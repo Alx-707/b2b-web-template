@@ -45,8 +45,8 @@ const seoFields = [
 export default defineConfig({
   // Git 提供者配置
   branch: process.env.NEXT_PUBLIC_TINA_BRANCH || 'main',
-  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
-  token: process.env.TINA_TOKEN,
+  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID || null,
+  token: process.env.TINA_TOKEN || null,
 
   build: {
     outputFolder: 'admin',
@@ -211,7 +211,7 @@ export default defineConfig({
             type: 'object',
             name: 'seo',
             label: 'SEO Settings',
-            fields: seoFields,
+            fields: seoFields as any,
           },
           // 文章内容
           {
@@ -281,7 +281,7 @@ export default defineConfig({
               ? 'zh'
               : 'en';
             // eslint-disable-next-line no-underscore-dangle
-            const slug = document.slug || document._sys.basename;
+            const slug = (document as any).slug || document._sys.basename;
             return `/${locale}/blog/${slug}`;
           },
           filename: {
@@ -401,7 +401,7 @@ export default defineConfig({
             type: 'object',
             name: 'seo',
             label: 'SEO Settings',
-            fields: seoFields,
+            fields: seoFields as any,
           },
           // 页面内容
           {
@@ -418,7 +418,7 @@ export default defineConfig({
               ? 'zh'
               : 'en';
             // eslint-disable-next-line no-underscore-dangle
-            const slug = document.slug || document._sys.basename;
+            const slug = (document as any).slug || document._sys.basename;
             return `/${locale}/${slug}`;
           },
           filename: {
