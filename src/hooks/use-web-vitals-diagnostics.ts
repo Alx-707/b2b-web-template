@@ -73,22 +73,36 @@ const calculatePerformanceTrends = (historicalReports: DiagnosticReport[]) => {
       : 0;
   };
 
+  // 计算score平均值的辅助函数
+  const getScoreAverage = (reports: DiagnosticReport[]) => {
+    const scores = reports
+      .map((r) => typeof r.analysis.score === 'number' ? r.analysis.score : 0)
+      .filter((s) => s > 0);
+
+    return scores.length > 0
+      ? scores.reduce((sum, s) => sum + s, 0) / scores.length
+      : 0;
+  };
+
   const recentAvg = {
     lcp: getAverage(recent, 'lcp'),
     fid: getAverage(recent, 'fid'),
     cls: getAverage(recent, 'cls'),
+    score: getScoreAverage(recent),
   };
 
   const olderAvg = {
     lcp: getAverage(older, 'lcp'),
     fid: getAverage(older, 'fid'),
     cls: getAverage(older, 'cls'),
+    score: getScoreAverage(older),
   };
 
   return {
     lcp: recentAvg.lcp - olderAvg.lcp,
     fid: recentAvg.fid - olderAvg.fid,
     cls: recentAvg.cls - olderAvg.cls,
+    score: recentAvg.score - olderAvg.score,
   };
 };
 
@@ -151,6 +165,7 @@ interface PerformanceTrends {
   lcp: number;
   fid: number;
   cls: number;
+  score: number;
 }
 
 // 页面对比数据类型

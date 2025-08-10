@@ -383,8 +383,8 @@ describe('useWebVitalsDiagnostics', () => {
       const trends = result.current.getPerformanceTrends();
       expect(trends).toBeTruthy();
       // Should handle zero values gracefully
-      expect(trends?.cls.current).toBe(0);
-      expect(trends?.fid.current).toBe(0);
+      expect(trends?.cls).toBe(0);
+      expect(trends?.fid).toBe(0);
     });
   });
 

@@ -36,6 +36,34 @@ export const PERFORMANCE_THRESHOLDS = {
 
 // ==================== 类型定义 ====================
 
+// 导入Web Vitals相关类型
+import type { WebVitalsMetrics, MetricRating } from '@/lib/web-vitals-monitor';
+
+/**
+ * Web Vitals 性能摘要接口
+ * 用于诊断工具的性能数据汇总
+ */
+export interface WebVitalsSummary {
+  /** Web Vitals 指标数据 */
+  metrics: WebVitalsMetrics;
+  /** 指标评级信息 */
+  ratings: Record<string, MetricRating>;
+  /** 综合评分 */
+  score: number;
+  /** 累积布局偏移 (Cumulative Layout Shift) */
+  cls: number;
+  /** 最大内容绘制 (Largest Contentful Paint) */
+  lcp: number;
+  /** 首次输入延迟 (First Input Delay) - 历史兼容 */
+  fid?: number;
+  /** 交互到下次绘制 (Interaction to Next Paint) - 新版推荐 */
+  inp?: number;
+  /** 首次内容绘制 (First Contentful Paint) */
+  fcp: number;
+  /** 首字节时间 (Time to First Byte) */
+  ttfb: number;
+}
+
 /**
  * 简化的 Web Vitals 指标接口
  * 用于诊断页面的性能数据展示
@@ -78,11 +106,11 @@ export function collectCurrentMetrics(): SimpleWebVitals {
   if (webVitalsMonitor) {
     const summary = webVitalsMonitor.getPerformanceSummary();
     return {
-      cls: summary.cls || 0,
-      lcp: summary.lcp || 0,
-      fid: summary.fid || 0,
-      fcp: summary.fcp || 0,
-      ttfb: summary.ttfb || 0,
+      cls: summary.metrics.cls || 0,
+      lcp: summary.metrics.lcp || 0,
+      fid: summary.metrics.fid || 0,
+      fcp: summary.metrics.fcp || 0,
+      ttfb: summary.metrics.ttfb || 0,
       score: summary.score || 0,
       timestamp: Date.now(),
       url: window.location.href,
