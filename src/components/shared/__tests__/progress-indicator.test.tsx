@@ -13,7 +13,7 @@ vi.mock('@/lib/utils', () => ({
   cn: (...classes: any[]) => {
     const result: string[] = [];
 
-    classes.forEach(cls => {
+    classes.forEach((cls) => {
       if (typeof cls === 'string') {
         result.push(cls);
       } else if (typeof cls === 'object' && cls !== null) {
@@ -57,7 +57,9 @@ describe('ProgressIndicator', () => {
     });
 
     it('renders with custom className', () => {
-      const { container } = render(<ProgressIndicator className="custom-class" />);
+      const { container } = render(
+        <ProgressIndicator className='custom-class' />,
+      );
 
       expect(container.firstChild).toHaveClass('custom-class');
     });
@@ -201,7 +203,12 @@ describe('ProgressIndicator', () => {
   describe('Progress Bar', () => {
     it('shows correct progress bar width for different steps', () => {
       const steps = [0, 1, 2, 3];
-      const expectedWidths = ['0%', '33.33333333333333%', '66.66666666666666%', '100%'];
+      const expectedWidths = [
+        '0%',
+        '33.33333333333333%',
+        '66.66666666666666%',
+        '100%',
+      ];
 
       steps.forEach((step, index) => {
         const { unmount } = render(<ProgressIndicator currentStep={step} />);
@@ -217,10 +224,19 @@ describe('ProgressIndicator', () => {
       render(<ProgressIndicator currentStep={1} />);
 
       const progressContainer = document.querySelector('.bg-muted.absolute');
-      expect(progressContainer).toHaveClass('top-4', 'right-4', 'left-4', 'h-0.5');
+      expect(progressContainer).toHaveClass(
+        'top-4',
+        'right-4',
+        'left-4',
+        'h-0.5',
+      );
 
       const progressBar = document.querySelector('.bg-primary.h-full');
-      expect(progressBar).toHaveClass('transition-all', 'duration-500', 'ease-out');
+      expect(progressBar).toHaveClass(
+        'transition-all',
+        'duration-500',
+        'ease-out',
+      );
     });
   });
 
@@ -243,7 +259,15 @@ describe('ProgressIndicator', () => {
 
       const stepCircles = document.querySelectorAll('.rounded-full');
       stepCircles.forEach((circle) => {
-        expect(circle).toHaveClass('flex', 'h-8', 'w-8', 'items-center', 'justify-center', 'text-sm', 'font-medium');
+        expect(circle).toHaveClass(
+          'flex',
+          'h-8',
+          'w-8',
+          'items-center',
+          'justify-center',
+          'text-sm',
+          'font-medium',
+        );
       });
     });
   });
@@ -263,8 +287,8 @@ describe('ProgressIndicator', () => {
 
       // Find the step circle that should have pulse animation
       const stepCircles = document.querySelectorAll('.rounded-full');
-      const currentStepCircle = Array.from(stepCircles).find(circle =>
-        circle.classList.contains('animate-pulse')
+      const currentStepCircle = Array.from(stepCircles).find((circle) =>
+        circle.classList.contains('animate-pulse'),
       );
       expect(currentStepCircle).toBeTruthy();
     });

@@ -1,6 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { EnhancedLocaleSwitcher, LocaleSwitcherWithInfo, SimpleLocaleSwitcher } from '../enhanced-locale-switcher';
+import {
+  EnhancedLocaleSwitcher,
+  LocaleSwitcherWithInfo,
+  SimpleLocaleSwitcher,
+} from '../enhanced-locale-switcher';
 
 // Mock next-intl
 const mockUseLocale = vi.fn();
@@ -14,9 +18,7 @@ vi.mock('next-intl', () => ({
 
 // Mock i18n routing
 vi.mock('@/i18n/routing', () => ({
-  Link: vi.fn(({ children, ...props }) => (
-    <a {...props}>{children}</a>
-  )),
+  Link: vi.fn(({ children, ...props }) => <a {...props}>{children}</a>),
   usePathname: () => mockUsePathname(),
 }));
 
@@ -52,28 +54,74 @@ vi.mock('@/components/ui/button', () => ({
 }));
 
 vi.mock('@/components/ui/dropdown-menu', () => ({
-  DropdownMenu: ({ children }: any) => <div data-testid="dropdown-menu">{children}</div>,
-  DropdownMenuTrigger: ({ children }: any) => <div data-testid="dropdown-trigger">{children}</div>,
+  DropdownMenu: ({ children }: any) => (
+    <div data-testid='dropdown-menu'>{children}</div>
+  ),
+  DropdownMenuTrigger: ({ children }: any) => (
+    <div data-testid='dropdown-trigger'>{children}</div>
+  ),
   DropdownMenuContent: ({ children, className }: any) => (
-    <div data-testid="dropdown-content" className={className}>{children}</div>
+    <div
+      data-testid='dropdown-content'
+      className={className}
+    >
+      {children}
+    </div>
   ),
   DropdownMenuItem: ({ children, asChild }: any) => (
-    <div data-testid="dropdown-item">{asChild ? children : <span>{children}</span>}</div>
+    <div data-testid='dropdown-item'>
+      {asChild ? children : <span>{children}</span>}
+    </div>
   ),
   DropdownMenuLabel: ({ children, className }: any) => (
-    <div data-testid="dropdown-label" className={className}>{children}</div>
+    <div
+      data-testid='dropdown-label'
+      className={className}
+    >
+      {children}
+    </div>
   ),
-  DropdownMenuSeparator: () => <hr data-testid="dropdown-separator" />,
+  DropdownMenuSeparator: () => <hr data-testid='dropdown-separator' />,
 }));
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
-  Check: ({ className }: any) => <div data-testid="check-icon" className={className} />,
-  Globe: ({ className }: any) => <div data-testid="globe-icon" className={className} />,
-  Languages: ({ className }: any) => <div data-testid="languages-icon" className={className} />,
-  Loader2: ({ className }: any) => <div data-testid="loader-icon" className={className} />,
-  MapPin: ({ className }: any) => <div data-testid="mappin-icon" className={className} />,
-  Monitor: ({ className }: any) => <div data-testid="monitor-icon" className={className} />,
+  Check: ({ className }: any) => (
+    <div
+      data-testid='check-icon'
+      className={className}
+    />
+  ),
+  Globe: ({ className }: any) => (
+    <div
+      data-testid='globe-icon'
+      className={className}
+    />
+  ),
+  Languages: ({ className }: any) => (
+    <div
+      data-testid='languages-icon'
+      className={className}
+    />
+  ),
+  Loader2: ({ className }: any) => (
+    <div
+      data-testid='loader-icon'
+      className={className}
+    />
+  ),
+  MapPin: ({ className }: any) => (
+    <div
+      data-testid='mappin-icon'
+      className={className}
+    />
+  ),
+  Monitor: ({ className }: any) => (
+    <div
+      data-testid='monitor-icon'
+      className={className}
+    />
+  ),
 }));
 
 describe('EnhancedLocaleSwitcher', () => {
@@ -101,7 +149,12 @@ describe('EnhancedLocaleSwitcher', () => {
 
     mockUseLocale.mockReturnValue(defaultMocks.locale);
     mockUsePathname.mockReturnValue(defaultMocks.pathname);
-    mockUseTranslations.mockImplementation((key: string) => defaultMocks.translations[key as keyof typeof defaultMocks.translations] || key);
+    mockUseTranslations.mockImplementation(
+      (key: string) =>
+        defaultMocks.translations[
+          key as keyof typeof defaultMocks.translations
+        ] || key,
+    );
     mockUseLocaleStorage.mockReturnValue(defaultMocks.localeStorage);
     mockUseClientLocaleDetection.mockReturnValue(defaultMocks.clientDetection);
   });
@@ -117,7 +170,7 @@ describe('EnhancedLocaleSwitcher', () => {
     });
 
     it('renders with custom className', () => {
-      render(<EnhancedLocaleSwitcher className="custom-class" />);
+      render(<EnhancedLocaleSwitcher className='custom-class' />);
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('custom-class');
@@ -311,11 +364,14 @@ describe('EnhancedLocaleSwitcher', () => {
       fireEvent.click(chineseLink!);
 
       // Wait for transition to complete
-      await waitFor(() => {
-        expect(screen.getByRole('button')).toContainElement(
-          document.querySelector('.bg-green-500')
-        );
-      }, { timeout: 2000 });
+      await waitFor(
+        () => {
+          expect(screen.getByRole('button')).toContainElement(
+            document.querySelector('.bg-green-500'),
+          );
+        },
+        { timeout: 2000 },
+      );
     });
 
     it('disables button during pending transition', async () => {
@@ -360,8 +416,9 @@ describe('EnhancedLocaleSwitcher', () => {
       render(<EnhancedLocaleSwitcher />);
 
       const fullNameElements = screen.getAllByText('English');
-      const triggerElement = fullNameElements.find(el =>
-        el.classList.contains('hidden') && el.classList.contains('sm:inline')
+      const triggerElement = fullNameElements.find(
+        (el) =>
+          el.classList.contains('hidden') && el.classList.contains('sm:inline'),
       );
       expect(triggerElement).toBeInTheDocument();
     });
@@ -370,7 +427,9 @@ describe('EnhancedLocaleSwitcher', () => {
       render(<EnhancedLocaleSwitcher />);
 
       const codeElements = screen.getAllByText('EN');
-      const mobileCode = codeElements.find(el => el.classList.contains('sm:hidden'));
+      const mobileCode = codeElements.find((el) =>
+        el.classList.contains('sm:hidden'),
+      );
       expect(mobileCode).toBeInTheDocument();
     });
   });

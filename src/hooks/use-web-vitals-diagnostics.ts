@@ -1,18 +1,18 @@
 'use client';
 
-import {
-    TEST_APP_CONSTANTS,
-    TEST_COUNT_CONSTANTS,
-} from '@/constants/test-constants';
-import { enhancedWebVitalsCollector } from '@/lib/enhanced-web-vitals';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { enhancedWebVitalsCollector } from '@/lib/enhanced-web-vitals';
 import {
-    calculatePageComparison,
-    calculatePerformanceTrends,
-    WEB_VITALS_CONSTANTS,
-    type DiagnosticReport,
-    type PageComparison,
-    type PerformanceTrend,
+  TEST_APP_CONSTANTS,
+  TEST_COUNT_CONSTANTS,
+} from '@/constants/test-constants';
+import {
+  calculatePageComparison,
+  calculatePerformanceTrends,
+  WEB_VITALS_CONSTANTS,
+  type DiagnosticReport,
+  type PageComparison,
+  type PerformanceTrend,
 } from './web-vitals-diagnostics-utils';
 
 interface WebVitalsDiagnosticsState {

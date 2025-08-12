@@ -36,60 +36,74 @@ describe('AnimatedIcon', () => {
       render(<AnimatedIcon />);
 
       // Find the outermost container div
-      const container = screen.getByRole('img').closest('div[class*="relative"]');
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="relative"]');
       expect(container).toHaveClass('w-16', 'h-16');
     });
 
     it('applies custom className', () => {
-      render(<AnimatedIcon className="custom-class" />);
+      render(<AnimatedIcon className='custom-class' />);
 
       // Find the outermost container div
-      const container = screen.getByRole('img').closest('div[class*="relative"]');
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="relative"]');
       expect(container).toHaveClass('custom-class');
     });
   });
 
   describe('Size Variants', () => {
     it('renders small size correctly', () => {
-      render(<AnimatedIcon size="sm" />);
+      render(<AnimatedIcon size='sm' />);
 
-      const container = screen.getByRole('img').closest('div[class*="relative"]');
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="relative"]');
       expect(container).toHaveClass('w-8', 'h-8');
     });
 
     it('renders medium size correctly', () => {
-      render(<AnimatedIcon size="md" />);
+      render(<AnimatedIcon size='md' />);
 
-      const container = screen.getByRole('img').closest('div[class*="relative"]');
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="relative"]');
       expect(container).toHaveClass('w-12', 'h-12');
     });
 
     it('renders large size correctly', () => {
-      render(<AnimatedIcon size="lg" />);
+      render(<AnimatedIcon size='lg' />);
 
-      const container = screen.getByRole('img').closest('div[class*="relative"]');
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="relative"]');
       expect(container).toHaveClass('w-16', 'h-16');
     });
 
     it('renders extra large size correctly', () => {
-      render(<AnimatedIcon size="xl" />);
+      render(<AnimatedIcon size='xl' />);
 
-      const container = screen.getByRole('img').closest('div[class*="relative"]');
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="relative"]');
       expect(container).toHaveClass('w-24', 'h-24');
     });
 
     it('falls back to large size for invalid size', () => {
       // @ts-expect-error Testing invalid size
-      render(<AnimatedIcon size="invalid" />);
+      render(<AnimatedIcon size='invalid' />);
 
-      const container = screen.getByRole('img').closest('div[class*="relative"]');
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="relative"]');
       expect(container).toHaveClass('w-16', 'h-16');
     });
   });
 
   describe('Construction Variant', () => {
     it('renders construction variant correctly', () => {
-      render(<AnimatedIcon variant="construction" />);
+      render(<AnimatedIcon variant='construction' />);
 
       const svg = screen.getByRole('img');
       expect(svg).toHaveClass('text-primary', 'h-full', 'w-full');
@@ -101,7 +115,7 @@ describe('AnimatedIcon', () => {
 
     it('applies pulse animation when motion is not reduced', () => {
       mockUseReducedMotion.mockReturnValue(false);
-      render(<AnimatedIcon variant="construction" />);
+      render(<AnimatedIcon variant='construction' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).toHaveClass('animate-pulse');
@@ -109,7 +123,7 @@ describe('AnimatedIcon', () => {
 
     it('does not apply pulse animation when motion is reduced', () => {
       mockUseReducedMotion.mockReturnValue(true);
-      render(<AnimatedIcon variant="construction" />);
+      render(<AnimatedIcon variant='construction' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).not.toHaveClass('animate-pulse');
@@ -118,7 +132,7 @@ describe('AnimatedIcon', () => {
 
   describe('Loading Variant', () => {
     it('renders loading variant correctly', () => {
-      render(<AnimatedIcon variant="loading" />);
+      render(<AnimatedIcon variant='loading' />);
 
       const svg = screen.getByRole('img');
       expect(svg).toHaveClass('text-primary', 'h-full', 'w-full');
@@ -130,7 +144,7 @@ describe('AnimatedIcon', () => {
 
     it('applies spin animation when motion is not reduced', () => {
       mockUseReducedMotion.mockReturnValue(false);
-      render(<AnimatedIcon variant="loading" />);
+      render(<AnimatedIcon variant='loading' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).toHaveClass('animate-spin');
@@ -138,14 +152,14 @@ describe('AnimatedIcon', () => {
 
     it('does not apply spin animation when motion is reduced', () => {
       mockUseReducedMotion.mockReturnValue(true);
-      render(<AnimatedIcon variant="loading" />);
+      render(<AnimatedIcon variant='loading' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).not.toHaveClass('animate-spin');
     });
 
     it('has correct container structure for loading variant', () => {
-      render(<AnimatedIcon variant="loading" />);
+      render(<AnimatedIcon variant='loading' />);
 
       const container = screen.getByRole('img').parentElement?.parentElement;
       expect(container).toHaveClass('relative');
@@ -157,7 +171,7 @@ describe('AnimatedIcon', () => {
 
   describe('Gear Variant', () => {
     it('renders gear variant correctly', () => {
-      render(<AnimatedIcon variant="gear" />);
+      render(<AnimatedIcon variant='gear' />);
 
       const svg = screen.getByRole('img');
       expect(svg).toHaveClass('text-primary', 'h-full', 'w-full');
@@ -169,12 +183,15 @@ describe('AnimatedIcon', () => {
       expect(circle).toHaveAttribute('r', '3');
 
       const path = svg.querySelector('path');
-      expect(path).toHaveAttribute('d', expect.stringContaining('M12 1v6m0 6v6'));
+      expect(path).toHaveAttribute(
+        'd',
+        expect.stringContaining('M12 1v6m0 6v6'),
+      );
     });
 
     it('applies spin animation when motion is not reduced', () => {
       mockUseReducedMotion.mockReturnValue(false);
-      render(<AnimatedIcon variant="gear" />);
+      render(<AnimatedIcon variant='gear' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).toHaveClass('animate-spin');
@@ -182,14 +199,14 @@ describe('AnimatedIcon', () => {
 
     it('does not apply spin animation when motion is reduced', () => {
       mockUseReducedMotion.mockReturnValue(true);
-      render(<AnimatedIcon variant="gear" />);
+      render(<AnimatedIcon variant='gear' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).not.toHaveClass('animate-spin');
     });
 
     it('has correct container structure for gear variant', () => {
-      render(<AnimatedIcon variant="gear" />);
+      render(<AnimatedIcon variant='gear' />);
 
       const container = screen.getByRole('img').parentElement?.parentElement;
       expect(container).toHaveClass('relative');
@@ -222,7 +239,7 @@ describe('AnimatedIcon', () => {
   describe('Motion Preferences', () => {
     it('respects reduced motion preference for construction variant', () => {
       mockUseReducedMotion.mockReturnValue(true);
-      render(<AnimatedIcon variant="construction" />);
+      render(<AnimatedIcon variant='construction' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).not.toHaveClass('animate-pulse');
@@ -231,7 +248,7 @@ describe('AnimatedIcon', () => {
 
     it('respects reduced motion preference for loading variant', () => {
       mockUseReducedMotion.mockReturnValue(true);
-      render(<AnimatedIcon variant="loading" />);
+      render(<AnimatedIcon variant='loading' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).not.toHaveClass('animate-spin');
@@ -240,7 +257,7 @@ describe('AnimatedIcon', () => {
 
     it('respects reduced motion preference for gear variant', () => {
       mockUseReducedMotion.mockReturnValue(true);
-      render(<AnimatedIcon variant="gear" />);
+      render(<AnimatedIcon variant='gear' />);
 
       const animatedDiv = screen.getByRole('img').parentElement;
       expect(animatedDiv).not.toHaveClass('animate-spin');
@@ -252,10 +269,10 @@ describe('AnimatedIcon', () => {
     it('combines size, variant, and className correctly', () => {
       render(
         <AnimatedIcon
-          size="sm"
-          variant="loading"
-          className="custom-class"
-        />
+          size='sm'
+          variant='loading'
+          className='custom-class'
+        />,
       );
 
       const container = screen.getByRole('img').parentElement?.parentElement;
@@ -269,10 +286,14 @@ describe('AnimatedIcon', () => {
       sizes.forEach((size) => {
         variants.forEach((variant) => {
           const { unmount } = render(
-            <AnimatedIcon size={size} variant={variant} />
+            <AnimatedIcon
+              size={size}
+              variant={variant}
+            />,
           );
 
-          const container = screen.getByRole('img').parentElement?.parentElement;
+          const container =
+            screen.getByRole('img').parentElement?.parentElement;
           expect(container).toBeInTheDocument();
 
           unmount();
@@ -284,7 +305,7 @@ describe('AnimatedIcon', () => {
   describe('Edge Cases', () => {
     it('returns null for invalid variant', () => {
       // @ts-expect-error Testing invalid variant
-      const { container } = render(<AnimatedIcon variant="invalid" />);
+      const { container } = render(<AnimatedIcon variant='invalid' />);
 
       expect(container.firstChild).toBeNull();
     });

@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
 import { DEV_TOOLS_CONSTANTS } from '@/constants/dev-tools';
 
 // 扩展 Window 接口以包含 React Scan 相关属性
@@ -102,7 +101,9 @@ export function ReactScanAnalyzer() {
   const [scanData, setScanData] = useState<ReactScanData | null>(null);
   const [componentStats, setComponentStats] = useState<ComponentStats[]>([]);
   const [isRecording, setIsRecording] = useState(false);
-  const [recordingHistory, setRecordingHistory] = useState<ComponentStats[]>([]);
+  const [recordingHistory, setRecordingHistory] = useState<ComponentStats[]>(
+    [],
+  );
 
   // 读取 React Scan 内部数据
   const readReactScanData = useCallback((): ReactScanData | null => {
@@ -119,21 +120,23 @@ export function ReactScanAnalyzer() {
       const renderHistory: ComponentStats[] = [];
       const fiberRoots = internals.fiberRoots || {};
 
-      Object.entries(fiberRoots).forEach(([, root]: [string, ReactScanFiberRoot]) => {
-        if (root && root.renders) {
-          root.renders.forEach((render: ReactScanRender) => {
-            renderHistory.push({
-              componentName:
-                render.fiber?.type?.name ||
-                render.fiber?.elementType?.name ||
-                'Unknown',
-              renderCount: render.count || 1,
-              lastRender: render.time || Date.now(),
-              isUnnecessary: render.unnecessary || false,
+      Object.entries(fiberRoots).forEach(
+        ([, root]: [string, ReactScanFiberRoot]) => {
+          if (root && root.renders) {
+            root.renders.forEach((render: ReactScanRender) => {
+              renderHistory.push({
+                componentName:
+                  render.fiber?.type?.name ||
+                  render.fiber?.elementType?.name ||
+                  'Unknown',
+                renderCount: render.count || 1,
+                lastRender: render.time || Date.now(),
+                isUnnecessary: render.unnecessary || false,
+              });
             });
-          });
-        }
-      });
+          }
+        },
+      );
 
       return {
         isEnabled: internals.options?.enabled || false,
@@ -211,7 +214,8 @@ export function ReactScanAnalyzer() {
       const reactScan = (window as ReactScanWindow).__REACT_SCAN__;
       if (reactScan && reactScan.ReactScanInternals) {
         // Check if React Scan is currently enabled
-        const isEnabled = reactScan.ReactScanInternals.options?.enabled || false;
+        const isEnabled =
+          reactScan.ReactScanInternals.options?.enabled || false;
         console.log('React Scan enabled:', isEnabled);
 
         // 模拟切换（实际的切换逻辑在 ReactScanProvider 中）
@@ -246,9 +250,18 @@ export function ReactScanAnalyzer() {
       exportTime: new Date().toISOString(),
     };
 
-    const blob = new Blob([JSON.stringify(dataToExport, null, DEV_TOOLS_CONSTANTS.REACT_SCAN.EXPORT_SPLIT_COUNT)], {
-      type: 'application/json',
-    });
+    const blob = new Blob(
+      [
+        JSON.stringify(
+          dataToExport,
+          null,
+          DEV_TOOLS_CONSTANTS.REACT_SCAN.EXPORT_SPLIT_COUNT,
+        ),
+      ],
+      {
+        type: 'application/json',
+      },
+    );
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -399,33 +412,40 @@ export function ReactScanAnalyzer() {
                 {componentStats.length === 0 ? (
                   <p className='text-gray-500'>暂无组件数据</p>
                 ) : (
-                  componentStats.slice(0, DEV_TOOLS_CONSTANTS.REACT_SCAN.ANALYSIS_MIN_THRESHOLD).map((component, index) => (
-                    <div
-                      key={component.name}
-                      className='flex items-center justify-between rounded-lg border p-3'
-                    >
-                      <div className='flex items-center gap-3'>
-                        <span className='font-mono text-sm'>{index + 1}</span>
-                        <span className='font-medium'>{component.name}</span>
-                        {component.isUnnecessary && (
-                          <Badge
-                            variant='destructive'
-                            className='text-xs'
-                          >
-                            不必要渲染
-                          </Badge>
-                        )}
-                      </div>
-                      <div className='text-right'>
-                        <div className='text-sm font-bold'>
-                          {component.renderCount} 次
+                  componentStats
+                    .slice(
+                      0,
+                      DEV_TOOLS_CONSTANTS.REACT_SCAN.ANALYSIS_MIN_THRESHOLD,
+                    )
+                    .map((component, index) => (
+                      <div
+                        key={component.name}
+                        className='flex items-center justify-between rounded-lg border p-3'
+                      >
+                        <div className='flex items-center gap-3'>
+                          <span className='font-mono text-sm'>{index + 1}</span>
+                          <span className='font-medium'>{component.name}</span>
+                          {component.isUnnecessary && (
+                            <Badge
+                              variant='destructive'
+                              className='text-xs'
+                            >
+                              不必要渲染
+                            </Badge>
+                          )}
                         </div>
-                        <div className='text-xs text-gray-500'>
-                          {new Date(component.lastRender).toLocaleTimeString()}
+                        <div className='text-right'>
+                          <div className='text-sm font-bold'>
+                            {component.renderCount} 次
+                          </div>
+                          <div className='text-xs text-gray-500'>
+                            {new Date(
+                              component.lastRender,
+                            ).toLocaleTimeString()}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    ))
                 )}
               </div>
             </CardContent>
@@ -446,7 +466,11 @@ export function ReactScanAnalyzer() {
                 <div>
                   <h4 className='font-semibold'>配置选项</h4>
                   <pre className='mt-2 rounded bg-gray-100 p-3 text-sm'>
-                    {JSON.stringify(scanData.options, null, DEV_TOOLS_CONSTANTS.REACT_SCAN.EXPORT_SPLIT_COUNT)}
+                    {JSON.stringify(
+                      scanData.options,
+                      null,
+                      DEV_TOOLS_CONSTANTS.REACT_SCAN.EXPORT_SPLIT_COUNT,
+                    )}
                   </pre>
                 </div>
 
@@ -456,19 +480,24 @@ export function ReactScanAnalyzer() {
                       记录历史 ({recordingHistory.length} 条记录)
                     </h4>
                     <div className='mt-2 max-h-40 overflow-y-auto rounded border'>
-                      {recordingHistory.slice(-DEV_TOOLS_CONSTANTS.REACT_SCAN.PERFORMANCE_NEGATIVE_OFFSET).map((record, index) => (
-                        <div
-                          key={index}
-                          className='border-b p-2 text-sm'
-                        >
-                          <span className='font-mono'>
-                            {new Date(record.timestamp).toLocaleTimeString()}
-                          </span>
-                          {' - '}
-                          渲染: {record.totalRenders}, 组件:{' '}
-                          {record.componentsTracked}
-                        </div>
-                      ))}
+                      {recordingHistory
+                        .slice(
+                          -DEV_TOOLS_CONSTANTS.REACT_SCAN
+                            .PERFORMANCE_NEGATIVE_OFFSET,
+                        )
+                        .map((record, index) => (
+                          <div
+                            key={index}
+                            className='border-b p-2 text-sm'
+                          >
+                            <span className='font-mono'>
+                              {new Date(record.timestamp).toLocaleTimeString()}
+                            </span>
+                            {' - '}
+                            渲染: {record.totalRenders}, 组件:{' '}
+                            {record.componentsTracked}
+                          </div>
+                        ))}
                     </div>
                   </div>
                 )}

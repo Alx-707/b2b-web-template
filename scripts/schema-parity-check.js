@@ -76,7 +76,9 @@ class SchemaParityChecker {
     console.log('🔄 执行MDX内容schema对等性检查...\n');
 
     // 检查每个内容类型
-    for (const [contentType, requiredFields] of Object.entries(this.contentTypes)) {
+    for (const [contentType, requiredFields] of Object.entries(
+      this.contentTypes,
+    )) {
       const schemaName = `${contentType.slice(0, -1)}Schema`; // posts -> postSchema
       const zodSchema = this.zodSchemas[schemaName];
 

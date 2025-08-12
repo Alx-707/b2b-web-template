@@ -43,7 +43,10 @@ export function DevToolsController() {
     updateLayoutInfo();
 
     // 定期更新布局信息
-    const interval = setInterval(updateLayoutInfo, DEV_TOOLS_CONSTANTS.PERFORMANCE.DELAY);
+    const interval = setInterval(
+      updateLayoutInfo,
+      DEV_TOOLS_CONSTANTS.PERFORMANCE.DELAY,
+    );
 
     return () => clearInterval(interval);
   }, [getLayoutInfo]);
@@ -139,7 +142,8 @@ export function DevToolsController() {
                     className={`h-2 w-2 rounded-full ${
                       config.priority >= DEV_TOOLS_CONSTANTS.LAYOUT.GRID_GAP
                         ? 'bg-red-500'
-                        : config.priority >= DEV_TOOLS_CONSTANTS.LAYOUT.BORDER_RADIUS
+                        : config.priority >=
+                            DEV_TOOLS_CONSTANTS.LAYOUT.BORDER_RADIUS
                           ? 'bg-yellow-500'
                           : 'bg-green-500'
                     }`}
@@ -233,7 +237,10 @@ export function DevToolsStatusIndicator() {
     };
 
     updateCount();
-    const interval = setInterval(updateCount, DEV_TOOLS_CONSTANTS.PERFORMANCE.DELAY);
+    const interval = setInterval(
+      updateCount,
+      DEV_TOOLS_CONSTANTS.PERFORMANCE.DELAY,
+    );
 
     // eslint-disable-next-line consistent-return
     return () => clearInterval(interval); // useEffect 清理函数

@@ -3,9 +3,9 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { DEV_TOOLS_CONSTANTS } from '@/constants/dev-tools';
 import { REACT_SCAN_CONFIG } from '@/constants/react-scan';
-import { Card } from '@/components/ui/card';
 
 /**
  * React Scan 演示组件
@@ -74,7 +74,12 @@ function FrequentRenderComponent({ trigger }: { trigger: number }) {
   return (
     <div className='rounded border p-2'>
       <p>Frequent Render: {trigger}</p>
-      <p>Expensive Value: {expensiveValue.toFixed(DEV_TOOLS_CONSTANTS.REACT_SCAN.EXPORT_SPLIT_COUNT)}</p>
+      <p>
+        Expensive Value:{' '}
+        {expensiveValue.toFixed(
+          DEV_TOOLS_CONSTANTS.REACT_SCAN.EXPORT_SPLIT_COUNT,
+        )}
+      </p>
     </div>
   );
 }

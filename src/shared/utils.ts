@@ -47,7 +47,11 @@ function validateEmailBasicFormat(email: string): boolean {
  * 验证邮箱本地部分（@前面）
  */
 function validateLocalPart(localPart: string): boolean {
-  if (!localPart || localPart.length === 0 || localPart.length > EMAIL_VALIDATION.LOCAL_PART_MAX_LENGTH) {
+  if (
+    !localPart ||
+    localPart.length === 0 ||
+    localPart.length > EMAIL_VALIDATION.LOCAL_PART_MAX_LENGTH
+  ) {
     return false;
   }
 
@@ -65,12 +69,20 @@ function validateLocalPart(localPart: string): boolean {
  * 验证邮箱域名部分（@后面）
  */
 function validateDomainPart(domainPart: string): boolean {
-  if (!domainPart || domainPart.length === 0 || domainPart.length > EMAIL_VALIDATION.DOMAIN_PART_MAX_LENGTH) {
+  if (
+    !domainPart ||
+    domainPart.length === 0 ||
+    domainPart.length > EMAIL_VALIDATION.DOMAIN_PART_MAX_LENGTH
+  ) {
     return false;
   }
 
   // 检查不能以点号开头或结尾，且必须包含点号
-  if (domainPart.startsWith('.') || domainPart.endsWith('.') || !domainPart.includes('.')) {
+  if (
+    domainPart.startsWith('.') ||
+    domainPart.endsWith('.') ||
+    !domainPart.includes('.')
+  ) {
     return false;
   }
 
@@ -94,5 +106,7 @@ export function validateEmail(email: string): boolean {
   const [localPart, domainPart] = parts;
 
   // 验证本地部分和域名部分
-  return validateLocalPart(localPart || '') && validateDomainPart(domainPart || '');
+  return (
+    validateLocalPart(localPart || '') && validateDomainPart(domainPart || '')
+  );
 }

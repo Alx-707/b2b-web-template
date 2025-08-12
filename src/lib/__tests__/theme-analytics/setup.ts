@@ -1,22 +1,25 @@
-import {
-    TEST_BASE_NUMBERS,
-    TEST_CONSTANTS,
-    THEME_ANALYTICS_CONSTANTS,
-} from '@/constants/test-constants';
-import type {
-    MockSwitchPattern,
-    ThemeAnalyticsPrivate,
-} from '@/types/test-types';
 import { vi } from 'vitest';
+import type {
+  MockSwitchPattern,
+  ThemeAnalyticsPrivate,
+} from '@/types/test-types';
 import {
-    DEBUG_CONSTANTS,
-    DELAY_CONSTANTS,
-    OPACITY_CONSTANTS,
-    PERCENTAGE_CONSTANTS,
-    PERFORMANCE_CONSTANTS,
-    TIME_CONSTANTS,
+  TEST_BASE_NUMBERS,
+  TEST_CONSTANTS,
+  THEME_ANALYTICS_CONSTANTS,
+} from '@/constants/test-constants';
+import {
+  DEBUG_CONSTANTS,
+  DELAY_CONSTANTS,
+  OPACITY_CONSTANTS,
+  PERCENTAGE_CONSTANTS,
+  PERFORMANCE_CONSTANTS,
+  TIME_CONSTANTS,
 } from '../../../constants/app-constants';
-import { ThemeAnalytics, type ThemeAnalyticsConfig } from '../../theme-analytics';
+import {
+  ThemeAnalytics,
+  type ThemeAnalyticsConfig,
+} from '../../theme-analytics';
 
 // Note: Sentry is mocked in the test file using vi.hoisted
 
@@ -163,10 +166,13 @@ export function setupThemeAnalyticsTest() {
 }
 
 // Helper function to create analytics instance with default config
-export function createAnalyticsInstance(config?: Partial<ThemeAnalyticsConfig>): ThemeAnalytics {
+export function createAnalyticsInstance(
+  config?: Partial<ThemeAnalyticsConfig>,
+): ThemeAnalytics {
   return new ThemeAnalytics({
     enabled: true,
-    performanceThreshold: THEME_ANALYTICS_CONSTANTS.PERFORMANCE_THRESHOLD_DEFAULT,
+    performanceThreshold:
+      THEME_ANALYTICS_CONSTANTS.PERFORMANCE_THRESHOLD_DEFAULT,
     sampleRate: THEME_ANALYTICS_CONSTANTS.SAMPLING_RATE_FULL,
     enableDetailedTracking: true,
     enableUserBehaviorAnalysis: true,
@@ -223,13 +229,12 @@ export function cleanupThemeAnalyticsTest() {
 
 // Export constants for use in tests
 export {
-    DEBUG_CONSTANTS,
-    DELAY_CONSTANTS,
-    OPACITY_CONSTANTS,
-    PERCENTAGE_CONSTANTS,
-    PERFORMANCE_CONSTANTS,
-    TEST_CONSTANTS,
-    THEME_ANALYTICS_CONSTANTS,
-    TIME_CONSTANTS
+  DEBUG_CONSTANTS,
+  DELAY_CONSTANTS,
+  OPACITY_CONSTANTS,
+  PERCENTAGE_CONSTANTS,
+  PERFORMANCE_CONSTANTS,
+  TEST_CONSTANTS,
+  THEME_ANALYTICS_CONSTANTS,
+  TIME_CONSTANTS,
 };
-

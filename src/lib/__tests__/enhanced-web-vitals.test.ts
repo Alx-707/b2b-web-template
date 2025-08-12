@@ -1,9 +1,9 @@
-import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
-import {
-    EnhancedWebVitalsCollector,
-    PERFORMANCE_THRESHOLDS
-} from '@/lib/enhanced-web-vitals';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  EnhancedWebVitalsCollector,
+  PERFORMANCE_THRESHOLDS,
+} from '@/lib/enhanced-web-vitals';
+import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
 
 // Use vi.hoisted to ensure proper mock setup
 const {
@@ -59,7 +59,12 @@ vi.mock('../web-vitals', async () => {
         fcp: 1500,
         ttfb: 200,
         inp: 100,
-        page: { url: 'test', referrer: '', title: 'Test', timestamp: Date.now() },
+        page: {
+          url: 'test',
+          referrer: '',
+          title: 'Test',
+          timestamp: Date.now(),
+        },
         device: { memory: 8, cores: 4, platform: 'test' },
         network: { effectiveType: '4g', downlink: 10, rtt: 50 },
         navigation: { type: 'navigate', redirectCount: 0 },
@@ -74,7 +79,12 @@ vi.mock('../web-vitals', async () => {
           fcp: 1500,
           ttfb: 200,
           inp: 100,
-          page: { url: 'test', referrer: '', title: 'Test', timestamp: Date.now() },
+          page: {
+            url: 'test',
+            referrer: '',
+            title: 'Test',
+            timestamp: Date.now(),
+          },
           device: { memory: 8, cores: 4, platform: 'test' },
           network: { effectiveType: '4g', downlink: 10, rtt: 50 },
           navigation: { type: 'navigate', redirectCount: 0 },
@@ -599,7 +609,9 @@ describe('enhanced-web-vitals', () => {
 
   describe('Convenience Functions', () => {
     it('should test initializePerformanceMonitoring with default config', async () => {
-      const { initializePerformanceMonitoring } = await import('@/lib/enhanced-web-vitals');
+      const { initializePerformanceMonitoring } = await import(
+        '@/lib/enhanced-web-vitals'
+      );
 
       const result = initializePerformanceMonitoring();
 
@@ -608,7 +620,9 @@ describe('enhanced-web-vitals', () => {
     });
 
     it('should test initializePerformanceMonitoring with custom config', async () => {
-      const { initializePerformanceMonitoring } = await import('@/lib/enhanced-web-vitals');
+      const { initializePerformanceMonitoring } = await import(
+        '@/lib/enhanced-web-vitals'
+      );
 
       const config = {
         enableAlerts: true,
@@ -625,7 +639,9 @@ describe('enhanced-web-vitals', () => {
     });
 
     it('should test generatePerformanceDiagnostics', async () => {
-      const { generatePerformanceDiagnostics } = await import('@/lib/enhanced-web-vitals');
+      const { generatePerformanceDiagnostics } = await import(
+        '@/lib/enhanced-web-vitals'
+      );
 
       const diagnostics = generatePerformanceDiagnostics();
 
@@ -635,7 +651,9 @@ describe('enhanced-web-vitals', () => {
     });
 
     it('should test performFullPerformanceMonitoring without buildInfo', async () => {
-      const { performFullPerformanceMonitoring } = await import('@/lib/enhanced-web-vitals');
+      const { performFullPerformanceMonitoring } = await import(
+        '@/lib/enhanced-web-vitals'
+      );
 
       const result = performFullPerformanceMonitoring();
 
@@ -643,7 +661,9 @@ describe('enhanced-web-vitals', () => {
     });
 
     it('should test performFullPerformanceMonitoring with buildInfo', async () => {
-      const { performFullPerformanceMonitoring } = await import('@/lib/enhanced-web-vitals');
+      const { performFullPerformanceMonitoring } = await import(
+        '@/lib/enhanced-web-vitals'
+      );
 
       const buildInfo = {
         version: '1.0.0',

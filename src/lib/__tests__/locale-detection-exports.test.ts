@@ -77,7 +77,7 @@ describe('locale-detection exports', () => {
     expect(exportKeys.length).toBeGreaterThan(0);
 
     // Verify no undefined exports
-    exportKeys.forEach(key => {
+    exportKeys.forEach((key) => {
       expect((localeDetection as Record<string, unknown>)[key]).toBeDefined();
     });
   });

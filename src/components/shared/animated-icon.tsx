@@ -1,8 +1,8 @@
 'use client';
 
-import { useReducedMotion } from '@/hooks/use-reduced-motion';
-import { cn } from '@/lib/utils';
 import React from 'react';
+import { cn } from '@/lib/utils';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 interface AnimatedIconProps {
   className?: string;
@@ -39,8 +39,8 @@ const AnimatedIconComponent = ({
         {/* 建设中图标 - 简化版本 */}
         <div className={prefersReducedMotion ? '' : 'animate-pulse'}>
           <svg
-            role="img"
-            aria-label="Construction icon"
+            role='img'
+            aria-label='Construction icon'
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
@@ -67,8 +67,8 @@ const AnimatedIconComponent = ({
           )}
         >
           <svg
-            role="img"
-            aria-label="Loading icon"
+            role='img'
+            aria-label='Loading icon'
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
@@ -94,8 +94,8 @@ const AnimatedIconComponent = ({
           )}
         >
           <svg
-            role="img"
-            aria-label="Gear icon"
+            role='img'
+            aria-label='Gear icon'
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'

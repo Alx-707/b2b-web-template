@@ -278,11 +278,20 @@ Next.js 15.4.6 + React 19.1.1 + TypeScript 5.9.2 + Tailwind CSS 4.1.11
 
 ### 开发命令标准
 
-- **启动开发环境**: `pnpm dev` - 启动Next.js开发服务器
+- **启动开发环境**: `pnpm dev` - 启动Next.js开发服务器（Turbopack）
+- **无扫描开发**: `pnpm dev:no-scan` - 禁用React Scan的开发模式
 - **构建生产版本**: `pnpm build` - 构建静态站点
-- **内容完整性检查**: `pnpm run content:check` - 验证内容文件完整性
-- **类型检查**: `pnpm run type-check` - 验证TypeScript类型
-- **内容同步检查**: `node scripts/content-integrity-check.js` - 多语言同步验证
+- **内容完整性检查**: `node scripts/content-integrity-check.js` - 多语言同步验证
+- **类型检查**: `pnpm type-check` - 验证TypeScript类型
+- **严格类型检查**: `pnpm type-check:strict` - 严格模式类型检查
+
+### 质量检查命令
+
+- **基础质量检查**: `pnpm quality:check` - 类型、lint、格式检查
+- **严格质量检查**: `pnpm quality:check:strict` - 零警告标准检查
+- **完整质量检查**: `pnpm quality:full` - 所有质量检查（包含安全、测试、构建）
+- **快速质量检查**: `pnpm quality:quick` - 快速质量验证
+- **暂存文件检查**: `pnpm quality:quick:staged` - 仅检查暂存文件
 
 ### 多语言内容管理配置
 
@@ -369,6 +378,28 @@ Next.js 15.4.6 + React 19.1.1 + TypeScript 5.9.2 + Tailwind CSS 4.1.11
 - **必须运行**: `pnpm quality:full`
 - **必须通过**: 所有自动化检查
 - **必须验证**: 功能在两种语言下正常工作
+
+### 质量监控工具
+
+- **AI质量引擎**: `pnpm ai:analyze` - AI驱动的代码质量分析
+- **质量仪表板**: `pnpm quality:dashboard` - 生成质量报告仪表板
+- **性能基准**: `pnpm performance:benchmark` - 性能基准测试
+- **覆盖率趋势**: `pnpm coverage:trend` - 测试覆盖率趋势监控
+- **质量门禁**: `pnpm quality:gate` - 质量门禁检查
+- **自动化报告**: `pnpm report:automated` - 生成自动化质量报告
+- **综合质量检查**: `pnpm quality:comprehensive` - 运行所有质量检查工具
+- **零容忍检查**: `pnpm quality:zero-tolerance` - 最严格的质量标准检查
+
+### 质量工作流程
+
+- **启动监控**: `pnpm quality:start` - 启动质量监控系统
+- **工作流控制**:
+  - `pnpm quality:workflow:start` - 启动自动化质量工作流
+  - `pnpm quality:workflow:stop` - 停止工作流
+  - `pnpm quality:workflow:status` - 查看工作流状态
+  - `pnpm quality:workflow:restart` - 重启工作流
+- **质量触发器**: `pnpm quality:trigger` - 手动触发质量检查
+- **状态监控**: `pnpm quality:watch` - 监控任务状态
 
 ## 修复验证流程（强制）
 
@@ -578,6 +609,7 @@ import { debugLog } from './debug'; // Temporary debugging
 - **组件测试**: src/components/\*\*/**tests**/
 - **工具函数测试**: src/lib/\*\*/**tests**/
 - **Hook测试**: src/hooks/\*\*/**tests**/
+- **E2E测试**: tests/e2e/
 - **必须使用**: Vitest + Testing Library（禁止Jest）
 
 ### 测试覆盖要求
@@ -607,6 +639,41 @@ import { debugLog } from './debug'; // Temporary debugging
     });
   });
   ```
+
+### E2E测试规范
+
+- **测试框架**: 必须使用Playwright
+- **测试文件**: tests/e2e/*.spec.ts
+- **浏览器支持**: Chromium、Firefox、WebKit
+- **测试命令**:
+  - `pnpm test:e2e` - 运行所有E2E测试
+  - `pnpm test:e2e:ui` - 使用UI模式运行
+  - `pnpm test:e2e:debug` - 调试模式
+  - `pnpm test:e2e:safe` - 安全导航测试
+- **测试覆盖**: 关键用户流程、导航安全、响应式设计
+- **示例**:
+  ```typescript
+  import { test, expect } from '@playwright/test';
+
+  test('should navigate between pages safely', async ({ page }) => {
+    await page.goto('/');
+    await expect(page).toHaveTitle(/Tucsenberg/);
+
+    // 测试导航
+    await page.click('[data-testid="nav-about"]');
+    await expect(page).toHaveURL(/\/about/);
+  });
+  ```
+
+### Web-Eval-Agent测试
+
+- **测试工具**: web-eval-agent MCP服务器
+- **测试命令**: `pnpm test:web-eval-agent`
+- **测试范围**: UX/UI评估、用户体验流程
+- **集成验证**: `pnpm test:verify-integration`
+- **测试服务器**: `pnpm test:server:start`
+- **并发测试**: `pnpm test:server:with-tests`
+- **用途**: 自动化用户体验评估和界面质量检查
 
 ## 性能优化规则
 
@@ -843,6 +910,34 @@ import { debugLog } from './debug'; // Temporary debugging
 - **API变更**: 更新接口文档
 - **配置变更**: 更新配置说明
 
+## AI Agent 决策框架集成
+
+### 规则文件层次结构
+
+- **核心规则**: shrimp-rules.md（本文件）- AI Agent 主要操作指南
+- **专项规则**: .augment/rules/ 目录 - 特定技术领域的详细规范
+- **冲突解决**: 核心约束优先，专项规则补充
+- **自动加载**: 根据任务类型自动应用相关专项规则
+
+### 专项规则引用
+
+- **测试相关**: 参考 .augment/rules/testing-standards.md
+- **安全相关**: 参考 .augment/rules/security-implementation.md
+- **TypeScript相关**: 参考 .augment/rules/typescript-safety-rules.md
+- **质量复杂度**: 参考 .augment/rules/quality-and-complexity.md
+- **Next.js/React**: 参考 .augment/rules/nextjs-architecture.md
+- **UI设计**: 参考 .augment/rules/ui-design-system.md
+- **国际化内容**: 参考 .augment/rules/i18n-content-management.md
+- **服务集成**: 参考 .augment/rules/service-integration.md
+- **CI/CD**: 参考 .augment/rules/eslint-cicd-integration.md
+
+### AI决策优先级
+
+1. **最高优先级**: 核心约束（零容忍规则）
+2. **高优先级**: 专项规则（技术特定要求）
+3. **中优先级**: 性能和用户体验
+4. **低优先级**: 代码风格和注释
+
 ## 应急处理规则
 
 ### 生产问题
@@ -912,4 +1007,103 @@ import { debugLog } from './debug'; // Temporary debugging
 - **代码质量**: 循环复杂度≤15，函数长度≤120行
 - **安全标准**: 零注入漏洞，零XSS漏洞
 - **性能标准**: 主包≤50KB，代码重复≤3%
-- **测试覆盖**: 组件、国际化、主题全覆盖
+- **测试覆盖**: 组件、国际化、主题、E2E全覆盖
+
+## 新增工具和脚本规范
+
+### 性能监控工具
+
+- **性能分析器**: `pnpm analyze:performance` - 分析应用性能瓶颈
+- **性能检查**: `pnpm perf:check` - 快速性能验证
+- **国际化性能**: `pnpm i18n:perf:test` - 国际化性能测试
+- **性能基准**: `pnpm i18n:perf:benchmark` - 国际化性能基准测试
+
+### 架构验证工具
+
+- **架构检查**: `pnpm arch:check` - 依赖关系验证
+- **架构图生成**: `pnpm arch:graph` - 生成依赖关系图
+- **循环依赖检查**: `pnpm circular:check` - 检测循环依赖
+- **循环依赖报告**: `pnpm circular:report` - 生成循环依赖报告
+- **架构验证**: `pnpm arch:validate` - 完整架构验证
+
+### 代码重复检查
+
+- **重复检查**: `pnpm duplication:check` - 检测代码重复
+- **重复报告**: `pnpm duplication:report` - 生成重复代码报告
+- **重复徽章**: `pnpm duplication:badge` - 生成重复率徽章
+- **CI重复检查**: `pnpm duplication:ci` - CI环境重复检查
+
+### 别名一致性检查
+
+- **别名检查**: `pnpm alias:check` - 验证路径别名一致性
+- **必须通过**: 确保@/别名在所有配置文件中一致
+- **检查范围**: tsconfig.json、next.config.ts、ESLint配置
+
+### React扫描工具
+
+- **React扫描**: `pnpm test:react-scan` - React组件性能扫描
+- **生产安全**: `pnpm test:production-safety` - 生产环境安全检查
+- **禁用扫描**: 开发时使用`pnpm dev:no-scan`避免干扰
+
+### 国际化增强工具
+
+- **翻译验证**: `pnpm validate:translations:enhanced` - 增强翻译验证
+- **翻译同步**: `pnpm sync:translations:enhanced` - 增强翻译同步
+- **翻译扫描**: `pnpm scan:translations` - 扫描缺失翻译
+- **完整i18n检查**: `pnpm i18n:full` - 运行所有国际化检查
+## 开发工作流程规范
+
+### 标准开发流程
+
+1. **任务分析**: 使用codebase-retrieval了解相关代码
+2. **规则检查**: 确认适用的专项规则文件
+3. **质量预检**: 运行`pnpm quality:check:strict`
+4. **开发实施**: 遵循所有编码标准
+5. **即时验证**: 每次修改后运行`pnpm lint && pnpm type-check`
+6. **功能测试**: 验证两种语言和三种主题
+7. **完整验证**: 运行`pnpm quality:full`
+8. **E2E测试**: 运行`pnpm test:e2e:safe`
+
+### 多文件修改流程
+
+- **国际化内容**: 修改content/*/en/时必须同时修改content/*/zh/
+- **翻译文件**: 修改messages/en.json时必须同时修改messages/zh.json
+- **组件修改**: 检查相关测试文件和类型定义
+- **配置修改**: 运行`pnpm alias:check`验证一致性
+
+### 错误修复流程
+
+1. **问题分析**: 理解错误根因和影响范围
+2. **复杂度评估**: 检查修复是否会增加代码复杂度
+3. **重构优先**: 如果复杂度会超限，先重构再修复
+4. **精确修复**: 应用最小化、精确的修复
+5. **立即验证**: 运行`pnpm lint && pnpm type-check`
+6. **无新问题**: 确保没有引入新的质量问题
+
+## 专项规则应用指南
+
+### 任务类型识别
+
+- **包含测试**: 自动应用testing-standards.md规则
+- **涉及安全**: 自动应用security-implementation.md规则
+- **TypeScript修改**: 自动应用typescript-safety-rules.md规则
+- **复杂度问题**: 自动应用quality-and-complexity.md规则
+- **React/Next.js**: 自动应用nextjs-architecture.md规则
+- **UI组件**: 自动应用ui-design-system.md规则
+- **国际化**: 自动应用i18n-content-management.md规则
+- **服务集成**: 自动应用service-integration.md规则
+- **CI/CD配置**: 自动应用eslint-cicd-integration.md规则
+
+### 规则冲突处理
+
+- **优先级1**: 核心约束（本文件的零容忍规则）
+- **优先级2**: 专项规则（技术特定要求）
+- **优先级3**: 项目偏好（性能和用户体验）
+- **优先级4**: 代码风格（格式和注释）
+
+### 规则更新机制
+
+- **定期检查**: 验证规则与实际代码库的一致性
+- **版本同步**: 确保规则与依赖版本保持同步
+- **工具集成**: 新工具添加时更新相应规则
+- **反馈循环**: 根据开发过程中的问题调整规则

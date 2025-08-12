@@ -1,12 +1,19 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { Sun, Moon, Monitor } from 'lucide-react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Monitor, Moon, Sun } from 'lucide-react';
+import { describe, expect, it, vi } from 'vitest';
 import { ThemeMenuItem } from '../theme-menu-item';
 
 // Mock DropdownMenuItem
 vi.mock('@/components/ui/dropdown-menu', () => ({
-  DropdownMenuItem: ({ children, className, onClick, onKeyDown, role, ...props }: any) => (
+  DropdownMenuItem: ({
+    children,
+    className,
+    onClick,
+    onKeyDown,
+    role,
+    ...props
+  }: any) => (
     <div
       role={role}
       className={className}
@@ -61,10 +68,20 @@ describe('ThemeMenuItem', () => {
     });
 
     it('renders with different icons correctly', () => {
-      const { rerender } = render(<ThemeMenuItem {...defaultProps} icon={Moon} />);
+      const { rerender } = render(
+        <ThemeMenuItem
+          {...defaultProps}
+          icon={Moon}
+        />,
+      );
       expect(screen.getByRole('menuitem')).toBeInTheDocument();
 
-      rerender(<ThemeMenuItem {...defaultProps} icon={Monitor} />);
+      rerender(
+        <ThemeMenuItem
+          {...defaultProps}
+          icon={Monitor}
+        />,
+      );
       expect(screen.getByRole('menuitem')).toBeInTheDocument();
     });
   });
@@ -74,9 +91,9 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="light"
-        />
+          theme='light'
+          currentTheme='light'
+        />,
       );
 
       const selectedIndicator = screen.getByLabelText('当前选中');
@@ -89,9 +106,9 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="dark"
-        />
+          theme='light'
+          currentTheme='dark'
+        />,
       );
 
       expect(screen.queryByLabelText('当前选中')).not.toBeInTheDocument();
@@ -102,9 +119,9 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="dark"
-          currentTheme="dark"
-        />
+          theme='dark'
+          currentTheme='dark'
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -115,9 +132,9 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="dark"
-        />
+          theme='light'
+          currentTheme='dark'
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -132,12 +149,16 @@ describe('ThemeMenuItem', () => {
         <ThemeMenuItem
           {...defaultProps}
           supportsViewTransitions={true}
-        />
+        />,
       );
 
       const transitionsIndicator = screen.getByText('✨');
       expect(transitionsIndicator).toBeInTheDocument();
-      expect(transitionsIndicator).toHaveClass('text-muted-foreground', 'ml-auto', 'text-xs');
+      expect(transitionsIndicator).toHaveClass(
+        'text-muted-foreground',
+        'ml-auto',
+        'text-xs',
+      );
       expect(transitionsIndicator).toHaveAttribute('aria-hidden', 'true');
     });
 
@@ -146,7 +167,7 @@ describe('ThemeMenuItem', () => {
         <ThemeMenuItem
           {...defaultProps}
           supportsViewTransitions={false}
-        />
+        />,
       );
 
       expect(screen.queryByText('✨')).not.toBeInTheDocument();
@@ -158,11 +179,15 @@ describe('ThemeMenuItem', () => {
           {...defaultProps}
           supportsViewTransitions={true}
           prefersReducedMotion={false}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
-      expect(menuItem).toHaveClass('hover:bg-accent', 'transition-all', 'duration-200');
+      expect(menuItem).toHaveClass(
+        'hover:bg-accent',
+        'transition-all',
+        'duration-200',
+      );
     });
 
     it('does not apply transition classes when prefersReducedMotion is true', () => {
@@ -171,7 +196,7 @@ describe('ThemeMenuItem', () => {
           {...defaultProps}
           supportsViewTransitions={true}
           prefersReducedMotion={true}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -186,7 +211,7 @@ describe('ThemeMenuItem', () => {
           {...defaultProps}
           supportsViewTransitions={false}
           prefersReducedMotion={false}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -202,7 +227,7 @@ describe('ThemeMenuItem', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -218,7 +243,7 @@ describe('ThemeMenuItem', () => {
         <ThemeMenuItem
           {...defaultProps}
           onKeyDown={handleKeyDown}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -234,14 +259,14 @@ describe('ThemeMenuItem', () => {
         <ThemeMenuItem
           {...defaultProps}
           onKeyDown={handleKeyDown}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
       fireEvent.keyDown(menuItem, { key: ' ' });
 
       expect(handleKeyDown).toHaveBeenCalledWith(
-        expect.objectContaining({ key: ' ' })
+        expect.objectContaining({ key: ' ' }),
       );
     });
   });
@@ -251,7 +276,10 @@ describe('ThemeMenuItem', () => {
       render(<ThemeMenuItem {...defaultProps} />);
 
       const menuItem = screen.getByRole('menuitem');
-      expect(menuItem).toHaveClass('focus:bg-accent', 'focus:text-accent-foreground');
+      expect(menuItem).toHaveClass(
+        'focus:bg-accent',
+        'focus:text-accent-foreground',
+      );
     });
 
     it('has proper icon accessibility attributes', () => {
@@ -265,9 +293,9 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="light"
-        />
+          theme='light'
+          currentTheme='light'
+        />,
       );
 
       const selectedIndicator = screen.getByLabelText('当前选中');
@@ -280,16 +308,19 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="light"
-          label="浅色模式"
-          ariaLabel="切换到浅色模式"
+          theme='light'
+          currentTheme='light'
+          label='浅色模式'
+          ariaLabel='切换到浅色模式'
           icon={Sun}
-        />
+        />,
       );
 
       expect(screen.getByText('浅色模式')).toBeInTheDocument();
-      expect(screen.getByRole('menuitem')).toHaveAttribute('aria-label', '切换到浅色模式');
+      expect(screen.getByRole('menuitem')).toHaveAttribute(
+        'aria-label',
+        '切换到浅色模式',
+      );
       expect(screen.getByLabelText('当前选中')).toBeInTheDocument();
     });
 
@@ -297,16 +328,19 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="dark"
-          currentTheme="dark"
-          label="深色模式"
-          ariaLabel="切换到深色模式"
+          theme='dark'
+          currentTheme='dark'
+          label='深色模式'
+          ariaLabel='切换到深色模式'
           icon={Moon}
-        />
+        />,
       );
 
       expect(screen.getByText('深色模式')).toBeInTheDocument();
-      expect(screen.getByRole('menuitem')).toHaveAttribute('aria-label', '切换到深色模式');
+      expect(screen.getByRole('menuitem')).toHaveAttribute(
+        'aria-label',
+        '切换到深色模式',
+      );
       expect(screen.getByLabelText('当前选中')).toBeInTheDocument();
     });
 
@@ -314,16 +348,19 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="system"
-          currentTheme="system"
-          label="跟随系统"
-          ariaLabel="跟随系统主题"
+          theme='system'
+          currentTheme='system'
+          label='跟随系统'
+          ariaLabel='跟随系统主题'
           icon={Monitor}
-        />
+        />,
       );
 
       expect(screen.getByText('跟随系统')).toBeInTheDocument();
-      expect(screen.getByRole('menuitem')).toHaveAttribute('aria-label', '跟随系统主题');
+      expect(screen.getByRole('menuitem')).toHaveAttribute(
+        'aria-label',
+        '跟随系统主题',
+      );
       expect(screen.getByLabelText('当前选中')).toBeInTheDocument();
     });
   });
@@ -333,16 +370,20 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="light"
+          theme='light'
+          currentTheme='light'
           supportsViewTransitions={true}
           prefersReducedMotion={false}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
       expect(menuItem).toHaveClass('bg-accent', 'text-accent-foreground');
-      expect(menuItem).toHaveClass('hover:bg-accent', 'transition-all', 'duration-200');
+      expect(menuItem).toHaveClass(
+        'hover:bg-accent',
+        'transition-all',
+        'duration-200',
+      );
       expect(screen.getByText('●')).toBeInTheDocument();
       expect(screen.getByText('✨')).toBeInTheDocument();
     });
@@ -351,11 +392,11 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="dark"
+          theme='light'
+          currentTheme='dark'
           supportsViewTransitions={true}
           prefersReducedMotion={true}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -369,11 +410,7 @@ describe('ThemeMenuItem', () => {
   describe('Edge Cases', () => {
     it('handles undefined currentTheme gracefully', () => {
       const { currentTheme, ...propsWithoutCurrentTheme } = defaultProps;
-      render(
-        <ThemeMenuItem
-          {...propsWithoutCurrentTheme}
-        />
-      );
+      render(<ThemeMenuItem {...propsWithoutCurrentTheme} />);
 
       expect(screen.queryByLabelText('当前选中')).not.toBeInTheDocument();
       const menuItem = screen.getByRole('menuitem');
@@ -384,8 +421,8 @@ describe('ThemeMenuItem', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          label=""
-        />
+          label=''
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');

@@ -139,8 +139,12 @@ export function getDevToolClasses(toolId: string): string {
     return 'fixed bottom-4 right-4 z-50';
   }
 
-  const positionClass = POSITION_CLASSES[config.position as keyof typeof POSITION_CLASSES] || POSITION_CLASSES['bottom-right'];
-  const sizeClass = SIZE_CLASSES[config.size as keyof typeof SIZE_CLASSES] || SIZE_CLASSES.medium;
+  const positionClass =
+    POSITION_CLASSES[config.position as keyof typeof POSITION_CLASSES] ||
+    POSITION_CLASSES['bottom-right'];
+  const sizeClass =
+    SIZE_CLASSES[config.size as keyof typeof SIZE_CLASSES] ||
+    SIZE_CLASSES.medium;
   const zIndexClass = `z-[${config.zIndex}]`;
 
   return `${positionClass} ${sizeClass} ${zIndexClass}`;
@@ -255,7 +259,8 @@ export class DevToolsLayoutManager {
       'right-center': ['bottom-right', 'top-right', 'left-center'],
     };
 
-    const alternativeList = alternatives[preferredPosition as keyof typeof alternatives] || [];
+    const alternativeList =
+      alternatives[preferredPosition as keyof typeof alternatives] || [];
 
     for (const alternative of alternativeList) {
       if (!usedPositions.has(alternative)) {

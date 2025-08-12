@@ -157,7 +157,8 @@ export function ReactScanProvider({ children }: { children: React.ReactNode }) {
 
     // 组件卸载时清理
     // eslint-disable-next-line consistent-return
-    return () => { // useEffect 清理函数
+    return () => {
+      // useEffect 清理函数
       if (cleanup) {
         cleanup();
       }

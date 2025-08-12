@@ -1,18 +1,17 @@
 // @ts-nocheck - 开发工具豁免：仅开发环境使用，不影响生产代码质量
 'use client';
 
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ReactScanAnalyzer } from '@/components/dev-tools/react-scan-analyzer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-
 import { DEV_TOOLS_CONSTANTS } from '@/constants/dev-tools';
 import { REACT_SCAN_CONFIG } from '@/constants/react-scan';
 
@@ -69,8 +68,16 @@ function IneffientComponent({ count }: { count: number }) {
         <div className='space-y-2 text-sm'>
           <p>计数: {count}</p>
           <p>时间戳: {expensiveObject.timestamp}</p>
-          <p>随机数: {expensiveObject.random.toFixed(DEV_TOOLS_CONSTANTS.REACT_SCAN.GRID_COLUMNS)}</p>
-          <p>昂贵计算结果: {result.toFixed(DEV_TOOLS_CONSTANTS.REACT_SCAN.GRID_ROWS)}</p>
+          <p>
+            随机数:{' '}
+            {expensiveObject.random.toFixed(
+              DEV_TOOLS_CONSTANTS.REACT_SCAN.GRID_COLUMNS,
+            )}
+          </p>
+          <p>
+            昂贵计算结果:{' '}
+            {result.toFixed(DEV_TOOLS_CONSTANTS.REACT_SCAN.GRID_ROWS)}
+          </p>
         </div>
       </CardContent>
     </Card>
@@ -84,7 +91,11 @@ function OptimizedComponent({ count }: { count: number }) {
   // 使用 useMemo 缓存昂贵计算
   const expensiveCalculation = useMemo(() => {
     let result = 0;
-    for (let i = 0; i < REACT_SCAN_CONFIG.EXPENSIVE_CALCULATION_ITERATIONS; i++) {
+    for (
+      let i = 0;
+      i < REACT_SCAN_CONFIG.EXPENSIVE_CALCULATION_ITERATIONS;
+      i++
+    ) {
       result += Math.random();
     }
     return result;
@@ -112,8 +123,18 @@ function OptimizedComponent({ count }: { count: number }) {
         <div className='space-y-2 text-sm'>
           <p>计数: {count}</p>
           <p>时间戳: {optimizedObject.timestamp}</p>
-          <p>随机数: {optimizedObject.random.toFixed(DEV_TOOLS_CONSTANTS.REACT_SCAN.GRID_COLUMNS)}</p>
-          <p>昂贵计算结果: {expensiveCalculation.toFixed(DEV_TOOLS_CONSTANTS.REACT_SCAN.GRID_ROWS)}</p>
+          <p>
+            随机数:{' '}
+            {optimizedObject.random.toFixed(
+              DEV_TOOLS_CONSTANTS.REACT_SCAN.GRID_COLUMNS,
+            )}
+          </p>
+          <p>
+            昂贵计算结果:{' '}
+            {expensiveCalculation.toFixed(
+              DEV_TOOLS_CONSTANTS.REACT_SCAN.GRID_ROWS,
+            )}
+          </p>
         </div>
       </CardContent>
     </Card>
@@ -181,7 +202,10 @@ function ReactScanStats() {
     updateStats();
 
     // 更频繁的轮询以快速响应状态变化
-    const interval = setInterval(updateStats, REACT_SCAN_CONFIG.STATS_UPDATE_INTERVAL);
+    const interval = setInterval(
+      updateStats,
+      REACT_SCAN_CONFIG.STATS_UPDATE_INTERVAL,
+    );
 
     // 监听键盘事件以立即更新状态
     const handleKeyDown = (event: KeyboardEvent) => {

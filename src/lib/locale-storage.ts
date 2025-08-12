@@ -1,7 +1,7 @@
 'use client';
 
-import { CACHE_DURATIONS, CACHE_LIMITS } from '@/constants/i18n-constants';
 import { Locale } from '@/types/i18n';
+import { CACHE_DURATIONS, CACHE_LIMITS } from '@/constants/i18n-constants';
 
 // 存储键名常量
 const STORAGE_KEYS = {

@@ -82,9 +82,15 @@ class PerformanceMonitoringCoordinator {
       sizeLimit: {
         enabled: true,
         limits: {
-          main: PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.MAIN_BUNDLE * PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.KB_TO_BYTES,
-          framework: PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.FRAMEWORK_BUNDLE * PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.KB_TO_BYTES,
-          css: PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.CSS_BUNDLE * PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.KB_TO_BYTES,
+          main:
+            PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.MAIN_BUNDLE *
+            PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.KB_TO_BYTES,
+          framework:
+            PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.FRAMEWORK_BUNDLE *
+            PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.KB_TO_BYTES,
+          css:
+            PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.CSS_BUNDLE *
+            PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.KB_TO_BYTES,
         },
       },
     };
@@ -127,7 +133,11 @@ class PerformanceMonitoringCoordinator {
   /**
    * 清理旧指标
    */
-  cleanupOldMetrics(maxAge = PERFORMANCE_CONSTANTS.MONITORING.DATA_COLLECTION_INTERVAL * PERFORMANCE_CONSTANTS.MONITORING.DATA_COLLECTION_DURATION * 1000) {
+  cleanupOldMetrics(
+    maxAge = PERFORMANCE_CONSTANTS.MONITORING.DATA_COLLECTION_INTERVAL *
+      PERFORMANCE_CONSTANTS.MONITORING.DATA_COLLECTION_DURATION *
+      1000,
+  ) {
     // 5分钟
     const cutoff = Date.now() - maxAge;
     this.metrics = this.metrics.filter((m) => m.timestamp > cutoff);
@@ -142,7 +152,11 @@ class PerformanceMonitoringCoordinator {
     recommendations: string[];
   } {
     const now = Date.now();
-    const recentMetrics = this.metrics.filter((m) => now - m.timestamp < PERFORMANCE_CONSTANTS.MONITORING.MONITORING_INTERVAL); // 最近1分钟
+    const recentMetrics = this.metrics.filter(
+      (m) =>
+        now - m.timestamp <
+        PERFORMANCE_CONSTANTS.MONITORING.MONITORING_INTERVAL,
+    ); // 最近1分钟
 
     const summary = {
       totalMetrics: this.metrics.length,
@@ -165,7 +179,9 @@ class PerformanceMonitoringCoordinator {
 
     // 基于指标生成建议
     const componentMetrics = this.metrics.filter((m) => m.type === 'component');
-    if (componentMetrics.length > PERFORMANCE_CONSTANTS.MONITORING.MAX_DATA_POINTS) {
+    if (
+      componentMetrics.length > PERFORMANCE_CONSTANTS.MONITORING.MAX_DATA_POINTS
+    ) {
       recommendations.push('考虑使用 React.memo 优化频繁渲染的组件');
     }
 

@@ -1,14 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // Import after mocks
 import {
-    generateArticleSchema,
-    generateBreadcrumbSchema,
-    generateFAQSchema,
-    generateJSONLD,
-    generateLocalBusinessSchema,
-    generateLocalizedStructuredData,
-    generateProductSchema,
-    generateStructuredData,
+  generateArticleSchema,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateJSONLD,
+  generateLocalBusinessSchema,
+  generateLocalizedStructuredData,
+  generateProductSchema,
+  generateStructuredData,
 } from '../structured-data';
 
 // 测试常量定义

@@ -1,15 +1,23 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ThemeToggleButton } from '../theme-toggle-button';
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
   Sun: ({ className, ...props }: any) => (
-    <div data-testid="sun-icon" className={className} {...props} />
+    <div
+      data-testid='sun-icon'
+      className={className}
+      {...props}
+    />
   ),
   Moon: ({ className, ...props }: any) => (
-    <div data-testid="moon-icon" className={className} {...props} />
+    <div
+      data-testid='moon-icon'
+      className={className}
+      {...props}
+    />
   ),
 }));
 
@@ -75,7 +83,7 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           ariaAttributes={ariaAttributes}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -89,7 +97,7 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           prefersHighContrast={true}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -101,7 +109,7 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           prefersHighContrast={false}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -113,7 +121,11 @@ describe('ThemeToggleButton', () => {
       render(<ThemeToggleButton {...defaultProps} />);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('focus:ring-ring', 'focus:ring-2', 'focus:ring-offset-2');
+      expect(button).toHaveClass(
+        'focus:ring-ring',
+        'focus:ring-2',
+        'focus:ring-offset-2',
+      );
     });
   });
 
@@ -123,7 +135,7 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           prefersReducedMotion={false}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -140,7 +152,7 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           prefersReducedMotion={true}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -166,7 +178,7 @@ describe('ThemeToggleButton', () => {
         'scale-100',
         'rotate-0',
         'dark:scale-0',
-        'dark:-rotate-90'
+        'dark:-rotate-90',
       );
       expect(sunIcon).toHaveAttribute('aria-hidden', 'true');
     });
@@ -182,7 +194,7 @@ describe('ThemeToggleButton', () => {
         'scale-0',
         'rotate-90',
         'dark:scale-100',
-        'dark:rotate-0'
+        'dark:rotate-0',
       );
       expect(moonIcon).toHaveAttribute('aria-hidden', 'true');
     });
@@ -195,7 +207,7 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -211,7 +223,7 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           onKeyDown={handleKeyDown}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -227,14 +239,14 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           onKeyDown={handleKeyDown}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
       fireEvent.keyDown(button, { key: ' ' });
 
       expect(handleKeyDown).toHaveBeenCalledWith(
-        expect.objectContaining({ key: ' ' })
+        expect.objectContaining({ key: ' ' }),
       );
     });
   });
@@ -242,7 +254,12 @@ describe('ThemeToggleButton', () => {
   describe('Forward Ref', () => {
     it('forwards ref to button element', () => {
       const ref = React.createRef<HTMLButtonElement>();
-      render(<ThemeToggleButton {...defaultProps} ref={ref} />);
+      render(
+        <ThemeToggleButton
+          {...defaultProps}
+          ref={ref}
+        />,
+      );
 
       expect(ref.current).toBeInstanceOf(HTMLButtonElement);
       expect(ref.current).toBe(screen.getByRole('button'));
@@ -258,9 +275,9 @@ describe('ThemeToggleButton', () => {
       render(
         <ThemeToggleButton
           {...defaultProps}
-          data-testid="custom-theme-button"
-          title="Custom title"
-        />
+          data-testid='custom-theme-button'
+          title='Custom title'
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -283,7 +300,7 @@ describe('ThemeToggleButton', () => {
         <ThemeToggleButton
           {...defaultProps}
           ariaAttributes={{}}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -300,7 +317,7 @@ describe('ThemeToggleButton', () => {
             'aria-label': 'Toggle dark mode',
             'aria-pressed': 'true',
           }}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');

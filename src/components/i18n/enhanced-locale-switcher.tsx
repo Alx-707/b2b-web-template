@@ -1,29 +1,29 @@
 'use client';
 
+import { memo, useMemo, useState, useTransition } from 'react';
+import {
+  Check,
+  Globe,
+  Languages,
+  Loader2,
+  MapPin,
+  Monitor,
+} from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { Locale } from '@/types/i18n';
+import { useClientLocaleDetection } from '@/lib/locale-detection';
+import { useLocaleStorage } from '@/lib/locale-storage';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Link, usePathname } from '@/i18n/routing';
-import { useClientLocaleDetection } from '@/lib/locale-detection';
-import { useLocaleStorage } from '@/lib/locale-storage';
-import { Locale } from '@/types/i18n';
-import {
-    Check,
-    Globe,
-    Languages,
-    Loader2,
-    MapPin,
-    Monitor,
-} from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import { memo, useMemo, useState, useTransition } from 'react';
 
 const TRANSITION_TIMEOUT = 1000;
 
