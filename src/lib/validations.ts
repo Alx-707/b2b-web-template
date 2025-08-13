@@ -1,38 +1,74 @@
 import { z } from 'zod';
 
 /**
+ * 验证常量定义
+ * Validation constants to avoid magic numbers
+ */
+const VALIDATION_CONSTANTS = {
+  // Name field constraints
+  NAME_MIN_LENGTH: 2,
+  NAME_MAX_LENGTH: 50,
+
+  // Email constraints
+  EMAIL_MAX_LENGTH: 100,
+
+  // Company constraints
+  COMPANY_MIN_LENGTH: 2,
+  COMPANY_MAX_LENGTH: 100,
+
+  // Message constraints
+  MESSAGE_MIN_LENGTH: 10,
+  MESSAGE_MAX_LENGTH: 1000,
+
+  // Subject constraints
+  SUBJECT_MIN_LENGTH: 5,
+  SUBJECT_MAX_LENGTH: 100,
+
+  // Phone constraints
+  PHONE_MAX_DIGITS: 15,
+
+  // Honeypot constraint
+  HONEYPOT_MAX_LENGTH: 0,
+
+  // Rate limiting
+  DEFAULT_COOLDOWN_MINUTES: 5,
+  COOLDOWN_TO_MS_MULTIPLIER: 60,
+  MS_PER_SECOND: 1000,
+} as const;
+
+/**
  * 联系表单验证模式
  * Contact form validation schema with comprehensive validation rules
  */
 export const contactFormSchema = z.object({
   firstName: z
     .string()
-    .min(2, 'First name must be at least 2 characters')
-    .max(50, 'First name must be less than 50 characters')
+    .min(VALIDATION_CONSTANTS.NAME_MIN_LENGTH, `First name must be at least ${VALIDATION_CONSTANTS.NAME_MIN_LENGTH} characters`)
+    .max(VALIDATION_CONSTANTS.NAME_MAX_LENGTH, `First name must be less than ${VALIDATION_CONSTANTS.NAME_MAX_LENGTH} characters`)
     .regex(/^[a-zA-Z\s\u4e00-\u9fff]+$/, 'First name can only contain letters and spaces'),
 
   lastName: z
     .string()
-    .min(2, 'Last name must be at least 2 characters')
-    .max(50, 'Last name must be less than 50 characters')
+    .min(VALIDATION_CONSTANTS.NAME_MIN_LENGTH, `Last name must be at least ${VALIDATION_CONSTANTS.NAME_MIN_LENGTH} characters`)
+    .max(VALIDATION_CONSTANTS.NAME_MAX_LENGTH, `Last name must be less than ${VALIDATION_CONSTANTS.NAME_MAX_LENGTH} characters`)
     .regex(/^[a-zA-Z\s\u4e00-\u9fff]+$/, 'Last name can only contain letters and spaces'),
 
   email: z
     .string()
     .email('Please enter a valid email address')
-    .max(100, 'Email must be less than 100 characters')
+    .max(VALIDATION_CONSTANTS.EMAIL_MAX_LENGTH, `Email must be less than ${VALIDATION_CONSTANTS.EMAIL_MAX_LENGTH} characters`)
     .toLowerCase(),
 
   company: z
     .string()
-    .min(2, 'Company name must be at least 2 characters')
-    .max(100, 'Company name must be less than 100 characters')
+    .min(VALIDATION_CONSTANTS.COMPANY_MIN_LENGTH, `Company name must be at least ${VALIDATION_CONSTANTS.COMPANY_MIN_LENGTH} characters`)
+    .max(VALIDATION_CONSTANTS.COMPANY_MAX_LENGTH, `Company name must be less than ${VALIDATION_CONSTANTS.COMPANY_MAX_LENGTH} characters`)
     .regex(/^[a-zA-Z0-9\s\u4e00-\u9fff&.,'-]+$/, 'Company name contains invalid characters'),
 
   message: z
     .string()
-    .min(10, 'Message must be at least 10 characters')
-    .max(1000, 'Message must be less than 1000 characters')
+    .min(VALIDATION_CONSTANTS.MESSAGE_MIN_LENGTH, `Message must be at least ${VALIDATION_CONSTANTS.MESSAGE_MIN_LENGTH} characters`)
+    .max(VALIDATION_CONSTANTS.MESSAGE_MAX_LENGTH, `Message must be less than ${VALIDATION_CONSTANTS.MESSAGE_MAX_LENGTH} characters`)
     .trim(),
 
   // Optional fields for enhanced form functionality
