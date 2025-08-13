@@ -6,6 +6,7 @@ import { AccessibilityManager } from '@/lib/accessibility';
 import { cn } from '@/lib/utils';
 import * as React from 'react';
 import { forwardRef, useEffect, useState } from 'react';
+import { animationUtils } from './animated-counter-helpers';
 
 /**
  * 缓动函数类型
@@ -172,25 +173,7 @@ export const AnimatedCounter = forwardRef<
 
       setIsAnimating(true);
 
-      // Check for performance.now availability
-      const getTime = () => {
-        if (typeof performance !== 'undefined' && performance.now) {
-          return performance.now();
-        }
-        return Date.now();
-      };
-
-      // Check for requestAnimationFrame availability
-      const scheduleFrame = (callback: (time: number) => void) => {
-        if (typeof requestAnimationFrame !== 'undefined') {
-          return requestAnimationFrame(callback);
-        }
-        // Fallback to setTimeout for environments without requestAnimationFrame
-        const FRAME_DURATION = 16; // 16ms for 60fps
-        return setTimeout(() => callback(getTime()), FRAME_DURATION) as unknown as number;
-      };
-
-      const startTime = getTime();
+      const startTime = animationUtils.getTime();
       const startValue = currentValue;
       const difference = to - startValue;
 
@@ -204,14 +187,14 @@ export const AnimatedCounter = forwardRef<
         setCurrentValue(newValue);
 
         if (progress < 1) {
-          scheduleFrame(updateValue);
+          animationUtils.scheduleFrame(updateValue);
         } else {
           setCurrentValue(to);
           setIsAnimating(false);
         }
       };
 
-      scheduleFrame(updateValue);
+      animationUtils.scheduleFrame(updateValue);
     }, [currentValue, to, duration, easing, isAnimating]);
 
     // 触发动画的条件

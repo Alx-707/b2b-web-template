@@ -162,14 +162,21 @@ export function getSecurityHeaders(nonce?: string, testMode = false) {
 /**
  * Generate a cryptographically secure nonce for CSP
  */
+// Constants for nonce generation
+const NONCE_CONSTANTS = {
+  RADIX_36: 36,
+  SUBSTRING_START: 2,
+  SUBSTRING_END: 15,
+} as const;
+
 export function generateNonce(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID().replace(/-/g, '');
   }
 
   // Fallback for environments without crypto.randomUUID
-  return Math.random().toString(36).substring(2, 15) +
-         Math.random().toString(36).substring(2, 15);
+  return Math.random().toString(NONCE_CONSTANTS.RADIX_36).substring(NONCE_CONSTANTS.SUBSTRING_START, NONCE_CONSTANTS.SUBSTRING_END) +
+         Math.random().toString(NONCE_CONSTANTS.RADIX_36).substring(NONCE_CONSTANTS.SUBSTRING_START, NONCE_CONSTANTS.SUBSTRING_END);
 }
 
 /**

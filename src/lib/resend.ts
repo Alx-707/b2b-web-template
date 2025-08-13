@@ -1,9 +1,9 @@
 import { Resend } from 'resend';
 import { env } from '@/../env.mjs';
-import { 
-  EmailTemplateData, 
+import {
+  EmailTemplateData,
   emailTemplateDataSchema,
-  validationHelpers 
+  validationHelpers
 } from './validations';
 import { logger } from './logger';
 
@@ -26,7 +26,7 @@ class ResendService {
       replyTo: env.EMAIL_REPLY_TO || 'contact@tucsenberg.com',
       supportEmail: env.EMAIL_REPLY_TO || 'support@tucsenberg.com',
     };
-    
+
     this.initializeResend();
   }
 
@@ -75,13 +75,13 @@ class ResendService {
     try {
       // 验证邮件数据
       const validatedData = emailTemplateDataSchema.parse(data);
-      
+
       // 清理数据
       const sanitizedData = this.sanitizeEmailData(validatedData);
 
       // 构建邮件内容
-      const subject = sanitizedData.subject 
-        ? `Contact Form: ${sanitizedData.subject}` 
+      const subject = sanitizedData.subject
+        ? `Contact Form: ${sanitizedData.subject}`
         : `New Contact from ${sanitizedData.firstName} ${sanitizedData.lastName}`;
 
       const htmlContent = this.generateContactEmailHtml(sanitizedData);
@@ -371,12 +371,12 @@ The Tucsenberg Team
    * 获取邮件发送统计
    * Get email sending statistics
    */
-  public async getEmailStats(): Promise<{
+  public getEmailStats(): {
     sent: number;
     delivered: number;
     bounced: number;
     complained: number;
-  }> {
+  } {
     // Note: Resend doesn't provide built-in analytics API
     // This would need to be implemented with webhook tracking
     return {

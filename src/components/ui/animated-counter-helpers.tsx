@@ -1,12 +1,22 @@
 import * as React from 'react';
 
 /**
+ * Animation constants to avoid magic numbers
+ */
+const ANIMATION_CONSTANTS = {
+  HALF_POINT: 0.5,
+  DOUBLE_MULTIPLIER: 2,
+  CUBIC_MULTIPLIER: 4,
+  EASE_ADJUSTMENT: 2,
+} as const;
+
+/**
  * Animation configuration interface
  */
 export interface AnimationConfig {
   duration: number;
-  easing: (t: number) => number;
-  onUpdate?: (value: number) => void;
+  easing: (_t: number) => number;
+  onUpdate?: (_value: number) => void;
   onComplete?: () => void;
 }
 
@@ -15,12 +25,15 @@ export interface AnimationConfig {
  */
 export const easingFunctions = {
   linear: (t: number) => t,
-  easeInOut: (t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
-  easeOut: (t: number) => t * (2 - t),
+  easeInOut: (t: number) => t < ANIMATION_CONSTANTS.HALF_POINT ? ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t * t : -1 + (ANIMATION_CONSTANTS.CUBIC_MULTIPLIER - ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t) * t,
+  easeOut: (t: number) => t * (ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER - t),
   easeIn: (t: number) => t * t,
   easeInCubic: (t: number) => t * t * t,
-  easeOutCubic: (t: number) => (--t) * t * t + 1,
-  easeInOutCubic: (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+  easeOutCubic: (t: number) => {
+    const adjustedT = t - 1;
+    return adjustedT * adjustedT * adjustedT + 1;
+  },
+  easeInOutCubic: (t: number) => t < ANIMATION_CONSTANTS.HALF_POINT ? ANIMATION_CONSTANTS.CUBIC_MULTIPLIER * t * t * t : (t - 1) * (ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t - ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER) * (ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t - ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER) + 1,
 };
 
 /**
@@ -44,12 +57,42 @@ export function formatNumber(
 
   const formattedValue = value.toFixed(decimals);
   const parts = formattedValue.split('.');
-  
-  // Add thousand separators
+
+  // Add thousand separators - using safe static regex pattern
+  // eslint-disable-next-line security/detect-unsafe-regex
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
-  
+
   return prefix + parts.join('.') + suffix;
 }
+
+/**
+ * Animation utilities for performance and compatibility
+ */
+export const animationUtils = {
+  getTime: () => {
+    if (typeof performance !== 'undefined' && performance.now) {
+      return performance.now();
+    }
+    return Date.now();
+  },
+
+  scheduleFrame: (callback: (_time: number) => void) => {
+    if (typeof requestAnimationFrame !== 'undefined') {
+      return requestAnimationFrame(callback);
+    }
+    // Fallback to setTimeout for environments without requestAnimationFrame
+    const FRAME_DURATION = 16; // 16ms for 60fps
+    return setTimeout(() => callback(animationUtils.getTime()), FRAME_DURATION) as unknown as number;
+  },
+
+  cancelFrame: (id: number) => {
+    if (typeof cancelAnimationFrame !== 'undefined') {
+      cancelAnimationFrame(id);
+    } else {
+      clearTimeout(id);
+    }
+  }
+};
 
 /**
  * Animation hook for counter values
@@ -72,9 +115,9 @@ export function useCounterAnimation(
     const elapsed = timestamp - startTimeRef.current;
     const progress = Math.min(elapsed / config.duration, 1);
     const easedProgress = config.easing(progress);
-    
+
     const newValue = startValueRef.current + (targetValue - startValueRef.current) * easedProgress;
-    
+
     setCurrentValue(newValue);
     config.onUpdate?.(newValue);
 
@@ -91,7 +134,7 @@ export function useCounterAnimation(
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
-    
+
     startTimeRef.current = null;
     animationRef.current = requestAnimationFrame(animate);
 
@@ -118,7 +161,7 @@ export function getCurrentTime(): number {
 /**
  * Schedule animation frame with fallback
  */
-export function scheduleAnimationFrame(callback: (time: number) => void): number {
+export function scheduleAnimationFrame(callback: (_time: number) => void): number {
   if (typeof requestAnimationFrame !== 'undefined') {
     return requestAnimationFrame(callback);
   }

@@ -190,7 +190,6 @@ function usePerformanceMonitorState(options: UsePerformanceMonitorOptions) {
   const {
     enableAlerts = false,
     alertThresholds = null,
-    autoMonitoring = false,
     monitoringInterval = 1000,
   } = safeOptions;
 
@@ -398,19 +397,21 @@ export function usePerformanceMonitor(
 
       return () => clearTimeout(timer);
     }
+    // Return undefined explicitly for all code paths
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount to avoid infinite loops
 
   // Auto monitoring interval effect
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | null = null;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
     if (isMonitoring && monitoringInterval > 0) {
       intervalId = setInterval(() => {
         try {
           refreshMetrics();
-        } catch (error) {
-          setError(error instanceof Error ? error.message : 'Unknown monitoring error');
+        } catch (monitoringError) {
+          setError(monitoringError instanceof Error ? monitoringError.message : 'Unknown monitoring error');
         }
       }, monitoringInterval);
     }

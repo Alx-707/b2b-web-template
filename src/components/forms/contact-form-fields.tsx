@@ -28,7 +28,7 @@ export function NameFields({ register, errors, isSubmitting, t }: NameFieldsProp
           placeholder={t('firstNamePlaceholder')}
           disabled={isSubmitting}
           className={errors.firstName ? 'border-red-500 focus:border-red-500' : ''}
-          aria-invalid={!!errors.firstName}
+          aria-invalid={Boolean(errors.firstName)}
           {...register('firstName')}
         />
         {errors.firstName && (
@@ -47,7 +47,7 @@ export function NameFields({ register, errors, isSubmitting, t }: NameFieldsProp
           placeholder={t('lastNamePlaceholder')}
           disabled={isSubmitting}
           className={errors.lastName ? 'border-red-500 focus:border-red-500' : ''}
-          aria-invalid={!!errors.lastName}
+          aria-invalid={Boolean(errors.lastName)}
           {...register('lastName')}
         />
         {errors.lastName && (
@@ -83,7 +83,7 @@ export function ContactFields({ register, errors, isSubmitting, t }: ContactFiel
           placeholder={t('emailPlaceholder')}
           disabled={isSubmitting}
           className={errors.email ? 'border-red-500 focus:border-red-500' : ''}
-          aria-invalid={!!errors.email}
+          aria-invalid={Boolean(errors.email)}
           {...register('email')}
         />
         {errors.email && (
@@ -102,7 +102,7 @@ export function ContactFields({ register, errors, isSubmitting, t }: ContactFiel
           placeholder={t('companyPlaceholder')}
           disabled={isSubmitting}
           className={errors.company ? 'border-red-500 focus:border-red-500' : ''}
-          aria-invalid={!!errors.company}
+          aria-invalid={Boolean(errors.company)}
           {...register('company')}
         />
         {errors.company && (
@@ -139,7 +139,7 @@ export function AdditionalFields({ register, errors, isSubmitting, t }: Addition
             placeholder={t('phonePlaceholder')}
             disabled={isSubmitting}
             className={errors.phone ? 'border-red-500 focus:border-red-500' : ''}
-            aria-invalid={!!errors.phone}
+            aria-invalid={Boolean(errors.phone)}
             {...register('phone')}
           />
           {errors.phone && (
@@ -158,7 +158,7 @@ export function AdditionalFields({ register, errors, isSubmitting, t }: Addition
             placeholder={t('subjectPlaceholder')}
             disabled={isSubmitting}
             className={errors.subject ? 'border-red-500 focus:border-red-500' : ''}
-            aria-invalid={!!errors.subject}
+            aria-invalid={Boolean(errors.subject)}
             {...register('subject')}
           />
           {errors.subject && (
@@ -179,7 +179,7 @@ export function AdditionalFields({ register, errors, isSubmitting, t }: Addition
           disabled={isSubmitting}
           rows={6}
           className={errors.message ? 'border-red-500 focus:border-red-500' : ''}
-          aria-invalid={!!errors.message}
+          aria-invalid={Boolean(errors.message)}
           {...register('message')}
         />
         {errors.message && (

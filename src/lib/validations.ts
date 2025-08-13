@@ -77,8 +77,8 @@ export const contactFormSchema = z.object({
     .optional()
     .refine((val) => {
       if (!val) return true;
-      // International phone number validation
-      return /^[\+]?[1-9][\d]{0,15}$/.test(val.replace(/[\s\-\(\)]/g, ''));
+      // International phone number validation - using safe static regex
+      return /^[+]?[1-9][\d]{0,15}$/.test(val.replace(/[\s\-()]/g, ''));
     }, 'Please enter a valid phone number'),
 
   subject: z
@@ -86,8 +86,8 @@ export const contactFormSchema = z.object({
     .optional()
     .refine((val) => {
       if (!val) return true;
-      return val.length >= 5 && val.length <= 100;
-    }, 'Subject must be between 5 and 100 characters'),
+      return val.length >= VALIDATION_CONSTANTS.SUBJECT_MIN_LENGTH && val.length <= VALIDATION_CONSTANTS.SUBJECT_MAX_LENGTH;
+    }, `Subject must be between ${VALIDATION_CONSTANTS.SUBJECT_MIN_LENGTH} and ${VALIDATION_CONSTANTS.SUBJECT_MAX_LENGTH} characters`),
 
   // Privacy and terms acceptance
   acceptPrivacy: z
@@ -98,7 +98,7 @@ export const contactFormSchema = z.object({
   marketingConsent: z.boolean().optional(),
 
   // Honeypot field for bot detection
-  website: z.string().max(0, 'This field should be empty').optional(),
+  website: z.string().max(VALIDATION_CONSTANTS.HONEYPOT_MAX_LENGTH, 'This field should be empty').optional(),
 });
 
 /**
@@ -223,12 +223,12 @@ export const validationHelpers = {
    * 验证提交频率限制
    * Validate submission rate limiting
    */
-  isSubmissionRateLimited: (lastSubmission: Date | null, cooldownMinutes = 5): boolean => {
+  isSubmissionRateLimited: (lastSubmission: Date | null, cooldownMinutes = VALIDATION_CONSTANTS.DEFAULT_COOLDOWN_MINUTES): boolean => {
     if (!lastSubmission) return false;
 
     const now = new Date();
     const timeDiff = now.getTime() - lastSubmission.getTime();
-    const cooldownMs = cooldownMinutes * 60 * 1000;
+    const cooldownMs = cooldownMinutes * VALIDATION_CONSTANTS.COOLDOWN_TO_MS_MULTIPLIER * VALIDATION_CONSTANTS.MS_PER_SECOND;
 
     return timeDiff < cooldownMs;
   },

@@ -47,7 +47,7 @@ describe('Security Utils', () => {
     });
 
     it('should reject emails that are too long', () => {
-      const longEmail = 'a'.repeat(250) + '@example.com';
+      const longEmail = `${'a'.repeat(250)}@example.com`;
       expect(isValidEmail(longEmail)).toBe(false);
     });
   });

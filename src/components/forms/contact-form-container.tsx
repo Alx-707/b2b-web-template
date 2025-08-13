@@ -1,22 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
 import { Turnstile } from '@marsidev/react-turnstile';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
-import {
-  ContactFormData,
-  contactFormSchema,
-  FormSubmissionStatus,
-  validationHelpers
-} from '@/lib/validations';
 import { logger } from '@/lib/logger';
-import { NameFields, ContactFields, AdditionalFields, CheckboxFields } from './contact-form-fields';
+import {
+    ContactFormData,
+    contactFormSchema,
+    FormSubmissionStatus,
+    validationHelpers
+} from '@/lib/validations';
+import { AdditionalFields, CheckboxFields, ContactFields, NameFields } from './contact-form-fields';
 
 /**
  * Status message component
@@ -45,7 +45,10 @@ function StatusMessage({ status, t }: StatusMessageProps) {
     idle: undefined
   };
 
-  const config = statusConfig[status];
+  // Use Object.prototype.hasOwnProperty to safely access object properties
+  const config = Object.prototype.hasOwnProperty.call(statusConfig, status)
+    ? statusConfig[status as keyof typeof statusConfig]
+    : undefined;
   if (!config) return null;
 
   return (
@@ -61,8 +64,8 @@ function StatusMessage({ status, t }: StatusMessageProps) {
 async function handleFormSubmission(
   data: ContactFormData,
   turnstileToken: string,
-  setSubmitStatus: (status: FormSubmissionStatus) => void,
-  setLastSubmissionTime: (time: Date) => void,
+  setSubmitStatus: (_status: FormSubmissionStatus) => void,
+  setLastSubmissionTime: (_time: Date) => void,
   reset: () => void
 ) {
   try {

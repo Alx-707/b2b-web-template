@@ -1,12 +1,12 @@
-import Airtable from 'airtable';
 import { env } from '@/../env.mjs';
-import {
-  ContactFormData,
-  AirtableRecord,
-  airtableRecordSchema,
-  validationHelpers
-} from './validations';
+import Airtable from 'airtable';
 import { logger } from './logger';
+import {
+    AirtableRecord,
+    airtableRecordSchema,
+    ContactFormData,
+    validationHelpers
+} from './validations';
 
 /**
  * Airtable配置和初始化
@@ -30,8 +30,8 @@ class AirtableService {
     try {
       if (!env.AIRTABLE_API_KEY || !env.AIRTABLE_BASE_ID) {
         logger.warn('Airtable configuration missing - service will be disabled', {
-          hasApiKey: !!env.AIRTABLE_API_KEY,
-          hasBaseId: !!env.AIRTABLE_BASE_ID,
+          hasApiKey: Boolean(env.AIRTABLE_API_KEY),
+          hasBaseId: Boolean(env.AIRTABLE_BASE_ID),
         });
         return;
       }
@@ -102,7 +102,7 @@ class AirtableService {
         },
       ]);
 
-      const createdRecord = records[0];
+      const [createdRecord] = records;
 
       if (!createdRecord) {
         throw new Error('Failed to create record');
@@ -144,7 +144,11 @@ class AirtableService {
     try {
       const { maxRecords = 100, filterByFormula, sort } = options;
 
-      const selectOptions: any = { maxRecords };
+      const selectOptions: {
+        maxRecords: number;
+        filterByFormula?: string;
+        sort?: Array<{ field: string; direction: 'asc' | 'desc' }>;
+      } = { maxRecords };
       if (filterByFormula) {
         selectOptions.filterByFormula = filterByFormula;
       }
@@ -326,5 +330,6 @@ class AirtableService {
 export const airtableService = new AirtableService();
 
 // 导出类型和服务
-export type { AirtableRecord };
 export { AirtableService };
+export type { AirtableRecord };
+

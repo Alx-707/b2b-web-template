@@ -1,6 +1,38 @@
 import { env } from '../../env.mjs';
 
 /**
+ * Security constants to avoid magic numbers
+ */
+const SECURITY_CONSTANTS = {
+  // Email validation
+  MAX_EMAIL_LENGTH: 254,
+
+  // Token generation
+  DEFAULT_TOKEN_LENGTH: 32,
+  HEX_RADIX: 2,
+  HEX_PAD_LENGTH: 2,
+  HEX_BASE: 16,
+
+  // Rate limiting
+  DEFAULT_MAX_REQUESTS: 10,
+  DEFAULT_WINDOW_MS: 60000, // 1 minute
+
+  // File upload
+  MAX_FILE_SIZE_MB: 10,
+  BYTES_PER_MB: 1024,
+  KB_TO_BYTES: 1024,
+
+  // Crypto
+  SALT_BYTE_LENGTH: 16,
+  HEX_CHARS_PER_BYTE: 2,
+
+  // Cleanup interval
+  CLEANUP_INTERVAL_MINUTES: 5,
+  MINUTES_TO_MS: 60,
+  SECONDS_TO_MS: 1000,
+} as const;
+
+/**
  * Security utilities and helpers
  */
 
@@ -25,7 +57,7 @@ export function sanitizeInput(input: string): string {
  */
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email) && email.length <= 254;
+  return emailRegex.test(email) && email.length <= SECURITY_CONSTANTS.MAX_EMAIL_LENGTH;
 }
 
 /**
@@ -43,13 +75,13 @@ export function isValidUrl(url: string, allowedProtocols: string[] = ['http:', '
 /**
  * Generate a secure random string
  */
-export function generateSecureToken(length: number = 32): string {
+export function generateSecureToken(length: number = SECURITY_CONSTANTS.DEFAULT_TOKEN_LENGTH): string {
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
     // Generate half the length in bytes since each byte becomes 2 hex characters
-    const byteLength = Math.ceil(length / 2);
+    const byteLength = Math.ceil(length / SECURITY_CONSTANTS.HEX_RADIX);
     const array = new Uint8Array(byteLength);
     crypto.getRandomValues(array);
-    const hex = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+    const hex = Array.from(array, byte => byte.toString(SECURITY_CONSTANTS.HEX_BASE).padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0')).join('');
     return hex.substring(0, length);
   }
 
@@ -74,8 +106,8 @@ const rateLimitStore = new Map<string, RateLimitEntry>();
 
 export function rateLimit(
   identifier: string,
-  maxRequests: number = 10,
-  windowMs: number = 60000 // 1 minute
+  maxRequests: number = SECURITY_CONSTANTS.DEFAULT_MAX_REQUESTS,
+  windowMs: number = SECURITY_CONSTANTS.DEFAULT_WINDOW_MS // 1 minute
 ): boolean {
   const now = Date.now();
   const entry = rateLimitStore.get(identifier);
@@ -95,7 +127,7 @@ export function rateLimit(
   }
 
   // Increment count
-  entry.count++;
+  entry.count += 1;
   rateLimitStore.set(identifier, entry);
   return true;
 }
@@ -117,9 +149,9 @@ export function cleanupRateLimit(): void {
  */
 export function validateFileUpload(file: File): { valid: boolean; error?: string } {
   // Check file size (10MB limit)
-  const maxSize = 10 * 1024 * 1024;
+  const maxSize = SECURITY_CONSTANTS.MAX_FILE_SIZE_MB * SECURITY_CONSTANTS.BYTES_PER_MB * SECURITY_CONSTANTS.KB_TO_BYTES;
   if (file.size > maxSize) {
-    return { valid: false, error: 'File size exceeds 10MB limit' };
+    return { valid: false, error: `File size exceeds ${SECURITY_CONSTANTS.MAX_FILE_SIZE_MB}MB limit` };
   }
 
   // Check file type
@@ -155,7 +187,7 @@ export function validateFileUpload(file: File): { valid: boolean; error?: string
  */
 export async function hashPassword(password: string, salt?: string): Promise<string> {
   const encoder = new TextEncoder();
-  const saltBytes = salt ? encoder.encode(salt) : crypto.getRandomValues(new Uint8Array(16));
+  const saltBytes = salt ? encoder.encode(salt) : crypto.getRandomValues(new Uint8Array(SECURITY_CONSTANTS.SALT_BYTE_LENGTH));
   const passwordBytes = encoder.encode(password);
 
   const combined = new Uint8Array(saltBytes.length + passwordBytes.length);
@@ -164,9 +196,9 @@ export async function hashPassword(password: string, salt?: string): Promise<str
 
   const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const hashHex = hashArray.map(b => b.toString(SECURITY_CONSTANTS.HEX_BASE).padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0')).join('');
 
-  const saltHex = Array.from(saltBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+  const saltHex = Array.from(saltBytes).map(b => b.toString(SECURITY_CONSTANTS.HEX_BASE).padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0')).join('');
 
   return `${saltHex}:${hashHex}`;
 }
@@ -276,5 +308,5 @@ export function checkSecurityConfig(testMode = false): {
 
 // Clean up rate limit entries every 5 minutes
 if (typeof setInterval !== 'undefined') {
-  setInterval(cleanupRateLimit, 5 * 60 * 1000);
+  setInterval(cleanupRateLimit, SECURITY_CONSTANTS.CLEANUP_INTERVAL_MINUTES * SECURITY_CONSTANTS.MINUTES_TO_MS * SECURITY_CONSTANTS.SECONDS_TO_MS);
 }

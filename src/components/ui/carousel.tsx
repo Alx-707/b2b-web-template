@@ -1,12 +1,12 @@
 'use client';
 
-import * as React from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import useEmblaCarousel, {
-  type UseEmblaCarouselType,
+    type UseEmblaCarouselType,
 } from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import * as React from 'react';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -102,6 +102,7 @@ const Carousel = React.forwardRef<
         return;
       }
 
+      // eslint-disable-next-line react-you-might-not-need-an-effect/no-pass-data-to-parent
       setApi(api);
     }, [api, setApi]);
 
@@ -255,10 +256,10 @@ const CarouselNext = React.forwardRef<
 CarouselNext.displayName = 'CarouselNext';
 
 export {
-  type CarouselApi,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious, type CarouselApi
 };
+
