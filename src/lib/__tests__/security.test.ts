@@ -1,21 +1,25 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  sanitizeInput,
+  checkSecurityConfig,
+  generateSecureToken,
   isValidEmail,
   isValidUrl,
-  generateSecureToken,
   rateLimit,
+  sanitizeInput,
   validateFileUpload,
-  checkSecurityConfig,
 } from '../security';
 
 describe('Security Utils', () => {
   describe('sanitizeInput', () => {
     it('should remove dangerous characters', () => {
-      expect(sanitizeInput('<script>alert("xss")</script>')).toBe('scriptalert("xss")/script');
+      expect(sanitizeInput('<script>alert("xss")</script>')).toBe(
+        'scriptalert("xss")/script',
+      );
       expect(sanitizeInput('javascript:alert("xss")')).toBe('alert("xss")');
       expect(sanitizeInput('onclick=alert("xss")')).toBe('alert("xss")');
-      expect(sanitizeInput('data:text/html,<script>alert("xss")</script>')).toBe('text/html,scriptalert("xss")/script');
+      expect(
+        sanitizeInput('data:text/html,<script>alert("xss")</script>'),
+      ).toBe('text/html,scriptalert("xss")/script');
     });
 
     it('should handle non-string input', () => {
@@ -27,7 +31,9 @@ describe('Security Utils', () => {
     it('should preserve safe content', () => {
       expect(sanitizeInput('Hello World')).toBe('Hello World');
       expect(sanitizeInput('user@example.com')).toBe('user@example.com');
-      expect(sanitizeInput('Some text with spaces')).toBe('Some text with spaces');
+      expect(sanitizeInput('Some text with spaces')).toBe(
+        'Some text with spaces',
+      );
     });
   });
 
@@ -121,28 +127,36 @@ describe('Security Utils', () => {
 
   describe('validateFileUpload', () => {
     it('should accept valid files', () => {
-      const validFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+      const validFile = new File(['content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
       const result = validateFileUpload(validFile);
       expect(result.valid).toBe(true);
       expect(result.error).toBeUndefined();
     });
 
     it('should reject files that are too large', () => {
-      const largeFile = new File(['x'.repeat(11 * 1024 * 1024)], 'large.jpg', { type: 'image/jpeg' });
+      const largeFile = new File(['x'.repeat(11 * 1024 * 1024)], 'large.jpg', {
+        type: 'image/jpeg',
+      });
       const result = validateFileUpload(largeFile);
       expect(result.valid).toBe(false);
       expect(result.error).toContain('size exceeds');
     });
 
     it('should reject dangerous file types', () => {
-      const dangerousFile = new File(['content'], 'malware.exe', { type: 'application/octet-stream' });
+      const dangerousFile = new File(['content'], 'malware.exe', {
+        type: 'application/octet-stream',
+      });
       const result = validateFileUpload(dangerousFile);
       expect(result.valid).toBe(false);
       expect(result.error).toContain('type not allowed');
     });
 
     it('should reject dangerous file extensions', () => {
-      const dangerousFile = new File(['content'], 'script.js', { type: 'text/plain' });
+      const dangerousFile = new File(['content'], 'script.js', {
+        type: 'text/plain',
+      });
       const result = validateFileUpload(dangerousFile);
       expect(result.valid).toBe(false);
       expect(result.error).toContain('extension not allowed');
@@ -158,7 +172,9 @@ describe('Security Utils', () => {
 
       const result = checkSecurityConfig(true);
       expect(result.configured).toBe(false);
-      expect(result.issues).toContain('Turnstile secret key not configured in production');
+      expect(result.issues).toContain(
+        'Turnstile secret key not configured in production',
+      );
     });
 
     it('should pass in development environment', () => {
@@ -177,7 +193,9 @@ describe('Security Utils', () => {
 
       const result = checkSecurityConfig(true);
       expect(result.configured).toBe(false);
-      expect(result.issues).toContain('Security mode is set to relaxed in production');
+      expect(result.issues).toContain(
+        'Security mode is set to relaxed in production',
+      );
     });
   });
 });

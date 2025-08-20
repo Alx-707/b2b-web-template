@@ -1,11 +1,12 @@
 'use client';
 
-import { ANIMATION_DURATIONS } from '@/constants/performance-constants';
-import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
-import { AccessibilityManager } from '@/lib/accessibility';
-import { cn } from '@/lib/utils';
+/// <reference lib="dom" />
 import * as React from 'react';
 import { forwardRef, useEffect, useState } from 'react';
+import { AccessibilityManager } from '@/lib/accessibility';
+import { cn } from '@/lib/utils';
+import { ANIMATION_DURATIONS } from '@/constants/performance-constants';
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { animationUtils } from './animated-counter-helpers';
 
 /**
@@ -81,6 +82,7 @@ export interface AnimatedCounterProps
     threshold?: number;
     rootMargin?: string;
     triggerOnce?: boolean;
+    root?: Element | null;
   };
   /** 动画延迟（毫秒） */
   delay?: number;
@@ -114,6 +116,109 @@ export interface AnimatedCounterProps
  * />
  * ```
  */
+/**
+ * 自定义Hook：管理动画计数器的状态和逻辑
+ */
+function useAnimatedCounter({
+  from,
+  to,
+  duration,
+  easing,
+  autoStart,
+  triggerOnVisible,
+  delay,
+  observerOptions,
+}: {
+  from: number;
+  to: number;
+  duration: number;
+  easing: (_t: number) => number;
+  autoStart: boolean;
+  triggerOnVisible: boolean;
+  delay: number;
+  observerOptions: {
+    threshold?: number;
+    rootMargin?: string;
+    triggerOnce?: boolean;
+    root?: Element | null;
+  };
+}) {
+  const [currentValue, setCurrentValue] = useState(from);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  // Intersection Observer Hook
+  const INTERSECTION_THRESHOLD = 0.3;
+  const observerConfig = {
+    threshold: INTERSECTION_THRESHOLD,
+    triggerOnce: true,
+    ...(observerOptions?.rootMargin && {
+      rootMargin: observerOptions.rootMargin,
+    }),
+    ...(observerOptions?.root && {
+      root: observerOptions.root,
+    }),
+  };
+  const { ref: observerRef, isVisible } =
+    useIntersectionObserver(observerConfig);
+
+  // 动画函数
+  const animate = React.useCallback(() => {
+    if (isAnimating) return;
+
+    // 检查可访问性偏好
+    const prefersReducedMotion = AccessibilityManager.prefersReducedMotion();
+    if (prefersReducedMotion) {
+      setCurrentValue(to);
+      return;
+    }
+
+    setIsAnimating(true);
+
+    const startTime = animationUtils.getTime();
+    const startValue = currentValue;
+    const difference = to - startValue;
+
+    const updateValue = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      const easedProgress = easing(progress);
+      const newValue = startValue + difference * easedProgress;
+
+      setCurrentValue(newValue);
+
+      if (progress < 1) {
+        animationUtils.scheduleFrame(updateValue);
+      } else {
+        setCurrentValue(to);
+        setIsAnimating(false);
+      }
+    };
+
+    animationUtils.scheduleFrame(updateValue);
+  }, [currentValue, to, duration, easing, isAnimating]);
+
+  // 触发动画的条件
+  useEffect(() => {
+    const shouldAnimate = autoStart || (triggerOnVisible && isVisible);
+
+    if (shouldAnimate && !isAnimating) {
+      if (delay > 0) {
+        const timer = setTimeout(animate, delay);
+        return () => clearTimeout(timer);
+      }
+      animate();
+    }
+    return undefined;
+  }, [autoStart, triggerOnVisible, isVisible, animate, delay, isAnimating]);
+
+  return {
+    currentValue,
+    isAnimating,
+    observerRef,
+  };
+}
+
 export const AnimatedCounter = forwardRef<
   HTMLSpanElement,
   AnimatedCounterProps
@@ -134,15 +239,15 @@ export const AnimatedCounter = forwardRef<
     },
     ref,
   ) => {
-    const [currentValue, setCurrentValue] = useState(from);
-    const [isAnimating, setIsAnimating] = useState(false);
-
-    // Intersection Observer Hook
-    const INTERSECTION_THRESHOLD = 0.3;
-    const { ref: observerRef, isVisible } = useIntersectionObserver({
-      threshold: INTERSECTION_THRESHOLD,
-      triggerOnce: true,
-      ...observerOptions,
+    const { currentValue, isAnimating, observerRef } = useAnimatedCounter({
+      from,
+      to,
+      duration,
+      easing,
+      autoStart,
+      triggerOnVisible,
+      delay,
+      observerOptions,
     });
 
     // 合并refs
@@ -159,57 +264,6 @@ export const AnimatedCounter = forwardRef<
       },
       [ref, observerRef],
     );
-
-    // 动画函数
-    const animate = React.useCallback(() => {
-      if (isAnimating) return;
-
-      // 检查可访问性偏好
-      const prefersReducedMotion = AccessibilityManager.prefersReducedMotion();
-      if (prefersReducedMotion) {
-        setCurrentValue(to);
-        return;
-      }
-
-      setIsAnimating(true);
-
-      const startTime = animationUtils.getTime();
-      const startValue = currentValue;
-      const difference = to - startValue;
-
-      const updateValue = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        const easedProgress = easing(progress);
-        const newValue = startValue + difference * easedProgress;
-
-        setCurrentValue(newValue);
-
-        if (progress < 1) {
-          animationUtils.scheduleFrame(updateValue);
-        } else {
-          setCurrentValue(to);
-          setIsAnimating(false);
-        }
-      };
-
-      animationUtils.scheduleFrame(updateValue);
-    }, [currentValue, to, duration, easing, isAnimating]);
-
-    // 触发动画的条件
-    useEffect(() => {
-      const shouldAnimate = autoStart || (triggerOnVisible && isVisible);
-
-      if (shouldAnimate && !isAnimating) {
-        if (delay > 0) {
-          const timer = setTimeout(animate, delay);
-          return () => clearTimeout(timer);
-        }
-        animate();
-      }
-      return undefined;
-    }, [autoStart, triggerOnVisible, isVisible, animate, delay, isAnimating]);
 
     // 当目标值改变时重置动画 - 使用key prop来重置组件状态
     const resetKey = `${to}-${from}-${autoStart}-${triggerOnVisible}`;
@@ -230,7 +284,10 @@ export const AnimatedCounter = forwardRef<
             return formatter(currentValue);
           } catch (error) {
             // Fallback to default formatting if custom formatter throws
-            console.warn('AnimatedCounter: Formatter error, using fallback', error);
+            console.warn(
+              'AnimatedCounter: Formatter error, using fallback',
+              error,
+            );
             return Math.round(currentValue).toString();
           }
         })()}

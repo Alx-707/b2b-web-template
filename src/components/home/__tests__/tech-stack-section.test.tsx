@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+// 导入要测试的组件
+import { TechStackSection } from '../tech-stack-section';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const {
@@ -36,7 +38,7 @@ vi.mock('react', async () => {
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
-  ExternalLink: () => <div data-testid="external-link-icon">ExternalLink</div>,
+  ExternalLink: () => <div data-testid='external-link-icon'>ExternalLink</div>,
 }));
 
 // Mock tech stack data
@@ -70,7 +72,11 @@ vi.mock('@/lib/tech-stack-data', () => ({
 // Mock UI components
 vi.mock('@/components/ui/badge', () => ({
   Badge: ({ children, className, ...props }: any) => (
-    <span data-testid="badge" className={className} {...props}>
+    <span
+      data-testid='badge'
+      className={className}
+      {...props}
+    >
       {children}
     </span>
   ),
@@ -79,10 +85,23 @@ vi.mock('@/components/ui/badge', () => ({
 vi.mock('@/components/ui/button', () => ({
   Button: ({ children, className, onClick, asChild, ...props }: any) => {
     if (asChild) {
-      return <div data-testid="button-as-child" className={className} {...props}>{children}</div>;
+      return (
+        <div
+          data-testid='button-as-child'
+          className={className}
+          {...props}
+        >
+          {children}
+        </div>
+      );
     }
     return (
-      <button data-testid="button" className={className} onClick={onClick} {...props}>
+      <button
+        data-testid='button'
+        className={className}
+        onClick={onClick}
+        {...props}
+      >
         {children}
       </button>
     );
@@ -91,27 +110,47 @@ vi.mock('@/components/ui/button', () => ({
 
 vi.mock('@/components/ui/card', () => ({
   Card: ({ children, className, ...props }: any) => (
-    <div data-testid="card" className={className} {...props}>
+    <div
+      data-testid='card'
+      className={className}
+      {...props}
+    >
       {children}
     </div>
   ),
   CardContent: ({ children, className, ...props }: any) => (
-    <div data-testid="card-content" className={className} {...props}>
+    <div
+      data-testid='card-content'
+      className={className}
+      {...props}
+    >
       {children}
     </div>
   ),
   CardDescription: ({ children, className, ...props }: any) => (
-    <div data-testid="card-description" className={className} {...props}>
+    <div
+      data-testid='card-description'
+      className={className}
+      {...props}
+    >
       {children}
     </div>
   ),
   CardHeader: ({ children, className, ...props }: any) => (
-    <div data-testid="card-header" className={className} {...props}>
+    <div
+      data-testid='card-header'
+      className={className}
+      {...props}
+    >
       {children}
     </div>
   ),
   CardTitle: ({ children, className, ...props }: any) => (
-    <div data-testid="card-title" className={className} {...props}>
+    <div
+      data-testid='card-title'
+      className={className}
+      {...props}
+    >
       {children}
     </div>
   ),
@@ -120,7 +159,7 @@ vi.mock('@/components/ui/card', () => ({
 vi.mock('@/components/ui/tabs', () => ({
   Tabs: ({ children, value, onValueChange, className, ...props }: any) => (
     <div
-      data-testid="tabs"
+      data-testid='tabs'
       data-value={value}
       className={className}
       {...props}
@@ -130,35 +169,46 @@ vi.mock('@/components/ui/tabs', () => ({
     </div>
   ),
   TabsContent: ({ children, value, className, ...props }: any) => (
-    <div data-testid="tabs-content" data-value={value} className={className} {...props}>
+    <div
+      data-testid='tabs-content'
+      data-value={value}
+      className={className}
+      {...props}
+    >
       {children}
     </div>
   ),
   TabsList: ({ children, className, ...props }: any) => (
-    <div data-testid="tabs-list" className={className} {...props}>
+    <div
+      data-testid='tabs-list'
+      className={className}
+      {...props}
+    >
       {children}
     </div>
   ),
   TabsTrigger: ({ children, value, className, ...props }: any) => (
-    <button data-testid="tabs-trigger" data-value={value} className={className} {...props}>
+    <button
+      data-testid='tabs-trigger'
+      data-value={value}
+      className={className}
+      {...props}
+    >
       {children}
     </button>
   ),
 }));
 
-// 导入要测试的组件
-import { TechStackSection } from '../tech-stack-section';
-
 describe('TechStackSection', () => {
   // 默认Mock返回值
   const defaultTranslations = {
-    title: 'Tech Stack',
-    subtitle: 'Modern technologies we use',
+    'title': 'Tech Stack',
+    'subtitle': 'Modern technologies we use',
     'stats.totalTech': 'Total Technologies',
     'stats.categories': 'Categories',
     'stats.modern': 'Modern',
     'stats.quality': 'Quality',
-    learnMore: 'Learn More',
+    'learnMore': 'Learn More',
     'categories.core': 'Core',
     'categories.frontend': 'Frontend',
     'categories.backend': 'Backend',
@@ -175,7 +225,9 @@ describe('TechStackSection', () => {
 
     // 设置默认Mock返回值 - 修复：useTranslations应该返回一个函数
     const mockTranslationFunction = vi.fn((key: string) => {
-      return defaultTranslations[key as keyof typeof defaultTranslations] || key;
+      return (
+        defaultTranslations[key as keyof typeof defaultTranslations] || key
+      );
     });
     mockUseTranslations.mockReturnValue(mockTranslationFunction);
     mockUseIntersectionObserver.mockReturnValue(defaultIntersectionObserver);
@@ -188,9 +240,13 @@ describe('TechStackSection', () => {
       render(<TechStackSection />);
 
       // 验证主要结构元素 - 修复：使用正确的选择器
-      expect(screen.getByRole('heading', { name: 'Tech Stack' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { name: 'Tech Stack' }),
+      ).toBeInTheDocument();
       expect(screen.getByText('Tech Stack')).toBeInTheDocument();
-      expect(screen.getByText('Modern technologies we use')).toBeInTheDocument();
+      expect(
+        screen.getByText('Modern technologies we use'),
+      ).toBeInTheDocument();
     });
 
     it('应该渲染统计信息', () => {
@@ -314,7 +370,9 @@ describe('TechStackSection', () => {
       // 验证标题组件
       expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
       expect(screen.getByText('Tech Stack')).toBeInTheDocument();
-      expect(screen.getByText('Modern technologies we use')).toBeInTheDocument();
+      expect(
+        screen.getByText('Modern technologies we use'),
+      ).toBeInTheDocument();
     });
 
     it('应该渲染TechStackTabs组件', () => {
@@ -332,7 +390,9 @@ describe('TechStackSection', () => {
         throw new Error('IntersectionObserver error');
       });
 
-      expect(() => render(<TechStackSection />)).toThrow('IntersectionObserver error');
+      expect(() => render(<TechStackSection />)).toThrow(
+        'IntersectionObserver error',
+      );
     });
 
     it('应该处理useState错误', () => {
@@ -361,7 +421,9 @@ describe('TechStackSection', () => {
 
       // 验证空数据的处理 - 组件应该仍然渲染基本结构
       expect(screen.getByText('Tech Stack')).toBeInTheDocument();
-      expect(screen.getByText('Modern technologies we use')).toBeInTheDocument();
+      expect(
+        screen.getByText('Modern technologies we use'),
+      ).toBeInTheDocument();
     });
 
     it('应该处理不同的选中分类', () => {

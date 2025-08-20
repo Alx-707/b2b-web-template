@@ -26,22 +26,24 @@ if (!fs.existsSync(METRICS_FILE)) {
       localeUsage: { en: 0, zh: 0 },
       translationErrors: 0,
       fallbackUsage: 0,
-      averageLoadTime: 0
+      averageLoadTime: 0,
     },
     performance: {
       pageLoadTime: 0,
       resourceLoadTime: 0,
-      userSatisfaction: 100
+      userSatisfaction: 100,
     },
     alerts: [],
-    lastUpdated: new Date().toISOString()
+    lastUpdated: new Date().toISOString(),
   };
-  
+
   fs.writeFileSync(METRICS_FILE, JSON.stringify(initialMetrics, null, 2));
 }
 
 console.log('🚀 Starting Monitoring Dashboard...');
-console.log(`📊 Dashboard will be available at: http://localhost:${DASHBOARD_PORT}`);
+console.log(
+  `📊 Dashboard will be available at: http://localhost:${DASHBOARD_PORT}`,
+);
 console.log(`📁 Metrics file: ${METRICS_FILE}`);
 
 // 启动简单的HTTP服务器来提供仪表板
@@ -79,7 +81,7 @@ const server = http.createServer((req, res) => {
   } else if (pathname === '/api/metrics' && req.method === 'POST') {
     // 接收新的指标数据
     let body = '';
-    req.on('data', chunk => {
+    req.on('data', (chunk) => {
       body += chunk.toString();
     });
     req.on('end', () => {
@@ -102,7 +104,7 @@ const server = http.createServer((req, res) => {
 server.listen(DASHBOARD_PORT, () => {
   console.log(`✅ Monitoring Dashboard started on port ${DASHBOARD_PORT}`);
   console.log('📈 Collecting metrics...');
-  
+
   // 启动指标收集
   startMetricsCollection();
 });
@@ -320,20 +322,20 @@ function getDashboardHTML() {
 function updateMetrics(newMetric) {
   try {
     const metrics = JSON.parse(fs.readFileSync(METRICS_FILE, 'utf8'));
-    
+
     // 更新指标
     if (newMetric.type === 'web_vital') {
       metrics.webVitals[newMetric.name] = {
         value: newMetric.value,
         rating: newMetric.rating,
-        trend: 'stable'
+        trend: 'stable',
       };
     } else if (newMetric.type === 'i18n') {
       Object.assign(metrics.i18n, newMetric.data);
     }
-    
+
     metrics.lastUpdated = new Date().toISOString();
-    
+
     fs.writeFileSync(METRICS_FILE, JSON.stringify(metrics, null, 2));
   } catch (error) {
     console.error('Failed to update metrics:', error);
@@ -342,7 +344,7 @@ function updateMetrics(newMetric) {
 
 function startMetricsCollection() {
   console.log('📊 Starting metrics collection...');
-  
+
   // 模拟指标收集
   setInterval(() => {
     const mockMetric = {
@@ -350,9 +352,9 @@ function startMetricsCollection() {
       name: 'lcp',
       value: 2000 + Math.random() * 1000,
       rating: 'good',
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
-    
+
     updateMetrics(mockMetric);
   }, 10000); // 每10秒更新一次模拟数据
 }

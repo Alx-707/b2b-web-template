@@ -39,14 +39,19 @@ export const env = createEnv({
     VERCEL_ENV: z.enum(['development', 'preview', 'production']).optional(),
 
     // Node Environment
-    NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+    NODE_ENV: z
+      .enum(['development', 'test', 'production'])
+      .default('development'),
 
     // CI/CD
     CI: z.string().optional(),
     GITHUB_TOKEN: z.string().optional(),
 
     // Security
-    SECURITY_HEADERS_ENABLED: z.string().transform((val) => val === 'true').default('true'),
+    SECURITY_HEADERS_ENABLED: z
+      .string()
+      .transform((val) => val === 'true')
+      .default('true'),
     CSP_REPORT_URI: z.string().url().optional(),
   },
 
@@ -69,14 +74,32 @@ export const env = createEnv({
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
 
     // Feature Flags
-    NEXT_PUBLIC_ENABLE_ANALYTICS: z.string().transform((val) => val === 'true').default('true'),
-    NEXT_PUBLIC_ENABLE_ERROR_REPORTING: z.string().transform((val) => val === 'true').default('true'),
-    NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING: z.string().transform((val) => val === 'true').default('true'),
+    NEXT_PUBLIC_ENABLE_ANALYTICS: z
+      .string()
+      .transform((val) => val === 'true')
+      .default('true'),
+    NEXT_PUBLIC_ENABLE_ERROR_REPORTING: z
+      .string()
+      .transform((val) => val === 'true')
+      .default('true'),
+    NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING: z
+      .string()
+      .transform((val) => val === 'true')
+      .default('true'),
 
     // Development Tools
-    NEXT_PUBLIC_DISABLE_REACT_SCAN: z.string().transform((val) => val === 'true').default('false'),
-    NEXT_PUBLIC_DISABLE_DEV_TOOLS: z.string().transform((val) => val === 'true').default('false'),
-    NEXT_PUBLIC_TEST_MODE: z.string().transform((val) => val === 'true').default('false'),
+    NEXT_PUBLIC_DISABLE_REACT_SCAN: z
+      .string()
+      .transform((val) => val === 'true')
+      .default('false'),
+    NEXT_PUBLIC_DISABLE_DEV_TOOLS: z
+      .string()
+      .transform((val) => val === 'true')
+      .default('false'),
+    NEXT_PUBLIC_TEST_MODE: z
+      .string()
+      .transform((val) => val === 'true')
+      .default('false'),
 
     // Internationalization
     NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('en'),
@@ -84,7 +107,9 @@ export const env = createEnv({
 
     // Security
     NEXT_PUBLIC_CSP_NONCE: z.string().optional(),
-    NEXT_PUBLIC_SECURITY_MODE: z.enum(['strict', 'moderate', 'relaxed']).default('strict'),
+    NEXT_PUBLIC_SECURITY_MODE: z
+      .enum(['strict', 'moderate', 'relaxed'])
+      .default('strict'),
   },
 
   /**
@@ -117,12 +142,15 @@ export const env = createEnv({
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
     NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION,
-    NEXT_PUBLIC_VERCEL_ANALYTICS_ID: process.env.NEXT_PUBLIC_VERCEL_ANALYTICS_ID,
+    NEXT_PUBLIC_VERCEL_ANALYTICS_ID:
+      process.env.NEXT_PUBLIC_VERCEL_ANALYTICS_ID,
     NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
     NEXT_PUBLIC_ENABLE_ANALYTICS: process.env.NEXT_PUBLIC_ENABLE_ANALYTICS,
-    NEXT_PUBLIC_ENABLE_ERROR_REPORTING: process.env.NEXT_PUBLIC_ENABLE_ERROR_REPORTING,
-    NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING: process.env.NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING,
+    NEXT_PUBLIC_ENABLE_ERROR_REPORTING:
+      process.env.NEXT_PUBLIC_ENABLE_ERROR_REPORTING,
+    NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING:
+      process.env.NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING,
     NEXT_PUBLIC_DISABLE_REACT_SCAN: process.env.NEXT_PUBLIC_DISABLE_REACT_SCAN,
     NEXT_PUBLIC_DISABLE_DEV_TOOLS: process.env.NEXT_PUBLIC_DISABLE_DEV_TOOLS,
     NEXT_PUBLIC_TEST_MODE: process.env.NEXT_PUBLIC_TEST_MODE,

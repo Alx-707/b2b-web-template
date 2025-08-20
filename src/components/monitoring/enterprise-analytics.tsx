@@ -18,7 +18,7 @@ const defaultConfig: AnalyticsConfig = {
 
 export function EnterpriseAnalytics({
   children,
-  config = defaultConfig
+  config = defaultConfig,
 }: {
   children: React.ReactNode;
   config?: AnalyticsConfig;
@@ -55,37 +55,45 @@ export function EnterpriseAnalytics({
 
 function initWebVitals(locale: string): void {
   // 动态导入web-vitals
-  import('web-vitals').then(({ onCLS, onFCP, onLCP, onTTFB, onINP }) => {
-    const reportVital = (metric: { name: string; value: number; rating: string }) => {
-      // 开发环境日志
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(`[Web Vitals] ${metric.name}: ${metric.value} (${metric.rating}) - Locale: ${locale}`);
-      }
-
-      // 发送到Vercel Analytics
-      if ('va' in window) {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (window as any).va('track', 'Web Vital', {
-            metric_name: metric.name,
-            metric_value: metric.value,
-            metric_rating: metric.rating,
-            locale,
-          });
-        } catch (error) {
-          console.error('Failed to send to Vercel Analytics:', error);
+  import('web-vitals')
+    .then(({ onCLS, onFCP, onLCP, onTTFB, onINP }) => {
+      const reportVital = (metric: {
+        name: string;
+        value: number;
+        rating: string;
+      }) => {
+        // 开发环境日志
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(
+            `[Web Vitals] ${metric.name}: ${metric.value} (${metric.rating}) - Locale: ${locale}`,
+          );
         }
-      }
-    };
 
-    onCLS(reportVital);
-    onFCP(reportVital);
-    onLCP(reportVital);
-    onTTFB(reportVital);
-    onINP(reportVital);
-  }).catch((error) => {
-    console.error('Failed to load web-vitals:', error);
-  });
+        // 发送到Vercel Analytics
+        if ('va' in window) {
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (window as any).va('track', 'Web Vital', {
+              metric_name: metric.name,
+              metric_value: metric.value,
+              metric_rating: metric.rating,
+              locale,
+            });
+          } catch (error) {
+            console.error('Failed to send to Vercel Analytics:', error);
+          }
+        }
+      };
+
+      onCLS(reportVital);
+      onFCP(reportVital);
+      onLCP(reportVital);
+      onTTFB(reportVital);
+      onINP(reportVital);
+    })
+    .catch((error) => {
+      console.error('Failed to load web-vitals:', error);
+    });
 }
 
 function initI18nTracking(locale: string): void {
@@ -93,12 +101,12 @@ function initI18nTracking(locale: string): void {
   const originalPushState = history.pushState;
   const originalReplaceState = history.replaceState;
 
-  history.pushState = function(...args) {
+  history.pushState = function (...args) {
     trackNavigation(locale);
     return originalPushState.apply(this, args);
   };
 
-  history.replaceState = function(...args) {
+  history.replaceState = function (...args) {
     trackNavigation(locale);
     return originalReplaceState.apply(this, args);
   };
@@ -110,7 +118,9 @@ function initI18nTracking(locale: string): void {
 
 function trackNavigation(locale: string): void {
   if (process.env.NODE_ENV === 'development') {
-    console.warn(`[I18n Navigation] Locale: ${locale}, URL: ${window.location.href}`);
+    console.warn(
+      `[I18n Navigation] Locale: ${locale}, URL: ${window.location.href}`,
+    );
   }
 
   // 发送导航事件
@@ -131,7 +141,9 @@ function initPerformanceMonitoring(locale: string): void {
   // 监控页面加载性能
   window.addEventListener('load', () => {
     setTimeout(() => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        'navigation',
+      )[0] as PerformanceNavigationTiming;
 
       if (navigation) {
         const metrics = {
@@ -173,12 +185,15 @@ function initPerformanceMonitoring(locale: string): void {
         const resourceEntry = entry as PerformanceResourceTiming;
 
         // 特别关注i18n相关资源
-        if (resourceEntry.name.includes('/messages/') ||
-            resourceEntry.name.includes('locale') ||
-            resourceEntry.name.includes('i18n')) {
-
+        if (
+          resourceEntry.name.includes('/messages/') ||
+          resourceEntry.name.includes('locale') ||
+          resourceEntry.name.includes('i18n')
+        ) {
           if (process.env.NODE_ENV === 'development') {
-            console.warn(`[I18n Resource] ${resourceEntry.name}: ${resourceEntry.duration}ms (${resourceEntry.transferSize} bytes) - Locale: ${locale}`);
+            console.warn(
+              `[I18n Resource] ${resourceEntry.name}: ${resourceEntry.duration}ms (${resourceEntry.transferSize} bytes) - Locale: ${locale}`,
+            );
           }
         }
       }

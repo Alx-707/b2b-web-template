@@ -47,11 +47,7 @@ export function generateCSP(nonce?: string): string {
       'https://images.unsplash.com',
       'https://via.placeholder.com',
     ],
-    'font-src': [
-      "'self'",
-      'data:',
-      'https://fonts.gstatic.com',
-    ],
+    'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
     'connect-src': [
       "'self'",
       // Vercel Analytics
@@ -92,9 +88,10 @@ export function generateCSP(nonce?: string): string {
  */
 export function getSecurityHeaders(nonce?: string, testMode = false) {
   // Use process.env directly in tests to avoid env validation issues
-  const isSecurityEnabled = testMode || process.env.NODE_ENV === 'test'
-    ? process.env.SECURITY_HEADERS_ENABLED !== 'false'
-    : env.SECURITY_HEADERS_ENABLED;
+  const isSecurityEnabled =
+    testMode || process.env.NODE_ENV === 'test'
+      ? process.env.SECURITY_HEADERS_ENABLED !== 'false'
+      : env.SECURITY_HEADERS_ENABLED;
 
   if (!isSecurityEnabled) {
     return [];
@@ -175,8 +172,17 @@ export function generateNonce(): string {
   }
 
   // Fallback for environments without crypto.randomUUID
-  return Math.random().toString(NONCE_CONSTANTS.RADIX_36).substring(NONCE_CONSTANTS.SUBSTRING_START, NONCE_CONSTANTS.SUBSTRING_END) +
-         Math.random().toString(NONCE_CONSTANTS.RADIX_36).substring(NONCE_CONSTANTS.SUBSTRING_START, NONCE_CONSTANTS.SUBSTRING_END);
+  return (
+    Math.random()
+      .toString(NONCE_CONSTANTS.RADIX_36)
+      .substring(
+        NONCE_CONSTANTS.SUBSTRING_START,
+        NONCE_CONSTANTS.SUBSTRING_END,
+      ) +
+    Math.random()
+      .toString(NONCE_CONSTANTS.RADIX_36)
+      .substring(NONCE_CONSTANTS.SUBSTRING_START, NONCE_CONSTANTS.SUBSTRING_END)
+  );
 }
 
 /**
@@ -214,9 +220,10 @@ export const SECURITY_MODES = {
  */
 export function getSecurityConfig(testMode = false) {
   // Use process.env directly in tests to avoid env validation issues
-  const mode = (testMode || process.env.NODE_ENV === 'test'
-    ? process.env.NEXT_PUBLIC_SECURITY_MODE
-    : env.NEXT_PUBLIC_SECURITY_MODE) || 'strict';
+  const mode =
+    (testMode || process.env.NODE_ENV === 'test'
+      ? process.env.NEXT_PUBLIC_SECURITY_MODE
+      : env.NEXT_PUBLIC_SECURITY_MODE) || 'strict';
   return SECURITY_MODES[mode as keyof typeof SECURITY_MODES];
 }
 
@@ -234,11 +241,11 @@ export function isValidNonce(nonce: string): boolean {
 export interface CSPReport {
   'csp-report': {
     'document-uri': string;
-    referrer: string;
+    'referrer': string;
     'violated-directive': string;
     'effective-directive': string;
     'original-policy': string;
-    disposition: string;
+    'disposition': string;
     'blocked-uri': string;
     'line-number': number;
     'column-number': number;

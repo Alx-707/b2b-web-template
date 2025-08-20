@@ -1,11 +1,11 @@
 import { Resend } from 'resend';
 import { env } from '@/../env.mjs';
+import { logger } from './logger';
 import {
   EmailTemplateData,
   emailTemplateDataSchema,
-  validationHelpers
+  validationHelpers,
 } from './validations';
-import { logger } from './logger';
 
 /**
  * Resend邮件服务配置
@@ -183,8 +183,12 @@ class ResendService {
       email: data.email.toLowerCase().trim(),
       company: validationHelpers.sanitizeInput(data.company),
       message: validationHelpers.sanitizeInput(data.message),
-      phone: data.phone ? validationHelpers.sanitizeInput(data.phone) : undefined,
-      subject: data.subject ? validationHelpers.sanitizeInput(data.subject) : undefined,
+      phone: data.phone
+        ? validationHelpers.sanitizeInput(data.phone)
+        : undefined,
+      subject: data.subject
+        ? validationHelpers.sanitizeInput(data.subject)
+        : undefined,
       submittedAt: data.submittedAt,
       marketingConsent: data.marketingConsent,
     };
@@ -231,18 +235,26 @@ class ResendService {
         <div class="label">Company:</div>
         <div class="value">${data.company}</div>
       </div>
-      ${data.phone ? `
+      ${
+        data.phone
+          ? `
       <div class="field">
         <div class="label">Phone:</div>
         <div class="value">${data.phone}</div>
       </div>
-      ` : ''}
-      ${data.subject ? `
+      `
+          : ''
+      }
+      ${
+        data.subject
+          ? `
       <div class="field">
         <div class="label">Subject:</div>
         <div class="value">${data.subject}</div>
       </div>
-      ` : ''}
+      `
+          : ''
+      }
       <div class="field">
         <div class="label">Message:</div>
         <div class="value">${data.message.replace(/\n/g, '<br>')}</div>
@@ -251,12 +263,16 @@ class ResendService {
         <div class="label">Submitted At:</div>
         <div class="value">${new Date(data.submittedAt).toLocaleString()}</div>
       </div>
-      ${data.marketingConsent ? `
+      ${
+        data.marketingConsent
+          ? `
       <div class="field">
         <div class="label">Marketing Consent:</div>
         <div class="value">Yes, agreed to receive marketing communications</div>
       </div>
-      ` : ''}
+      `
+          : ''
+      }
     </div>
     <div class="footer">
       <p>This email was sent from the Tucsenberg website contact form.</p>

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
+import type { ContactFormData } from '@/lib/validations';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import type { ContactFormData } from '@/lib/validations';
 
 /**
  * Name fields component
@@ -16,42 +16,63 @@ interface NameFieldsProps {
   t: (_key: string) => string;
 }
 
-export function NameFields({ register, errors, isSubmitting, t }: NameFieldsProps) {
+export function NameFields({
+  register,
+  errors,
+  isSubmitting,
+  t,
+}: NameFieldsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="space-y-2">
-        <Label htmlFor="firstName" className="after:content-['*'] after:ml-0.5 after:text-red-500">
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+      <div className='space-y-2'>
+        <Label
+          htmlFor='firstName'
+          className="after:ml-0.5 after:text-red-500 after:content-['*']"
+        >
           {t('firstName')}
         </Label>
         <Input
-          id="firstName"
+          id='firstName'
           placeholder={t('firstNamePlaceholder')}
           disabled={isSubmitting}
-          className={errors.firstName ? 'border-red-500 focus:border-red-500' : ''}
+          className={
+            errors.firstName ? 'border-red-500 focus:border-red-500' : ''
+          }
           aria-invalid={Boolean(errors.firstName)}
           {...register('firstName')}
         />
         {errors.firstName && (
-          <p className="text-sm text-red-500" role="alert">
+          <p
+            className='text-sm text-red-500'
+            role='alert'
+          >
             {errors.firstName.message}
           </p>
         )}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="lastName" className="after:content-['*'] after:ml-0.5 after:text-red-500">
+      <div className='space-y-2'>
+        <Label
+          htmlFor='lastName'
+          className="after:ml-0.5 after:text-red-500 after:content-['*']"
+        >
           {t('lastName')}
         </Label>
         <Input
-          id="lastName"
+          id='lastName'
           placeholder={t('lastNamePlaceholder')}
           disabled={isSubmitting}
-          className={errors.lastName ? 'border-red-500 focus:border-red-500' : ''}
+          className={
+            errors.lastName ? 'border-red-500 focus:border-red-500' : ''
+          }
           aria-invalid={Boolean(errors.lastName)}
           {...register('lastName')}
         />
         {errors.lastName && (
-          <p className="text-sm text-red-500" role="alert">
+          <p
+            className='text-sm text-red-500'
+            role='alert'
+          >
             {errors.lastName.message}
           </p>
         )}
@@ -70,16 +91,24 @@ interface ContactFieldsProps {
   t: (_key: string) => string;
 }
 
-export function ContactFields({ register, errors, isSubmitting, t }: ContactFieldsProps) {
+export function ContactFields({
+  register,
+  errors,
+  isSubmitting,
+  t,
+}: ContactFieldsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="space-y-2">
-        <Label htmlFor="email" className="after:content-['*'] after:ml-0.5 after:text-red-500">
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+      <div className='space-y-2'>
+        <Label
+          htmlFor='email'
+          className="after:ml-0.5 after:text-red-500 after:content-['*']"
+        >
           {t('email')}
         </Label>
         <Input
-          id="email"
-          type="email"
+          id='email'
+          type='email'
           placeholder={t('emailPlaceholder')}
           disabled={isSubmitting}
           className={errors.email ? 'border-red-500 focus:border-red-500' : ''}
@@ -87,26 +116,32 @@ export function ContactFields({ register, errors, isSubmitting, t }: ContactFiel
           {...register('email')}
         />
         {errors.email && (
-          <p className="text-sm text-red-500" role="alert">
+          <p
+            className='text-sm text-red-500'
+            role='alert'
+          >
             {errors.email.message}
           </p>
         )}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="company">
-          {t('company')}
-        </Label>
+      <div className='space-y-2'>
+        <Label htmlFor='company'>{t('company')}</Label>
         <Input
-          id="company"
+          id='company'
           placeholder={t('companyPlaceholder')}
           disabled={isSubmitting}
-          className={errors.company ? 'border-red-500 focus:border-red-500' : ''}
+          className={
+            errors.company ? 'border-red-500 focus:border-red-500' : ''
+          }
           aria-invalid={Boolean(errors.company)}
           {...register('company')}
         />
         {errors.company && (
-          <p className="text-sm text-red-500" role="alert">
+          <p
+            className='text-sm text-red-500'
+            role='alert'
+          >
             {errors.company.message}
           </p>
         )}
@@ -125,65 +160,89 @@ interface AdditionalFieldsProps {
   t: (_key: string) => string;
 }
 
-export function AdditionalFields({ register, errors, isSubmitting, t }: AdditionalFieldsProps) {
+export function AdditionalFields({
+  register,
+  errors,
+  isSubmitting,
+  t,
+}: AdditionalFieldsProps) {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="phone">
-            {t('phone')}
-          </Label>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+        <div className='space-y-2'>
+          <Label htmlFor='phone'>{t('phone')}</Label>
           <Input
-            id="phone"
-            type="tel"
+            id='phone'
+            type='tel'
             placeholder={t('phonePlaceholder')}
             disabled={isSubmitting}
-            className={errors.phone ? 'border-red-500 focus:border-red-500' : ''}
+            className={
+              errors.phone ? 'border-red-500 focus:border-red-500' : ''
+            }
             aria-invalid={Boolean(errors.phone)}
             {...register('phone')}
           />
           {errors.phone && (
-            <p className="text-sm text-red-500" role="alert">
+            <p
+              className='text-sm text-red-500'
+              role='alert'
+            >
               {errors.phone.message}
             </p>
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="subject" className="after:content-['*'] after:ml-0.5 after:text-red-500">
+        <div className='space-y-2'>
+          <Label
+            htmlFor='subject'
+            className="after:ml-0.5 after:text-red-500 after:content-['*']"
+          >
             {t('subject')}
           </Label>
           <Input
-            id="subject"
+            id='subject'
             placeholder={t('subjectPlaceholder')}
             disabled={isSubmitting}
-            className={errors.subject ? 'border-red-500 focus:border-red-500' : ''}
+            className={
+              errors.subject ? 'border-red-500 focus:border-red-500' : ''
+            }
             aria-invalid={Boolean(errors.subject)}
             {...register('subject')}
           />
           {errors.subject && (
-            <p className="text-sm text-red-500" role="alert">
+            <p
+              className='text-sm text-red-500'
+              role='alert'
+            >
               {errors.subject.message}
             </p>
           )}
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="message" className="after:content-['*'] after:ml-0.5 after:text-red-500">
+      <div className='space-y-2'>
+        <Label
+          htmlFor='message'
+          className="after:ml-0.5 after:text-red-500 after:content-['*']"
+        >
           {t('message')}
         </Label>
         <Textarea
-          id="message"
+          id='message'
           placeholder={t('messagePlaceholder')}
           disabled={isSubmitting}
           rows={6}
-          className={errors.message ? 'border-red-500 focus:border-red-500' : ''}
+          className={
+            errors.message ? 'border-red-500 focus:border-red-500' : ''
+          }
           aria-invalid={Boolean(errors.message)}
           {...register('message')}
         />
         {errors.message && (
-          <p className="text-sm text-red-500" role="alert">
+          <p
+            className='text-sm text-red-500'
+            role='alert'
+          >
             {errors.message.message}
           </p>
         )}
@@ -203,41 +262,57 @@ interface CheckboxFieldsProps {
   t: (_key: string) => string;
 }
 
-export function CheckboxFields({ errors, isSubmitting, watchedValues, setValue, t }: CheckboxFieldsProps) {
+export function CheckboxFields({
+  errors,
+  isSubmitting,
+  watchedValues,
+  setValue,
+  t,
+}: CheckboxFieldsProps) {
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <div className="flex items-center space-x-2">
+    <div className='space-y-4'>
+      <div className='space-y-2'>
+        <div className='flex items-center space-x-2'>
           <Checkbox
-            id="acceptPrivacy"
+            id='acceptPrivacy'
             checked={watchedValues.acceptPrivacy}
-            onCheckedChange={(checked) => setValue('acceptPrivacy', Boolean(checked))}
+            onCheckedChange={(checked) =>
+              setValue('acceptPrivacy', Boolean(checked))
+            }
             disabled={isSubmitting}
             aria-invalid={Boolean(errors.acceptPrivacy)}
           />
           <Label
-            htmlFor="acceptPrivacy"
-            className="text-sm after:content-['*'] after:ml-0.5 after:text-red-500"
+            htmlFor='acceptPrivacy'
+            className="text-sm after:ml-0.5 after:text-red-500 after:content-['*']"
           >
             {t('acceptPrivacy')}
           </Label>
         </div>
         {errors.acceptPrivacy && (
-          <p className="text-sm text-red-500" role="alert">
+          <p
+            className='text-sm text-red-500'
+            role='alert'
+          >
             {errors.acceptPrivacy.message}
           </p>
         )}
       </div>
 
-      <div className="space-y-2">
-        <div className="flex items-center space-x-2">
+      <div className='space-y-2'>
+        <div className='flex items-center space-x-2'>
           <Checkbox
-            id="marketingConsent"
+            id='marketingConsent'
             checked={watchedValues.marketingConsent || false}
-            onCheckedChange={(checked) => setValue('marketingConsent', Boolean(checked))}
+            onCheckedChange={(checked) =>
+              setValue('marketingConsent', Boolean(checked))
+            }
             disabled={isSubmitting}
           />
-          <Label htmlFor="marketingConsent" className="text-sm">
+          <Label
+            htmlFor='marketingConsent'
+            className='text-sm'
+          >
             {t('marketingConsent')}
           </Label>
         </div>

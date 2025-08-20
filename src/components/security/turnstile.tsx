@@ -48,7 +48,9 @@ export function TurnstileWidget({
   // Don't render if no site key is configured
   if (!siteKey) {
     if (process.env.NODE_ENV === 'development') {
-      console.warn('Turnstile site key not configured. Bot protection is disabled.');
+      console.warn(
+        'Turnstile site key not configured. Bot protection is disabled.',
+      );
     }
     return null;
   }
@@ -58,9 +60,9 @@ export function TurnstileWidget({
     return (
       <div
         className={`turnstile-mock ${className || ''}`}
-        data-testid="turnstile-mock"
+        data-testid='turnstile-mock'
       >
-        <div className="text-sm text-muted-foreground">
+        <div className='text-muted-foreground text-sm'>
           Bot protection disabled in test mode
         </div>
       </div>
@@ -97,14 +99,14 @@ export function TurnstileWidget({
     <div className={`turnstile-container ${className || ''}`}>
       <Turnstile
         siteKey={siteKey}
-        onVerify={handleVerify}
+        onSuccess={handleVerify}
         onError={handleError}
         onExpire={handleExpire}
         onLoad={handleLoad}
         options={{
           theme,
           size,
-          tabindex: tabIndex,
+          tabIndex,
         }}
         id={id}
       />

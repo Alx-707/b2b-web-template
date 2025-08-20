@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+// 导入被测试的组件
+import { HeroSection } from '../hero-section';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const {
@@ -36,15 +38,19 @@ vi.mock('next-themes', () => ({
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
-  ArrowRight: () => <div data-testid="arrow-right-icon">ArrowRight</div>,
-  ExternalLink: () => <div data-testid="external-link-icon">ExternalLink</div>,
-  Github: () => <div data-testid="github-icon">Github</div>,
+  ArrowRight: () => <div data-testid='arrow-right-icon'>ArrowRight</div>,
+  ExternalLink: () => <div data-testid='external-link-icon'>ExternalLink</div>,
+  Github: () => <div data-testid='github-icon'>Github</div>,
 }));
 
 // Mock UI components
 vi.mock('@/components/ui/badge', () => ({
   Badge: ({ children, className, ...props }: any) => (
-    <span data-testid="badge" className={className} {...props}>
+    <span
+      data-testid='badge'
+      className={className}
+      {...props}
+    >
       {children}
     </span>
   ),
@@ -53,7 +59,7 @@ vi.mock('@/components/ui/badge', () => ({
 vi.mock('@/components/ui/button', () => ({
   Button: ({ children, className, onClick, ...props }: any) => (
     <button
-      data-testid="button"
+      data-testid='button'
       className={className}
       onClick={onClick}
       {...props}
@@ -63,9 +69,6 @@ vi.mock('@/components/ui/button', () => ({
   ),
 }));
 
-// 导入被测试的组件
-import { HeroSection } from '../hero-section';
-
 describe('HeroSection', () => {
   // Mock翻译函数
   const mockT = vi.fn((key: string) => {
@@ -73,7 +76,8 @@ describe('HeroSection', () => {
       'version': 'v1.0.0',
       'title.line1': 'Modern B2B',
       'title.line2': 'Enterprise Solution',
-      'subtitle': 'Build powerful business applications with our modern tech stack',
+      'subtitle':
+        'Build powerful business applications with our modern tech stack',
       'cta.demo': 'View Demo',
       'cta.github': 'View on GitHub',
       'stats.technologies': '22+ Technologies',
@@ -124,7 +128,9 @@ describe('HeroSection', () => {
 
       // Get all badges and find the version badge (first one with rocket emoji)
       const badges = screen.getAllByTestId('badge');
-      const versionBadge = badges.find(badge => badge.textContent?.includes('🚀'));
+      const versionBadge = badges.find((badge) =>
+        badge.textContent?.includes('🚀'),
+      );
 
       expect(versionBadge).toBeInTheDocument();
       expect(versionBadge).toHaveTextContent('🚀');
@@ -144,7 +150,11 @@ describe('HeroSection', () => {
     it('should render subtitle', () => {
       render(<HeroSection />);
 
-      expect(screen.getByText('Build powerful business applications with our modern tech stack')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Build powerful business applications with our modern tech stack',
+        ),
+      ).toBeInTheDocument();
     });
   });
 
@@ -200,7 +210,9 @@ describe('HeroSection', () => {
       expect(heading).toBeInTheDocument();
 
       // Check for animation classes on animated elements
-      const animatedElements = document.querySelectorAll('.translate-y-0.opacity-100');
+      const animatedElements = document.querySelectorAll(
+        '.translate-y-0.opacity-100',
+      );
       expect(animatedElements.length).toBeGreaterThan(0);
     });
 
@@ -218,7 +230,9 @@ describe('HeroSection', () => {
       expect(heading).toBeInTheDocument();
 
       // Check for invisible animation classes
-      const invisibleElements = document.querySelectorAll('.translate-y-8.opacity-0, .translate-y-4.opacity-0');
+      const invisibleElements = document.querySelectorAll(
+        '.translate-y-8.opacity-0, .translate-y-4.opacity-0',
+      );
       expect(invisibleElements.length).toBeGreaterThan(0);
     });
   });
@@ -281,7 +295,7 @@ describe('HeroSection', () => {
       const buttons = screen.getAllByRole('button');
       expect(buttons).toHaveLength(2);
 
-      buttons.forEach(button => {
+      buttons.forEach((button) => {
         expect(button).toBeInTheDocument();
       });
     });

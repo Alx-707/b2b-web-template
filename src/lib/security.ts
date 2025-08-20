@@ -57,13 +57,19 @@ export function sanitizeInput(input: string): string {
  */
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email) && email.length <= SECURITY_CONSTANTS.MAX_EMAIL_LENGTH;
+  return (
+    emailRegex.test(email) &&
+    email.length <= SECURITY_CONSTANTS.MAX_EMAIL_LENGTH
+  );
 }
 
 /**
  * Validate URL format and protocol
  */
-export function isValidUrl(url: string, allowedProtocols: string[] = ['http:', 'https:']): boolean {
+export function isValidUrl(
+  url: string,
+  allowedProtocols: string[] = ['http:', 'https:'],
+): boolean {
   try {
     const urlObj = new URL(url);
     return allowedProtocols.includes(urlObj.protocol);
@@ -75,18 +81,25 @@ export function isValidUrl(url: string, allowedProtocols: string[] = ['http:', '
 /**
  * Generate a secure random string
  */
-export function generateSecureToken(length: number = SECURITY_CONSTANTS.DEFAULT_TOKEN_LENGTH): string {
+export function generateSecureToken(
+  length: number = SECURITY_CONSTANTS.DEFAULT_TOKEN_LENGTH,
+): string {
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
     // Generate half the length in bytes since each byte becomes 2 hex characters
     const byteLength = Math.ceil(length / SECURITY_CONSTANTS.HEX_RADIX);
     const array = new Uint8Array(byteLength);
     crypto.getRandomValues(array);
-    const hex = Array.from(array, byte => byte.toString(SECURITY_CONSTANTS.HEX_BASE).padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0')).join('');
+    const hex = Array.from(array, (byte) =>
+      byte
+        .toString(SECURITY_CONSTANTS.HEX_BASE)
+        .padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0'),
+    ).join('');
     return hex.substring(0, length);
   }
 
   // Fallback for environments without crypto.getRandomValues
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
   for (let i = 0; i < length; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -107,7 +120,7 @@ const rateLimitStore = new Map<string, RateLimitEntry>();
 export function rateLimit(
   identifier: string,
   maxRequests: number = SECURITY_CONSTANTS.DEFAULT_MAX_REQUESTS,
-  windowMs: number = SECURITY_CONSTANTS.DEFAULT_WINDOW_MS // 1 minute
+  windowMs: number = SECURITY_CONSTANTS.DEFAULT_WINDOW_MS, // 1 minute
 ): boolean {
   const now = Date.now();
   const entry = rateLimitStore.get(identifier);
@@ -147,11 +160,20 @@ export function cleanupRateLimit(): void {
 /**
  * Validate file upload security
  */
-export function validateFileUpload(file: File): { valid: boolean; error?: string } {
+export function validateFileUpload(file: File): {
+  valid: boolean;
+  error?: string;
+} {
   // Check file size (10MB limit)
-  const maxSize = SECURITY_CONSTANTS.MAX_FILE_SIZE_MB * SECURITY_CONSTANTS.BYTES_PER_MB * SECURITY_CONSTANTS.KB_TO_BYTES;
+  const maxSize =
+    SECURITY_CONSTANTS.MAX_FILE_SIZE_MB *
+    SECURITY_CONSTANTS.BYTES_PER_MB *
+    SECURITY_CONSTANTS.KB_TO_BYTES;
   if (file.size > maxSize) {
-    return { valid: false, error: `File size exceeds ${SECURITY_CONSTANTS.MAX_FILE_SIZE_MB}MB limit` };
+    return {
+      valid: false,
+      error: `File size exceeds ${SECURITY_CONSTANTS.MAX_FILE_SIZE_MB}MB limit`,
+    };
   }
 
   // Check file type
@@ -170,7 +192,15 @@ export function validateFileUpload(file: File): { valid: boolean; error?: string
   }
 
   // Check file name
-  const dangerousExtensions = ['.exe', '.bat', '.cmd', '.scr', '.pif', '.js', '.vbs'];
+  const dangerousExtensions = [
+    '.exe',
+    '.bat',
+    '.cmd',
+    '.scr',
+    '.pif',
+    '.js',
+    '.vbs',
+  ];
   const fileName = file.name.toLowerCase();
 
   for (const ext of dangerousExtensions) {
@@ -185,9 +215,16 @@ export function validateFileUpload(file: File): { valid: boolean; error?: string
 /**
  * Hash password using Web Crypto API
  */
-export async function hashPassword(password: string, salt?: string): Promise<string> {
+export async function hashPassword(
+  password: string,
+  salt?: string,
+): Promise<string> {
   const encoder = new TextEncoder();
-  const saltBytes = salt ? encoder.encode(salt) : crypto.getRandomValues(new Uint8Array(SECURITY_CONSTANTS.SALT_BYTE_LENGTH));
+  const saltBytes = salt
+    ? encoder.encode(salt)
+    : crypto.getRandomValues(
+        new Uint8Array(SECURITY_CONSTANTS.SALT_BYTE_LENGTH),
+      );
   const passwordBytes = encoder.encode(password);
 
   const combined = new Uint8Array(saltBytes.length + passwordBytes.length);
@@ -196,9 +233,21 @@ export async function hashPassword(password: string, salt?: string): Promise<str
 
   const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(SECURITY_CONSTANTS.HEX_BASE).padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0')).join('');
+  const hashHex = hashArray
+    .map((b) =>
+      b
+        .toString(SECURITY_CONSTANTS.HEX_BASE)
+        .padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0'),
+    )
+    .join('');
 
-  const saltHex = Array.from(saltBytes).map(b => b.toString(SECURITY_CONSTANTS.HEX_BASE).padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0')).join('');
+  const saltHex = Array.from(saltBytes)
+    .map((b) =>
+      b
+        .toString(SECURITY_CONSTANTS.HEX_BASE)
+        .padStart(SECURITY_CONSTANTS.HEX_PAD_LENGTH, '0'),
+    )
+    .join('');
 
   return `${saltHex}:${hashHex}`;
 }
@@ -206,20 +255,26 @@ export async function hashPassword(password: string, salt?: string): Promise<str
 /**
  * Verify password against hash
  */
-export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+export async function verifyPassword(
+  password: string,
+  hash: string,
+): Promise<boolean> {
   try {
     const [saltHex, expectedHash] = hash.split(':');
     if (!saltHex || !expectedHash) {
       return false;
     }
 
-    const salt = saltHex.match(/.{2}/g)?.map(byte => parseInt(byte, 16));
+    const salt = saltHex.match(/.{2}/g)?.map((byte) => parseInt(byte, 16));
     if (!salt) {
       return false;
     }
 
     const saltBytes = new Uint8Array(salt);
-    const actualHash = await hashPassword(password, new TextDecoder().decode(saltBytes));
+    const actualHash = await hashPassword(
+      password,
+      new TextDecoder().decode(saltBytes),
+    );
 
     return actualHash === hash;
   } catch {
@@ -245,7 +300,10 @@ export function getApiSecurityHeaders(): Record<string, string> {
 /**
  * Verify Turnstile token
  */
-export async function verifyTurnstileToken(token: string, remoteip?: string): Promise<boolean> {
+export async function verifyTurnstileToken(
+  token: string,
+  remoteip?: string,
+): Promise<boolean> {
   try {
     const response = await fetch('/api/verify-turnstile', {
       method: 'POST',
@@ -276,15 +334,18 @@ export function checkSecurityConfig(testMode = false): {
 
   // Use process.env directly in tests to avoid env validation issues
   const nodeEnv = process.env.NODE_ENV;
-  const turnstileKey = testMode || process.env.NODE_ENV === 'test'
-    ? process.env.TURNSTILE_SECRET_KEY
-    : env.TURNSTILE_SECRET_KEY;
-  const sentryDsn = testMode || process.env.NODE_ENV === 'test'
-    ? process.env.SENTRY_DSN
-    : env.SENTRY_DSN;
-  const securityMode = testMode || process.env.NODE_ENV === 'test'
-    ? process.env.NEXT_PUBLIC_SECURITY_MODE
-    : env.NEXT_PUBLIC_SECURITY_MODE;
+  const turnstileKey =
+    testMode || process.env.NODE_ENV === 'test'
+      ? process.env.TURNSTILE_SECRET_KEY
+      : env.TURNSTILE_SECRET_KEY;
+  const sentryDsn =
+    testMode || process.env.NODE_ENV === 'test'
+      ? process.env.SENTRY_DSN
+      : env.SENTRY_DSN;
+  const securityMode =
+    testMode || process.env.NODE_ENV === 'test'
+      ? process.env.NEXT_PUBLIC_SECURITY_MODE
+      : env.NEXT_PUBLIC_SECURITY_MODE;
 
   // Check environment variables
   if (!turnstileKey && nodeEnv === 'production') {
@@ -308,5 +369,10 @@ export function checkSecurityConfig(testMode = false): {
 
 // Clean up rate limit entries every 5 minutes
 if (typeof setInterval !== 'undefined') {
-  setInterval(cleanupRateLimit, SECURITY_CONSTANTS.CLEANUP_INTERVAL_MINUTES * SECURITY_CONSTANTS.MINUTES_TO_MS * SECURITY_CONSTANTS.SECONDS_TO_MS);
+  setInterval(
+    cleanupRateLimit,
+    SECURITY_CONSTANTS.CLEANUP_INTERVAL_MINUTES *
+      SECURITY_CONSTANTS.MINUTES_TO_MS *
+      SECURITY_CONSTANTS.SECONDS_TO_MS,
+  );
 }

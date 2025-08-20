@@ -194,23 +194,36 @@ function usePerformanceMonitorState(options: UsePerformanceMonitorOptions) {
   } = safeOptions;
 
   // Ensure alertThresholds is always a valid object
-  const validAlertThresholds = alertThresholds && typeof alertThresholds === 'object' ? {
-    loadTime: typeof alertThresholds.loadTime === 'number' ? alertThresholds.loadTime : 3000,
-    renderTime: typeof alertThresholds.renderTime === 'number' ? alertThresholds.renderTime : 100,
-    memoryUsage: typeof alertThresholds.memoryUsage === 'number' ? alertThresholds.memoryUsage :
-      PERFORMANCE_CONSTANTS.MEMORY_THRESHOLD_MB * PERFORMANCE_CONSTANTS.MEMORY_BYTES_PER_MB,
-  } : {
-    loadTime: 3000,
-    renderTime: 100,
-    memoryUsage:
-      PERFORMANCE_CONSTANTS.MEMORY_THRESHOLD_MB *
-      PERFORMANCE_CONSTANTS.MEMORY_BYTES_PER_MB, // 50MB
-  };
+  const validAlertThresholds =
+    alertThresholds && typeof alertThresholds === 'object'
+      ? {
+          loadTime:
+            typeof alertThresholds.loadTime === 'number'
+              ? alertThresholds.loadTime
+              : 3000,
+          renderTime:
+            typeof alertThresholds.renderTime === 'number'
+              ? alertThresholds.renderTime
+              : 100,
+          memoryUsage:
+            typeof alertThresholds.memoryUsage === 'number'
+              ? alertThresholds.memoryUsage
+              : PERFORMANCE_CONSTANTS.MEMORY_THRESHOLD_MB *
+                PERFORMANCE_CONSTANTS.MEMORY_BYTES_PER_MB,
+        }
+      : {
+          loadTime: 3000,
+          renderTime: 100,
+          memoryUsage:
+            PERFORMANCE_CONSTANTS.MEMORY_THRESHOLD_MB *
+            PERFORMANCE_CONSTANTS.MEMORY_BYTES_PER_MB, // 50MB
+        };
 
   // Validate monitoring interval
-  const validMonitoringInterval = typeof monitoringInterval === 'number' && monitoringInterval > 0
-    ? monitoringInterval
-    : 1000;
+  const validMonitoringInterval =
+    typeof monitoringInterval === 'number' && monitoringInterval > 0
+      ? monitoringInterval
+      : 1000;
 
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
@@ -270,7 +283,11 @@ function usePerformanceMeasurements(
       prev ? { ...prev, loadTime } : { loadTime, renderTime: 0 },
     );
 
-    if (enableAlerts && typeof alertThresholds.loadTime === 'number' && loadTime >= alertThresholds.loadTime) {
+    if (
+      enableAlerts &&
+      typeof alertThresholds.loadTime === 'number' &&
+      loadTime >= alertThresholds.loadTime
+    ) {
       addAlert({
         level: 'warning',
         message: `Slow load time detected: ${loadTime}ms`,
@@ -288,7 +305,11 @@ function usePerformanceMeasurements(
         prev ? { ...prev, renderTime } : { loadTime: 0, renderTime },
       );
 
-      if (enableAlerts && typeof alertThresholds.renderTime === 'number' && renderTime >= alertThresholds.renderTime) {
+      if (
+        enableAlerts &&
+        typeof alertThresholds.renderTime === 'number' &&
+        renderTime >= alertThresholds.renderTime
+      ) {
         addAlert({
           level: 'warning',
           message: `Slow render time detected: ${renderTime}ms`,
@@ -380,47 +401,36 @@ export function usePerformanceMonitor(
     }
   }, [isMonitoring, measureLoadTime, measureMemoryUsage]);
 
-  // Auto monitoring initialization effect (only run once on mount)
+  // Auto monitoring initialization effect
   useEffect(() => {
-    const safeOptions = options || {};
-    if (safeOptions.autoMonitoring) {
-      // Use setTimeout to delay auto-start until after initial render
+    if (options?.autoMonitoring) {
       const timer = setTimeout(() => {
         setIsMonitoring(true);
         setError(null);
         startTime.current = Date.now();
-        setMetrics({
-          loadTime: 0,
-          renderTime: 0,
-        });
+        setMetrics({ loadTime: 0, renderTime: 0 });
       }, 0);
-
       return () => clearTimeout(timer);
     }
-    // Return undefined explicitly for all code paths
     return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run on mount to avoid infinite loops
+  }, []);
 
   // Auto monitoring interval effect
   useEffect(() => {
-    let intervalId: ReturnType<typeof setInterval> | null = null;
+    if (!isMonitoring || monitoringInterval <= 0) return undefined;
 
-    if (isMonitoring && monitoringInterval > 0) {
-      intervalId = setInterval(() => {
-        try {
-          refreshMetrics();
-        } catch (monitoringError) {
-          setError(monitoringError instanceof Error ? monitoringError.message : 'Unknown monitoring error');
-        }
-      }, monitoringInterval);
-    }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
+    const intervalId = setInterval(() => {
+      try {
+        refreshMetrics();
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Unknown monitoring error',
+        );
       }
-    };
+    }, monitoringInterval);
+
+    return () => clearInterval(intervalId);
   }, [isMonitoring, monitoringInterval, refreshMetrics, setError]);
 
   useEffect(() => {

@@ -25,7 +25,13 @@ export interface AnimationConfig {
  */
 export const easingFunctions = {
   linear: (t: number) => t,
-  easeInOut: (t: number) => t < ANIMATION_CONSTANTS.HALF_POINT ? ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t * t : -1 + (ANIMATION_CONSTANTS.CUBIC_MULTIPLIER - ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t) * t,
+  easeInOut: (t: number) =>
+    t < ANIMATION_CONSTANTS.HALF_POINT
+      ? ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t * t
+      : -1 +
+        (ANIMATION_CONSTANTS.CUBIC_MULTIPLIER -
+          ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t) *
+          t,
   easeOut: (t: number) => t * (ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER - t),
   easeIn: (t: number) => t * t,
   easeInCubic: (t: number) => t * t * t,
@@ -33,7 +39,15 @@ export const easingFunctions = {
     const adjustedT = t - 1;
     return adjustedT * adjustedT * adjustedT + 1;
   },
-  easeInOutCubic: (t: number) => t < ANIMATION_CONSTANTS.HALF_POINT ? ANIMATION_CONSTANTS.CUBIC_MULTIPLIER * t * t * t : (t - 1) * (ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t - ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER) * (ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t - ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER) + 1,
+  easeInOutCubic: (t: number) =>
+    t < ANIMATION_CONSTANTS.HALF_POINT
+      ? ANIMATION_CONSTANTS.CUBIC_MULTIPLIER * t * t * t
+      : (t - 1) *
+          (ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t -
+            ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER) *
+          (ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER * t -
+            ANIMATION_CONSTANTS.DOUBLE_MULTIPLIER) +
+        1,
 };
 
 /**
@@ -46,21 +60,18 @@ export function formatNumber(
     separator?: string;
     prefix?: string;
     suffix?: string;
-  } = {}
+  } = {},
 ): string {
-  const {
-    decimals = 0,
-    separator = ',',
-    prefix = '',
-    suffix = ''
-  } = options;
+  const { decimals = 0, separator = ',', prefix = '', suffix = '' } = options;
 
   const formattedValue = value.toFixed(decimals);
   const parts = formattedValue.split('.');
 
   // Add thousand separators - using safe static regex pattern
-  // eslint-disable-next-line security/detect-unsafe-regex
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+  if (parts[0]) {
+    // eslint-disable-next-line security/detect-unsafe-regex
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+  }
 
   return prefix + parts.join('.') + suffix;
 }
@@ -82,7 +93,10 @@ export const animationUtils = {
     }
     // Fallback to setTimeout for environments without requestAnimationFrame
     const FRAME_DURATION = 16; // 16ms for 60fps
-    return setTimeout(() => callback(animationUtils.getTime()), FRAME_DURATION) as unknown as number;
+    return setTimeout(
+      () => callback(animationUtils.getTime()),
+      FRAME_DURATION,
+    ) as unknown as number;
   },
 
   cancelFrame: (id: number) => {
@@ -91,7 +105,7 @@ export const animationUtils = {
     } else {
       clearTimeout(id);
     }
-  }
+  },
 };
 
 /**
@@ -99,36 +113,41 @@ export const animationUtils = {
  */
 export function useCounterAnimation(
   targetValue: number,
-  config: AnimationConfig
+  config: AnimationConfig,
 ) {
   const [currentValue, setCurrentValue] = React.useState(0);
   const animationRef = React.useRef<number | null>(null);
   const startTimeRef = React.useRef<number | null>(null);
   const startValueRef = React.useRef(0);
 
-  const animate = React.useCallback((timestamp: number) => {
-    if (startTimeRef.current === null) {
-      startTimeRef.current = timestamp;
-      startValueRef.current = currentValue;
-    }
+  const animate = React.useCallback(
+    (timestamp: number) => {
+      if (startTimeRef.current === null) {
+        startTimeRef.current = timestamp;
+        startValueRef.current = currentValue;
+      }
 
-    const elapsed = timestamp - startTimeRef.current;
-    const progress = Math.min(elapsed / config.duration, 1);
-    const easedProgress = config.easing(progress);
+      const elapsed = timestamp - startTimeRef.current;
+      const progress = Math.min(elapsed / config.duration, 1);
+      const easedProgress = config.easing(progress);
 
-    const newValue = startValueRef.current + (targetValue - startValueRef.current) * easedProgress;
+      const newValue =
+        startValueRef.current +
+        (targetValue - startValueRef.current) * easedProgress;
 
-    setCurrentValue(newValue);
-    config.onUpdate?.(newValue);
+      setCurrentValue(newValue);
+      config.onUpdate?.(newValue);
 
-    if (progress < 1) {
-      animationRef.current = requestAnimationFrame(animate);
-    } else {
-      config.onComplete?.();
-      animationRef.current = null;
-      startTimeRef.current = null;
-    }
-  }, [targetValue, config, currentValue]);
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        config.onComplete?.();
+        animationRef.current = null;
+        startTimeRef.current = null;
+      }
+    },
+    [targetValue, config, currentValue],
+  );
 
   React.useEffect(() => {
     if (animationRef.current) {
@@ -161,13 +180,18 @@ export function getCurrentTime(): number {
 /**
  * Schedule animation frame with fallback
  */
-export function scheduleAnimationFrame(callback: (_time: number) => void): number {
+export function scheduleAnimationFrame(
+  callback: (_time: number) => void,
+): number {
   if (typeof requestAnimationFrame !== 'undefined') {
     return requestAnimationFrame(callback);
   }
   // Fallback to setTimeout for environments without requestAnimationFrame
   const FRAME_DURATION = 16; // 16ms for 60fps
-  return setTimeout(() => callback(getCurrentTime()), FRAME_DURATION) as unknown as number;
+  return setTimeout(
+    () => callback(getCurrentTime()),
+    FRAME_DURATION,
+  ) as unknown as number;
 }
 
 /**

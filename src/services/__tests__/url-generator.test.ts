@@ -145,8 +145,8 @@ describe('URLGenerator', () => {
     it('should generate entries for all pages and languages', () => {
       const entries = generator.generateAllSitemapEntries();
 
-      // 应该有 10个页面类型 × 2种语言 = 20个条目
-      expect(entries).toHaveLength(20);
+      // 应该有 11个页面类型 × 2种语言 = 22个条目
+      expect(entries).toHaveLength(22);
 
       // 检查是否包含主页条目
       const homeEntries = entries.filter(

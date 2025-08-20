@@ -3,17 +3,17 @@ module.exports = {
     collect: {
       url: [
         'http://localhost:3000',
-        'http://localhost:3000/en', 
+        'http://localhost:3000/en',
         'http://localhost:3000/zh',
         'http://localhost:3000/about',
         'http://localhost:3000/zh/guanyu',
         'http://localhost:3000/contact',
         'http://localhost:3000/zh/lianxi',
         'http://localhost:3000/products',
-        'http://localhost:3000/zh/chanpin'
+        'http://localhost:3000/zh/chanpin',
       ],
       startServerCommand: 'pnpm start',
-      numberOfRuns: 3
+      numberOfRuns: 3,
     },
     assert: {
       assertions: {
@@ -28,11 +28,11 @@ module.exports = {
         'total-blocking-time': ['error', { maxNumericValue: 300 }],
         'speed-index': ['error', { maxNumericValue: 3000 }],
         'first-meaningful-paint': ['error', { maxNumericValue: 2000 }],
-        'interactive': ['error', { maxNumericValue: 3000 }]
-      }
+        'interactive': ['error', { maxNumericValue: 3000 }],
+      },
     },
     upload: {
-      target: 'temporary-public-storage'
-    }
-  }
+      target: 'temporary-public-storage',
+    },
+  },
 };

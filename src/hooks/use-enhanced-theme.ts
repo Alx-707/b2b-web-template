@@ -1,12 +1,12 @@
 'use client';
 
+import React, { useCallback, useMemo, useRef } from 'react';
+import { useTheme } from 'next-themes';
 import { logger } from '@/lib/logger';
 import {
-    recordThemePreference,
-    recordThemeSwitch,
+  recordThemePreference,
+  recordThemeSwitch,
 } from '@/lib/theme-analytics';
-import { useTheme } from 'next-themes';
-import React, { useCallback, useMemo, useRef } from 'react';
 
 /**
  * View Transitions API 类型定义
@@ -58,12 +58,11 @@ const supportsViewTransitions = (() => {
       return cachedResult;
     }
 
-    cachedResult = (
+    cachedResult =
       typeof document !== 'undefined' &&
       'startViewTransition' in document &&
       typeof (document as Document & { startViewTransition?: unknown })
-        .startViewTransition === 'function'
-    );
+        .startViewTransition === 'function';
 
     return cachedResult;
   };
@@ -81,8 +80,16 @@ function getClickCoordinates(clickEvent?: React.MouseEvent<HTMLElement>): {
   }
 
   // 如果没有点击事件，使用屏幕中心
-  const centerX = (typeof window !== 'undefined' ? window.innerWidth : DEFAULT_SCREEN_DIMENSIONS.WIDTH) / DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR;
-  const centerY = (typeof window !== 'undefined' ? window.innerHeight : DEFAULT_SCREEN_DIMENSIONS.HEIGHT) / DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR;
+  const centerX =
+    (typeof window !== 'undefined'
+      ? window.innerWidth
+      : DEFAULT_SCREEN_DIMENSIONS.WIDTH) /
+    DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR;
+  const centerY =
+    (typeof window !== 'undefined'
+      ? window.innerHeight
+      : DEFAULT_SCREEN_DIMENSIONS.HEIGHT) /
+    DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR;
   return { x: centerX, y: centerY };
 }
 
@@ -90,8 +97,14 @@ function getClickCoordinates(clickEvent?: React.MouseEvent<HTMLElement>): {
  * 计算圆形展开动画的半径
  */
 function calculateEndRadius(x: number, y: number): number {
-  const width = typeof window !== 'undefined' ? window.innerWidth : DEFAULT_SCREEN_DIMENSIONS.WIDTH;
-  const height = typeof window !== 'undefined' ? window.innerHeight : DEFAULT_SCREEN_DIMENSIONS.HEIGHT;
+  const width =
+    typeof window !== 'undefined'
+      ? window.innerWidth
+      : DEFAULT_SCREEN_DIMENSIONS.WIDTH;
+  const height =
+    typeof window !== 'undefined'
+      ? window.innerHeight
+      : DEFAULT_SCREEN_DIMENSIONS.HEIGHT;
   return Math.hypot(Math.max(x, width - x), Math.max(y, height - y));
 }
 
@@ -133,10 +146,17 @@ interface ThemeTransitionRecord {
  * 统一的性能监控和分析记录函数
  */
 function recordThemeTransition(record: ThemeTransitionRecord): void {
-  const { fromTheme, toTheme, startTime, endTime, hasViewTransition, error } = record;
+  const { fromTheme, toTheme, startTime, endTime, hasViewTransition, error } =
+    record;
 
   try {
-    recordThemeSwitch(fromTheme, toTheme, startTime, endTime, hasViewTransition);
+    recordThemeSwitch(
+      fromTheme,
+      toTheme,
+      startTime,
+      endTime,
+      hasViewTransition,
+    );
     recordThemePreference(toTheme);
 
     // 记录性能指标
@@ -163,7 +183,8 @@ function recordThemeTransition(record: ThemeTransitionRecord): void {
     logger.error('Failed to record theme transition', {
       fromTheme,
       toTheme,
-      recordError: recordError instanceof Error ? recordError.message : 'Unknown error',
+      recordError:
+        recordError instanceof Error ? recordError.message : 'Unknown error',
     });
   }
 }
@@ -201,7 +222,10 @@ function executeThemeTransition(
         startTime,
         endTime,
         hasViewTransition: false,
-        error: error instanceof Error ? error : new Error('Unknown theme switch error'),
+        error:
+          error instanceof Error
+            ? error
+            : new Error('Unknown theme switch error'),
       });
     }
     return;
@@ -238,14 +262,20 @@ function executeThemeTransition(
           startTime,
           endTime,
           hasViewTransition: true,
-          error: error instanceof Error ? error : new Error('View transition failed'),
+          error:
+            error instanceof Error
+              ? error
+              : new Error('View transition failed'),
         });
       });
   } catch (error) {
     // View Transitions API 调用失败，回退到直接切换
-    logger.warn('View Transitions API failed, falling back to direct theme switch', {
-      error: error instanceof Error ? error.message : 'Unknown error',
-    });
+    logger.warn(
+      'View Transitions API failed, falling back to direct theme switch',
+      {
+        error: error instanceof Error ? error.message : 'Unknown error',
+      },
+    );
 
     try {
       originalSetTheme(newTheme);
@@ -265,7 +295,10 @@ function executeThemeTransition(
         startTime,
         endTime,
         hasViewTransition: false,
-        error: fallbackError instanceof Error ? fallbackError : new Error('Theme switch failed'),
+        error:
+          fallbackError instanceof Error
+            ? fallbackError
+            : new Error('Theme switch failed'),
       });
     }
   }
@@ -314,7 +347,10 @@ function executeCircularThemeTransition(
           );
         } catch (animationError) {
           logger.warn('Failed to setup circular animation', {
-            error: animationError instanceof Error ? animationError.message : 'Unknown error',
+            error:
+              animationError instanceof Error
+                ? animationError.message
+                : 'Unknown error',
             coordinates: { x, y },
             endRadius,
           });
@@ -322,7 +358,8 @@ function executeCircularThemeTransition(
       })
       .catch((readyError: unknown) => {
         logger.warn('View transition ready promise rejected', {
-          error: readyError instanceof Error ? readyError.message : 'Unknown error',
+          error:
+            readyError instanceof Error ? readyError.message : 'Unknown error',
         });
       });
   };
@@ -351,7 +388,9 @@ export function useEnhancedTheme() {
 
   // 使用 ref 来存储防抖函数，避免重复创建
   const debouncedSetThemeRef = useRef<((_theme: string) => void) | null>(null);
-  const debouncedSetCircularThemeRef = useRef<((_theme: string, _event?: React.MouseEvent<HTMLElement>) => void) | null>(null);
+  const debouncedSetCircularThemeRef = useRef<
+    ((_theme: string, _event?: React.MouseEvent<HTMLElement>) => void) | null
+  >(null);
 
   // 缓存 View Transitions API 支持状态
   const viewTransitionsSupported = useMemo(() => supportsViewTransitions(), []);
@@ -361,7 +400,8 @@ export function useEnhancedTheme() {
     (newTheme: string) => {
       if (!debouncedSetThemeRef.current) {
         debouncedSetThemeRef.current = createDebounce(
-          (_targetTheme: string) => executeBasicThemeTransition(originalSetTheme, _targetTheme, theme),
+          (_targetTheme: string) =>
+            executeBasicThemeTransition(originalSetTheme, _targetTheme, theme),
           DEFAULT_CONFIG.debounceDelay,
         ) as (_theme: string) => void;
       }
@@ -376,7 +416,12 @@ export function useEnhancedTheme() {
       if (!debouncedSetCircularThemeRef.current) {
         debouncedSetCircularThemeRef.current = createDebounce(
           (_targetTheme: string, _event?: React.MouseEvent<HTMLElement>) =>
-            executeCircularThemeTransition(originalSetTheme, _targetTheme, theme, _event),
+            executeCircularThemeTransition(
+              originalSetTheme,
+              _targetTheme,
+              theme,
+              _event,
+            ),
           DEFAULT_CONFIG.debounceDelay,
         ) as (_theme: string, _event?: React.MouseEvent<HTMLElement>) => void;
       }

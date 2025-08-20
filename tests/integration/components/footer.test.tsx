@@ -9,10 +9,10 @@
  * - Responsive behavior
  */
 
-import { Footer } from '@/components/layout/footer';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { Footer } from '@/components/layout/footer';
 
 // Mock next-intl hooks
 const mockUseTranslations = vi.fn();
@@ -262,7 +262,7 @@ describe('Footer Integration Tests', () => {
       expect(socialLinks.length).toBeGreaterThan(0);
 
       // Verify social links have external attributes
-      socialLinks.forEach(link => {
+      socialLinks.forEach((link) => {
         expect(link).toHaveAttribute('target', '_blank');
         expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       });

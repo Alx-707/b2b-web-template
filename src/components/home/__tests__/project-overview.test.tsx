@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+// Import the component after mocks
+import { ProjectOverview } from '../project-overview';
 
 // Mock next-intl
 const mockUseTranslations = vi.hoisted(() => vi.fn());
@@ -44,7 +46,10 @@ vi.mock('@/lib/site-config', () => ({
 // Mock UI components
 vi.mock('@/components/ui/badge', () => ({
   Badge: ({ children, ...props }: any) => (
-    <span data-testid="badge" {...props}>
+    <span
+      data-testid='badge'
+      {...props}
+    >
       {children}
     </span>
   ),
@@ -53,10 +58,20 @@ vi.mock('@/components/ui/badge', () => ({
 vi.mock('@/components/ui/button', () => ({
   Button: ({ children, asChild, ...props }: any) => {
     if (asChild) {
-      return <div data-testid="button" {...props}>{children}</div>;
+      return (
+        <div
+          data-testid='button'
+          {...props}
+        >
+          {children}
+        </div>
+      );
     }
     return (
-      <button data-testid="button" {...props}>
+      <button
+        data-testid='button'
+        {...props}
+      >
         {children}
       </button>
     );
@@ -65,27 +80,42 @@ vi.mock('@/components/ui/button', () => ({
 
 vi.mock('@/components/ui/card', () => ({
   Card: ({ children, ...props }: any) => (
-    <div data-testid="card" {...props}>
+    <div
+      data-testid='card'
+      {...props}
+    >
       {children}
     </div>
   ),
   CardContent: ({ children, ...props }: any) => (
-    <div data-testid="card-content" {...props}>
+    <div
+      data-testid='card-content'
+      {...props}
+    >
       {children}
     </div>
   ),
   CardDescription: ({ children, ...props }: any) => (
-    <div data-testid="card-description" {...props}>
+    <div
+      data-testid='card-description'
+      {...props}
+    >
       {children}
     </div>
   ),
   CardHeader: ({ children, ...props }: any) => (
-    <div data-testid="card-header" {...props}>
+    <div
+      data-testid='card-header'
+      {...props}
+    >
       {children}
     </div>
   ),
   CardTitle: ({ children, ...props }: any) => (
-    <div data-testid="card-title" {...props}>
+    <div
+      data-testid='card-title'
+      {...props}
+    >
       {children}
     </div>
   ),
@@ -93,19 +123,16 @@ vi.mock('@/components/ui/card', () => ({
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
-  ArrowRight: () => <div data-testid="arrow-right-icon">ArrowRight</div>,
-  CheckCircle: () => <div data-testid="check-circle-icon">CheckCircle</div>,
-  Code: () => <div data-testid="code-icon">Code</div>,
-  ExternalLink: () => <div data-testid="external-link-icon">ExternalLink</div>,
-  Globe: () => <div data-testid="globe-icon">Globe</div>,
-  Palette: () => <div data-testid="palette-icon">Palette</div>,
-  Rocket: () => <div data-testid="rocket-icon">Rocket</div>,
-  Shield: () => <div data-testid="shield-icon">Shield</div>,
-  Zap: () => <div data-testid="zap-icon">Zap</div>,
+  ArrowRight: () => <div data-testid='arrow-right-icon'>ArrowRight</div>,
+  CheckCircle: () => <div data-testid='check-circle-icon'>CheckCircle</div>,
+  Code: () => <div data-testid='code-icon'>Code</div>,
+  ExternalLink: () => <div data-testid='external-link-icon'>ExternalLink</div>,
+  Globe: () => <div data-testid='globe-icon'>Globe</div>,
+  Palette: () => <div data-testid='palette-icon'>Palette</div>,
+  Rocket: () => <div data-testid='rocket-icon'>Rocket</div>,
+  Shield: () => <div data-testid='shield-icon'>Shield</div>,
+  Zap: () => <div data-testid='zap-icon'>Zap</div>,
 }));
-
-// Import the component after mocks
-import { ProjectOverview } from '../project-overview';
 
 describe('ProjectOverview', () => {
   // Mock translation function
@@ -168,7 +195,9 @@ describe('ProjectOverview', () => {
       render(<ProjectOverview />);
 
       expect(screen.getByText('Project Overview')).toBeInTheDocument();
-      expect(screen.getByText('Comprehensive analysis of our modern tech stack')).toBeInTheDocument();
+      expect(
+        screen.getByText('Comprehensive analysis of our modern tech stack'),
+      ).toBeInTheDocument();
     });
   });
 

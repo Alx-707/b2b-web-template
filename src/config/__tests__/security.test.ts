@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   generateCSP,
-  getSecurityHeaders,
   generateNonce,
   getSecurityConfig,
+  getSecurityHeaders,
   isValidNonce,
   SECURITY_MODES,
 } from '../security';
@@ -62,7 +62,7 @@ describe('Security Configuration', () => {
       const headers = getSecurityHeaders(undefined, true);
       expect(headers).toHaveLength(10);
 
-      const headerKeys = headers.map(h => h.key);
+      const headerKeys = headers.map((h) => h.key);
       expect(headerKeys).toContain('X-Frame-Options');
       expect(headerKeys).toContain('X-Content-Type-Options');
       expect(headerKeys).toContain('Referrer-Policy');
@@ -84,7 +84,9 @@ describe('Security Configuration', () => {
       const nonce = 'test-nonce-456';
       const headers = getSecurityHeaders(nonce, true);
 
-      const cspHeader = headers.find(h => h.key === 'Content-Security-Policy');
+      const cspHeader = headers.find(
+        (h) => h.key === 'Content-Security-Policy',
+      );
       expect(cspHeader?.value).toContain(`'nonce-${nonce}'`);
     });
 
@@ -92,7 +94,7 @@ describe('Security Configuration', () => {
       vi.stubEnv('SECURITY_HEADERS_ENABLED', 'true');
 
       const headers = getSecurityHeaders(undefined, true);
-      const frameHeader = headers.find(h => h.key === 'X-Frame-Options');
+      const frameHeader = headers.find((h) => h.key === 'X-Frame-Options');
       expect(frameHeader?.value).toBe('DENY');
     });
 
@@ -100,8 +102,12 @@ describe('Security Configuration', () => {
       vi.stubEnv('SECURITY_HEADERS_ENABLED', 'true');
 
       const headers = getSecurityHeaders(undefined, true);
-      const hstsHeader = headers.find(h => h.key === 'Strict-Transport-Security');
-      expect(hstsHeader?.value).toBe('max-age=63072000; includeSubDomains; preload');
+      const hstsHeader = headers.find(
+        (h) => h.key === 'Strict-Transport-Security',
+      );
+      expect(hstsHeader?.value).toBe(
+        'max-age=63072000; includeSubDomains; preload',
+      );
     });
   });
 

@@ -71,10 +71,17 @@ const nextConfig: NextConfig = {
     // even though we're returning static configuration
     await Promise.resolve(); // Satisfy require-await ESLint rule
 
+    const securityHeaders = getSecurityHeaders();
+
+    // Next.js 15.4.7+ requires non-empty headers array
+    if (securityHeaders.length === 0) {
+      return [];
+    }
+
     return [
       {
         source: '/:path*',
-        headers: getSecurityHeaders(),
+        headers: securityHeaders,
       },
     ];
   },

@@ -1,6 +1,6 @@
-import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Locale } from '@/types/i18n';
+import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
 import { SmartLocaleDetector } from '../locale-detector';
 
 // Use vi.hoisted to ensure proper mock setup

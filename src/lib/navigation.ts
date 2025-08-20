@@ -29,11 +29,7 @@ export const mainNavigation: NavigationItem[] = [
     href: '/about',
     translationKey: 'navigation.about',
   },
-  {
-    key: 'services',
-    href: '/services',
-    translationKey: 'navigation.services',
-  },
+
   {
     key: 'products',
     href: '/products',

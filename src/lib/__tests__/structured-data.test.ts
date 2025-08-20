@@ -1,14 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // Import after mocks
 import {
-    generateArticleSchema,
-    generateBreadcrumbSchema,
-    generateFAQSchema,
-    generateJSONLD,
-    generateLocalBusinessSchema,
-    generateLocalizedStructuredData,
-    generateProductSchema,
-    generateStructuredData,
+  generateArticleSchema,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateJSONLD,
+  generateLocalBusinessSchema,
+  generateLocalizedStructuredData,
+  generateProductSchema,
+  generateStructuredData,
 } from '../structured-data';
 
 // 测试常量定义
@@ -456,7 +456,11 @@ describe('Structured Data Generation', () => {
       // Mock getTranslations to throw an error
       mockGetTranslations.mockRejectedValueOnce(new Error('Translation error'));
 
-      const data = await generateLocalizedStructuredData('en', 'Organization', {});
+      const data = await generateLocalizedStructuredData(
+        'en',
+        'Organization',
+        {},
+      );
 
       // Should return basic structure even when translation fails
       expect(data).toHaveProperty('@context', 'https://schema.org');
@@ -464,7 +468,11 @@ describe('Structured Data Generation', () => {
     });
 
     it('should handle invalid structured data types', async () => {
-      const data = await generateLocalizedStructuredData('en', 'InvalidType' as any, {});
+      const data = await generateLocalizedStructuredData(
+        'en',
+        'InvalidType' as any,
+        {},
+      );
 
       // Should return basic structure for unknown types
       expect(data).toHaveProperty('@context', 'https://schema.org');
@@ -479,7 +487,11 @@ describe('Structured Data Generation', () => {
       ] as const;
 
       for (const testCase of testCases) {
-        const data = await generateLocalizedStructuredData('en', testCase.type, testCase.data as any);
+        const data = await generateLocalizedStructuredData(
+          'en',
+          testCase.type,
+          testCase.data as any,
+        );
 
         expect(data).toHaveProperty('@context', 'https://schema.org');
         expect(data).toHaveProperty('@type', testCase.type);
@@ -495,7 +507,11 @@ describe('Structured Data Generation', () => {
         invalidProperty: 'should be ignored',
       };
 
-      const data = await generateLocalizedStructuredData('en', 'Article', malformedData);
+      const data = await generateLocalizedStructuredData(
+        'en',
+        'Article',
+        malformedData,
+      );
 
       expect(data).toHaveProperty('@context', 'https://schema.org');
       expect(data).toHaveProperty('@type', 'Article');
@@ -509,7 +525,11 @@ describe('Structured Data Generation', () => {
         availability: 'InvalidStatus',
       };
 
-      const data = await generateLocalizedStructuredData('en', 'Product', malformedData);
+      const data = await generateLocalizedStructuredData(
+        'en',
+        'Product',
+        malformedData,
+      );
 
       expect(data).toHaveProperty('@context', 'https://schema.org');
       expect(data).toHaveProperty('@type', 'Product');
@@ -521,7 +541,7 @@ describe('Structured Data Generation', () => {
       const testData = {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: 'Test Organization',
+        'name': 'Test Organization',
       };
 
       const jsonLD = generateJSONLD(testData);
@@ -539,16 +559,16 @@ describe('Structured Data Generation', () => {
       const complexData = {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        address: {
+        'address': {
           '@type': 'PostalAddress',
-          streetAddress: '123 Main St',
-          addressLocality: 'City',
+          'streetAddress': '123 Main St',
+          'addressLocality': 'City',
         },
-        contactPoint: [
+        'contactPoint': [
           {
             '@type': 'ContactPoint',
-            telephone: '+1-555-123-4567',
-            contactType: 'customer service',
+            'telephone': '+1-555-123-4567',
+            'contactType': 'customer service',
           },
         ],
       };
@@ -566,9 +586,9 @@ describe('Structured Data Generation', () => {
       const dataWithNulls = {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: 'Test',
-        description: null,
-        url: undefined,
+        'name': 'Test',
+        'description': null,
+        'url': undefined,
       };
 
       const jsonLD = generateJSONLD(dataWithNulls);

@@ -47,14 +47,21 @@ class SecurityChecker {
     this.addCheck(
       'Environment template exists',
       fs.existsSync('.env.example'),
-      '.env.example file should exist as a template'
+      '.env.example file should exist as a template',
     );
 
     // Check .env files are not committed
-    const envFiles = ['.env', '.env.local', '.env.production', '.env.development'];
-    envFiles.forEach(file => {
+    const envFiles = [
+      '.env',
+      '.env.local',
+      '.env.production',
+      '.env.development',
+    ];
+    envFiles.forEach((file) => {
       if (fs.existsSync(file)) {
-        this.addWarning(`${file} exists - ensure it's not committed to version control`);
+        this.addWarning(
+          `${file} exists - ensure it's not committed to version control`,
+        );
       }
     });
 
@@ -62,7 +69,7 @@ class SecurityChecker {
     this.addCheck(
       'Environment validation exists',
       fs.existsSync('env.mjs'),
-      'env.mjs file should exist for environment variable validation'
+      'env.mjs file should exist for environment variable validation',
     );
 
     // Check for sensitive data in .env.example
@@ -71,13 +78,14 @@ class SecurityChecker {
 
       // Look for uncommented lines with sensitive values that don't look like placeholders
       const lines = envExample.split('\n');
-      const sensitiveLines = lines.filter(line => {
+      const sensitiveLines = lines.filter((line) => {
         // Skip comments
         if (line.trim().startsWith('#')) return false;
 
         // Check for sensitive keys with non-placeholder values
         const sensitivePattern = /(password|secret|key|token)=/i;
-        const placeholderPattern = /(your_|test_|example_|placeholder|changeme|replace)/i;
+        const placeholderPattern =
+          /(your_|test_|example_|placeholder|changeme|replace)/i;
 
         if (sensitivePattern.test(line)) {
           const value = line.split('=')[1]?.trim();
@@ -91,11 +99,13 @@ class SecurityChecker {
       this.addCheck(
         'No sensitive data in .env.example',
         sensitiveLines.length === 0,
-        '.env.example should not contain real sensitive data'
+        '.env.example should not contain real sensitive data',
       );
 
       if (sensitiveLines.length > 0) {
-        console.log(`     Found potentially sensitive lines: ${sensitiveLines.length}`);
+        console.log(
+          `     Found potentially sensitive lines: ${sensitiveLines.length}`,
+        );
       }
     }
   }
@@ -111,7 +121,7 @@ class SecurityChecker {
     this.addCheck(
       'Security configuration exists',
       fs.existsSync(securityConfigPath),
-      'Security configuration file should exist'
+      'Security configuration file should exist',
     );
 
     // Check next.config.ts for security headers
@@ -121,13 +131,14 @@ class SecurityChecker {
       this.addCheck(
         'Security headers configured',
         nextConfig.includes('getSecurityHeaders'),
-        'next.config.ts should use getSecurityHeaders function'
+        'next.config.ts should use getSecurityHeaders function',
       );
 
       this.addCheck(
         'CSP configured',
-        nextConfig.includes('Content-Security-Policy') || nextConfig.includes('getSecurityHeaders'),
-        'Content Security Policy should be configured'
+        nextConfig.includes('Content-Security-Policy') ||
+          nextConfig.includes('getSecurityHeaders'),
+        'Content Security Policy should be configured',
       );
     }
   }
@@ -143,7 +154,7 @@ class SecurityChecker {
     this.addCheck(
       'CSP report endpoint exists',
       fs.existsSync(cspReportPath),
-      'CSP report endpoint should exist for violation reporting'
+      'CSP report endpoint should exist for violation reporting',
     );
 
     // Check middleware includes security
@@ -152,8 +163,9 @@ class SecurityChecker {
 
       this.addCheck(
         'Middleware includes security',
-        middleware.includes('getSecurityHeaders') || middleware.includes('generateNonce'),
-        'Middleware should include security headers'
+        middleware.includes('getSecurityHeaders') ||
+          middleware.includes('generateNonce'),
+        'Middleware should include security headers',
       );
     }
   }
@@ -167,31 +179,36 @@ class SecurityChecker {
     // Check if security-related packages are installed
     if (fs.existsSync('package.json')) {
       const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-      const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
+      const dependencies = {
+        ...packageJson.dependencies,
+        ...packageJson.devDependencies,
+      };
 
       this.addCheck(
         'Environment validation package installed',
         '@t3-oss/env-nextjs' in dependencies,
-        '@t3-oss/env-nextjs should be installed for environment validation'
+        '@t3-oss/env-nextjs should be installed for environment validation',
       );
 
       this.addCheck(
         'Bot protection package installed',
         '@marsidev/react-turnstile' in dependencies,
-        'Turnstile package should be installed for bot protection'
+        'Turnstile package should be installed for bot protection',
       );
 
       this.addCheck(
         'Security linting installed',
         'eslint-plugin-security' in dependencies,
-        'Security ESLint plugin should be installed'
+        'Security ESLint plugin should be installed',
       );
 
       // Check for known vulnerable packages (basic check)
       const vulnerablePackages = ['lodash', 'moment', 'request'];
-      vulnerablePackages.forEach(pkg => {
+      vulnerablePackages.forEach((pkg) => {
         if (pkg in dependencies) {
-          this.addWarning(`${pkg} is installed - consider using modern alternatives`);
+          this.addWarning(
+            `${pkg} is installed - consider using modern alternatives`,
+          );
         }
       });
     }
@@ -214,9 +231,11 @@ class SecurityChecker {
       'id_dsa',
     ];
 
-    sensitiveFiles.forEach(file => {
+    sensitiveFiles.forEach((file) => {
       if (fs.existsSync(file)) {
-        this.addWarning(`Sensitive file ${file} exists - ensure it's properly secured`);
+        this.addWarning(
+          `Sensitive file ${file} exists - ensure it's properly secured`,
+        );
       }
     });
   }
@@ -234,23 +253,22 @@ class SecurityChecker {
         { pattern: '.env', alternatives: ['.env', '.env*'] },
         { pattern: '.env.local', alternatives: ['.env.local', '.env*'] },
         { pattern: '.env.*.local', alternatives: ['.env.*.local', '.env*'] },
-        { pattern: 'node_modules', alternatives: ['node_modules', '/node_modules'] },
+        {
+          pattern: 'node_modules',
+          alternatives: ['node_modules', '/node_modules'],
+        },
       ];
 
       requiredEntries.forEach(({ pattern, alternatives }) => {
-        const isIncluded = alternatives.some(alt => gitignore.includes(alt));
+        const isIncluded = alternatives.some((alt) => gitignore.includes(alt));
         this.addCheck(
           `.gitignore includes ${pattern}`,
           isIncluded,
-          `${pattern} should be in .gitignore`
+          `${pattern} should be in .gitignore`,
         );
       });
     } else {
-      this.addCheck(
-        '.gitignore exists',
-        false,
-        '.gitignore file should exist'
-      );
+      this.addCheck('.gitignore exists', false, '.gitignore file should exist');
     }
   }
 
@@ -265,7 +283,7 @@ class SecurityChecker {
     this.addCheck(
       'Turnstile component exists',
       fs.existsSync(turnstilePath),
-      'Turnstile component should exist for bot protection'
+      'Turnstile component should exist for bot protection',
     );
 
     // Check Turnstile verification endpoint exists
@@ -273,7 +291,7 @@ class SecurityChecker {
     this.addCheck(
       'Turnstile verification endpoint exists',
       fs.existsSync(verifyPath),
-      'Turnstile verification endpoint should exist'
+      'Turnstile verification endpoint should exist',
     );
   }
 
@@ -321,7 +339,7 @@ class SecurityChecker {
     console.log('========================');
 
     const totalChecks = this.results.checks.length;
-    const passedChecks = this.results.checks.filter(c => c.passed).length;
+    const passedChecks = this.results.checks.filter((c) => c.passed).length;
     const failedChecks = totalChecks - passedChecks;
 
     console.log(`Total checks: ${totalChecks}`);
@@ -332,18 +350,24 @@ class SecurityChecker {
     if (this.results.passed) {
       console.log('\n🎉 All security checks passed!');
     } else {
-      console.log('\n⚠️  Some security checks failed. Please review and fix the issues above.');
+      console.log(
+        '\n⚠️  Some security checks failed. Please review and fix the issues above.',
+      );
     }
 
     // Add general recommendations
-    this.addRecommendation('Regularly update dependencies to patch security vulnerabilities');
+    this.addRecommendation(
+      'Regularly update dependencies to patch security vulnerabilities',
+    );
     this.addRecommendation('Use strong, unique secrets in production');
     this.addRecommendation('Enable security monitoring and alerting');
-    this.addRecommendation('Regularly review and update security configurations');
+    this.addRecommendation(
+      'Regularly review and update security configurations',
+    );
 
     if (this.results.recommendations.length > 0) {
       console.log('\n💡 Recommendations:');
-      this.results.recommendations.forEach(rec => {
+      this.results.recommendations.forEach((rec) => {
         console.log(`  • ${rec}`);
       });
     }
@@ -367,7 +391,7 @@ class SecurityChecker {
 // Run the security check
 if (require.main === module) {
   const checker = new SecurityChecker();
-  checker.runChecks().catch(error => {
+  checker.runChecks().catch((error) => {
     console.error('Error running security checks:', error);
     process.exit(1);
   });

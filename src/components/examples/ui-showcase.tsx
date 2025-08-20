@@ -1,13 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 import {
+  CarouselDemoSection,
+  ProgressBarDemoSection,
   ToastDemoSection,
   TypographyDemoSection,
-  CarouselDemoSection,
-  ProgressBarDemoSection
 } from './ui-showcase-sections';
 
 /**
@@ -41,10 +41,12 @@ export function UIShowcase() {
   };
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold">UI Enhancement Components Showcase</h1>
-        <p className="text-muted-foreground mt-2">
+    <div className='container mx-auto space-y-8 py-8'>
+      <div className='text-center'>
+        <h1 className='text-3xl font-bold'>
+          UI Enhancement Components Showcase
+        </h1>
+        <p className='text-muted-foreground mt-2'>
           Demonstrating the newly implemented UI components
         </p>
       </div>
@@ -69,11 +71,13 @@ export function UIShowcase() {
         <CardHeader>
           <CardTitle>Implementation Summary</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <CardContent className='space-y-4'>
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
             <div>
-              <h4 className="font-semibold text-green-600">✅ Successfully Implemented</h4>
-              <ul className="text-sm space-y-1 mt-2">
+              <h4 className='font-semibold text-green-600'>
+                ✅ Successfully Implemented
+              </h4>
+              <ul className='mt-2 space-y-1 text-sm'>
                 <li>• Sonner toast notifications</li>
                 <li>• @tailwindcss/typography</li>
                 <li>• Embla Carousel component</li>
@@ -83,8 +87,10 @@ export function UIShowcase() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-blue-600">📊 Performance Impact</h4>
-              <ul className="text-sm space-y-1 mt-2">
+              <h4 className='font-semibold text-blue-600'>
+                📊 Performance Impact
+              </h4>
+              <ul className='mt-2 space-y-1 text-sm'>
                 <li>• Typography: ~8KB</li>
                 <li>• Sonner: ~15KB</li>
                 <li>• Progress Bar: ~3KB</li>

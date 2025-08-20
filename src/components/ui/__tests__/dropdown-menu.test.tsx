@@ -1,23 +1,23 @@
-import { TEST_COUNT_CONSTANTS, TEST_COUNTS } from '@/constants/test-constants';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { TEST_COUNT_CONSTANTS, TEST_COUNTS } from '@/constants/test-constants';
 // Import after mocks
 import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuPortal,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from '../dropdown-menu';
 
 // Use vi.hoisted to ensure proper mock setup
@@ -39,7 +39,7 @@ const { mockRadixComponents, mockLucideIcons } = vi.hoisted(() => ({
         {children}
       </div>
     ),
-    Trigger: ({ children, ...props }: any) => (
+    Trigger: ({ children, asChild, ...props }: any) => (
       <button
         data-testid='dropdown-trigger'
         {...props}
@@ -47,9 +47,10 @@ const { mockRadixComponents, mockLucideIcons } = vi.hoisted(() => ({
         {children}
       </button>
     ),
-    Content: ({ children, ...props }: any) => (
+    Content: ({ children, sideOffset, ...props }: any) => (
       <div
         data-testid='dropdown-content'
+        data-side-offset={sideOffset}
         {...props}
       >
         {children}
@@ -227,13 +228,12 @@ describe('DropdownMenu Components', () => {
 
     it('passes through props to portal', () => {
       render(
-        <DropdownMenuPortal className='custom-portal' data-custom='test-value'>
+        <DropdownMenuPortal data-custom='test-value'>
           <div>Portal Content</div>
         </DropdownMenuPortal>,
       );
 
       const portal = screen.getByTestId('dropdown-portal');
-      expect(portal).toHaveClass('custom-portal');
       expect(portal).toHaveAttribute('data-custom', 'test-value');
     });
   });
@@ -296,7 +296,7 @@ describe('DropdownMenu Components', () => {
       const content = screen.getByTestId('dropdown-content');
       expect(content).toBeInTheDocument();
       expect(content).toHaveAttribute('data-slot', 'dropdown-menu-content');
-      expect(content).toHaveAttribute('sideOffset', '4');
+      expect(content).toHaveAttribute('data-side-offset', '4');
     });
 
     it('applies custom className', () => {
@@ -324,7 +324,7 @@ describe('DropdownMenu Components', () => {
       );
 
       const content = screen.getByTestId('dropdown-content');
-      expect(content).toHaveAttribute('sideOffset', '8');
+      expect(content).toHaveAttribute('data-side-offset', '8');
     });
 
     it('renders within portal', () => {

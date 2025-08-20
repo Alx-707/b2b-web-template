@@ -105,11 +105,13 @@ const NEW_TEST_FILES = [
 function calculateExpectedCoverage() {
   const totalExpectedNewCoverage = NEW_TEST_FILES.reduce(
     (sum, file) => sum + file.expectedCoverage,
-    0
+    0,
   );
 
-  const expectedCoverageIncrease = (totalExpectedNewCoverage / PROJECT_CONFIG.totalLines) * 100;
-  const expectedFinalCoverage = PROJECT_CONFIG.currentBaseline + expectedCoverageIncrease;
+  const expectedCoverageIncrease =
+    (totalExpectedNewCoverage / PROJECT_CONFIG.totalLines) * 100;
+  const expectedFinalCoverage =
+    PROJECT_CONFIG.currentBaseline + expectedCoverageIncrease;
 
   return {
     totalExpectedNewCoverage,
@@ -122,14 +124,18 @@ function calculateExpectedCoverage() {
 // 读取当前覆盖率报告
 function readCurrentCoverage() {
   try {
-    const summaryPath = path.join(process.cwd(), 'coverage', 'coverage-summary.json');
+    const summaryPath = path.join(
+      process.cwd(),
+      'coverage',
+      'coverage-summary.json',
+    );
     if (!fs.existsSync(summaryPath)) {
       return null;
     }
-    
+
     const content = fs.readFileSync(summaryPath, 'utf8');
     const data = JSON.parse(content);
-    
+
     if (data.total) {
       return {
         lines: {
@@ -149,7 +155,7 @@ function readCurrentCoverage() {
         },
       };
     }
-    
+
     return null;
   } catch (error) {
     console.error(colors.red('读取覆盖率报告失败:'), error.message);
@@ -165,29 +171,49 @@ function generateFinalReport() {
   // 项目概览
   console.log(colors.bold('\n📊 项目概览'));
   console.log(`起始覆盖率: ${colors.cyan(PROJECT_CONFIG.startCoverage + '%')}`);
-  console.log(`基线覆盖率: ${colors.cyan(PROJECT_CONFIG.currentBaseline + '%')}`);
-  console.log(`目标覆盖率: ${colors.blue(PROJECT_CONFIG.targetCoverage + '%')}`);
-  console.log(`项目总行数: ${colors.cyan(PROJECT_CONFIG.totalLines.toLocaleString())}`);
+  console.log(
+    `基线覆盖率: ${colors.cyan(PROJECT_CONFIG.currentBaseline + '%')}`,
+  );
+  console.log(
+    `目标覆盖率: ${colors.blue(PROJECT_CONFIG.targetCoverage + '%')}`,
+  );
+  console.log(
+    `项目总行数: ${colors.cyan(PROJECT_CONFIG.totalLines.toLocaleString())}`,
+  );
 
   // 预期计算
   const expected = calculateExpectedCoverage();
   console.log(colors.bold('\n📈 预期成果计算'));
-  console.log(`预期新增覆盖: ${colors.green(expected.totalExpectedNewCoverage + '行')}`);
-  console.log(`预期覆盖率增量: ${colors.green('+' + expected.expectedCoverageIncrease.toFixed(2) + '%')}`);
-  console.log(`预期最终覆盖率: ${colors.green(expected.expectedFinalCoverage.toFixed(2) + '%')}`);
-  
+  console.log(
+    `预期新增覆盖: ${colors.green(expected.totalExpectedNewCoverage + '行')}`,
+  );
+  console.log(
+    `预期覆盖率增量: ${colors.green('+' + expected.expectedCoverageIncrease.toFixed(2) + '%')}`,
+  );
+  console.log(
+    `预期最终覆盖率: ${colors.green(expected.expectedFinalCoverage.toFixed(2) + '%')}`,
+  );
+
   if (expected.targetGap <= 0) {
     console.log(colors.green('🎉 预期将达到或超过60%目标！'));
   } else {
-    console.log(`距离目标还差: ${colors.yellow(expected.targetGap.toFixed(2) + '%')}`);
+    console.log(
+      `距离目标还差: ${colors.yellow(expected.targetGap.toFixed(2) + '%')}`,
+    );
   }
 
   // 新增测试统计
   console.log(colors.bold('\n🧪 新增测试统计'));
-  
-  const totalNewTests = NEW_TEST_FILES.reduce((sum, file) => sum + file.testCases, 0);
-  const totalNewLines = NEW_TEST_FILES.reduce((sum, file) => sum + file.lines, 0);
-  
+
+  const totalNewTests = NEW_TEST_FILES.reduce(
+    (sum, file) => sum + file.testCases,
+    0,
+  );
+  const totalNewLines = NEW_TEST_FILES.reduce(
+    (sum, file) => sum + file.lines,
+    0,
+  );
+
   console.log(`新增测试文件: ${colors.cyan(NEW_TEST_FILES.length + '个')}`);
   console.log(`新增测试用例: ${colors.cyan(totalNewTests + '个')}`);
   console.log(`新增测试代码: ${colors.cyan(totalNewLines + '行')}`);
@@ -211,44 +237,63 @@ function generateFinalReport() {
       enhanced: '增强现有测试',
       optimized: '优化高覆盖率文件',
     };
-    
+
     console.log(`${colors.magenta(typeNames[type] || type)}:`);
-    console.log(`  文件数: ${stats.count}, 测试: ${stats.tests}, 代码: ${stats.lines}行, 覆盖: +${stats.coverage}行`);
+    console.log(
+      `  文件数: ${stats.count}, 测试: ${stats.tests}, 代码: ${stats.lines}行, 覆盖: +${stats.coverage}行`,
+    );
   });
 
   // 当前覆盖率状态
   console.log(colors.bold('\n📊 当前覆盖率状态'));
   const currentCoverage = readCurrentCoverage();
-  
+
   if (currentCoverage) {
-    console.log(`当前行覆盖率: ${colors.green(currentCoverage.lines.pct.toFixed(2) + '%')} (${currentCoverage.lines.covered}/${currentCoverage.lines.total})`);
-    console.log(`当前函数覆盖率: ${colors.cyan(currentCoverage.functions.pct.toFixed(2) + '%')} (${currentCoverage.functions.covered}/${currentCoverage.functions.total})`);
-    console.log(`当前分支覆盖率: ${colors.cyan(currentCoverage.branches.pct.toFixed(2) + '%')} (${currentCoverage.branches.covered}/${currentCoverage.branches.total})`);
-    
+    console.log(
+      `当前行覆盖率: ${colors.green(currentCoverage.lines.pct.toFixed(2) + '%')} (${currentCoverage.lines.covered}/${currentCoverage.lines.total})`,
+    );
+    console.log(
+      `当前函数覆盖率: ${colors.cyan(currentCoverage.functions.pct.toFixed(2) + '%')} (${currentCoverage.functions.covered}/${currentCoverage.functions.total})`,
+    );
+    console.log(
+      `当前分支覆盖率: ${colors.cyan(currentCoverage.branches.pct.toFixed(2) + '%')} (${currentCoverage.branches.covered}/${currentCoverage.branches.total})`,
+    );
+
     // 目标达成评估
     const actualGap = PROJECT_CONFIG.targetCoverage - currentCoverage.lines.pct;
-    
+
     if (actualGap <= 0) {
       console.log(colors.green('\n🎉 恭喜！已达到60%覆盖率目标！'));
     } else if (actualGap <= 0.5) {
-      console.log(colors.yellow(`\n⚡ 非常接近目标！还差 ${actualGap.toFixed(2)}%`));
+      console.log(
+        colors.yellow(`\n⚡ 非常接近目标！还差 ${actualGap.toFixed(2)}%`),
+      );
     } else {
-      console.log(colors.yellow(`\n📈 还需努力！距离目标还差 ${actualGap.toFixed(2)}%`));
+      console.log(
+        colors.yellow(`\n📈 还需努力！距离目标还差 ${actualGap.toFixed(2)}%`),
+      );
     }
-    
+
     // 实际vs预期对比
-    const actualIncrease = currentCoverage.lines.pct - PROJECT_CONFIG.currentBaseline;
+    const actualIncrease =
+      currentCoverage.lines.pct - PROJECT_CONFIG.currentBaseline;
     console.log(colors.bold('\n📊 实际vs预期对比'));
-    console.log(`实际覆盖率增量: ${colors.green('+' + actualIncrease.toFixed(2) + '%')}`);
-    console.log(`预期覆盖率增量: ${colors.cyan('+' + expected.expectedCoverageIncrease.toFixed(2) + '%')}`);
-    
+    console.log(
+      `实际覆盖率增量: ${colors.green('+' + actualIncrease.toFixed(2) + '%')}`,
+    );
+    console.log(
+      `预期覆盖率增量: ${colors.cyan('+' + expected.expectedCoverageIncrease.toFixed(2) + '%')}`,
+    );
+
     const variance = actualIncrease - expected.expectedCoverageIncrease;
     if (Math.abs(variance) <= 0.1) {
       console.log(colors.green('✅ 实际结果与预期高度一致！'));
     } else if (variance > 0) {
       console.log(colors.green(`🚀 超出预期 ${variance.toFixed(2)}%！`));
     } else {
-      console.log(colors.yellow(`📉 低于预期 ${Math.abs(variance).toFixed(2)}%`));
+      console.log(
+        colors.yellow(`📉 低于预期 ${Math.abs(variance).toFixed(2)}%`),
+      );
     }
   } else {
     console.log(colors.yellow('⚠️  无法读取当前覆盖率报告'));
@@ -266,7 +311,7 @@ function generateFinalReport() {
     '✅ 形成了完整的测试最佳实践文档',
   ];
 
-  achievements.forEach(achievement => console.log(achievement));
+  achievements.forEach((achievement) => console.log(achievement));
 
   // 技术突破
   console.log(colors.bold('\n🚀 技术突破'));
@@ -278,11 +323,11 @@ function generateFinalReport() {
     '⚡ 性能和内存泄漏测试方法',
   ];
 
-  breakthroughs.forEach(breakthrough => console.log(breakthrough));
+  breakthroughs.forEach((breakthrough) => console.log(breakthrough));
 
   console.log(colors.bold('\n' + '='.repeat(70)));
   console.log(colors.bold('🎊 测试覆盖率提升项目验证完成！'));
-  
+
   return currentCoverage;
 }
 
@@ -290,7 +335,7 @@ function generateFinalReport() {
 function main() {
   try {
     const result = generateFinalReport();
-    
+
     if (result && result.lines.pct >= PROJECT_CONFIG.targetCoverage) {
       console.log(colors.green('\n🎉 项目成功达到60%覆盖率目标！'));
       process.exit(0);

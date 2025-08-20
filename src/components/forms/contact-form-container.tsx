@@ -1,22 +1,24 @@
 'use client';
 
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-
 import { logger } from '@/lib/logger';
 import {
-    ContactFormData,
-    contactFormSchema,
-    FormSubmissionStatus,
-    validationHelpers
+  ContactFormData,
+  contactFormSchema,
+  FormSubmissionStatus,
 } from '@/lib/validations';
-import { AdditionalFields, CheckboxFields, ContactFields, NameFields } from './contact-form-fields';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import {
+  AdditionalFields,
+  CheckboxFields,
+  ContactFields,
+  NameFields,
+} from './contact-form-fields';
 
 /**
  * Status message component
@@ -29,20 +31,23 @@ interface StatusMessageProps {
 function StatusMessage({ status, t }: StatusMessageProps) {
   if (status === 'idle') return null;
 
-  const statusConfig: Record<FormSubmissionStatus, { className: string; message: string } | undefined> = {
+  const statusConfig: Record<
+    FormSubmissionStatus,
+    { className: string; message: string } | undefined
+  > = {
     success: {
       className: 'bg-green-50 border-green-200 text-green-800',
-      message: t('submitSuccess')
+      message: t('submitSuccess'),
     },
     error: {
       className: 'bg-red-50 border-red-200 text-red-800',
-      message: t('submitError')
+      message: t('submitError'),
     },
     submitting: {
       className: 'bg-blue-50 border-blue-200 text-blue-800',
-      message: t('submitting')
+      message: t('submitting'),
     },
-    idle: undefined
+    idle: undefined,
   };
 
   // Use Object.prototype.hasOwnProperty to safely access object properties
@@ -52,7 +57,10 @@ function StatusMessage({ status, t }: StatusMessageProps) {
   if (!config) return null;
 
   return (
-    <div className={`p-4 border rounded-md ${config.className}`} role="alert">
+    <div
+      className={`rounded-md border p-4 ${config.className}`}
+      role='alert'
+    >
       {config.message}
     </div>
   );
@@ -66,7 +74,7 @@ async function handleFormSubmission(
   turnstileToken: string,
   setSubmitStatus: (_status: FormSubmissionStatus) => void,
   setLastSubmissionTime: (_time: Date) => void,
-  reset: () => void
+  reset: () => void,
 ) {
   try {
     setSubmitStatus('submitting');
@@ -118,23 +126,18 @@ async function handleFormSubmission(
 }
 
 /**
- * Main contact form container component
+ * 自定义Hook：管理联系表单状态和逻辑
  */
-export function ContactFormContainer() {
-  const t = useTranslations('contact.form');
-  const [submitStatus, setSubmitStatus] = useState<FormSubmissionStatus>('idle');
+function useContactForm() {
+  const [submitStatus, setSubmitStatus] =
+    useState<FormSubmissionStatus>('idle');
   const [turnstileToken, setTurnstileToken] = useState<string>('');
-  const [lastSubmissionTime, setLastSubmissionTime] = useState<Date | null>(null);
+  const [lastSubmissionTime, setLastSubmissionTime] = useState<Date | null>(
+    null,
+  );
 
   // React Hook Form setup
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-    watch,
-    setValue,
-  } = useForm<ContactFormData>({
+  const form = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
       firstName: '',
@@ -149,7 +152,7 @@ export function ContactFormContainer() {
     },
   });
 
-  const watchedValues = watch();
+  const watchedValues = form.watch();
 
   // Form submission handler
   const onSubmit = async (data: ContactFormData) => {
@@ -163,22 +166,82 @@ export function ContactFormContainer() {
       turnstileToken,
       setSubmitStatus,
       setLastSubmissionTime,
-      reset
+      form.reset,
     );
   };
 
-  // Rate limiting check
-  const isRateLimited = lastSubmissionTime &&
-    Date.now() - lastSubmissionTime.getTime() < validationHelpers.RATE_LIMIT_WINDOW;
+  // Rate limiting check (5 minutes = 300000ms)
+  const RATE_LIMIT_MINUTES = 5;
+  const SECONDS_PER_MINUTE = 60;
+  const MS_PER_SECOND = 1000;
+  const RATE_LIMIT_WINDOW =
+    RATE_LIMIT_MINUTES * SECONDS_PER_MINUTE * MS_PER_SECOND;
+  const isRateLimited =
+    lastSubmissionTime &&
+    Date.now() - lastSubmissionTime.getTime() < RATE_LIMIT_WINDOW;
+
+  return {
+    form,
+    submitStatus,
+    turnstileToken,
+    setTurnstileToken,
+    watchedValues,
+    onSubmit,
+    isRateLimited,
+  };
+}
+
+/**
+ * Main contact form container component
+ */
+export function ContactFormContainer() {
+  const t = useTranslations('contact.form');
+  const {
+    form,
+    submitStatus,
+    turnstileToken,
+    setTurnstileToken,
+    watchedValues,
+    onSubmit,
+    isRateLimited,
+  } = useContactForm();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+  } = form;
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
-        <StatusMessage status={submitStatus} t={t} />
+    <Card className='mx-auto w-full max-w-2xl'>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='space-y-6 p-6'
+      >
+        <StatusMessage
+          status={submitStatus}
+          t={t}
+        />
 
-        <NameFields register={register} errors={errors} isSubmitting={isSubmitting} t={t} />
-        <ContactFields register={register} errors={errors} isSubmitting={isSubmitting} t={t} />
-        <AdditionalFields register={register} errors={errors} isSubmitting={isSubmitting} t={t} />
+        <NameFields
+          register={register}
+          errors={errors}
+          isSubmitting={isSubmitting}
+          t={t}
+        />
+        <ContactFields
+          register={register}
+          errors={errors}
+          isSubmitting={isSubmitting}
+          t={t}
+        />
+        <AdditionalFields
+          register={register}
+          errors={errors}
+          isSubmitting={isSubmitting}
+          t={t}
+        />
         <CheckboxFields
           errors={errors}
           isSubmitting={isSubmitting}
@@ -188,28 +251,30 @@ export function ContactFormContainer() {
         />
 
         {/* Turnstile CAPTCHA */}
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Turnstile
             siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
-            onVerify={setTurnstileToken}
+            onSuccess={setTurnstileToken}
             onError={() => setTurnstileToken('')}
             onExpire={() => setTurnstileToken('')}
-            theme="auto"
-            size="normal"
+            options={{
+              theme: 'auto',
+              size: 'normal',
+            }}
           />
         </div>
 
         {/* Submit button */}
         <Button
-          type="submit"
-          disabled={isSubmitting || !turnstileToken || isRateLimited}
-          className="w-full"
+          type='submit'
+          disabled={Boolean(isSubmitting || !turnstileToken || isRateLimited)}
+          className='w-full'
         >
           {isSubmitting ? t('submitting') : t('submit')}
         </Button>
 
         {isRateLimited && (
-          <p className="text-sm text-amber-600 text-center">
+          <p className='text-center text-sm text-amber-600'>
             {t('rateLimitMessage')}
           </p>
         )}

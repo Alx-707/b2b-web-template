@@ -6,27 +6,27 @@
  */
 'use client';
 
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { Menu, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import {
+  isActivePath,
+  mobileNavigation,
+  NAVIGATION_ARIA,
+} from '@/lib/navigation';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from '@/components/ui/sheet';
 import { Link } from '@/i18n/routing';
-import {
-    isActivePath,
-    mobileNavigation,
-    NAVIGATION_ARIA,
-} from '@/lib/navigation';
-import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 /**
  * Mobile Navigation Component
@@ -61,7 +61,7 @@ export function MobileNavigation({ className }: MobileNavigationProps) {
             size='icon'
             className='relative'
             aria-label={NAVIGATION_ARIA.mobileMenuButton}
-            aria-expanded={isOpen.toString()}
+            aria-expanded={isOpen}
             aria-controls='mobile-navigation'
             data-state={isOpen ? 'open' : 'closed'}
           >
@@ -108,6 +108,7 @@ export function MobileNavigation({ className }: MobileNavigationProps) {
                       | '/contact'
                       | '/blog'
                       | '/products'
+                      | '/diagnostics'
                   }
                   className={cn(
                     'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200',
@@ -148,7 +149,7 @@ export function MobileMenuButton({
       className={cn('md:hidden', className)}
       onClick={onClick}
       aria-label={NAVIGATION_ARIA.mobileMenuButton}
-      aria-expanded={isOpen.toString()}
+      aria-expanded={isOpen}
       data-state={isOpen ? 'open' : 'closed'}
     >
       {isOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}

@@ -1,9 +1,9 @@
-import {
-    TEST_BASE_NUMBERS,
-    TEST_SCREEN_CONSTANTS,
-} from '@/constants/test-constants';
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  TEST_BASE_NUMBERS,
+  TEST_SCREEN_CONSTANTS,
+} from '@/constants/test-constants';
 import { useBreakpoint } from '../use-breakpoint';
 
 // Use vi.hoisted to ensure proper mock setup
@@ -470,7 +470,7 @@ describe('useBreakpoint', () => {
       // Simulate rapid resize events
       const widths = [320, 768, 1024, 1280, 1920, 640];
 
-      widths.forEach(width => {
+      widths.forEach((width) => {
         act(() => {
           mockWindowDimensions.innerWidth = width;
 

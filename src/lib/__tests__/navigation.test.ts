@@ -1,18 +1,18 @@
-import {
-    TEST_COUNT_CONSTANTS,
-    TEST_SCREEN_CONSTANTS,
-    TEST_TIMEOUT_CONSTANTS,
-} from '@/constants/test-constants';
 import { describe, expect, it, vi } from 'vitest';
 import {
-    getLocalizedHref,
-    isActivePath,
-    mainNavigation,
-    mobileNavigation,
-    NAVIGATION_ANIMATIONS,
-    NAVIGATION_ARIA,
-    NAVIGATION_BREAKPOINTS,
-    type NavigationItem,
+  TEST_COUNT_CONSTANTS,
+  TEST_SCREEN_CONSTANTS,
+  TEST_TIMEOUT_CONSTANTS,
+} from '@/constants/test-constants';
+import {
+  getLocalizedHref,
+  isActivePath,
+  mainNavigation,
+  mobileNavigation,
+  NAVIGATION_ANIMATIONS,
+  NAVIGATION_ARIA,
+  NAVIGATION_BREAKPOINTS,
+  type NavigationItem,
 } from '../navigation';
 
 // Use vi.hoisted to ensure proper mock setup
@@ -50,14 +50,7 @@ describe('navigation', () => {
 
   describe('mainNavigation', () => {
     it('should have all required navigation items', () => {
-      const expectedKeys = [
-        'home',
-        'about',
-        'services',
-        'products',
-        'blog',
-        'diagnostics',
-      ];
+      const expectedKeys = ['home', 'about', 'products', 'blog', 'diagnostics'];
       const actualKeys = mainNavigation.map((item) => item.key);
 
       expectedKeys.forEach((key) => {

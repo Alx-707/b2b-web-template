@@ -1,9 +1,9 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    EnhancedLocaleSwitcher,
-    LocaleSwitcherWithInfo,
-    SimpleLocaleSwitcher,
+  EnhancedLocaleSwitcher,
+  LocaleSwitcherWithInfo,
+  SimpleLocaleSwitcher,
 } from '../enhanced-locale-switcher';
 
 // Mock next-intl

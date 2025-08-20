@@ -1,16 +1,16 @@
-import {
-    TEST_COUNT_CONSTANTS,
-    TEST_EASING_CONSTANTS,
-    TEST_SAMPLE_CONSTANTS,
-    TEST_TIMEOUT_CONSTANTS,
-} from '@/constants/test-constants';
-import { act, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    AnimatedCounter,
-    easingFunctions,
-    formatters,
+  TEST_COUNT_CONSTANTS,
+  TEST_EASING_CONSTANTS,
+  TEST_SAMPLE_CONSTANTS,
+  TEST_TIMEOUT_CONSTANTS,
+} from '@/constants/test-constants';
+import {
+  AnimatedCounter,
+  easingFunctions,
+  formatters,
 } from '../animated-counter';
 
 // Mock dependencies
@@ -661,8 +661,8 @@ describe('AnimatedCounter Component', () => {
           to={Infinity}
           from={0}
           autoStart
-          data-testid="counter"
-        />
+          data-testid='counter'
+        />,
       );
 
       const counter = screen.getByTestId('counter');
@@ -676,8 +676,8 @@ describe('AnimatedCounter Component', () => {
           to={NaN}
           from={0}
           autoStart
-          data-testid="counter"
-        />
+          data-testid='counter'
+        />,
       );
 
       const counter = screen.getByTestId('counter');
@@ -691,8 +691,8 @@ describe('AnimatedCounter Component', () => {
           to={0.000001}
           from={0}
           formatter={formatters.decimal}
-          data-testid="counter"
-        />
+          data-testid='counter'
+        />,
       );
 
       const counter = screen.getByTestId('counter');
@@ -710,8 +710,8 @@ describe('AnimatedCounter Component', () => {
             to={100}
             from={0}
             formatter={errorFormatter}
-            data-testid="counter"
-          />
+            data-testid='counter'
+          />,
         );
       }).not.toThrow();
     });
@@ -728,8 +728,8 @@ describe('AnimatedCounter Component', () => {
             <AnimatedCounter
               to={100}
               autoStart
-              data-testid="counter"
-            />
+              data-testid='counter'
+            />,
           );
         }).not.toThrow();
       } finally {
@@ -749,8 +749,8 @@ describe('AnimatedCounter Component', () => {
             <AnimatedCounter
               to={100}
               autoStart
-              data-testid="counter"
-            />
+              data-testid='counter'
+            />,
           );
         }).not.toThrow();
       } finally {

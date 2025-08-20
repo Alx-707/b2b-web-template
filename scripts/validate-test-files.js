@@ -27,7 +27,7 @@ const testFiles = [
 // 验证测试文件结构
 function validateTestFile(filePath) {
   const fullPath = path.join(process.cwd(), filePath);
-  
+
   if (!fs.existsSync(fullPath)) {
     return {
       valid: false,
@@ -79,7 +79,7 @@ function validateTestFile(filePath) {
     },
   ];
 
-  checks.forEach(check => {
+  checks.forEach((check) => {
     if (!check.pattern.test(content)) {
       if (check.required) {
         errors.push(`缺少${check.name}`);
@@ -101,7 +101,7 @@ function validateTestFile(filePath) {
     },
   ];
 
-  importChecks.forEach(check => {
+  importChecks.forEach((check) => {
     if (!check.pattern.test(content)) {
       errors.push(`缺少${check.name}`);
     }
@@ -126,7 +126,7 @@ function validateTestFile(filePath) {
 // 验证组件文件存在
 function validateComponentExists(testFilePath) {
   let componentPath;
-  
+
   if (testFilePath.includes('tech-stack-section')) {
     componentPath = 'src/components/home/tech-stack-section.tsx';
   } else if (testFilePath.includes('contact')) {
@@ -152,12 +152,12 @@ function generateValidationReport() {
   let allValid = true;
   const results = [];
 
-  testFiles.forEach(filePath => {
+  testFiles.forEach((filePath) => {
     console.log(colors.bold(`\n📁 验证文件: ${filePath}`));
-    
+
     const result = validateTestFile(filePath);
     const component = validateComponentExists(filePath);
-    
+
     results.push({ filePath, result, component });
 
     // 显示验证结果
@@ -187,7 +187,7 @@ function generateValidationReport() {
     // 显示错误
     if (result.errors.length > 0) {
       console.log(colors.red('❌ 错误:'));
-      result.errors.forEach(error => {
+      result.errors.forEach((error) => {
         console.log(`   - ${error}`);
       });
     }
@@ -195,7 +195,7 @@ function generateValidationReport() {
     // 显示警告
     if (result.warnings.length > 0) {
       console.log(colors.yellow('⚠️  警告:'));
-      result.warnings.forEach(warning => {
+      result.warnings.forEach((warning) => {
         console.log(`   - ${warning}`);
       });
     }
@@ -216,8 +216,14 @@ function generateValidationReport() {
   }
 
   // 统计总计
-  const totalTests = results.reduce((sum, r) => sum + (r.result.stats?.testCases || 0), 0);
-  const totalLines = results.reduce((sum, r) => sum + (r.result.stats?.lines || 0), 0);
+  const totalTests = results.reduce(
+    (sum, r) => sum + (r.result.stats?.testCases || 0),
+    0,
+  );
+  const totalLines = results.reduce(
+    (sum, r) => sum + (r.result.stats?.lines || 0),
+    0,
+  );
 
   console.log(colors.bold('\n📈 总体统计'));
   console.log(`总测试用例: ${colors.cyan(totalTests)}`);

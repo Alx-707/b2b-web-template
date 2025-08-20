@@ -1,6 +1,6 @@
+import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MobileMenuButton, MobileNavigation } from '../mobile-navigation';
 import { renderWithProviders } from './test-utils';
@@ -90,9 +90,9 @@ vi.mock('@/components/ui/sheet', () => {
             if (React.isValidElement(child) && child.type === 'SheetTrigger') {
               // Pass the state to SheetTrigger
               return React.cloneElement(child as any, {
-                ...child.props,
+                ...(child.props || {}),
                 __sheetOpen: open,
-                __onOpenChange: onOpenChange
+                __onOpenChange: onOpenChange,
               });
             }
             return child;
@@ -127,7 +127,7 @@ vi.mock('@/components/ui/sheet', () => {
           'data-testid': 'sheet-trigger',
           'aria-expanded': __sheetOpen ? 'true' : 'false',
           'data-state': __sheetOpen ? 'open' : 'closed',
-          onClick: (e: any) => {
+          'onClick': (e: any) => {
             child.props.onClick?.(e);
             __onOpenChange?.(!__sheetOpen);
           },
@@ -392,7 +392,9 @@ describe('MobileNavigation Component', () => {
 
       // Simulate pathname change by re-rendering with different mock
       const mockUsePathname = vi.mocked(
-        await vi.importMock<typeof import('next/navigation')>('next/navigation')
+        await vi.importMock<typeof import('next/navigation')>(
+          'next/navigation',
+        ),
       ).usePathname;
       mockUsePathname.mockReturnValue('/about');
 
@@ -408,7 +410,9 @@ describe('MobileNavigation Component', () => {
 
       // Test multiple route changes
       const mockUsePathname = vi.mocked(
-        await vi.importMock<typeof import('next/navigation')>('next/navigation')
+        await vi.importMock<typeof import('next/navigation')>(
+          'next/navigation',
+        ),
       ).usePathname;
 
       mockUsePathname.mockReturnValue('/contact');
@@ -425,7 +429,7 @@ describe('MobileNavigation Component', () => {
   describe('Error Handling', () => {
     it('handles missing translations gracefully', () => {
       const mockUseTranslations = vi.mocked(
-        vi.fn(() => (key: string) => `missing.${key}`)
+        vi.fn(() => (key: string) => `missing.${key}`),
       );
       vi.mocked(vi.fn()).mockImplementation(() => mockUseTranslations);
 
@@ -480,7 +484,10 @@ describe('MobileNavigation Component', () => {
       // Test the MobileMenuButton component directly to verify aria-expanded behavior
       const mockOnClick = vi.fn();
       const { rerender } = renderWithProviders(
-        <MobileMenuButton isOpen={false} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -490,7 +497,12 @@ describe('MobileNavigation Component', () => {
       expect(button).toHaveAttribute('data-state', 'closed');
 
       // Simulate state change by re-rendering with isOpen=true
-      rerender(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
+      rerender(
+        <MobileMenuButton
+          isOpen={true}
+          onClick={mockOnClick}
+        />,
+      );
 
       // Check after state change
       expect(button).toHaveAttribute('aria-expanded', 'true');
@@ -514,7 +526,10 @@ describe('MobileMenuButton Component', () => {
     it('renders with closed state', () => {
       const mockOnClick = vi.fn();
       renderWithProviders(
-        <MobileMenuButton isOpen={false} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
       );
 
       expect(screen.getByRole('button')).toBeInTheDocument();
@@ -525,7 +540,10 @@ describe('MobileMenuButton Component', () => {
     it('renders with open state', () => {
       const mockOnClick = vi.fn();
       renderWithProviders(
-        <MobileMenuButton isOpen={true} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={true}
+          onClick={mockOnClick}
+        />,
       );
 
       expect(screen.getByRole('button')).toBeInTheDocument();
@@ -541,7 +559,7 @@ describe('MobileMenuButton Component', () => {
           isOpen={false}
           onClick={mockOnClick}
           className={customClass}
-        />
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -553,7 +571,10 @@ describe('MobileMenuButton Component', () => {
     it('calls onClick when clicked', async () => {
       const mockOnClick = vi.fn();
       renderWithProviders(
-        <MobileMenuButton isOpen={false} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -565,7 +586,10 @@ describe('MobileMenuButton Component', () => {
     it('handles keyboard interaction', async () => {
       const mockOnClick = vi.fn();
       renderWithProviders(
-        <MobileMenuButton isOpen={false} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -583,7 +607,10 @@ describe('MobileMenuButton Component', () => {
     it('has proper ARIA attributes when closed', () => {
       const mockOnClick = vi.fn();
       renderWithProviders(
-        <MobileMenuButton isOpen={false} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -594,7 +621,10 @@ describe('MobileMenuButton Component', () => {
     it('has proper ARIA attributes when open', () => {
       const mockOnClick = vi.fn();
       renderWithProviders(
-        <MobileMenuButton isOpen={true} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={true}
+          onClick={mockOnClick}
+        />,
       );
 
       const button = screen.getByRole('button');
@@ -607,13 +637,21 @@ describe('MobileMenuButton Component', () => {
 
       // Test closed state
       const { rerender } = renderWithProviders(
-        <MobileMenuButton isOpen={false} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
       );
 
       expect(screen.getByText('Open navigation menu')).toBeInTheDocument();
 
       // Test open state
-      rerender(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
+      rerender(
+        <MobileMenuButton
+          isOpen={true}
+          onClick={mockOnClick}
+        />,
+      );
       expect(screen.getByText('Close navigation menu')).toBeInTheDocument();
     });
   });
@@ -622,7 +660,10 @@ describe('MobileMenuButton Component', () => {
     it('shows correct icon for closed state', () => {
       const mockOnClick = vi.fn();
       renderWithProviders(
-        <MobileMenuButton isOpen={false} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
       );
 
       expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
@@ -632,7 +673,10 @@ describe('MobileMenuButton Component', () => {
     it('shows correct icon for open state', () => {
       const mockOnClick = vi.fn();
       renderWithProviders(
-        <MobileMenuButton isOpen={true} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={true}
+          onClick={mockOnClick}
+        />,
       );
 
       expect(screen.getByTestId('close-icon')).toBeInTheDocument();
@@ -642,18 +686,31 @@ describe('MobileMenuButton Component', () => {
     it('toggles icons correctly', () => {
       const mockOnClick = vi.fn();
       const { rerender } = renderWithProviders(
-        <MobileMenuButton isOpen={false} onClick={mockOnClick} />
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
       );
 
       // Initially closed
       expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
 
       // Change to open
-      rerender(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
+      rerender(
+        <MobileMenuButton
+          isOpen={true}
+          onClick={mockOnClick}
+        />,
+      );
       expect(screen.getByTestId('close-icon')).toBeInTheDocument();
 
       // Change back to closed
-      rerender(<MobileMenuButton isOpen={false} onClick={mockOnClick} />);
+      rerender(
+        <MobileMenuButton
+          isOpen={false}
+          onClick={mockOnClick}
+        />,
+      );
       expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
     });
   });

@@ -43,32 +43,68 @@ const VALIDATION_CONSTANTS = {
 export const contactFormSchema = z.object({
   firstName: z
     .string()
-    .min(VALIDATION_CONSTANTS.NAME_MIN_LENGTH, `First name must be at least ${VALIDATION_CONSTANTS.NAME_MIN_LENGTH} characters`)
-    .max(VALIDATION_CONSTANTS.NAME_MAX_LENGTH, `First name must be less than ${VALIDATION_CONSTANTS.NAME_MAX_LENGTH} characters`)
-    .regex(/^[a-zA-Z\s\u4e00-\u9fff]+$/, 'First name can only contain letters and spaces'),
+    .min(
+      VALIDATION_CONSTANTS.NAME_MIN_LENGTH,
+      `First name must be at least ${VALIDATION_CONSTANTS.NAME_MIN_LENGTH} characters`,
+    )
+    .max(
+      VALIDATION_CONSTANTS.NAME_MAX_LENGTH,
+      `First name must be less than ${VALIDATION_CONSTANTS.NAME_MAX_LENGTH} characters`,
+    )
+    .regex(
+      /^[a-zA-Z\s\u4e00-\u9fff]+$/,
+      'First name can only contain letters and spaces',
+    ),
 
   lastName: z
     .string()
-    .min(VALIDATION_CONSTANTS.NAME_MIN_LENGTH, `Last name must be at least ${VALIDATION_CONSTANTS.NAME_MIN_LENGTH} characters`)
-    .max(VALIDATION_CONSTANTS.NAME_MAX_LENGTH, `Last name must be less than ${VALIDATION_CONSTANTS.NAME_MAX_LENGTH} characters`)
-    .regex(/^[a-zA-Z\s\u4e00-\u9fff]+$/, 'Last name can only contain letters and spaces'),
+    .min(
+      VALIDATION_CONSTANTS.NAME_MIN_LENGTH,
+      `Last name must be at least ${VALIDATION_CONSTANTS.NAME_MIN_LENGTH} characters`,
+    )
+    .max(
+      VALIDATION_CONSTANTS.NAME_MAX_LENGTH,
+      `Last name must be less than ${VALIDATION_CONSTANTS.NAME_MAX_LENGTH} characters`,
+    )
+    .regex(
+      /^[a-zA-Z\s\u4e00-\u9fff]+$/,
+      'Last name can only contain letters and spaces',
+    ),
 
   email: z
     .string()
     .email('Please enter a valid email address')
-    .max(VALIDATION_CONSTANTS.EMAIL_MAX_LENGTH, `Email must be less than ${VALIDATION_CONSTANTS.EMAIL_MAX_LENGTH} characters`)
+    .max(
+      VALIDATION_CONSTANTS.EMAIL_MAX_LENGTH,
+      `Email must be less than ${VALIDATION_CONSTANTS.EMAIL_MAX_LENGTH} characters`,
+    )
     .toLowerCase(),
 
   company: z
     .string()
-    .min(VALIDATION_CONSTANTS.COMPANY_MIN_LENGTH, `Company name must be at least ${VALIDATION_CONSTANTS.COMPANY_MIN_LENGTH} characters`)
-    .max(VALIDATION_CONSTANTS.COMPANY_MAX_LENGTH, `Company name must be less than ${VALIDATION_CONSTANTS.COMPANY_MAX_LENGTH} characters`)
-    .regex(/^[a-zA-Z0-9\s\u4e00-\u9fff&.,'-]+$/, 'Company name contains invalid characters'),
+    .min(
+      VALIDATION_CONSTANTS.COMPANY_MIN_LENGTH,
+      `Company name must be at least ${VALIDATION_CONSTANTS.COMPANY_MIN_LENGTH} characters`,
+    )
+    .max(
+      VALIDATION_CONSTANTS.COMPANY_MAX_LENGTH,
+      `Company name must be less than ${VALIDATION_CONSTANTS.COMPANY_MAX_LENGTH} characters`,
+    )
+    .regex(
+      /^[a-zA-Z0-9\s\u4e00-\u9fff&.,'-]+$/,
+      'Company name contains invalid characters',
+    ),
 
   message: z
     .string()
-    .min(VALIDATION_CONSTANTS.MESSAGE_MIN_LENGTH, `Message must be at least ${VALIDATION_CONSTANTS.MESSAGE_MIN_LENGTH} characters`)
-    .max(VALIDATION_CONSTANTS.MESSAGE_MAX_LENGTH, `Message must be less than ${VALIDATION_CONSTANTS.MESSAGE_MAX_LENGTH} characters`)
+    .min(
+      VALIDATION_CONSTANTS.MESSAGE_MIN_LENGTH,
+      `Message must be at least ${VALIDATION_CONSTANTS.MESSAGE_MIN_LENGTH} characters`,
+    )
+    .max(
+      VALIDATION_CONSTANTS.MESSAGE_MAX_LENGTH,
+      `Message must be less than ${VALIDATION_CONSTANTS.MESSAGE_MAX_LENGTH} characters`,
+    )
     .trim(),
 
   // Optional fields for enhanced form functionality
@@ -86,7 +122,10 @@ export const contactFormSchema = z.object({
     .optional()
     .refine((val) => {
       if (!val) return true;
-      return val.length >= VALIDATION_CONSTANTS.SUBJECT_MIN_LENGTH && val.length <= VALIDATION_CONSTANTS.SUBJECT_MAX_LENGTH;
+      return (
+        val.length >= VALIDATION_CONSTANTS.SUBJECT_MIN_LENGTH &&
+        val.length <= VALIDATION_CONSTANTS.SUBJECT_MAX_LENGTH
+      );
     }, `Subject must be between ${VALIDATION_CONSTANTS.SUBJECT_MIN_LENGTH} and ${VALIDATION_CONSTANTS.SUBJECT_MAX_LENGTH} characters`),
 
   // Privacy and terms acceptance
@@ -98,7 +137,10 @@ export const contactFormSchema = z.object({
   marketingConsent: z.boolean().optional(),
 
   // Honeypot field for bot detection
-  website: z.string().max(VALIDATION_CONSTANTS.HONEYPOT_MAX_LENGTH, 'This field should be empty').optional(),
+  website: z
+    .string()
+    .max(VALIDATION_CONSTANTS.HONEYPOT_MAX_LENGTH, 'This field should be empty')
+    .optional(),
 });
 
 /**
@@ -136,7 +178,9 @@ export const airtableRecordSchema = z.object({
     'Phone': z.string().optional(),
     'Subject': z.string().optional(),
     'Submitted At': z.string(),
-    'Status': z.enum(['New', 'In Progress', 'Completed', 'Archived']).default('New'),
+    'Status': z
+      .enum(['New', 'In Progress', 'Completed', 'Archived'])
+      .default('New'),
     'Source': z.string().default('Website Contact Form'),
     'Marketing Consent': z.boolean().optional(),
   }),
@@ -191,7 +235,7 @@ export const validationHelpers = {
     if (!allowedDomains || allowedDomains.length === 0) return true;
 
     const domain = email.split('@')[1]?.toLowerCase();
-    return allowedDomains.some(allowed => domain === allowed.toLowerCase());
+    return allowedDomains.some((allowed) => domain === allowed.toLowerCase());
   },
 
   /**
@@ -211,24 +255,37 @@ export const validationHelpers = {
    */
   isSpamContent: (message: string): boolean => {
     const spamKeywords = [
-      'viagra', 'casino', 'lottery', 'winner', 'congratulations',
-      'click here', 'free money', 'make money fast', 'work from home'
+      'viagra',
+      'casino',
+      'lottery',
+      'winner',
+      'congratulations',
+      'click here',
+      'free money',
+      'make money fast',
+      'work from home',
     ];
 
     const lowerMessage = message.toLowerCase();
-    return spamKeywords.some(keyword => lowerMessage.includes(keyword));
+    return spamKeywords.some((keyword) => lowerMessage.includes(keyword));
   },
 
   /**
    * 验证提交频率限制
    * Validate submission rate limiting
    */
-  isSubmissionRateLimited: (lastSubmission: Date | null, cooldownMinutes = VALIDATION_CONSTANTS.DEFAULT_COOLDOWN_MINUTES): boolean => {
+  isSubmissionRateLimited: (
+    lastSubmission: Date | null,
+    cooldownMinutes = VALIDATION_CONSTANTS.DEFAULT_COOLDOWN_MINUTES,
+  ): boolean => {
     if (!lastSubmission) return false;
 
     const now = new Date();
     const timeDiff = now.getTime() - lastSubmission.getTime();
-    const cooldownMs = cooldownMinutes * VALIDATION_CONSTANTS.COOLDOWN_TO_MS_MULTIPLIER * VALIDATION_CONSTANTS.MS_PER_SECOND;
+    const cooldownMs =
+      cooldownMinutes *
+      VALIDATION_CONSTANTS.COOLDOWN_TO_MS_MULTIPLIER *
+      VALIDATION_CONSTANTS.MS_PER_SECOND;
 
     return timeDiff < cooldownMs;
   },
@@ -248,7 +305,14 @@ export const validationConfig = {
   allowedEmailDomains: [], // Empty array means all domains allowed
 
   // Field requirements
-  requiredFields: ['firstName', 'lastName', 'email', 'company', 'message', 'acceptPrivacy'] as const,
+  requiredFields: [
+    'firstName',
+    'lastName',
+    'email',
+    'company',
+    'message',
+    'acceptPrivacy',
+  ] as const,
   optionalFields: ['phone', 'subject', 'marketingConsent', 'website'] as const,
 
   // Security settings

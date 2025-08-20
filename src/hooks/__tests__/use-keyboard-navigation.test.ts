@@ -1,15 +1,16 @@
-import { TEST_COUNT_CONSTANTS } from '@/constants/test-constants';
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TEST_COUNT_CONSTANTS } from '@/constants/test-constants';
 import { useKeyboardNavigation } from '../use-keyboard-navigation';
 
 // 使用vi.hoisted确保Mock在模块导入前设置 - 遵循项目标准
-const { mockFocus, mockBlur, mockQuerySelector, mockQuerySelectorAll } = vi.hoisted(() => ({
-  mockFocus: vi.fn(),
-  mockBlur: vi.fn(),
-  mockQuerySelector: vi.fn(),
-  mockQuerySelectorAll: vi.fn(),
-}));
+const { mockFocus, mockBlur, mockQuerySelector, mockQuerySelectorAll } =
+  vi.hoisted(() => ({
+    mockFocus: vi.fn(),
+    mockBlur: vi.fn(),
+    mockQuerySelector: vi.fn(),
+    mockQuerySelectorAll: vi.fn(),
+  }));
 
 // Mock focusable elements
 const createMockElement = (
@@ -449,8 +450,8 @@ describe('useKeyboardNavigation', () => {
     it('should handle custom selector with actual DOM', () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
-          selector: 'button:not([disabled]), input:not([disabled])'
-        })
+          selector: 'button:not([disabled]), input:not([disabled])',
+        }),
       );
 
       const container = document.getElementById('container');
@@ -475,7 +476,7 @@ describe('useKeyboardNavigation', () => {
       originalFocus = HTMLElement.prototype.focus;
 
       // Mock HTMLElement.prototype.focus来模拟真实的焦点行为
-      HTMLElement.prototype.focus = vi.fn(function(this: HTMLElement) {
+      HTMLElement.prototype.focus = vi.fn(function (this: HTMLElement) {
         // 更新document.activeElement为当前元素
         Object.defineProperty(document, 'activeElement', {
           value: this,
@@ -525,7 +526,7 @@ describe('useKeyboardNavigation', () => {
     it('should handle Tab key navigation', () => {
       const mockOnNavigate = vi.fn();
       const { result } = renderHook(() =>
-        useKeyboardNavigation({ onNavigate: mockOnNavigate })
+        useKeyboardNavigation({ onNavigate: mockOnNavigate }),
       );
 
       // 设置真实DOM容器
@@ -553,7 +554,7 @@ describe('useKeyboardNavigation', () => {
     it('should handle Shift+Tab key navigation', () => {
       const mockOnNavigate = vi.fn();
       const { result } = renderHook(() =>
-        useKeyboardNavigation({ onNavigate: mockOnNavigate })
+        useKeyboardNavigation({ onNavigate: mockOnNavigate }),
       );
 
       // 设置真实DOM容器
@@ -582,8 +583,8 @@ describe('useKeyboardNavigation', () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           orientation: 'vertical',
-          onNavigate: mockOnNavigate
-        })
+          onNavigate: mockOnNavigate,
+        }),
       );
 
       // 设置真实DOM容器
@@ -610,7 +611,7 @@ describe('useKeyboardNavigation', () => {
     it('should handle Home and End keys', () => {
       const mockOnNavigate = vi.fn();
       const { result } = renderHook(() =>
-        useKeyboardNavigation({ onNavigate: mockOnNavigate })
+        useKeyboardNavigation({ onNavigate: mockOnNavigate }),
       );
 
       // 设置真实DOM容器
@@ -648,9 +649,9 @@ describe('useKeyboardNavigation', () => {
     it('should handle all orientation options', () => {
       const orientations = ['horizontal', 'vertical', 'both'] as const;
 
-      orientations.forEach(orientation => {
+      orientations.forEach((orientation) => {
         const { result } = renderHook(() =>
-          useKeyboardNavigation({ orientation })
+          useKeyboardNavigation({ orientation }),
         );
 
         expect(result.current.containerRef).toBeDefined();
@@ -668,8 +669,8 @@ describe('useKeyboardNavigation', () => {
       const mockOnNavigate = vi.fn();
       const { result } = renderHook(() =>
         useKeyboardNavigation({
-          onNavigate: mockOnNavigate
-        })
+          onNavigate: mockOnNavigate,
+        }),
       );
 
       act(() => {
@@ -683,7 +684,7 @@ describe('useKeyboardNavigation', () => {
     it('should handle enabled/disabled state changes', () => {
       const { result, rerender } = renderHook(
         ({ enabled }) => useKeyboardNavigation({ enabled }),
-        { initialProps: { enabled: true } }
+        { initialProps: { enabled: true } },
       );
 
       // Initially enabled
@@ -717,7 +718,7 @@ describe('useKeyboardNavigation', () => {
     it('should handle rapid option changes', () => {
       const { rerender } = renderHook(
         ({ loop }) => useKeyboardNavigation({ loop }),
-        { initialProps: { loop: true } }
+        { initialProps: { loop: true } },
       );
 
       expect(() => {
@@ -737,7 +738,7 @@ describe('useKeyboardNavigation', () => {
 
       // Unmount all instances
       expect(() => {
-        hooks.forEach(hook => hook.unmount());
+        hooks.forEach((hook) => hook.unmount());
       }).not.toThrow();
     });
   });
@@ -780,7 +781,7 @@ describe('useKeyboardNavigation', () => {
 
       const invalidIndices = [-100, 1000, NaN, Infinity, -Infinity];
 
-      invalidIndices.forEach(index => {
+      invalidIndices.forEach((index) => {
         expect(() => {
           act(() => {
             result.current.setFocusIndex(index);
@@ -797,10 +798,10 @@ describe('useKeyboardNavigation', () => {
         document.createElement('div'),
         document.createElement('section'),
         null,
-        document.createElement('nav')
+        document.createElement('nav'),
       ];
 
-      containers.forEach(container => {
+      containers.forEach((container) => {
         expect(() => {
           result.current.containerRef.current = container;
           act(() => {

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
+import { generateNonce, getSecurityHeaders } from './src/config/security';
 import { OPACITY_CONSTANTS } from './src/constants/app-constants';
 import { routing } from './src/i18n/routing';
-import { generateNonce, getSecurityHeaders } from './src/config/security';
 
 // 置信度常量
 const HIGH_CONFIDENCE = OPACITY_CONSTANTS.VERY_HIGH_OPACITY;

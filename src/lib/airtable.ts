@@ -1,11 +1,11 @@
-import { env } from '@/../env.mjs';
 import Airtable from 'airtable';
+import { env } from '@/../env.mjs';
 import { logger } from './logger';
 import {
-    AirtableRecord,
-    airtableRecordSchema,
-    ContactFormData,
-    validationHelpers
+  AirtableRecord,
+  airtableRecordSchema,
+  ContactFormData,
+  validationHelpers,
 } from './validations';
 
 /**
@@ -29,10 +29,13 @@ class AirtableService {
   private initializeAirtable(): void {
     try {
       if (!env.AIRTABLE_API_KEY || !env.AIRTABLE_BASE_ID) {
-        logger.warn('Airtable configuration missing - service will be disabled', {
-          hasApiKey: Boolean(env.AIRTABLE_API_KEY),
-          hasBaseId: Boolean(env.AIRTABLE_BASE_ID),
-        });
+        logger.warn(
+          'Airtable configuration missing - service will be disabled',
+          {
+            hasApiKey: Boolean(env.AIRTABLE_API_KEY),
+            hasBaseId: Boolean(env.AIRTABLE_BASE_ID),
+          },
+        );
         return;
       }
 
@@ -66,7 +69,9 @@ class AirtableService {
    * 创建联系人记录
    * Create contact record in Airtable
    */
-  public async createContact(formData: ContactFormData): Promise<AirtableRecord> {
+  public async createContact(
+    formData: ContactFormData,
+  ): Promise<AirtableRecord> {
     if (!this.isReady()) {
       throw new Error('Airtable service is not configured');
     }
@@ -132,11 +137,13 @@ class AirtableService {
    * 获取联系人记录
    * Get contact records from Airtable
    */
-  public async getContacts(options: {
-    maxRecords?: number;
-    filterByFormula?: string;
-    sort?: Array<{ field: string; direction: 'asc' | 'desc' }>;
-  } = {}): Promise<AirtableRecord[]> {
+  public async getContacts(
+    options: {
+      maxRecords?: number;
+      filterByFormula?: string;
+      sort?: Array<{ field: string; direction: 'asc' | 'desc' }>;
+    } = {},
+  ): Promise<AirtableRecord[]> {
     if (!this.isReady()) {
       throw new Error('Airtable service is not configured');
     }
@@ -160,7 +167,7 @@ class AirtableService {
         .select(selectOptions)
         .all();
 
-      return records.map(record => ({
+      return records.map((record) => ({
         id: record.id,
         fields: record.fields as AirtableRecord['fields'],
         createdTime: record.get('Created Time') as string,
@@ -179,7 +186,7 @@ class AirtableService {
    */
   public async updateContactStatus(
     recordId: string,
-    status: 'New' | 'In Progress' | 'Completed' | 'Archived'
+    status: 'New' | 'In Progress' | 'Completed' | 'Archived',
   ): Promise<void> {
     if (!this.isReady()) {
       throw new Error('Airtable service is not configured');
@@ -245,8 +252,12 @@ class AirtableService {
       email: formData.email.toLowerCase().trim(),
       company: validationHelpers.sanitizeInput(formData.company),
       message: validationHelpers.sanitizeInput(formData.message),
-      phone: formData.phone ? validationHelpers.sanitizeInput(formData.phone) : undefined,
-      subject: formData.subject ? validationHelpers.sanitizeInput(formData.subject) : undefined,
+      phone: formData.phone
+        ? validationHelpers.sanitizeInput(formData.phone)
+        : undefined,
+      subject: formData.subject
+        ? validationHelpers.sanitizeInput(formData.subject)
+        : undefined,
       acceptPrivacy: formData.acceptPrivacy,
       marketingConsent: formData.marketingConsent,
       website: formData.website,
@@ -299,15 +310,15 @@ class AirtableService {
         this.getContacts({ maxRecords: 1000 }),
         this.getContacts({
           filterByFormula: `{Status} = "New"`,
-          maxRecords: 1000
+          maxRecords: 1000,
         }),
         this.getContacts({
           filterByFormula: `{Status} = "Completed"`,
-          maxRecords: 1000
+          maxRecords: 1000,
         }),
         this.getContacts({
           filterByFormula: `IS_AFTER({Submitted At}, DATEADD(TODAY(), -7, 'days'))`,
-          maxRecords: 1000
+          maxRecords: 1000,
         }),
       ]);
 
@@ -332,4 +343,3 @@ export const airtableService = new AirtableService();
 // 导出类型和服务
 export { AirtableService };
 export type { AirtableRecord };
-

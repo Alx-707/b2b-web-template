@@ -10,5 +10,3 @@ import { ContactForm as EnhancedContactForm } from '@/components/forms/contact-f
 export function ContactForm() {
   return <EnhancedContactForm />;
 }
-
-

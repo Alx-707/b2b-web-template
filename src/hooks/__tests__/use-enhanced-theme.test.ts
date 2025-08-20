@@ -195,7 +195,7 @@ describe('useEnhancedTheme', () => {
         { theme: 'system', resolvedTheme: 'dark', systemTheme: 'dark' },
       ];
 
-      themeStates.forEach(state => {
+      themeStates.forEach((state) => {
         mockUseTheme.mockReturnValue({
           theme: state.theme,
           themes: ['light', 'dark', 'system'],
@@ -287,8 +287,12 @@ describe('useEnhancedTheme', () => {
     it('should handle View Transitions with rejected promises', () => {
       // 创建被拒绝的Promise，但捕获错误以避免未处理的拒绝
       const rejectedTransition = {
-        ready: Promise.reject(new Error('Transition ready failed')).catch(() => {}),
-        finished: Promise.reject(new Error('Transition finished failed')).catch(() => {}),
+        ready: Promise.reject(new Error('Transition ready failed')).catch(
+          () => {},
+        ),
+        finished: Promise.reject(new Error('Transition finished failed')).catch(
+          () => {},
+        ),
       };
 
       const mockFailingTransition = vi.fn((callback: () => void) => {
@@ -396,7 +400,9 @@ describe('useEnhancedTheme', () => {
         act(() => {
           for (let i = 0; i < 10; i++) {
             result.current.setTheme(i % 2 === 0 ? 'light' : 'dark');
-            result.current.setThemeWithCircularTransition(i % 2 === 0 ? 'dark' : 'light');
+            result.current.setThemeWithCircularTransition(
+              i % 2 === 0 ? 'dark' : 'light',
+            );
           }
         });
       }).not.toThrow();

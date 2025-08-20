@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-
-import { contactFormSchema, validationHelpers, type ContactFormData } from '@/lib/validations';
 import { airtableService } from '@/lib/airtable';
-import { resendService } from '@/lib/resend';
 import { logger } from '@/lib/logger';
+import { resendService } from '@/lib/resend';
+import {
+  contactFormSchema,
+  validationHelpers,
+  type ContactFormData,
+} from '@/lib/validations';
 
 /**
  * 扩展的联系表单模式，包含Turnstile token
@@ -31,7 +34,11 @@ const RATE_LIMIT_CONFIG = {
  * 检查速率限制
  * Check rate limiting
  */
-function checkRateLimit(ip: string, maxRequests = RATE_LIMIT_CONFIG.MAX_REQUESTS, windowMs = RATE_LIMIT_CONFIG.WINDOW_MS): boolean {
+function checkRateLimit(
+  ip: string,
+  maxRequests = RATE_LIMIT_CONFIG.MAX_REQUESTS,
+  windowMs = RATE_LIMIT_CONFIG.WINDOW_MS,
+): boolean {
   const now = Date.now();
   const key = ip;
 
@@ -64,17 +71,20 @@ async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
       return process.env.NODE_ENV === 'development'; // 开发环境跳过验证
     }
 
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await fetch(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          secret: secretKey,
+          response: token,
+          remoteip: ip,
+        }),
       },
-      body: new URLSearchParams({
-        secret: secretKey,
-        response: token,
-        remoteip: ip,
-      }),
-    });
+    );
 
     const result = await response.json();
     return result.success === true;
@@ -117,20 +127,30 @@ async function validateFormData(body: unknown, clientIP: string) {
       errors: validationResult.error.errors,
       ip: clientIP,
     });
-    return { success: false, error: 'Invalid form data', details: validationResult.error.errors };
+    return {
+      success: false,
+      error: 'Invalid form data',
+      details: validationResult.error.errors,
+    };
   }
 
   const formData = validationResult.data;
 
   // 验证Turnstile token
-  const isTurnstileValid = await verifyTurnstile(formData.turnstileToken, clientIP);
+  const isTurnstileValid = await verifyTurnstile(
+    formData.turnstileToken,
+    clientIP,
+  );
 
   if (!isTurnstileValid) {
     logger.warn('Turnstile verification failed', {
       ip: clientIP,
       email: formData.email,
     });
-    return { success: false, error: 'Security verification failed. Please try again.' };
+    return {
+      success: false,
+      error: 'Security verification failed. Please try again.',
+    };
   }
 
   // 检查蜜罐字段
@@ -159,7 +179,9 @@ async function validateFormData(body: unknown, clientIP: string) {
  * 处理表单提交
  * Process form submission
  */
-async function processFormSubmission(formData: ContactFormData & { turnstileToken: string; submittedAt: string }) {
+async function processFormSubmission(
+  formData: ContactFormData & { turnstileToken: string; submittedAt: string },
+) {
   const emailData = {
     firstName: formData.firstName,
     lastName: formData.lastName,
@@ -175,7 +197,9 @@ async function processFormSubmission(formData: ContactFormData & { turnstileToke
   // 并行处理：保存到Airtable和发送邮件
   const [airtableResult, emailResult] = await Promise.allSettled([
     airtableService.isReady() ? airtableService.createContact(formData) : null,
-    resendService.isReady() ? resendService.sendContactFormEmail(emailData) : null,
+    resendService.isReady()
+      ? resendService.sendContactFormEmail(emailData)
+      : null,
   ]);
 
   let airtableRecordId: string | undefined;
@@ -241,9 +265,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Too many requests. Please try again later.'
+          error: 'Too many requests. Please try again later.',
         },
-        { status: 429 }
+        { status: 429 },
       );
     }
 
@@ -252,14 +276,15 @@ export async function POST(request: NextRequest) {
 
     // 验证表单数据
     const validation = await validateFormData(body, clientIP);
-    if (!validation.success) {
+    if (!validation.success || !validation.data) {
       return NextResponse.json(validation, { status: 400 });
     }
 
     const formData = validation.data;
 
     // 处理表单提交
-    const { airtableRecordId, emailMessageId } = await processFormSubmission(formData);
+    const { airtableRecordId, emailMessageId } =
+      await processFormSubmission(formData);
 
     // 记录成功提交
     const processingTime = Date.now() - startTime;
@@ -278,7 +303,6 @@ export async function POST(request: NextRequest) {
       messageId: emailMessageId,
       recordId: airtableRecordId,
     });
-
   } catch (error) {
     const processingTime = Date.now() - startTime;
 
@@ -294,7 +318,7 @@ export async function POST(request: NextRequest) {
         success: false,
         error: 'An unexpected error occurred. Please try again later.',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -311,10 +335,7 @@ export async function GET(request: NextRequest) {
     const adminToken = process.env.ADMIN_API_TOKEN;
 
     if (!adminToken || authHeader !== `Bearer ${adminToken}`) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 获取统计信息
@@ -331,7 +352,6 @@ export async function GET(request: NextRequest) {
       success: true,
       data: stats,
     });
-
   } catch (error) {
     logger.error('Failed to get contact statistics', {
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -339,7 +359,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       { error: 'Failed to get statistics' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

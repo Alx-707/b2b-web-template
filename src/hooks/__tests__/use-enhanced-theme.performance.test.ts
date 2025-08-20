@@ -1,10 +1,15 @@
-import { act, renderHook } from '@testing-library/react';
 import React from 'react';
+import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useEnhancedTheme } from '../use-enhanced-theme';
 
 // Mock dependencies using vi.hoisted() to solve hoisting issues
-const { mockSetTheme, mockUseTheme, mockRecordThemeSwitch, mockRecordThemePreference } = vi.hoisted(() => ({
+const {
+  mockSetTheme,
+  mockUseTheme,
+  mockRecordThemeSwitch,
+  mockRecordThemePreference,
+} = vi.hoisted(() => ({
   mockSetTheme: vi.fn(),
   mockUseTheme: vi.fn(),
   mockRecordThemeSwitch: vi.fn(),
@@ -30,9 +35,12 @@ vi.mock('@/lib/logger', () => ({
 }));
 
 // Mock View Transitions API
-const mockTransition = {
+const mockTransition: any = {
   ready: Promise.resolve(),
   finished: Promise.resolve(),
+  updateCallbackDone: Promise.resolve(),
+  types: new Set(),
+  skipTransition: vi.fn(),
 };
 
 const mockStartViewTransition = vi.fn((callback: () => void) => {
@@ -71,7 +79,9 @@ describe('useEnhancedTheme Performance Tests', () => {
     const { result: result2 } = renderHook(() => useEnhancedTheme());
 
     // Both hooks should return the same cached result
-    expect(result1.current.supportsViewTransitions).toBe(result2.current.supportsViewTransitions);
+    expect(result1.current.supportsViewTransitions).toBe(
+      result2.current.supportsViewTransitions,
+    );
   });
 
   it('should handle rapid theme switching with debouncing', async () => {
@@ -86,7 +96,7 @@ describe('useEnhancedTheme Performance Tests', () => {
     });
 
     // Wait for debounce delay
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 150));
 
     // Should only call setTheme once due to debouncing
     expect(mockSetTheme).toHaveBeenCalledTimes(1);
@@ -109,7 +119,7 @@ describe('useEnhancedTheme Performance Tests', () => {
     });
 
     // Wait for debounce delay
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 150));
 
     // Should only call setTheme once due to debouncing
     expect(mockSetTheme).toHaveBeenCalledTimes(1);
@@ -120,14 +130,17 @@ describe('useEnhancedTheme Performance Tests', () => {
     const { result, rerender } = renderHook(() => useEnhancedTheme());
 
     const initialSetTheme = result.current.setTheme;
-    const initialSetCircularTheme = result.current.setThemeWithCircularTransition;
+    const initialSetCircularTheme =
+      result.current.setThemeWithCircularTransition;
 
     // Rerender the hook
     rerender();
 
     // Functions should be the same reference (memoized)
     expect(result.current.setTheme).toBe(initialSetTheme);
-    expect(result.current.setThemeWithCircularTransition).toBe(initialSetCircularTheme);
+    expect(result.current.setThemeWithCircularTransition).toBe(
+      initialSetCircularTheme,
+    );
   });
 
   it('should handle errors gracefully without breaking functionality', () => {
@@ -161,7 +174,9 @@ describe('useEnhancedTheme Performance Tests', () => {
   });
 
   it('should maintain performance with multiple hook instances', () => {
-    const hooks = Array.from({ length: 10 }, () => renderHook(() => useEnhancedTheme()));
+    const hooks = Array.from({ length: 10 }, () =>
+      renderHook(() => useEnhancedTheme()),
+    );
 
     // All hooks should work independently
     hooks.forEach(({ result }, index) => {
@@ -171,6 +186,10 @@ describe('useEnhancedTheme Performance Tests', () => {
     });
 
     // Should not cause performance issues
-    expect(hooks.every(({ result }) => typeof result.current.setTheme === 'function')).toBe(true);
+    expect(
+      hooks.every(
+        ({ result }) => typeof result.current.setTheme === 'function',
+      ),
+    ).toBe(true);
   });
 });

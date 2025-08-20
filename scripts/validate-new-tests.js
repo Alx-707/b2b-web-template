@@ -69,13 +69,13 @@ function analyzeTestFile(filePath) {
   try {
     const fullPath = path.join(process.cwd(), filePath);
     const content = fs.readFileSync(fullPath, 'utf8');
-    
+
     // 统计测试用例
     const testCases = content.match(/it\(/g) || [];
     const describeBlocks = content.match(/describe\(/g) || [];
     const mockConfigs = content.match(/vi\.hoisted/g) || [];
     const imports = content.match(/import.*from/g) || [];
-    
+
     return {
       lines: content.split('\n').length,
       testCases: testCases.length,
@@ -102,17 +102,19 @@ function analyzeTestFile(filePath) {
 function calculateExpectedContribution(testFiles) {
   let totalExpectedLines = 0;
   let totalComponentLines = 0;
-  
-  testFiles.forEach(file => {
-    const expectedCoveredLines = Math.round(file.componentLines * (file.expectedCoverage / 100));
+
+  testFiles.forEach((file) => {
+    const expectedCoveredLines = Math.round(
+      file.componentLines * (file.expectedCoverage / 100),
+    );
     totalExpectedLines += expectedCoveredLines;
     totalComponentLines += file.componentLines;
   });
-  
+
   // 基于总行数17,463计算百分比
   const totalProjectLines = 17463;
   const coverageIncrease = (totalExpectedLines / totalProjectLines) * 100;
-  
+
   return {
     totalExpectedLines,
     totalComponentLines,
@@ -131,59 +133,75 @@ function generateValidationReport() {
 
   // 验证每个测试文件
   newTestFiles.forEach((testFile, index) => {
-    console.log(colors.bold(`\n📁 ${index + 1}. ${testFile.type === 'new' ? '新建' : '增强'}测试: ${path.basename(testFile.path)}`));
-    
+    console.log(
+      colors.bold(
+        `\n📁 ${index + 1}. ${testFile.type === 'new' ? '新建' : '增强'}测试: ${path.basename(testFile.path)}`,
+      ),
+    );
+
     // 检查测试文件
     const testExists = validateFileExists(testFile.path);
     const componentExists = validateFileExists(testFile.component);
-    
+
     if (!testExists.exists) {
       console.log(colors.red('❌ 测试文件不存在'));
       allValid = false;
       return;
     }
-    
+
     if (!componentExists.exists) {
       console.log(colors.red('❌ 组件文件不存在'));
       allValid = false;
       return;
     }
-    
+
     // 分析测试文件
     const analysis = analyzeTestFile(testFile.path);
-    
+
     if (analysis.error) {
       console.log(colors.red(`❌ 文件分析失败: ${analysis.error}`));
       allValid = false;
       return;
     }
-    
+
     // 显示分析结果
     console.log(colors.green('✅ 文件存在且可读取'));
     console.log(colors.cyan(`📊 测试统计:`));
-    console.log(`   - 测试用例: ${analysis.testCases} (预期: ${testFile.expectedTests})`);
+    console.log(
+      `   - 测试用例: ${analysis.testCases} (预期: ${testFile.expectedTests})`,
+    );
     console.log(`   - describe块: ${analysis.describeBlocks}`);
     console.log(`   - 代码行数: ${analysis.lines}`);
-    console.log(`   - Mock配置: ${analysis.hasViHoisted ? '✅ vi.hoisted' : '❌ 缺少vi.hoisted'}`);
-    
+    console.log(
+      `   - Mock配置: ${analysis.hasViHoisted ? '✅ vi.hoisted' : '❌ 缺少vi.hoisted'}`,
+    );
+
     // 验证测试数量
     if (analysis.testCases < testFile.expectedTests * 0.8) {
-      console.log(colors.yellow(`⚠️  测试用例数量偏少 (${analysis.testCases}/${testFile.expectedTests})`));
+      console.log(
+        colors.yellow(
+          `⚠️  测试用例数量偏少 (${analysis.testCases}/${testFile.expectedTests})`,
+        ),
+      );
     }
-    
+
     if (!analysis.hasViHoisted) {
       console.log(colors.yellow('⚠️  建议使用vi.hoisted Mock配置'));
     }
-    
+
     // 计算预期覆盖率贡献
-    const expectedCoveredLines = Math.round(testFile.componentLines * (testFile.expectedCoverage / 100));
+    const expectedCoveredLines = Math.round(
+      testFile.componentLines * (testFile.expectedCoverage / 100),
+    );
     const contributionPercent = (expectedCoveredLines / 17463) * 100;
-    
+
     console.log(colors.blue(`🎯 预期贡献:`));
     console.log(`   - 组件总行数: ${testFile.componentLines}`);
-    console.log(`   - 预期覆盖: ${expectedCoveredLines}行 (${testFile.expectedCoverage}%)`);
+    console.log(
+      `   - 预期覆盖: ${expectedCoveredLines}行 (${testFile.expectedCoverage}%)`,
+    );
     console.log(`   - 覆盖率贡献: +${contributionPercent.toFixed(3)}%`);
-    
+
     results.push({
       ...testFile,
       analysis,
@@ -196,13 +214,19 @@ function generateValidationReport() {
   // 计算总体预期贡献
   console.log(colors.bold('\n📈 总体预期贡献'));
   console.log('='.repeat(40));
-  
+
   const contribution = calculateExpectedContribution(newTestFiles);
-  
-  console.log(`总预期新覆盖行数: ${colors.cyan(contribution.totalExpectedLines + '行')}`);
-  console.log(`总覆盖率增量: ${colors.cyan('+' + contribution.coverageIncrease.toFixed(2) + '%')}`);
-  console.log(`预期新覆盖率: ${colors.green(contribution.newCoverageRate.toFixed(2) + '%')}`);
-  
+
+  console.log(
+    `总预期新覆盖行数: ${colors.cyan(contribution.totalExpectedLines + '行')}`,
+  );
+  console.log(
+    `总覆盖率增量: ${colors.cyan('+' + contribution.coverageIncrease.toFixed(2) + '%')}`,
+  );
+  console.log(
+    `预期新覆盖率: ${colors.green(contribution.newCoverageRate.toFixed(2) + '%')}`,
+  );
+
   if (contribution.newCoverageRate >= 59.0) {
     console.log(colors.green('🎉 预期将显著接近60%目标！'));
   } else {
@@ -222,7 +246,10 @@ function generateValidationReport() {
     console.log(colors.yellow('请修复上述问题后重新验证'));
   }
 
-  const totalNewTests = results.reduce((sum, r) => sum + r.analysis.testCases, 0);
+  const totalNewTests = results.reduce(
+    (sum, r) => sum + r.analysis.testCases,
+    0,
+  );
   const totalNewLines = results.reduce((sum, r) => sum + r.analysis.lines, 0);
 
   console.log(colors.bold('\n📊 新增测试代码统计'));
@@ -237,14 +264,14 @@ function generateValidationReport() {
 function main() {
   try {
     const isValid = generateValidationReport();
-    
+
     if (isValid) {
       console.log(colors.bold('\n🚀 建议下一步操作:'));
       console.log('1. 运行测试: npm run test');
       console.log('2. 生成覆盖率: npm run test:coverage');
       console.log('3. 验证覆盖率: node scripts/verify-coverage-improvement.js');
     }
-    
+
     process.exit(isValid ? 0 : 1);
   } catch (error) {
     console.error(colors.red('❌ 验证过程中发生错误:'), error.message);

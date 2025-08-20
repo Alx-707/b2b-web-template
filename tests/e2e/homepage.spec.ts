@@ -1,5 +1,5 @@
-import { test, expect, devices } from '@playwright/test';
-import { injectAxe, checkA11y } from 'axe-playwright';
+import { expect, test } from '@playwright/test';
+import { checkA11y, injectAxe } from 'axe-playwright';
 import {
   removeInterferingElements,
   waitForStablePage,
@@ -38,7 +38,9 @@ test.describe('Homepage Core Functionality', () => {
     await expect(navigation).toBeVisible();
   });
 
-  test('should display hero section with correct content and animations', async ({ page }) => {
+  test('should display hero section with correct content and animations', async ({
+    page,
+  }) => {
     const heroSection = page.locator('section').first();
 
     // Verify hero badge with version
@@ -52,8 +54,10 @@ test.describe('Homepage Core Functionality', () => {
     await expect(heroTitle).toBeVisible();
 
     // Check for gradient text styling
-    const gradientText = heroTitle.locator('.bg-gradient-to-r, [class*="gradient"]');
-    if (await gradientText.count() > 0) {
+    const gradientText = heroTitle.locator(
+      '.bg-gradient-to-r, [class*="gradient"]',
+    );
+    if ((await gradientText.count()) > 0) {
       await expect(gradientText.first()).toBeVisible();
     }
 
@@ -77,7 +81,7 @@ test.describe('Homepage Core Functionality', () => {
 
     // Verify stats section exists
     const statsGrid = heroSection.locator('.grid, [class*="grid"]');
-    if (await statsGrid.count() > 0) {
+    if ((await statsGrid.count()) > 0) {
       await expect(statsGrid.last()).toBeVisible();
     }
   });
@@ -92,14 +96,14 @@ test.describe('Homepage Core Functionality', () => {
 
     // Test for anchor links (demo button)
     const anchorLinks = heroSection.locator('a[href^="#"]');
-    if (await anchorLinks.count() > 0) {
+    if ((await anchorLinks.count()) > 0) {
       const demoButton = anchorLinks.first();
       await expect(demoButton).toBeVisible();
     }
 
     // Test for external links (GitHub)
     const externalLinks = heroSection.locator('a[target="_blank"]');
-    if (await externalLinks.count() > 0) {
+    if ((await externalLinks.count()) > 0) {
       const githubButton = externalLinks.first();
       await expect(githubButton).toBeVisible();
       await expect(githubButton).toHaveAttribute('rel', /noopener/);
@@ -109,14 +113,16 @@ test.describe('Homepage Core Functionality', () => {
 
       // Look for icons
       const icons = githubButton.locator('svg, [class*="lucide"]');
-      if (await icons.count() > 0) {
+      if ((await icons.count()) > 0) {
         await expect(icons.first()).toBeVisible();
       }
     }
   });
 
   test.describe('Responsive Design Tests', () => {
-    test('should display correctly on desktop (1920x1080)', async ({ page }) => {
+    test('should display correctly on desktop (1920x1080)', async ({
+      page,
+    }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
       await page.reload();
       await waitForStablePage(page);
@@ -137,7 +143,11 @@ test.describe('Homepage Core Functionality', () => {
       // Verify responsive classes are applied (check for large text classes)
       const hasLargeText = await heroTitle.evaluate((el) => {
         const classes = el.className;
-        return classes.includes('text-4xl') || classes.includes('text-6xl') || classes.includes('text-7xl');
+        return (
+          classes.includes('text-4xl') ||
+          classes.includes('text-6xl') ||
+          classes.includes('text-7xl')
+        );
       });
       expect(hasLargeText).toBe(true);
     });
@@ -168,8 +178,10 @@ test.describe('Homepage Core Functionality', () => {
       await expect(heroSection).toBeVisible();
 
       // Verify mobile navigation is used (look for hamburger menu)
-      const mobileMenuButton = page.getByRole('button').filter({ hasText: /menu|toggle/i });
-      if (await mobileMenuButton.count() > 0) {
+      const mobileMenuButton = page
+        .getByRole('button')
+        .filter({ hasText: /menu|toggle/i });
+      if ((await mobileMenuButton.count()) > 0) {
         await expect(mobileMenuButton.first()).toBeVisible();
       }
 
@@ -179,7 +191,7 @@ test.describe('Homepage Core Functionality', () => {
 
       // Verify buttons/links are accessible
       const links = heroSection.getByRole('link');
-      if (await links.count() > 0) {
+      if ((await links.count()) > 0) {
         await expect(links.first()).toBeVisible();
       }
     });
@@ -202,22 +214,28 @@ test.describe('Homepage Core Functionality', () => {
         return new Promise((resolve) => {
           new PerformanceObserver((list) => {
             const entries = list.getEntries();
-            const vitals = {};
+            const webVitals: { lcp?: number; fid?: number; cls?: number } = {};
 
-            entries.forEach((entry) => {
+            entries.forEach((entry: any) => {
               if (entry.name === 'LCP') {
-                vitals.lcp = entry.value;
+                webVitals.lcp = entry.value;
               }
               if (entry.name === 'FID') {
-                vitals.fid = entry.value;
+                webVitals.fid = entry.value;
               }
               if (entry.name === 'CLS') {
-                vitals.cls = entry.value;
+                webVitals.cls = entry.value;
               }
             });
 
-            resolve(vitals);
-          }).observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] });
+            resolve(webVitals);
+          }).observe({
+            entryTypes: [
+              'largest-contentful-paint',
+              'first-input',
+              'layout-shift',
+            ],
+          });
 
           // Fallback timeout
           setTimeout(() => resolve({}), 3000);
@@ -225,21 +243,28 @@ test.describe('Homepage Core Functionality', () => {
       });
 
       // Verify Core Web Vitals thresholds (if available)
-      if (vitals.lcp) {
-        expect(vitals.lcp).toBeLessThan(2500); // LCP < 2.5s
+      const typedVitals = vitals as {
+        lcp?: number;
+        fid?: number;
+        cls?: number;
+      };
+      if (typedVitals.lcp) {
+        expect(typedVitals.lcp).toBeLessThan(2500); // LCP < 2.5s
       }
-      if (vitals.fid) {
-        expect(vitals.fid).toBeLessThan(100); // FID < 100ms
+      if (typedVitals.fid) {
+        expect(typedVitals.fid).toBeLessThan(100); // FID < 100ms
       }
-      if (vitals.cls) {
-        expect(vitals.cls).toBeLessThan(0.1); // CLS < 0.1
+      if (typedVitals.cls) {
+        expect(typedVitals.cls).toBeLessThan(0.1); // CLS < 0.1
       }
     });
 
-    test('should handle slow network conditions gracefully', async ({ page }) => {
+    test('should handle slow network conditions gracefully', async ({
+      page,
+    }) => {
       // Simulate slow 3G network
       await page.route('**/*', async (route) => {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Add 100ms delay
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Add 100ms delay
         await route.continue();
       });
 
@@ -261,7 +286,7 @@ test.describe('Homepage Core Functionality', () => {
       await injectAxe(page);
 
       // Run axe-core accessibility checks
-      await checkA11y(page, null, {
+      await checkA11y(page, undefined, {
         detailedReport: true,
         detailedReportOptions: { html: true },
       });
@@ -291,7 +316,9 @@ test.describe('Homepage Core Functionality', () => {
       // Should scroll to demo section or navigate
     });
 
-    test('should have proper ARIA attributes and semantic structure', async ({ page }) => {
+    test('should have proper ARIA attributes and semantic structure', async ({
+      page,
+    }) => {
       const heroSection = page.locator('section').first();
 
       // Verify semantic structure exists

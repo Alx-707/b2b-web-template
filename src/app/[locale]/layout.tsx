@@ -2,21 +2,20 @@ import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import NextTopLoader from 'nextjs-toploader';
 import { generateJSONLD } from '@/lib/structured-data';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
-import {
-  DevelopmentPerformanceMonitor,
-  DevelopmentWebVitalsIndicator,
-  DynamicDevToolsController,
-  DynamicDevToolsStatusIndicator,
-  DynamicReactScanControlPanel,
-  DynamicReactScanIndicator,
-  DynamicReactScanProvider,
-  DynamicThemePerformanceMonitor,
-  DynamicTranslationPreloader,
-} from '@/components/shared/dynamic-imports';
 import { EnterpriseAnalytics } from '@/components/monitoring/enterprise-analytics';
+// 临时禁用所有性能监控组件以排查 "Maximum update depth exceeded" 错误
+// import {
+//     DevelopmentPerformanceMonitor,
+//     DevelopmentWebVitalsIndicator,
+//     DynamicDevToolsController,
+//     DynamicDevToolsStatusIndicator,
+//     DynamicThemePerformanceMonitor,
+//     DynamicTranslationPreloader,
+// } from '@/components/shared/dynamic-imports';
 import { ThemeProvider } from '@/components/theme-provider';
 import { routing } from '@/i18n/routing';
 import '../globals.css';
@@ -77,16 +76,25 @@ export default async function LocaleLayout({
             defaultTheme='system'
             enableSystem
           >
-          {/* React Scan 性能监控 - 动态导入（默认禁用） */}
-          <DynamicReactScanProvider>
-            {/* I18n性能优化组件 - 动态导入 */}
-            <DynamicTranslationPreloader />
+            {/* 页面导航进度条 - 全局生效 */}
+            <NextTopLoader
+              color='hsl(var(--primary))'
+              height={3}
+              showSpinner={false}
+              easing='ease-in-out'
+              speed={300}
+              shadow='0 0 10px hsl(var(--primary)),0 0 5px hsl(var(--primary))'
+              zIndex={1600}
+            />
 
-            {/* 主题性能监控组件 - 动态导入 */}
-            <DynamicThemePerformanceMonitor />
+            {/* 临时禁用：I18n性能优化组件 - 动态导入 */}
+            {/* <DynamicTranslationPreloader /> */}
 
-            {/* Web Vitals 性能监控 - 动态导入 */}
-            <DevelopmentWebVitalsIndicator />
+            {/* 临时禁用：主题性能监控组件 - 动态导入 */}
+            {/* <DynamicThemePerformanceMonitor /> */}
+
+            {/* 临时禁用：Web Vitals 性能监控 - 动态导入 */}
+            {/* <DevelopmentWebVitalsIndicator /> */}
 
             {/* 导航栏 */}
             <Header />
@@ -99,22 +107,15 @@ export default async function LocaleLayout({
 
             {/* 企业级监控组件已集成到AnalyticsProvider中 */}
 
-            {/* 开发环境性能指示器 - 动态导入 */}
-            <DevelopmentPerformanceMonitor />
+            {/* 临时禁用：开发环境性能指示器 - 动态导入 */}
+            {/* <DevelopmentPerformanceMonitor /> */}
 
-            {/* React Scan 状态指示器 - 动态导入 */}
-            <DynamicReactScanIndicator />
+            {/* 临时禁用：开发工具控制器 - 统一管理所有开发工具 */}
+            {/* <DynamicDevToolsController /> */}
 
-            {/* React Scan 控制面板 - 动态导入 */}
-            <DynamicReactScanControlPanel />
-
-            {/* 开发工具控制器 - 统一管理所有开发工具 */}
-            <DynamicDevToolsController />
-
-            {/* 开发工具状态指示器 */}
-            <DynamicDevToolsStatusIndicator />
-          </DynamicReactScanProvider>
-        </ThemeProvider>
+            {/* 临时禁用：开发工具状态指示器 */}
+            {/* <DynamicDevToolsStatusIndicator /> */}
+          </ThemeProvider>
         </EnterpriseAnalytics>
       </NextIntlClientProvider>
     </div>

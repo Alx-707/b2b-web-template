@@ -20,6 +20,7 @@ export type PageType =
   | 'contact'
   | 'blog'
   | 'products'
+  | 'diagnostics'
   | 'services'
   | 'pricing'
   | 'support'
@@ -53,6 +54,11 @@ export const PATHS_CONFIG = Object.freeze({
   products: Object.freeze({
     en: '/products',
     zh: '/products',
+  }),
+
+  diagnostics: Object.freeze({
+    en: '/diagnostics',
+    zh: '/diagnostics',
   }),
 
   services: Object.freeze({
@@ -168,6 +174,7 @@ export function getPathnames(): Record<string, string> {
     '/contact': '/contact',
     '/blog': '/blog',
     '/products': '/products',
+    '/diagnostics': '/diagnostics',
     '/services': '/services',
     '/pricing': '/pricing',
     '/support': '/support',

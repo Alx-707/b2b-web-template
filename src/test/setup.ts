@@ -133,14 +133,14 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock ResizeObserver for React components that use it
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
+globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
 
 // Mock IntersectionObserver for React components that use it
-global.IntersectionObserver = vi.fn().mockImplementation(() => ({
+globalThis.IntersectionObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
@@ -162,7 +162,7 @@ Object.defineProperty(MockPerformanceObserver, 'supportedEntryTypes', {
   configurable: true,
 });
 
-global.PerformanceObserver = MockPerformanceObserver as any;
+globalThis.PerformanceObserver = MockPerformanceObserver as any;
 
 // Mock environment variables - 使用vi.stubEnv而不是直接修改process.env
 vi.stubEnv('NODE_ENV', 'test');
@@ -170,11 +170,11 @@ vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://tucsenberg.com');
 vi.stubEnv('NEXT_PUBLIC_VERCEL_URL', 'tucsenberg.vercel.app');
 
 // Mock requestAnimationFrame for animations
-global.requestAnimationFrame = vi.fn((cb) => {
+globalThis.requestAnimationFrame = vi.fn((cb) => {
   setTimeout(cb, 0);
   return 1;
 });
-global.cancelAnimationFrame = vi.fn((id) => clearTimeout(id as any));
+globalThis.cancelAnimationFrame = vi.fn((id) => clearTimeout(id as any));
 
 // Mock localStorage and sessionStorage
 const createStorageMock = () => {

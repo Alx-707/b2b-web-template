@@ -53,7 +53,11 @@ export function useReducedMotion(): boolean {
       // Create event listener with enhanced malformed event handling
       const handleChange = (event: MediaQueryListEvent) => {
         // Handle malformed events gracefully - check for event existence and matches property
-        if (event && typeof event === 'object' && typeof event.matches === 'boolean') {
+        if (
+          event &&
+          typeof event === 'object' &&
+          typeof event.matches === 'boolean'
+        ) {
           setPrefersReducedMotion(event.matches);
         } else {
           // Fallback: re-query the media query if event is malformed
@@ -68,13 +72,19 @@ export function useReducedMotion(): boolean {
       };
 
       // Add listener if addEventListener is available
-      if (mediaQuery.addEventListener && typeof mediaQuery.addEventListener === 'function') {
+      if (
+        mediaQuery.addEventListener &&
+        typeof mediaQuery.addEventListener === 'function'
+      ) {
         mediaQuery.addEventListener('change', handleChange);
       }
 
       // Cleanup
       return () => {
-        if (mediaQuery?.removeEventListener && typeof mediaQuery.removeEventListener === 'function') {
+        if (
+          mediaQuery?.removeEventListener &&
+          typeof mediaQuery.removeEventListener === 'function'
+        ) {
           mediaQuery.removeEventListener('change', handleChange);
         }
       };

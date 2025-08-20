@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { env } from '../../../../env.mjs';
 import type { CSPReport } from '@/config/security';
+import { env } from '../../../../env.mjs';
 
 /**
  * CSP Report endpoint
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     if (!contentType || !contentType.includes('application/csp-report')) {
       return NextResponse.json(
         { error: 'Invalid content type' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     if (!report['csp-report']) {
       return NextResponse.json(
         { error: 'Invalid CSP report format' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -54,12 +54,18 @@ export async function POST(request: NextRequest) {
       scriptSample: cspReport['script-sample'],
       disposition: cspReport.disposition,
       userAgent: request.headers.get('user-agent'),
-      ip: request.ip || request.headers.get('x-forwarded-for') || 'unknown',
+      ip:
+        request.headers.get('x-forwarded-for') ||
+        request.headers.get('x-real-ip') ||
+        'unknown',
     };
 
     // Log the violation
     const JSON_INDENT = 2;
-    console.warn('CSP Violation Report:', JSON.stringify(violationData, null, JSON_INDENT));
+    console.warn(
+      'CSP Violation Report:',
+      JSON.stringify(violationData, null, JSON_INDENT),
+    );
 
     // In production, you might want to send this to a monitoring service
     if (env.NODE_ENV === 'production') {
@@ -80,9 +86,10 @@ export async function POST(request: NextRequest) {
       'onclick',
     ];
 
-    const isSuspicious = suspiciousPatterns.some(pattern =>
-      cspReport['blocked-uri']?.toLowerCase().includes(pattern) ||
-      cspReport['script-sample']?.toLowerCase().includes(pattern)
+    const isSuspicious = suspiciousPatterns.some(
+      (pattern) =>
+        cspReport['blocked-uri']?.toLowerCase().includes(pattern) ||
+        cspReport['script-sample']?.toLowerCase().includes(pattern),
     );
 
     if (isSuspicious) {
@@ -98,15 +105,14 @@ export async function POST(request: NextRequest) {
         status: 'received',
         timestamp: violationData.timestamp,
       },
-      { status: 200 }
+      { status: 200 },
     );
-
   } catch (error) {
     console.error('Error processing CSP report:', error);
 
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -120,7 +126,7 @@ export function GET() {
       status: 'CSP report endpoint active',
       timestamp: new Date().toISOString(),
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
 

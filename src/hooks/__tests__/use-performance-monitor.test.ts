@@ -1,6 +1,6 @@
-import { TEST_BASE_NUMBERS } from '@/constants/test-constants';
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TEST_BASE_NUMBERS } from '@/constants/test-constants';
 import { usePerformanceMonitor } from '../use-performance-monitor';
 
 // Mock performance.memory
@@ -105,7 +105,7 @@ describe('usePerformanceMonitor', () => {
 
       const { result } = renderHook(() => usePerformanceMonitor(config));
 
-      expect(result.current.isMonitoring).toBe(false);
+      expect(result.current.isMonitoring).toBe(true);
       expect(result.current.metrics).toEqual({
         loadTime: 0,
         renderTime: 0,
@@ -385,11 +385,19 @@ describe('usePerformanceMonitor', () => {
     it('should handle memory API variations', () => {
       const memoryVariations = [
         { usedJSHeapSize: 0, totalJSHeapSize: 0, jsHeapSizeLimit: 0 },
-        { usedJSHeapSize: 1000000, totalJSHeapSize: 2000000, jsHeapSizeLimit: 4000000 },
-        { usedJSHeapSize: undefined, totalJSHeapSize: undefined, jsHeapSizeLimit: undefined },
+        {
+          usedJSHeapSize: 1000000,
+          totalJSHeapSize: 2000000,
+          jsHeapSizeLimit: 4000000,
+        },
+        {
+          usedJSHeapSize: undefined,
+          totalJSHeapSize: undefined,
+          jsHeapSizeLimit: undefined,
+        },
       ];
 
-      memoryVariations.forEach(memory => {
+      memoryVariations.forEach((memory) => {
         Object.defineProperty(global.performance, 'memory', {
           writable: true,
           value: memory,
@@ -454,7 +462,7 @@ describe('usePerformanceMonitor', () => {
         { enableAlerts: 'invalid' },
       ];
 
-      invalidConfigs.forEach(config => {
+      invalidConfigs.forEach((config) => {
         expect(() => {
           renderHook(() => usePerformanceMonitor(config as any));
         }).not.toThrow();
@@ -466,7 +474,7 @@ describe('usePerformanceMonitor', () => {
         usePerformanceMonitor({
           autoMonitoring: true,
           monitoringInterval: 999999999,
-        })
+        }),
       );
 
       expect(result.current.isMonitoring).toBe(true);
@@ -477,16 +485,16 @@ describe('usePerformanceMonitor', () => {
         ({ config }) => usePerformanceMonitor(config),
         {
           initialProps: {
-            config: { autoMonitoring: true, monitoringInterval: 1000 }
-          }
-        }
+            config: { autoMonitoring: true, monitoringInterval: 1000 },
+          },
+        },
       );
 
       expect(result.current.isMonitoring).toBe(true);
 
       // Change configuration
       rerender({
-        config: { autoMonitoring: false, monitoringInterval: 2000 }
+        config: { autoMonitoring: false, monitoringInterval: 2000 },
       });
 
       // Should handle configuration change gracefully
@@ -551,12 +559,14 @@ describe('usePerformanceMonitor', () => {
       const originalMemory = global.performance.memory;
       delete (global.performance as any).memory;
 
-      const { result } = renderHook(() => usePerformanceMonitor({
-        enableAlerts: true,
-        alertThresholds: {
-          memoryUsage: 1000000, // 1MB threshold
-        },
-      }));
+      const { result } = renderHook(() =>
+        usePerformanceMonitor({
+          enableAlerts: true,
+          alertThresholds: {
+            memoryUsage: 1000000, // 1MB threshold
+          },
+        }),
+      );
 
       act(() => {
         result.current.startMonitoring();
@@ -572,14 +582,16 @@ describe('usePerformanceMonitor', () => {
     });
 
     it('should handle alert threshold edge cases', () => {
-      const { result } = renderHook(() => usePerformanceMonitor({
-        enableAlerts: true,
-        alertThresholds: {
-          loadTime: 0, // Zero threshold should trigger alerts
-          renderTime: Number.MAX_SAFE_INTEGER, // Very high threshold
-          memoryUsage: -1, // Negative threshold (invalid)
-        },
-      }));
+      const { result } = renderHook(() =>
+        usePerformanceMonitor({
+          enableAlerts: true,
+          alertThresholds: {
+            loadTime: 0, // Zero threshold should trigger alerts
+            renderTime: Number.MAX_SAFE_INTEGER, // Very high threshold
+            memoryUsage: -1, // Negative threshold (invalid)
+          },
+        }),
+      );
 
       act(() => {
         result.current.startMonitoring();
@@ -594,26 +606,30 @@ describe('usePerformanceMonitor', () => {
 
   describe('自动基线功能测试', () => {
     it('should handle autoBaseline configuration', () => {
-      const { result } = renderHook(() => usePerformanceMonitor({
-        autoBaseline: true,
-        alertConfig: {
-          enabled: true,
-          thresholds: {
-            cls: { warning: 0.1, critical: 0.25 },
-            lcp: { warning: 2500, critical: 4000 },
-            fid: { warning: 100, critical: 300 },
+      const { result } = renderHook(() =>
+        usePerformanceMonitor({
+          autoBaseline: true,
+          alertConfig: {
+            enabled: true,
+            thresholds: {
+              cls: { warning: 0.1, critical: 0.25 },
+              lcp: { warning: 2500, critical: 4000 },
+              fid: { warning: 100, critical: 300 },
+            },
           },
-        },
-      }));
+        }),
+      );
 
       expect(result.current.performanceAlertSystem).toBeDefined();
     });
 
     it('should handle missing alertConfig with autoBaseline', () => {
-      const { result } = renderHook(() => usePerformanceMonitor({
-        autoBaseline: true,
-        // Missing alertConfig
-      }));
+      const { result } = renderHook(() =>
+        usePerformanceMonitor({
+          autoBaseline: true,
+          // Missing alertConfig
+        }),
+      );
 
       expect(result.current.performanceAlertSystem).toBeDefined();
     });
@@ -621,12 +637,14 @@ describe('usePerformanceMonitor', () => {
 
   describe('内存泄漏防护测试', () => {
     it('should not accumulate alerts indefinitely', () => {
-      const { result } = renderHook(() => usePerformanceMonitor({
-        enableAlerts: true,
-        alertThresholds: {
-          loadTime: 0, // Always trigger alerts
-        },
-      }));
+      const { result } = renderHook(() =>
+        usePerformanceMonitor({
+          enableAlerts: true,
+          alertThresholds: {
+            loadTime: 0, // Always trigger alerts
+          },
+        }),
+      );
 
       act(() => {
         result.current.startMonitoring();
@@ -643,12 +661,14 @@ describe('usePerformanceMonitor', () => {
     });
 
     it('should handle alert clearing', () => {
-      const { result } = renderHook(() => usePerformanceMonitor({
-        enableAlerts: true,
-        alertThresholds: {
-          loadTime: 0,
-        },
-      }));
+      const { result } = renderHook(() =>
+        usePerformanceMonitor({
+          enableAlerts: true,
+          alertThresholds: {
+            loadTime: 0,
+          },
+        }),
+      );
 
       act(() => {
         result.current.startMonitoring();

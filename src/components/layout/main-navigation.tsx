@@ -57,7 +57,13 @@ export function MainNavigation({
             <Link
               key={item.key}
               href={
-                item.href as '/' | '/about' | '/contact' | '/blog' | '/products'
+                item.href as
+                  | '/'
+                  | '/about'
+                  | '/contact'
+                  | '/blog'
+                  | '/products'
+                  | '/diagnostics'
               }
               className={cn(
                 'rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200',
@@ -92,6 +98,7 @@ export function MainNavigation({
                       | '/contact'
                       | '/blog'
                       | '/products'
+                      | '/diagnostics'
                   }
                   className={cn(
                     navigationMenuTriggerStyle(),

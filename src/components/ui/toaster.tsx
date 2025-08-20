@@ -1,7 +1,7 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import * as React from 'react';
+import { useTheme } from 'next-themes';
 import { Toaster as Sonner } from 'sonner';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
@@ -31,7 +31,15 @@ export function Toaster({ ...props }: ToasterProps) {
   };
 
   // Only add theme if it's defined and valid
-  const validTheme = theme && ['light', 'dark', 'system'].includes(theme) ? theme : 'system';
+  const validTheme: 'light' | 'dark' | 'system' =
+    theme && ['light', 'dark', 'system'].includes(theme)
+      ? (theme as 'light' | 'dark' | 'system')
+      : 'system';
 
-  return <Sonner {...baseProps} theme={validTheme as ToasterProps['theme']} />;
+  return (
+    <Sonner
+      {...baseProps}
+      theme={validTheme}
+    />
+  );
 }
