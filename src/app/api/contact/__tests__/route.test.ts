@@ -49,7 +49,10 @@ vi.mock('@/lib/validations', () => ({
       safeParse: vi.fn(),
     }),
   },
-  validationHelpers: mockValidationHelpers,
+  validationHelpers: {
+    ...mockValidationHelpers,
+    isSpamContent: vi.fn().mockReturnValue(false),
+  },
 }));
 
 // Mock environment variables
@@ -60,6 +63,15 @@ vi.mock('../../../../env.mjs', () => ({
     TURNSTILE_SECRET_KEY: 'test-turnstile-key',
   },
 }));
+
+// Mock process.env for Turnstile verification
+Object.defineProperty(process, 'env', {
+  value: {
+    ...process.env,
+    NODE_ENV: 'test',
+    TURNSTILE_SECRET_KEY: 'test-turnstile-key',
+  },
+});
 
 describe('Contact API Route', () => {
   beforeEach(() => {
@@ -97,7 +109,7 @@ describe('Contact API Route', () => {
       });
 
       // Mock successful service responses
-      mockAirtableService.createContact.mockResolvedValue('record-123');
+      mockAirtableService.createContact.mockResolvedValue({ id: 'record-123' });
       mockResendService.sendContactFormEmail.mockResolvedValue('email-123');
       mockResendService.sendConfirmationEmail.mockResolvedValue('confirmation-123');
 
@@ -199,6 +211,15 @@ describe('Contact API Route', () => {
     });
 
     it('应该处理Turnstile验证失败', async () => {
+      // Mock successful form validation but failed Turnstile verification
+      const mockValidations = await import('@/lib/validations');
+      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue({
+        safeParse: vi.fn().mockReturnValue({
+          success: true,
+          data: validFormData,
+        }),
+      });
+
       // Mock failed Turnstile verification
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
