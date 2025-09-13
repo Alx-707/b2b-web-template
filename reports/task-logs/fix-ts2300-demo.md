@@ -23,3 +23,17 @@ Duplicate exports of `PreloaderFactory` and `TranslationPreloader` in `i18n-prel
 - Re-ran `pnpm run type-check`
 - `SmartLocaleDetector` duplicate resolved.
 - First remaining TS2300: `src/lib/locale-storage-manager.ts(16,628): error TS2300: Duplicate identifier 'PerformanceMetrics'.`
+
+## PerformanceMetrics Fix
+
+### Initial Error
+- `pnpm run type-check`
+- `src/lib/locale-storage-manager.ts(16,628): error TS2300: Duplicate identifier 'PerformanceMetrics'.`
+
+### Plan
+`PerformanceMetrics` type was re-exported from both `locale-storage-types` and `locale-storage-analytics`. Alias the analytics export to `AnalyticsPerformanceMetrics` to avoid the name collision.
+
+### Verification
+- Re-ran `pnpm run type-check`
+- `PerformanceMetrics` duplicate resolved.
+- First remaining TS2300: `src/types/whatsapp-api-types.ts(14,507): error TS2300: Duplicate identifier 'WhatsAppApiErrorResponse'.`

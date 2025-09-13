@@ -21,7 +21,12 @@ export { LocaleHistoryManager, HistoryManager } from './locale-storage-history';
 export type { QueryConditions } from './locale-storage-history';
 // 导出分析功能
 export { LocaleStorageAnalytics, Analytics } from './locale-storage-analytics';
-export type { UsagePatterns, PerformanceMetrics, UsageTrends, ExportData } from './locale-storage-analytics';
+export type {
+  UsagePatterns,
+  PerformanceMetrics as AnalyticsPerformanceMetrics,
+  UsageTrends,
+  ExportData,
+} from './locale-storage-analytics';
 // 导出维护功能
 export { LocaleMaintenanceManager } from './locale-storage-maintenance';
 
