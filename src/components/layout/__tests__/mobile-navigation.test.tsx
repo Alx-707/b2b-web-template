@@ -89,11 +89,11 @@ vi.mock('@/components/ui/sheet', () => {
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child) && child.type === 'SheetTrigger') {
               // Pass the state to SheetTrigger
-              return React.cloneElement(child as unknown, {
+              return React.cloneElement(child as React.ReactElement, {
                 ...(child.props || {}),
                 __sheetOpen: open,
                 __onOpenChange: onOpenChange,
-              });
+              } as any);
             }
             return child;
           })}

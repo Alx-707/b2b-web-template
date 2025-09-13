@@ -106,7 +106,7 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
       // Mock reduced motion preference
       Object.defineProperty(window, 'matchMedia', {
         writable: true,
-        _to: vi.fn().mockImplementation(query => ({
+        value: vi.fn().mockImplementation(query => ({
           matches: query === '(prefers-reduced-motion: reduce)',
           media: query,
           onchange: null,

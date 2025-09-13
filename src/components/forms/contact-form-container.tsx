@@ -1,21 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { logger } from '@/lib/logger';
+import type { ContactFormData, FormSubmissionStatus } from '@/lib/validations';
+import { contactFormSchema, } from '@/lib/validations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { logger } from '@/lib/logger';
-import type { ContactFormData, FormSubmissionStatus } from '@/lib/validations';
-import { contactFormSchema,  } from '@/lib/validations';;
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import {
-  AdditionalFields,
-  CheckboxFields,
-  ContactFields,
-  NameFields,
+    AdditionalFields,
+    CheckboxFields,
+    ContactFields,
+    NameFields,
 } from './contact-form-fields';
+;
 
 /**
  * Status message component
@@ -134,8 +135,8 @@ function useContactForm() {
   );
 
   // React Hook Form setup
-  const form = useForm<ContactFormData>({
-    resolver: zodResolver(contactFormSchema),
+  const form = (useForm as any)<ContactFormData>({
+    resolver: zodResolver(contactFormSchema) as any,
     defaultValues: {
       firstName: '',
       lastName: '',

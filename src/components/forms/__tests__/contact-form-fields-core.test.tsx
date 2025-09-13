@@ -132,7 +132,7 @@ describe('Contact Form Fields - Core Tests', () => {
         ...defaultProps,
         errors: {
           privacyPolicy: { message: 'You must accept the privacy policy' },
-        },
+        } as any,
       };
 
       render(<CheckboxFields {...propsWithErrors} />);

@@ -92,12 +92,12 @@ describe('Enhanced Locale Switcher - 核心语言切换功能', () => {
       return key;
     });
 
-    useTranslations.mockImplementation((namespace: string) => {
+    useTranslations.mockImplementation(((namespace: string) => {
       if (namespace === 'LocaleSwitcher') {
         return mockT;
       }
       return (key: string) => key;
-    });
+    }) as any);
   });
 
   describe('基础语言选项', () => {

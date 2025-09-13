@@ -2,28 +2,28 @@
  * @vitest-environment jsdom
  */
 
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuIndicator,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+    navigationMenuTriggerStyle,
 } from '../navigation-menu';
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
-  ChevronDownIcon: ({ className, ...props }: React.ComponentProps<"div">) => (
+  ChevronDownIcon: ({ className, ...props }: React.ComponentProps<"svg">) => (
     <svg
       data-testid='chevron-down-icon'
       className={className}
-      {...props}
+      {...(props as any)}
     >
       <path d='M6 9l6 6 6-6' />
     </svg>

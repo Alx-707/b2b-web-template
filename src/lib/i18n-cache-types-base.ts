@@ -5,7 +5,7 @@
  * 提供缓存系统所需的基础类型、接口和常量定义
  */
 
-import type { I18nMetrics, Locale, Messages } from '@/types/i18n';
+import type { I18nMetrics, Locale } from '@/types/i18n';
 
 /**
  * 缓存配置接口

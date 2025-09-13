@@ -148,7 +148,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
       expect(buttons).toHaveLength(3);
 
       // 模拟键盘事件
-      const arrowDownEvent = new KeyboardEvent('keydown', {
+      const _arrowDownEvent = new KeyboardEvent('keydown', {
         key: 'ArrowDown',
         bubbles: true,
       });

@@ -175,8 +175,8 @@ export function ReactScanProvider({ children }: { children: React.ReactNode }) {
  */
 export function ReactScanIndicator() {
   const { registerTool, unregisterTool, getClasses } = {
-    registerTool: () => {},
-    unregisterTool: () => {},
+    registerTool: (_toolId: string) => {},
+    unregisterTool: (_toolId: string) => {},
     getClasses: () => '',
   };
 
@@ -209,7 +209,7 @@ export function ReactScanIndicator() {
 
   return (
     <div
-      className={`${getClasses('reactScanIndicator')} flex items-center gap-2 rounded-md bg-blue-500 px-3 py-2 text-xs text-white shadow-lg`}
+      className={`${getClasses()} flex items-center gap-2 rounded-md bg-blue-500 px-3 py-2 text-xs text-white shadow-lg`}
     >
       <div className='h-2 w-2 animate-pulse rounded-full bg-white'></div>
       <span>🔍 React Scan Active</span>
@@ -225,8 +225,8 @@ export function ReactScanIndicator() {
  */
 export function ReactScanControlPanel() {
   const { registerTool, unregisterTool, getClasses } = {
-    registerTool: () => {},
-    unregisterTool: () => {},
+    registerTool: (_toolId: string) => {},
+    unregisterTool: (_toolId: string) => {},
     getClasses: () => '',
   };
 
@@ -259,7 +259,7 @@ export function ReactScanControlPanel() {
 
   return (
     <div
-      className={`${getClasses('reactScanControlPanel')} rounded-lg bg-gray-900 p-4 text-white shadow-xl`}
+      className={`${getClasses()} rounded-lg bg-gray-900 p-4 text-white shadow-xl`}
     >
       <h3 className='mb-2 text-sm font-semibold'>React Scan Controls</h3>
       <div className='space-y-2 text-xs'>

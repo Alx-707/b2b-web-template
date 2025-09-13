@@ -16,8 +16,8 @@ interface PerformanceMetrics {
 
 export function I18nPerformanceDashboard() {
   const { registerTool, unregisterTool, getClasses } = {
-    registerTool: () => {},
-    unregisterTool: () => {},
+    registerTool: (_toolId: string) => {},
+    unregisterTool: (_toolId: string) => {},
     getClasses: () => '',
   };
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
@@ -55,7 +55,7 @@ export function I18nPerformanceDashboard() {
 
   return (
     <div
-      className={`${getClasses('i18nPerformanceDashboard')} rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800`}
+      className={`${getClasses()} rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800`}
     >
       <div className='mb-3 flex items-center justify-between'>
         <h3 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
@@ -182,8 +182,8 @@ function getGradeColor(grade: string): string {
  */
 export function I18nPerformanceIndicator() {
   const { registerTool, unregisterTool, getClasses } = {
-    registerTool: () => {},
-    unregisterTool: () => {},
+    registerTool: (_toolId: string) => {},
+    unregisterTool: (_toolId: string) => {},
     getClasses: () => '',
   };
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
@@ -217,7 +217,7 @@ export function I18nPerformanceIndicator() {
   if (!hasIssues && !showDetails) return null;
 
   return (
-    <div className={getClasses('i18nPerformanceIndicator')}>
+    <div className={getClasses()}>
       <button
         onClick={() => _setShowDetails(!showDetails)}
         className={`rounded-full px-3 py-2 text-xs font-medium transition-colors ${

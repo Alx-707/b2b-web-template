@@ -1,6 +1,6 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Monitor, Moon, Sun } from 'lucide-react';
+import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { ThemeMenuItem } from '../theme-menu-item';
 
@@ -36,9 +36,6 @@ describe('ThemeMenuItem', () => {
     supportsViewTransitions: false,
     prefersReducedMotion: false,
     onClick: vi.fn(),
-    onKeyDown: vi.fn(),
-    supportsViewTransitions: false,
-    prefersReducedMotion: false,
     onKeyDown: vi.fn(),
   };
 

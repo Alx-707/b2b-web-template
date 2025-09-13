@@ -254,7 +254,7 @@ describe('useReducedMotion', () => {
     // Simulate malformed event
     act(() => {
       if (changeHandler) {
-        changeHandler({} as unknown); // Empty object instead of proper MediaQueryListEvent
+        changeHandler({} as any); // Empty object instead of proper MediaQueryListEvent
       }
     });
 

@@ -17,6 +17,8 @@ import {
 } from '../social-icons';
 
 describe('Social Icons Accessibility - Internationalization Tests', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     user = userEvent.setup();
   });

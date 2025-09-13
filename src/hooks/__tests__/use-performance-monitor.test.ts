@@ -464,7 +464,7 @@ describe('usePerformanceMonitor', () => {
 
       invalidConfigs.forEach((config) => {
         expect(() => {
-          renderHook(() => usePerformanceMonitor(config as unknown));
+          renderHook(() => usePerformanceMonitor(config as any));
         }).not.toThrow();
       });
     });
@@ -597,7 +597,7 @@ describe('usePerformanceMonitor', () => {
       act(() => {
         result.current.startMonitoring();
         result.current.measureLoadTime();
-        result.current.measureRenderTime(Date.now() - 100);
+        result.current.measureRenderTime();
       });
 
       // Should handle edge cases without crashing

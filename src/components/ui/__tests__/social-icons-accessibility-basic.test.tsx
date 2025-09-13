@@ -13,10 +13,10 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
-  ExternalLinkIcon,
-  LinkedInIcon,
-  SocialIconLink,
-  TwitterIcon,
+    ExternalLinkIcon,
+    LinkedInIcon,
+    SocialIconLink,
+    TwitterIcon,
 } from '../social-icons';
 
 describe('Social Icons Accessibility - Basic Tests', () => {
@@ -65,8 +65,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Follow us on Twitter'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
           data-testid='social-link'
         />
       );
@@ -80,8 +81,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Twitter'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Twitter'
           data-testid='external-link'
         />
       );
@@ -95,9 +97,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Twitter'
-          role='button'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Twitter'
           data-testid='social-link'
         />
       );
@@ -111,8 +113,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
         <div>
           <SocialIconLink
             href='https://twitter.com/example'
-            platform='twitter'
-            aria-label='Twitter'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Twitter'
             aria-describedby='twitter-description'
             data-testid='social-link'
           />
@@ -133,8 +136,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Twitter'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Twitter'
           aria-expanded='false'
           data-testid='social-link'
         />
@@ -151,14 +155,16 @@ describe('Social Icons Accessibility - Basic Tests', () => {
         <div>
           <SocialIconLink
             href='https://twitter.com/example'
-            platform='twitter'
-            aria-label='Twitter'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Twitter'
             data-testid='twitter-link'
           />
           <SocialIconLink
             href='https://linkedin.com/in/example'
-            platform='linkedin'
-            aria-label='LinkedIn'
+            icon='linkedin'
+            label='LinkedIn'
+            ariaLabel='LinkedIn'
             data-testid='linkedin-link'
           />
         </div>
@@ -179,9 +185,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Twitter'
-          _onClick={handleClick}
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Twitter'
           data-testid='social-link'
         />
       );
@@ -199,16 +205,16 @@ describe('Social Icons Accessibility - Basic Tests', () => {
         <div>
           <SocialIconLink
             href='https://linkedin.com/in/example'
-            platform='linkedin'
-            aria-label='LinkedIn'
-            tabIndex={2}
+            icon='linkedin'
+            label='LinkedIn'
+            ariaLabel='LinkedIn'
             data-testid='linkedin-link'
           />
           <SocialIconLink
             href='https://twitter.com/example'
-            platform='twitter'
-            aria-label='Twitter'
-            tabIndex={1}
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Twitter'
             data-testid='twitter-link'
           />
         </div>
@@ -227,8 +233,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           <button data-testid='before'>Before</button>
           <SocialIconLink
             href='https://twitter.com/example'
-            platform='twitter'
-            aria-label='Twitter'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Twitter'
             data-testid='social-link'
           />
           <button data-testid='after'>After</button>
@@ -255,8 +262,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Twitter'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Twitter'
           className='focus:ring-2 focus:ring-offset-2'
           data-testid='social-link'
         />
@@ -270,8 +278,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Twitter'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Twitter'
           className='text-blue-600 hover:text-blue-800'
           data-testid='social-link'
         />
@@ -297,8 +306,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Twitter'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Twitter'
           className='motion-reduce:transition-none'
           data-testid='social-link'
         />
@@ -316,8 +326,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           <div aria-live='polite' id='announcements'></div>
           <SocialIconLink
             href='https://twitter.com/example'
-            platform='twitter'
-            aria-label='Twitter'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Twitter'
             data-testid='social-link'
           />
         </div>
@@ -334,8 +345,9 @@ describe('Social Icons Accessibility - Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://twitter.com/example'
-          platform='twitter'
-          aria-label='Click Twitter link'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Click Twitter link'
           data-testid='social-link'
         />
       );

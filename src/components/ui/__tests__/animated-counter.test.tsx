@@ -54,7 +54,7 @@ describe('AnimatedCounter Component', () => {
     global.requestAnimationFrame = mockRequestAnimationFrame;
     global.cancelAnimationFrame = mockCancelAnimationFrame;
     Object.defineProperty(global.performance, 'now', {
-      _to: mockPerformanceNow,
+      value: mockPerformanceNow,
       writable: true,
     });
   });

@@ -17,7 +17,7 @@ import { ComponentLoadingFallback, MinimalLoadingFallback } from '../dynamic-imp
  */
 export const DynamicAnimatedCounter = dynamic(
   () =>
-    import('../animated-counter').then((mod) => ({
+    import('../../ui/animated-counter').then((mod) => ({
       default: mod.AnimatedCounter,
     })),
   {

@@ -1,14 +1,11 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { enhancedWebVitalsCollector } from '@/lib/enhanced-web-vitals';
-import { TEST_APP_CONSTANTS } from '@/constants/test-constants';
 import {
   calculatePageComparison,
   calculatePerformanceTrends,
   type DiagnosticReport,
-  type PageComparison,
-  type PerformanceTrend,
 } from './web-vitals-diagnostics-utils';
 import type {
   WebVitalsDiagnosticsState,

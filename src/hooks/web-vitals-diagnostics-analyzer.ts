@@ -4,9 +4,9 @@
  */
 
 import type { DetailedWebVitals } from '@/lib/enhanced-web-vitals';
-import { 
-  WEB_VITALS_CONSTANTS, 
-  type DiagnosticReport, 
+import {
+  WEB_VITALS_CONSTANTS,
+  type DiagnosticReport,
   type PageComparison,
   type ExportData,
   type PagePerformanceGroup
@@ -100,9 +100,9 @@ export const comparePagePerformance = (
   metrics.forEach((metric) => {
     const current = currentReport.vitals[metric];
     const compared = comparedReport.vitals[metric];
-    
-    const difference = current && compared ? current - compared : 0;
-    const percentageChange = current && compared ? calculatePercentageChange(current, compared) : 0;
+
+    const difference = current && compared ? (current as any) - (compared as any) : 0;
+    const percentageChange = current && compared ? calculatePercentageChange(current as any, compared as any) : 0;
 
     metricsComparison[metric] = {
       current,
@@ -143,10 +143,10 @@ export const calculatePageComparison = (
   // 按页面URL分组
   historicalReports.forEach((report) => {
     // 安全地处理URL，避免过长的路径
-    const safeUrl = report.pageUrl.length > WEB_VITALS_CONSTANTS.MAX_PATH_LENGTH 
+    const safeUrl = report.pageUrl.length > WEB_VITALS_CONSTANTS.MAX_PATH_LENGTH
       ? report.pageUrl.substring(0, WEB_VITALS_CONSTANTS.MAX_PATH_LENGTH) + '...'
       : report.pageUrl;
-    
+
     const existing = pageGroups.get(safeUrl);
     if (existing) {
       existing.push(report);
@@ -160,10 +160,10 @@ export const calculatePageComparison = (
     .map(([url, reports]) => {
       // 按时间戳排序，最新的在前
       const sortedReports = reports.sort((a, b) => b.timestamp - a.timestamp);
-      
+
       // 计算平均分数
       const averageScore = reports.reduce((sum, report) => sum + report.score, 0) / reports.length;
-      
+
       return {
         url,
         reports: sortedReports,

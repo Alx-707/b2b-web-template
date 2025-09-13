@@ -13,7 +13,6 @@ import type {
   CacheEventType,
   CacheStats,
   CacheConfigValidation,
-  CACHE_CONSTANTS,
 } from './i18n-cache-types-base';
 import type { AdvancedCacheConfig } from './i18n-cache-types-advanced';
 

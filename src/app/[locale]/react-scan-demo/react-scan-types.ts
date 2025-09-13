@@ -13,15 +13,19 @@ export interface ReactScanStats {
 /**
  * 扩展的 Window 接口，包含 React Scan 相关属性
  */
-export interface ReactScanWindow extends Window {
-  __REACT_SCAN__?: {
-    ReactScanInternals?: {
-      enabled?: boolean;
-      totalRenders?: number;
-      componentsScanned?: number;
+declare global {
+  interface Window {
+    __REACT_SCAN__?: {
+      ReactScanInternals?: {
+        enabled?: boolean;
+        totalRenders?: number;
+        componentsScanned?: number;
+      };
     };
-  };
+  }
 }
+
+export interface ReactScanWindow extends Window {}
 
 /**
  * React Scan 配置选项
@@ -48,7 +52,7 @@ export interface ComponentPerformanceData {
 /**
  * React Scan 事件类型
  */
-export type ReactScanEventType = 
+export type ReactScanEventType =
   | 'component-render'
   | 'unnecessary-render'
   | 'optimization-detected'

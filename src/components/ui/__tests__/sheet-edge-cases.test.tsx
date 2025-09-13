@@ -140,7 +140,7 @@ describe('Sheet - Edge Cases', () => {
     // Rapid open/close operations
     for (let i = 0; i < 3; i++) {
       await user.click(trigger);
-      
+
       await waitFor(() => {
         expect(screen.getByTestId('sheet-content')).toBeInTheDocument();
       });
@@ -162,7 +162,7 @@ describe('Sheet - Edge Cases', () => {
             <SheetTitle>Complex Content</SheetTitle>
             <SheetDescription>Sheet with nested elements</SheetDescription>
           </SheetHeader>
-          
+
           <div className='nested-container'>
             <div className='level-1'>
               <div className='level-2'>
@@ -179,7 +179,7 @@ describe('Sheet - Edge Cases', () => {
     await waitFor(() => {
       const content = screen.getByTestId('sheet-content');
       const nestedContent = screen.getByTestId('deeply-nested');
-      
+
       expect(content).toBeInTheDocument();
       expect(nestedContent).toBeInTheDocument();
       expect(nestedContent).toHaveTextContent('Deeply nested content');
@@ -203,7 +203,7 @@ describe('Sheet - Edge Cases', () => {
     await waitFor(() => {
       const content = screen.getByTestId('sheet-content');
       const longContentElement = screen.getByTestId('long-content');
-      
+
       expect(content).toBeInTheDocument();
       expect(longContentElement).toBeInTheDocument();
       expect(longContentElement).toHaveTextContent(/Paragraph 1:/);
@@ -236,7 +236,7 @@ describe('Sheet - Edge Cases', () => {
   it('handles sheet with dynamic content updates', async () => {
     const DynamicSheet = () => {
       const [count, setCount] = React.useState(0);
-      
+
       return (
         <Sheet defaultOpen>
           <SheetContent data-testid='sheet-content'>
@@ -244,9 +244,9 @@ describe('Sheet - Edge Cases', () => {
               <SheetTitle>Dynamic Content</SheetTitle>
             </SheetHeader>
             <div data-testid='counter'>Count: {count}</div>
-            <button 
+            <button
               data-testid='increment-button'
-              _onClick={() => setCount(c => c + 1)}
+              onClick={() => setCount(c => c + 1)}
             >
               Increment
             </button>

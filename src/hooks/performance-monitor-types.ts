@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * 性能监控相关类型定义
  */

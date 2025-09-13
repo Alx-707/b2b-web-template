@@ -360,7 +360,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
         },
         body: JSON.stringify({ keys }),
         signal: this.abortController?.signal,
-      });
+      } as RequestInit);
 
       if (!response.ok) {
         throw new Error(`Failed to load specific keys for ${locale}: ${response.statusText}`);

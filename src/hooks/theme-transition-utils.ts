@@ -111,8 +111,6 @@ export function recordThemeTransition(record: ThemeTransitionRecord): void {
       fromTheme,
       toTheme,
       endTime - startTime,
-      hasViewTransition,
-      error,
     );
 
     // 记录性能指标

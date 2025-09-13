@@ -1,5 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { Separator } from '../separator';
 
@@ -236,7 +236,7 @@ describe('Separator Component', () => {
     it('handles null className gracefully', () => {
       render(
         <Separator
-          className={null as unknown}
+          className={null as any}
           data-testid='separator'
         />,
       );

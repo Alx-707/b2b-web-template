@@ -13,7 +13,6 @@ import type {
   AirtableRecord,
   ContactFormData,
   AirtableQueryOptions,
-  AirtableStatistics,
   ContactStatus,
 } from './types';
 

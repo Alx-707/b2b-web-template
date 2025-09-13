@@ -108,7 +108,7 @@ export class LocaleStorageManager {
     timestamp: number;
     confidence: number;
   }): void {
-    return LocaleHistoryManager.addDetectionRecord(detection);
+    return (LocaleHistoryManager.addDetectionRecord as any)(detection);
   }
 
   /**

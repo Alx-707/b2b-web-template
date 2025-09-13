@@ -50,7 +50,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         useKeyboardNavigation({ enabled: true }),
       );
 
-      const mockEvent = {
+      const _mockEvent = {
         key: 'ArrowDown',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
@@ -96,13 +96,13 @@ describe('useKeyboardNavigation Events Tests', () => {
         useKeyboardNavigation({ enabled: true }),
       );
 
-      const homeEvent = {
+      const _homeEvent = {
         key: 'Home',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
       } as unknown as KeyboardEvent;
 
-      const endEvent = {
+      const _endEvent = {
         key: 'End',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
@@ -124,7 +124,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         useKeyboardNavigation({ enabled: true }),
       );
 
-      const mockEvent = {
+      const _mockEvent = {
         key: 'Enter',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
@@ -143,7 +143,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         useKeyboardNavigation({ enabled: false }),
       );
 
-      const mockEvent = {
+      const _mockEvent = {
         key: 'ArrowDown',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
@@ -171,13 +171,13 @@ describe('useKeyboardNavigation Events Tests', () => {
         }),
       );
 
-      const leftEvent = {
+      const _leftEvent = {
         key: 'ArrowLeft',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
       } as unknown as KeyboardEvent;
 
-      const rightEvent = {
+      const _rightEvent = {
         key: 'ArrowRight',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
@@ -202,13 +202,13 @@ describe('useKeyboardNavigation Events Tests', () => {
         }),
       );
 
-      const upEvent = {
+      const _upEvent = {
         key: 'ArrowUp',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
       } as unknown as KeyboardEvent;
 
-      const downEvent = {
+      const _downEvent = {
         key: 'ArrowDown',
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
@@ -236,7 +236,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
       keys.forEach((key) => {
-        const mockEvent = {
+        const _mockEvent = {
           key,
           preventDefault: vi.fn(),
           stopPropagation: vi.fn(),

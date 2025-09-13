@@ -26,22 +26,10 @@ import type {
   CacheConfig,
   CacheItem,
   CacheStats,
-  PreloadConfig,
-  CacheOperationResult,
   CacheEventType,
   CacheEvent,
   CacheEventListener,
-  CacheStrategy,
-  CacheConfigValidation,
-  CacheHealthCheck,
-  CacheDebugInfo,
-  DEFAULT_CACHE_CONFIG,
-  DEFAULT_PRELOAD_CONFIG,
-  CACHE_CONSTANTS,
-  CacheError,
-  CacheValidationError,
-  CacheStorageError,
-  CacheSerializationError } from
+  CacheStrategy } from
 './i18n-cache-types-base';
 
 import type {

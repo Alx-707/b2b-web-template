@@ -6,9 +6,7 @@ import type {
   PerformanceMeasurements,
 } from './performance-monitor-types';
 import {
-  PERFORMANCE_CONSTANTS,
   checkMemoryUsageAlert,
-  checkPerformanceThresholds,
 } from './performance-monitor-utils';
 import { logger } from '@/lib/logger';
 
@@ -31,7 +29,7 @@ export function usePerformanceMeasurements(
           const loadTime = navigation.loadEventEnd - navigation.navigationStart;
 
           setMetrics(prev => ({
-            ...prev,
+            ...(prev || {}),
             loadTime,
           }));
 
@@ -55,7 +53,7 @@ export function usePerformanceMeasurements(
         const renderTime = performance.now() - startTime.current;
 
         setMetrics(prev => ({
-          ...prev,
+          ...(prev || {}),
           renderTime,
         }));
 
@@ -78,7 +76,7 @@ export function usePerformanceMeasurements(
         const memoryUsage = window.performance.memory.usedJSHeapSize;
 
         setMetrics(prev => ({
-          ...prev,
+          ...(prev || {}),
           memoryUsage,
         }));
 

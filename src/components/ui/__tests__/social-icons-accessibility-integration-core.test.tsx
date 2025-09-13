@@ -15,11 +15,11 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  ExternalLinkIcon,
-  LinkedInIcon,
-  SocialIconLink,
-  SocialIconMapper,
-  TwitterIcon,
+    ExternalLinkIcon,
+    LinkedInIcon,
+    SocialIconLink,
+    SocialIconMapper,
+    TwitterIcon,
 } from '../social-icons';
 
 describe('Social Icons Accessibility & Integration - Core Tests', () => {
@@ -33,12 +33,18 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('provides accessible names for social links', () => {
       render(
         <div>
-          <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-            <TwitterIcon />
-          </SocialIconLink>
-          <SocialIconLink href='https://linkedin.com/in/test' platform='linkedin'>
-            <LinkedInIcon />
-          </SocialIconLink>
+          <SocialIconLink
+            href='https://twitter.com/test'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Follow us on Twitter'
+          />
+          <SocialIconLink
+            href='https://linkedin.com/in/test'
+            icon='linkedin'
+            label='LinkedIn'
+            ariaLabel='Connect with us on LinkedIn'
+          />
         </div>
       );
 
@@ -51,8 +57,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('has proper ARIA attributes', () => {
       render(
-        <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-          <TwitterIcon />
+        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
         </SocialIconLink>
       );
 
@@ -65,11 +70,9 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('supports keyboard navigation', async () => {
       render(
         <div>
-          <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-            <TwitterIcon />
+          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
           </SocialIconLink>
-          <SocialIconLink href='https://linkedin.com/in/test' platform='linkedin'>
-            <LinkedInIcon />
+          <SocialIconLink href='https://linkedin.com/in/test' icon='linkedin' label='LinkedIn' ariaLabel='Connect with us on LinkedIn'>
           </SocialIconLink>
         </div>
       );
@@ -88,7 +91,6 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('handles external link indicators', () => {
       render(
         <SocialIconLink href='https://external.com' platform='external'>
-          <ExternalLinkIcon />
         </SocialIconLink>
       );
 
@@ -124,11 +126,9 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('handles multiple social icons in navigation', () => {
       render(
         <nav aria-label='Social Media Links'>
-          <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-            <TwitterIcon />
+          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
           </SocialIconLink>
-          <SocialIconLink href='https://linkedin.com/in/test' platform='linkedin'>
-            <LinkedInIcon />
+          <SocialIconLink href='https://linkedin.com/in/test' icon='linkedin' label='LinkedIn' ariaLabel='Connect with us on LinkedIn'>
           </SocialIconLink>
         </nav>
       );
@@ -145,11 +145,9 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
         <footer>
           <div>
             <h3>Follow Us</h3>
-            <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-              <TwitterIcon />
+            <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
             </SocialIconLink>
-            <SocialIconLink href='https://linkedin.com/in/test' platform='linkedin'>
-              <LinkedInIcon />
+            <SocialIconLink href='https://linkedin.com/in/test' icon='linkedin' label='LinkedIn' ariaLabel='Connect with us on LinkedIn'>
             </SocialIconLink>
           </div>
         </footer>
@@ -168,11 +166,9 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('handles responsive layout integration', () => {
       render(
         <div className='flex flex-wrap gap-4'>
-          <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-            <TwitterIcon />
+          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
           </SocialIconLink>
-          <SocialIconLink href='https://linkedin.com/in/test' platform='linkedin'>
-            <LinkedInIcon />
+          <SocialIconLink href='https://linkedin.com/in/test' icon='linkedin' label='LinkedIn' ariaLabel='Connect with us on LinkedIn'>
           </SocialIconLink>
         </div>
       );
@@ -194,8 +190,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
       });
 
       render(
-        <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-          <TwitterIcon />
+        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
         </SocialIconLink>
       );
 
@@ -209,8 +204,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles keyboard activation', async () => {
       render(
-        <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-          <TwitterIcon />
+        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
         </SocialIconLink>
       );
 
@@ -223,13 +217,12 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('provides hover states', async () => {
       render(
-        <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-          <TwitterIcon />
+        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
         </SocialIconLink>
       );
 
       const link = screen.getByRole('link');
-      
+
       await user.hover(link);
       expect(link).toBeInTheDocument();
 
@@ -241,8 +234,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
   describe('Error Handling', () => {
     it('handles missing href gracefully', () => {
       render(
-        <SocialIconLink href='' platform='twitter'>
-          <TwitterIcon />
+        <SocialIconLink href='' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
         </SocialIconLink>
       );
 
@@ -253,7 +245,6 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('handles unknown platform gracefully', () => {
       render(
         <SocialIconLink href='https://example.com' platform='unknown'>
-          <ExternalLinkIcon />
         </SocialIconLink>
       );
 
@@ -263,7 +254,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles missing children gracefully', () => {
       render(
-        <SocialIconLink href='https://twitter.com/test' platform='twitter'>
+        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
           {/* No children */}
         </SocialIconLink>
       );
@@ -277,8 +268,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('applies theme classes correctly', () => {
       render(
         <div className='dark'>
-          <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-            <TwitterIcon />
+          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
           </SocialIconLink>
         </div>
       );
@@ -293,8 +283,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('handles light theme', () => {
       render(
         <div className='light'>
-          <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-            <TwitterIcon />
+          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
           </SocialIconLink>
         </div>
       );
@@ -335,16 +324,14 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles re-renders without issues', () => {
       const { rerender } = render(
-        <SocialIconLink href='https://twitter.com/test' platform='twitter'>
-          <TwitterIcon />
+        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
         </SocialIconLink>
       );
 
       expect(screen.getByRole('link')).toBeInTheDocument();
 
       rerender(
-        <SocialIconLink href='https://twitter.com/updated' platform='twitter'>
-          <TwitterIcon />
+        <SocialIconLink href='https://twitter.com/updated' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
         </SocialIconLink>
       );
 

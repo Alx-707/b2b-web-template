@@ -509,7 +509,7 @@ describe('ThemeAnalytics', () => {
         .length;
 
       // Call convenience function
-      recordThemeSwitch('light', 'dark', 1000, 1100);
+      recordThemeSwitch('light', 'dark', 1000);
 
       // Verify that the global instance was affected
       const finalMetricsCount = (themeAnalytics as unknown).performanceMetrics

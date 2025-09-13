@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { TEST_COUNT_CONSTANTS } from '@/constants/test-constants';
 import type {
   DiagnosticReport,
@@ -173,13 +173,13 @@ function calculateAverageMetrics(reports: DiagnosticReport[]): Record<string, nu
  */
 function generateInsights(reports: DiagnosticReport[]): string[] {
   const insights: string[] = [];
-  
+
   if (reports.length === 0) {
     return ['No data available for analysis'];
   }
 
   const averages = calculateAverageMetrics(reports);
-  
+
   // CLS 分析
   if (averages.cls > 0.25) {
     insights.push('High Cumulative Layout Shift detected. Consider optimizing layout stability.');
@@ -205,11 +205,11 @@ function generateInsights(reports: DiagnosticReport[]): string[] {
   if (reports.length >= 5) {
     const recent = reports.slice(-5);
     const older = reports.slice(0, -5);
-    
+
     if (older.length > 0) {
       const recentAvg = calculateAverageMetrics(recent);
       const olderAvg = calculateAverageMetrics(older);
-      
+
       if (recentAvg.performanceScore > olderAvg.performanceScore) {
         insights.push('Performance is improving over time.');
       } else if (recentAvg.performanceScore < olderAvg.performanceScore) {
@@ -246,7 +246,7 @@ export function exportExcelReport(historicalReports: DiagnosticReport[]): void {
   const rows = historicalReports.map(report => {
     const date = new Date(report.timestamp);
     const status = getPerformanceStatus(report);
-    
+
     return [
       date.toLocaleDateString(),
       date.toLocaleTimeString(),
@@ -281,7 +281,7 @@ export function exportExcelReport(historicalReports: DiagnosticReport[]): void {
  */
 function getPerformanceStatus(report: DiagnosticReport): string {
   const score = report.performanceScore || 0;
-  
+
   if (score >= 90) return 'Excellent';
   if (score >= 75) return 'Good';
   if (score >= 50) return 'Needs Improvement';

@@ -211,7 +211,7 @@ describe('ProgressIndicator - 性能和边界情况测试', () => {
           <div data-testid="state-provider">
             {React.cloneElement(children as React.ReactElement, {
               currentStep: globalStep,
-            })}
+            } as any)}
             <button
               onClick={() => setGlobalStep(3)}
               data-testid="jump-to-step-3"

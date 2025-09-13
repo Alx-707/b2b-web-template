@@ -35,9 +35,6 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
     prefersReducedMotion: false,
     onClick: vi.fn(),
     onKeyDown: vi.fn(),
-    supportsViewTransitions: false,
-    prefersReducedMotion: false,
-    onKeyDown: vi.fn(),
   };
 
   beforeEach(() => {

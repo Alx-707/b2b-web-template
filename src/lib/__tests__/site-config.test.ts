@@ -224,7 +224,7 @@ describe('Site Configuration', () => {
 
     it('should have no undefined values in configurations', () => {
       const checkForUndefined = (obj: unknown, path = ''): void => {
-        Object.entries(obj).forEach(([key, value]) => {
+        Object.entries(obj as Record<string, unknown>).forEach(([key, value]) => {
           const currentPath = path ? `${path}.${key}` : key;
           if (value === undefined) {
             throw new Error(`Undefined value found at ${currentPath}`);

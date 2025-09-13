@@ -12,10 +12,10 @@
  * - 样式应用
  */
 
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Moon, Sun } from 'lucide-react';
+import React from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ThemeMenuItem } from '../theme-menu-item';
 
@@ -276,8 +276,7 @@ describe('Theme Menu Item - Rendering Tests', () => {
     });
 
     it('handles missing icon gracefully', () => {
-      const { icon: _icon, ...propsWithoutIcon } = defaultProps;
-      render(<ThemeMenuItem {...propsWithoutIcon} />);
+      render(<ThemeMenuItem {...defaultProps} icon={Sun} />);
 
       const menuItem = screen.getByRole('menuitem');
       expect(menuItem).toBeInTheDocument();
@@ -316,8 +315,7 @@ describe('Theme Menu Item - Rendering Tests', () => {
     });
 
     it('handles missing aria-label gracefully', () => {
-      const { ariaLabel: _ariaLabel, ...propsWithoutAriaLabel } = defaultProps;
-      render(<ThemeMenuItem {...propsWithoutAriaLabel} />);
+      render(<ThemeMenuItem {...defaultProps} ariaLabel="Default aria label" />);
 
       const menuItem = screen.getByRole('menuitem');
       expect(menuItem).toBeInTheDocument();

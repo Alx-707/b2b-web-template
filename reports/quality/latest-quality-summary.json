@@ -1,58 +1,58 @@
 {
-  "timestamp": "2025-09-07T11:08:26.697Z",
+  "timestamp": "2025-09-12T16:51:45.968Z",
   "qualityScore": 0,
-  "totalErrors": 876,
-  "totalWarnings": 106,
-  "totalFiles": 377,
+  "totalErrors": 4057,
+  "totalWarnings": 40,
+  "totalFiles": 858,
   "topViolations": [
     {
+      "rule": "no-restricted-imports",
+      "count": 1251,
+      "severity": "error"
+    },
+    {
       "rule": "no-unused-vars",
-      "count": 273,
+      "count": 931,
       "severity": "error"
     },
     {
       "rule": "@typescript-eslint/no-unused-vars",
-      "count": 178,
+      "count": 612,
+      "severity": "error"
+    },
+    {
+      "rule": "no-magic-numbers",
+      "count": 483,
       "severity": "error"
     },
     {
       "rule": "@typescript-eslint/no-explicit-any",
-      "count": 90,
-      "severity": "error"
-    },
-    {
-      "rule": "max-lines-per-function",
-      "count": 81,
-      "severity": "warning"
-    },
-    {
-      "rule": "no-console",
-      "count": 59,
+      "count": 151,
       "severity": "error"
     },
     {
       "rule": "security/detect-object-injection",
-      "count": 57,
+      "count": 124,
       "severity": "error"
     },
     {
-      "rule": "max-depth",
-      "count": 49,
+      "rule": "no-restricted-syntax",
+      "count": 77,
       "severity": "error"
     },
     {
-      "rule": "max-lines",
-      "count": 44,
+      "rule": "no-duplicate-imports",
+      "count": 63,
       "severity": "error"
     },
     {
       "rule": "max-params",
-      "count": 28,
+      "count": 60,
       "severity": "error"
     },
     {
-      "rule": "no-plusplus",
-      "count": 26,
+      "rule": "no-undef",
+      "count": 57,
       "severity": "error"
     }
   ],
@@ -61,15 +61,15 @@
     "violations": [
       {
         "type": "errors",
-        "current": 876,
+        "current": 4057,
         "threshold": 0,
-        "message": "错误数量超过阈值: 876 > 0"
+        "message": "错误数量超过阈值: 4057 > 0"
       },
       {
         "type": "any-type",
-        "current": 90,
+        "current": 151,
         "threshold": 0,
-        "message": "any类型使用超过阈值: 90 > 0"
+        "message": "any类型使用超过阈值: 151 > 0"
       }
     ]
   }

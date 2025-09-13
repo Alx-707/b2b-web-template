@@ -281,13 +281,13 @@ describe('AnimatedCounter - Performance & Refs', () => {
       // Simulate tab becoming hidden
       Object.defineProperty(document, 'hidden', {
         writable: true,
-        _to: true,
+        value: true,
       });
 
       // Should continue to work when tab becomes visible again
       Object.defineProperty(document, 'hidden', {
         writable: true,
-        _to: false,
+        value: false,
       });
 
       const counter = screen.getByRole('status');

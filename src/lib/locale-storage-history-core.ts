@@ -159,25 +159,29 @@ export function getDetectionHistory(): StorageOperationResult<LocaleDetectionHis
         version: '1.0.0',
       };
 
-      const saveResult = LocalStorageManager.set('locale_detection_history', defaultHistory);
+      try {
+        LocalStorageManager.set('locale_detection_history', defaultHistory);
+        const saveResult = { success: true };
 
-      if (saveResult.success) {
-        HistoryCacheManager.updateCache(defaultHistory);
+        if (saveResult.success) {
+          HistoryCacheManager.updateCache(defaultHistory);
+          return {
+            success: true,
+            data: defaultHistory,
+            source: 'localStorage',
+            timestamp: Date.now(),
+            responseTime: Date.now() - startTime,
+          };
+        }
+      } catch (error) {
         return {
-          success: true,
-          data: defaultHistory,
+          success: false,
+          error: error instanceof Error ? error.message : 'Failed to create default history',
           source: 'localStorage',
           timestamp: Date.now(),
           responseTime: Date.now() - startTime,
         };
       }
-      return {
-        success: false,
-        error: saveResult.error || 'Failed to create default history',
-        source: 'localStorage',
-        timestamp: Date.now(),
-        responseTime: Date.now() - startTime,
-      };
     }
 
     // 验证数据格式
@@ -229,7 +233,7 @@ export function updateDetectionHistory(detection: LocaleDetectionRecord): Storag
   history.history.unshift(detection);
 
   // 限制历史记录数量
-  const maxRecords = CACHE_LIMITS.MAX_HISTORY_ENTRIES || 100;
+  const maxRecords = CACHE_LIMITS.MAX_DETECTION_HISTORY || 100;
   if (history.history.length > maxRecords) {
     history.history = history.history.slice(0, maxRecords);
   }
@@ -238,24 +242,28 @@ export function updateDetectionHistory(detection: LocaleDetectionRecord): Storag
   history.lastUpdated = Date.now();
 
   // 保存到存储
-  const saveResult = LocalStorageManager.set('locale_detection_history', history);
+  try {
+    LocalStorageManager.set('locale_detection_history', history);
+    const saveResult = { success: true };
 
-  if (saveResult.success) {
-    // 更新缓存
-    HistoryCacheManager.updateCache(history);
+    if (saveResult.success) {
+      // 更新缓存
+      HistoryCacheManager.updateCache(history);
+      return {
+        success: true,
+        data: history,
+        source: 'localStorage',
+        timestamp: Date.now(),
+      };
+    }
+  } catch (error) {
     return {
-      success: true,
-      data: history,
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to save history',
       source: 'localStorage',
       timestamp: Date.now(),
     };
   }
-  return {
-    success: false,
-    error: saveResult.error || 'Failed to save history',
-    source: 'localStorage',
-    timestamp: Date.now(),
-  };
 }
 
 /**
@@ -350,7 +358,7 @@ export function needsCleanup(maxAge: number = 30 * 24 * 60 * 60 * 1000): {
     recommendations.push(`历史记录过多 (${totalCount} 条)，建议清理旧记录`);
   }
 
-  const maxRecords = CACHE_LIMITS.MAX_HISTORY_ENTRIES || 100;
+  const maxRecords = CACHE_LIMITS.MAX_DETECTION_HISTORY || 100;
   if (totalCount > maxRecords) {
     recommendations.push(`超出最大记录限制 (${maxRecords})，将自动截断`);
   }

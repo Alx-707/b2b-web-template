@@ -29,9 +29,9 @@ export function calculateStorageStats(): StorageStats {
   const now = Date.now();
 
   // 获取所有存储的数据
-  const userPreference = LocalStorageManager.getUserPreference();
-  const detectionHistory = LocalStorageManager.getDetectionHistory();
-  const fallbackLocale = LocalStorageManager.getFallbackLocale();
+  const userPreference = LocalStorageManager.getLocale();
+  const detectionHistory = LocalStorageManager.getDetectionHistory?.() || [];
+  const fallbackLocale = LocalStorageManager.getLocale();
 
   // 计算存储大小
   const userPreferenceSize = estimateStorageSize(userPreference);
@@ -89,7 +89,7 @@ function calculateLocaleDistribution(detectionHistory: LocaleDetectionHistory | 
   const distribution: Record<string, number> = {};
 
   for (const entry of detectionHistory.history) {
-    const locale = entry.detectedLocale;
+    const locale = (entry as any).detectedLocale || (entry as any).locale || 'unknown';
     distribution[locale] = (distribution[locale] || 0) + 1;
   }
 

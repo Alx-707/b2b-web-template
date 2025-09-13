@@ -77,14 +77,14 @@ export const ExternalLinkIcon: FC<SocialIconProps> = ({
 
 // Social Icon Mapper
 interface SocialIconMapperProps {
-  'icon': string;
+  'platform': string;
   'className'?: string;
   'size'?: number;
   'data-testid'?: string;
 }
 
 export const SocialIconMapper: FC<SocialIconMapperProps> = ({
-  icon,
+  platform,
   className,
   size,
   'data-testid': dataTestId,
@@ -95,7 +95,7 @@ export const SocialIconMapper: FC<SocialIconMapperProps> = ({
     ...(dataTestId && { 'data-testid': dataTestId }),
   };
 
-  switch (icon.toLowerCase()) {
+  switch (platform.toLowerCase()) {
     case 'twitter':
     case 'x':
       return <TwitterIcon {...iconProps} />;
@@ -135,7 +135,7 @@ export const SocialIconLink: FC<SocialIconLinkProps> = ({
     {...(dataTestId && { 'data-testid': dataTestId })}
   >
     <SocialIconMapper
-      icon={icon}
+      platform={icon}
       size={iconSize}
     />
     <span className='text-sm'>{label}</span>

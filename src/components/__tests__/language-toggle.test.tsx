@@ -78,10 +78,10 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
   DropdownMenuTrigger: ({ children, asChild, ...props }: { children?: React.ReactNode; asChild?: boolean; [key: string]: any }) => {
     if (asChild && React.isValidElement(children)) {
       // When asChild is true, render children directly with props
-      return React.cloneElement(children, {
+      return React.cloneElement(children as React.ReactElement, {
         ...props,
         'data-testid': 'language-dropdown-trigger',
-      });
+      } as any);
     }
     return (
       <div
@@ -120,7 +120,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
 }));
 
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, ...props }: React.ComponentProps<"div">) => (
+  Button: ({ children, ...props }: React.ComponentProps<"button">) => (
     <button
       data-testid='language-toggle-button'
       {...props}

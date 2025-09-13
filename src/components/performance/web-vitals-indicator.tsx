@@ -102,8 +102,8 @@ function useWebVitalsMonitoring() {
  */
 export function WebVitalsIndicator() {
   const { registerTool, unregisterTool, getClasses } = {
-    registerTool: () => {},
-    unregisterTool: () => {},
+    registerTool: (_toolId: string) => {},
+    unregisterTool: (_toolId: string) => {},
     getClasses: () => '',
   };
   const { metrics, isVisible } = useWebVitalsMonitoring();
@@ -124,7 +124,7 @@ export function WebVitalsIndicator() {
 
   return (
     <div
-      className={`${getClasses('webVitalsIndicator')} rounded-lg bg-black/80 p-3 text-xs text-white shadow-lg backdrop-blur-sm`}
+      className={`${getClasses()} rounded-lg bg-black/80 p-3 text-xs text-white shadow-lg backdrop-blur-sm`}
     >
       <div className='mb-2 font-semibold'>🚀 Web Vitals</div>
       <div className='space-y-1'>

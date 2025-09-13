@@ -44,7 +44,7 @@ export function useEnhancedTranslations(
       const startTime = performance.now();
 
       try {
-        const result = t(key, values);
+        const result = t(key, values as any);
 
         // 记录加载时间
         if (analytics) {

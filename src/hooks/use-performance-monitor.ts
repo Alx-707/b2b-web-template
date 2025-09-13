@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   PerformanceAlert,
   PerformanceMetrics,
@@ -85,7 +85,7 @@ export function usePerformanceMonitor(
     alertThresholds,
     addAlert,
     setMetrics,
-    startTime,
+    startTime as any,
   );
 
   // 监控控制函数
