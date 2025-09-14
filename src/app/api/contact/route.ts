@@ -9,13 +9,13 @@ import { logger } from '@/lib/logger';
 import {
   checkRateLimit,
   getClientIP,
-} from './contact-api-utils';
+} from '@/app/api/contact/contact-api-utils';
 import {
   validateFormData,
   processFormSubmission,
   getContactFormStats,
   validateAdminAccess,
-} from './contact-api-validation';
+} from '@/app/api/contact/contact-api-validation';
 
 
 

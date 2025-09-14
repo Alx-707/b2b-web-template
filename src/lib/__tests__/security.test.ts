@@ -23,9 +23,9 @@ describe('Security Utils', () => {
     });
 
     it('should handle non-string input', () => {
-      expect(sanitizeInput(null as unknown)).toBe('');
-      expect(sanitizeInput(undefined as unknown)).toBe('');
-      expect(sanitizeInput(123 as unknown)).toBe('');
+      expect(sanitizeInput(null as any)).toBe('');
+      expect(sanitizeInput(undefined as any)).toBe('');
+      expect(sanitizeInput(123 as any)).toBe('');
     });
 
     it('should preserve safe content', () => {

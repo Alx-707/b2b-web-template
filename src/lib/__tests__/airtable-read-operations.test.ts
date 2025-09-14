@@ -51,7 +51,7 @@ vi.mock('./validations', async () => {
 });
 
 describe('Airtable Service - Read Operations Tests', () => {
-  let AirtableService: typeof import('../airtable');
+  let AirtableServiceClass: any;
 
   beforeEach(async () => {
     // Clear mocks but preserve the mock functions
@@ -65,7 +65,7 @@ describe('Airtable Service - Read Operations Tests', () => {
 
     // Dynamically import the module to ensure fresh instance
     const module = await import('../airtable') as DynamicImportModule;
-    AirtableService = module.AirtableService;
+    AirtableServiceClass = module.AirtableService;
   });
 
   afterEach(() => {
@@ -74,7 +74,7 @@ describe('Airtable Service - Read Operations Tests', () => {
 
   describe('获取联系人记录', () => {
     it('should retrieve contact records successfully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -101,7 +101,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle query options', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -124,7 +124,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should throw error when service is not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as unknown as AirtableServicePrivate).isConfigured = false;
@@ -136,7 +136,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle retrieval errors gracefully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -151,7 +151,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle empty results', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -168,7 +168,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle complex query options', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -195,7 +195,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle large result sets', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -225,7 +225,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle pagination options', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -248,7 +248,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle network timeout during retrieval', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -266,7 +266,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle API rate limiting during retrieval', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -284,7 +284,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle malformed response data', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -316,7 +316,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     });
 
     it('should handle view-based queries', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {

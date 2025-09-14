@@ -68,7 +68,7 @@ export type WhatsAppApiRequest =
  * Request validation functions
  */
 export function isSendMessageRequest(request: unknown): request is SendMessageRequest {
-  return (
+  return Boolean(
     request &&
     typeof request === 'object' &&
     (request as Record<string, unknown>).messaging_product === 'whatsapp' &&
@@ -79,7 +79,7 @@ export function isSendMessageRequest(request: unknown): request is SendMessageRe
 }
 
 export function isMediaUploadRequest(request: unknown): request is MediaUploadRequest {
-  return (
+  return Boolean(
     request &&
     typeof request === 'object' &&
     (request as Record<string, unknown>).messaging_product === 'whatsapp' &&
@@ -89,7 +89,7 @@ export function isMediaUploadRequest(request: unknown): request is MediaUploadRe
 }
 
 export function isAnalyticsRequest(request: unknown): request is AnalyticsRequest {
-  return (
+  return Boolean(
     request &&
     typeof request === 'object' &&
     typeof (request as Record<string, unknown>).start === 'string' &&
@@ -99,9 +99,9 @@ export function isAnalyticsRequest(request: unknown): request is AnalyticsReques
 }
 
 export function isBatchRequest(request: unknown): request is BatchRequest {
-  return (
+  return Boolean(
     request &&
     typeof request === 'object' &&
-    Array.isArray(request.requests)
+    Array.isArray((request as Record<string, unknown>).requests)
   );
 }

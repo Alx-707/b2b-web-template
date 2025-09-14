@@ -2,9 +2,8 @@
  * 翻译质量基准管理
  */
 import type { Locale } from '@/types/i18n';
-;
+import type { QualityScore } from '@/types/translation-manager';
 import type { QualityBenchmark, QualityComparison } from './translation-quality-types';
-import {  } from './translation-quality-types';
 
 export class TranslationBenchmarks {
   private benchmarks: Map<Locale, QualityBenchmark> = new Map();
@@ -19,7 +18,7 @@ export class TranslationBenchmarks {
   /**
    * 与质量基准对比
    */
-  compareWithBenchmark(currentScore: unknown, locale: Locale): QualityComparison {
+  compareWithBenchmark(currentScore: QualityScore, locale: Locale): QualityComparison {
     const benchmark = this.benchmarks.get(locale);
 
     if (!benchmark) {
@@ -96,7 +95,7 @@ export class TranslationBenchmarks {
    * 生成基准对比建议
    */
   private generateBenchmarkRecommendations(
-    current: unknown,
+    current: QualityScore,
     benchmark: QualityBenchmark,
     improvement: number,
   ): string[] {
@@ -115,25 +114,25 @@ export class TranslationBenchmarks {
     }
 
     // 分类建议
-    if (current.grammar < benchmark.categories.grammar) {
+    if (current.grammar && current.grammar < benchmark.categories.grammar) {
       recommendations.push(
         'Grammar score below benchmark. Review grammatical accuracy.',
       );
     }
 
-    if (current.consistency < benchmark.categories.consistency) {
+    if (current.consistency && current.consistency < benchmark.categories.consistency) {
       recommendations.push(
         'Consistency score below benchmark. Ensure terminology consistency.',
       );
     }
 
-    if (current.terminology < benchmark.categories.terminology) {
+    if (current.terminology && current.terminology < benchmark.categories.terminology) {
       recommendations.push(
         'Terminology score below benchmark. Review domain-specific terms.',
       );
     }
 
-    if (current.fluency < benchmark.categories.fluency) {
+    if (current.fluency && current.fluency < benchmark.categories.fluency) {
       recommendations.push(
         'Fluency score below benchmark. Improve natural language flow.',
       );

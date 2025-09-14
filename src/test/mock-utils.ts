@@ -60,7 +60,7 @@ export const createNextIntlMocks = () => {
     prefetch: vi.fn(),
   });
 
-  mockLink.mockImplementation(({ children, ...props }: unknown) => {
+  mockLink.mockImplementation(({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
     return {
       type: 'a',
       props: { ...props, children },

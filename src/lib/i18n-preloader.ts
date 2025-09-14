@@ -8,20 +8,16 @@
 // 重新导出所有模块的功能
 export type { PreloadOptions, SmartPreloadConfig, PreloadStrategyConfig, PreloaderConfig, PreloaderFactoryConfig, IPreloader, PreloadConfigKey } from './i18n-preloader-types';
 export { PRELOADER_CONSTANTS, PRELOADER_EVENTS, isPreloadResult, isPreloadState, isPreloaderError } from './i18n-preloader-types';
-export type { PreloaderStateManager, PreloaderCache, PreloaderNetwork, PreloaderScheduler, PreloaderMonitor, PreloadStrategy, PreloaderFactory, PreloaderMiddleware, PreloaderPlugin, PreloaderError, PreloaderTimeoutError, PreloaderNetworkError, PreloaderCacheError } from './i18n-preloader-types';
+export type { PreloaderStateManager, PreloaderCache, PreloaderNetwork, PreloaderScheduler, PreloaderMonitor, PreloadStrategy, PreloaderMiddleware, PreloaderPlugin, PreloaderError, PreloaderTimeoutError, PreloaderNetworkError, PreloaderCacheError } from './i18n-preloader-types';
 export type { PreloadState, PreloadStats, PreloadResult, BatchResult, PreloaderMetrics, PreloaderEvents, PreloadEventHandler, PreloadEventMap, PreloadStateKey, PreloadStatsKey } from './i18n-preloader-types';
-export { TranslationPreloader } from './i18n-preloader-core';;
+export { TranslationPreloader as CorePreloader } from './i18n-preloader-core';
 export * from './i18n-preloader-strategies';
 export * from './i18n-preloader-utils';
 
 // 向后兼容的重新导出
 import type { Locale, Messages } from '@/types/i18n';
 import type {
-  Preloader,
-  MetricsCollector,
-  CacheStorage,
-  PreloadConfig,
-  CacheOperationResult
+  PreloadConfig
 } from './i18n-cache-types';
 
 import type {
@@ -78,7 +74,7 @@ export type {
   // 配置类型
   PreloaderConfig as Config,
   PreloadConfig as LegacyConfig,
-  PreloaderFactoryConfig as FactoryConfig,
+  // PreloaderFactoryConfig as FactoryConfig, // 注释掉不存在的类型
 
   // 策略类型
   PreloadStrategy as Strategy,
@@ -110,7 +106,7 @@ export {
   StrategyUtils,
 
   // 工厂和管理器
-  PreloaderFactoryClass as PreloaderFactory,
+  // PreloaderFactoryClass as PreloaderFactory, // 注释掉重复的导出
   PreloaderManager,
   PreloaderUtils,
 

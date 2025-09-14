@@ -18,8 +18,7 @@ import {
     ExternalLinkIcon,
     LinkedInIcon,
     SocialIconLink,
-    SocialIconMapper,
-    TwitterIcon,
+    TwitterIcon
 } from '../social-icons';
 
 describe('Social Icons Accessibility & Integration - Core Tests', () => {
@@ -90,7 +89,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles external link indicators', () => {
       render(
-        <SocialIconLink href='https://external.com' platform='external'>
+        <SocialIconLink href='https://external.com' platform='external' aria-label='External link'>
         </SocialIconLink>
       );
 
@@ -110,10 +109,11 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
       render(
         <div>
           {socialLinks.map((link) => (
-            <SocialIconMapper
+            <SocialIconLink
               key={link.platform}
               platform={link.platform}
               href={link.url}
+              aria-label={`Follow us on ${link.platform}`}
             />
           ))}
         </div>
@@ -244,7 +244,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles unknown platform gracefully', () => {
       render(
-        <SocialIconLink href='https://example.com' platform='unknown'>
+        <SocialIconLink href='https://example.com' platform='unknown' aria-label='Unknown platform'>
         </SocialIconLink>
       );
 
@@ -310,6 +310,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
                 key={platform}
                 href={`https://${platform}.com/test`}
                 platform={platform}
+                aria-label={`Follow us on ${platform}`}
               >
                 <IconComponent />
               </SocialIconLink>

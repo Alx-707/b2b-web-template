@@ -4,11 +4,10 @@
  */
 
 import * as Sentry from '@sentry/nextjs';
-import type { 
-  ThemePerformanceMetrics, 
-  ThemeUsageStats, 
+import type {
+  ThemePerformanceMetrics,
+  ThemeUsageStats,
   ThemeSwitchPattern,
-  ThemeAnalyticsConfig,
   ThemePerformanceSummary
 } from './theme-analytics-types';
 
@@ -28,7 +27,7 @@ export class ThemeAnalyticsUtils {
       const randomValue = array[0] / maxUint32;
       return randomValue < sampleRate;
     }
-    
+
     // 降级到Math.random()
     return Math.random() < sampleRate;
   }
@@ -114,8 +113,8 @@ export class ThemeAnalyticsUtils {
   ): void {
     const sequence = [fromTheme, toTheme];
     const sequenceKey = sequence.join('-');
-    
-    const existing = switchPatterns.find(p => 
+
+    const existing = switchPatterns.find(p =>
       p.sequence.join('-') === sequenceKey
     );
 
@@ -140,12 +139,12 @@ export class ThemeAnalyticsUtils {
     maxAge: number = 24 * 60 * 60 * 1000, // 24小时
   ): void {
     const cutoffTime = Date.now() - maxAge;
-    
+
     // 清理性能指标
     const validMetrics = performanceMetrics.filter(
       metric => metric.timestamp > cutoffTime
     );
-    
+
     // 清空原数组并添加有效数据
     performanceMetrics.length = 0;
     performanceMetrics.push(...validMetrics);
@@ -175,10 +174,10 @@ export class ThemeAnalyticsUtils {
     const slowSwitches = durations.filter(d => d > 100).length; // 超过100ms的切换
     const fastestSwitch = Math.min(...durations);
     const slowestSwitch = Math.max(...durations);
-    
+
     // 找出最常用的主题
     const usageArray = Array.from(usageStats.values());
-    const mostUsedTheme = usageArray.length > 0 
+    const mostUsedTheme = usageArray.length > 0
       ? usageArray.reduce((a, b) => a.count > b.count ? a : b).theme
       : 'system';
 

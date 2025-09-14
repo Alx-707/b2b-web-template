@@ -19,66 +19,10 @@ export type { StorageConfig, EnvironmentConfig, ConfigValidationRules, ConfigMig
 export { isUserLocalePreference, isLocaleDetectionHistory, isStorageConfig, validatePreference, validateDetectionHistory, createStorageKey, parseStorageKey, estimateStorageSize, generateChecksum, deepClone, mergeObjects, compareObjects, formatByteSize, formatDuration, generateUniqueId, throttle, debounce, retry, safeJsonParse, safeJsonStringify } from './locale-storage-types-utils';
 
 // 向后兼容的重新导出
-import type { Locale } from '@/types/i18n';
-import type {
-  STORAGE_KEYS,
-  LocaleSource,
-  StorageEventType,
-  STORAGE_CONSTANTS,
-  StorageType,
-  CompressionAlgorithm,
-  EncryptionAlgorithm,
-  SyncStatus,
-  MigrationStatus,
-  HealthStatus,
-  ErrorType,
-  PriorityLevel,
-  EnvironmentType,
-  BrowserType,
-  DeviceType,
-  OSType,
-  VersionInfo,
-  TimestampUtils,
-  BaseValidators } from
-'./locale-storage-types-base';
-
-import type {
-  UserLocalePreference,
-  LocaleDetectionRecord,
-  LocaleDetectionHistory,
-  StorageStats,
-  StorageOperationResult,
-  StorageEvent,
-  StorageEventListener,
-  StorageHealthCheck,
-  ValidationResult,
-  StorageBackupData,
-  StorageMigrationConfig,
-  StorageCompressionConfig,
-  StorageEncryptionConfig,
-  StorageSyncConfig,
-  DeviceInfo,
-  NetworkInfo,
-  GeolocationInfo,
-  SessionInfo,
-  PerformanceMetrics,
-  ErrorInfo,
-  AuditLogEntry,
-  ConfigSnapshot,
-  DataExport,
-  DataImportResult } from
-'./locale-storage-types-data';
-
-import type {
-  StorageConfig,
-  DEFAULT_STORAGE_CONFIG,
-  EnvironmentConfig,
-  CONFIG_PRESETS,
-  ConfigValidationRules,
-  CONFIG_VALIDATION_RULES,
-  ConfigMigration,
-  CONFIG_MIGRATIONS } from
-'./locale-storage-types-config';
+import { STORAGE_KEYS } from './locale-storage-types-base';
+import type { LocaleSource, StorageOperationResult, ValidationResult } from './locale-storage-types-data';
+import type { LocaleDetectionRecord } from './locale-storage-types-data';
+import { DEFAULT_STORAGE_CONFIG } from './locale-storage-types-config';
 
 import {
   isUserLocalePreference,

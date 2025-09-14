@@ -385,7 +385,7 @@ export type WhatsAppApiResponseType =
  * Response validation functions
  */
 export function isSendMessageResponse(response: unknown): response is SendMessageResponse {
-  return (
+  return Boolean(
     response &&
     typeof response === 'object' &&
     (response as Record<string, unknown>).messaging_product === 'whatsapp' &&
@@ -395,7 +395,7 @@ export function isSendMessageResponse(response: unknown): response is SendMessag
 }
 
 export function isMediaUploadResponse(response: unknown): response is MediaUploadResponse {
-  return (
+  return Boolean(
     response &&
     typeof response === 'object' &&
     typeof (response as Record<string, unknown>).id === 'string'
@@ -403,13 +403,13 @@ export function isMediaUploadResponse(response: unknown): response is MediaUploa
 }
 
 export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
-  return (
+  return Boolean(
     error &&
     typeof error === 'object' &&
-    typeof error.error === 'object' &&
-    'message' in error.error &&
-    'type' in error.error &&
-    'code' in error.error
+    typeof (error as Record<string, unknown>).error === 'object' &&
+    'message' in ((error as Record<string, unknown>).error as Record<string, unknown>) &&
+    'type' in ((error as Record<string, unknown>).error as Record<string, unknown>) &&
+    'code' in ((error as Record<string, unknown>).error as Record<string, unknown>)
   );
 }
 

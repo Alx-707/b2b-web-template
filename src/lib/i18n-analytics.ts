@@ -151,7 +151,9 @@ export class I18nAnalytics {
           fallbackUsage += 1;
           break;
         case 'load_time':
-          loadTimes.push(event.metadata.loadTime);
+          if (typeof event.metadata.loadTime === 'number') {
+            loadTimes.push(event.metadata.loadTime);
+          }
           break;
       }
     }
@@ -188,7 +190,7 @@ export class I18nAnalytics {
     try {
       // Google Analytics 4
       if (typeof window !== 'undefined' && 'gtag' in window) {
-        (window as unknown).gtag('event', eventType, data);
+        (window as any).gtag('event', eventType, data);
       }
 
       // 自定义分析服务
@@ -319,8 +321,10 @@ export class I18nAnalytics {
     if (loadTimeEvents.length === 0) return 100;
 
     const avgLoadTime =
-      loadTimeEvents.reduce((sum, e) => sum + e.metadata.loadTime, 0) /
-      loadTimeEvents.length;
+      loadTimeEvents.reduce((sum, e) => {
+        const loadTime = typeof e.metadata.loadTime === 'number' ? e.metadata.loadTime : 0;
+        return sum + loadTime;
+      }, 0) / loadTimeEvents.length;
 
     // 100ms = 100分，1000ms = 0分
     return Math.max(0, 100 - avgLoadTime / 10);

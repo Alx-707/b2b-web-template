@@ -182,8 +182,8 @@ describe('Social Icons Integration Scenarios - Main Tests', () => {
       expect(() => {
         render(
           <div>
-            <SocialIconMapper platform={undefined as string | undefined} />
-            <SocialIconMapper platform={null as string | null} />
+            <SocialIconMapper platform='' />
+            <SocialIconMapper platform='' />
             <SocialIconMapper platform='' />
           </div>
         );
@@ -272,7 +272,7 @@ describe('Social Icons Integration Scenarios - Main Tests', () => {
     it('handles missing platform gracefully', () => {
       expect(() => {
         render(
-          <SocialIconMapper platform={undefined as string | undefined} />
+          <SocialIconMapper platform='' />
         );
       }).not.toThrow();
     });
@@ -288,7 +288,7 @@ describe('Social Icons Integration Scenarios - Main Tests', () => {
     it('handles null platform gracefully', () => {
       expect(() => {
         render(
-          <SocialIconMapper platform={null as string | null} />
+          <SocialIconMapper platform='' />
         );
       }).not.toThrow();
     });

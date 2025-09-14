@@ -195,7 +195,7 @@ describe('NavigationMenu - Dropdown & State Management', () => {
 
     it('handles controlled state changes', () => {
       const TestComponent = ({ value }: { value?: string }) => (
-        <NavigationMenu value={value}>
+        <NavigationMenu {...(value !== undefined && { value })}>
           <NavigationMenuList>
             <NavigationMenuItem value='item-1'>
               <NavigationMenuTrigger data-testid='trigger-1'>

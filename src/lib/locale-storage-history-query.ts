@@ -11,7 +11,6 @@ import type { Locale } from '@/types/i18n';
 ;
 import type {
   LocaleDetectionRecord,
-  LocaleSource,
 } from './locale-storage-types';
 import { getDetectionHistory } from './locale-storage-history-core';
 
@@ -426,6 +425,7 @@ export function getTimeDistributionStats(bucketSize: number = 24 * 60 * 60 * 100
   const timestamps = records.map(r => r.timestamp);
   const minTime = Math.min(...timestamps);
   const _maxTime = Math.max(...timestamps);
+  // 最大时间已计算但在此处未直接使用
 
   // 创建时间桶
   const buckets = new Map<number, {

@@ -10,10 +10,10 @@ import type {
   StorageOperationResult,
 } from '../locale-storage-types';
 import { getDetectionHistory } from '../locale-storage-history-core';
-import { 
-  cleanupExpiredDetections, 
-  cleanupDuplicateDetections, 
-  limitHistorySize 
+import {
+  cleanupExpiredDetections,
+  cleanupDuplicateDetections,
+  limitHistorySize
 } from './cleanup';
 
 /**
@@ -33,7 +33,7 @@ export function performMaintenance(options: {
   finalCount: number;
 }> {
   const startTime = Date.now();
-  
+
   try {
     let expiredRemoved = 0;
     let duplicatesRemoved = 0;
@@ -100,7 +100,7 @@ export function getMaintenanceRecommendations(): {
   estimatedBenefit: string;
 } {
   const historyResult = getDetectionHistory();
-  
+
   if (!historyResult.success || !historyResult.data) {
     return {
       recommendations: ['无法获取历史记录，建议检查存储状态'],
@@ -115,28 +115,28 @@ export function getMaintenanceRecommendations(): {
   let urgency: 'low' | 'medium' | 'high' = 'low';
 
   // 检查记录数量
-  const maxRecords = CACHE_LIMITS.MAX_HISTORY_ENTRIES || 100;
+  const maxRecords = CACHE_LIMITS.MAX_DETECTION_HISTORY || 100;
   if (records.length > maxRecords * 1.5) {
     recommendations.push(`历史记录过多 (${records.length})，建议清理`);
     urgency = 'high';
   } else if (records.length > maxRecords) {
     recommendations.push(`历史记录较多 (${records.length})，考虑清理`);
-    urgency = Math.max(urgency === 'low' ? 'medium' : urgency, 'medium') as 'medium' | 'high';
+    urgency = urgency === 'low' ? 'medium' : urgency;
   }
 
   // 检查过期记录
   const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
   const expiredCount = records.filter(r => r.timestamp < thirtyDaysAgo).length;
-  
+
   if (expiredCount > 0) {
     recommendations.push(`发现 ${expiredCount} 条过期记录，建议清理`);
-    urgency = Math.max(urgency === 'low' ? 'medium' : urgency, 'medium') as 'medium' | 'high';
+    urgency = urgency === 'low' ? 'medium' : urgency;
   }
 
   // 检查重复记录
   const uniqueKeys = new Set();
   let duplicateCount = 0;
-  
+
   records.forEach(record => {
     const key = `${record.locale}-${record.source}-${record.timestamp}`;
     if (uniqueKeys.has(key)) {
@@ -151,7 +151,7 @@ export function getMaintenanceRecommendations(): {
   }
 
   // 检查数据完整性
-  const invalidRecords = records.filter(record => 
+  const invalidRecords = records.filter(record =>
     !record.locale || !record.source || !record.timestamp || record.confidence < 0 || record.confidence > 1
   );
 
@@ -164,7 +164,7 @@ export function getMaintenanceRecommendations(): {
     recommendations.push('历史记录状态良好，无需维护');
   }
 
-  const estimatedBenefit = urgency === 'high' 
+  const estimatedBenefit = urgency === 'high'
     ? '显著提升性能和稳定性'
     : urgency === 'medium'
     ? '改善存储效率'

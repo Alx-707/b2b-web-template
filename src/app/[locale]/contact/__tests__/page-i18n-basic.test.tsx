@@ -15,7 +15,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import ContactPage, { generateMetadata } from '../page';
+import ContactPage, { generateMetadata } from '@/app/[locale]/contact/__tests__/page';
 
 // Mock next-intl
 const mockGetTranslations = vi.fn();

@@ -99,6 +99,8 @@ export interface TranslationManagerConfig {
     maxIssues: number;
     criticalIssueThreshold: number;
   };
+  /** 必需的翻译键列表 */
+  requiredKeys?: string[];
 }
 
 /**

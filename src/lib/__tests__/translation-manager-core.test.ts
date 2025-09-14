@@ -200,6 +200,7 @@ describe('TranslationManagerCore - Data Management', () => {
     const setup = setupTranslationManagerCoreTest();
     manager = setup.manager;
     _defaultConfig = setup._defaultConfig;
+    // 默认配置已设置但在此测试中未直接使用
 
     // 直接Mock manager的qualityChecker属性
     manager['qualityChecker'] = {
@@ -263,13 +264,13 @@ describe('TranslationManagerCore - Data Management', () => {
       expect(typeof allTranslations).toBe('object');
 
       // 测试单个翻译获取
-      const translation = manager.getTranslation('hello', 'en');
+      const translation = manager.getTranslation('en', 'hello');
       expect(typeof translation).toBe('string');
     });
 
     it('应该安全地处理不支持的语言', () => {
       // 测试获取不存在语言的翻译
-      const translation = manager.getTranslation('hello', 'fr' as UnsafeLocaleCode);
+      const translation = manager.getTranslation('fr' as any, 'hello');
       expect(translation).toBe('hello'); // 应该返回键名作为fallback
     });
   });
@@ -283,6 +284,7 @@ describe('TranslationManagerCore - Quality and Operations', () => {
     const setup = setupTranslationManagerCoreTest();
     manager = setup.manager;
     _defaultConfig = setup._defaultConfig;
+    // 默认配置已设置但在此测试中未直接使用
 
     // 直接Mock manager的qualityChecker属性
     manager['qualityChecker'] = {
@@ -405,7 +407,7 @@ describe('TranslationManagerCore - Quality and Operations', () => {
 
   describe('翻译功能', () => {
     it('应该能够获取单个翻译', () => {
-      const translation = manager.getTranslation('common.hello', 'en');
+      const translation = manager.getTranslation('en', 'common.hello');
       expect(translation).toBeDefined();
       expect(typeof translation).toBe('string');
     });
@@ -458,6 +460,7 @@ describe('TranslationManagerCore - Error Handling and Edge Cases', () => {
     const setup = setupTranslationManagerCoreTest();
     manager = setup.manager;
     _defaultConfig = setup._defaultConfig;
+    // 默认配置已设置但在此测试中未直接使用
 
     // Mock translations数据，确保getTranslationsForLocale返回有效数据
     manager['translations'] = {
@@ -472,7 +475,7 @@ describe('TranslationManagerCore - Error Handling and Edge Cases', () => {
 
   describe('错误处理', () => {
     it('应该处理无效的翻译键', () => {
-      const translation = manager.getTranslation('', 'en');
+      const translation = manager.getTranslation('en', '');
       expect(translation).toBe('');
     });
 
@@ -527,10 +530,10 @@ describe('TranslationManagerCore - Error Handling and Edge Cases', () => {
   describe('安全性测试', () => {
     it('应该安全地处理语言代码', () => {
       // 尝试访问不支持的语言代码
-      const translation1 = manager.getTranslation('hello', '__proto__' as UnsafeLocaleCode);
+      const translation1 = manager.getTranslation('__proto__' as any, 'hello');
       const translation2 = manager.getTranslation(
+        'constructor' as any,
         'hello',
-        'constructor' as UnsafeLocaleCode,
       );
 
       expect(translation1).toBe('hello'); // 返回键名作为fallback
@@ -539,7 +542,7 @@ describe('TranslationManagerCore - Error Handling and Edge Cases', () => {
 
     it('应该防止对象注入攻击', () => {
       // 测试安全的翻译获取
-      const translation = manager.getTranslation('common.hello', 'en');
+      const translation = manager.getTranslation('en', 'common.hello');
       expect(typeof translation).toBe('string');
 
       // 测试批量翻译的安全性
@@ -554,12 +557,12 @@ describe('TranslationManagerCore - Error Handling and Edge Cases', () => {
 
   describe('边界条件测试', () => {
     it('应该处理空翻译键', () => {
-      const translation = manager.getTranslation('', 'en');
+      const translation = manager.getTranslation('en', '');
       expect(translation).toBe('');
     });
 
     it('应该处理不存在的翻译键', () => {
-      const translation = manager.getTranslation('nonexistent.key', 'en');
+      const translation = manager.getTranslation('en', 'nonexistent.key');
       expect(translation).toBe('nonexistent.key'); // 返回键名作为fallback
     });
 
@@ -616,12 +619,12 @@ describe('TranslationManagerCore - Error Handling and Edge Cases', () => {
     it('应该处理嵌套翻译结构', () => {
       // 测试嵌套键的翻译获取
       const saveTranslation = manager.getTranslation(
-        'common.buttons.save',
         'en',
+        'common.buttons.save',
       );
       const cancelTranslation = manager.getTranslation(
-        'common.buttons.cancel',
         'en',
+        'common.buttons.cancel',
       );
 
       expect(typeof saveTranslation).toBe('string');

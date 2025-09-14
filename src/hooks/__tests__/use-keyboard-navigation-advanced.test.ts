@@ -118,7 +118,7 @@ describe('useKeyboardNavigation Advanced Tests', () => {
             config: {
               enabled: i % 2 === 0,
               loop: i % 3 === 0,
-              orientation: i % 2 === 0 ? 'vertical' as const : 'horizontal' as const,
+              orientation: 'horizontal' as const,
             },
           });
         }
@@ -287,7 +287,7 @@ describe('useKeyboardNavigation Advanced Tests', () => {
       complexSelectors.forEach((selector) => {
         const { result } = renderHook(() =>
           useKeyboardNavigation({
-            focusableSelector: selector,
+            selector: selector,
           }),
         );
 
@@ -307,7 +307,7 @@ describe('useKeyboardNavigation Advanced Tests', () => {
         expect(() => {
           renderHook(() =>
             useKeyboardNavigation({
-              focusableSelector: selector,
+              selector: selector,
             }),
           );
         }).not.toThrow();

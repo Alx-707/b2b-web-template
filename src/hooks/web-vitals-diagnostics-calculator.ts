@@ -4,10 +4,10 @@
  */
 
 import type { DetailedWebVitals } from '@/lib/enhanced-web-vitals';
-import { 
-  WEB_VITALS_CONSTANTS, 
-  type DiagnosticReport, 
-  type PerformanceTrend 
+import {
+  WEB_VITALS_CONSTANTS,
+  type DiagnosticReport,
+  type PerformanceTrend
 } from './web-vitals-diagnostics-constants';
 
 /**
@@ -157,15 +157,17 @@ export const calculateAverage = (values: number[]): number => {
  */
 export const calculateMedian = (values: number[]): number => {
   if (values.length === 0) return 0;
-  
+
   const sorted = [...values].sort((a, b) => a - b);
   const middle = Math.floor(sorted.length / 2);
-  
+
   if (sorted.length % 2 === 0) {
-    return Number(((sorted[middle - 1] + sorted[middle]) / 2).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
+    const left = sorted[middle - 1] ?? 0;
+    const right = sorted[middle] ?? 0;
+    return Number(((left + right) / 2).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
   }
-  
-  return Number(sorted[middle].toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
+
+  return Number((sorted[middle] ?? 0).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
 };
 
 /**
@@ -173,11 +175,11 @@ export const calculateMedian = (values: number[]): number => {
  */
 export const calculateP95 = (values: number[]): number => {
   if (values.length === 0) return 0;
-  
+
   const sorted = [...values].sort((a, b) => a - b);
   const index = Math.ceil(sorted.length * 0.95) - 1;
-  
-  return Number(sorted[Math.max(0, index)].toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
+
+  return Number((sorted[Math.max(0, index)] ?? 0).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
 };
 
 /**
@@ -221,18 +223,18 @@ export const calculatePerformanceGrade = (score: number): string => {
  */
 export const calculateImprovementPotential = (vitals: DetailedWebVitals): number => {
   let potential = 0;
-  
+
   if (vitals.lcp && vitals.lcp > WEB_VITALS_CONSTANTS.LCP_GOOD) {
     potential += WEB_VITALS_CONSTANTS.SCORE_WEIGHT_LCP;
   }
-  
+
   if (vitals.fid && vitals.fid > WEB_VITALS_CONSTANTS.FID_GOOD) {
     potential += WEB_VITALS_CONSTANTS.SCORE_WEIGHT_FID;
   }
-  
+
   if (vitals.cls && vitals.cls > WEB_VITALS_CONSTANTS.CLS_GOOD) {
     potential += WEB_VITALS_CONSTANTS.SCORE_WEIGHT_CLS;
   }
-  
+
   return potential;
 };

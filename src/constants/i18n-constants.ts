@@ -128,6 +128,10 @@ export const QUALITY_SCORING = {
   TREND_KEY_COUNT_BASE: 50,
   /** 质量趋势键数量 - 变化范围 */
   TREND_KEY_COUNT_RANGE: 100,
+  /** 严重问题惩罚分数 */
+  CRITICAL_PENALTY: 20,
+  /** 警告问题惩罚分数 */
+  WARNING_PENALTY: 5,
 } as const;
 
 /** 翻译质量检查阈值 */

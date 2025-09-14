@@ -12,15 +12,12 @@ export { calculateStorageStats, getStorageStats, calculateHealthCheck, performHe
 export { EventManager, cleanupAnalyticsData } from './locale-storage-analytics-events';
 export type { AccessLogEntry, AccessLogger, ErrorLogEntry, ErrorLogger } from './locale-storage-analytics-events';
 export { getUsagePatterns, getPerformanceMetrics, getUsageTrends } from './locale-storage-analytics-performance';
-export { CacheManager, exportAnalyticsData, exportAnalyticsDataAsJson, exportAnalyticsDataAsCsv, validateAnalyticsData, compressAnalyticsData, optimizeAnalyticsStorage, formatByteSize, formatDuration, formatPercentage, generateUniqueId } from './locale-storage-analytics-utils';
+export { CacheManager, exportAnalyticsData, validateAnalyticsData, compressAnalyticsData, optimizeAnalyticsStorage, formatByteSize, formatDuration, formatPercentage, generateUniqueId } from './locale-storage-analytics-utils';
 
 // 导入主要功能用于向后兼容
 import {
-  getStorageStats,
   performHealthCheck,
-  calculateStorageStats,
-  calculateHealthCheck,
-  calculateStorageEfficiency } from
+  calculateStorageStats } from
 './locale-storage-analytics-core';
 
 import {
@@ -42,8 +39,6 @@ import {
 import {
   CacheManager,
   exportAnalyticsData,
-  exportAnalyticsDataAsJson,
-  exportAnalyticsDataAsCsv,
   validateAnalyticsData,
   compressAnalyticsData,
   optimizeAnalyticsStorage,
@@ -58,7 +53,6 @@ import type {
   StorageStats,
   StorageHealthCheck,
   StorageOperationResult,
-  StorageEvent,
   StorageEventListener } from
 './locale-storage-types';
 

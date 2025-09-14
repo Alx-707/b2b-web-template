@@ -14,10 +14,8 @@ import { LocalStorageManager } from './locale-storage-local';
 import type {
   LocaleDetectionHistory,
   LocaleDetectionRecord,
-  LocaleSource,
   StorageOperationResult,
-  StorageEvent,
-  STORAGE_KEYS,
+  LocaleSource,
 } from './locale-storage-types';
 import { isLocaleDetectionHistory } from './locale-storage-types';
 
@@ -91,7 +89,7 @@ export class HistoryCacheManager {
  */
 export function addDetectionRecord(
   locale: Locale,
-  source: string,
+  source: LocaleSource,
   confidence: number,
   metadata?: Record<string, unknown>
 ): StorageOperationResult<LocaleDetectionHistory> {
@@ -154,9 +152,10 @@ export function getDetectionHistory(): StorageOperationResult<LocaleDetectionHis
     if (!stored) {
       // 创建默认历史记录
       const defaultHistory: LocaleDetectionHistory = {
+        detections: [],
         history: [],
         lastUpdated: Date.now(),
-        version: '1.0.0',
+        totalDetections: 0,
       };
 
       try {
@@ -264,6 +263,14 @@ export function updateDetectionHistory(detection: LocaleDetectionRecord): Storag
       timestamp: Date.now(),
     };
   }
+
+  // 默认返回失败结果
+  return {
+    success: false,
+    error: 'Unknown error occurred',
+    source: 'localStorage',
+    timestamp: Date.now(),
+  };
 }
 
 /**
@@ -280,9 +287,10 @@ export function validateHistoryData(history: unknown): history is LocaleDetectio
  */
 export function createDefaultHistory(): LocaleDetectionHistory {
   return {
+    detections: [],
     history: [],
     lastUpdated: Date.now(),
-    version: '1.0.0',
+    totalDetections: 0,
   };
 }
 
@@ -315,8 +323,8 @@ export function getHistorySummary(): {
   return {
     totalRecords: records.length,
     lastUpdated: history.lastUpdated,
-    oldestRecord: records.length > 0 ? records[records.length - 1].timestamp : 0,
-    newestRecord: records.length > 0 ? records[0].timestamp : 0,
+    oldestRecord: records.length > 0 ? records[records.length - 1]!.timestamp : 0,
+    newestRecord: records.length > 0 ? records[0]!.timestamp : 0,
     cacheStatus: HistoryCacheManager.getCacheStatus(),
   };
 }

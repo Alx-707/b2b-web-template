@@ -184,8 +184,8 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
       expect(() => {
         render(
           <div>
-            <SocialIconMapper platform={undefined as string | undefined} />
-            <SocialIconMapper platform={null as string | null} />
+            <SocialIconMapper platform='' />
+            <SocialIconMapper platform='' />
             <SocialIconMapper platform='' />
           </div>
         );

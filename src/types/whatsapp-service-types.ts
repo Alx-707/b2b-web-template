@@ -6,10 +6,12 @@
  */
 
 // 重新导出所有模块的类型和功能
-export { validateWhatsAppConfig, validateServiceOptions, mergeWithDefaults } from './whatsapp-service-config';export { isWhatsAppError, isWhatsAppApiError, isWhatsAppValidationError, isWhatsAppRateLimitError, isWhatsAppNetworkError, isWhatsAppAuthError, createErrorFromApiResponse, getErrorSeverity } from
-'./whatsapp-service-errors';export { HealthCheckConfig, MetricsConfig, AlertConfig, calculateUptime, calculateErrorRate, determineHealthStatus, createDefaultMetrics, createDefaultHealth, updateMetrics, needsAttention } from
-'./whatsapp-service-monitoring';export { Config, ServiceOptions, Status, Health, Metrics, ServiceInterface, ServiceError, isWhatsAppService, createDefaultServiceStatus } from
-'./whatsapp-service-interface';
+export { validateWhatsAppConfig, validateServiceOptions, mergeWithDefaults } from './whatsapp-service-config';
+export { isWhatsAppError, isWhatsAppApiError, isWhatsAppValidationError, isWhatsAppRateLimitError, isWhatsAppNetworkError, isWhatsAppAuthError, createErrorFromApiResponse, getErrorSeverity } from './whatsapp-service-errors';
+export type { HealthCheckConfig, MetricsConfig, AlertConfig } from './whatsapp-service-monitoring';
+export { calculateUptime, calculateErrorRate, determineHealthStatus, createDefaultMetrics, createDefaultHealth, updateMetrics, needsAttention } from './whatsapp-service-monitoring';
+export type { Config, ServiceOptions, Status, Health, Metrics, ServiceInterface, ServiceError } from './whatsapp-service-interface';
+export { isWhatsAppService } from './whatsapp-service-interface';
 
 // 导入主要类型用于向后兼容
 import type {
@@ -75,9 +77,9 @@ import type {
  */
 export {
   DEFAULT_SERVICE_OPTIONS,
-  DEFAULT_RETRY_CONFIG,
-  DEFAULT_CIRCUIT_BREAKER_CONFIG,
-  DEFAULT_CACHE_CONFIG };
+  type DEFAULT_RETRY_CONFIG,
+  type DEFAULT_CIRCUIT_BREAKER_CONFIG,
+  type DEFAULT_CACHE_CONFIG };
 
 // ==================== 向后兼容的类型别名 ====================
 
@@ -133,9 +135,9 @@ export type {
  * Backward compatible error class exports
  */
 export {
-  WhatsAppError,
+  type WhatsAppError,
   WhatsAppApiError,
-  WhatsAppValidationError,
+  type WhatsAppValidationError,
   WhatsAppRateLimitError,
   WhatsAppNetworkError,
   WhatsAppAuthError };
@@ -210,4 +212,4 @@ export function createDefaultServiceStatus(): ServiceStatus {
  * 默认导出主要配置类型
  * Default export main configuration type
  */
-export default WhatsAppConfig;
+export type { WhatsAppConfig as default };

@@ -1,7 +1,7 @@
 /**
  * 性能监控核心配置管理
  * Performance Monitoring Core Configuration Management
- * 
+ *
  * 负责性能监控的配置管理、验证和合并功能
  */
 
@@ -33,9 +33,9 @@ export class PerformanceConfigManager {
   private initializeConfig(customConfig?: Partial<PerformanceConfig>): PerformanceConfig {
     // 生成默认配置
     const defaultConfig = generateEnvironmentConfig();
-    
+
     // 合并自定义配置
-    const mergedConfig = customConfig 
+    const mergedConfig = customConfig
       ? this.mergeConfig(defaultConfig, customConfig)
       : defaultConfig;
 
@@ -59,22 +59,52 @@ export class PerformanceConfigManager {
     customConfig: Partial<PerformanceConfig>
   ): PerformanceConfig {
     const merged: PerformanceConfig = {
-      global: {
-        ...defaultConfig.global,
-        ...customConfig.global,
+      reactScan: {
+        ...defaultConfig.reactScan,
+        ...customConfig.reactScan,
       },
-      component: {
-        ...defaultConfig.component,
-        ...customConfig.component,
+      webEvalAgent: {
+        ...defaultConfig.webEvalAgent,
+        ...customConfig.webEvalAgent,
       },
-      network: {
-        ...defaultConfig.network,
-        ...customConfig.network,
+      bundleAnalyzer: {
+        ...defaultConfig.bundleAnalyzer,
+        ...customConfig.bundleAnalyzer,
       },
-      bundle: {
-        ...defaultConfig.bundle,
-        ...customConfig.bundle,
+      sizeLimit: {
+        ...defaultConfig.sizeLimit,
+        ...customConfig.sizeLimit,
       },
+      ...(defaultConfig.webVitals && {
+        webVitals: customConfig.webVitals ? {
+          ...defaultConfig.webVitals,
+          ...customConfig.webVitals,
+        } : defaultConfig.webVitals,
+      }),
+      ...(defaultConfig.component && {
+        component: customConfig.component ? {
+          ...defaultConfig.component,
+          ...customConfig.component,
+        } : defaultConfig.component,
+      }),
+      ...(defaultConfig.network && {
+        network: customConfig.network ? {
+          ...defaultConfig.network,
+          ...customConfig.network,
+        } : defaultConfig.network,
+      }),
+      ...(defaultConfig.bundle && {
+        bundle: customConfig.bundle ? {
+          ...defaultConfig.bundle,
+          ...customConfig.bundle,
+        } : defaultConfig.bundle,
+      }),
+      ...(defaultConfig.global && {
+        global: customConfig.global ? {
+          ...defaultConfig.global,
+          ...customConfig.global,
+        } : defaultConfig.global,
+      }),
     };
 
     return merged;
@@ -94,7 +124,7 @@ export class PerformanceConfigManager {
    */
   updateConfig(newConfig: Partial<PerformanceConfig>): void {
     this.config = this.mergeConfig(this.config, newConfig);
-    
+
     // 重新验证配置
     const validation = validateConfig(this.config);
     if (!validation.isValid) {
@@ -148,7 +178,7 @@ export class PerformanceConfigManager {
    * Update specific module configuration
    */
   updateModuleConfig<T extends keyof PerformanceConfig>(
-    module: T, 
+    module: T,
     config: Partial<PerformanceConfig[T]>
   ): void {
     this.config[module] = {
@@ -178,7 +208,7 @@ export class PerformanceConfigManager {
   importConfig(configJson: string): boolean {
     try {
       const importedConfig = JSON.parse(configJson) as PerformanceConfig;
-      
+
       // 验证导入的配置
       const validation = validateConfig(importedConfig);
       if (!validation.isValid) {
@@ -205,25 +235,25 @@ export class PerformanceConfigManager {
     maxMetrics: number;
     thresholds: Record<string, number>;
   } {
-    const global = this.config.global || {};
-    const component = this.config.component || {};
-    const network = this.config.network || {};
-    const bundle = this.config.bundle || {};
+    const global = this.config.global;
+    const component = this.config.component;
+    const network = this.config.network;
+    const bundle = this.config.bundle;
 
     const enabledModules: string[] = [];
-    if (component.enabled) enabledModules.push('component');
-    if (network.enabled) enabledModules.push('network');
-    if (bundle.enabled) enabledModules.push('bundle');
+    if (component?.enabled) enabledModules.push('component');
+    if (network?.enabled) enabledModules.push('network');
+    if (bundle?.enabled) enabledModules.push('bundle');
 
     return {
-      isEnabled: global.enabled || false,
+      isEnabled: global?.enabled || false,
       enabledModules,
-      dataRetentionTime: global.dataRetentionTime || PERFORMANCE_CONSTANTS.DEFAULT_RETENTION_TIME,
-      maxMetrics: global.maxMetrics || PERFORMANCE_CONSTANTS.DEFAULT_MAX_METRICS,
+      dataRetentionTime: global?.dataRetentionTime || PERFORMANCE_CONSTANTS.DEFAULT_RETENTION_TIME,
+      maxMetrics: global?.maxMetrics || PERFORMANCE_CONSTANTS.DEFAULT_MAX_METRICS,
       thresholds: {
-        componentRenderTime: component.thresholds?.renderTime || 100,
-        networkResponseTime: network.thresholds?.responseTime || 1000,
-        bundleSize: bundle.thresholds?.size || MB, // 1MB
+        componentRenderTime: component?.thresholds?.renderTime || 100,
+        networkResponseTime: network?.thresholds?.responseTime || 1000,
+        bundleSize: bundle?.thresholds?.size || MB, // 1MB
       },
     };
   }
@@ -298,7 +328,7 @@ export class PerformanceConfigManager {
     this.configHistory.push({
       timestamp: Date.now(),
       config: { ...this.config },
-      reason,
+      ...(reason !== undefined && { reason }),
     });
 
     // 限制历史记录数量
@@ -327,7 +357,7 @@ export class PerformanceConfigManager {
     const targetConfig = this.configHistory[this.configHistory.length - steps - 1];
     this.config = { ...targetConfig.config };
     this.recordConfigChange(`Rollback ${steps} steps`);
-    
+
     return true;
   }
 }

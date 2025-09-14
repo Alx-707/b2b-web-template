@@ -51,7 +51,7 @@ vi.mock('./validations', async () => {
 });
 
 describe('Airtable Service - Configuration Tests', () => {
-  let AirtableService: typeof import('../airtable');
+  let AirtableServiceClass: any;
 
   beforeEach(async () => {
     // Clear mocks but preserve the mock functions
@@ -65,7 +65,7 @@ describe('Airtable Service - Configuration Tests', () => {
 
     // Dynamically import the module to ensure fresh instance
     const module = await import('../airtable') as DynamicImportModule;
-    AirtableService = module.AirtableService;
+    AirtableServiceClass = module.AirtableService;
   });
 
   afterEach(() => {
@@ -208,7 +208,7 @@ describe('Airtable Service - Configuration Tests', () => {
 
   describe('配置验证', () => {
     it('should validate required configuration fields', () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Test with missing configuration
       (service as unknown as AirtableServicePrivate).isConfigured = false;
@@ -223,7 +223,7 @@ describe('Airtable Service - Configuration Tests', () => {
     });
 
     it('should check base instance availability', () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Test with null base
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -238,7 +238,7 @@ describe('Airtable Service - Configuration Tests', () => {
     });
 
     it('should validate table instance', () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -305,7 +305,7 @@ describe('Airtable Service - Configuration Tests', () => {
       });
 
       expect(() => {
-        new AirtableService();
+        new AirtableServiceClass();
       }).not.toThrow();
     });
 
@@ -315,7 +315,7 @@ describe('Airtable Service - Configuration Tests', () => {
       });
 
       expect(() => {
-        new AirtableService();
+        new AirtableServiceClass();
       }).not.toThrow();
     });
 
@@ -325,7 +325,7 @@ describe('Airtable Service - Configuration Tests', () => {
       });
 
       expect(() => {
-        new AirtableService();
+        new AirtableServiceClass();
       }).not.toThrow();
     });
   });

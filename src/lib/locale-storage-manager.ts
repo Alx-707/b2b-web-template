@@ -15,13 +15,13 @@ export { isUserLocalePreference, isLocaleDetectionHistory, isStorageConfig, vali
 // 导出类型定义
 export type { StorageKey, LocaleSource, StorageEventType, StorageType, CompressionAlgorithm, EncryptionAlgorithm, SyncStatus, MigrationStatus, HealthStatus, ErrorType, PriorityLevel, EnvironmentType, BrowserType, DeviceType, OSType, VersionInfo, TimestampUtils, BaseValidators, UserLocalePreference, LocaleDetectionRecord, LocaleDetectionHistory, StorageStats, StorageOperationResult, StorageEvent, StorageEventListener, StorageHealthCheck, ValidationResult, StorageBackupData, StorageMigrationConfig, StorageCompressionConfig, StorageEncryptionConfig, StorageSyncConfig, DeviceInfo, NetworkInfo, GeolocationInfo, SessionInfo, PerformanceMetrics, ErrorInfo, AuditLogEntry, ConfigSnapshot, DataExport, DataImportResult, StorageConfig, EnvironmentConfig, ConfigValidationRules, ConfigMigration, ConfigFactory, StorageKeys, Source, EventType, Preference, DetectionRecord, DetectionHistory, OperationResult, Event, EventListener, Config, DefaultConfig, Validation } from './locale-storage-types';
 // 导出偏好管理功能
-export { validatePreferenceData, createDefaultPreference, normalizePreference, saveUserPreference, getUserPreference, updatePreferenceConfidence, hasUserPreference, getPreferenceSourcePriority, comparePreferences, getPreferenceSummary, clearUserPreference, setUserOverride, getUserOverride, clearUserOverride, hasUserOverride, getOverrideHistory, recordOverrideOperation, getOverrideStats, clearOverrideHistory, exportOverrideData, importOverrideData, PreferenceCacheManager, syncPreferenceData, checkDataConsistency, fixDataInconsistency, getStorageUsage, optimizeStoragePerformance, PreferenceEventManager, createPreferenceSavedEvent, createPreferenceLoadedEvent, createOverrideSetEvent, createOverrideClearedEvent, createSyncEvent, createPreferenceErrorEvent, getPreferenceHistory, recordPreferenceHistory, clearPreferenceHistory, getPreferenceChangeStats, consoleLogListener, historyRecordingListener, setupDefaultListeners, cleanupEventSystem, getEventSystemStatus, LocalePreferenceManager, PreferenceManager } from './locale-storage-preference';
+export { validatePreferenceData, createDefaultPreference, normalizePreference, saveUserPreference, getUserPreference, updatePreferenceConfidence, hasUserPreference, getPreferenceSourcePriority, comparePreferences, getPreferenceSummary, clearUserPreference, setUserOverride, getUserOverride, clearUserOverride, hasUserOverride, getOverrideHistory, recordOverrideOperation, getOverrideStats, clearOverrideHistory, exportOverrideData, importOverrideData, PreferenceCacheManager, syncPreferenceData, checkDataConsistency, fixDataInconsistency, getStorageUsage, optimizeStoragePerformance, PreferenceEventManager, createPreferenceSavedEvent, createPreferenceLoadedEvent, createOverrideSetEvent, createOverrideClearedEvent, createSyncEvent, createPreferenceErrorEvent, getPreferenceHistory, recordPreferenceHistory, clearPreferenceHistory, getPreferenceChangeStats, consoleLogListener, historyRecordingListener, setupDefaultListeners, cleanupEventSystem, getEventSystemStatus, LocalePreferenceManager, type PreferenceManager } from './locale-storage-preference';
 // 导出历史管理功能
-export { LocaleHistoryManager, HistoryManager } from './locale-storage-history';
+export { LocaleHistoryManager, type HistoryManager } from './locale-storage-history';
 export type { QueryConditions } from './locale-storage-history';
 // 导出分析功能
-export { LocaleStorageAnalytics, Analytics } from './locale-storage-analytics';
-export type { UsagePatterns, PerformanceMetrics, UsageTrends, ExportData } from './locale-storage-analytics';
+export { LocaleStorageAnalytics, type Analytics } from './locale-storage-analytics';
+export type { UsagePatterns, UsageTrends, ExportData } from './locale-storage-analytics';
 // 导出维护功能
 export { LocaleMaintenanceManager } from './locale-storage-maintenance';
 
@@ -45,7 +45,9 @@ export class LocaleStorageManager {
    * Save user locale preference
    */
   static saveUserPreference(preference: UserLocalePreference): void {
-    return LocalePreferenceManager.saveUserPreference(preference);
+    const result = LocalePreferenceManager.saveUserPreference(preference);
+    // 忽略返回值，保持向后兼容的void返回类型
+    return;
   }
 
   /**
@@ -54,7 +56,7 @@ export class LocaleStorageManager {
    */
   static getUserPreference(): UserLocalePreference | null {
     const result = LocalePreferenceManager.getUserPreference();
-    return result.success ? result.data : null;
+    return result.success ? (result.data ?? null) : null;
   }
 
   /**
@@ -62,7 +64,9 @@ export class LocaleStorageManager {
    * Set user manually selected locale
    */
   static setUserOverride(locale: Locale): void {
-    return LocalePreferenceManager.setUserOverride(locale);
+    const result = LocalePreferenceManager.setUserOverride(locale);
+    // 忽略返回值，保持向后兼容的void返回类型
+    return;
   }
 
   /**
@@ -70,7 +74,8 @@ export class LocaleStorageManager {
    * Get user manually selected locale
    */
   static getUserOverride(): Locale | null {
-    return LocalePreferenceManager.getUserOverride();
+    const result = LocalePreferenceManager.getUserOverride();
+    return result.success ? (result.data ?? null) : null;
   }
 
   /**
@@ -78,7 +83,9 @@ export class LocaleStorageManager {
    * Clear user manual selection
    */
   static clearUserOverride(): void {
-    return LocalePreferenceManager.clearUserOverride();
+    const result = LocalePreferenceManager.clearUserOverride();
+    // 忽略返回值，保持向后兼容的void返回类型
+    return;
   }
 
   /**
@@ -129,7 +136,9 @@ export class LocaleStorageManager {
    * Clear all storage data
    */
   static clearAll(): void {
-    return LocaleMaintenanceManager.clearAll();
+    const result = LocaleMaintenanceManager.clearAll();
+    // 忽略返回值，保持向后兼容的void返回类型
+    return;
   }
 
   /**
@@ -153,7 +162,9 @@ export class LocaleStorageManager {
    * Clean up expired detection records
    */
   static cleanupExpiredDetections(maxAgeMs: number = 30 * 24 * 60 * 60 * 1000): void {
-    return LocaleMaintenanceManager.cleanupExpiredDetections(maxAgeMs);
+    const result = LocaleMaintenanceManager.cleanupExpiredDetections(maxAgeMs);
+    // 忽略返回值，保持向后兼容的void返回类型
+    return;
   }
 
   /**
@@ -173,7 +184,9 @@ export class LocaleStorageManager {
     override?: Locale;
     history?: LocaleDetectionHistory;
   }): void {
-    return LocaleMaintenanceManager.importData(data);
+    const result = LocaleMaintenanceManager.importData(data);
+    // 忽略返回值，保持向后兼容的void返回类型
+    return;
   }
 
   /**

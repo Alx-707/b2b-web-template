@@ -221,7 +221,7 @@ export class I18nMetricsCollector implements MetricsCollector {
     if (total > 0) {
       this.metrics.localeUsage = Object.keys(this.localeUsageCount).reduce(
         (acc, locale) => {
-          acc[locale as Locale] = (this.localeUsageCount[locale] / total) * 100;
+          acc[locale as Locale] = ((this.localeUsageCount[locale] ?? 0) / total) * 100;
           return acc;
         },
         {} as Record<Locale, number>
@@ -347,7 +347,8 @@ export class I18nMetricsCollector implements MetricsCollector {
       recommendations.push('平均加载时间较长，考虑启用预加载或优化翻译文件大小');
     }
 
-    if (stats.requestsPerMinute > 100) {
+    const requestsPerMinute = typeof stats.requestsPerMinute === 'number' ? stats.requestsPerMinute : 0;
+    if (requestsPerMinute > 100) {
       recommendations.push('请求频率较高，建议增加缓存容量');
     }
 

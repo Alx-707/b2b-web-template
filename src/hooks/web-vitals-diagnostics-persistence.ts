@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { logger } from '@/lib/logger';
+import { MB } from '@/constants/app-constants';
 import type {
   DiagnosticReport,
   WebVitalsDataPersistence,
@@ -80,7 +81,7 @@ export function useWebVitalsInitialization(
     // 检查是否需要刷新数据
     const shouldRefresh = historicalReports.length === 0 ||
       (historicalReports.length > 0 &&
-       Date.now() - historicalReports[historicalReports.length - 1].timestamp > 300000); // 5分钟
+       Date.now() - (historicalReports[historicalReports.length - 1]?.timestamp || 0) > 300000); // 5分钟
 
     return {
       historicalReports,
@@ -135,7 +136,7 @@ export function mergeHistoricalData(
   // 去重（基于时间戳和URL）
   const unique = combined.filter((report, index, array) => {
     return array.findIndex(r =>
-      r.timestamp === report.timestamp && r.url === report.url
+      r.timestamp === report.timestamp && r.pageUrl === report.pageUrl
     ) === index;
   });
 
@@ -243,7 +244,10 @@ export function compressHistoricalData(
 
   const compressed: DiagnosticReport[] = [];
   for (let i = 0; i < reports.length; i += step) {
-    compressed.push(reports[Math.floor(i)]);
+    const report = reports[Math.floor(i)];
+    if (report) {
+      compressed.push(report);
+    }
   }
 
   return compressed;

@@ -32,7 +32,11 @@ vi.mock('@/lib/content-validation', () => ({
   })),
 }));
 
-const mockFs = vi.mocked(fs);
+const mockFs = vi.mocked(fs) as {
+  existsSync: ReturnType<typeof vi.fn>;
+  readFileSync: ReturnType<typeof vi.fn>;
+  readdirSync: ReturnType<typeof vi.fn>;
+};
 const mockLogger = vi.mocked(logger);
 
 describe('content-parser', () => {
@@ -184,7 +188,7 @@ This is test content.`;
         'post4.zh.mdx',
         'invalid.txt',
         'draft.mdx',
-      ] as unknown);
+      ] as string[]);
     });
 
     it('should return all valid content files when no locale specified', () => {
@@ -240,7 +244,7 @@ This is test content.`;
         'image.jpg',
         'config.json',
         'readme.txt',
-      ] as unknown);
+      ] as string[]);
 
       const result = getContentFiles(mockContentDir);
 
@@ -251,7 +255,7 @@ This is test content.`;
     });
 
     it('should handle empty directory', () => {
-      mockFs.readdirSync.mockReturnValue([] as unknown);
+      mockFs.readdirSync.mockReturnValue([] as string[]);
 
       const result = getContentFiles(mockContentDir);
 

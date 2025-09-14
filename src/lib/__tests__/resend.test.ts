@@ -54,10 +54,10 @@ const cleanupResendTest = () => {
 };
 
 describe('resend - Service Initialization', () => {
-  let ResendService: typeof import('../resend');
+  let ResendServiceClass: any;
 
   beforeEach(async () => {
-    ResendService = await setupResendTest();
+    ResendServiceClass = await setupResendTest();
   });
 
   afterEach(() => {
@@ -66,7 +66,7 @@ describe('resend - Service Initialization', () => {
 
   describe('ResendService initialization', () => {
     it('should initialize successfully with valid API key', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       expect(service.isReady()).toBe(true);
       expect(mockResend).toHaveBeenCalledWith('test-api-key');
     });
@@ -75,7 +75,7 @@ describe('resend - Service Initialization', () => {
       // Create a service instance and manually test the missing API key scenario
       // Since we can'_t easily mock the environment after module load,
       // we'll test the behavior by checking the service state
-      const service = new ResendService();
+      const service = new ResendServiceClass();
 
       // The service should be created and ready with our test API key
       expect(service).toBeDefined();
@@ -125,7 +125,7 @@ describe('resend - Email Operations', () => {
     };
 
     it('should send contact form email successfully', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
 
       // Directly mock the service's resend instance
       mockResendSend.mockClear();
@@ -157,7 +157,7 @@ describe('resend - Email Operations', () => {
     });
 
     it('should use custom subject when provided', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       const dataWithSubject = { ...validEmailData, subject: 'Custom Subject' };
 
       // Directly mock the service's resend instance
@@ -183,7 +183,7 @@ describe('resend - Email Operations', () => {
       // Since we can'_t easily mock missing API key after module load,
       // we'll test this by creating a service that fails due to other reasons
       // and verify the error handling works correctly
-      const service = new ResendService();
+      const service = new ResendServiceClass();
 
       // Mock the resend send to simulate service not configured scenario
       mockResendSend.mockResolvedValue({
@@ -197,7 +197,7 @@ describe('resend - Email Operations', () => {
     });
 
     it('should handle Resend API errors', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       mockResendSend.mockResolvedValue({
         data: null,
         error: { message: 'API Error' },
@@ -209,7 +209,7 @@ describe('resend - Email Operations', () => {
     });
 
     it('should handle network errors', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       mockResendSend.mockRejectedValue(new Error('Network error'));
 
       await expect(
@@ -218,7 +218,7 @@ describe('resend - Email Operations', () => {
     });
 
     it('should return unknown when message ID is not available', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
 
       // Directly mock the service's resend instance
       mockResendSend.mockClear();
@@ -258,7 +258,7 @@ describe('resend - Confirmation and Validation', () => {
     };
 
     it('should send confirmation email successfully', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
 
       // Directly mock the service's resend instance
       mockResendSend.mockClear();
@@ -290,7 +290,7 @@ describe('resend - Confirmation and Validation', () => {
 
     it('should throw error when service is not configured', async () => {
       // Test error handling by simulating API configuration error
-      const service = new ResendService();
+      const service = new ResendServiceClass();
 
       // Mock the resend send to simulate service not configured scenario
       mockResendSend.mockResolvedValue({
@@ -304,7 +304,7 @@ describe('resend - Confirmation and Validation', () => {
     });
 
     it('should handle confirmation email API errors', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       mockResendSend.mockResolvedValue({
         data: null,
         error: { message: 'Confirmation API Error' },
@@ -318,14 +318,14 @@ describe('resend - Confirmation and Validation', () => {
 
   describe('isReady', () => {
     it('should return true when properly configured', () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       expect(service.isReady()).toBe(true);
     });
 
     it('should return false when not configured', async () => {
       // Since we can'_t easily mock missing API key after module load,
       // we'll test that the service is ready with our test configuration
-      const service = new ResendService();
+      const service = new ResendServiceClass();
 
       // With our mock API key, the service should be ready
       expect(service.isReady()).toBe(true);
@@ -334,7 +334,7 @@ describe('resend - Confirmation and Validation', () => {
 
   describe('Email content generation', () => {
     it('should generate HTML and text content for contact emails', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       const emailData = {
         firstName: 'John',
         lastName: 'Doe',
@@ -364,7 +364,7 @@ describe('resend - Confirmation and Validation', () => {
     });
 
     it('should generate HTML and text content for confirmation emails', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       const emailData = {
         firstName: 'John',
         lastName: 'Doe',
@@ -396,7 +396,7 @@ describe('resend - Confirmation and Validation', () => {
 
   describe('Data validation and sanitization', () => {
     it('should validate email data before sending', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
 
       // Directly mock the service's resend instance
       mockResendSend.mockClear();
@@ -433,7 +433,7 @@ describe('resend - Confirmation and Validation', () => {
     });
 
     it('should handle validation errors', async () => {
-      const service = new ResendService();
+      const service = new ResendServiceClass();
       const { emailTemplateDataSchema } = await import('./mocks/validations');
 
       // Use vi.mocked to properly mock the function

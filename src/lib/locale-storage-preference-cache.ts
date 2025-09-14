@@ -1,7 +1,7 @@
 /**
  * 用户语言偏好缓存和同步
  * User Locale Preference Cache and Sync
- * 
+ *
  * 负责偏好数据的缓存管理、数据同步和性能优化
  */
 
@@ -15,10 +15,10 @@ import type {
   UserLocalePreference,
   StorageOperationResult,
 } from './locale-storage-types';
-import { 
-  getUserPreference, 
-  saveUserPreference, 
-  validatePreferenceData 
+import {
+  getUserPreference,
+  saveUserPreference,
+  validatePreferenceData
 } from './locale-storage-preference-core';
 
 // ==================== 缓存管理器 ====================
@@ -41,7 +41,7 @@ export class PreferenceCacheManager {
       this.cache.clear();
       return null;
     }
-    
+
     return this.cache.get(key) || null;
   }
 
@@ -112,7 +112,7 @@ export function syncPreferenceData(): StorageOperationResult<{
   synced: boolean;
 }> {
   const startTime = Date.now();
-  
+
   try {
     // 获取各存储源的数据
     const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
@@ -124,7 +124,7 @@ export function syncPreferenceData(): StorageOperationResult<{
     // 确定主要数据源
     if (localPreference && validatePreferenceData(localPreference).isValid) {
       primaryPreference = localPreference;
-      
+
       // 同步到 cookies
       if (cookieLocale !== localPreference.locale) {
         CookieManager.set('locale_preference', localPreference.locale);
@@ -134,12 +134,12 @@ export function syncPreferenceData(): StorageOperationResult<{
       // 从 cookies 创建偏好并同步到 localStorage
       primaryPreference = {
         locale: cookieLocale as Locale,
-        source: 'cookie_sync',
+        source: 'browser',
         confidence: 0.7,
         timestamp: Date.now(),
         metadata: { syncedFrom: 'cookies' },
       };
-      
+
       const saveResult = saveUserPreference(primaryPreference);
       synced = saveResult.success;
     }
@@ -240,10 +240,10 @@ export function fixDataInconsistency(): StorageOperationResult<{
 }> {
   const startTime = Date.now();
   const actions: string[] = [];
-  
+
   try {
     const consistency = checkDataConsistency();
-    
+
     if (consistency.isConsistent) {
       return {
         success: true,
@@ -273,7 +273,7 @@ export function fixDataInconsistency(): StorageOperationResult<{
     } else if (cookieLocale) {
       authoritative = {
         locale: cookieLocale as Locale,
-        source: 'cookie_recovery',
+        source: 'browser',
         confidence: 0.6,
         timestamp: Date.now(),
         metadata: { recoveredFrom: 'cookies' },
@@ -283,7 +283,7 @@ export function fixDataInconsistency(): StorageOperationResult<{
       // 创建默认偏好
       authoritative = {
         locale: 'en',
-        source: 'default_recovery',
+        source: 'default',
         confidence: 0.5,
         timestamp: Date.now(),
         metadata: { createdBy: 'recovery' },
@@ -361,7 +361,7 @@ export function getStorageUsage(): {
   try {
     if (typeof localStorage !== 'undefined') {
       usage.localStorage.available = true;
-      
+
       // 估算使用大小
       let totalSize = 0;
       for (let key in localStorage) {
@@ -421,7 +421,7 @@ export function optimizeStoragePerformance(): StorageOperationResult<{
 }> {
   const startTime = Date.now();
   const actions: string[] = [];
-  
+
   try {
     const beforeTime = Date.now();
 

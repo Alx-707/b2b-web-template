@@ -1,4 +1,5 @@
 import { TEST_CONSTANTS } from '@/constants/test-constants';
+import type { ThemeColors } from '@/types';
 import {
   calculateContrast,
   checkContrastCompliance,
@@ -431,7 +432,7 @@ describe('OKLCH颜色系统', () => {
     });
 
     it('should handle empty colors object', () => {
-      const variables = generateCSSVariables({} as unknown);
+      const variables = generateCSSVariables({} as Partial<ThemeColors>);
 
       expect(variables).toEqual({});
     });

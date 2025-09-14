@@ -51,7 +51,8 @@ class QualityMonitor {
 
     try {
       // 直接运行ESLint命令，避免pnpm输出干扰
-      const lintOutput = execSync('npx eslint . --ext .js,.jsx,.ts,.tsx --config eslint.config.mjs --format json', {
+      // 复用项目脚本，确保与 lint:check 完全一致（并开启缓存），仅覆盖输出格式为 JSON
+      const lintOutput = execSync('pnpm run -s lint:check -- --format json', {
         encoding: 'utf8',
         maxBuffer: 10 * 1024 * 1024, // 10MB buffer
         stdio: ['pipe', 'pipe', 'pipe'], // 确保只获取stdout

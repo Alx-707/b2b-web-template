@@ -105,8 +105,8 @@ export const comparePagePerformance = (
     const percentageChange = current && compared ? calculatePercentageChange(current as any, compared as any) : 0;
 
     metricsComparison[metric] = {
-      current,
-      compared,
+      current: typeof current === 'number' ? current : undefined,
+      compared: typeof compared === 'number' ? compared : undefined,
       difference,
       percentageChange,
     };
@@ -164,11 +164,17 @@ export const calculatePageComparison = (
       // 计算平均分数
       const averageScore = reports.reduce((sum, report) => sum + report.score, 0) / reports.length;
 
+      // 确保有最新报告
+      const latestReport = sortedReports[0];
+      if (!latestReport) {
+        throw new Error(`No reports found for URL: ${url}`);
+      }
+
       return {
         url,
         reports: sortedReports,
         averageScore: Number(averageScore.toFixed(1)),
-        latestReport: sortedReports[0],
+        latestReport,
       };
     })
     .sort((a, b) => b.averageScore - a.averageScore); // 按平均分数降序排列

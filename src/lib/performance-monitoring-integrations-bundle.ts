@@ -1,7 +1,7 @@
 /**
  * Bundle Analyzer 性能监控集成
  * Bundle Analyzer Performance Monitoring Integration
- * 
+ *
  * 提供与Bundle Analyzer工具的集成钩子，用于监控打包大小和优化
  */
 
@@ -39,7 +39,10 @@ export function useBundleAnalyzerIntegration(
     recordBundleSize: (bundleName: string, size: number, gzipSize?: number) => {
       if (!config.bundleAnalyzer.enabled) return;
 
-      bundleData.set(bundleName, { size, gzipSize });
+      bundleData.set(bundleName, {
+        size,
+        ...(gzipSize !== undefined && { gzipSize })
+      });
 
       recordMetric({
         source: 'bundle-analyzer',
@@ -101,16 +104,15 @@ export function validateBundleAnalyzerConfig(config: PerformanceConfig): {
   }
 
   if (config.bundleAnalyzer.enabled) {
-    if (config.bundleAnalyzer.maxBundleSize && 
-        (typeof config.bundleAnalyzer.maxBundleSize !== 'number' || 
-         config.bundleAnalyzer.maxBundleSize <= 0)) {
-      warnings.push('Bundle Analyzer maxBundleSize should be a positive number');
+    if (config.bundleAnalyzer.port &&
+        (typeof config.bundleAnalyzer.port !== 'number' ||
+         config.bundleAnalyzer.port <= 0)) {
+      warnings.push('Bundle Analyzer port should be a positive number');
     }
 
-    if (config.bundleAnalyzer.maxChunkSize && 
-        (typeof config.bundleAnalyzer.maxChunkSize !== 'number' || 
-         config.bundleAnalyzer.maxChunkSize <= 0)) {
-      warnings.push('Bundle Analyzer maxChunkSize should be a positive number');
+    if (config.bundleAnalyzer.reportDir &&
+        typeof config.bundleAnalyzer.reportDir !== 'string') {
+      warnings.push('Bundle Analyzer reportDir should be a string');
     }
   }
 
@@ -153,12 +155,12 @@ export class BundleAnalyzerAnalyzer {
 
     this.bundles.set(bundleName, {
       size,
-      gzipSize,
+      ...(gzipSize !== undefined && { gzipSize }),
       timestamp: Date.now(),
     });
 
-    // 检查是否超过大小限制
-    const maxSize = this.config.bundleAnalyzer.maxBundleSize || MB; // 1MB
+    // 检查是否超过大小限制 (使用bundle配置的阈值)
+    const maxSize = this.config.bundle?.thresholds?.size || MB; // 1MB
     if (size > maxSize) {
       logger.warn(`Bundle ${bundleName} exceeds size limit`, {
         size: this.formatSize(size),
@@ -180,8 +182,8 @@ export class BundleAnalyzerAnalyzer {
       timestamp: Date.now(),
     });
 
-    // 检查是否超过大小限制
-    const maxSize = this.config.bundleAnalyzer.maxChunkSize || 512 * KB; // 512KB
+    // 检查是否超过大小限制 (使用bundle配置的阈值)
+    const maxSize = this.config.bundle?.thresholds?.size || 512 * KB; // 512KB
     if (size > maxSize) {
       logger.warn(`Chunk ${chunkName} exceeds size limit`, {
         size: this.formatSize(size),
@@ -214,8 +216,8 @@ export class BundleAnalyzerAnalyzer {
       .map(([name, bundle]) => ({
         name,
         size: bundle.size,
-        gzipSize: bundle.gzipSize,
-        compressionRatio: bundle.gzipSize ? bundle.gzipSize / bundle.size : undefined,
+        ...(bundle.gzipSize !== undefined && { gzipSize: bundle.gzipSize }),
+        ...(bundle.gzipSize !== undefined && { compressionRatio: bundle.gzipSize / bundle.size }),
       }))
       .sort((a, b) => b.size - a.size)
       .slice(0, 10);
@@ -232,7 +234,7 @@ export class BundleAnalyzerAnalyzer {
       recommendations.push(`${largeBundles.length} bundles are larger than 1MB. Consider splitting them.`);
     }
 
-    const poorCompressionBundles = largestBundles.filter(b => 
+    const poorCompressionBundles = largestBundles.filter(b =>
       b.compressionRatio && b.compressionRatio > 0.8
     );
     if (poorCompressionBundles.length > 0) {

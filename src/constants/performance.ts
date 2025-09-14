@@ -30,6 +30,12 @@ export const PERFORMANCE_CONSTANTS = {
     DATA_PAGE_SIZE: 2,
   },
 
+  // 数据保留配置
+  /** 默认数据保留时间 (ms) - 5分钟 */
+  DEFAULT_RETENTION_TIME: 5 * 60 * 1000,
+  /** 默认最大指标数量 */
+  DEFAULT_MAX_METRICS: 1000,
+
   // 性能阈值
   THRESHOLDS: {
     /** Core Web Vitals 阈值 */

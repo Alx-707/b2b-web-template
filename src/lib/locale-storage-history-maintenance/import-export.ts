@@ -10,10 +10,10 @@ import type {
   LocaleDetectionHistory,
   StorageOperationResult,
 } from '../locale-storage-types';
-import { 
-  getDetectionHistory, 
+import {
+  getDetectionHistory,
   validateHistoryData,
-  HistoryCacheManager 
+  HistoryCacheManager
 } from '../locale-storage-history-core';
 
 /**
@@ -30,11 +30,12 @@ export function exportHistory(): StorageOperationResult<LocaleDetectionHistory> 
  */
 export function exportHistoryAsJson(): StorageOperationResult<string> {
   const historyResult = exportHistory();
-  
+
   if (!historyResult.success) {
     return {
-      ...historyResult,
-      data: undefined,
+      success: false,
+      timestamp: Date.now(),
+      error: historyResult.error,
     } as StorageOperationResult<string>;
   }
 
@@ -60,7 +61,7 @@ export function exportHistoryAsJson(): StorageOperationResult<string> {
  */
 export function importHistory(history: LocaleDetectionHistory): StorageOperationResult<LocaleDetectionHistory> {
   const startTime = Date.now();
-  
+
   try {
     // 验证导入的数据
     if (!validateHistoryData(history)) {
@@ -80,21 +81,13 @@ export function importHistory(history: LocaleDetectionHistory): StorageOperation
     };
 
     // 保存到存储
-    const saveResult = LocalStorageManager.set('locale_detection_history', updatedHistory);
-    
-    if (saveResult.success) {
-      HistoryCacheManager.clearCache();
-      return {
-        success: true,
-        data: updatedHistory,
-        source: 'localStorage',
-        timestamp: Date.now(),
-        responseTime: Date.now() - startTime,
-      };
-    }
+    LocalStorageManager.set('locale_detection_history', updatedHistory);
+
+    // LocalStorageManager.set() returns void, so we assume success if no error is thrown
+    HistoryCacheManager.clearCache();
     return {
-      success: false,
-      error: saveResult.error || 'Failed to save imported history',
+      success: true,
+      data: updatedHistory,
       source: 'localStorage',
       timestamp: Date.now(),
       responseTime: Date.now() - startTime,

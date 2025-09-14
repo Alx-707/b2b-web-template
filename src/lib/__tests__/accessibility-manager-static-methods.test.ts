@@ -3,7 +3,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { AccessibilityManager, AccessibilityUtils } from '../accessibility';
+import { AccessibilityUtils } from '../accessibility';
 
 // vi.hoisted Mock setup
 const mockCheckContrastCompliance = vi.hoisted(() => vi.fn());
@@ -26,7 +26,7 @@ vi.mock('@/lib/colors', () => ({
 }));
 
 describe('AccessibilityManager Static Methods', () => {
-  let mockWindow: unknown;
+  let mockWindow: any;
 
   beforeEach(() => {
     // Mock window

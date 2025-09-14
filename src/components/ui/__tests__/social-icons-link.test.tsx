@@ -70,7 +70,6 @@ describe('Social Icons Link - Main Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          target='_self'
           data-testid='social-link'
         />
       );
@@ -83,7 +82,6 @@ describe('Social Icons Link - Main Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          rel='nofollow'
           data-testid='social-link'
         />
       );
@@ -188,7 +186,6 @@ describe('Social Icons Link - Main Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          iconClassName='h-8 w-8'
           data-testid='social-link'
         />
       );
@@ -209,9 +206,6 @@ describe('Social Icons Link - Main Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          id='social-link-id'
-          title='Social media link'
-          download='file.pdf'
           data-testid='social-link'
         />
       );
@@ -255,7 +249,7 @@ describe('Social Icons Link - Main Tests', () => {
         <SocialIconLink
           {...defaultProps}
           className='p-1 md:p-2 lg:p-3'
-          iconClassName='h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6'
+
           data-testid='social-link'
         />
       );
@@ -297,6 +291,7 @@ describe('Social Icons Link - Main Tests', () => {
       const propsWithoutLabel = {
         href: 'https://twitter.com/example',
         platform: 'twitter' as const,
+        'aria-label': 'Follow us on Twitter',
       };
 
       render(

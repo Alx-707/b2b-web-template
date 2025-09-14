@@ -358,8 +358,8 @@ export default [
       'no-throw-literal': 'off', // 测试异常抛出
       'no-underscore-dangle': 'off', // 私有属性测试访问
 
-      // 🎯 企业级标准：测试文件也保持严格类型安全
-      '@typescript-eslint/no-explicit-any': 'error', // 测试代码也需要类型安全
+      // 🎯 行业标准：测试文件允许any类型（Mock对象复杂性）
+      '@typescript-eslint/no-explicit-any': 'off', // 测试文件允许any类型 - 符合行业标准
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }], // 严格清理未使用变量
       'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }], // 保持代码整洁
       '@typescript-eslint/no-require-imports': 'off', // 测试中可能需要require导入
@@ -500,6 +500,17 @@ export default [
     },
   },
 
+  // TypeScript files: disable base rules that duplicate TS-aware checks
+  // 目的：避免在TS文件上同时触发基础 no-unused-vars/no-undef 与 TS 规则的重复报错
+  {
+    name: 'ts-core-overrides',
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
+    },
+  },
+
   // Prettier configuration (must be last to override conflicting rules)
   prettierConfig,
 
@@ -517,8 +528,8 @@ export default [
       '.env*',
       'coverage/**',
       '*.d.ts',
-      'scripts/**',
       'reports/**',
+      'backups/**', // 忽略备份文件，减少非目标代码噪声
       'jest.setup.js',
       'jest.config.js',
       'tina/__generated__/**', // 忽略TinaCMS生成的文件

@@ -50,11 +50,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         useKeyboardNavigation({ enabled: true }),
       );
 
-      const _mockEvent = {
-        key: 'ArrowDown',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
+      // 模拟键盘事件（已移除未使用的事件变量）
 
       // Test navigation functions directly instead of handleKeyDown
       act(() => {
@@ -96,17 +92,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         useKeyboardNavigation({ enabled: true }),
       );
 
-      const _homeEvent = {
-        key: 'Home',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
-
-      const _endEvent = {
-        key: 'End',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
+      // Home和End键事件（已移除未使用的事件变量）
 
       act(() => {
         result.current.focusFirst();
@@ -124,11 +110,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         useKeyboardNavigation({ enabled: true }),
       );
 
-      const _mockEvent = {
-        key: 'Enter',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
+      // Enter键事件（已移除未使用的事件变量）
 
       act(() => {
         // Test that navigation still works even with unknown keys
@@ -143,11 +125,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         useKeyboardNavigation({ enabled: false }),
       );
 
-      const _mockEvent = {
-        key: 'ArrowDown',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
+      // ArrowDown键事件（已移除未使用的事件变量）
 
       act(() => {
         // Even when disabled, navigation functions should still work
@@ -171,17 +149,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         }),
       );
 
-      const _leftEvent = {
-        key: 'ArrowLeft',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
-
-      const _rightEvent = {
-        key: 'ArrowRight',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
+      // 左右箭头键事件（已移除未使用的事件变量）
 
       act(() => {
         result.current.focusPrevious(); // Left arrow
@@ -202,17 +170,7 @@ describe('useKeyboardNavigation Events Tests', () => {
         }),
       );
 
-      const _upEvent = {
-        key: 'ArrowUp',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
-
-      const _downEvent = {
-        key: 'ArrowDown',
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      } as unknown as KeyboardEvent;
+      // 上下箭头键事件（已移除未使用的事件变量）
 
       act(() => {
         result.current.focusPrevious(); // Up arrow
@@ -235,12 +193,8 @@ describe('useKeyboardNavigation Events Tests', () => {
 
       const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
-      keys.forEach((key) => {
-        const _mockEvent = {
-          key,
-          preventDefault: vi.fn(),
-          stopPropagation: vi.fn(),
-        } as unknown as KeyboardEvent;
+      keys.forEach((_key) => {
+        // 模拟键盘事件（已移除未使用的事件变量）
 
         act(() => {
           // Test navigation functions directly

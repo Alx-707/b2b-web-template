@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 ;
-import { POST, GET } from '../route';
+import { POST, GET } from '@/app/api/verify-turnstile/__tests__/route';
 
 // Mock fetch globally
 const mockFetch = vi.fn();

@@ -9,7 +9,6 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import {
@@ -17,10 +16,8 @@ import {
 } from '../social-icons';
 
 describe('Social Icons Accessibility - Internationalization Tests', () => {
-  let user: ReturnType<typeof userEvent.setup>;
-
   beforeEach(() => {
-    user = userEvent.setup();
+    // Setup user event for tests
   });
 
   describe('多语言支持', () => {

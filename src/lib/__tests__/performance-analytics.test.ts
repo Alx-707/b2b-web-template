@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
+import type { DetailedWebVitals, PerformanceBaseline } from '@/types';
 import {
   PerformanceAlertSystem,
   PerformanceBaselineManager,
@@ -113,7 +114,7 @@ describe('PerformanceBaselineManager', () => {
     },
   };
 
-  const mockDetailedWebVitals: unknown = {
+  const mockDetailedWebVitals: DetailedWebVitals = {
     cls: 0.1,
     fid: 100,
     lcp: 2500,
@@ -164,7 +165,7 @@ describe('PerformanceBaselineManager', () => {
 
   describe('基准数据管理', () => {
     it('should save baseline to localStorage', () => {
-      baselineManager.saveBaseline(mockDetailedWebVitals as unknown);
+      baselineManager.saveBaseline(mockDetailedWebVitals);
 
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'performance-baselines',
@@ -250,7 +251,7 @@ describe('PerformanceBaselineManager', () => {
       baselineManager.saveBaseline({
         ...mockBaseline,
         id: 'new-baseline',
-      } as unknown);
+      } as DetailedWebVitals);
 
       // Should limit to 100 baselines
       const setItemCall = mockLocalStorage.setItem.mock.calls.find(
@@ -272,7 +273,7 @@ describe('PerformanceBaselineManager', () => {
       };
 
       expect(() => {
-        baselineManager.saveBaseline(invalidBaseline as unknown);
+        baselineManager.saveBaseline(invalidBaseline as DetailedWebVitals);
       }).not.toThrow(); // Should handle gracefully
     });
 
@@ -297,18 +298,30 @@ describe('PerformanceBaselineManager', () => {
 describe('PerformanceRegressionDetector', () => {
   let detector: InstanceType<typeof PerformanceRegressionDetector>;
 
-  const mockCurrentMetrics: unknown = {
+  const mockCurrentMetrics: DetailedWebVitals = {
     cls: 0.15, // Regression from baseline
     lcp: 3000, // Regression from baseline
     fid: 120, // Slight regression
     inp: 200,
     ttfb: 900,
     fcp: 2000,
-    deviceInfo: {
+    domContentLoaded: 1500,
+    loadComplete: 3000,
+    firstPaint: 1200,
+    resourceTiming: {
+      totalResources: 10,
+      slowResources: [],
+      totalSize: 1024000,
+      totalDuration: 2000,
+    },
+    device: {
       memory: 8,
       cores: 4,
       userAgent: 'Test Browser',
-      viewport: '1920x1080',
+      viewport: {
+        width: 1920,
+        height: 1080,
+      },
     },
     connection: {
       effectiveType: '4g',
@@ -322,10 +335,9 @@ describe('PerformanceRegressionDetector', () => {
       title: 'Test Page',
       timestamp: Date.now(),
     },
-    slowResources: [],
   };
 
-  const mockBaseline: unknown = {
+  const mockBaseline: PerformanceBaseline = {
     id: 'test-baseline',
     timestamp: Date.now() - WEB_VITALS_CONSTANTS.MILLISECONDS_PER_DAY,
     page: '/page',
@@ -430,7 +442,7 @@ describe('PerformanceRegressionDetector', () => {
         metrics: {
           cls: 0.1,
           // Missing other metrics
-        } as unknown,
+        } as DetailedWebVitals,
       };
 
       expect(() => {
@@ -500,17 +512,17 @@ describe('PerformanceAlertSystem', () => {
         },
       };
 
-      alertSystem.configure(customConfig as unknown);
+      alertSystem.configure(customConfig as DetailedWebVitals);
 
       // Should not throw and should accept configuration
-      expect(() => alertSystem.configure(customConfig as unknown)).not.toThrow();
+      expect(() => alertSystem.configure(customConfig as DetailedWebVitals)).not.toThrow();
     });
 
     it('should handle invalid configuration gracefully', () => {
       const invalidConfig = {
         enabled: 'not-boolean',
         thresholds: 'not-object',
-      } as unknown;
+      } as DetailedWebVitals;
 
       expect(() => {
         alertSystem.configure(invalidConfig);
@@ -538,7 +550,7 @@ describe('PerformanceAlertSystem', () => {
       loggerErrorSpy.mockClear();
       loggerWarnSpy.mockClear();
 
-      (alertSystem as unknown).checkMetrics(poorMetrics as unknown);
+      (alertSystem as DetailedWebVitals).checkMetrics(poorMetrics as DetailedWebVitals);
 
       // 由于这些指标都超过了critical阈值，应该调用logger.error
       expect(loggerErrorSpy).toHaveBeenCalled();
@@ -556,7 +568,7 @@ describe('PerformanceAlertSystem', () => {
 
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      (alertSystem as unknown).checkMetrics(goodMetrics as unknown);
+      (alertSystem as DetailedWebVitals).checkMetrics(goodMetrics as DetailedWebVitals);
 
       expect(consoleSpy).not.toHaveBeenCalled();
       consoleSpy.mockRestore();
@@ -573,7 +585,7 @@ describe('PerformanceAlertSystem', () => {
 
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      (alertSystem as unknown).checkMetrics(poorMetrics as unknown);
+      (alertSystem as DetailedWebVitals).checkMetrics(poorMetrics as DetailedWebVitals);
 
       expect(consoleSpy).not.toHaveBeenCalled();
       consoleSpy.mockRestore();
@@ -589,9 +601,9 @@ describe('PerformanceAlertSystem', () => {
 
       // Mock logger.error instead of console.warn for critical alerts
       const { logger } = await vi.importMock('@/lib/logger');
-      const loggerSpy = vi.mocked((logger as unknown).error);
+      const loggerSpy = vi.mocked((logger as DetailedWebVitals).error);
 
-      (alertSystem as unknown).sendAlert('critical', 'Test alert message', {
+      (alertSystem as DetailedWebVitals).sendAlert('critical', 'Test alert message', {
         metric: 'cls',
         value: 0.5,
       });
@@ -618,7 +630,7 @@ describe('PerformanceAlertSystem', () => {
         },
       });
 
-      await (alertSystem as unknown).sendAlert('warning', 'Test webhook alert', {
+      await (alertSystem as DetailedWebVitals).sendAlert('warning', 'Test webhook alert', {
         metric: 'lcp',
         value: 3500,
       });
@@ -645,7 +657,7 @@ describe('PerformanceAlertSystem', () => {
       });
 
       await expect(
-        (alertSystem as unknown).sendAlert('critical', 'Test alert', {
+        (alertSystem as DetailedWebVitals).sendAlert('critical', 'Test alert', {
           metric: 'cls',
           value: 0.5,
         }),
@@ -655,16 +667,16 @@ describe('PerformanceAlertSystem', () => {
 
   describe('警报历史记录', () => {
     it('should track alert history', () => {
-      (alertSystem as unknown).sendAlert('warning', 'Test alert 1', {
+      (alertSystem as DetailedWebVitals).sendAlert('warning', 'Test alert 1', {
         metric: 'cls',
         value: 0.2,
       });
-      (alertSystem as unknown).sendAlert('critical', 'Test alert 2', {
+      (alertSystem as DetailedWebVitals).sendAlert('critical', 'Test alert 2', {
         metric: 'lcp',
         value: 5000,
       });
 
-      const history = (alertSystem as unknown).getAlertHistory();
+      const history = (alertSystem as DetailedWebVitals).getAlertHistory();
 
       expect(history).toHaveLength(WEB_VITALS_CONSTANTS.TEST_COUNT_TWO);
       expect(history[0]?.level).toBe('warning');
@@ -674,28 +686,28 @@ describe('PerformanceAlertSystem', () => {
     it('should limit alert history size', () => {
       // Send many alerts
       for (let i = 0; i < WEB_VITALS_CONSTANTS.TEST_ALERT_HISTORY_LIMIT; i++) {
-        (alertSystem as unknown).sendAlert('warning', `Alert ${i}`, {
+        (alertSystem as DetailedWebVitals).sendAlert('warning', `Alert ${i}`, {
           metric: 'cls',
           value: 0.2,
         });
       }
 
-      const history = (alertSystem as unknown).getAlertHistory();
+      const history = (alertSystem as DetailedWebVitals).getAlertHistory();
 
       expect(history.length).toBeLessThanOrEqual(100); // Should limit to 100
     });
 
     it('should clear alert history', () => {
-      (alertSystem as unknown).sendAlert('warning', 'Test alert', {
+      (alertSystem as DetailedWebVitals).sendAlert('warning', 'Test alert', {
         metric: 'cls',
         value: 0.2,
       });
 
-      expect((alertSystem as unknown).getAlertHistory()).toHaveLength(1);
+      expect((alertSystem as DetailedWebVitals).getAlertHistory()).toHaveLength(1);
 
-      (alertSystem as unknown).clearHistory();
+      (alertSystem as DetailedWebVitals).clearHistory();
 
-      expect((alertSystem as unknown).getAlertHistory()).toHaveLength(0);
+      expect((alertSystem as DetailedWebVitals).getAlertHistory()).toHaveLength(0);
     });
   });
 });

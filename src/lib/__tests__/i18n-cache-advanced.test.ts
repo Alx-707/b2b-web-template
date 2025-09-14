@@ -127,16 +127,16 @@ describe('I18nCacheManager - Advanced Functionality', () => {
 
     it('should preload messages efficiently', async () => {
       const _startTime = Date.now();
-      
+
       await cacheManager.preloadMessages('en');
       await cacheManager.preloadMessages('zh');
-      
+
       const endTime = Date.now();
       const duration = endTime - _startTime;
-      
+
       // Preloading should be reasonably fast
       expect(duration).toBeLessThan(WEB_VITALS_CONSTANTS.PERFORMANCE_THRESHOLDS.LCP);
-      
+
       const stats = cacheManager.getCacheStats();
       expect(stats.size).toBe(2);
     });
@@ -156,10 +156,10 @@ describe('I18nCacheManager - Advanced Functionality', () => {
     it('should calculate cache hit rate correctly', async () => {
       // First call - cache miss
       await cacheManager.getMessages('en');
-      
+
       // Second call - cache hit
       await cacheManager.getMessages('en');
-      
+
       const metrics = cacheManager.getMetrics();
       expect(metrics.cacheHitRate).toBe(0.5); // 1 hit out of 2 total calls
     });
@@ -174,8 +174,9 @@ describe('I18nCacheManager - Advanced Functionality', () => {
 
     it('should measure load time performance', async () => {
       const _startTime = Date.now();
+      // 开始时间已记录但在此测试中未直接使用
       await cacheManager.getMessages('en');
-      
+
       const metrics = cacheManager.getMetrics();
       expect(metrics.loadTime).toBeGreaterThanOrEqual(0);
     });
@@ -222,6 +223,7 @@ describe('I18nCacheManager - Advanced Functionality', () => {
       const _persistentManager = new I18nCacheManager({
         enablePersistence: true,
       });
+      // 管理器已创建但在此测试中未直接使用
 
       // Verify localStorage was queried
       expect(mockLocalStorage.getItem).toHaveBeenCalled();
@@ -304,10 +306,10 @@ describe('I18nCacheManager - Advanced Functionality', () => {
       );
 
       const results = await Promise.all(promises);
-      
+
       // All results should be the same object (cached)
       expect(results.every(result => result === results[0])).toBe(true);
-      
+
       // Should only have one cache entry
       const stats = cacheManager.getCacheStats();
       expect(stats.size).toBe(1);
@@ -326,13 +328,13 @@ describe('I18nCacheManager - Advanced Functionality', () => {
 
       // Should complete many operations quickly
       expect(duration).toBeLessThan(1000); // Less than 1 second for 100 operations
-      
+
       const metrics = cacheManager.getMetrics();
       expect(metrics.cacheHitRate).toBeGreaterThan(0.9); // High cache hit rate
     });
 
     it('should optimize memory usage with LRU eviction', async () => {
-      const smallCacheManager = new I18nCacheManager({ 
+      const smallCacheManager = new I18nCacheManager({
         maxSize: 2,
         enablePersistence: false,
       });
@@ -340,7 +342,7 @@ describe('I18nCacheManager - Advanced Functionality', () => {
       // Fill cache to capacity
       await smallCacheManager.getMessages('en');
       await smallCacheManager.getMessages('zh');
-      
+
       expect(smallCacheManager.getCacheStats().size).toBe(2);
 
       // Access 'en' to make it most recently used
@@ -348,23 +350,23 @@ describe('I18nCacheManager - Advanced Functionality', () => {
 
       // Add a third locale - should evict 'zh' (least recently used)
       await smallCacheManager.getMessages('en'); // This won'_t add new entry
-      
+
       const stats = smallCacheManager.getCacheStats();
       expect(stats.size).toBeLessThanOrEqual(2);
     });
 
     it('should handle cache warming efficiently', async () => {
       const _startTime = Date.now();
-      
+
       cacheManager.warmupCache();
-      
+
       // Warmup should be fast (non-blocking)
       const warmupTime = Date.now() - _startTime;
       expect(warmupTime).toBeLessThan(100);
-      
+
       // Allow some time for async warmup to complete
       await new Promise(resolve => setTimeout(resolve, 50));
-      
+
       const stats = cacheManager.getCacheStats();
       // Warmup may or may not complete immediately, but should not error
       expect(stats.size).toBeGreaterThanOrEqual(0);

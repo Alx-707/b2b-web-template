@@ -26,7 +26,7 @@ export const CacheKeyUtils = {
    * Create cache key
    */
   create(locale: Locale, namespace?: string, key?: string): string {
-    const parts = [locale];
+    const parts: string[] = [locale];
     if (namespace) parts.push(namespace);
     if (key) parts.push(key);
     return parts.join(':');
@@ -40,8 +40,8 @@ export const CacheKeyUtils = {
     const parts = cacheKey.split(':');
     return {
       locale: parts[0] as Locale,
-      namespace: parts[1],
-      key: parts[2],
+      ...(parts[1] && { namespace: parts[1] }),
+      ...(parts[2] && { key: parts[2] }),
     };
   },
 
@@ -131,7 +131,8 @@ export const CacheTimeUtils = {
     if (!match) throw new Error(`Invalid time format: ${timeStr}`);
 
     const [, value, unit] = match;
-    return parseInt(value, 10) * units[unit];
+    if (!value || !unit) throw new Error(`Invalid time format: ${timeStr}`);
+    return parseInt(value, 10) * (units[unit as keyof typeof units] || 1);
   },
 } as const;
 
@@ -186,7 +187,8 @@ export const CacheSizeUtils = {
     if (!match) throw new Error(`Invalid size format: ${sizeStr}`);
 
     const [, value, unit] = match;
-    return parseFloat(value) * units[unit.toUpperCase()];
+    if (!value || !unit) throw new Error(`Invalid size format: ${sizeStr}`);
+    return parseFloat(value) * (units[unit.toUpperCase() as keyof typeof units] || 1);
   },
 } as const;
 
@@ -416,9 +418,9 @@ export const CacheEventUtils = {
   createEvent<T>(type: string, data?: T, key?: string): CacheEvent<T> {
     return {
       type: type as CacheEventType,
-      key,
-      data,
       timestamp: Date.now(),
+      ...(key && { key }),
+      ...(data && { data }),
     };
   },
 
@@ -491,7 +493,7 @@ export const CacheDebugUtils = {
     if (typeof performance !== 'undefined' && performance.measure) {
       performance.measure(name, startMark, endMark);
       const entries = performance.getEntriesByName(name);
-      return entries.length > 0 ? entries[entries.length - 1].duration : 0;
+      return entries.length > 0 ? (entries[entries.length - 1]?.duration ?? 0) : 0;
     }
     return 0;
   },

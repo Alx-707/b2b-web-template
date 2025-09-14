@@ -1,9 +1,9 @@
 import type { Locale } from '@/types/i18n';
 ;
-import type { LocaleQualityReport, QualityIssue, QualityReport, QualityScore, TranslationManagerConfig, ValidationReport, QualityTrend, QualityTrendReport } from '@/types/translation-manager';
-import { DETECTION_SCORING, PERFORMANCE_THRESHOLDS, QUALITY_SCORING } from '@/constants/i18n-constants';
+import type { LocaleQualityReport, QualityIssue, QualityReport, QualityScore, TranslationManagerConfig, ValidationReport, QualityTrend } from '@/types/translation-manager';
+import { QUALITY_SCORING } from '@/constants/i18n-constants';
 import { TranslationQualityChecker } from './translation-quality-checker';
-import { calculateConfidence, flattenTranslations, generateRecommendations, generateSuggestions, getNestedValue, isEmptyTranslation,  } from './translation-utils';
+import { calculateConfidence, flattenTranslations, generateRecommendations, generateSuggestions, isEmptyTranslation,  } from './translation-utils';
 import { TranslationManagerSecurity } from './translation-manager-security';
 
 /**
@@ -16,7 +16,7 @@ export class TranslationQualityManager {
 
   constructor(config: TranslationManagerConfig) {
     this.config = config;
-    this.qualityChecker = new TranslationQualityChecker(config);
+    this.qualityChecker = new TranslationQualityChecker(config, {});
   }
 
   /**
@@ -57,10 +57,11 @@ export class TranslationQualityManager {
         missingKeys: missingKeys.length,
         emptyKeys: emptyKeys.length,
         qualityIssues: qualityIssues.length,
-        score: this.calculateQualityScore(flatTranslations, qualityIssues),
+        score: this.calculateQualityScore(flatTranslations, qualityIssues).score,
       };
 
-      TranslationManagerSecurity.setQualityScoreForLocale(byLocale, locale, localeReport.score);
+      const qualityScore = this.calculateQualityScore(flatTranslations, qualityIssues);
+      TranslationManagerSecurity.setQualityScoreForLocale(byLocale, locale, qualityScore);
     }
 
     return {
@@ -115,7 +116,7 @@ export class TranslationQualityManager {
       const value = TranslationManagerSecurity.getTranslationValue(flatTranslations, key);
       if (!value) {
         issues.push({
-          type: 'missing_translation',
+          type: 'missing',
           severity: 'critical',
           locale,
           key,
@@ -149,8 +150,8 @@ export class TranslationQualityManager {
       const value = TranslationManagerSecurity.getTranslationValue(flatTranslations, key);
       if (value && isEmptyTranslation(value)) {
         issues.push({
-          type: 'empty_translation',
-          severity: 'warning',
+          type: 'missing',
+          severity: 'medium',
           locale,
           key,
           message: `Empty translation for key: ${key}`,

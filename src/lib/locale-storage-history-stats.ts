@@ -1,7 +1,7 @@
 /**
  * 语言检测历史统计和分析
  * Locale Detection History Statistics and Analysis
- * 
+ *
  * 负责历史记录的统计分析、趋势分析和洞察生成
  */
 
@@ -10,10 +10,9 @@
 import type { Locale } from '@/types/i18n';
 ;
 import type {
-  LocaleDetectionRecord,
 } from './locale-storage-types';
 import { getDetectionHistory } from './locale-storage-history-core';
-import { getLocaleGroupStats, getSourceGroupStats, getTimeDistributionStats } from './locale-storage-history-query';
+import { getLocaleGroupStats, getSourceGroupStats } from './locale-storage-history-query';
 
 // ==================== 基础统计功能 ====================
 
@@ -41,7 +40,7 @@ export function getDetectionStats(): {
   };
 } {
   const historyResult = getDetectionHistory();
-  
+
   if (!historyResult.success || !historyResult.data) {
     return {
       totalDetections: 0,
@@ -164,7 +163,7 @@ export function getDetectionTrends(days: number = 7): {
   predictions: Array<{ date: string; predictedCount: number }>;
 } {
   const historyResult = getDetectionHistory();
-  
+
   if (!historyResult.success || !historyResult.data) {
     return {
       dailyDetections: [],
@@ -188,16 +187,16 @@ export function getDetectionTrends(days: number = 7): {
   // 初始化所有日期
   for (let i = 0; i < days; i++) {
     const date = new Date(now - i * 24 * 60 * 60 * 1000);
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = date.toISOString().split('T')[0] || date.toISOString();
     dailyData.set(dateStr, { count: 0, totalConfidence: 0 });
   }
 
   // 填充实际数据
   recentRecords.forEach(record => {
     const date = new Date(record.timestamp);
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = date.toISOString().split('T')[0] || date.toISOString();
     const existing = dailyData.get(dateStr);
-    
+
     if (existing) {
       existing.count += 1;
       existing.totalConfidence += record.confidence;
@@ -294,8 +293,8 @@ function generatePredictions(
   const avgCount = recent.reduce((sum, day) => sum + day.count, 0) / recent.length;
 
   // 简单的趋势预测
-  const trend = recent.length > 1 
-    ? (recent[recent.length - 1].count - recent[0].count) / (recent.length - 1)
+  const trend = recent.length > 1
+    ? (recent[recent.length - 1]!.count - recent[0]!.count) / (recent.length - 1)
     : 0;
 
   const predictions: Array<{ date: string; predictedCount: number }> = [];
@@ -303,7 +302,7 @@ function generatePredictions(
   for (let i = 1; i <= futureDays; i++) {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + i);
-    const dateStr = futureDate.toISOString().split('T')[0];
+    const dateStr = futureDate.toISOString().split('T')[0] || futureDate.toISOString();
 
     const predictedCount = Math.max(0, Math.round(avgCount + trend * i));
 
@@ -331,6 +330,7 @@ export function generateHistoryInsights(): {
   const trends = getDetectionTrends();
   const _localeStats = getLocaleGroupStats();
   const _sourceStats = getSourceGroupStats();
+  // 统计数据已获取但在此处未直接使用
 
   const insights: string[] = [];
   const recommendations: string[] = [];
@@ -416,7 +416,7 @@ export function getPerformanceMetrics(): {
   responseConsistency: number;
 } {
   const historyResult = getDetectionHistory();
-  
+
   if (!historyResult.success || !historyResult.data) {
     return {
       averageConfidence: 0,
@@ -428,7 +428,7 @@ export function getPerformanceMetrics(): {
   }
 
   const records = historyResult.data.history;
-  
+
   if (records.length === 0) {
     return {
       averageConfidence: 0,
@@ -471,7 +471,7 @@ export function getPerformanceMetrics(): {
 
   let totalConsistency = 0;
   let localeCount = 0;
-  
+
   for (const [_locale, confidences] of localeConsistency.entries()) {
     if (confidences.length > 1) {
       const avg = confidences.reduce((sum, c) => sum + c, 0) / confidences.length;

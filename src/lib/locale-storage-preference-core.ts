@@ -1,7 +1,7 @@
 /**
  * 用户语言偏好核心管理
  * User Locale Preference Core Management
- * 
+ *
  * 负责用户偏好的基础操作：保存、获取、验证和核心数据管理
  */
 
@@ -13,11 +13,10 @@ import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
 import type {
   UserLocalePreference,
-  LocaleSource,
   StorageOperationResult,
   ValidationResult,
 } from './locale-storage-types';
-import { validatePreference, isUserLocalePreference } from './locale-storage-types';
+import { isUserLocalePreference } from './locale-storage-types';
 
 // ==================== 数据验证功能 ====================
 
@@ -30,6 +29,7 @@ export function validatePreferenceData(preference: unknown): ValidationResult {
     return {
       isValid: false,
       errors: ['Invalid preference data structure'],
+      warnings: [],
     };
   }
 
@@ -46,8 +46,8 @@ export function validatePreferenceData(preference: unknown): ValidationResult {
   }
 
   // 验证置信度
-  if (typeof preference.confidence !== 'number' || 
-      preference.confidence < 0 || 
+  if (typeof preference.confidence !== 'number' ||
+      preference.confidence < 0 ||
       preference.confidence > 1) {
     errors.push('Invalid confidence value (must be between 0 and 1)');
   }
@@ -65,6 +65,7 @@ export function validatePreferenceData(preference: unknown): ValidationResult {
   return {
     isValid: errors.length === 0,
     errors,
+    warnings: [],
   };
 }
 
@@ -104,7 +105,7 @@ export function normalizePreference(preference: UserLocalePreference): UserLocal
  */
 export function saveUserPreference(preference: UserLocalePreference): StorageOperationResult<UserLocalePreference> {
   const startTime = Date.now();
-  
+
   try {
     // 验证偏好数据
     const validation = validatePreferenceData(preference);
@@ -121,25 +122,17 @@ export function saveUserPreference(preference: UserLocalePreference): StorageOpe
     const normalizedPreference = normalizePreference(preference);
 
     // 保存到 localStorage
-    const localResult = LocalStorageManager.set('locale_preference', normalizedPreference);
-    
+    LocalStorageManager.set('locale_preference', normalizedPreference);
+
     // 保存到 cookies（用于 SSR）
-    const cookieResult = CookieManager.set('locale_preference', normalizedPreference.locale);
+    CookieManager.set('locale_preference', normalizedPreference.locale);
 
-    // 检查保存结果
-    if (!localResult.success && !cookieResult.success) {
-      return {
-        success: false,
-        error: 'Failed to save preference to both localStorage and cookies',
-        timestamp: Date.now(),
-        responseTime: Date.now() - startTime,
-      };
-    }
-
+    // 两个存储操作都返回void，我们假设成功
+    // 如果有错误，会在try-catch中捕获
     return {
       success: true,
       data: normalizedPreference,
-      source: localResult.success ? 'localStorage' : 'cookies',
+      source: 'localStorage',
       timestamp: Date.now(),
       responseTime: Date.now() - startTime,
     };
@@ -159,11 +152,11 @@ export function saveUserPreference(preference: UserLocalePreference): StorageOpe
  */
 export function getUserPreference(): StorageOperationResult<UserLocalePreference> {
   const startTime = Date.now();
-  
+
   try {
     // 首先尝试从 localStorage 获取
     const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
-    
+
     if (localPreference && validatePreferenceData(localPreference).isValid) {
       return {
         success: true,
@@ -176,11 +169,11 @@ export function getUserPreference(): StorageOperationResult<UserLocalePreference
 
     // 如果 localStorage 没有，尝试从 cookies 获取
     const cookieLocale = CookieManager.get('locale_preference');
-    
+
     if (cookieLocale) {
       const cookiePreference: UserLocalePreference = {
         locale: cookieLocale as Locale,
-        source: 'cookie',
+        source: 'fallback',
         confidence: 0.7,
         timestamp: Date.now(),
         metadata: { source: 'cookie_fallback' },
@@ -188,7 +181,8 @@ export function getUserPreference(): StorageOperationResult<UserLocalePreference
 
       // 同步到 localStorage
       const _syncResult = saveUserPreference(cookiePreference);
-      
+      // 同步结果已保存但在此处未直接使用
+
       return {
         success: true,
         data: cookiePreference,
@@ -200,7 +194,7 @@ export function getUserPreference(): StorageOperationResult<UserLocalePreference
 
     // 如果都没有，返回默认偏好
     const defaultPreference = createDefaultPreference();
-    
+
     return {
       success: true,
       data: defaultPreference,
@@ -224,7 +218,7 @@ export function getUserPreference(): StorageOperationResult<UserLocalePreference
  */
 export function updatePreferenceConfidence(confidence: number): StorageOperationResult<UserLocalePreference> {
   const currentResult = getUserPreference();
-  
+
   if (!currentResult.success || !currentResult.data) {
     return {
       success: false,
@@ -249,7 +243,7 @@ export function updatePreferenceConfidence(confidence: number): StorageOperation
 export function hasUserPreference(): boolean {
   const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
   const cookieLocale = CookieManager.get('locale_preference');
-  
+
   return (localPreference && validatePreferenceData(localPreference).isValid) || !!cookieLocale;
 }
 
@@ -268,7 +262,7 @@ export function getPreferenceSourcePriority(): Array<{
   return [
     {
       source: 'localStorage',
-      available: localPreference && validatePreferenceData(localPreference).isValid,
+      available: !!(localPreference && validatePreferenceData(localPreference).isValid),
       priority: 1,
     },
     {
@@ -332,7 +326,7 @@ export function getPreferenceSummary(): {
   isValid: boolean;
 } {
   const result = getUserPreference();
-  
+
   if (!result.success || !result.data) {
     return {
       hasPreference: false,
@@ -363,13 +357,14 @@ export function getPreferenceSummary(): {
  */
 export function clearUserPreference(): StorageOperationResult<void> {
   const startTime = Date.now();
-  
+
   try {
     // 清除 localStorage
     const _localResult = LocalStorageManager.remove('locale_preference');
-    
+
     // 清除 cookies
     const _cookieResult = CookieManager.remove('locale_preference');
+    // 清除结果已保存但在此处未直接使用
 
     return {
       success: true,

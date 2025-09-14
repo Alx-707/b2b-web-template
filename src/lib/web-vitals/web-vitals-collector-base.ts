@@ -161,11 +161,13 @@ export class WebVitalsCollectorBase {
    * 获取默认的设备信息
    */
   protected getDefaultDevice() {
+    const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+    const hardwareConcurrency = navigator.hardwareConcurrency;
+
     return {
-      memory:
-        (navigator as Navigator & { deviceMemory?: number }).deviceMemory ||
-        DEVICE_DEFAULTS.MEMORY_GB,
-      cores: navigator.hardwareConcurrency || DEVICE_DEFAULTS.CPU_CORES,
+      ...(deviceMemory !== undefined && { memory: deviceMemory }),
+      ...(hardwareConcurrency !== undefined && { cores: hardwareConcurrency }),
+      userAgent: navigator.userAgent,
       viewport: {
         width: window?.innerWidth || 0,
         height: window?.innerHeight || 0,

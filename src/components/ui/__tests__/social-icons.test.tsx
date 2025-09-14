@@ -1,12 +1,12 @@
+import { TEST_COUNT_CONSTANTS } from '@/constants/test-constants';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { TEST_COUNT_CONSTANTS } from '@/constants/test-constants';
 import {
-  ExternalLinkIcon,
-  LinkedInIcon,
-  SocialIconLink,
-  SocialIconMapper,
-  TwitterIcon,
+    ExternalLinkIcon,
+    LinkedInIcon,
+    SocialIconLink,
+    SocialIconMapper,
+    TwitterIcon,
 } from '../social-icons';
 
 describe('Social Icons Components', () => {
@@ -155,7 +155,7 @@ describe('Social Icons Components', () => {
 
   describe('SocialIconMapper', () => {
     it('renders Twitter icon for "twitter" input', () => {
-      const { container } = render(<SocialIconMapper icon='twitter' />);
+      const { container } = render(<SocialIconMapper platform='twitter' />);
 
       const svg = container.querySelector('svg');
       expect(svg).toBeInTheDocument();
@@ -163,7 +163,7 @@ describe('Social Icons Components', () => {
     });
 
     it('renders Twitter icon for "x" input', () => {
-      const { container } = render(<SocialIconMapper icon='x' />);
+      const { container } = render(<SocialIconMapper platform='x' />);
 
       const svg = container.querySelector('svg');
       expect(svg).toBeInTheDocument();
@@ -171,7 +171,7 @@ describe('Social Icons Components', () => {
     });
 
     it('renders LinkedIn icon for "linkedin" input', () => {
-      const { container } = render(<SocialIconMapper icon='linkedin' />);
+      const { container } = render(<SocialIconMapper platform='linkedin' />);
 
       const svg = container.querySelector('svg');
       expect(svg).toBeInTheDocument();
@@ -180,10 +180,10 @@ describe('Social Icons Components', () => {
 
     it('handles case insensitive input', () => {
       const { container: twitterContainer } = render(
-        <SocialIconMapper icon='TWITTER' />,
+        <SocialIconMapper platform='TWITTER' />,
       );
       const { container: linkedinContainer } = render(
-        <SocialIconMapper icon='LinkedIn' />,
+        <SocialIconMapper platform='LinkedIn' />,
       );
 
       expect(twitterContainer.querySelector('svg')).toBeInTheDocument();
@@ -191,7 +191,7 @@ describe('Social Icons Components', () => {
     });
 
     it('returns null for unknown icon', () => {
-      const { container } = render(<SocialIconMapper icon='unknown' />);
+      const { container } = render(<SocialIconMapper platform='unknown' />);
 
       expect(container.firstChild).toBeNull();
     });
@@ -199,7 +199,7 @@ describe('Social Icons Components', () => {
     it('passes through className prop', () => {
       const { container } = render(
         <SocialIconMapper
-          icon='twitter'
+          platform='twitter'
           className='text-red-500'
         />,
       );
@@ -211,7 +211,7 @@ describe('Social Icons Components', () => {
     it('passes through size prop', () => {
       const { container } = render(
         <SocialIconMapper
-          icon='twitter'
+          platform='twitter'
           size={32}
         />,
       );
@@ -223,11 +223,11 @@ describe('Social Icons Components', () => {
 
     it('handles conditional props correctly', () => {
       const { container: noPropsContainer } = render(
-        <SocialIconMapper icon='twitter' />,
+        <SocialIconMapper platform='twitter' />,
       );
       const { container: withPropsContainer } = render(
         <SocialIconMapper
-          icon='twitter'
+          platform='twitter'
           className='custom'
           size={24}
         />,

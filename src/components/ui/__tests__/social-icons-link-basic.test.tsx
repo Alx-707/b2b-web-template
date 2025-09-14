@@ -68,7 +68,6 @@ describe('Social Icons Link - Basic Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          target='_self'
           data-testid='social-link'
         />
       );
@@ -81,7 +80,6 @@ describe('Social Icons Link - Basic Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          rel='nofollow'
           data-testid='social-link'
         />
       );
@@ -171,7 +169,6 @@ describe('Social Icons Link - Basic Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          iconClassName='h-8 w-8'
           data-testid='social-link'
         />
       );
@@ -195,7 +192,7 @@ describe('Social Icons Link - Basic Tests', () => {
         const { unmount } = render(
           <SocialIconLink
             href={href}
-            platform={platform as unknown}
+            platform={platform}
             aria-label={`Follow us on ${platform}`}
             data-testid={`social-link-${index}`}
           />
@@ -257,9 +254,6 @@ describe('Social Icons Link - Basic Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          id='social-link-id'
-          title='Social media link'
-          download='file.pdf'
           data-testid='social-link'
         />
       );
@@ -309,7 +303,6 @@ describe('Social Icons Link - Basic Tests', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          style={{ backgroundColor: 'red', color: 'white' }}
           data-testid='social-link'
         />
       );

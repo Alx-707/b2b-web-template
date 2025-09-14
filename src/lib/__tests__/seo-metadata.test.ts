@@ -375,7 +375,7 @@ describe('SEO Metadata', () => {
 
     it('should handle complex custom config merging', () => {
       const customConfig = {
-        image: null as unknown, // Null value
+        image: null as any, // Null value
         type: 'website' as const,
       };
 

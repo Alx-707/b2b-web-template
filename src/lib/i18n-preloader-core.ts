@@ -10,13 +10,11 @@ import type {
   Preloader,
   MetricsCollector,
   CacheStorage,
-  PreloadConfig,
   CacheOperationResult
 } from './i18n-cache-types';
 import type {
   PreloadState,
   PreloadStats,
-  PreloadResult,
   PreloadOptions,
   IPreloader,
   PreloaderConfig
@@ -26,7 +24,7 @@ import {
   PreloaderTimeoutError,
   PreloaderNetworkError
 } from './i18n-preloader-types';
-import { CACHE_LIMITS } from '@/constants/i18n-constants';
+
 import { logger } from '@/lib/logger';
 
 /**
@@ -43,13 +41,13 @@ export class TranslationPreloader implements Preloader, IPreloader {
     completedLocales: 0,
     errors: [],
   };
-  private preloadConfig: PreloadConfig;
+  private preloadConfig: PreloaderConfig;
   private abortController?: AbortController;
 
   constructor(
     cache: CacheStorage<Messages>,
     metricsCollector: MetricsCollector,
-    config?: Partial<PreloadConfig>
+    config?: Partial<PreloaderConfig>
   ) {
     this.cache = cache;
     this.metricsCollector = metricsCollector;
@@ -62,6 +60,23 @@ export class TranslationPreloader implements Preloader, IPreloader {
       timeout: 10000,
       retryCount: 3,
       retryDelay: 1000,
+      smartPreload: {
+        enabled: false,
+        maxLocales: 3,
+        minUsageThreshold: 0.1,
+        usageWindow: 24,
+        preloadTrigger: 'idle'
+      },
+      memoryLimit: 50 * 1024 * 1024,
+      networkThrottling: false,
+      priorityQueue: false,
+      cacheStrategy: 'adaptive',
+      cacheTTL: 24 * 60 * 60 * 1000,
+      maxCacheSize: 100,
+      enableMetrics: true,
+      metricsInterval: 60000,
+      enableLogging: false,
+      logLevel: 'info',
       ...config,
     };
   }
@@ -171,6 +186,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
         }
 
         const batch = batches[i];
+        if (!batch) continue;
         const batchResults = await this.processBatch(batch, options);
         results.push(...batchResults);
 
@@ -266,7 +282,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
 
       // 合并到现有缓存
       const existing = this.cache.get(locale) || {};
-      const merged = { ...existing, ...messages };
+      const merged = { ...existing, ...messages } as Messages;
       this.cache.set(locale, merged);
     } catch (error) {
       logger.error(`Failed to preload missing translations for ${locale}:`, error);
@@ -310,7 +326,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
   getCacheStats(): { size: number; keys: string[] } {
     return {
       size: this.cache.size(),
-      keys: this.cache.keys(),
+      keys: Array.from(this.cache.keys()),
       // 其他缓存统计信息
     };
   }
@@ -401,8 +417,8 @@ export class TranslationPreloader implements Preloader, IPreloader {
         return {
           success: true,
           data: messages,
-          key: locale,
-          timestamp: Date.now(),
+          fromCache: false,
+          loadTime: Date.now(),
         };
       } catch (error) {
         this.preloadState.errors.push({
@@ -413,8 +429,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
         return {
           success: false,
           error: error instanceof Error ? error.message : 'Unknown error',
-          key: locale,
-          timestamp: Date.now(),
+          fromCache: false,
         };
       }
     });
@@ -462,7 +477,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
    * 设置预加载配置
    * Set preload configuration
    */
-  setConfig(config: Partial<PreloadConfig>): void {
+  setConfig(config: Partial<PreloaderConfig>): void {
     this.preloadConfig = { ...this.preloadConfig, ...config };
   }
 
@@ -470,7 +485,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
    * 获取预加载配置
    * Get preload configuration
    */
-  getConfig(): PreloadConfig {
+  getConfig(): PreloaderConfig {
     return { ...this.preloadConfig };
   }
 }

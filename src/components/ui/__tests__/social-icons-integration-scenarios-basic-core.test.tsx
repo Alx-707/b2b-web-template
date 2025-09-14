@@ -15,11 +15,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-  _GitHubIcon,
-  _LinkedInIcon,
-  SocialIconLink,
-  SocialIconMapper,
-  _TwitterIcon,
+    SocialIconLink,
+    SocialIconMapper
 } from '../social-icons';
 
 describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
@@ -83,13 +80,15 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
             <SocialIconLink
               href='https://twitter.com/company'
               platform='twitter'
-              size='sm'
+              iconSize={16}
+              aria-label='Follow us on Twitter'
               data-testid='footer-twitter'
             />
             <SocialIconLink
               href='https://github.com/company'
               platform='github'
-              size='sm'
+              iconSize={16}
+              aria-label='Follow us on GitHub'
               data-testid='footer-github'
             />
           </div>
@@ -111,8 +110,9 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           <SocialIconLink
             href='https://linkedin.com/company/example'
             platform='linkedin'
-            size='lg'
+            iconSize={32}
             className='md:h-8 md:w-8'
+            aria-label='Connect with us on LinkedIn'
             data-testid='footer-linkedin'
           />
         </footer>
@@ -126,7 +126,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
   describe('核心平台映射', () => {
     it('maps basic platforms correctly', () => {
       const platforms = ['twitter', 'github', 'linkedin'] as const;
-      
+
       platforms.forEach(platform => {
         render(
           <SocialIconMapper
@@ -143,7 +143,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
     it('handles unknown platforms gracefully', () => {
       render(
         <SocialIconMapper
-          platform='unknown' as unknown
+          platform='unknown'
           data-testid='mapper-unknown'
         />
       );
@@ -160,15 +160,17 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
-            size='sm'
+            iconSize={20}
             className='md:h-6 md:w-6'
+            aria-label='Follow us on Twitter'
             data-testid='responsive-twitter'
           />
           <SocialIconLink
             href='https://github.com/example'
             platform='github'
-            size='sm'
+            iconSize={20}
             className='md:h-6 md:w-6'
+            aria-label='Follow us on GitHub'
             data-testid='responsive-github'
           />
         </div>
@@ -187,16 +189,19 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
+            aria-label='Follow us on Twitter'
             data-testid='grid-twitter'
           />
           <SocialIconLink
             href='https://github.com/example'
             platform='github'
+            aria-label='Follow us on GitHub'
             data-testid='grid-github'
           />
           <SocialIconLink
             href='https://linkedin.com/in/example'
             platform='linkedin'
+            aria-label='Connect with us on LinkedIn'
             data-testid='grid-linkedin'
           />
         </div>
@@ -219,6 +224,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           href='https://twitter.com/example'
           platform='twitter'
           className='text-blue-500 hover:text-blue-600'
+          aria-label='Follow us on Twitter'
           data-testid='themed-twitter'
         />
       );
@@ -233,6 +239,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           href='https://github.com/example'
           platform='github'
           className='text-gray-600 dark:text-gray-300'
+          aria-label='Follow us on GitHub'
           data-testid='dark-github'
         />
       );
@@ -248,6 +255,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
         <SocialIconLink
           href=''
           platform='twitter'
+          aria-label='Follow us on Twitter'
           data-testid='empty-href'
         />
       );
@@ -261,7 +269,8 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
       render(
         <SocialIconLink
           href='https://example.com'
-          platform={undefined as unknown}
+          platform=''
+          aria-label='Follow us'
           data-testid='missing-platform'
         />
       );
@@ -275,7 +284,8 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
         <SocialIconLink
           href='https://twitter.com/example'
           platform='twitter'
-          size={'invalid' as unknown}
+          iconSize={20}
+          aria-label='Follow us on Twitter'
           data-testid='invalid-size'
         />
       );

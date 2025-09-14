@@ -6,6 +6,7 @@
  */
 
 import type { FC } from 'react';
+import React from 'react';
 
 interface SocialIconProps {
   'className'?: string;
@@ -106,8 +107,8 @@ export const SocialIconMapper: FC<SocialIconMapperProps> = ({
   }
 };
 
-// Social Icon with Link Component
-interface SocialIconLinkProps {
+// Social Icon with Link Component - Support both interface styles
+interface SocialIconLinkPropsV1 {
   'href': string;
   'icon': string;
   'label': string;
@@ -117,29 +118,84 @@ interface SocialIconLinkProps {
   'data-testid'?: string;
 }
 
-export const SocialIconLink: FC<SocialIconLinkProps> = ({
-  href,
-  icon,
-  label,
-  ariaLabel,
-  className = '',
-  iconSize = 20,
-  'data-testid': dataTestId,
-}) => (
-  <a
-    href={href}
-    target='_blank'
-    rel='noopener noreferrer'
-    aria-label={ariaLabel}
-    className={`inline-flex items-center gap-2 text-gray-600 transition-colors duration-200 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 ${className}`}
-    {...(dataTestId && { 'data-testid': dataTestId })}
-  >
-    <SocialIconMapper
-      platform={icon}
-      size={iconSize}
-    />
-    <span className='text-sm'>{label}</span>
-  </a>
-);
+interface SocialIconLinkPropsV2 {
+  'href': string;
+  'platform': string;
+  'aria-label': string;
+  'className'?: string;
+  'iconSize'?: number;
+  'data-testid'?: string;
+  'children'?: React.ReactNode;
+}
+
+type SocialIconLinkProps = SocialIconLinkPropsV1 | SocialIconLinkPropsV2;
+
+export const SocialIconLink: FC<SocialIconLinkProps> = (props) => {
+  // Check which interface is being used
+  const isV1 = 'icon' in props && 'label' in props && 'ariaLabel' in props;
+  const isV2 = 'platform' in props && 'aria-label' in props;
+
+  if (isV1) {
+    const {
+      href,
+      icon,
+      label,
+      ariaLabel,
+      className = '',
+      iconSize = 20,
+      'data-testid': dataTestId,
+    } = props as SocialIconLinkPropsV1;
+
+    return (
+      <a
+        href={href}
+        target='_blank'
+        rel='noopener noreferrer'
+        aria-label={ariaLabel}
+        className={`inline-flex items-center gap-2 text-gray-600 transition-colors duration-200 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 ${className}`}
+        {...(dataTestId && { 'data-testid': dataTestId })}
+      >
+        <SocialIconMapper
+          platform={icon}
+          size={iconSize}
+        />
+        <span className='text-sm'>{label}</span>
+      </a>
+    );
+  }
+
+  if (isV2) {
+    const {
+      href,
+      platform,
+      'aria-label': ariaLabel,
+      className = '',
+      iconSize = 20,
+      'data-testid': dataTestId,
+      children,
+    } = props as SocialIconLinkPropsV2;
+
+    return (
+      <a
+        href={href}
+        target='_blank'
+        rel='noopener noreferrer'
+        aria-label={ariaLabel}
+        className={`inline-flex items-center justify-center rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground ${className}`}
+        {...(dataTestId && { 'data-testid': dataTestId })}
+      >
+        {children || (
+          <SocialIconMapper
+            platform={platform}
+            size={iconSize}
+          />
+        )}
+      </a>
+    );
+  }
+
+  // Fallback for invalid props
+  return null;
+};
 
 export default SocialIconMapper;

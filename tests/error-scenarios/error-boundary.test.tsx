@@ -4,11 +4,11 @@
  * 全面测试错误边界组件的错误捕获、恢复和用户体验功能
  */
 
-import React from 'react';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ErrorBoundary } from '@/components/error-boundary';
 
 // Mock next-intl
 const mockUseTranslations = vi.fn();
@@ -18,7 +18,7 @@ vi.mock('next-intl', () => ({
 
 // Mock UI components
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, variant, className, ...props }: React.ComponentProps<"div">) => (
+  Button: ({ children, onClick, variant, className, ...props }: React.ComponentProps<"button"> & { variant?: string }) => (
     <button
       data-testid='error-boundary-button'
       onClick={onClick}

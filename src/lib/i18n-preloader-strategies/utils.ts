@@ -23,7 +23,7 @@ export const StrategyUtils = {
     const connection = (navigator as { connection?: { effectiveType?: string; downlink?: number } }).connection;
     if (connection) {
       const { effectiveType, downlink } = connection;
-      if (effectiveType === '4g' && downlink > 2) {
+      if (effectiveType === '4g' && (downlink ?? 0) > 2) {
         return 'fast';
       }
     }

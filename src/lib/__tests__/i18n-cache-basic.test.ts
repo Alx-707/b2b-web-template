@@ -252,6 +252,7 @@ describe('I18nCacheManager - Basic Functionality', () => {
 
     it('should track performance metrics correctly', async () => {
       const _startTime = Date.now();
+      // 开始时间已记录但在此测试中未直接使用
 
       await cacheManager.getMessages('en');
       await cacheManager.getMessages('zh');

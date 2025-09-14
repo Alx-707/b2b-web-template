@@ -121,6 +121,9 @@ describe('TranslationBenchmarks', () => {
     it('should compare current score with benchmark and calculate improvement', () => {
       const currentScore = {
         score: 90,
+        confidence: 0.9,
+        issues: [],
+        suggestions: [],
         grammar: 92,
         consistency: 88,
         terminology: 90,
@@ -142,6 +145,9 @@ describe('TranslationBenchmarks', () => {
     it('should throw error for non-existent benchmark', () => {
       const currentScore = {
         score: 85,
+        confidence: 0.8,
+        issues: [],
+        suggestions: [],
         grammar: 85,
         consistency: 85,
         terminology: 85,
@@ -156,6 +162,9 @@ describe('TranslationBenchmarks', () => {
     it('should generate positive recommendations for high scores', () => {
       const currentScore = {
         score: 95,
+        confidence: 0.95,
+        issues: [],
+        suggestions: [],
         grammar: 95,
         consistency: 95,
         terminology: 95,
@@ -176,6 +185,9 @@ describe('TranslationBenchmarks', () => {
     it('should generate improvement recommendations for low scores', () => {
       const currentScore = {
         score: 70,
+        confidence: 0.7,
+        issues: [],
+        suggestions: [],
         grammar: 75,
         consistency: 70,
         terminology: 72,
@@ -196,6 +208,9 @@ describe('TranslationBenchmarks', () => {
     it('should generate specific category recommendations', () => {
       const currentScore = {
         score: 85,
+        confidence: 0.85,
+        issues: [],
+        suggestions: [],
         grammar: 80, // Below benchmark (88)
         consistency: 75, // Below benchmark (82)
         terminology: 85, // Equal to benchmark
@@ -224,6 +239,9 @@ describe('TranslationBenchmarks', () => {
     it('should handle moderate improvement correctly', () => {
       const currentScore = {
         score: 82,
+        confidence: 0.82,
+        issues: [],
+        suggestions: [],
         grammar: 85,
         consistency: 80,
         terminology: 83,

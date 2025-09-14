@@ -1,12 +1,12 @@
-import type { ReactNode } from 'react';
-import { notFound } from 'next/navigation';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
-import NextTopLoader from 'nextjs-toploader';
-import { generateJSONLD } from '@/lib/structured-data';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { EnterpriseAnalytics } from '@/components/monitoring/enterprise-analytics';
+import { generateJSONLD } from '@/lib/structured-data';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+import NextTopLoader from 'nextjs-toploader';
+import type { ReactNode } from 'react';
 // 临时禁用所有性能监控组件以排查 "Maximum update depth exceeded" 错误
 // import {
 //     DevelopmentPerformanceMonitor,
@@ -16,12 +16,12 @@ import { EnterpriseAnalytics } from '@/components/monitoring/enterprise-analytic
 //     DynamicThemePerformanceMonitor,
 //     DynamicTranslationPreloader,
 // } from '@/components/shared/dynamic-imports';
+import { getFontClassNames } from '@/app/[locale]/layout-fonts';
+import { generateLocaleMetadata } from '@/app/[locale]/layout-metadata';
+import { generatePageStructuredData } from '@/app/[locale]/layout-structured-data';
+import '@/app/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { routing } from '@/i18n/routing';
-import '../globals.css';
-import { getFontClassNames } from './layout-fonts';
-import { generateLocaleMetadata } from './layout-metadata';
-import { generatePageStructuredData } from './layout-structured-data';
 
 // 重新导出元数据生成函数
 export const generateMetadata = generateLocaleMetadata;

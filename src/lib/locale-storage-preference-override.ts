@@ -1,7 +1,7 @@
 /**
  * 用户语言偏好覆盖管理
  * User Locale Preference Override Management
- * 
+ *
  * 负责用户手动覆盖语言设置的功能，包括设置、获取、清除覆盖
  */
 
@@ -24,12 +24,12 @@ import { saveUserPreference, getUserPreference } from './locale-storage-preferen
  * Set user locale override
  */
 export function setUserOverride(
-  locale: Locale, 
+  locale: Locale,
   metadata?: Record<string, unknown>
 ): StorageOperationResult<UserLocalePreference> {
   const preference: UserLocalePreference = {
     locale,
-    source: 'user_override',
+    source: 'user',
     confidence: 1.0, // 用户手动选择，置信度最高
     timestamp: Date.now(),
     metadata: {
@@ -41,7 +41,7 @@ export function setUserOverride(
 
   // 保存偏好
   const saveResult = saveUserPreference(preference);
-  
+
   if (saveResult.success) {
     // 同时保存覆盖标记到单独的存储键
     LocalStorageManager.set('user_locale_override', locale);
@@ -57,11 +57,11 @@ export function setUserOverride(
  */
 export function getUserOverride(): StorageOperationResult<Locale> {
   const startTime = Date.now();
-  
+
   try {
     // 首先检查专门的覆盖存储
     const localOverride = LocalStorageManager.get<Locale>('user_locale_override');
-    
+
     if (localOverride) {
       return {
         success: true,
@@ -74,11 +74,11 @@ export function getUserOverride(): StorageOperationResult<Locale> {
 
     // 检查 cookies 中的覆盖
     const cookieOverride = CookieManager.get('user_locale_override');
-    
+
     if (cookieOverride) {
       // 同步到 localStorage
       LocalStorageManager.set('user_locale_override', cookieOverride);
-      
+
       return {
         success: true,
         data: cookieOverride as Locale,
@@ -90,16 +90,16 @@ export function getUserOverride(): StorageOperationResult<Locale> {
 
     // 检查主偏好是否为用户覆盖
     const preferenceResult = getUserPreference();
-    
-    if (preferenceResult.success && 
-        preferenceResult.data && 
+
+    if (preferenceResult.success &&
+        preferenceResult.data &&
         preferenceResult.data.source === 'user_override') {
       return {
         success: true,
         data: preferenceResult.data.locale,
-        source: preferenceResult.source,
         timestamp: Date.now(),
         responseTime: Date.now() - startTime,
+        ...(preferenceResult.source && { source: preferenceResult.source }),
       };
     }
 
@@ -126,7 +126,7 @@ export function getUserOverride(): StorageOperationResult<Locale> {
  */
 export function clearUserOverride(): StorageOperationResult<void> {
   const startTime = Date.now();
-  
+
   try {
     // 清除专门的覆盖存储
     LocalStorageManager.remove('user_locale_override');
@@ -134,15 +134,15 @@ export function clearUserOverride(): StorageOperationResult<void> {
 
     // 检查主偏好是否为覆盖，如果是则清除
     const preferenceResult = getUserPreference();
-    
-    if (preferenceResult.success && 
-        preferenceResult.data && 
+
+    if (preferenceResult.success &&
+        preferenceResult.data &&
         preferenceResult.data.source === 'user_override') {
-      
+
       // 创建一个新的非覆盖偏好
       const newPreference: UserLocalePreference = {
         ...preferenceResult.data,
-        source: 'auto_detected',
+        source: 'auto',
         confidence: 0.8,
         timestamp: Date.now(),
         metadata: {
@@ -179,14 +179,14 @@ export function clearUserOverride(): StorageOperationResult<void> {
 export function hasUserOverride(): boolean {
   const localOverride = LocalStorageManager.get<Locale>('user_locale_override');
   const cookieOverride = CookieManager.get('user_locale_override');
-  
+
   if (localOverride || cookieOverride) {
     return true;
   }
 
   // 检查主偏好
   const preferenceResult = getUserPreference();
-  return preferenceResult.success && 
+  return preferenceResult.success &&
          preferenceResult.data?.source === 'user_override';
 }
 
@@ -232,12 +232,12 @@ export function recordOverrideOperation(
   metadata?: Record<string, unknown>
 ): void {
   const history = getOverrideHistory();
-  
+
   const newEntry = {
     locale,
     timestamp: Date.now(),
     action,
-    metadata,
+    ...(metadata && { metadata }),
   };
 
   history.unshift(newEntry);
@@ -264,10 +264,10 @@ export function getOverrideStats(): {
 } {
   const history = getOverrideHistory();
   const currentOverride = getUserOverride();
-  
+
   const stats = {
     totalOverrides: 0,
-    currentOverride: currentOverride.success ? currentOverride.data : null,
+    currentOverride: (currentOverride.success && currentOverride.data) ? currentOverride.data : null,
     lastOverrideTime: null as number | null,
     mostUsedLocale: null as Locale | null,
     overrideFrequency: {} as Record<Locale, number>,
@@ -308,10 +308,10 @@ export function getOverrideStats(): {
  */
 export function clearOverrideHistory(): StorageOperationResult<void> {
   const startTime = Date.now();
-  
+
   try {
     LocalStorageManager.remove('override_history');
-    
+
     return {
       success: true,
       data: undefined,
@@ -340,9 +340,9 @@ export function exportOverrideData(): {
   exportTime: number;
 } {
   const currentOverride = getUserOverride();
-  
+
   return {
-    currentOverride: currentOverride.success ? currentOverride.data : null,
+    currentOverride: (currentOverride.success && currentOverride.data) ? currentOverride.data : null,
     history: getOverrideHistory(),
     stats: getOverrideStats(),
     exportTime: Date.now(),
@@ -358,7 +358,7 @@ export function importOverrideData(data: {
   history?: ReturnType<typeof getOverrideHistory>;
 }): StorageOperationResult<void> {
   const startTime = Date.now();
-  
+
   try {
     // 导入历史记录
     if (data.history && Array.isArray(data.history)) {
@@ -370,7 +370,7 @@ export function importOverrideData(data: {
       const setResult = setUserOverride(data.currentOverride, {
         importedAt: Date.now(),
       });
-      
+
       if (!setResult.success) {
         return {
           success: false,

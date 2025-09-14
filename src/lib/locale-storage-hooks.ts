@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger';
 import type { Locale } from '@/types/i18n';
 import type { UserLocalePreference, LocaleDetectionHistory } from './locale-storage-manager';
 import { LocaleStorageManager } from './locale-storage-manager';
+import { STORAGE_KEYS } from './locale-storage-types';
 
 /**
  * React Hook: 使用语言偏好存储
@@ -303,7 +304,7 @@ export function useStorageEvents() {
 
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.key && Object.values(LocaleStorageManager as Record<string, unknown>).includes(event.key)) {
+      if (event.key && Object.values(STORAGE_KEYS).includes(event.key as any)) {
         setLastStorageEvent({
           key: event.key,
           newValue: event.newValue,

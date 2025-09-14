@@ -7,6 +7,8 @@
 
 'use client';
 
+import type { LocaleSource } from './locale-storage-types';
+
 // 重新导出所有模块的功能
 export { HistoryCacheManager, addDetectionRecord, getDetectionHistory, updateDetectionHistory, validateHistoryData, createDefaultHistory, getHistorySummary, needsCleanup } from './locale-storage-history-core';export { getRecentDetections, getDetectionsBySource, getDetectionsByLocale, getDetectionsByTimeRange, getDetectionsByConfidence, queryDetections, searchDetections, getUniqueLocales, getUniqueSources, getLocaleGroupStats, getSourceGroupStats, getTimeDistributionStats } from
 './locale-storage-history-query';export { getDetectionStats, getDetectionTrends, generateHistoryInsights, getPerformanceMetrics } from
@@ -91,7 +93,7 @@ export class LocaleHistoryManager {
    */
   static addDetectionRecord(
   locale: Locale,
-  source: string,
+  source: LocaleSource,
   confidence: number,
   metadata?: Record<string, unknown>)
   : StorageOperationResult<LocaleDetectionHistory> {

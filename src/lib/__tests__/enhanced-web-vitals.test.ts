@@ -430,7 +430,7 @@ describe('enhanced-web-vitals', () => {
 
     it('should handle performance.now() not available', () => {
       const originalNow = mockPerformance.now;
-      mockPerformance.now = undefined as unknown;
+      mockPerformance.now = undefined as ReturnType<typeof vi.fn>;
 
       const analyzer = new EnhancedWebVitalsCollector();
       expect(analyzer).toBeInstanceOf(EnhancedWebVitalsCollector);

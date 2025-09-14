@@ -187,7 +187,7 @@ export function validateFileUpload(
 
   return {
     valid: true,
-    warnings: warnings.length > 0 ? warnings : undefined
+    ...(warnings.length > 0 && { warnings })
   };
 }
 

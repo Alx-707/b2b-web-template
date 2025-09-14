@@ -233,16 +233,22 @@ function getPerformanceScore(
   targets: unknown,
   higherIsBetter = false,
 ): number {
-  if (higherIsBetter) {
-    if (value >= targets.excellent) return CACHE_LIMITS.MAX_CACHE_ENTRIES;
-    if (value >= targets.good) return PERFORMANCE_THRESHOLDS.GOOD;
-    if (value >= targets.acceptable) return PERFORMANCE_THRESHOLDS.FAIR;
+  // 类型守卫：确保targets是一个包含性能阈值的对象
+  const safeTargets = targets as { excellent: number; good: number; acceptable: number } | null;
+  if (!safeTargets || typeof safeTargets !== 'object') {
     return PERFORMANCE_THRESHOLDS.POOR;
   }
 
-  if (value <= targets.excellent) return CACHE_LIMITS.MAX_CACHE_ENTRIES;
-  if (value <= targets.good) return PERFORMANCE_THRESHOLDS.GOOD;
-  if (value <= targets.acceptable) return PERFORMANCE_THRESHOLDS.FAIR;
+  if (higherIsBetter) {
+    if (value >= safeTargets.excellent) return CACHE_LIMITS.MAX_CACHE_ENTRIES;
+    if (value >= safeTargets.good) return PERFORMANCE_THRESHOLDS.GOOD;
+    if (value >= safeTargets.acceptable) return PERFORMANCE_THRESHOLDS.FAIR;
+    return PERFORMANCE_THRESHOLDS.POOR;
+  }
+
+  if (value <= safeTargets.excellent) return CACHE_LIMITS.MAX_CACHE_ENTRIES;
+  if (value <= safeTargets.good) return PERFORMANCE_THRESHOLDS.GOOD;
+  if (value <= safeTargets.acceptable) return PERFORMANCE_THRESHOLDS.FAIR;
   return PERFORMANCE_THRESHOLDS.POOR;
 }
 

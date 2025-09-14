@@ -1,6 +1,6 @@
 /**
  * 语言检测器基础方法
- * 
+ *
  * 提供浏览器检测、地理位置检测、时区检测等基础检测方法
  */
 
@@ -83,8 +83,8 @@ export class BaseLocaleDetector {
 
         // 尝试提取主要语言代码 (例如: 'zh-CN' -> 'zh')
         const primaryLang = normalizedLang.split('-')[0];
-        const primaryLocale = this.getLocaleFromLanguageCode(primaryLang);
-        
+        const primaryLocale = this.getLocaleFromLanguageCode(primaryLang!);
+
         if (primaryLocale) {
           return primaryLocale;
         }
@@ -122,7 +122,7 @@ export class BaseLocaleDetector {
                 position.coords.latitude,
                 position.coords.longitude
               );
-              
+
               const detectedLocale = this.getLocaleFromCountryCode(countryCode);
               resolve(detectedLocale || DEFAULT_LOCALE);
             } catch (error) {
@@ -139,7 +139,7 @@ export class BaseLocaleDetector {
             }
             resolve(DEFAULT_LOCALE);
           },
-          { 
+          {
             timeout: DETECTION_TIMEOUTS.GEOLOCATION,
             enableHighAccuracy: false,
             maximumAge: 10 * 60 * 1000, // 10分钟缓存
@@ -184,7 +184,7 @@ export class BaseLocaleDetector {
     try {
       const countryCode = await this.getCountryFromIP();
       const detectedLocale = this.getLocaleFromCountryCode(countryCode);
-      
+
       return detectedLocale || DEFAULT_LOCALE;
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
@@ -207,7 +207,7 @@ export class BaseLocaleDetector {
       // 例如: Google Geocoding API, OpenStreetMap Nominatim, 等
       const response = await fetch(
         `https://api.example.com/geo?lat=${lat}&lng=${lng}`,
-        { 
+        {
           signal: controller.signal,
           headers: {
             'Accept': 'application/json',
@@ -256,7 +256,7 @@ export class BaseLocaleDetector {
 
           const data = await response.json();
           const countryCode = data.country || data.country_code || data.countryCode;
-          
+
           if (countryCode) {
             return countryCode;
           }

@@ -1,7 +1,7 @@
 /**
  * 语言存储分析事件和日志管理
  * Locale Storage Analytics Events and Logging
- * 
+ *
  * 负责事件监听、访问日志和错误日志管理
  */
 
@@ -84,7 +84,7 @@ export class EventManager {
     if (eventType) {
       return this.eventListeners.get(eventType)?.length || 0;
     }
-    
+
     let total = 0;
     for (const listeners of this.eventListeners.values()) {
       total += listeners.length;
@@ -129,9 +129,9 @@ export class AccessLogger {
    * Log access
    */
   static logAccess(
-    key: string, 
-    operation: string, 
-    success: boolean, 
+    key: string,
+    operation: string,
+    success: boolean,
     responseTime?: number,
     error?: string
   ): void {
@@ -140,8 +140,8 @@ export class AccessLogger {
       operation,
       timestamp: Date.now(),
       success,
-      responseTime,
-      error,
+      ...(responseTime !== undefined && { responseTime }),
+      ...(error !== undefined && { error }),
     };
 
     this.accessLog.unshift(logEntry);
@@ -153,8 +153,9 @@ export class AccessLogger {
 
     // 触发访问事件
     EventManager.emitEvent({
-      type: 'access',
+      type: 'preference_loaded',
       timestamp: Date.now(),
+      source: 'analytics-events',
       data: logEntry,
     });
   }
@@ -251,17 +252,17 @@ export class ErrorLogger {
    * Log error
    */
   static logError(
-    error: string, 
-    context?: string, 
+    error: string,
+    context?: string,
     severity: ErrorLogEntry['severity'] = 'medium',
     stack?: string
   ): void {
     const errorEntry: ErrorLogEntry = {
       error,
       timestamp: Date.now(),
-      context,
       severity,
-      stack,
+      ...(context !== undefined && { context }),
+      ...(stack !== undefined && { stack }),
     };
 
     this.errorLog.unshift(errorEntry);
@@ -273,8 +274,9 @@ export class ErrorLogger {
 
     // 触发错误事件
     EventManager.emitEvent({
-      type: 'error',
+      type: 'error_occurred',
       timestamp: Date.now(),
+      source: 'analytics-events',
       data: errorEntry,
     });
 
@@ -324,7 +326,9 @@ export class ErrorLogger {
     };
 
     for (const entry of this.errorLog) {
-      severityDistribution[entry.severity] += 1;
+      if (entry.severity && severityDistribution[entry.severity] !== undefined) {
+        severityDistribution[entry.severity]! += 1;
+      }
     }
 
     // 获取最近错误
@@ -354,16 +358,16 @@ export class ErrorLogger {
     for (let i = 6; i >= 0; i--) {
       const date = new Date(now);
       date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = date.toISOString().split('T')[0] || date.toISOString();
       trends[dateStr] = 0;
     }
 
     // 统计错误数量
     for (const entry of this.errorLog) {
       const date = new Date(entry.timestamp);
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = date.toISOString().split('T')[0] || date.toISOString();
       if (Object.prototype.hasOwnProperty.call(trends, dateStr)) {
-        trends[dateStr] += 1;
+        trends[dateStr] = (trends[dateStr] || 0) + 1;
       }
     }
 
@@ -404,8 +408,9 @@ export function cleanupAnalyticsData(maxAge: number = 7 * 24 * 60 * 60 * 1000): 
 
   // 触发清理事件
   EventManager.emitEvent({
-    type: 'cleanup',
+    type: 'cache_cleared',
     timestamp: Date.now(),
+    source: 'analytics-events',
     data: {
       maxAge,
       cutoffTime,

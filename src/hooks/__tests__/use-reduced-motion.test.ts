@@ -127,7 +127,7 @@ describe('useReducedMotion', () => {
   it('should handle server-side rendering gracefully', () => {
     // Mock matchMedia to return null (SSR behavior)
     const originalMatchMedia = global.window.matchMedia;
-    global.window.matchMedia = vi.fn(() => null as unknown);
+    global.window.matchMedia = vi.fn(() => null) as typeof window.matchMedia;
 
     const { result } = renderHook(() => useReducedMotion());
 
@@ -143,7 +143,7 @@ describe('useReducedMotion', () => {
     const originalMatchMedia = global.window.matchMedia;
 
     // Mock window without matchMedia
-    global.window.matchMedia = undefined as unknown;
+    global.window.matchMedia = undefined as typeof window.matchMedia;
 
     const { result } = renderHook(() => useReducedMotion());
 

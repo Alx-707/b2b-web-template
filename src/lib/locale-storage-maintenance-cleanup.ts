@@ -9,8 +9,6 @@
 
 import { logger } from '@/lib/logger';
 
-import type { Locale } from '@/types/i18n';
-;
 import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
 import type {
@@ -43,15 +41,13 @@ export class LocaleCleanupManager {
 
       return {
         success: true,
-        message: '所有存储数据已清除',
         timestamp: Date.now(),
       };
     } catch (error) {
       return {
         success: false,
-        message: `清除存储数据失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -71,7 +67,6 @@ export class LocaleCleanupManager {
       if (!historyData || !Array.isArray(historyData.detections)) {
         return {
           success: true,
-          message: '没有检测历史数据需要清理',
           timestamp: Date.now(),
         };
       }
@@ -89,14 +84,15 @@ export class LocaleCleanupManager {
       if (cleanedCount > 0) {
         const updatedHistory: LocaleDetectionHistory = {
           detections: validDetections,
+          history: validDetections,
           lastUpdated: now,
+          totalDetections: validDetections.length,
         };
 
         LocalStorageManager.set(STORAGE_KEYS.LOCALE_DETECTION_HISTORY, updatedHistory);
 
         return {
           success: true,
-          message: `已清理 ${cleanedCount} 条过期检测记录`,
           timestamp: Date.now(),
           data: { cleanedCount, remainingCount: validDetections.length },
         };
@@ -104,16 +100,14 @@ export class LocaleCleanupManager {
 
       return {
         success: true,
-        message: '没有过期的检测记录需要清理',
         timestamp: Date.now(),
         data: { cleanedCount: 0, remainingCount: originalCount },
       };
     } catch (error) {
       return {
         success: false,
-        message: `清理过期检测记录失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -132,16 +126,14 @@ export class LocaleCleanupManager {
 
       return {
         success: true,
-        message: `已清除 ${dataType} 数据`,
         timestamp: Date.now(),
         data: { dataType, key },
       };
     } catch (error) {
       return {
         success: false,
-        message: `清除 ${dataType} 数据失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -185,16 +177,14 @@ export class LocaleCleanupManager {
 
       return {
         success: true,
-        message: cleanedItems > 0 ? `已清理 ${cleanedItems} 项无效偏好数据` : '没有无效偏好数据需要清理',
         timestamp: Date.now(),
         data: { cleanedItems, issues },
       };
     } catch (error) {
       return {
         success: false,
-        message: `清理无效偏好数据失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -212,7 +202,6 @@ export class LocaleCleanupManager {
       if (!historyData || !Array.isArray(historyData.detections)) {
         return {
           success: true,
-          message: '没有检测历史数据需要去重',
           timestamp: Date.now(),
         };
       }
@@ -233,14 +222,15 @@ export class LocaleCleanupManager {
       if (duplicateCount > 0) {
         const updatedHistory: LocaleDetectionHistory = {
           detections: uniqueDetections,
+          history: uniqueDetections,
           lastUpdated: Date.now(),
+          totalDetections: uniqueDetections.length,
         };
 
         LocalStorageManager.set(STORAGE_KEYS.LOCALE_DETECTION_HISTORY, updatedHistory);
 
         return {
           success: true,
-          message: `已清理 ${duplicateCount} 条重复检测记录`,
           timestamp: Date.now(),
           data: { duplicateCount, remainingCount: uniqueDetections.length },
         };
@@ -248,16 +238,14 @@ export class LocaleCleanupManager {
 
       return {
         success: true,
-        message: '没有重复的检测记录需要清理',
         timestamp: Date.now(),
         data: { duplicateCount: 0, remainingCount: originalCount },
       };
     } catch (error) {
       return {
         success: false,
-        message: `清理重复检测记录失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }

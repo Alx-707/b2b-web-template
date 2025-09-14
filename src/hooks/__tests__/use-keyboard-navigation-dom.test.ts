@@ -147,11 +147,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
       const buttons = realContainer.querySelectorAll('button');
       expect(buttons).toHaveLength(3);
 
-      // 模拟键盘事件
-      const _arrowDownEvent = new KeyboardEvent('keydown', {
-        key: 'ArrowDown',
-        bubbles: true,
-      });
+      // 模拟键盘事件（已移除未使用的事件变量）
 
       act(() => {
         result.current.focusNext();
@@ -212,7 +208,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
         });
       }
 
-      const _buttons = realContainer.querySelectorAll('button');
+      // 按钮查询已移除（未使用的变量）
 
       // 直接聚焦到第二个按钮
       act(() => {

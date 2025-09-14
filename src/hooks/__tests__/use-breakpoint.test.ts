@@ -342,7 +342,7 @@ describe('useBreakpoint', () => {
           addEventListener: vi.fn(),
           removeEventListener: vi.fn(),
           // innerWidth is undefined, which should trigger fallback
-        } as unknown;
+        } as unknown as Window & typeof globalThis;
 
         const { result } = renderHook(() => useBreakpoint());
 
@@ -402,7 +402,7 @@ describe('useBreakpoint', () => {
 
       try {
         mockWindowDimensions.innerWidth = NaN;
-        mockWindowDimensions.innerHeight = undefined as unknown;
+        mockWindowDimensions.innerHeight = undefined as number;
 
         const { result } = renderHook(() => useBreakpoint());
 

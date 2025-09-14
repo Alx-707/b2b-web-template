@@ -9,8 +9,8 @@ import type {
   MonitoringConfig,
   PerformanceData,
   MonitoringEventType,
-  ErrorLevel,
 } from './i18n-monitoring-types';
+import { ErrorLevel } from './i18n-monitoring-types';
 import type { EventCollector } from './i18n-event-collector';
 
 // 性能监控器
@@ -79,7 +79,7 @@ export class PerformanceMonitor {
     this.performanceData.totalRequests += 1;
 
     const level: ErrorLevel =
-      error.code === 'MISSING_KEY' ? 'warning' : 'error';
+      error.code === 'MISSING_KEY' ? ErrorLevel.WARNING : ErrorLevel.ERROR;
 
     this.eventCollector.addEvent({
       type: 'translation_error' as MonitoringEventType,
@@ -88,8 +88,8 @@ export class PerformanceMonitor {
       message: error.message,
       metadata: {
         errorCode: error.code,
-        key: error.key,
-        params: error.params,
+        key: error.key || '',
+        params: error.params || {},
         errorRate: this.getErrorRate(),
       },
     });

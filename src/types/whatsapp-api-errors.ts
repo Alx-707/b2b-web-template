@@ -5,7 +5,7 @@
  * 提供API错误处理相关的类型定义和工具函数
  */
 
-import type { ErrorCode } from './whatsapp-api-config';
+
 
 /**
  * 基础API错误响应
@@ -244,7 +244,7 @@ export interface ErrorHandlingConfig {
  * Error type guard functions
  */
 export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
-  return (
+  return Boolean(
     error &&
     typeof error === 'object' &&
     typeof (error as Record<string, unknown>).error === 'object' &&
@@ -255,7 +255,7 @@ export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
 }
 
 export function isNetworkError(error: unknown): error is NetworkError {
-  return (
+  return Boolean(
     error &&
     typeof error === 'object' &&
     (error as Record<string, unknown>).name === 'NetworkError'
@@ -263,7 +263,7 @@ export function isNetworkError(error: unknown): error is NetworkError {
 }
 
 export function isValidationError(error: unknown): error is ValidationError {
-  return (
+  return Boolean(
     error &&
     typeof error === 'object' &&
     (error as Record<string, unknown>).name === 'ValidationError'
@@ -271,7 +271,7 @@ export function isValidationError(error: unknown): error is ValidationError {
 }
 
 export function isAuthenticationError(error: unknown): error is AuthenticationError {
-  return (
+  return Boolean(
     error &&
     typeof error === 'object' &&
     (error as Record<string, unknown>).name === 'AuthenticationError'
@@ -279,7 +279,7 @@ export function isAuthenticationError(error: unknown): error is AuthenticationEr
 }
 
 export function isRateLimitError(error: unknown): error is RateLimitError {
-  return (
+  return Boolean(
     error &&
     typeof error === 'object' &&
     (error as Record<string, unknown>).name === 'RateLimitError'
@@ -287,7 +287,7 @@ export function isRateLimitError(error: unknown): error is RateLimitError {
 }
 
 export function isBusinessLogicError(error: unknown): error is BusinessLogicError {
-  return (
+  return Boolean(
     error &&
     typeof error === 'object' &&
     (error as Record<string, unknown>).name === 'BusinessLogicError'
@@ -295,10 +295,10 @@ export function isBusinessLogicError(error: unknown): error is BusinessLogicErro
 }
 
 export function isServerError(error: unknown): error is ServerError {
-  return (
+  return Boolean(
     error &&
     typeof error === 'object' &&
-    error.name === 'ServerError'
+    (error as Record<string, unknown>).name === 'ServerError'
   );
 }
 
@@ -413,7 +413,7 @@ export const ErrorUtils = {
       severity,
       category,
       retryable,
-      retryAfter,
+      ...(retryAfter !== undefined && { retryAfter }),
       suggestions,
     };
   },

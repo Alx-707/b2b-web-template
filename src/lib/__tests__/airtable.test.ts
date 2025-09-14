@@ -50,7 +50,7 @@ vi.mock('./validations', async () => {
 });
 
 describe('Airtable Tests - Index', () => {
-  let AirtableService: typeof import('../airtable');
+  let AirtableServiceClass: any;
 
   beforeEach(async () => {
     // Clear mocks but preserve the mock functions
@@ -66,7 +66,8 @@ describe('Airtable Tests - Index', () => {
     vi.resetModules();
 
     // Import the service fresh for each test
-    AirtableService = await import('../airtable');
+    const AirtableModule = await import('../airtable');
+    AirtableServiceClass = AirtableModule.AirtableService;
   });
 
   afterEach(() => {
@@ -119,7 +120,7 @@ describe('Airtable Tests - Index', () => {
     };
 
     it('should create contact record successfully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -169,7 +170,7 @@ describe('Airtable Tests - Index', () => {
     });
 
     it('should throw error when service is not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as AirtableServicePrivate).isConfigured = false;
@@ -183,7 +184,7 @@ describe('Airtable Tests - Index', () => {
 
   describe('Basic getContacts', () => {
     it('should retrieve contact records successfully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -223,7 +224,7 @@ describe('Airtable Tests - Index', () => {
     });
 
     it('should throw error when service is not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as unknown as AirtableServicePrivate).isConfigured = false;
@@ -237,7 +238,7 @@ describe('Airtable Tests - Index', () => {
 
   describe('Basic updateContactStatus', () => {
     it('should update contact status successfully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -273,7 +274,7 @@ describe('Airtable Tests - Index', () => {
     });
 
     it('should throw error when service is not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as unknown as AirtableServicePrivate).isConfigured = false;
@@ -287,7 +288,7 @@ describe('Airtable Tests - Index', () => {
 
   describe('Basic deleteContact', () => {
     it('should delete contact successfully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -306,7 +307,7 @@ describe('Airtable Tests - Index', () => {
     });
 
     it('should throw error when service is not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as unknown as AirtableServicePrivate).isConfigured = false;
@@ -320,7 +321,7 @@ describe('Airtable Tests - Index', () => {
 
   describe('Basic isReady', () => {
     it('should return true when properly configured', () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -337,7 +338,7 @@ describe('Airtable Tests - Index', () => {
     });
 
     it('should return false when not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as unknown as AirtableServicePrivate).isConfigured = false;

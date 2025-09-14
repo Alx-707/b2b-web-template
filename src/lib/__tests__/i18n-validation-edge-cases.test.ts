@@ -304,7 +304,7 @@ describe('I18n Validation - Edge Cases Tests', () => {
       results.forEach(result => {
         expect(result).toBeDefined();
         expect(typeof result.isValid).toBe('boolean');
-        expect(result.isValid).toBe(results[0].isValid);
+        expect(result.isValid).toBe(results[0]?.isValid);
       });
     });
 

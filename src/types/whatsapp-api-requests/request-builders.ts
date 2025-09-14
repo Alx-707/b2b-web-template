@@ -24,7 +24,7 @@ export const RequestBuilders = {
       type: 'text',
       text: {
         body: text,
-        preview_url: previewUrl,
+        ...(previewUrl !== undefined && { preview_url: previewUrl }),
       },
     };
   },

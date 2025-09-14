@@ -41,7 +41,7 @@ vi.mock('./validations', async () => {
 });
 
 describe('Airtable Advanced Tests', () => {
-  let AirtableService: typeof import('../airtable');
+  let AirtableServiceClass: any;
 
   beforeEach(async () => {
     // Clear mocks but preserve the mock functions
@@ -57,7 +57,8 @@ describe('Airtable Advanced Tests', () => {
     vi.resetModules();
 
     // Import the service fresh for each test
-    AirtableService = await import('../airtable');
+    const AirtableModule = await import('../airtable');
+    AirtableServiceClass = AirtableModule.AirtableService;
   });
 
   afterEach(() => {
@@ -66,7 +67,7 @@ describe('Airtable Advanced Tests', () => {
 
   describe('Edge Cases', () => {
     it('should handle very large form data', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -102,7 +103,7 @@ describe('Airtable Advanced Tests', () => {
     });
 
     it('should handle special characters in form data', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -146,7 +147,7 @@ describe('Airtable Advanced Tests', () => {
     });
 
     it('should handle concurrent operations', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;

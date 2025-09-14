@@ -22,11 +22,12 @@ export function createBackup(): StorageOperationResult<{
   size: number;
 }> {
   const historyResult = exportHistory();
-  
+
   if (!historyResult.success) {
     return {
-      ...historyResult,
-      data: undefined,
+      success: false,
+      timestamp: Date.now(),
+      error: historyResult.error,
     } as StorageOperationResult<{
       backup: LocaleDetectionHistory;
       timestamp: number;

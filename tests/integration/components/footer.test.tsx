@@ -9,11 +9,11 @@
  * - Responsive behavior
  */
 
-import React from 'react';
+import { Footer } from '@/components/layout/footer';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { Footer } from '@/components/layout/footer';
 
 // Mock next-intl hooks
 const mockUseTranslations = vi.fn();
@@ -27,7 +27,7 @@ vi.mock('next-intl', () => ({
 // Mock Next.js Link component
 const mockLinkClick = vi.fn();
 vi.mock('next/link', () => ({
-  default: ({ children, href, className, ...props }: React.ComponentProps<"div">) => (
+  default: ({ children, href, className, ...props }: React.ComponentProps<"a"> & { href: string }) => (
     <a
       data-testid={`footer-link-${href.replace(/[^a-zA-Z0-9]/g, '-')}`}
       href={href}
@@ -125,7 +125,7 @@ vi.mock('@/lib/footer-config', () => {
 
 // Mock social icons component
 vi.mock('@/components/ui/social-icons', () => ({
-  ExternalLinkIcon: ({ size }: React.ComponentProps<"div">) => (
+  ExternalLinkIcon: ({ size }: { size?: string }) => (
     <span
       data-testid='external-link-icon'
       data-size={size}
@@ -133,7 +133,12 @@ vi.mock('@/components/ui/social-icons', () => ({
       🔗
     </span>
   ),
-  SocialIconLink: ({ href, icon, label, ariaLabel, ...props }: React.ComponentProps<"div">) => (
+  SocialIconLink: ({ href, icon, label, ariaLabel, ...props }: React.ComponentProps<"a"> & {
+    href: string;
+    icon: string;
+    label: string;
+    ariaLabel: string;
+  }) => (
     <a
       data-testid={`social-link-${icon}`}
       href={href}

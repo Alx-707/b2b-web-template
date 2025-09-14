@@ -236,12 +236,20 @@ export class I18nCacheManager implements CacheManager {
 
   // 添加事件监听器
   addEventListener(eventType: string, listener: (event: Record<string, unknown>) => void): void {
-    this.metricsCollector.addEventListener(eventType, listener);
+    // 创建适配器函数来转换事件类型
+    const adaptedListener = (cacheEvent: any) => {
+      listener(cacheEvent as Record<string, unknown>);
+    };
+    this.metricsCollector.addEventListener(eventType, adaptedListener);
   }
 
   // 移除事件监听器
   removeEventListener(eventType: string, listener: (event: Record<string, unknown>) => void): void {
-    this.metricsCollector.removeEventListener(eventType, listener);
+    // 创建适配器函数来转换事件类型
+    const adaptedListener = (cacheEvent: any) => {
+      listener(cacheEvent as Record<string, unknown>);
+    };
+    this.metricsCollector.removeEventListener(eventType, adaptedListener);
   }
 
   // 估算内存使用量

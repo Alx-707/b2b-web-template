@@ -85,10 +85,10 @@ export const networkAwareStrategy: PreloadStrategy = async (
   if (connection) {
     const { effectiveType, downlink } = connection;
 
-    if (effectiveType === '4g' && downlink > 2) {
+    if (effectiveType === '4g' && (downlink ?? 0) > 2) {
       // 快速网络，使用立即策略
       await immediateStrategy(preloader, locales, options);
-    } else if (effectiveType === '3g' || downlink > 0.5) {
+    } else if (effectiveType === '3g' || (downlink ?? 0) > 0.5) {
       // 中等网络，使用渐进式策略
       await progressiveStrategy(preloader, locales, options);
     } else {

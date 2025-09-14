@@ -456,7 +456,7 @@ export enum PreloadPriority {
  */
 export function isPreloadResult(obj: unknown): obj is PreloadResult {
   return (
-    obj &&
+    !!obj &&
     typeof obj === 'object' &&
     typeof (obj as Record<string, unknown>).success === 'boolean' &&
     typeof (obj as Record<string, unknown>).locale === 'string' &&
@@ -466,7 +466,7 @@ export function isPreloadResult(obj: unknown): obj is PreloadResult {
 }
 
 export function isPreloadState(obj: unknown): obj is PreloadState {
-  return (
+  return Boolean(
     obj &&
     typeof obj === 'object' &&
     typeof (obj as PreloadState).isPreloading === 'boolean' &&

@@ -11,7 +11,7 @@
 import { NextRequest } from 'next/server';
 ;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { POST } from '../route';
+import { POST } from '@/app/api/csp-report/__tests__/route';
 
 // 注意：基础测试已移至 route-post-core.test.ts
 // 注意：高级功能测试已移至 route-post-advanced.test.ts

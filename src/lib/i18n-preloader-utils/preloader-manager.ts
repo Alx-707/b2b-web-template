@@ -14,7 +14,7 @@ import type {
  */
 export class PreloaderManager {
   private preloaders = new Map<string, IPreloader>();
-  private defaultPreloader?: IPreloader;
+  private defaultPreloader?: IPreloader | undefined;
 
   /**
    * 注册预加载器
@@ -61,7 +61,7 @@ export class PreloaderManager {
       preloader.cleanup();
       this.preloaders.delete(name);
       if (this.defaultPreloader === preloader) {
-        this.defaultPreloader = this.preloaders.values().next().value;
+        this.defaultPreloader = this.preloaders.values().next().value || undefined;
       }
       return true;
     }

@@ -41,7 +41,7 @@ vi.mock('./validations', async () => {
 });
 
 describe('Airtable Error Handling Tests', () => {
-  let AirtableService: typeof import('../airtable');
+  let AirtableServiceClass: any;
 
   beforeEach(async () => {
     // Clear mocks but preserve the mock functions
@@ -57,7 +57,8 @@ describe('Airtable Error Handling Tests', () => {
     vi.resetModules();
 
     // Import the service fresh for each test
-    AirtableService = await import('../airtable');
+    const AirtableModule = await import('../airtable');
+    AirtableServiceClass = AirtableModule.AirtableService;
   });
 
   afterEach(() => {
@@ -76,7 +77,7 @@ describe('Airtable Error Handling Tests', () => {
     };
 
     it('should handle API errors during creation', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -95,7 +96,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should handle validation errors', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -119,7 +120,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should handle network timeouts', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -140,7 +141,7 @@ describe('Airtable Error Handling Tests', () => {
 
   describe('Error Handling - getContacts', () => {
     it('should handle API errors during retrieval', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -162,7 +163,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should handle empty results gracefully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -184,7 +185,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should handle malformed records', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -223,7 +224,7 @@ describe('Airtable Error Handling Tests', () => {
 
   describe('Error Handling - updateContactStatus', () => {
     it('should handle update errors', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -242,7 +243,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should handle invalid record IDs', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -261,7 +262,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should handle invalid status values', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -280,7 +281,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should throw error when service is not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as unknown as AirtableServicePrivate).isConfigured = false;
@@ -294,7 +295,7 @@ describe('Airtable Error Handling Tests', () => {
 
   describe('Error Handling - deleteContact', () => {
     it('should handle deletion errors', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -313,7 +314,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should handle invalid record IDs for deletion', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -332,7 +333,7 @@ describe('Airtable Error Handling Tests', () => {
     });
 
     it('should throw error when service is not configured for deletion', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as unknown as AirtableServicePrivate).isConfigured = false;

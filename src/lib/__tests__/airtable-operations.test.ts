@@ -5,7 +5,7 @@
  * - 核心服务导出验证
  * - 基本操作集成测试
  * - 错误处理验证
- * 
+ *
  * 详细测试请参考：
  * - airtable-crud.test.ts - CRUD操作专门测试
  * - airtable-configuration.test.ts - 配置功能测试
@@ -54,7 +54,7 @@ vi.mock('./validations', async () => {
 });
 
 describe('Airtable Service - Main Operations Tests', () => {
-  let AirtableService: typeof import('../airtable');
+  let AirtableServiceClass: any;
 
   beforeEach(async () => {
     // Clear mocks but preserve the mock functions
@@ -68,7 +68,7 @@ describe('Airtable Service - Main Operations Tests', () => {
 
     // Dynamically import the module to ensure fresh instance
     const module = await import('../airtable') as DynamicImportModule;
-    AirtableService = module.AirtableService;
+    AirtableServiceClass = module.AirtableService;
   });
 
   afterEach(() => {
@@ -92,14 +92,14 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should create AirtableService instance', () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
       expect(service).toBeInstanceOf(AirtableService);
     });
   });
 
   describe('基本操作集成测试', () => {
     it('should handle basic contact creation', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -123,7 +123,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should handle basic contact retrieval', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -150,7 +150,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should handle contact status updates', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -172,7 +172,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should handle contact deletion', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -188,7 +188,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should check service readiness correctly', () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Test with missing configuration
       (service as unknown as AirtableServicePrivate).isConfigured = false;
@@ -205,7 +205,7 @@ describe('Airtable Service - Main Operations Tests', () => {
 
   describe('错误处理验证', () => {
     it('should handle missing configuration gracefully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as AirtableServicePrivate).isConfigured = false;
@@ -217,7 +217,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should handle API errors gracefully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as AirtableServicePrivate).isConfigured = true;
       (service as AirtableServicePrivate).base = {
@@ -232,7 +232,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should handle retrieval errors gracefully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -247,7 +247,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should handle update errors gracefully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -262,7 +262,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should handle deletion errors gracefully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as unknown as AirtableServicePrivate).isConfigured = true;
       (service as unknown as AirtableServicePrivate).base = {
@@ -298,7 +298,7 @@ describe('Airtable Service - Main Operations Tests', () => {
 
   describe('服务状态检查', () => {
     it('should return true when properly configured', () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as unknown as AirtableServicePrivate).isConfigured = true;
@@ -310,7 +310,7 @@ describe('Airtable Service - Main Operations Tests', () => {
     });
 
     it('should return false when not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as unknown as AirtableServicePrivate).isConfigured = false;

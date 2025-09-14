@@ -38,7 +38,7 @@ export class WebhookUtils {
           errors.push({
             entry_id: entry.id,
             error: error instanceof Error ? error.message : 'Unknown parsing error',
-            raw_data: entry,
+            raw_data: entry as Record<string, unknown>,
           });
         }
       }
@@ -60,7 +60,7 @@ export class WebhookUtils {
         events: [],
         errors: [{
           error: error instanceof Error ? error.message : 'Failed to parse webhook payload',
-          raw_data: payload,
+          raw_data: payload as Record<string, unknown>,
         }],
         metadata: {
           total_entries: payload.entry?.length || 0,
@@ -141,26 +141,28 @@ export class WebhookUtils {
       return { is_valid: false, errors, warnings };
     }
 
-    if (payload.object !== 'whatsapp_business_account') {
+    if ((payload as Record<string, unknown>).object !== 'whatsapp_business_account') {
       errors.push('Invalid object type, expected "whatsapp_business_account"');
     }
 
-    if (!Array.isArray(payload.entry)) {
+    if (!Array.isArray((payload as Record<string, unknown>).entry)) {
       errors.push('Entry must be an array');
     } else {
       // 验证每个条目
-      payload.entry.forEach((entry: Record<string, unknown>, index: number) => {
+      ((payload as Record<string, unknown>).entry as Record<string, unknown>[]).forEach((entry: Record<string, unknown>, index: number) => {
         if (!entry.id) {
           errors.push(`Entry ${index}: Missing id`);
         }
         if (!Array.isArray(entry.changes)) {
           errors.push(`Entry ${index}: Changes must be an array`);
         } else {
-          entry.changes.forEach((change: Record<string, unknown>, changeIndex: number) => {
+          (entry.changes as Record<string, unknown>[]).forEach((change: Record<string, unknown>, changeIndex: number) => {
             if (!change.value) {
               errors.push(`Entry ${index}, Change ${changeIndex}: Missing value`);
             }
-            if (!change.value?.metadata?.phone_number_id) {
+            const changeValue = change.value as Record<string, unknown>;
+            const metadata = changeValue?.metadata as Record<string, unknown>;
+            if (!metadata?.phone_number_id) {
               errors.push(`Entry ${index}, Change ${changeIndex}: Missing phone_number_id`);
             }
           });

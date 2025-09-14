@@ -13,13 +13,13 @@ import type {
  * Webhook verification utility functions
  */
 export function isWebhookVerificationRequest(query: unknown): query is WebhookVerificationRequest {
-  return (
+  return Boolean(
     query &&
     typeof query === 'object' &&
     'hub.mode' in query &&
     'hub.challenge' in query &&
     'hub.verify_token' in query &&
-    query['hub.mode'] === 'subscribe'
+    (query as Record<string, unknown>)['hub.mode'] === 'subscribe'
   );
 }
 

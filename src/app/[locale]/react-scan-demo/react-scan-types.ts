@@ -11,17 +11,26 @@ export interface ReactScanStats {
 }
 
 /**
+ * React Scan 全局对象类型定义
+ */
+export interface ReactScanGlobal {
+  ReactScanInternals?: {
+    enabled?: boolean;
+    totalRenders?: number;
+    componentsScanned?: number;
+  };
+  components?: Record<string, {
+    renderCount: number;
+    renderTime: number;
+  }>;
+}
+
+/**
  * 扩展的 Window 接口，包含 React Scan 相关属性
  */
 declare global {
   interface Window {
-    __REACT_SCAN__?: {
-      ReactScanInternals?: {
-        enabled?: boolean;
-        totalRenders?: number;
-        componentsScanned?: number;
-      };
-    };
+    __REACT_SCAN__?: ReactScanGlobal;
   }
 }
 

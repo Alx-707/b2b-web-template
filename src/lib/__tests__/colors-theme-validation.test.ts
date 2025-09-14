@@ -185,8 +185,8 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
     });
 
     it('should handle null and undefined color objects', () => {
-      expect(() => oklchToCSS(null as unknown)).toThrow();
-      expect(() => oklchToCSS(undefined as unknown)).toThrow();
+      expect(() => oklchToCSS(null as unknown as OKLCHColor)).toThrow();
+      expect(() => oklchToCSS(undefined as unknown as OKLCHColor)).toThrow();
     });
 
     it('should handle empty color object', () => {
@@ -214,7 +214,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
         c: '0.1' as unknown,
         h: '180' as unknown,
         alpha: '0.8' as unknown,
-      };
+      } as OKLCHColor;
 
       expect(() => oklchToCSS(stringColor)).not.toThrow();
     });
@@ -225,7 +225,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
         c: false as unknown,
         h: true as unknown,
         alpha: false as unknown,
-      };
+      } as OKLCHColor;
 
       expect(() => oklchToCSS(booleanColor)).not.toThrow();
     });
@@ -236,7 +236,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
         c: [0.1, 0.2] as unknown,
         h: [] as unknown,
         alpha: [0.8] as unknown,
-      };
+      } as OKLCHColor;
 
       expect(() => oklchToCSS(arrayColor)).not.toThrow();
     });
@@ -247,7 +247,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
         c: { nested: { value: 0.1 } } as unknown,
         h: { toString: () => '180' } as unknown,
         alpha: { valueOf: () => 0.8 } as unknown,
-      };
+      } as OKLCHColor;
 
       expect(() => oklchToCSS(objectColor)).not.toThrow();
     });
@@ -258,7 +258,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
         c: Math.sin as unknown,
         h: parseInt as unknown,
         alpha: parseFloat as unknown,
-      };
+      } as OKLCHColor;
 
       expect(() => oklchToCSS(functionColor)).not.toThrow();
     });
@@ -269,7 +269,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
         c: Symbol.iterator as unknown,
         h: Symbol.for('hue') as unknown,
         alpha: Symbol.toPrimitive as unknown,
-      };
+      } as OKLCHColor;
 
       expect(() => oklchToCSS(symbolColor)).not.toThrow();
     });
@@ -280,7 +280,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
         c: BigInt(0) as unknown,
         h: BigInt(180) as unknown,
         alpha: BigInt(1) as unknown,
-      };
+      } as OKLCHColor;
 
       expect(() => oklchToCSS(bigintColor)).not.toThrow();
     });

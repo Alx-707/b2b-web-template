@@ -342,25 +342,17 @@ export class LRUCache<T> implements CacheStorage<T> {
     const mid = Math.floor(sorted.length / 2);
 
     return sorted.length % 2 === 0
-      ? (sorted[mid - 1] + sorted[mid]) / 2
-      : sorted[mid];
+      ? ((sorted[mid - 1] || 0) + (sorted[mid] || 0)) / 2
+      : sorted[mid] || 0;
   }
 
   // 发出事件
   private emitEvent(type: string, key?: string, data?: T): void {
-    const event: CacheEvent<T> = {
-      type: type as CacheEventType,
-      key,
-      data,
-      timestamp: Date.now(),
-      metadata: {
-        cacheSize: this.cache.size,
-        maxSize: this.config.maxSize,
-      },
-    };
-
     // 这里可以添加事件发射逻辑
     // 由于 MetricsCollector 已经处理了基本事件，这里主要用于扩展
+    // TODO: 实现事件发射逻辑
+    // 当前暂时不创建事件对象，避免未使用变量警告
+    void type; void key; void data; // 避免参数未使用警告
   }
 }
 

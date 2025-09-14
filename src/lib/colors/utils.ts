@@ -52,7 +52,7 @@ export function checkContrastCompliance(
  * 生成CSS变量定义
  */
 export function generateCSSVariables(
-  colors: ThemeColors,
+  colors: Partial<ThemeColors>,
   prefix = '',
 ): Record<string, string> {
   const variables: Record<string, string> = {};
@@ -69,7 +69,7 @@ export function generateCSSVariables(
 /**
  * 验证主题颜色的对比度合规性
  */
-export function validateThemeContrast(colors: ThemeColors): {
+export function validateThemeContrast(colors: Partial<ThemeColors>): {
   compliant: boolean;
   issues: string[];
 } {
@@ -135,7 +135,7 @@ export function validateThemeContrast(colors: ThemeColors): {
   ];
 
   checks.forEach(({ fg, bg, name }) => {
-    if (!checkContrastCompliance(fg, bg, 'AA')) {
+    if (fg && bg && !checkContrastCompliance(fg, bg, 'AA')) {
       const contrast = calculateContrast(fg, bg);
       const decimalPlaces = 2;
       issues.push(

@@ -47,7 +47,7 @@ export function useEnhancedTheme(): EnhancedThemeHook {
           DEFAULT_CONFIG.debounceDelay,
         );
       }
-      debouncedSetThemeRef.current(newTheme);
+      debouncedSetThemeRef.current?.(newTheme);
     },
     [originalSetTheme, theme],
   );
@@ -63,7 +63,7 @@ export function useEnhancedTheme(): EnhancedThemeHook {
           DEFAULT_CONFIG.debounceDelay,
         );
       }
-      debouncedSetCircularThemeRef.current(newTheme, clickEvent);
+      debouncedSetCircularThemeRef.current?.(newTheme, clickEvent);
     },
     [originalSetTheme, theme],
   );
@@ -74,7 +74,10 @@ export function useEnhancedTheme(): EnhancedThemeHook {
       theme,
       setTheme,
       setCircularTheme,
-      ...rest,
+      themes: rest.themes,
+      forcedTheme: rest.forcedTheme,
+      resolvedTheme: rest.resolvedTheme,
+      systemTheme: rest.systemTheme,
     }),
     [theme, setTheme, setCircularTheme, rest],
   );

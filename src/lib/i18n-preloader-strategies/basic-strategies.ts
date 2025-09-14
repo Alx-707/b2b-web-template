@@ -4,7 +4,7 @@
  */
 
 import type { Locale } from '@/types/i18n';
-import type { 
+import type {
   IPreloader,
   PreloadStrategy,
   PreloadOptions,
@@ -28,8 +28,8 @@ export const immediateStrategy: PreloadStrategy = async (
  */
 export const smartStrategy: PreloadStrategy = async (
   preloader: IPreloader,
-  locales: Locale[],
-  options?: PreloadOptions
+  _locales: Locale[],
+  _options?: PreloadOptions
 ) => {
   await preloader.smartPreload();
 };
@@ -94,6 +94,6 @@ export const lazyStrategy: PreloadStrategy = async (
 ) => {
   // 只预加载当前最需要的语言
   if (locales.length > 0) {
-    await preloader.preloadLocale(locales[0], options);
+    await preloader.preloadLocale(locales[0]!, options);
   }
 };

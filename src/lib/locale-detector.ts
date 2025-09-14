@@ -6,15 +6,30 @@
  */
 
 // 重新导出所有模块的类型和功能
-export { CHINESE_LANGUAGE_CODES, ENGLISH_LANGUAGE_CODES, LANGUAGE_CODE_TO_LOCALE_MAP, CHINESE_COUNTRY_CODES, ENGLISH_COUNTRY_CODES, COUNTRY_CODE_TO_LOCALE_MAP, CHINESE_TIME_ZONES, ENGLISH_TIME_ZONES, TIMEZONE_TO_LOCALE_MAP, DETECTION_TIMEOUTS, CONFIDENCE_WEIGHTS, DETECTION_SOURCES, DetectionSource, GEO_API_CONFIG, QUALITY_THRESHOLDS } from './locale-detector-constants';export { BaseLocaleDetector } from
-'./locale-detector-base';export { SmartLocaleDetector } from
-'./locale-detector-smart';
+export {
+  CHINESE_LANGUAGE_CODES,
+  ENGLISH_LANGUAGE_CODES,
+  LANGUAGE_CODE_TO_LOCALE_MAP,
+  CHINESE_COUNTRY_CODES,
+  ENGLISH_COUNTRY_CODES,
+  COUNTRY_CODE_TO_LOCALE_MAP,
+  CHINESE_TIME_ZONES,
+  ENGLISH_TIME_ZONES,
+  TIMEZONE_TO_LOCALE_MAP,
+  DETECTION_TIMEOUTS,
+  CONFIDENCE_WEIGHTS,
+  DETECTION_SOURCES,
+  GEO_API_CONFIG,
+  QUALITY_THRESHOLDS
+} from './locale-detector-constants';
+export type { DetectionSource } from './locale-detector-constants';
+export { BaseLocaleDetector } from './locale-detector-base';
+export { SmartLocaleDetector as SmartDetector } from './locale-detector-smart';
 
 // 导入主要功能类
 import { SmartLocaleDetector as SmartDetector } from './locale-detector-smart';
 import { BaseLocaleDetector } from './locale-detector-base';
 import type { LocaleDetectionResult } from './locale-detection-types';
-import type { Locale } from '@/types/i18n';
 
 /**
  * 智能语言检测器 - 向后兼容的主类

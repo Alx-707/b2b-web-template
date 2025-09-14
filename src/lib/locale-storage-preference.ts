@@ -275,6 +275,15 @@ export class LocalePreferenceManager {
   static getPreferenceChangeStats(): ReturnType<typeof getPreferenceChangeStats> {
     return getPreferenceChangeStats();
   }
+
+  /**
+   * 验证偏好数据
+   * Validate preference data
+   */
+  static validatePreference(preference: UserLocalePreference): boolean {
+    const result = validatePreferenceData(preference);
+    return result.isValid;
+  }
 }
 
 // ==================== 向后兼容的类型别名 ====================

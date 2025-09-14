@@ -135,8 +135,8 @@ function useContactForm() {
   );
 
   // React Hook Form setup
-  const form = (useForm as any)<ContactFormData>({
-    resolver: zodResolver(contactFormSchema) as any,
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema as any),
     defaultValues: {
       firstName: '',
       lastName: '',

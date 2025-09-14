@@ -6,20 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCallback, useEffect, useState } from 'react';
+import type { ReactScanGlobal } from '@/app/[locale]/react-scan-demo/react-scan-types';
 
-// React Scan 全局对象类型定义
-interface ReactScanGlobal {
-  components?: Record<string, {
-    renderCount: number;
-    renderTime: number;
-  }>;
-}
-
-declare global {
-  interface Window {
-    __REACT_SCAN__?: ReactScanGlobal;
-  }
-}
 
 interface ComponentStats {
   name: string;

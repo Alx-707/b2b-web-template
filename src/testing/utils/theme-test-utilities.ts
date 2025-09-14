@@ -178,7 +178,7 @@ export class ThemeTestUtils {
       {
         name: 'Invalid Theme State',
         setup: (mock: ThemeHookMock) => {
-          mock.theme = undefined as unknown;
+          mock.theme = undefined as unknown as ThemeType;
           mock.ariaAttributes['aria-current'] = 'light'; // fallback
         },
         description: 'should handle invalid theme state',

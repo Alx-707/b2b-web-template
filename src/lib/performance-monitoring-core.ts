@@ -6,10 +6,12 @@
  */
 
 // 重新导出所有模块的功能
-export { PerformanceConfigManager, createConfigManager, getDefaultConfig, validatePerformanceConfig } from './performance-monitoring-core-config';export { PerformanceMetricsManager, createMetricsManager } from
-'./performance-monitoring-core-metrics';export { PerformanceReport, PerformanceReportGenerator, createReportGenerator } from
-'./performance-monitoring-core-reports';export { ToolConflictResult, PerformanceToolConflictChecker, createConflictChecker, quickConflictCheck } from
-'./performance-monitoring-core-conflicts';
+export { PerformanceConfigManager, createConfigManager, getDefaultConfig, validatePerformanceConfig } from './performance-monitoring-core-config';
+export { PerformanceMetricsManager, createMetricsManager } from './performance-monitoring-core-metrics';
+export type { PerformanceReport } from './performance-monitoring-core-reports';
+export { PerformanceReportGenerator, createReportGenerator } from './performance-monitoring-core-reports';
+export type { ToolConflictResult } from './performance-monitoring-core-conflicts';
+export { PerformanceToolConflictChecker, createConflictChecker, quickConflictCheck } from './performance-monitoring-core-conflicts';
 
 // 导入主要功能用于向后兼容
 import type {

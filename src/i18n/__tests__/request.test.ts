@@ -70,7 +70,7 @@ describe('i18n Request Configuration', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Setup default mocks
     mockHeaders.mockResolvedValue(mockHeadersList);
     mockTranslationCache.getInstance.mockReturnValue(mockCacheInstance);
@@ -78,30 +78,30 @@ describe('i18n Request Configuration', () => {
       common: { loading: 'Loading...' },
       navigation: { home: 'Home' },
     });
-    
+
     // Mock performance.now
     global.performance = {
       now: vi.fn().mockReturnValue(100),
-    } as unknown;
+    } as Performance;
   });
 
   describe('基础配置', () => {
     it('应该正确配置getRequestConfig', async () => {
       // Import the module to trigger getRequestConfig call
       await import('../request');
-      
+
       expect(mockGetRequestConfig).toHaveBeenCalledWith(expect.any(Function));
     });
 
     it('应该处理有效的locale', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         expect(result.locale).toBe('en');
         expect(result.messages).toBeDefined();
         expect(result.timeZone).toBe('UTC');
         expect(result.strictMessageTypeSafety).toBe(true);
-        
+
         return result;
       });
 
@@ -116,11 +116,11 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('zh') });
-        
+
         expect(result.locale).toBe('zh');
         expect(result.timeZone).toBe('Asia/Shanghai');
         expect(result.messages).toBeDefined();
-        
+
         return result;
       });
 
@@ -136,7 +136,7 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve(null) });
-        
+
         expect(result.locale).toBe('zh');
         expect(result.metadata.smartDetection).toEqual({
           detectedLocale: 'zh',
@@ -144,7 +144,7 @@ describe('i18n Request Configuration', () => {
           confidence: 0.9,
           applied: true,
         });
-        
+
         return result;
       });
 
@@ -158,7 +158,7 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve(null) });
-        
+
         expect(result.locale).toBe('en');
         expect(result.metadata.smartDetection).toEqual({
           detectedLocale: 'invalid',
@@ -166,7 +166,7 @@ describe('i18n Request Configuration', () => {
           confidence: 0.5,
           applied: false,
         });
-        
+
         return result;
       });
 
@@ -176,10 +176,10 @@ describe('i18n Request Configuration', () => {
     it('应该处理缺少检测头的情况', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve(null) });
-        
+
         expect(result.locale).toBe('en');
         expect(result.metadata.smartDetection).toBeUndefined();
-        
+
         return result;
       });
 
@@ -193,10 +193,10 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         expect(mockI18nPerformanceMonitor.recordCacheHit).toHaveBeenCalled();
         expect(mockI18nPerformanceMonitor.recordLoadTime).toHaveBeenCalled();
-        
+
         return {};
       });
 
@@ -208,10 +208,10 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         expect(mockI18nPerformanceMonitor.recordCacheMiss).toHaveBeenCalled();
         expect(mockI18nPerformanceMonitor.recordLoadTime).toHaveBeenCalled();
-        
+
         return {};
       });
 
@@ -223,11 +223,11 @@ describe('i18n Request Configuration', () => {
     it('应该为英文配置正确的格式', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         expect(result.formats.number.currency.currency).toBe('USD');
         expect(result.formats.dateTime.short.day).toBe('numeric');
         expect(result.formats.list.enumeration.style).toBe('long');
-        
+
         return result;
       });
 
@@ -237,11 +237,11 @@ describe('i18n Request Configuration', () => {
     it('应该为中文配置正确的格式', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('zh') });
-        
+
         expect(result.formats.number.currency.currency).toBe('CNY');
         expect(result.formats.dateTime.long.weekday).toBe('long');
         expect(result.formats.number.percentage.style).toBe('percent');
-        
+
         return result;
       });
 
@@ -255,12 +255,12 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         expect(mockI18nPerformanceMonitor.recordError).toHaveBeenCalled();
         expect(result.locale).toBe('en');
         expect(result.metadata.error).toBe(true);
         expect(result.metadata.cacheUsed).toBe(false);
-        
+
         return result;
       });
 
@@ -272,13 +272,13 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         // 应该回退到直接导入的消息
         expect(result.messages).toEqual({
           common: { loading: 'Loading...' },
           navigation: { home: 'Home' },
         });
-        
+
         return result;
       });
 
@@ -294,9 +294,9 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         expect(mockI18nPerformanceMonitor.recordLoadTime).toHaveBeenCalledWith(50);
-        
+
         return {};
       });
 
@@ -310,11 +310,11 @@ describe('i18n Request Configuration', () => {
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         expect(result.metadata.loadTime).toBe(100);
         expect(result.metadata.timestamp).toBeDefined();
         expect(typeof result.metadata.cacheUsed).toBe('boolean');
-        
+
         return result;
       });
 
@@ -326,9 +326,9 @@ describe('i18n Request Configuration', () => {
     it('应该为英文设置UTC时区', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('en') });
-        
+
         expect(result.timeZone).toBe('UTC');
-        
+
         return result;
       });
 
@@ -338,9 +338,9 @@ describe('i18n Request Configuration', () => {
     it('应该为中文设置上海时区', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('zh') });
-        
+
         expect(result.timeZone).toBe('Asia/Shanghai');
-        
+
         return result;
       });
 
@@ -352,9 +352,9 @@ describe('i18n Request Configuration', () => {
     it('应该处理无效的locale', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('invalid') });
-        
+
         expect(result.locale).toBe('en'); // 应该回退到默认locale
-        
+
         return result;
       });
 
@@ -364,9 +364,9 @@ describe('i18n Request Configuration', () => {
     it('应该处理空的requestLocale', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('') });
-        
+
         expect(result.locale).toBe('en'); // 应该回退到默认locale
-        
+
         return result;
       });
 
@@ -376,9 +376,9 @@ describe('i18n Request Configuration', () => {
     it('应该处理undefined的requestLocale', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve(undefined) });
-        
+
         expect(result.locale).toBe('en'); // 应该回退到默认locale
-        
+
         return result;
       });
 

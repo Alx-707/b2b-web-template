@@ -30,11 +30,11 @@ export const ConfigFactory = {
   createForEnvironment(environment: EnvironmentType): StorageConfig {
     const baseConfig = this.createDefault();
     const preset = CONFIG_PRESETS[environment];
-    
+
     if (preset) {
       return this.merge(baseConfig, preset);
     }
-    
+
     return baseConfig;
   },
 
@@ -128,8 +128,8 @@ export const ConfigFactory = {
    * Get nested value
    */
   getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-    return path.split('.').reduce((current, key) => {
+    return path.split('.').reduce((current: unknown, key: string) => {
       return current && typeof current === 'object' ? (current as Record<string, unknown>)[key] : undefined;
-    }, obj);
+    }, obj as unknown);
   },
 } as const;

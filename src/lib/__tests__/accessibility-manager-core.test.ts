@@ -30,9 +30,9 @@ vi.mock('@/lib/colors', () => ({
 }));
 
 describe('AccessibilityManager Core Tests', () => {
-  let mockElement: unknown;
-  let mockDocument: unknown;
-  let mockWindow: unknown;
+  let mockElement: any;
+  let mockDocument: any;
+  let mockWindow: any;
 
   beforeEach(() => {
     vi.useFakeTimers();

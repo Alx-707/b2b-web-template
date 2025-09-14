@@ -1,7 +1,7 @@
 /**
  * 语言存储系统基础类型和常量
  * Locale Storage System Base Types and Constants
- * 
+ *
  * 提供语言偏好存储系统所需的基础类型定义和常量
  */
 
@@ -36,7 +36,7 @@ export type LocaleSource = 'user' | 'geo' | 'browser' | 'default' | 'auto' | 'fa
  * 存储事件类型
  * Storage event types
  */
-export type StorageEventType = 
+export type StorageEventType =
   | 'preference_saved'
   | 'preference_loaded'
   | 'preference_updated'
@@ -49,7 +49,12 @@ export type StorageEventType =
   | 'migration_started'
   | 'migration_completed'
   | 'backup_created'
-  | 'backup_restored';
+  | 'backup_restored'
+  | 'history_error'
+  | 'override_set'
+  | 'override_cleared'
+  | 'preference_sync'
+  | 'preference_error';
 
 /**
  * 存储常量
@@ -60,39 +65,39 @@ export const STORAGE_CONSTANTS = {
   MAX_LOCALSTORAGE_SIZE: 5 * 1024 * 1024, // 5MB
   MAX_SESSIONSTORAGE_SIZE: 5 * 1024 * 1024, // 5MB
   MAX_INDEXEDDB_SIZE: 50 * 1024 * 1024, // 50MB
-  
+
   // 数据保留时间
   DEFAULT_RETENTION_TIME: 30 * 24 * 60 * 60 * 1000, // 30天
   CACHE_RETENTION_TIME: 24 * 60 * 60 * 1000, // 24小时
   ANALYTICS_RETENTION_TIME: 90 * 24 * 60 * 60 * 1000, // 90天
-  
+
   // 性能限制
   MAX_HISTORY_ENTRIES: 100,
   MAX_ANALYTICS_ENTRIES: 1000,
   MAX_CACHE_ENTRIES: 50,
-  
+
   // 压缩和加密
   COMPRESSION_THRESHOLD: 1024, // 1KB
   ENCRYPTION_KEY_LENGTH: 32,
-  
+
   // 同步配置
   SYNC_INTERVAL: 5 * 60 * 1000, // 5分钟
   SYNC_RETRY_ATTEMPTS: 3,
   SYNC_TIMEOUT: 10 * 1000, // 10秒
-  
+
   // 验证配置
   MIN_CONFIDENCE: 0.0,
   MAX_CONFIDENCE: 1.0,
   DEFAULT_CONFIDENCE: 0.5,
-  
+
   // 备份配置
   MAX_BACKUP_FILES: 5,
   BACKUP_INTERVAL: 24 * 60 * 60 * 1000, // 24小时
-  
+
   // 错误重试
   MAX_RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000, // 1秒
-  
+
   // 健康检查
   HEALTH_CHECK_INTERVAL: 60 * 1000, // 1分钟
   HEALTH_CHECK_TIMEOUT: 5 * 1000, // 5秒
@@ -360,8 +365,8 @@ export const BaseValidators = {
    * Validate confidence
    */
   isValidConfidence(confidence: number): boolean {
-    return typeof confidence === 'number' && 
-           confidence >= STORAGE_CONSTANTS.MIN_CONFIDENCE && 
+    return typeof confidence === 'number' &&
+           confidence >= STORAGE_CONSTANTS.MIN_CONFIDENCE &&
            confidence <= STORAGE_CONSTANTS.MAX_CONFIDENCE;
   },
 
@@ -370,8 +375,8 @@ export const BaseValidators = {
    * Validate timestamp
    */
   isValidTimestamp(timestamp: number): boolean {
-    return typeof timestamp === 'number' && 
-           timestamp > 0 && 
+    return typeof timestamp === 'number' &&
+           timestamp > 0 &&
            timestamp <= Date.now();
   },
 
@@ -380,8 +385,8 @@ export const BaseValidators = {
    * Validate storage key
    */
   isValidStorageKey(key: string): boolean {
-    return typeof key === 'string' && 
-           key.length > 0 && 
+    return typeof key === 'string' &&
+           key.length > 0 &&
            key.length <= 255;
   },
 } as const;

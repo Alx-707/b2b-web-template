@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
-import { generateNonce, getSecurityHeaders } from './src/config/security';
-import { OPACITY_CONSTANTS } from './src/constants/app-constants';
-import { routing } from './src/i18n/routing';
+import { generateNonce, getSecurityHeaders } from '@/config/security';
+import { OPACITY_CONSTANTS } from '@/constants/app-constants';
+import { routing } from '@/i18n/routing';
 
 // 置信度常量
 const HIGH_CONFIDENCE = OPACITY_CONSTANTS.VERY_HIGH_OPACITY;
@@ -93,20 +93,56 @@ function detectLocaleFromHeaders(request: NextRequest) {
 // 创建基础的 next-intl 中间件
 const intlMiddleware = createMiddleware(routing);
 
+// 辅助函数：为测试环境创建响应
+function createTestResponse(): NextResponse {
+  const response = NextResponse.next();
+  const nonce = generateNonce();
+  const securityHeaders = getSecurityHeaders(nonce);
+
+  securityHeaders.forEach(({ key, value }) => {
+    response.headers.set(key, value);
+  });
+  response.headers.set('x-csp-nonce', nonce);
+
+  return response;
+}
+
+// 辅助函数：创建增强的请求对象
+function createEnhancedRequest(request: NextRequest, detectionResult: ReturnType<typeof detectLocaleFromHeaders>, nonce: string): Request {
+  const enhancedRequest = new Request(request.url, {
+    ...request,
+    headers: new Headers(request.headers),
+  });
+
+  // 添加检测信息到请求头
+  enhancedRequest.headers.set('x-detected-locale', detectionResult.locale);
+  enhancedRequest.headers.set('x-detection-source', detectionResult.source);
+  enhancedRequest.headers.set('x-detection-confidence', detectionResult.confidence.toString());
+  enhancedRequest.headers.set('x-csp-nonce', nonce);
+
+  if (detectionResult.country) {
+    enhancedRequest.headers.set('x-detected-country', detectionResult.country);
+  }
+  if (detectionResult.languages) {
+    enhancedRequest.headers.set('x-detected-language', detectionResult.languages.join(','));
+  }
+
+  return enhancedRequest;
+}
+
+// 辅助函数：添加安全头到响应
+function addSecurityHeaders(response: NextResponse, nonce: string): void {
+  const securityHeaders = getSecurityHeaders(nonce);
+  securityHeaders.forEach(({ key, value }) => {
+    response.headers.set(key, value);
+  });
+  response.headers.set('x-csp-nonce', nonce);
+}
+
 export default function middleware(request: NextRequest) {
   // 测试环境下跳过next-intl middleware（修复Playwright测试环境下的SSR失败问题）
   if (process.env.PLAYWRIGHT_TEST === 'true') {
-    const response = NextResponse.next();
-
-    // 仍然添加安全headers
-    const nonce = generateNonce();
-    const securityHeaders = getSecurityHeaders(nonce);
-    securityHeaders.forEach(({ key, value }) => {
-      response.headers.set(key, value);
-    });
-    response.headers.set('x-csp-nonce', nonce);
-
-    return response;
+    return createTestResponse();
   }
 
   // Generate nonce for CSP
@@ -116,44 +152,14 @@ export default function middleware(request: NextRequest) {
   const detectionResult = detectLocaleFromHeaders(request);
 
   // 创建增强的请求对象
-  const enhancedRequest = new Request(request.url, {
-    ...request,
-    headers: new Headers(request.headers),
-  });
-
-  // 添加检测信息到请求头
-  enhancedRequest.headers.set('x-detected-locale', detectionResult.locale);
-  enhancedRequest.headers.set('x-detection-source', detectionResult.source);
-  enhancedRequest.headers.set(
-    'x-detection-confidence',
-    detectionResult.confidence.toString(),
-  );
-
-  // Add security nonce to request headers
-  enhancedRequest.headers.set('x-csp-nonce', nonce);
-
-  if (detectionResult.country) {
-    enhancedRequest.headers.set('x-detected-country', detectionResult.country);
-  }
-  if (detectionResult.languages) {
-    enhancedRequest.headers.set(
-      'x-detected-language',
-      detectionResult.languages.join(','),
-    );
-  }
+  const enhancedRequest = createEnhancedRequest(request, detectionResult, nonce);
 
   // 调用原始的 next-intl 中间件
   const response = intlMiddleware(enhancedRequest as NextRequest);
 
   // Add security headers to response
   if (response) {
-    const securityHeaders = getSecurityHeaders(nonce);
-    securityHeaders.forEach(({ key, value }) => {
-      response.headers.set(key, value);
-    });
-
-    // Add nonce to response for client-side access
-    response.headers.set('x-csp-nonce', nonce);
+    addSecurityHeaders(response, nonce);
   }
 
   return response;

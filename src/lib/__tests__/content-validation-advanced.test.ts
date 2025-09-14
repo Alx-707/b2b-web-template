@@ -34,7 +34,7 @@ describe('Content Validation - Advanced Tests', () => {
       it('should warn about missing excerpt for blog posts', () => {
         const { excerpt: _excerpt, ...metadataWithoutExcerpt } = validMetadata;
 
-        const result = validateContentMetadata(metadataWithoutExcerpt, 'post');
+        const result = validateContentMetadata(metadataWithoutExcerpt, 'posts');
 
         expect(result.isValid).toBe(true); // Still valid, but with warnings
         expect(result.warnings).toContain(
@@ -45,7 +45,7 @@ describe('Content Validation - Advanced Tests', () => {
       it('should not warn about missing excerpt for pages', () => {
         const { excerpt: _excerpt, ...metadataWithoutExcerpt } = validMetadata;
 
-        const result = validateContentMetadata(metadataWithoutExcerpt, 'page');
+        const result = validateContentMetadata(metadataWithoutExcerpt, 'pages');
 
         expect(result.isValid).toBe(true);
         expect(result.warnings).not.toContain(
@@ -54,7 +54,7 @@ describe('Content Validation - Advanced Tests', () => {
       });
 
       it('should validate different content types', () => {
-        const contentTypes: ContentType[] = ['post', 'page', 'project'];
+        const contentTypes: ContentType[] = ['posts', 'pages'];
 
         contentTypes.forEach((type) => {
           const result = validateContentMetadata(validMetadata, type);
@@ -78,7 +78,7 @@ describe('Content Validation - Advanced Tests', () => {
           tags: Array.from({ length: 15 }, (_, i) => `tag-${i}`),
         };
 
-        const result = validateContentMetadata(metadataWithManyTags, 'post');
+        const result = validateContentMetadata(metadataWithManyTags, 'posts');
 
         if (result.warnings) {
           expect(result.warnings).toContain(
@@ -94,7 +94,7 @@ describe('Content Validation - Advanced Tests', () => {
           title: 'A'.repeat(TEST_CONTENT_LIMITS.TITLE_MAX + 1),
         };
 
-        const result = validateContentMetadata(metadataWithLongTitle, 'post');
+        const result = validateContentMetadata(metadataWithLongTitle, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
@@ -108,7 +108,7 @@ describe('Content Validation - Advanced Tests', () => {
           excerpt: 'A'.repeat(TEST_CONTENT_LIMITS.DESCRIPTION_MAX + 1),
         };
 
-        const result = validateContentMetadata(metadataWithLongExcerpt, 'post');
+        const result = validateContentMetadata(metadataWithLongExcerpt, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
@@ -119,7 +119,7 @@ describe('Content Validation - Advanced Tests', () => {
 
     describe('SEO validation', () => {
       it('should pass validation with proper SEO fields', () => {
-        const result = validateContentMetadata(validMetadata, 'post');
+        const result = validateContentMetadata(validMetadata, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.warnings).not.toContain(
@@ -138,7 +138,7 @@ describe('Content Validation - Advanced Tests', () => {
           },
         };
 
-        const result = validateContentMetadata(metadataWithoutSeoTitle, 'post');
+        const result = validateContentMetadata(metadataWithoutSeoTitle, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.warnings).toContain('SEO title is recommended');
@@ -154,7 +154,7 @@ describe('Content Validation - Advanced Tests', () => {
 
         const result = validateContentMetadata(
           metadataWithoutSeoDescription,
-          'post',
+          'posts',
         );
 
         expect(result.isValid).toBe(true);
@@ -164,7 +164,7 @@ describe('Content Validation - Advanced Tests', () => {
       it('should warn about missing entire SEO object', () => {
         const { seo: _seo, ...metadataWithoutSeo } = validMetadata;
 
-        const result = validateContentMetadata(metadataWithoutSeo, 'post');
+        const result = validateContentMetadata(metadataWithoutSeo, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.warnings).toContain('SEO title is recommended');
@@ -180,7 +180,7 @@ describe('Content Validation - Advanced Tests', () => {
           },
         };
 
-        const result = validateContentMetadata(metadataWithLongSeoTitle, 'post');
+        const result = validateContentMetadata(metadataWithLongSeoTitle, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
@@ -201,7 +201,7 @@ describe('Content Validation - Advanced Tests', () => {
 
         const result = validateContentMetadata(
           metadataWithLongSeoDescription,
-          'post',
+          'posts',
         );
 
         expect(result.isValid).toBe(false);
@@ -219,7 +219,7 @@ describe('Content Validation - Advanced Tests', () => {
           },
         };
 
-        const result = validateContentMetadata(metadataWithEmptySeo, 'post');
+        const result = validateContentMetadata(metadataWithEmptySeo, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.warnings).toContain('SEO title is recommended');
@@ -232,7 +232,7 @@ describe('Content Validation - Advanced Tests', () => {
           seo: null,
         };
 
-        const result = validateContentMetadata(metadataWithNullSeo, 'post');
+        const result = validateContentMetadata(metadataWithNullSeo, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.warnings).not.toContain(expect.stringContaining('SEO'));
@@ -241,7 +241,7 @@ describe('Content Validation - Advanced Tests', () => {
 
     describe('edge cases', () => {
       it('should handle empty metadata object', () => {
-        const result = validateContentMetadata({}, 'post');
+        const result = validateContentMetadata({}, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Title is required');
@@ -256,7 +256,7 @@ describe('Content Validation - Advanced Tests', () => {
           anotherField: 123,
         };
 
-        const result = validateContentMetadata(metadataWithExtraFields, 'post');
+        const result = validateContentMetadata(metadataWithExtraFields, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
@@ -268,7 +268,7 @@ describe('Content Validation - Advanced Tests', () => {
           tags: Array.from({ length: 100 }, (_, i) => `tag-${i}`),
         };
 
-        const result = validateContentMetadata(metadataWithManyTags, 'post');
+        const result = validateContentMetadata(metadataWithManyTags, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.warnings).toContain(
@@ -298,7 +298,7 @@ describe('Content Validation - Advanced Tests', () => {
           },
         };
 
-        const result = validateContentMetadata(maximalMetadata, 'post');
+        const result = validateContentMetadata(maximalMetadata, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);

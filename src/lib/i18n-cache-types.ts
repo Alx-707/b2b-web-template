@@ -37,46 +37,20 @@ import type {
   PersistentStorage,
   MetricsCollector,
   Preloader,
-  CacheManager,
-  SerializationOptions,
-  CacheExportData,
-  CacheSyncOptions,
-  CachePartitionConfig,
-  CacheCompressionConfig,
-  CacheEncryptionConfig,
-  CacheMonitoringConfig,
-  CacheBackupConfig,
-  CacheRecoveryOptions,
-  CachePerformanceConfig,
-  CacheSecurityConfig,
-  CacheObserver,
-  CacheMiddleware,
-  CacheStrategyInterface,
-  CacheAdapter,
-  CacheFactory,
-  CacheEventEmitter,
-  CachePlugin,
-  CacheLifecycleHooks,
-  CacheStatsCollector } from
-'./i18n-cache-types-interfaces';
+  CacheManager
+} from './i18n-cache-types-interfaces';
 
 import type {
   AdvancedCacheConfig,
   CacheClusterConfig,
-  CacheShardingConfig,
-  CacheWarmingConfig,
-  CacheInvalidationConfig,
-  CacheConsistencyConfig,
-  CacheRateLimitConfig,
-  CacheQualityConfig,
-  CacheExtensionConfig,
-  CacheEnvironmentConfig,
-  DEFAULT_ADVANCED_CACHE_CONFIG } from
-'./i18n-cache-types-advanced';
+  CacheShardingConfig
+} from './i18n-cache-types-advanced';
 
-import {
-  CacheConfigFactory } from
-'./i18n-cache-types-advanced';
+
+
+
+
+
 
 import {
   CacheKeyUtils,

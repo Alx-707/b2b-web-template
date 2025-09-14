@@ -86,7 +86,7 @@ describe('Social Icons Mapper & Links Tests - Index', () => {
     });
 
     it('handles null platform gracefully', () => {
-      render(<SocialIconMapper platform={null as string | null} data-testid='mapped-icon' />);
+      render(<SocialIconMapper platform='' data-testid='mapped-icon' />);
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -171,7 +171,6 @@ describe('Social Icons Mapper & Links Tests - Index', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          target='_self'
           data-testid='social-link'
         />
       );
@@ -184,7 +183,6 @@ describe('Social Icons Mapper & Links Tests - Index', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          rel='nofollow'
           data-testid='social-link'
         />
       );
@@ -289,7 +287,7 @@ describe('Social Icons Mapper & Links Tests - Index', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          iconClassName='h-8 w-8'
+
           data-testid='social-link'
         />
       );

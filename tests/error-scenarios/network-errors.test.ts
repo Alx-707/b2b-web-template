@@ -105,11 +105,11 @@ class TestAPIClient {
     defaultValue: T,
   ): Promise<{ data: T; source: 'primary' | 'fallback' | 'default' }> {
     try {
-      const data = await this.get(primaryEndpoint);
+      const data = await this.get(primaryEndpoint) as T;
       return { data, source: 'primary' };
     } catch (primaryError) {
       try {
-        const data = await this.get(fallbackEndpoint);
+        const data = await this.get(fallbackEndpoint) as T;
         return { data, source: 'fallback' };
       } catch (fallbackError) {
         return { data: defaultValue, source: 'default' };

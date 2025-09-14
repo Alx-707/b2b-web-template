@@ -36,12 +36,12 @@ describe('Social Icons Accessibility & Integration - Advanced Tests', () => {
           <h2 id='social-heading'>Connect With Us</h2>
           <div role='list' aria-label='Social media links'>
             <div role='listitem'>
-              <SocialIconLink href='https://twitter.com/test' platform='twitter'>
+              <SocialIconLink href='https://twitter.com/test' platform='twitter' aria-label='Follow us on Twitter'>
                 <TwitterIcon />
               </SocialIconLink>
             </div>
             <div role='listitem'>
-              <SocialIconLink href='https://linkedin.com/in/test' platform='linkedin'>
+              <SocialIconLink href='https://linkedin.com/in/test' platform='linkedin' aria-label='Connect with us on LinkedIn'>
                 <LinkedInIcon />
               </SocialIconLink>
             </div>
@@ -81,7 +81,7 @@ describe('Social Icons Accessibility & Integration - Advanced Tests', () => {
           <div className='social-grid'>
             {socialPlatforms.map(({ name, url, icon: IconComponent }) => (
               <div key={name} className='social-item'>
-                <SocialIconLink href={url} platform={name}>
+                <SocialIconLink href={url} platform={name} aria-label={`Follow us on ${name}`}>
                   <IconComponent />
                 </SocialIconLink>
                 <span className='platform-name'>{name}</span>
@@ -111,8 +111,6 @@ describe('Social Icons Accessibility & Integration - Advanced Tests', () => {
           href='https://twitter.com/example'
           platform='twitter'
           aria-label='Twitter'
-          target='_blank'
-          rel='noopener noreferrer'
           data-testid='external-link'
         />
       );
@@ -200,7 +198,6 @@ describe('Social Icons Accessibility & Integration - Advanced Tests', () => {
         href='https://twitter.com/example'
         platform='twitter'
         aria-label='Twitter'
-        _onClick={handleClick}
         data-testid='social-link'
       />
     );
@@ -401,7 +398,7 @@ describe('Social Icons Accessibility & Integration - Advanced Tests', () => {
     expect(() => {
       render(
         <div>
-          <SocialIconMapper platform={undefined as string | undefined} />
+          <SocialIconMapper platform='' />
           <SocialIconLink
             href=''
             platform='twitter'

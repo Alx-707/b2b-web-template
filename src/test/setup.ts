@@ -162,7 +162,7 @@ Object.defineProperty(MockPerformanceObserver, 'supportedEntryTypes', {
   configurable: true,
 });
 
-globalThis.PerformanceObserver = MockPerformanceObserver as unknown;
+globalThis.PerformanceObserver = MockPerformanceObserver as unknown as typeof PerformanceObserver;
 
 // Mock environment variables - 使用vi.stubEnv而不是直接修改process.env
 vi.stubEnv('NODE_ENV', 'test');
@@ -219,7 +219,7 @@ globalThis.requestAnimationFrame = vi.fn((cb) => {
   setTimeout(cb, 0);
   return 1;
 });
-globalThis.cancelAnimationFrame = vi.fn((id) => clearTimeout(id as unknown));
+globalThis.cancelAnimationFrame = vi.fn((id) => clearTimeout(id as number));
 
 // Mock localStorage and sessionStorage
 const createStorageMock = () => {

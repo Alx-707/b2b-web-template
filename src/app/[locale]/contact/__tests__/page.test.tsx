@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 // 导入要测试的组件
-import ContactPage, { generateMetadata } from '../page';
+import ContactPage, { generateMetadata } from '@/app/[locale]/contact/page';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const { mockGetTranslations } = vi.hoisted(() => ({

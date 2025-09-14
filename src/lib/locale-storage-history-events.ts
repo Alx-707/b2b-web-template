@@ -1,7 +1,7 @@
 /**
  * 语言检测历史事件管理
  * Locale Detection History Event Management
- * 
+ *
  * 负责历史记录相关的事件监听、发布和管理功能
  */
 
@@ -100,7 +100,7 @@ export class HistoryEventManager {
    */
   private static recordEvent(event: StorageEvent): void {
     this.eventHistory.unshift(event);
-    
+
     // 限制事件历史长度
     if (this.eventHistory.length > this.MAX_EVENT_HISTORY) {
       this.eventHistory = this.eventHistory.slice(0, this.MAX_EVENT_HISTORY);
@@ -161,7 +161,7 @@ export function createRecordAddedEvent(
   confidence: number
 ): StorageEvent {
   return {
-    type: 'history_record_added',
+    type: 'preference_saved',
     data: {
       locale,
       source,
@@ -182,7 +182,7 @@ export function createCleanupEvent(
   removedCount: number
 ): StorageEvent {
   return {
-    type: 'history_cleanup',
+    type: 'cache_cleared',
     data: {
       cleanupType,
       removedCount,
@@ -202,7 +202,7 @@ export function createExportEvent(
   recordCount: number
 ): StorageEvent {
   return {
-    type: 'history_export',
+    type: 'backup_created',
     data: {
       format,
       recordCount,
@@ -223,7 +223,7 @@ export function createImportEvent(
   success: boolean
 ): StorageEvent {
   return {
-    type: 'history_import',
+    type: 'backup_restored',
     data: {
       format,
       recordCount,
@@ -293,7 +293,7 @@ export function createStatsListener(): {
   const listener: StorageEventListener = (event: StorageEvent) => {
     stats.totalEvents += 1;
     stats.eventsByType[event.type] = (stats.eventsByType[event.type] || 0) + 1;
-    
+
     // 保留最近10个事件
     stats.recentEvents.unshift(event);
     if (stats.recentEvents.length > 10) {
@@ -329,8 +329,8 @@ export function createErrorListener(
  */
 export const consoleLogListener: StorageEventListener = (event: StorageEvent) => {
   const timestamp = new Date(event.timestamp).toLocaleTimeString();
-  
-  switch (event.type) {
+
+  switch (event.type as string) {
     case 'history_record_added':
       logger.info('历史记录已添加', { timestamp, data: event.data });
       break;
@@ -357,14 +357,14 @@ export const consoleLogListener: StorageEventListener = (event: StorageEvent) =>
  */
 export const performanceListener: StorageEventListener = (event: StorageEvent) => {
   // 记录性能相关的事件
-  if (event.type === 'history_cleanup' && event.data) {
+  if ((event.type as string) === 'history_cleanup' && event.data) {
     const { cleanupType, removedCount } = event.data as { cleanupType: string; removedCount: number };
-    
+
     if (removedCount > 100) {
       logger.warn('大量历史记录清理', { cleanupType, removedCount });
     }
   }
-  
+
   if (event.type === 'history_error') {
     logger.error('历史记录操作失败', { data: event.data as unknown });
   }
@@ -434,11 +434,11 @@ export function getEventSystemStatus(): {
 } {
   const listenerStats = HistoryEventManager.getListenerStats();
   const eventHistory = HistoryEventManager.getEventHistory(1);
-  
+
   return {
     isActive: listenerStats.totalListeners > 0,
     listenerStats,
     eventHistoryCount: HistoryEventManager.getEventHistory().length,
-    lastEventTime: eventHistory.length > 0 ? eventHistory[0].timestamp : null,
+    lastEventTime: eventHistory.length > 0 ? eventHistory[0]!.timestamp : null,
   };
 }

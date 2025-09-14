@@ -32,7 +32,7 @@ describe('Content Validation - Basic Tests', () => {
 
     describe('required fields validation', () => {
       it('should pass validation with all required fields', () => {
-        const result = validateContentMetadata(validMetadata, 'post');
+        const result = validateContentMetadata(validMetadata, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
@@ -41,7 +41,7 @@ describe('Content Validation - Basic Tests', () => {
       it('should fail validation when title is missing', () => {
         const { title: _title, ...metadataWithoutTitle } = validMetadata;
 
-        const result = validateContentMetadata(metadataWithoutTitle, 'post');
+        const result = validateContentMetadata(metadataWithoutTitle, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Title is required');
@@ -53,7 +53,7 @@ describe('Content Validation - Basic Tests', () => {
 
         const result = validateContentMetadata(
           metadataWithoutPublishedAt,
-          'post',
+          'posts',
         );
 
         expect(result.isValid).toBe(false);
@@ -66,7 +66,7 @@ describe('Content Validation - Basic Tests', () => {
 
         const result = validateContentMetadata(
           metadataWithoutUpdatedAt,
-          'post',
+          'posts',
         );
 
         expect(result.isValid).toBe(false);
@@ -79,7 +79,7 @@ describe('Content Validation - Basic Tests', () => {
           title: '',
         };
 
-        const result = validateContentMetadata(metadataWithEmptyTitle, 'post');
+        const result = validateContentMetadata(metadataWithEmptyTitle, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Title is required');
@@ -93,7 +93,7 @@ describe('Content Validation - Basic Tests', () => {
 
         const result = validateContentMetadata(
           metadataWithWhitespaceTitle,
-          'post',
+          'posts',
         );
 
         expect(result.isValid).toBe(false);
@@ -107,7 +107,7 @@ describe('Content Validation - Basic Tests', () => {
           ...metadataWithoutMultiple
         } = validMetadata;
 
-        const result = validateContentMetadata(metadataWithoutMultiple, 'post');
+        const result = validateContentMetadata(metadataWithoutMultiple, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Title is required');
@@ -123,7 +123,7 @@ describe('Content Validation - Basic Tests', () => {
           updatedAt: '2024-01-02T12:30:45Z',
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
@@ -135,7 +135,7 @@ describe('Content Validation - Basic Tests', () => {
           publishedAt: 'invalid-date',
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Published date must be a valid ISO date');
@@ -147,7 +147,7 @@ describe('Content Validation - Basic Tests', () => {
           updatedAt: 'not-a-date',
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Updated date must be a valid ISO date');
@@ -160,7 +160,7 @@ describe('Content Validation - Basic Tests', () => {
           updatedAt: '2024-01-01T00:00:00Z',
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
@@ -175,7 +175,7 @@ describe('Content Validation - Basic Tests', () => {
           updatedAt: '2024-01-01T00:00:00Z',
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
@@ -188,7 +188,7 @@ describe('Content Validation - Basic Tests', () => {
           updatedAt: '2024-01-02T00:00:00-05:00',
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
@@ -202,7 +202,7 @@ describe('Content Validation - Basic Tests', () => {
           publishedAt: 1704067200000 as unknown as string, // timestamp
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Published date must be a valid ISO date');
@@ -216,7 +216,7 @@ describe('Content Validation - Basic Tests', () => {
           title: 123 as unknown as string,
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Title must be a string');
@@ -228,7 +228,7 @@ describe('Content Validation - Basic Tests', () => {
           tags: 'not-an-array' as unknown as string[],
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Tags must be an array');
@@ -240,7 +240,7 @@ describe('Content Validation - Basic Tests', () => {
           excerpt: 456 as unknown as string,
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Excerpt must be a string');
@@ -254,7 +254,7 @@ describe('Content Validation - Basic Tests', () => {
           tags: ['valid-tag', 123, 'another-valid-tag'] as unknown as string[],
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('All tags must be strings');
@@ -266,7 +266,7 @@ describe('Content Validation - Basic Tests', () => {
           tags: [],
         };
 
-        const result = validateContentMetadata(metadata, 'post');
+        const result = validateContentMetadata(metadata, 'posts');
 
         // Empty tags array should be valid
         expect(result.isValid).toBe(true);

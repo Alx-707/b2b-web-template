@@ -7,8 +7,6 @@
 
 'use client';
 
-import type { Locale } from '@/types/i18n';
-;
 import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
 import { LocaleCleanupManager } from './locale-storage-maintenance-cleanup';
@@ -52,9 +50,9 @@ export class LocaleMaintenanceOperationsManager {
         const cleanupResult = LocaleCleanupManager.cleanupExpiredDetections(maxDetectionAge);
         if (cleanupResult.success) {
           successfulOperations += 1;
-          results.push(cleanupResult.message);
+          results.push(`清理过期记录成功，删除了 ${cleanupResult.data || 0} 条记录`);
         } else {
-          results.push(`清理过期记录失败: ${cleanupResult.message}`);
+          results.push(`清理过期记录失败: ${cleanupResult.error || '未知错误'}`);
         }
       }
 
@@ -64,9 +62,9 @@ export class LocaleMaintenanceOperationsManager {
         const duplicateResult = LocaleCleanupManager.cleanupDuplicateDetections();
         if (duplicateResult.success) {
           successfulOperations += 1;
-          results.push(duplicateResult.message);
+          results.push(`清理重复记录成功，删除了 ${duplicateResult.data || 0} 条记录`);
         } else {
-          results.push(`清理重复记录失败: ${duplicateResult.message}`);
+          results.push(`清理重复记录失败: ${duplicateResult.error || '未知错误'}`);
         }
       }
 
@@ -76,9 +74,9 @@ export class LocaleMaintenanceOperationsManager {
         const invalidResult = LocaleCleanupManager.cleanupInvalidPreferences();
         if (invalidResult.success) {
           successfulOperations += 1;
-          results.push(invalidResult.message);
+          results.push(`清理无效数据成功，删除了 ${invalidResult.data || 0} 条记录`);
         } else {
-          results.push(`清理无效数据失败: ${invalidResult.message}`);
+          results.push(`清理无效数据失败: ${invalidResult.error || '未知错误'}`);
         }
       }
 
@@ -88,9 +86,9 @@ export class LocaleMaintenanceOperationsManager {
         const validationResult = LocaleValidationManager.validateStorageIntegrity();
         if (validationResult.success) {
           successfulOperations += 1;
-          results.push(validationResult.message);
+          results.push(`数据验证成功`);
         } else {
-          results.push(`数据验证失败: ${validationResult.message}`);
+          results.push(`数据验证失败: ${validationResult.error || '未知错误'}`);
         }
       }
 
@@ -100,9 +98,9 @@ export class LocaleMaintenanceOperationsManager {
         const syncResult = LocaleValidationManager.fixSyncIssues();
         if (syncResult.success) {
           successfulOperations += 1;
-          results.push(syncResult.message);
+          results.push(`修复同步问题成功`);
         } else {
-          results.push(`修复同步问题失败: ${syncResult.message}`);
+          results.push(`修复同步问题失败: ${syncResult.error || '未知错误'}`);
         }
       }
 
@@ -112,9 +110,9 @@ export class LocaleMaintenanceOperationsManager {
         const compactResult = this.compactStorage();
         if (compactResult.success) {
           successfulOperations += 1;
-          results.push(compactResult.message);
+          results.push(`压缩存储成功`);
         } else {
-          results.push(`压缩存储失败: ${compactResult.message}`);
+          results.push(`压缩存储失败: ${compactResult.error || '未知错误'}`);
         }
       }
 
@@ -134,7 +132,7 @@ export class LocaleMaintenanceOperationsManager {
         success: false,
         message: `执行维护失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -168,7 +166,7 @@ export class LocaleMaintenanceOperationsManager {
         success: false,
         message: `压缩存储失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -205,7 +203,9 @@ export class LocaleMaintenanceOperationsManager {
       if (removedCount > 0) {
         const updatedHistory: LocaleDetectionHistory = {
           detections: optimizedDetections,
+          history: optimizedDetections,
           lastUpdated: Date.now(),
+          totalDetections: optimizedDetections.length,
         };
 
         LocalStorageManager.set(STORAGE_KEYS.LOCALE_DETECTION_HISTORY, updatedHistory);
@@ -229,7 +229,7 @@ export class LocaleMaintenanceOperationsManager {
         success: false,
         message: `优化检测历史失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -291,7 +291,7 @@ export class LocaleMaintenanceOperationsManager {
         success: false,
         message: `重建存储索引失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -320,7 +320,7 @@ export class LocaleMaintenanceOperationsManager {
         successfulOperations += 1;
         results.push('标准维护完成');
       } else {
-        results.push(`标准维护失败: ${standardResult.message}`);
+        results.push(`标准维护失败: ${standardResult.error || '未知错误'}`);
       }
 
       // 优化检测历史
@@ -328,9 +328,9 @@ export class LocaleMaintenanceOperationsManager {
       const optimizeResult = this.optimizeDetectionHistory();
       if (optimizeResult.success) {
         successfulOperations += 1;
-        results.push(optimizeResult.message);
+        results.push(`优化历史成功`);
       } else {
-        results.push(`优化历史失败: ${optimizeResult.message}`);
+        results.push(`优化历史失败: ${optimizeResult.error || '未知错误'}`);
       }
 
       // 重建存储索引
@@ -338,9 +338,9 @@ export class LocaleMaintenanceOperationsManager {
       const rebuildResult = this.rebuildStorageIndex();
       if (rebuildResult.success) {
         successfulOperations += 1;
-        results.push(rebuildResult.message);
+        results.push(`重建索引成功`);
       } else {
-        results.push(`重建索引失败: ${rebuildResult.message}`);
+        results.push(`重建索引失败: ${rebuildResult.error || '未知错误'}`);
       }
 
       return {
@@ -358,7 +358,7 @@ export class LocaleMaintenanceOperationsManager {
         success: false,
         message: `执行深度维护失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }

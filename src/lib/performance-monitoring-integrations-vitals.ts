@@ -344,7 +344,7 @@ export class WebVitalsAnalyzer {
     score: number;
     recommendations: string[];
   } {
-    const vitals: Record<string, { average: number; latest: number; score: number; grade: string }> = {};
+    const vitals: Record<string, { average: number; latest: number; trend: 'improving' | 'stable' | 'degrading'; rating: 'good' | 'needs-improvement' | 'poor' }> = {};
     let totalScore = 0;
     let vitalCount = 0;
 
@@ -352,8 +352,8 @@ export class WebVitalsAnalyzer {
       if (data.values.length === 0) continue;
 
       const average = data.values.reduce((sum, val) => sum + val, 0) / data.values.length;
-      const latest = data.values[data.values.length - 1];
-      const latestRating = data.ratings[data.ratings.length - 1];
+      const latest = data.values[data.values.length - 1] ?? 0;
+      const latestRating = data.ratings[data.ratings.length - 1] ?? 'poor';
 
       // 计算趋势
       let trend: 'improving' | 'stable' | 'degrading' = 'stable';

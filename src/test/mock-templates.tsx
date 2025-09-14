@@ -3,7 +3,37 @@
  * 提供统一的vi.hoisted Mock配置模式，确保所有测试使用一致的Mock方式
  */
 
+import React from 'react';
 import { vi } from 'vitest';
+
+// Mock组件的类型定义
+interface MockDropdownMenuProps {
+  children: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+interface MockDropdownMenuContentProps {
+  children: React.ReactNode;
+  align?: string;
+  [key: string]: unknown;
+}
+
+interface MockDropdownMenuTriggerProps {
+  children: React.ReactNode;
+}
+
+interface MockButtonProps {
+  children: React.ReactNode;
+  variant?: string;
+  size?: string;
+  [key: string]: unknown;
+}
+
+interface MockIconProps {
+  className?: string;
+  [key: string]: unknown;
+}
 
 /**
  * React Hooks Mock模板
@@ -251,7 +281,7 @@ export const createBrowserAPIMock = () => {
 export const createUIComponentMock = () => {
   return vi.hoisted(() => {
     // DropdownMenu组件Mock
-    const DropdownMenu = ({ children, open, onOpenChange }: unknown) => (
+    const DropdownMenu = ({ children, open, onOpenChange }: MockDropdownMenuProps) => (
       <div
         data-testid='dropdown-menu'
         data-open={open}
@@ -261,7 +291,7 @@ export const createUIComponentMock = () => {
       </div>
     );
 
-    const DropdownMenuContent = ({ children, align, ...props }: unknown) => (
+    const DropdownMenuContent = ({ children, align, ...props }: MockDropdownMenuContentProps) => (
       <div
         data-testid='dropdown-content'
         data-align={align}
@@ -271,12 +301,12 @@ export const createUIComponentMock = () => {
       </div>
     );
 
-    const DropdownMenuTrigger = ({ children }: unknown) => (
+    const DropdownMenuTrigger = ({ children }: MockDropdownMenuTriggerProps) => (
       <div data-testid='dropdown-trigger'>{children}</div>
     );
 
     // Button组件Mock
-    const Button = ({ children, variant, size, ...props }: unknown) => (
+    const Button = ({ children, variant, size, ...props }: MockButtonProps) => (
       <button
         data-testid='theme-button'
         data-variant={variant}
@@ -289,7 +319,7 @@ export const createUIComponentMock = () => {
 
     // Icon组件Mock
     const Icons = {
-      Sun: ({ className, ...props }: unknown) => (
+      Sun: ({ className, ...props }: MockIconProps) => (
         <span
           data-testid='sun-icon'
           className={className}
@@ -298,7 +328,7 @@ export const createUIComponentMock = () => {
           ☀️
         </span>
       ),
-      Moon: ({ className, ...props }: unknown) => (
+      Moon: ({ className, ...props }: MockIconProps) => (
         <span
           data-testid='moon-icon'
           className={className}
@@ -307,7 +337,7 @@ export const createUIComponentMock = () => {
           🌙
         </span>
       ),
-      Monitor: ({ className, ...props }: unknown) => (
+      Monitor: ({ className, ...props }: MockIconProps) => (
         <span
           data-testid='monitor-icon'
           className={className}

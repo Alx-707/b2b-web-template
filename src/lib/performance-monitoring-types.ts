@@ -1,6 +1,6 @@
 /**
  * 性能监控类型定义和配置
- * 
+ *
  * 包含性能监控相关的接口定义、配置类型和环境配置逻辑
  */
 
@@ -12,7 +12,7 @@ import { PERFORMANCE_CONSTANTS } from '@/constants/performance';
  * 性能指标数据源类型
  * Performance metrics source types
  */
-export type PerformanceMetricSource = 
+export type PerformanceMetricSource =
   | 'react-scan'
   | 'web-eval-agent'
   | 'bundle-analyzer'
@@ -26,7 +26,7 @@ export type PerformanceMetricSource =
  * 性能指标类型
  * Performance metrics types
  */
-export type PerformanceMetricType = 
+export type PerformanceMetricType =
   | 'component'
   | 'page'
   | 'bundle'
@@ -36,6 +36,49 @@ export type PerformanceMetricType =
   | 'cpu'
   | 'rendering'
   | 'loading';
+
+/**
+ * 组件性能数据
+ * Component performance data
+ */
+export interface ComponentPerformanceData {
+  /** 渲染时间 (毫秒) */
+  renderTime: number;
+  /** 内存使用 (字节) */
+  memoryUsage?: number;
+}
+
+/**
+ * 网络性能数据
+ * Network performance data
+ */
+export interface NetworkPerformanceData {
+  /** 响应时间 (毫秒) */
+  responseTime: number;
+  /** 超时时间 (毫秒) */
+  timeout?: number;
+}
+
+/**
+ * 打包性能数据
+ * Bundle performance data
+ */
+export interface BundlePerformanceData {
+  /** 包大小 (字节) */
+  size: number;
+  /** 加载时间 (毫秒) */
+  loadTime?: number;
+}
+
+/**
+ * 性能指标数据联合类型
+ * Performance metrics data union type
+ */
+export type PerformanceMetricData =
+  | ComponentPerformanceData
+  | NetworkPerformanceData
+  | BundlePerformanceData
+  | Record<string, unknown>;
 
 /**
  * 性能指标接口
@@ -49,7 +92,7 @@ export interface PerformanceMetrics {
   /** 指标类型 */
   type: PerformanceMetricType;
   /** 指标数据 */
-  data: Record<string, unknown>;
+  data: PerformanceMetricData;
   /** 指标ID (可选) */
   id?: string;
   /** 指标标签 (可选) */
@@ -77,6 +120,8 @@ export interface ReactScanConfig {
   showComponentNames?: boolean;
   /** 最大跟踪组件数量 */
   maxTrackedComponents?: number;
+  /** 渲染时间阈值 (毫秒) */
+  renderThreshold?: number;
 }
 
 /**
@@ -96,6 +141,8 @@ export interface WebEvalAgentConfig {
   capturePerformance?: boolean;
   /** 测试超时时间 (毫秒) */
   timeout?: number;
+  /** 每个会话最大交互次数 */
+  maxInteractionsPerSession?: number;
 }
 
 /**
@@ -145,6 +192,77 @@ export interface WebVitalsConfig {
   sampleRate?: number;
   /** 是否在控制台输出 */
   debug?: boolean;
+  /** 是否报告所有变化 */
+  reportAllChanges?: boolean;
+  /** 性能阈值配置 */
+  thresholds?: {
+    /** CLS 阈值 */
+    cls?: number;
+    /** FID 阈值 */
+    fid?: number;
+    /** LCP 阈值 */
+    lcp?: number;
+  };
+}
+
+/**
+ * 组件性能监控配置
+ * Component performance monitoring configuration
+ */
+export interface ComponentConfig {
+  /** 是否启用 */
+  enabled: boolean;
+  /** 性能阈值 */
+  thresholds?: {
+    /** 渲染时间阈值 (毫秒) */
+    renderTime: number;
+    /** 内存使用阈值 (字节) */
+    memoryUsage?: number;
+  };
+  /** 是否跟踪重新渲染 */
+  trackRerenders?: boolean;
+  /** 最大跟踪组件数 */
+  maxTrackedComponents?: number;
+}
+
+/**
+ * 网络性能监控配置
+ * Network performance monitoring configuration
+ */
+export interface NetworkConfig {
+  /** 是否启用 */
+  enabled: boolean;
+  /** 性能阈值 */
+  thresholds?: {
+    /** 响应时间阈值 (毫秒) */
+    responseTime: number;
+    /** 超时时间 (毫秒) */
+    timeout?: number;
+  };
+  /** 是否监控所有请求 */
+  monitorAllRequests?: boolean;
+  /** 采样率 (0-1) */
+  sampleRate?: number;
+}
+
+/**
+ * 打包性能监控配置
+ * Bundle performance monitoring configuration
+ */
+export interface BundleConfig {
+  /** 是否启用 */
+  enabled: boolean;
+  /** 性能阈值 */
+  thresholds?: {
+    /** 包大小阈值 (字节) */
+    size: number;
+    /** 加载时间阈值 (毫秒) */
+    loadTime?: number;
+  };
+  /** 是否分析依赖 */
+  analyzeDependencies?: boolean;
+  /** 是否生成报告 */
+  generateReports?: boolean;
 }
 
 /**
@@ -162,6 +280,14 @@ export interface PerformanceConfig {
   sizeLimit: SizeLimitConfig;
   /** Web Vitals 配置 */
   webVitals?: WebVitalsConfig;
+  /** 组件性能监控配置 */
+  component?: ComponentConfig;
+  /** 网络性能监控配置 */
+  network?: NetworkConfig;
+  /** 打包性能监控配置 */
+  bundle?: BundleConfig;
+  /** 是否启用调试模式 */
+  debug?: boolean;
   /** 全局配置 */
   global?: {
     /** 是否启用性能监控 */
@@ -239,7 +365,7 @@ export function generateEnvironmentConfig(): PerformanceConfig {
 
   return {
     reactScan: {
-      enabled: 
+      enabled:
         isDevelopment &&
         !isTest &&
         process.env.NEXT_PUBLIC_DISABLE_REACT_SCAN !== 'true',
@@ -248,16 +374,18 @@ export function generateEnvironmentConfig(): PerformanceConfig {
       showRenderTime: isDevelopment,
       showComponentNames: isDevelopment,
       maxTrackedComponents: 100,
+      renderThreshold: 100, // 100ms
     },
     webEvalAgent: {
-      enabled: 
-        isTest || 
+      enabled:
+        isTest ||
         process.env.NEXT_PUBLIC_ENABLE_WEB_EVAL_AGENT === 'true',
       captureNetwork: true,
       captureLogs: true,
       captureScreenshots: isTest,
       capturePerformance: true,
       timeout: 30000,
+      maxInteractionsPerSession: 50,
     },
     bundleAnalyzer: {
       enabled: process.env.ANALYZE === 'true',
@@ -269,7 +397,7 @@ export function generateEnvironmentConfig(): PerformanceConfig {
     sizeLimit: {
       enabled: true,
       limits: {
-        main: 
+        main:
           PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.MAIN_BUNDLE *
           PERFORMANCE_CONSTANTS.BUNDLE_LIMITS.KB_TO_BYTES,
         framework:
@@ -288,7 +416,41 @@ export function generateEnvironmentConfig(): PerformanceConfig {
       reportToAnalytics: isProduction,
       sampleRate: isProduction ? 0.1 : 1.0, // 生产环境10%采样
       debug: isDevelopment,
+      reportAllChanges: isDevelopment,
+      thresholds: {
+        cls: 0.1,
+        fid: 100,
+        lcp: 2500,
+      },
     },
+    component: {
+      enabled: isDevelopment,
+      thresholds: {
+        renderTime: 100, // 100ms
+        memoryUsage: 50 * 1024 * 1024, // 50MB
+      },
+      trackRerenders: isDevelopment,
+      maxTrackedComponents: 100,
+    },
+    network: {
+      enabled: true,
+      thresholds: {
+        responseTime: 1000, // 1s
+        timeout: 10000, // 10s
+      },
+      monitorAllRequests: isDevelopment,
+      sampleRate: isProduction ? 0.1 : 1.0,
+    },
+    bundle: {
+      enabled: true,
+      thresholds: {
+        size: 1024 * 1024, // 1MB
+        loadTime: 3000, // 3s
+      },
+      analyzeDependencies: isDevelopment,
+      generateReports: !isProduction,
+    },
+    debug: isDevelopment,
     global: {
       enabled: true,
       dataRetentionTime: 5 * 60 * 1000, // 5分钟
@@ -323,7 +485,7 @@ export function validateConfig(config: PerformanceConfig): {
 
   // 验证 Web Vitals 配置
   if (config.webVitals?.enabled) {
-    if (config.webVitals.sampleRate && 
+    if (config.webVitals.sampleRate &&
         (config.webVitals.sampleRate < 0 || config.webVitals.sampleRate > 1)) {
       errors.push('Web Vitals sample rate must be between 0 and 1');
     }

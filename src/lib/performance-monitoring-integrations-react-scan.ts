@@ -1,7 +1,7 @@
 /**
  * React Scan 性能监控集成
  * React Scan Performance Monitoring Integration
- * 
+ *
  * 提供与React Scan工具的集成钩子，用于监控React组件渲染性能
  */
 
@@ -34,7 +34,7 @@ export function useReactScanIntegration(
 
   return {
     enabled: config.reactScan.enabled,
-    
+
     recordRender: (componentName: string, renderCount: number, renderTime = 0) => {
       if (!config.reactScan.enabled) return;
 
@@ -109,16 +109,15 @@ export function validateReactScanConfig(config: PerformanceConfig): {
       warnings.push('React Scan trackUnnecessaryRenders should be a boolean');
     }
 
-    if (config.reactScan.maxComponentsToTrack && 
-        (typeof config.reactScan.maxComponentsToTrack !== 'number' || 
-         config.reactScan.maxComponentsToTrack <= 0)) {
-      warnings.push('React Scan maxComponentsToTrack should be a positive number');
+    if (config.reactScan.maxTrackedComponents &&
+        (typeof config.reactScan.maxTrackedComponents !== 'number' ||
+         config.reactScan.maxTrackedComponents <= 0)) {
+      warnings.push('React Scan maxTrackedComponents should be a positive number');
     }
 
-    if (config.reactScan.renderThreshold && 
-        (typeof config.reactScan.renderThreshold !== 'number' || 
-         config.reactScan.renderThreshold <= 0)) {
-      warnings.push('React Scan renderThreshold should be a positive number');
+    if (config.reactScan.showRenderTime !== undefined &&
+        typeof config.reactScan.showRenderTime !== 'boolean') {
+      warnings.push('React Scan showRenderTime should be a boolean');
     }
   }
 

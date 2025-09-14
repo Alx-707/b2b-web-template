@@ -9,7 +9,7 @@ export {
   type CacheConfig, type CacheItem, type CacheStats, type CacheEvent, type CacheEventType, type CacheEventListener,
   type CacheStorage, type PersistentStorage, type MetricsCollector, type Preloader, type CacheManager,
   type PreloadConfig, type CacheOperationResult, type CacheConfigValidation, type CacheHealthCheck, type CacheDebugInfo,
-  CacheError, CacheValidationError, CacheStorageError, CacheSerializationError,
+  type CacheError, type CacheValidationError, type CacheStorageError, type CacheSerializationError,
   DEFAULT_CACHE_CONFIG, DEFAULT_PRELOAD_CONFIG, CACHE_CONSTANTS,
   isCacheItem, isCacheConfig, isCacheEvent, validateCacheConfig, createCacheKey, parseCacheKey,
   type Config, type Item, type Stats, type Event, type Manager, type Metrics,

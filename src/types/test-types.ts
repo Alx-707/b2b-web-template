@@ -105,6 +105,12 @@ export interface MockGlobal {
 export type ThemeMode = 'light' | 'dark' | 'system';
 
 /**
+ * 不安全的语言代码类型 - 用于安全性测试
+ * 包含可能导致原型污染的危险字符串
+ */
+export type UnsafeLocaleCode = '__proto__' | 'constructor' | 'prototype' | string;
+
+/**
  * 性能指标接口
  * 用于主题切换性能测试
  */
@@ -319,6 +325,53 @@ export interface CSSVariablesTest {
   input: MockColorData | IncompleteThemeColors;
   prefix?: string;
   expected: Record<string, string>;
+}
+
+// ============================================================================
+// Browser API Mock Types - 用于浏览器API模拟的类型
+// ============================================================================
+
+/**
+ * NumberFormat构造函数类型
+ * 用于测试中模拟Intl.NumberFormat
+ */
+export interface NumberFormatConstructor {
+  new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat;
+  (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat;
+  supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: string }): string[];
+}
+
+/**
+ * DateTimeFormat构造函数类型
+ * 用于测试中模拟Intl.DateTimeFormat
+ */
+export interface DateTimeFormatConstructor {
+  new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat;
+  (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat;
+  supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: string }): string[];
+}
+
+/**
+ * Mock存储管理器接口
+ * 用于测试中模拟存储操作
+ */
+export interface MockStorageManager {
+  getUserPreference: MockFunction<() => string | null>;
+  getDetectionHistory: MockFunction<() => Array<{ locale: string; timestamp: number }>>;
+  getUserOverride: MockFunction<() => string | null>;
+  setUserPreference: MockFunction<(locale: string) => void>;
+  setUserOverride: MockFunction<(locale: string) => void>;
+  clearUserData: MockFunction<() => void>;
+}
+
+/**
+ * Mock地理位置接口
+ * 用于测试中模拟地理位置API
+ */
+export interface MockGeolocation {
+  getCurrentPosition: MockFunction<(success: (position: GeolocationPosition) => void, error?: (error: GeolocationPositionError) => void) => void>;
+  watchPosition: MockFunction<(success: (position: GeolocationPosition) => void, error?: (error: GeolocationPositionError) => void) => number>;
+  clearWatch: MockFunction<(watchId: number) => void>;
 }
 
 // ============================================================================

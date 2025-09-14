@@ -7,7 +7,7 @@
 
 // 基础类型 - Base Types
 export type {
-  WhatsAppContact, WhatsAppMessage, WhatsAppError, MessageStatus,
+  WhatsAppContact, WhatsAppMessage, MessageStatus,
   MessageStatusUpdate, LocationData, ContactData, MessageType, MediaType,
   MediaObject, ImageMedia, DocumentMedia, VideoMedia, AudioMedia,
   ContactName, ContactPhone, ContactEmail, ContactUrl, ContactAddress, ContactOrg,
@@ -60,7 +60,7 @@ export {
   type TemplateStatus, type TemplatesResponse, type AnalyticsRequest, type AnalyticsDataPoint, type AnalyticsResponse,
   type RateLimitInfo, type ApiConfig, type ApiRequestOptions, type PaginationCursors, type PaginationInfo, type PaginatedResponse,
   type ApiRequest, type ApiResponse, type BatchRequest, type BatchResponse, type ApiEndpoint, type HttpMethod,
-  isSuccessResponse, isErrorResponse, isWhatsAppApiError, API_ENDPOINTS, HTTP_METHODS, API_VERSIONS, DEFAULT_API_CONFIG,
+  isSuccessResponse, isErrorResponse, isWhatsAppApiError, type API_ENDPOINTS, type HTTP_METHODS, type API_VERSIONS, type DEFAULT_API_CONFIG,
   type SendRequest, type SendResponse, type ApiResponse as ApiResponseType, type ServiceResponse, type ApiError, type UploadRequest, type UploadResponse,
 } from './whatsapp-api-types';
 
@@ -83,18 +83,20 @@ export {
 // 服务配置和错误类型 - Service Types
 export {
   type WhatsAppConfig, type WhatsAppServiceOptions, type ServiceEnvironmentConfig,
-  WhatsAppError, WhatsAppApiError, WhatsAppValidationError, WhatsAppRateLimitError, WhatsAppNetworkError,
+  type WhatsAppError, WhatsAppApiError, type WhatsAppValidationError, WhatsAppRateLimitError, WhatsAppNetworkError,
   type ServiceHealth, type ServiceMetrics, type ServiceStatus, type RetryConfig, type CircuitBreakerConfig, type CircuitBreakerState,
   type LogEntry, type Logger, type CacheConfig, type CacheEntry, type Cache,
   type ServiceEvent, type MessageSentEvent, type MessageDeliveredEvent, type ErrorEvent, type WhatsAppServiceEvent,
   type WhatsAppServiceInterface, type MessageType as ServiceMessageType, type MessageStatus as ServiceMessageStatus,
-  type ServiceEnvironment, type LogLevel, DEFAULT_SERVICE_OPTIONS, DEFAULT_RETRY_CONFIG, DEFAULT_CIRCUIT_BREAKER_CONFIG, DEFAULT_CACHE_CONFIG,
+  type ServiceEnvironment, type LogLevel, DEFAULT_SERVICE_OPTIONS, type DEFAULT_RETRY_CONFIG, type DEFAULT_CIRCUIT_BREAKER_CONFIG, type DEFAULT_CACHE_CONFIG,
   isWhatsAppError, isWhatsAppApiError, isWhatsAppValidationError, isWhatsAppRateLimitError, isWhatsAppNetworkError,
   type Config, type ServiceOptions, type Status, type Health, type Metrics, type ServiceInterface,
 } from './whatsapp-service-types';
 
 // 向后兼容的通用别名 - Backward Compatibility Aliases
+// 注意：这些别名引用的是已经导出的类型
 export type {
-  WhatsAppConfig as Config, WhatsAppMessage as Message, SendMessageRequest as SendRequest,
-  SendMessageResponse as SendResponse, TemplateMessage as Template, WebhookPayload as Webhook
+  WhatsAppConfig as WhatsAppConfigAlias,
+  WhatsAppMessage as WhatsAppMessageAlias,
+  TemplateMessage as TemplateMessageAlias
 };

@@ -26,9 +26,10 @@ export function usePerformanceMeasurements(
       if (typeof window !== 'undefined' && window.performance) {
         const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
         if (navigation) {
-          const loadTime = navigation.loadEventEnd - navigation.navigationStart;
+          const loadTime = navigation.loadEventEnd - navigation.startTime;
 
           setMetrics(prev => ({
+            renderTime: 0,
             ...(prev || {}),
             loadTime,
           }));
@@ -53,6 +54,7 @@ export function usePerformanceMeasurements(
         const renderTime = performance.now() - startTime.current;
 
         setMetrics(prev => ({
+          loadTime: 0,
           ...(prev || {}),
           renderTime,
         }));
@@ -76,6 +78,8 @@ export function usePerformanceMeasurements(
         const memoryUsage = window.performance.memory.usedJSHeapSize;
 
         setMetrics(prev => ({
+          loadTime: 0,
+          renderTime: 0,
           ...(prev || {}),
           memoryUsage,
         }));
@@ -183,8 +187,9 @@ export const measureCumulativeLayoutShift = (): Promise<number | null> => {
 
         const observer = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
-            if (!(entry as { hadRecentInput?: boolean; value: number }).hadRecentInput) {
-              clsValue += (entry as { hadRecentInput?: boolean; value: number }).value;
+            const layoutShiftEntry = entry as unknown as { hadRecentInput?: boolean; value: number };
+            if (!layoutShiftEntry.hadRecentInput) {
+              clsValue += layoutShiftEntry.value;
             }
           }
         });
@@ -229,7 +234,8 @@ export const measureFirstInputDelay = (): Promise<number | null> => {
           const entries = list.getEntries();
           const firstEntry = entries[0];
           if (firstEntry) {
-            const fid = (firstEntry as { processingStart: number; startTime: number }).processingStart - firstEntry.startTime;
+            const firstInputEntry = firstEntry as unknown as { processingStart: number; startTime: number };
+            const fid = firstInputEntry.processingStart - firstEntry.startTime;
             resolve(fid);
           } else {
             resolve(null);
@@ -266,7 +272,7 @@ export const measureComprehensivePerformance = async (): Promise<Partial<Perform
       // 加载时间
       const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
       if (navigation) {
-        metrics.loadTime = navigation.loadEventEnd - navigation.navigationStart;
+        metrics.loadTime = navigation.loadEventEnd - navigation.startTime;
       }
 
       // 内存使用

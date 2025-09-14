@@ -190,7 +190,7 @@ export function createAccessibilityManager(config?: unknown): AccessibilityManag
 export function getPrivateAccessibility(
   manager: AccessibilityManager,
 ): AccessibilityManagerPrivate {
-  return manager as unknown;
+  return manager as AccessibilityManagerPrivate;
 }
 
 // Helper function to simulate media query changes

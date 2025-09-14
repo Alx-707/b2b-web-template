@@ -9,11 +9,11 @@
  * - Error recovery mechanisms
  */
 
-import React from 'react';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ThemeToggle } from '@/components/theme-toggle';
 
 // Mock next-themes
 const mockSetTheme = vi.fn();
@@ -52,7 +52,7 @@ vi.mock('@/hooks/use-theme-toggle', () => ({
 
 // Mock UI components with realistic behavior
 vi.mock('@/components/ui/dropdown-menu', () => ({
-  DropdownMenu: ({ children, open, onOpenChange }: React.ComponentProps<"div">) => (
+  DropdownMenu: ({ children, open, onOpenChange }: React.ComponentProps<"div"> & { open?: boolean; onOpenChange?: (open: boolean) => void }) => (
     <div
       data-testid='dropdown-menu'
       data-open={open}
@@ -60,7 +60,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
       <div onClick={() => onOpenChange?.(!open)}>{children}</div>
     </div>
   ),
-  DropdownMenuTrigger: ({ children, asChild: _asChild }: React.ComponentProps<"div">) => (
+  DropdownMenuTrigger: ({ children, asChild: _asChild }: React.ComponentProps<"div"> & { asChild?: boolean }) => (
     <div data-testid='dropdown-trigger'>{children}</div>
   ),
   DropdownMenuContent: ({
@@ -69,7 +69,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     className,
     role,
     ...props
-  }: React.ComponentProps<"div">) => (
+  }: React.ComponentProps<"div"> & { align?: string }) => (
     <div
       data-testid='dropdown-content'
       data-align={align}
@@ -83,7 +83,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
 }));
 
 vi.mock('@/components/theme/theme-toggle-button', () => ({
-  ThemeToggleButton: ({ ariaAttributes, onKeyDown, ...props }: React.ComponentProps<"div">) => (
+  ThemeToggleButton: ({ ariaAttributes, onKeyDown, ...props }: React.ComponentProps<"button"> & { ariaAttributes?: Record<string, unknown> }) => (
     <button
       data-testid='theme-toggle-button'
       onKeyDown={onKeyDown}
@@ -104,7 +104,12 @@ vi.mock('@/components/theme/theme-menu-item', () => ({
     onClick,
     onKeyDown,
     ...props
-  }: React.ComponentProps<"div">) => (
+  }: React.ComponentProps<"div"> & {
+    theme?: string;
+    currentTheme?: string;
+    label?: string;
+    ariaLabel?: string;
+  }) => (
     <div
       data-testid={`theme-menu-item-${theme}`}
       data-current={currentTheme === theme}

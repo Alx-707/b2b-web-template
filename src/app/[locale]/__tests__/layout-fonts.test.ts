@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { geistMono, geistSans, getFontClassNames } from '../layout-fonts';
+import { geistMono, geistSans, getFontClassNames } from '@/app/[locale]/layout-fonts';
 
 // Mock Next.js字体函数 - 使用vi.hoisted确保正确初始化
 const { mockGeistSans, mockGeistMono } = vi.hoisted(() => ({

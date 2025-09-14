@@ -72,15 +72,15 @@ const verifyMockSetup = async () => {
 };
 
 // 辅助函数：验证Hook返回值的完整性
-const validateHookResult = (result: unknown) => {
+const validateHookResult = (result: any) => {
   // 在测试环境中，Hook应该立即返回有效对象
-  expect(result.current).toBeTruthy();
-  expect(result.current).not.toBeNull();
-  expect(typeof result.current.refreshDiagnostics).toBe('function');
-  expect(typeof result.current.getPerformanceTrends).toBe('function');
-  expect(typeof result.current.exportReport).toBe('function');
-  expect(typeof result.current.getPageComparison).toBe('function');
-  expect(typeof result.current.clearHistory).toBe('function');
+  expect((result as any).current).toBeTruthy();
+  expect((result as any).current).not.toBeNull();
+  expect(typeof (result as any).current.refreshDiagnostics).toBe('function');
+  expect(typeof (result as any).current.getPerformanceTrends).toBe('function');
+  expect(typeof (result as any).current.exportReport).toBe('function');
+  expect(typeof (result as any).current.getPageComparison).toBe('function');
+  expect(typeof (result as any).current.clearHistory).toBe('function');
 };
 
 describe('useWebVitalsDiagnostics', () => {

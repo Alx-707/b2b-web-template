@@ -46,13 +46,13 @@ export function exportCsvReport(historicalReports: DiagnosticReport[]): void {
 
   const csvRows = historicalReports.map(report => [
     new Date(report.timestamp).toISOString(),
-    report.url,
-    report.cls.toFixed(3),
-    report.lcp.toFixed(0),
-    report.fid.toFixed(0),
-    report.fcp.toFixed(0),
-    report.ttfb.toFixed(0),
-    report.performanceScore?.toFixed(1) || 'N/A',
+    report.pageUrl,
+    report.vitals.cls.toFixed(3),
+    report.vitals.lcp.toFixed(0),
+    report.vitals.fid.toFixed(0),
+    report.vitals.fcp.toFixed(0),
+    report.vitals.ttfb.toFixed(0),
+    report.score?.toFixed(1) || 'N/A',
   ]);
 
   const csvContent = [csvHeaders, ...csvRows]
@@ -133,7 +133,14 @@ export function generateDetailedReport(
 /**
  * 计算平均指标
  */
-function calculateAverageMetrics(reports: DiagnosticReport[]): Record<string, number> {
+function calculateAverageMetrics(reports: DiagnosticReport[]): {
+  cls: number;
+  lcp: number;
+  fid: number;
+  fcp: number;
+  ttfb: number;
+  performanceScore: number;
+} {
   if (reports.length === 0) {
     return {
       cls: 0,
@@ -147,12 +154,12 @@ function calculateAverageMetrics(reports: DiagnosticReport[]): Record<string, nu
 
   const totals = reports.reduce(
     (acc, report) => ({
-      cls: acc.cls + report.cls,
-      lcp: acc.lcp + report.lcp,
-      fid: acc.fid + report.fid,
-      fcp: acc.fcp + report.fcp,
-      ttfb: acc.ttfb + report.ttfb,
-      performanceScore: acc.performanceScore + (report.performanceScore || 0),
+      cls: acc.cls + report.vitals.cls,
+      lcp: acc.lcp + report.vitals.lcp,
+      fid: acc.fid + report.vitals.fid,
+      fcp: acc.fcp + report.vitals.fcp,
+      ttfb: acc.ttfb + report.vitals.ttfb,
+      performanceScore: acc.performanceScore + (report.score || 0),
     }),
     { cls: 0, lcp: 0, fid: 0, fcp: 0, ttfb: 0, performanceScore: 0 },
   );
@@ -250,13 +257,13 @@ export function exportExcelReport(historicalReports: DiagnosticReport[]): void {
     return [
       date.toLocaleDateString(),
       date.toLocaleTimeString(),
-      report.url,
-      report.cls.toFixed(3),
-      report.lcp.toFixed(0),
-      report.fid.toFixed(0),
-      report.fcp.toFixed(0),
-      report.ttfb.toFixed(0),
-      report.performanceScore?.toFixed(1) || 'N/A',
+      report.pageUrl,
+      report.vitals.cls.toFixed(3),
+      report.vitals.lcp.toFixed(0),
+      report.vitals.fid.toFixed(0),
+      report.vitals.fcp.toFixed(0),
+      report.vitals.ttfb.toFixed(0),
+      report.score?.toFixed(1) || 'N/A',
       status,
     ];
   });
@@ -280,7 +287,7 @@ export function exportExcelReport(historicalReports: DiagnosticReport[]): void {
  * 获取性能状态
  */
 function getPerformanceStatus(report: DiagnosticReport): string {
-  const score = report.performanceScore || 0;
+  const score = report.score || 0;
 
   if (score >= 90) return 'Excellent';
   if (score >= 75) return 'Good';

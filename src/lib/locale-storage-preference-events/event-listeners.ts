@@ -11,6 +11,7 @@ import type {
   UserLocalePreference,
   StorageEvent,
   StorageEventListener,
+  LocaleSource,
 } from '../locale-storage-types';
 import { recordPreferenceHistory } from './history-manager';
 import { logger } from '@/lib/logger';
@@ -26,7 +27,7 @@ import { logger } from '@/lib/logger';
  */
 export const consoleLogListener: StorageEventListener = (event: StorageEvent) => {
   const timestamp = new Date(event.timestamp).toLocaleTimeString();
-  
+
   switch (event.type) {
     case 'preference_saved':
       logger.info('偏好已保存', { timestamp, data: event.data });
@@ -59,10 +60,10 @@ export const historyRecordingListener: StorageEventListener = (event: StorageEve
   if (event.type === 'preference_saved' && event.data) {
     const { locale, source, confidence } = event.data as {
       locale: Locale;
-      source: string;
+      source: LocaleSource;
       confidence: number;
     };
-    
+
     const preference: UserLocalePreference = {
       locale,
       source,
@@ -70,7 +71,7 @@ export const historyRecordingListener: StorageEventListener = (event: StorageEve
       timestamp: event.timestamp,
       metadata: { recordedBy: 'event_listener' },
     };
-    
+
     recordPreferenceHistory(preference);
   }
 };

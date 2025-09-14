@@ -160,7 +160,7 @@ describe('useKeyboardNavigation Basic Tests', () => {
 
       const { result } = renderHook(() =>
         useKeyboardNavigation({
-          focusableSelector: customSelector,
+          selector: customSelector,
         }),
       );
 

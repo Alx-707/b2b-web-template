@@ -35,8 +35,12 @@ export class WhatsAppError extends Error {
     this.name = 'WhatsAppError';
     this.code = code;
     this.type = type;
-    this.subcode = subcode;
-    this.traceId = traceId;
+    if (subcode !== undefined) {
+      this.subcode = subcode;
+    }
+    if (traceId !== undefined) {
+      this.traceId = traceId;
+    }
     this.timestamp = Date.now();
 
     // Ensure proper prototype chain for instanceof checks
@@ -109,7 +113,9 @@ export class WhatsAppApiError extends WhatsAppError {
       traceId || apiError?.fbtrace_id
     );
     this.name = 'WhatsAppApiError';
-    this.apiError = apiError;
+    if (apiError !== undefined) {
+      this.apiError = apiError;
+    }
   }
 
   /**
@@ -150,8 +156,12 @@ export class WhatsAppValidationError extends WhatsAppError {
   ) {
     super(message, 400, 'ValidationError');
     this.name = 'WhatsAppValidationError';
-    this.field = field;
-    this.value = value;
+    if (field !== undefined) {
+      this.field = field;
+    }
+    if (value !== undefined) {
+      this.value = value;
+    }
   }
 
   /**
@@ -208,9 +218,15 @@ export class WhatsAppRateLimitError extends WhatsAppError {
   ) {
     super(message, 429, 'RateLimitError');
     this.name = 'WhatsAppRateLimitError';
-    this.retryAfter = retryAfter;
-    this.limit = limit;
-    this.remaining = remaining;
+    if (retryAfter !== undefined) {
+      this.retryAfter = retryAfter;
+    }
+    if (limit !== undefined) {
+      this.limit = limit;
+    }
+    if (remaining !== undefined) {
+      this.remaining = remaining;
+    }
   }
 
   /**
@@ -258,8 +274,12 @@ export class WhatsAppNetworkError extends WhatsAppError {
   ) {
     super(message, 500, 'NetworkError');
     this.name = 'WhatsAppNetworkError';
-    this.originalError = originalError;
-    this.isTimeout = isTimeout;
+    if (originalError !== undefined) {
+      this.originalError = originalError;
+    }
+    if (isTimeout !== undefined) {
+      this.isTimeout = isTimeout;
+    }
   }
 
   /**
@@ -313,8 +333,12 @@ export class WhatsAppAuthError extends WhatsAppError {
   ) {
     super(message, 401, 'AuthError');
     this.name = 'WhatsAppAuthError';
-    this.tokenExpired = tokenExpired;
-    this.tokenInvalid = tokenInvalid;
+    if (tokenExpired !== undefined) {
+      this.tokenExpired = tokenExpired;
+    }
+    if (tokenInvalid !== undefined) {
+      this.tokenInvalid = tokenInvalid;
+    }
   }
 
   /**
@@ -411,7 +435,10 @@ export function createErrorFromApiResponse(
   }
 
   if (status === 429) {
-    const retryAfter = data?.error?.retry_after;
+    const retryAfter = (data as Record<string, unknown>)?.error &&
+      typeof (data as Record<string, unknown>).error === 'object'
+      ? ((data as Record<string, unknown>).error as Record<string, unknown>).retry_after
+      : undefined;
     return new WhatsAppRateLimitError(
       'Rate limit exceeded',
       retryAfter
@@ -419,8 +446,11 @@ export function createErrorFromApiResponse(
   }
 
   if (data?.error) {
+    const errorMessage = typeof data.error === 'object' && data.error !== null && 'message' in data.error
+      ? (data.error as Record<string, unknown>).message || 'API Error'
+      : 'API Error';
     return new WhatsAppApiError(
-      data.error.message || 'API Error',
+      errorMessage as string,
       status,
       data.error,
       traceId

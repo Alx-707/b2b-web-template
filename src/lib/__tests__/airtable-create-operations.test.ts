@@ -51,7 +51,7 @@ vi.mock('./validations', async () => {
 });
 
 describe('Airtable Service - Create Operations Tests', () => {
-  let AirtableService: typeof import('../airtable');
+  let AirtableServiceClass: any;
 
   beforeEach(async () => {
     // Clear mocks but preserve the mock functions
@@ -65,7 +65,7 @@ describe('Airtable Service - Create Operations Tests', () => {
 
     // Dynamically import the module to ensure fresh instance
     const module = await import('../airtable') as DynamicImportModule;
-    AirtableService = module.AirtableService;
+    AirtableServiceClass = module.AirtableService;
   });
 
   afterEach(() => {
@@ -84,7 +84,7 @@ describe('Airtable Service - Create Operations Tests', () => {
 
   describe('创建联系人记录', () => {
     it('should create contact record successfully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -127,7 +127,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     });
 
     it('should include optional fields when provided', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       (service as AirtableServicePrivate).isConfigured = true;
@@ -168,7 +168,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     });
 
     it('should throw error when service is not configured', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       // Ensure service is not configured
       (service as AirtableServicePrivate).isConfigured = false;
@@ -180,7 +180,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     });
 
     it('should handle creation errors gracefully', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as AirtableServicePrivate).isConfigured = true;
       (service as AirtableServicePrivate).base = {
@@ -195,7 +195,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     });
 
     it('should handle empty form data', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as AirtableServicePrivate).isConfigured = true;
       (service as AirtableServicePrivate).base = {
@@ -226,7 +226,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     });
 
     it('should handle special characters in form data', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as AirtableServicePrivate).isConfigured = true;
       (service as AirtableServicePrivate).base = {
@@ -270,7 +270,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     });
 
     it('should handle long text content', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as AirtableServicePrivate).isConfigured = true;
       (service as AirtableServicePrivate).base = {
@@ -310,7 +310,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     });
 
     it('should handle network timeout errors', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as AirtableServicePrivate).isConfigured = true;
       (service as AirtableServicePrivate).base = {
@@ -327,7 +327,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     });
 
     it('should handle rate limiting errors', async () => {
-      const service = new AirtableService();
+      const service = new AirtableServiceClass();
 
       (service as AirtableServicePrivate).isConfigured = true;
       (service as AirtableServicePrivate).base = {

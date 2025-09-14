@@ -6,10 +6,14 @@
  */
 
 // 重新导出所有模块的功能
-export { ReactScanIntegration, useReactScanIntegration, validateReactScanConfig, ReactScanAnalyzer, ReactScanUtils } from './performance-monitoring-integrations-react-scan';export { WebEvalAgentIntegration, useWebEvalAgentIntegration, validateWebEvalAgentConfig, WebEvalAgentAnalyzer } from
-'./performance-monitoring-integrations-web-eval';export { BundleAnalyzerIntegration, useBundleAnalyzerIntegration, validateBundleAnalyzerConfig, BundleAnalyzerAnalyzer, BundleAnalyzerUtils } from
-'./performance-monitoring-integrations-bundle';export { WebVitalsIntegration, useWebVitalsIntegration, EnvironmentCompatibilityResult, checkEnvironmentCompatibility, performHealthCheck, validateWebVitalsConfig, WebVitalsAnalyzer } from
-'./performance-monitoring-integrations-vitals';
+export type { ReactScanIntegration } from './performance-monitoring-integrations-react-scan';
+export { useReactScanIntegration, validateReactScanConfig, ReactScanAnalyzer, ReactScanUtils } from './performance-monitoring-integrations-react-scan';
+export type { WebEvalAgentIntegration } from './performance-monitoring-integrations-web-eval';
+export { useWebEvalAgentIntegration, validateWebEvalAgentConfig, WebEvalAgentAnalyzer } from './performance-monitoring-integrations-web-eval';
+export type { BundleAnalyzerIntegration } from './performance-monitoring-integrations-bundle';
+export { useBundleAnalyzerIntegration, validateBundleAnalyzerConfig, BundleAnalyzerAnalyzer, BundleAnalyzerUtils } from './performance-monitoring-integrations-bundle';
+export type { WebVitalsIntegration, EnvironmentCompatibilityResult } from './performance-monitoring-integrations-vitals';
+export { useWebVitalsIntegration, checkEnvironmentCompatibility, performHealthCheck, validateWebVitalsConfig, WebVitalsAnalyzer } from './performance-monitoring-integrations-vitals';
 
 // 向后兼容的重新导出
 import type {

@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 import { resendService } from '@/lib/resend';
 import type { ContactFormData } from '@/lib/validations';
 import { contactFormSchema } from '@/lib/validations';
-import { verifyTurnstile } from './contact-api-utils';
+import { verifyTurnstile } from '@/app/api/contact/contact-api-utils';
 
 /**
  * 扩展的联系表单模式，包含Turnstile token

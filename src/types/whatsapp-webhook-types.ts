@@ -21,7 +21,7 @@ export { WEBHOOK_EVENT_TYPES, MESSAGE_EVENT_TYPES, SYSTEM_EVENT_TYPES, isMessage
 
 export type { WebhookParsingResult, WebhookValidationResult, SignatureVerificationConfig, WebhookProcessingContext, WebhookResponseConfig, DeduplicationConfig, RateLimitConfig, WebhookHealthCheck, WebhookDebugInfo, EventAggregationResult, WebhookUtils } from './whatsapp-webhook-utils';
 
-export { isWebhookVerificationRequest, createWebhookVerificationResponse, createWebhookError, isRetryableError, isTimestampValid } from './whatsapp-webhook-utils';
+export { createWebhookVerificationResponse, createWebhookError, isRetryableError, isTimestampValid } from './whatsapp-webhook-utils';
 
 // 向后兼容的重新导出
 import type { WhatsAppContact, WhatsAppMessage, WhatsAppError, MessageStatus } from './whatsapp-base-types';

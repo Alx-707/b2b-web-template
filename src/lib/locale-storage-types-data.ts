@@ -10,11 +10,9 @@ import type { Locale } from '@/types/i18n';
 import type {
   LocaleSource,
   StorageEventType,
-  StorageType,
   CompressionAlgorithm,
   EncryptionAlgorithm,
   SyncStatus,
-  MigrationStatus,
   HealthStatus,
   ErrorType,
   PriorityLevel,
@@ -155,10 +153,11 @@ export interface StorageHealthCheck {
  * 验证结果
  * Validation result
  */
-export interface ValidationResult {
+export interface ValidationResult<T = unknown> {
   isValid: boolean;
   errors: string[];
   warnings: string[];
+  data?: T;
   metadata?: Record<string, unknown>;
 }
 

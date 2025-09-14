@@ -10,7 +10,13 @@ export type { ApiResponse, PaginatedResponse, DeepPartial, RequiredKeys, Optiona
 // 导出测试工具函数
 export { isMockDOMElement, isMockKeyboardEvent, isValidThemeMode } from './test-types';
 // 导出测试类型定义
-export type { MockDOMElement, MockKeyboardEvent, MockMouseEvent, MockProcessEnv, MockCrypto, MockGlobal, ThemeMode, MockPerformanceMetric, MockSwitchPattern, MockAnalyticsConfig, MockFunction, TestCallback, TestConfig, MockColorData, AccessibilityManagerPrivate, AccessibilityTestConfig, ThemeAnalyticsPrivate, ThemeAnalyticsInstance, IncompleteThemeColors, CSSVariablesTest, ExtendedMockFunction, SpyFunction, TestSuiteConfig, PatternMatchResult, TestDataGenerator, TestAssertion, AllTestTypes } from './test-types';
+export type { MockDOMElement, MockKeyboardEvent, MockMouseEvent, MockProcessEnv, MockCrypto, MockGlobal, ThemeMode, MockPerformanceMetric, MockSwitchPattern, MockAnalyticsConfig, MockFunction, TestCallback, TestConfig, MockColorData, AccessibilityManagerPrivate, AccessibilityTestConfig, ThemeAnalyticsPrivate, ThemeAnalyticsInstance, IncompleteThemeColors, CSSVariablesTest, ExtendedMockFunction, SpyFunction, TestSuiteConfig, PatternMatchResult, TestDataGenerator, TestAssertion, AllTestTypes, UnsafeLocaleCode, NumberFormatConstructor, DateTimeFormatConstructor, MockStorageManager, MockGeolocation } from './test-types';
+
+// 导出Web Vitals类型
+export type { DetailedWebVitals, PerformanceBaseline } from '@/lib/web-vitals/types';
+
+// 导出颜色系统类型
+export type { ThemeColors } from '@/lib/colors/types';
 
 // 未来可以添加更多类型模块的导出
 // export * from './api';

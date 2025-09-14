@@ -1,0 +1,556 @@
+src/app/[locale]/react-scan-demo/react-scan-types.ts(18,5): error TS2717: Subsequent property declarations must have the same type.  Property '__REACT_SCAN__' must be of type 'ReactScanGlobal | undefined', but here has type '{ ReactScanInternals?: { enabled?: boolean; totalRenders?: number; componentsScanned?: number; }; } | undefined'.
+src/components/forms/contact-form-container.tsx(139,27): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(schema: Zod3Type<{ firstName: string; lastName: string; email: string; company: string; message: string; acceptPrivacy: boolean; phone?: string | undefined; subject?: string | undefined; marketingConsent?: boolean | undefined; website?: string | undefined; }, { ...; }>, schemaOptions?: ParseParams | undefined, resolverOptions?: NonRawResolverOptions | undefined): Resolver<...>', gave the following error.
+    Argument of type 'ZodObject<{ firstName: ZodString; lastName: ZodString; email: ZodString; company: ZodString; message: ZodString; phone: ZodOptional<ZodString>; subject: ZodOptional<...>; acceptPrivacy: ZodBoolean; marketingConsent: ZodOptional<...>; website: ZodOptional<...>; }, $strip>' is not assignable to parameter of type 'Zod3Type<{ firstName: string; lastName: string; email: string; company: string; message: string; acceptPrivacy: boolean; phone?: string | undefined; subject?: string | undefined; marketingConsent?: boolean | undefined; website?: string | undefined; }, { ...; }>'.
+      Types of property '_def' are incompatible.
+        Property 'typeName' is missing in type '$ZodObjectDef<{ firstName: ZodString; lastName: ZodString; email: ZodString; company: ZodString; message: ZodString; phone: ZodOptional<ZodString>; subject: ZodOptional<...>; acceptPrivacy: ZodBoolean; marketingConsent: ZodOptional<...>; website: ZodOptional<...>; }>' but required in type '{ typeName: string; }'.
+  Overload 2 of 4, '(schema: $ZodType<unknown, FieldValues, $ZodTypeInternals<unknown, FieldValues>>, schemaOptions?: ParseContext<$ZodIssue> | undefined, resolverOptions?: NonRawResolverOptions | undefined): Resolver<...>', gave the following error.
+    Argument of type 'ZodObject<{ firstName: ZodString; lastName: ZodString; email: ZodString; company: ZodString; message: ZodString; phone: ZodOptional<ZodString>; subject: ZodOptional<...>; acceptPrivacy: ZodBoolean; marketingConsent: ZodOptional<...>; website: ZodOptional<...>; }, $strip>' is not assignable to parameter of type '$ZodType<unknown, FieldValues, $ZodTypeInternals<unknown, FieldValues>>'.
+      The types of '_zod.version.minor' are incompatible between these types.
+        Type '1' is not assignable to type '0'.
+src/constants/units.ts(5,26): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+src/constants/units.ts(6,24): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+src/constants/units.ts(9,19): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+src/hooks/performance-monitor-measurements.ts(29,65): error TS2551: Property 'navigationStart' does not exist on type 'PerformanceNavigationTiming'. Did you mean 'activationStart'?
+src/hooks/performance-monitor-measurements.ts(35,13): error TS1117: An object literal cannot have multiple properties with the same name.
+src/hooks/performance-monitor-measurements.ts(61,11): error TS1117: An object literal cannot have multiple properties with the same name.
+src/hooks/performance-monitor-measurements.ts(192,19): error TS2352: Conversion of type 'PerformanceEntry' to type '{ hadRecentInput?: boolean; value: number; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'value' is missing in type 'PerformanceEntry' but required in type '{ hadRecentInput?: boolean; value: number; }'.
+src/hooks/performance-monitor-measurements.ts(193,28): error TS2352: Conversion of type 'PerformanceEntry' to type '{ hadRecentInput?: boolean; value: number; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'value' is missing in type 'PerformanceEntry' but required in type '{ hadRecentInput?: boolean; value: number; }'.
+src/hooks/performance-monitor-measurements.ts(238,26): error TS2352: Conversion of type 'PerformanceEntry' to type '{ processingStart: number; startTime: number; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'processingStart' is missing in type 'PerformanceEntry' but required in type '{ processingStart: number; startTime: number; }'.
+src/hooks/performance-monitor-measurements.ts(275,65): error TS2551: Property 'navigationStart' does not exist on type 'PerformanceNavigationTiming'. Did you mean 'activationStart'?
+src/hooks/use-enhanced-theme.ts(50,7): error TS2721: Cannot invoke an object which is possibly 'null'.
+src/hooks/use-enhanced-theme.ts(66,7): error TS2721: Cannot invoke an object which is possibly 'null'.
+src/hooks/use-performance-monitor.ts(129,13): error TS7030: Not all code paths return a value.
+src/hooks/use-performance-monitor.ts(154,13): error TS7030: Not all code paths return a value.
+src/hooks/web-vitals-diagnostics-export.ts(4,3): error TS2459: Module '"./web-vitals-diagnostics-types"' declares 'DiagnosticReport' locally, but it is not exported.
+src/hooks/web-vitals-diagnostics-export.ts(184,7): error TS18048: 'averages.cls' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(186,14): error TS18048: 'averages.cls' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(191,7): error TS18048: 'averages.lcp' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(193,14): error TS18048: 'averages.lcp' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(198,7): error TS18048: 'averages.fid' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(200,14): error TS18048: 'averages.fid' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(213,11): error TS18048: 'recentAvg.performanceScore' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(213,40): error TS18048: 'olderAvg.performanceScore' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(215,18): error TS18048: 'recentAvg.performanceScore' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-export.ts(215,47): error TS18048: 'olderAvg.performanceScore' is possibly 'undefined'.
+src/hooks/web-vitals-diagnostics-persistence.ts(5,3): error TS2459: Module '"./web-vitals-diagnostics-types"' declares 'DiagnosticReport' locally, but it is not exported.
+src/lib/i18n-analytics.ts(154,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'number'.
+src/lib/i18n-analytics.ts(191,9): error TS2571: Object is of type 'unknown'.
+src/lib/i18n-analytics.ts(322,47): error TS18046: 'e.metadata.loadTime' is of type 'unknown'.
+src/lib/i18n-cache-manager.ts(239,55): error TS2345: Argument of type '(event: Record<string, unknown>) => void' is not assignable to parameter of type 'CacheEventListener'.
+  Types of parameters 'event' and 'event' are incompatible.
+    Type 'CacheEvent<unknown>' is not assignable to type 'Record<string, unknown>'.
+      Index signature for type 'string' is missing in type 'CacheEvent<unknown>'.
+src/lib/i18n-cache-manager.ts(244,58): error TS2345: Argument of type '(event: Record<string, unknown>) => void' is not assignable to parameter of type 'CacheEventListener'.
+  Types of parameters 'event' and 'event' are incompatible.
+    Type 'CacheEvent<unknown>' is not assignable to type 'Record<string, unknown>'.
+      Index signature for type 'string' is missing in type 'CacheEvent<unknown>'.
+src/lib/i18n-cache-types-base.ts(196,5): error TS2412: Type 'Record<string, unknown> | undefined' is not assignable to type 'Record<string, unknown>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'Record<string, unknown>'.
+src/lib/i18n-cache-types-base.ts(274,29): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Locale'.
+src/lib/i18n-cache-types-base.ts(275,23): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Locale'.
+src/lib/i18n-cache-types-base.ts(281,3): error TS2375: Type '{ locale: Locale; namespace: string | undefined; key: string | undefined; }' is not assignable to type '{ locale: Locale; namespace?: string; key?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'namespace' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/i18n-cache-types-utils.ts(30,31): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Locale'.
+src/lib/i18n-cache-types-utils.ts(31,25): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Locale'.
+src/lib/i18n-cache-types-utils.ts(41,5): error TS2375: Type '{ locale: Locale; namespace: string | undefined; key: string | undefined; }' is not assignable to type '{ locale: Locale; namespace?: string; key?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'namespace' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/i18n-cache-types-utils.ts(134,21): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/i18n-cache-types-utils.ts(134,40): error TS2538: Type 'undefined' cannot be used as an index type.
+src/lib/i18n-cache-types-utils.ts(189,39): error TS2532: Object is possibly 'undefined'.
+src/lib/i18n-cache-types-utils.ts(417,5): error TS2375: Type '{ type: CacheEventType; key: string | undefined; data: T | undefined; timestamp: number; }' is not assignable to type 'CacheEvent<T>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'key' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/i18n-cache.ts(12,3): error TS1448: 'CacheError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/lib/i18n-cache.ts(12,15): error TS1448: 'CacheValidationError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/lib/i18n-cache.ts(12,37): error TS1448: 'CacheStorageError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/lib/i18n-cache.ts(12,56): error TS1448: 'CacheSerializationError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/lib/i18n-metrics-collector.ts(350,9): error TS18046: 'stats.requestsPerMinute' is of type 'unknown'.
+src/lib/i18n-performance.ts(237,18): error TS18046: 'targets' is of type 'unknown'.
+src/lib/i18n-performance.ts(238,18): error TS18046: 'targets' is of type 'unknown'.
+src/lib/i18n-performance.ts(239,18): error TS18046: 'targets' is of type 'unknown'.
+src/lib/i18n-performance.ts(243,16): error TS18046: 'targets' is of type 'unknown'.
+src/lib/i18n-performance.ts(244,16): error TS18046: 'targets' is of type 'unknown'.
+src/lib/i18n-performance.ts(245,16): error TS18046: 'targets' is of type 'unknown'.
+src/lib/i18n-preloader-core.ts(189,54): error TS2345: Argument of type 'Locale[] | undefined' is not assignable to parameter of type 'Locale[]'.
+  Type 'undefined' is not assignable to type 'Locale[]'.
+src/lib/i18n-preloader-core.ts(193,47): error TS18048: 'batch' is possibly 'undefined'.
+src/lib/i18n-preloader-core.ts(285,30): error TS2345: Argument of type '{ common?: { loading: string; error: string; success: string; cancel: string; confirm: string; save: string; edit: string; delete: string; search: string; filter: string; sort: string; next: string; previous: string; close: string; open: string; retry: string; back: string; refresh: string; }; ... 10 more ...; acces...' is not assignable to parameter of type 'Messages'.
+  Property 'common' is optional in type '{ common?: { loading: string; error: string; success: string; cancel: string; confirm: string; save: string; edit: string; delete: string; search: string; filter: string; sort: string; next: string; previous: string; ... 4 more ...; refresh: string; }; ... 10 more ...; accessibility?: { ...; }; }' but required in type 'Messages'.
+src/lib/i18n-preloader-core.ts(328,7): error TS2740: Type 'IterableIterator<string>' is missing the following properties from type 'string[]': length, pop, push, concat, and 34 more.
+src/lib/i18n-preloader-core.ts(419,11): error TS2353: Object literal may only specify known properties, and 'key' does not exist in type 'CacheOperationResult<Messages>'.
+src/lib/i18n-preloader-core.ts(431,11): error TS2353: Object literal may only specify known properties, and 'key' does not exist in type 'CacheOperationResult<Messages>'.
+src/lib/i18n-preloader-strategies/advanced-strategies.ts(88,35): error TS18048: 'downlink' is possibly 'undefined'.
+src/lib/i18n-preloader-strategies/advanced-strategies.ts(91,42): error TS18048: 'downlink' is possibly 'undefined'.
+src/lib/i18n-preloader-strategies/basic-strategies.ts(97,35): error TS2345: Argument of type 'Locale | undefined' is not assignable to parameter of type 'Locale'.
+  Type 'undefined' is not assignable to type 'Locale'.
+src/lib/i18n-preloader-strategies/utils.ts(26,37): error TS18048: 'downlink' is possibly 'undefined'.
+src/lib/i18n-preloader-utils/preloader-manager.ts(64,9): error TS2412: Type 'IPreloader | undefined' is not assignable to type 'IPreloader' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'IPreloader'.
+src/lib/i18n-preloader-utils/preloader-manager.ts(80,5): error TS2412: Type 'undefined' is not assignable to type 'IPreloader' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+src/lib/i18n-preloader.ts(11,127): error TS2300: Duplicate identifier 'PreloaderFactory'.
+src/lib/i18n-preloader.ts(13,10): error TS2300: Duplicate identifier 'TranslationPreloader'.
+src/lib/i18n-preloader.ts(77,3): error TS2552: Cannot find name 'PreloaderFactoryConfig'. Did you mean 'PreloaderFactory'?
+src/lib/i18n-preloader.ts(99,3): error TS2300: Duplicate identifier 'TranslationPreloader'.
+src/lib/i18n-preloader.ts(109,28): error TS2300: Duplicate identifier 'PreloaderFactory'.
+src/lib/locale-detection.ts(3,37): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/locale-detection.ts(4,311): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/locale-detection.ts(4,384): error TS2300: Duplicate identifier 'SmartLocaleDetector'.
+src/lib/locale-detection.ts(4,405): error TS2300: Duplicate identifier 'SmartLocaleDetector'.
+src/lib/locale-detector-base.ts(86,62): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/locale-detector-smart.ts(61,20): error TS2353: Object literal may only specify known properties, and 'storedPreference' does not exist in type '{ userOverride?: Locale; geoLocale?: Locale; browserLocale?: Locale; timeZoneLocale?: Locale; fallbackUsed?: boolean; browserLanguages?: string[]; detectionStats?: { ...; }; }'.
+src/lib/locale-detector-smart.ts(358,9): error TS18048: 'details.detectionStats.consistentSources' is possibly 'undefined'.
+src/lib/locale-detector.ts(9,284): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/locale-detector.ts(10,35): error TS2323: Cannot redeclare exported variable 'SmartLocaleDetector'.
+src/lib/locale-detector.ts(10,35): error TS2484: Export declaration conflicts with exported declaration of 'SmartLocaleDetector'.
+src/lib/locale-detector.ts(22,14): error TS2323: Cannot redeclare exported variable 'SmartLocaleDetector'.
+src/lib/locale-storage-analytics-core.ts(61,5): error TS2353: Object literal may only specify known properties, and 'itemCount' does not exist in type 'StorageStats'.
+src/lib/locale-storage-analytics-core.ts(149,7): error TS2820: Type '"ACCESS_DENIED"' is not assignable to type 'ErrorType'. Did you mean '"access_denied"'?
+src/lib/locale-storage-analytics-core.ts(159,7): error TS2820: Type '"ACCESS_DENIED"' is not assignable to type 'ErrorType'. Did you mean '"access_denied"'?
+src/lib/locale-storage-analytics-core.ts(170,7): error TS2820: Type '"VALIDATION_ERROR"' is not assignable to type 'ErrorType'. Did you mean '"validation_error"'?
+src/lib/locale-storage-analytics-core.ts(182,7): error TS2820: Type '"STORAGE_FULL"' is not assignable to type 'ErrorType'. Did you mean '"storage_full"'?
+src/lib/locale-storage-analytics-core.ts(193,7): error TS2820: Type '"VALIDATION_ERROR"' is not assignable to type 'ErrorType'. Did you mean '"validation_error"'?
+src/lib/locale-storage-analytics-core.ts(212,5): error TS2353: Object literal may only specify known properties, and 'score' does not exist in type 'StorageHealthCheck'.
+src/lib/locale-storage-analytics-events.ts(138,11): error TS2375: Type '{ key: string; operation: string; timestamp: number; success: boolean; responseTime: number | undefined; error: string | undefined; }' is not assignable to type 'AccessLogEntry' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'responseTime' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/lib/locale-storage-analytics-events.ts(155,28): error TS2345: Argument of type '{ type: "preference_loaded"; timestamp: number; data: AccessLogEntry; }' is not assignable to parameter of type 'StorageEvent<unknown>'.
+  Property 'source' is missing in type '{ type: "preference_loaded"; timestamp: number; data: AccessLogEntry; }' but required in type 'StorageEvent<unknown>'.
+src/lib/locale-storage-analytics-events.ts(259,11): error TS2375: Type '{ error: string; timestamp: number; context: string | undefined; severity: "low" | "medium" | "high" | "critical"; stack: string | undefined; }' is not assignable to type 'ErrorLogEntry' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'context' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/locale-storage-analytics-events.ts(275,28): error TS2345: Argument of type '{ type: "error_occurred"; timestamp: number; data: ErrorLogEntry; }' is not assignable to parameter of type 'StorageEvent<unknown>'.
+  Property 'source' is missing in type '{ type: "error_occurred"; timestamp: number; data: ErrorLogEntry; }' but required in type 'StorageEvent<unknown>'.
+src/lib/locale-storage-analytics-events.ts(328,9): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-analytics-events.ts(360,14): error TS2538: Type 'undefined' cannot be used as an index type.
+src/lib/locale-storage-analytics-events.ts(367,56): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'PropertyKey'.
+  Type 'undefined' is not assignable to type 'PropertyKey'.
+src/lib/locale-storage-analytics-events.ts(368,16): error TS2538: Type 'undefined' cannot be used as an index type.
+src/lib/locale-storage-analytics-events.ts(408,26): error TS2345: Argument of type '{ type: "cache_cleared"; timestamp: number; data: { maxAge: number; cutoffTime: number; accessLogCleaned: number; errorLogCleaned: number; }; }' is not assignable to parameter of type 'StorageEvent<unknown>'.
+  Property 'source' is missing in type '{ type: "cache_cleared"; timestamp: number; data: { maxAge: number; cutoffTime: number; accessLogCleaned: number; errorLogCleaned: number; }; }' but required in type 'StorageEvent<unknown>'.
+src/lib/locale-storage-analytics-performance.ts(336,14): error TS2538: Type 'undefined' cannot be used as an index type.
+src/lib/locale-storage-analytics-performance.ts(343,56): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'PropertyKey'.
+  Type 'undefined' is not assignable to type 'PropertyKey'.
+src/lib/locale-storage-analytics-performance.ts(344,16): error TS2538: Type 'undefined' cannot be used as an index type.
+src/lib/locale-storage-analytics-performance.ts(396,7): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-analytics-performance.ts(398,7): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-analytics-performance.ts(400,7): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-analytics-performance.ts(428,8): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-analytics-performance.ts(428,47): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-history-core.ts(157,9): error TS2353: Object literal may only specify known properties, and 'version' does not exist in type 'LocaleDetectionHistory'.
+src/lib/locale-storage-history-core.ts(221,75): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+src/lib/locale-storage-history-core.ts(283,5): error TS2353: Object literal may only specify known properties, and 'version' does not exist in type 'LocaleDetectionHistory'.
+src/lib/locale-storage-history-core.ts(316,40): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-history-core.ts(317,40): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-history-events.ts(334,10): error TS2678: Type '"history_record_added"' is not comparable to type 'StorageEventType'.
+src/lib/locale-storage-history-events.ts(337,10): error TS2678: Type '"history_cleanup"' is not comparable to type 'StorageEventType'.
+src/lib/locale-storage-history-events.ts(340,10): error TS2678: Type '"history_export"' is not comparable to type 'StorageEventType'.
+src/lib/locale-storage-history-events.ts(343,10): error TS2678: Type '"history_import"' is not comparable to type 'StorageEventType'.
+src/lib/locale-storage-history-events.ts(360,7): error TS2367: This comparison appears to be unintentional because the types 'StorageEventType' and '"history_cleanup"' have no overlap.
+src/lib/locale-storage-history-events.ts(442,46): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-history-maintenance/backup.ts(27,12): error TS2352: Conversion of type '{ data: undefined; success: boolean; error?: string; timestamp: number; responseTime?: number; source?: string; metadata?: Record<string, unknown>; }' to type 'StorageOperationResult<{ backup: LocaleDetectionHistory; timestamp: number; size: number; }>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of property 'data' are incompatible.
+    Type 'undefined' is not comparable to type '{ backup: LocaleDetectionHistory; timestamp: number; size: number; }'.
+src/lib/locale-storage-history-maintenance/import-export.ts(35,12): error TS2352: Conversion of type '{ data: undefined; success: boolean; error?: string; timestamp: number; responseTime?: number; source?: string; metadata?: Record<string, unknown>; }' to type 'StorageOperationResult<string>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of property 'data' are incompatible.
+    Type 'undefined' is not comparable to type 'string'.
+src/lib/locale-storage-history-maintenance/maintenance.ts(124,15): error TS2352: Conversion of type 'number' to type '"medium" | "high"' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/lib/locale-storage-history-maintenance/maintenance.ts(124,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+src/lib/locale-storage-history-maintenance/maintenance.ts(133,15): error TS2352: Conversion of type 'number' to type '"medium" | "high"' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/lib/locale-storage-history-maintenance/maintenance.ts(133,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/lib/locale-storage-history-stats.ts(191,19): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/locale-storage-history-stats.ts(198,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/locale-storage-history-stats.ts(297,8): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-history-stats.ts(297,42): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-history.ts(98,47): error TS2345: Argument of type 'string' is not assignable to parameter of type 'LocaleSource'.
+src/lib/locale-storage-hooks.ts(306,38): error TS2352: Conversion of type 'typeof LocaleStorageManager' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'typeof LocaleStorageManager'.
+src/lib/locale-storage-maintenance-cleanup.ts(44,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(50,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(72,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(88,15): error TS2739: Type '{ detections: LocaleDetectionRecord[]; lastUpdated: number; }' is missing the following properties from type 'LocaleDetectionHistory': history, totalDetections
+src/lib/locale-storage-maintenance-cleanup.ts(97,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(105,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(112,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(133,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(140,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(186,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(193,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(213,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(232,15): error TS2739: Type '{ detections: LocaleDetectionRecord[]; lastUpdated: number; }' is missing the following properties from type 'LocaleDetectionHistory': history, totalDetections
+src/lib/locale-storage-maintenance-cleanup.ts(241,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(249,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-cleanup.ts(256,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(19,3): error TS2305: Module '"./locale-storage-types"' has no exported member 'ExportData'.
+src/lib/locale-storage-maintenance-import-export.ts(20,3): error TS2305: Module '"./locale-storage-types"' has no exported member 'ImportData'.
+src/lib/locale-storage-maintenance-import-export.ts(67,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(106,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(115,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(142,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(163,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(170,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(188,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(197,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(206,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(276,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(285,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(292,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(310,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(330,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-import-export.ts(337,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(18,3): error TS2305: Module '"./locale-storage-types"' has no exported member 'MaintenanceOptions'.
+src/lib/locale-storage-maintenance-operations.ts(121,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(133,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(160,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(167,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(187,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(204,15): error TS2739: Type '{ detections: LocaleDetectionRecord[]; lastUpdated: number; }' is missing the following properties from type 'LocaleDetectionHistory': history, totalDetections
+src/lib/locale-storage-maintenance-operations.ts(213,11): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(221,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(228,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(269,15): error TS2739: Type '{ detections: LocaleDetectionRecord[]; lastUpdated: number; }' is missing the following properties from type 'LocaleDetectionHistory': history, totalDetections
+src/lib/locale-storage-maintenance-operations.ts(283,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(290,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(346,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance-operations.ts(357,9): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'StorageOperationResult<unknown>'.
+src/lib/locale-storage-maintenance.ts(24,3): error TS2305: Module '"./locale-storage-types"' has no exported member 'MaintenanceOptions'.
+src/lib/locale-storage-maintenance.ts(25,3): error TS2305: Module '"./locale-storage-types"' has no exported member 'ExportData'.
+src/lib/locale-storage-maintenance.ts(26,3): error TS2305: Module '"./locale-storage-types"' has no exported member 'ImportData'.
+src/lib/locale-storage-manager.ts(16,628): error TS2300: Duplicate identifier 'PerformanceMetrics'.
+src/lib/locale-storage-manager.ts(18,997): error TS1448: 'PreferenceManager' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/lib/locale-storage-manager.ts(20,32): error TS1448: 'HistoryManager' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/lib/locale-storage-manager.ts(23,34): error TS1448: 'Analytics' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/lib/locale-storage-manager.ts(24,30): error TS2300: Duplicate identifier 'PerformanceMetrics'.
+src/lib/locale-storage-manager.ts(31,10): error TS2305: Module '"./locale-storage-analytics"' has no exported member 'LocaleAnalyticsManager'.
+src/lib/locale-storage-manager.ts(33,61): error TS2305: Module '"./locale-storage-types"' has no exported member 'MaintenanceOptions'.
+src/lib/locale-storage-manager.ts(96,5): error TS2739: Type 'StorageOperationResult<LocaleDetectionHistory>' is missing the following properties from type 'LocaleDetectionHistory': detections, history, lastUpdated, totalDetections
+src/lib/locale-storage-preference-events/stats-analyzer.ts(53,22): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-preference-events/stats-analyzer.ts(57,22): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-preference-events/stats-analyzer.ts(57,45): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-preference-events/system-manager.ts(64,46): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-preference-override.ts(96,9): error TS2367: This comparison appears to be unintentional because the types 'LocaleSource' and '"user_override"' have no overlap.
+src/lib/locale-storage-preference-override.ts(97,7): error TS2375: Type '{ success: true; data: Locale; source: string | undefined; timestamp: number; responseTime: number; }' is not assignable to type 'StorageOperationResult<Locale>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'source' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/locale-storage-preference-override.ts(140,9): error TS2367: This comparison appears to be unintentional because the types 'LocaleSource' and '"user_override"' have no overlap.
+src/lib/locale-storage-preference-override.ts(190,10): error TS2367: This comparison appears to be unintentional because the types 'LocaleSource | undefined' and '"user_override"' have no overlap.
+src/lib/locale-storage-preference-override.ts(243,19): error TS2379: Argument of type '{ locale: Locale; timestamp: number; action: "set" | "clear"; metadata: Record<string, unknown> | undefined; }' is not assignable to parameter of type '{ locale: Locale; timestamp: number; action: "set" | "clear"; metadata?: Record<string, unknown>; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'metadata' are incompatible.
+    Type 'Record<string, unknown> | undefined' is not assignable to type 'Record<string, unknown>'.
+      Type 'undefined' is not assignable to type 'Record<string, unknown>'.
+src/lib/locale-storage-preference-override.ts(285,30): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-types-config/presets.ts(116,5): error TS2739: Type '{ enabled: true; conflictResolution: "server"; authentication: { type: "oauth"; credentials: {}; }; }' is missing the following properties from type 'StorageSyncConfig': interval, retryAttempts, timeout
+src/lib/locale-storage-types-utils/type-guards.ts(11,3): error TS2724: '"../locale-storage-types-data"' has no exported member named 'StorageConfig'. Did you mean 'StorageSyncConfig'?
+src/lib/locale-storage-types-utils/validators.ts(125,11): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-types-utils/validators.ts(125,45): error TS2532: Object is possibly 'undefined'.
+src/lib/locale-storage-types.ts(23,15): error TS2459: Module '"./locale-storage-types-data"' declares 'LocaleSource' locally, but it is not exported.
+src/lib/locale-storage-types.ts(60,3): error TS2552: Cannot find name 'StorageEventType'. Did you mean 'StorageEvent'?
+src/lib/locale-storage-types.ts(63,3): error TS2552: Cannot find name 'UserLocalePreference'. Did you mean 'isUserLocalePreference'?
+src/lib/locale-storage-types.ts(65,3): error TS2552: Cannot find name 'LocaleDetectionHistory'. Did you mean 'isLocaleDetectionHistory'?
+src/lib/locale-storage-types.ts(67,3): error TS2661: Cannot export 'StorageEvent'. Only local declarations can be exported from a module.
+src/lib/locale-storage-types.ts(68,3): error TS2552: Cannot find name 'StorageEventListener'. Did you mean 'addEventListener'?
+src/lib/locale-storage-types.ts(71,3): error TS2552: Cannot find name 'StorageConfig'. Did you mean 'isStorageConfig'?
+src/lib/metadata.ts(2,15): error TS2206: The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.
+src/lib/performance-monitoring-core-config.ts(173,14): error TS2698: Spread types may only be created from object types.
+src/lib/performance-monitoring-core-config.ts(185,7): error TS2698: Spread types may only be created from object types.
+src/lib/performance-monitoring-core-config.ts(328,29): error TS2379: Argument of type '{ timestamp: number; config: { reactScan: ReactScanConfig; webEvalAgent: WebEvalAgentConfig; bundleAnalyzer: BundleAnalyzerConfig; ... 6 more ...; global?: { enabled: boolean; dataRetentionTime: number; maxMetrics: number; enableInProduction: boolean; }; }; reason: string | undefined; }' is not assignable to parameter of type '{ timestamp: number; config: PerformanceConfig; reason?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'reason' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/performance-monitoring-core-config.ts(358,24): error TS18048: 'targetConfig' is possibly 'undefined'.
+src/lib/performance-monitoring-core-metrics.ts(370,30): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+src/lib/performance-monitoring-core-reports.ts(102,5): error TS2375: Type '{ summary: { totalMetrics: number; recentMetrics: number; sources: PerformanceMetricSource[]; types: PerformanceMetricType[]; timeRange: { start: number; end: number; }; averageMetricsPerMinute: number; }; details: PerformanceMetrics[]; recommendations: string[]; score: { ...; } | undefined; }' is not assignable to type 'PerformanceReport' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'score' are incompatible.
+    Type '{ overall: number; component: number; network: number; bundle: number; } | undefined' is not assignable to type '{ overall: number; component: number; network: number; bundle: number; }'.
+      Type 'undefined' is not assignable to type '{ overall: number; component: number; network: number; bundle: number; }'.
+src/lib/performance-monitoring-core.ts(10,50): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/performance-monitoring-core.ts(11,50): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/performance-monitoring-core.ts(83,26): error TS2304: Cannot find name 'PerformanceMetricType'.
+src/lib/performance-monitoring-core.ts(91,30): error TS2304: Cannot find name 'PerformanceMetricSource'.
+src/lib/performance-monitoring-integrations-bundle.ts(42,34): error TS2379: Argument of type '{ size: number; gzipSize: number | undefined; }' is not assignable to parameter of type '{ size: number; gzipSize?: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'gzipSize' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/lib/performance-monitoring-integrations-bundle.ts(153,34): error TS2379: Argument of type '{ size: number; gzipSize: number | undefined; timestamp: number; }' is not assignable to parameter of type '{ size: number; gzipSize?: number; timestamp: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'gzipSize' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/lib/performance-monitoring-integrations-bundle.ts(344,11): error TS18048: 'largest' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations-bundle.ts(345,37): error TS18048: 'largest' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations-bundle.ts(345,85): error TS18048: 'largest' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations-react-scan.ts(244,11): error TS18048: 'slowestComponent' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations-react-scan.ts(245,53): error TS18048: 'slowestComponent' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations-react-scan.ts(245,101): error TS18048: 'slowestComponent' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations-vitals.ts(238,24): error TS2551: Property 'LCP' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'lcp'?
+src/lib/performance-monitoring-integrations-vitals.ts(238,50): error TS2551: Property 'LCP' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'lcp'?
+src/lib/performance-monitoring-integrations-vitals.ts(238,82): error TS2551: Property 'LCP' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'lcp'?
+src/lib/performance-monitoring-integrations-vitals.ts(238,106): error TS2551: Property 'LCP' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'lcp'?
+src/lib/performance-monitoring-integrations-vitals.ts(242,24): error TS2551: Property 'FID' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'fid'?
+src/lib/performance-monitoring-integrations-vitals.ts(242,50): error TS2551: Property 'FID' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'fid'?
+src/lib/performance-monitoring-integrations-vitals.ts(242,82): error TS2551: Property 'FID' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'fid'?
+src/lib/performance-monitoring-integrations-vitals.ts(242,106): error TS2551: Property 'FID' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'fid'?
+src/lib/performance-monitoring-integrations-vitals.ts(246,24): error TS2551: Property 'CLS' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'cls'?
+src/lib/performance-monitoring-integrations-vitals.ts(246,50): error TS2551: Property 'CLS' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'cls'?
+src/lib/performance-monitoring-integrations-vitals.ts(246,82): error TS2551: Property 'CLS' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'cls'?
+src/lib/performance-monitoring-integrations-vitals.ts(246,106): error TS2551: Property 'CLS' does not exist on type '{ cls?: number; fid?: number; lcp?: number; }'. Did you mean 'cls'?
+src/lib/performance-monitoring-integrations-web-eval.ts(321,11): error TS18048: 'slowestAction' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations-web-eval.ts(322,41): error TS18048: 'slowestAction' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations-web-eval.ts(322,75): error TS18048: 'slowestAction' is possibly 'undefined'.
+src/lib/performance-monitoring-integrations.ts(9,10): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/performance-monitoring-integrations.ts(9,183): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/performance-monitoring-integrations.ts(10,59): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/performance-monitoring-integrations.ts(11,57): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/performance-monitoring-integrations.ts(11,104): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/security-file-upload.ts(146,41): error TS2345: Argument of type 'string' is not assignable to parameter of type '".exe" | ".bat" | ".cmd" | ".scr" | ".com" | ".pif" | ".vbs" | ".js" | ".jar" | ".msi" | ".dll" | ".app" | ".deb" | ".rpm" | ".dmg" | ".pkg" | ".sh" | ".ps1" | ".php" | ".asp" | ".aspx" | ".jsp"'.
+src/lib/security-file-upload.ts(188,3): error TS2375: Type '{ valid: true; warnings: string[] | undefined; }' is not assignable to type 'FileValidationResult' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'warnings' are incompatible.
+    Type 'string[] | undefined' is not assignable to type 'string[]'.
+      Type 'undefined' is not assignable to type 'string[]'.
+src/lib/security-file-upload.ts(269,45): error TS2345: Argument of type 'string' is not assignable to parameter of type '"image/jpeg" | "image/png" | "image/gif" | "image/webp" | "image/svg+xml"'.
+src/lib/security-file-upload.ts(276,48): error TS2345: Argument of type 'string' is not assignable to parameter of type '"text/plain" | "text/csv" | "application/vnd.ms-excel" | "application/pdf" | "application/msword" | "application/vnd.openxmlformats-officedocument.wordprocessingml.document" | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"'.
+src/lib/security-file-upload.ts(284,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+src/lib/security-file-upload.ts(331,39): error TS2345: Argument of type 'File | undefined' is not assignable to parameter of type 'File'.
+  Type 'undefined' is not assignable to type 'File'.
+src/lib/security-file-upload.ts(335,34): error TS2532: Object is possibly 'undefined'.
+src/lib/security-tokens.ts(55,17): error TS2532: Object is possibly 'undefined'.
+src/lib/security-tokens.ts(56,17): error TS2532: Object is possibly 'undefined'.
+src/lib/security-tokens.ts(120,24): error TS2532: Object is possibly 'undefined'.
+src/lib/security-tokens.ts(144,23): error TS2532: Object is possibly 'undefined'.
+src/lib/security.ts(14,3): error TS2323: Cannot redeclare exported variable 'sanitizeInput'.
+src/lib/security.ts(14,3): error TS2484: Export declaration conflicts with exported declaration of 'sanitizeInput'.
+src/lib/security.ts(111,17): error TS2323: Cannot redeclare exported variable 'sanitizeInput'.
+src/lib/seo-metadata.ts(4,15): error TS2206: The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.
+src/lib/theme-analytics-utils.ts(27,27): error TS2532: Object is possibly 'undefined'.
+src/lib/translation-manager-core.ts(11,14): error TS2420: Class 'TranslationManagerCore' incorrectly implements interface 'TranslationQualityCheck'.
+  Type 'TranslationManagerCore' is missing the following properties from type 'TranslationQualityCheck': checkLingoTranslation, validateTranslationConsistency
+src/lib/translation-manager-quality.ts(44,55): error TS2551: Property 'checkTranslations' does not exist on type 'TranslationQualityChecker'. Did you mean 'checkLingoTranslation'?
+src/lib/translation-manager-quality.ts(54,9): error TS2353: Object literal may only specify known properties, and 'translatedKeys' does not exist in type 'LocaleQualityReport'.
+src/lib/translation-manager-quality.ts(70,7): error TS2353: Object literal may only specify known properties, and 'byLocale' does not exist in type 'ValidationReport'.
+src/lib/translation-manager-quality.ts(74,47): error TS2367: This comparison appears to be unintentional because the types '"low" | "medium" | "high" | "critical"' and '"warning"' have no overlap.
+src/lib/translation-manager-quality.ts(75,44): error TS2367: This comparison appears to be unintentional because the types '"low" | "medium" | "high" | "critical"' and '"info"' have no overlap.
+src/lib/translation-manager-quality.ts(93,9): error TS2353: Object literal may only specify known properties, and 'period' does not exist in type 'QualityTrend[]'.
+src/lib/translation-manager-quality.ts(121,11): error TS2353: Object literal may only specify known properties, and 'locale' does not exist in type 'QualityIssue'.
+src/lib/translation-manager-quality.ts(155,11): error TS2353: Object literal may only specify known properties, and 'locale' does not exist in type 'QualityIssue'.
+src/lib/translation-manager-quality.ts(188,7): error TS2353: Object literal may only specify known properties, and 'overall' does not exist in type 'QualityScore'.
+src/lib/translation-manager-quality.ts(201,57): error TS2367: This comparison appears to be unintentional because the types '"low" | "medium" | "high" | "critical"' and '"warning"' have no overlap.
+src/lib/translation-manager.ts(14,14): error TS2420: Class 'TranslationManager' incorrectly implements interface 'TranslationQualityCheck'.
+  Type 'TranslationManager' is missing the following properties from type 'TranslationQualityCheck': checkLingoTranslation, validateTranslationConsistency
+src/lib/translation-quality.ts(12,3): error TS2305: Module '"@/types/translation-manager"' has no exported member 'BatchTranslationInput'.
+src/lib/translation-quality.ts(13,3): error TS2305: Module '"@/types/translation-manager"' has no exported member 'QualityComparison'.
+src/lib/translation-quality.ts(20,10): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/translation-quality.ts(20,32): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/translation-quality.ts(20,50): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/translation-quality.ts(20,69): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/translation-quality.ts(20,87): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/lib/translation-quality.ts(159,36): error TS2551: Property 'validateTranslationConsistency' does not exist on type 'TranslationManager'. Did you mean 'validateTranslations'?
+src/lib/web-vitals/alert-system-sender.ts(69,39): error TS2345: Argument of type '(_alert: PerformanceAlert) => void' is not assignable to parameter of type '(alert: Record<string, unknown>) => void'.
+  Types of parameters '_alert' and 'alert' are incompatible.
+    Type 'Record<string, unknown>' is missing the following properties from type 'PerformanceAlert': id, timestamp, severity, metric, and 6 more.
+src/lib/web-vitals/alert-system-sender.ts(196,5): error TS2375: Type '{ total: number; warnings: number; criticals: number; lastAlert: AlertHistoryEntry | undefined; }' is not assignable to type '{ total: number; warnings: number; criticals: number; lastAlert?: AlertHistoryEntry; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'lastAlert' are incompatible.
+    Type 'AlertHistoryEntry | undefined' is not assignable to type 'AlertHistoryEntry'.
+      Type 'undefined' is not assignable to type 'AlertHistoryEntry'.
+src/lib/web-vitals/web-vitals-collector-analyzer.ts(83,7): error TS2532: Object is possibly 'undefined'.
+src/lib/web-vitals/web-vitals-collector-analyzer.ts(86,20): error TS2532: Object is possibly 'undefined'.
+src/lib/web-vitals/web-vitals-collector-analyzer.ts(86,61): error TS2532: Object is possibly 'undefined'.
+src/lib/web-vitals/web-vitals-collector-base.ts(52,5): error TS2741: Property 'userAgent' is missing in type '{ viewport: { width: number; height: number; }; cores?: number; memory?: number; }' but required in type '{ memory?: number; cores?: number; userAgent: string; viewport: { width: number; height: number; }; }'.
+src/lib/web-vitals/web-vitals-collector-base.ts(199,7): error TS2375: Type '{ memory?: number; cores?: number; userAgent: string; viewport: { width: number; height: number; }; } | { memory: number; cores: number; viewport: { width: number; height: number; }; }' is not assignable to type '{ memory?: number; cores?: number; userAgent: string; viewport: { width: number; height: number; }; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Property 'userAgent' is missing in type '{ memory: number; cores: number; viewport: { width: number; height: number; }; }' but required in type '{ memory?: number; cores?: number; userAgent: string; viewport: { width: number; height: number; }; }'.
+src/lib/whatsapp-core.ts(18,11): error TS2564: Property 'messageService' has no initializer and is not definitely assigned in the constructor.
+src/lib/whatsapp-core.ts(19,11): error TS2564: Property 'mediaService' has no initializer and is not definitely assigned in the constructor.
+src/services/url-generator.ts(8,15): error TS2206: The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.
+src/types/test-types.ts(362,35): error TS2344: Type '(locale: string) => void' does not satisfy the constraint '(..._args: unknown[]) => unknown'.
+  Types of parameters 'locale' and '_args' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+src/types/test-types.ts(363,33): error TS2344: Type '(locale: string) => void' does not satisfy the constraint '(..._args: unknown[]) => unknown'.
+  Types of parameters 'locale' and '_args' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+src/types/test-types.ts(372,36): error TS2344: Type '(success: (position: GeolocationPosition) => void, error?: ((error: GeolocationPositionError) => void) | undefined) => void' does not satisfy the constraint '(..._args: unknown[]) => unknown'.
+  Types of parameters 'success' and '_args' are incompatible.
+    Type 'unknown' is not assignable to type '(position: GeolocationPosition) => void'.
+src/types/test-types.ts(373,31): error TS2344: Type '(success: (position: GeolocationPosition) => void, error?: ((error: GeolocationPositionError) => void) | undefined) => number' does not satisfy the constraint '(..._args: unknown[]) => unknown'.
+  Types of parameters 'success' and '_args' are incompatible.
+    Type 'unknown' is not assignable to type '(position: GeolocationPosition) => void'.
+src/types/test-types.ts(374,28): error TS2344: Type '(watchId: number) => void' does not satisfy the constraint '(..._args: unknown[]) => unknown'.
+  Types of parameters 'watchId' and '_args' are incompatible.
+    Type 'unknown' is not assignable to type 'number'.
+src/types/whatsapp-api-errors.ts(410,5): error TS2375: Type '{ error: WhatsAppError; context: ErrorContext; severity: ErrorSeverity; category: ErrorCategory; retryable: boolean; retryAfter: number | undefined; suggestions: string[]; }' is not assignable to type 'ErrorDetails' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'retryAfter' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/types/whatsapp-api-requests/request-builders.ts(25,7): error TS2375: Type '{ body: string; preview_url: boolean | undefined; }' is not assignable to type '{ preview_url?: boolean; body: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'preview_url' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+src/types/whatsapp-api-types.ts(14,507): error TS2300: Duplicate identifier 'WhatsAppApiErrorResponse'.
+src/types/whatsapp-api-types.ts(14,533): error TS2300: Duplicate identifier 'WhatsAppApiError'.
+src/types/whatsapp-api-types.ts(16,56): error TS2300: Duplicate identifier 'isWhatsAppApiError'.
+src/types/whatsapp-api-types.ts(22,15): error TS2300: Duplicate identifier 'WhatsAppApiErrorResponse'.
+src/types/whatsapp-api-types.ts(22,41): error TS2300: Duplicate identifier 'WhatsAppApiError'.
+src/types/whatsapp-api-types.ts(24,10): error TS2300: Duplicate identifier 'isWhatsAppApiError'.
+src/types/whatsapp-api-types.ts(198,3): error TS1448: 'API_ENDPOINTS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(199,3): error TS1448: 'HTTP_METHODS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(200,3): error TS1448: 'API_VERSIONS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(201,3): error TS1448: 'MESSAGE_TYPES' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(202,3): error TS1448: 'MEDIA_TYPES' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(203,3): error TS1448: 'TEMPLATE_CATEGORIES' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(204,3): error TS1448: 'TEMPLATE_STATUSES' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(205,3): error TS1448: 'QUALITY_RATINGS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(206,3): error TS1448: 'THROUGHPUT_LEVELS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(207,3): error TS1448: 'ANALYTICS_GRANULARITIES' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(208,3): error TS1448: 'ANALYTICS_METRIC_TYPES' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(211,3): error TS1448: 'DEFAULT_API_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(212,3): error TS1448: 'DEFAULT_WEBHOOK_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(213,3): error TS1448: 'DEFAULT_REQUEST_OPTIONS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(216,3): error TS1448: 'ERROR_CODE_MESSAGES' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(217,3): error TS1448: 'RETRYABLE_ERROR_CODES' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(220,3): error TS1448: 'ConfigUtils' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(221,3): error TS1448: 'ResponseUtils' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(222,3): error TS1448: 'ErrorUtils' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-api-types.ts(223,3): error TS1448: 'RequestBuilders' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-service-errors.ts(38,5): error TS2412: Type 'number | undefined' is not assignable to type 'number' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'number'.
+src/types/whatsapp-service-errors.ts(39,5): error TS2412: Type 'string | undefined' is not assignable to type 'string' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'string'.
+src/types/whatsapp-service-errors.ts(112,5): error TS2412: Type '{ error_data?: { messaging_product: string; details: string; }; error_subcode?: number; fbtrace_id?: string; } | undefined' is not assignable to type '{ error_data?: { messaging_product: string; details: string; }; error_subcode?: number; fbtrace_id?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type '{ error_data?: { messaging_product: string; details: string; }; error_subcode?: number; fbtrace_id?: string; }'.
+src/types/whatsapp-service-errors.ts(118,3): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'WhatsAppError'.
+src/types/whatsapp-service-errors.ts(153,5): error TS2412: Type 'string | undefined' is not assignable to type 'string' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'string'.
+src/types/whatsapp-service-errors.ts(160,3): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'WhatsAppError'.
+src/types/whatsapp-service-errors.ts(211,5): error TS2412: Type 'number | undefined' is not assignable to type 'number' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'number'.
+src/types/whatsapp-service-errors.ts(212,5): error TS2412: Type 'number | undefined' is not assignable to type 'number' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'number'.
+src/types/whatsapp-service-errors.ts(213,5): error TS2412: Type 'number | undefined' is not assignable to type 'number' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'number'.
+src/types/whatsapp-service-errors.ts(219,3): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'WhatsAppError'.
+src/types/whatsapp-service-errors.ts(261,5): error TS2412: Type 'Error | undefined' is not assignable to type 'Error' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'Error'.
+src/types/whatsapp-service-errors.ts(262,5): error TS2412: Type 'boolean | undefined' is not assignable to type 'boolean' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'boolean'.
+src/types/whatsapp-service-errors.ts(268,3): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'WhatsAppError'.
+src/types/whatsapp-service-errors.ts(316,5): error TS2412: Type 'boolean | undefined' is not assignable to type 'boolean' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'boolean'.
+src/types/whatsapp-service-errors.ts(317,5): error TS2412: Type 'boolean | undefined' is not assignable to type 'boolean' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type 'boolean'.
+src/types/whatsapp-service-errors.ts(323,3): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'WhatsAppError'.
+src/types/whatsapp-service-errors.ts(420,7): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'number | undefined'.
+src/types/whatsapp-service-types.ts(10,38): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(10,57): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(10,72): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(11,42): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(11,50): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(11,66): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(11,74): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(11,82): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(11,91): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
+src/types/whatsapp-service-types.ts(11,109): error TS1448: 'ServiceError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-service-types.ts(11,142): error TS2323: Cannot redeclare exported variable 'createDefaultServiceStatus'.
+src/types/whatsapp-service-types.ts(11,142): error TS2484: Export declaration conflicts with exported declaration of 'createDefaultServiceStatus'.
+src/types/whatsapp-service-types.ts(78,3): error TS1448: 'DEFAULT_RETRY_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-service-types.ts(79,3): error TS1448: 'DEFAULT_CIRCUIT_BREAKER_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-service-types.ts(80,3): error TS1448: 'DEFAULT_CACHE_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-service-types.ts(136,3): error TS1448: 'WhatsAppError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-service-types.ts(138,3): error TS1448: 'WhatsAppValidationError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp-service-types.ts(171,17): error TS2323: Cannot redeclare exported variable 'createDefaultServiceStatus'.
+src/types/whatsapp-service-types.ts(213,16): error TS1284: An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but 'WhatsAppConfig' only refers to a type.
+src/types/whatsapp-service-types.ts(213,16): error TS1292: 'WhatsAppConfig' resolves to a type and must be marked type-only in this file before re-exporting when 'verbatimModuleSyntax' is enabled. Consider using 'export type { WhatsAppConfig as default }'.
+src/types/whatsapp-webhook-messages.ts(103,18): error TS2430: Interface 'IncomingContactsMessage' incorrectly extends interface 'WhatsAppMessage'.
+  Types of property 'contacts' are incompatible.
+    Type '{ name: { formatted_name: string; first_name?: string; last_name?: string; middle_name?: string; suffix?: string; prefix?: string; }; phones?: { phone: string; type?: string; wa_id?: string; }[]; emails?: { email: string; type?: string; }[]; urls?: { ...; }[]; addresses?: { ...; }[]; org?: { ...; }; birthday?: strin...' is not assignable to type 'WhatsAppContact[]'.
+      Type '{ name: { formatted_name: string; first_name?: string; last_name?: string; middle_name?: string; suffix?: string; prefix?: string; }; phones?: { phone: string; type?: string; wa_id?: string; }[]; emails?: { email: string; type?: string; }[]; urls?: { ...; }[]; addresses?: { ...; }[]; org?: { ...; }; birthday?: strin...' is missing the following properties from type 'WhatsAppContact': input, wa_id
+src/types/whatsapp-webhook-messages.ts(150,18): error TS2430: Interface 'IncomingInteractiveMessage' incorrectly extends interface 'WhatsAppMessage'.
+  Types of property 'type' are incompatible.
+    Type '"interactive"' is not assignable to type '"audio" | "template" | "video" | "image" | "text" | "document" | "location" | "contacts"'.
+src/types/whatsapp-webhook-messages.ts(171,18): error TS2430: Interface 'IncomingReactionMessage' incorrectly extends interface 'WhatsAppMessage'.
+  Types of property 'type' are incompatible.
+    Type '"reaction"' is not assignable to type '"audio" | "template" | "video" | "image" | "text" | "document" | "location" | "contacts"'.
+src/types/whatsapp-webhook-messages.ts(184,18): error TS2430: Interface 'IncomingStickerMessage' incorrectly extends interface 'WhatsAppMessage'.
+  Types of property 'type' are incompatible.
+    Type '"sticker"' is not assignable to type '"audio" | "template" | "video" | "image" | "text" | "document" | "location" | "contacts"'.
+src/types/whatsapp-webhook-messages.ts(199,18): error TS2430: Interface 'IncomingOrderMessage' incorrectly extends interface 'WhatsAppMessage'.
+  Types of property 'type' are incompatible.
+    Type '"order"' is not assignable to type '"audio" | "template" | "video" | "image" | "text" | "document" | "location" | "contacts"'.
+src/types/whatsapp-webhook-messages.ts(218,18): error TS2430: Interface 'IncomingSystemMessage' incorrectly extends interface 'WhatsAppMessage'.
+  Types of property 'type' are incompatible.
+    Type '"system"' is not assignable to type '"audio" | "template" | "video" | "image" | "text" | "document" | "location" | "contacts"'.
+src/types/whatsapp-webhook-messages.ts(234,18): error TS2430: Interface 'IncomingButtonMessage' incorrectly extends interface 'WhatsAppMessage'.
+  Types of property 'type' are incompatible.
+    Type '"button"' is not assignable to type '"audio" | "template" | "video" | "image" | "text" | "document" | "location" | "contacts"'.
+src/types/whatsapp-webhook-messages.ts(247,18): error TS2430: Interface 'IncomingTemplateReply' incorrectly extends interface 'WhatsAppMessage'.
+  Types of property 'type' are incompatible.
+    Type '"template_reply"' is not assignable to type '"audio" | "template" | "video" | "image" | "text" | "document" | "location" | "contacts"'.
+src/types/whatsapp-webhook-messages.ts(400,14): error TS2532: Object is possibly 'undefined'.
+src/types/whatsapp-webhook-messages.ts(416,12): error TS7053: Element implicitly has an 'any' type because expression of type '"audio" | "video" | "image" | "document" | "sticker"' can't be used to index type 'IncomingImageMessage | IncomingDocumentMessage | IncomingAudioMessage | IncomingVideoMessage | IncomingStickerMessage'.
+  Property 'sticker' does not exist on type 'IncomingImageMessage | IncomingDocumentMessage | IncomingAudioMessage | IncomingVideoMessage | IncomingStickerMessage'.
+src/types/whatsapp-webhook-types.ts(12,144): error TS2300: Duplicate identifier 'isWebhookVerificationRequest'.
+src/types/whatsapp-webhook-types.ts(24,10): error TS2300: Duplicate identifier 'isWebhookVerificationRequest'.
+src/types/whatsapp-webhook-utils/functions.ts(35,3): error TS2375: Type '{ code: number; title: string; message: string; error_data: { details: string; } | undefined; }' is not assignable to type 'WebhookError' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'error_data' are incompatible.
+    Type '{ details: string; } | undefined' is not assignable to type '{ details: string; }'.
+      Type 'undefined' is not assignable to type '{ details: string; }'.
+src/types/whatsapp-webhook-utils/webhook-utils.ts(41,23): error TS2352: Conversion of type 'WebhookEntry' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'WebhookEntry'.
+src/types/whatsapp-webhook-utils/webhook-utils.ts(63,21): error TS2352: Conversion of type 'WebhookPayload' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'WebhookPayload'.
+src/types/whatsapp-webhook-utils/webhook-utils.ts(91,23): error TS2345: Argument of type '{ type: "message_received"; timestamp: string; phone_number_id: string; from: string; message: IncomingWhatsAppMessage; contact: WhatsAppContact | undefined; }' is not assignable to parameter of type 'WebhookEvent'.
+  Type '{ type: "message_received"; timestamp: string; phone_number_id: string; from: string; message: IncomingWhatsAppMessage; contact: WhatsAppContact | undefined; }' is not assignable to type 'MessageReceivedEvent' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    Types of property 'contact' are incompatible.
+      Type 'WhatsAppContact | undefined' is not assignable to type 'WhatsAppContact'.
+        Type 'undefined' is not assignable to type 'WhatsAppContact'.
+src/types/whatsapp-webhook-utils/webhook-utils.ts(240,23): error TS2352: Conversion of type 'MessageReceivedEvent | MessageReadEvent | UserStatusChangeEvent' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UserStatusChangeEvent' is not comparable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'UserStatusChangeEvent'.
+src/types/whatsapp-webhook-utils/webhook-utils.ts(279,5): error TS2375: Type '{ total_events: number; events_by_type: Record<string, number>; processing_times: { average_ms: number; min_ms: number; max_ms: number; p95_ms: number; p99_ms: number; }; error_rate: number; success_rate: number; last_processed_at: string | undefined; }' is not assignable to type 'EventStatistics' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'last_processed_at' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/types/whatsapp.ts(10,37): error TS2300: Duplicate identifier 'WhatsAppError'.
+src/types/whatsapp.ts(11,3): error TS2300: Duplicate identifier 'MessageStatusUpdate'.
+src/types/whatsapp.ts(58,39): error TS2300: Duplicate identifier 'WhatsAppApiError'.
+src/types/whatsapp.ts(63,39): error TS2300: Duplicate identifier 'isWhatsAppApiError'.
+src/types/whatsapp.ts(63,59): error TS1448: 'API_ENDPOINTS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(63,74): error TS1448: 'HTTP_METHODS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(63,88): error TS1448: 'API_VERSIONS' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(63,102): error TS1448: 'DEFAULT_API_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(69,48): error TS2300: Duplicate identifier 'MessageStatusUpdate'.
+src/types/whatsapp.ts(76,3): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingTextMessage'. Did you mean 'IncomingTextMessage'?
+src/types/whatsapp.ts(76,26): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingImageMessage'. Did you mean 'IncomingImageMessage'?
+src/types/whatsapp.ts(76,50): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingDocumentMessage'. Did you mean 'IncomingDocumentMessage'?
+src/types/whatsapp.ts(76,77): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingAudioMessage'. Did you mean 'IncomingAudioMessage'?
+src/types/whatsapp.ts(77,3): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingVideoMessage'. Did you mean 'IncomingVideoMessage'?
+src/types/whatsapp.ts(77,27): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingLocationMessage'. Did you mean 'IncomingLocationMessage'?
+src/types/whatsapp.ts(77,54): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingContactsMessage'. Did you mean 'IncomingContactsMessage'?
+src/types/whatsapp.ts(77,81): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingInteractiveMessage'. Did you mean 'IncomingInteractiveMessage'?
+src/types/whatsapp.ts(78,3): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingReactionMessage'. Did you mean 'IncomingReactionMessage'?
+src/types/whatsapp.ts(78,30): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isIncomingStickerMessage'. Did you mean 'IncomingStickerMessage'?
+src/types/whatsapp.ts(79,3): error TS2724: '"./whatsapp-webhook-types"' has no exported member named 'isValidWebhookPayload'. Did you mean 'isWebhookPayload'?
+src/types/whatsapp.ts(79,26): error TS2305: Module '"./whatsapp-webhook-types"' has no exported member 'isValidWebhookVerification'.
+src/types/whatsapp.ts(86,3): error TS1448: 'WhatsAppError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(86,3): error TS2300: Duplicate identifier 'WhatsAppError'.
+src/types/whatsapp.ts(86,18): error TS2300: Duplicate identifier 'WhatsAppApiError'.
+src/types/whatsapp.ts(86,36): error TS1448: 'WhatsAppValidationError' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(91,68): error TS1448: 'DEFAULT_RETRY_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(91,90): error TS1448: 'DEFAULT_CIRCUIT_BREAKER_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(91,122): error TS1448: 'DEFAULT_CACHE_CONFIG' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'verbatimModuleSyntax' is enabled.
+src/types/whatsapp.ts(92,20): error TS2300: Duplicate identifier 'isWhatsAppApiError'.
+src/types/whatsapp.ts(99,3): error TS2304: Cannot find name 'WhatsAppConfig'.
+src/types/whatsapp.ts(100,3): error TS2304: Cannot find name 'WhatsAppMessage'.
+src/types/whatsapp.ts(101,3): error TS2304: Cannot find name 'TemplateMessage'.

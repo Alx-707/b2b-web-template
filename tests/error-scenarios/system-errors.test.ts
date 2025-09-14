@@ -25,7 +25,7 @@ class SystemErrorSimulator {
           this.message = 'Maximum call stack size exceeded';
         }
       }
-    } as unknown;
+    } as unknown as ErrorConstructor;
   }
 
   // 模拟文件系统错误
@@ -320,7 +320,7 @@ describe('System Error and Exception Handling Tests', () => {
       // Restore original handlers
       process.removeAllListeners('unhandledRejection');
       originalHandler.forEach((handler) => {
-        process.on('unhandledRejection', handler as unknown);
+        process.on('unhandledRejection', handler as (...args: any[]) => void);
       });
     });
 
@@ -533,7 +533,8 @@ describe('System Error and Exception Handling Tests', () => {
             return errorHandler.handleSystemError(caught);
           }
           // Convert to Error
-          const error = new Error(String((caught as unknown)?.message || caught));
+          const caughtObj = caught as Record<string, unknown>;
+          const error = new Error(String(caughtObj?.message || caught));
           return errorHandler.handleSystemError(error);
         }
       };

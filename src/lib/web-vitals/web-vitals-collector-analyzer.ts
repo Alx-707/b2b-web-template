@@ -80,10 +80,10 @@ export class WebVitalsCollectorAnalyzer {
   ): void {
     if (
       resourceTiming.slowResources.length > 0 &&
-      resourceTiming.slowResources[0].duration > 500
+      resourceTiming.slowResources[0]!.duration > 500
     ) {
       issues.push(
-        `发现慢速资源: ${resourceTiming.slowResources[0].name} (${resourceTiming.slowResources[0].duration.toFixed(0)}ms)`,
+        `发现慢速资源: ${resourceTiming.slowResources[0]!.name} (${resourceTiming.slowResources[0]!.duration.toFixed(0)}ms)`,
       );
       recommendations.push('优化慢速资源的加载，考虑压缩或使用 CDN');
     }
@@ -228,8 +228,8 @@ export class WebVitalsCollectorAnalyzer {
         current: currentMetrics.lcp,
         previous: previousMetrics.lcp,
         change: currentMetrics.lcp - previousMetrics.lcp,
-        changePercent: previousMetrics.lcp > 0 
-          ? ((currentMetrics.lcp - previousMetrics.lcp) / previousMetrics.lcp) * 100 
+        changePercent: previousMetrics.lcp > 0
+          ? ((currentMetrics.lcp - previousMetrics.lcp) / previousMetrics.lcp) * 100
           : 0,
       },
       {
@@ -237,8 +237,8 @@ export class WebVitalsCollectorAnalyzer {
         current: currentMetrics.fid,
         previous: previousMetrics.fid,
         change: currentMetrics.fid - previousMetrics.fid,
-        changePercent: previousMetrics.fid > 0 
-          ? ((currentMetrics.fid - previousMetrics.fid) / previousMetrics.fid) * 100 
+        changePercent: previousMetrics.fid > 0
+          ? ((currentMetrics.fid - previousMetrics.fid) / previousMetrics.fid) * 100
           : 0,
       },
       {
@@ -246,8 +246,8 @@ export class WebVitalsCollectorAnalyzer {
         current: currentMetrics.cls,
         previous: previousMetrics.cls,
         change: currentMetrics.cls - previousMetrics.cls,
-        changePercent: previousMetrics.cls > 0 
-          ? ((currentMetrics.cls - previousMetrics.cls) / previousMetrics.cls) * 100 
+        changePercent: previousMetrics.cls > 0
+          ? ((currentMetrics.cls - previousMetrics.cls) / previousMetrics.cls) * 100
           : 0,
       },
     ];
@@ -255,7 +255,7 @@ export class WebVitalsCollectorAnalyzer {
     // 计算总体趋势
     const improvingCount = changes.filter(c => c.change < 0).length;
     const decliningCount = changes.filter(c => c.change > 0).length;
-    
+
     let trend: 'improving' | 'declining' | 'stable';
     if (improvingCount > decliningCount) {
       trend = 'improving';

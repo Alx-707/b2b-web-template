@@ -7,15 +7,14 @@
 
 'use client';
 
-import type { Locale } from '@/types/i18n';
-;
 import { LocalStorageManager } from './locale-storage-local';
 import type {
   StorageStats,
   StorageHealthCheck,
   StorageOperationResult,
-  UserLocalePreference,
   LocaleDetectionHistory,
+  ErrorType,
+  PriorityLevel,
 } from './locale-storage-types';
 import { estimateStorageSize } from './locale-storage-types';
 
@@ -29,9 +28,9 @@ export function calculateStorageStats(): StorageStats {
   const now = Date.now();
 
   // 获取所有存储的数据
-  const userPreference = LocalStorageManager.getLocale();
-  const detectionHistory = LocalStorageManager.getDetectionHistory?.() || [];
-  const fallbackLocale = LocalStorageManager.getLocale();
+  const userPreference = LocalStorageManager.get('user-locale-preference') as any;
+  const detectionHistory = (LocalStorageManager.get('locale-detection-history') || { history: [], lastUpdated: 0 }) as any;
+  const fallbackLocale = (LocalStorageManager.get('fallback-locale') || 'en') as any;
 
   // 计算存储大小
   const userPreferenceSize = estimateStorageSize(userPreference);
@@ -58,22 +57,19 @@ export function calculateStorageStats(): StorageStats {
   const freshness = Math.max(0, 1 - (dataAge / maxAge));
 
   return {
+    totalEntries: (userPreference ? 1 : 0) + (detectionHistory ? 1 : 0) + (fallbackLocale ? 1 : 0),
     totalSize,
-    itemCount: (userPreference ? 1 : 0) + (detectionHistory ? 1 : 0) + (fallbackLocale ? 1 : 0),
-    lastActivity,
+    lastAccessed: lastActivity,
+    lastModified: lastActivity,
+    accessCount: 0, // 需要从其他地方获取
+    errorCount: 0, // 需要从其他地方获取
     freshness,
-    breakdown: {
-      userPreference: userPreferenceSize,
-      detectionHistory: historySize,
-      fallbackLocale: fallbackSize,
-    },
     historyStats: {
       totalEntries: historyCount,
       uniqueLocales,
       oldestEntry: detectionHistory?.history?.[historyCount - 1]?.timestamp || 0,
       newestEntry: detectionHistory?.history?.[0]?.timestamp || 0,
     },
-    localeDistribution: calculateLocaleDistribution(detectionHistory),
   };
 }
 
@@ -136,36 +132,66 @@ export function calculateHealthCheck(): StorageHealthCheck {
 
   // 计算健康分数 (0-1)
   let healthScore = 1.0;
-  const issues: string[] = [];
+  const issues: Array<{
+    type: ErrorType;
+    severity: PriorityLevel;
+    message: string;
+    timestamp: number;
+  }> = [];
 
   // 检查存储可用性
   if (!availability.localStorageAvailable) {
     healthScore -= 0.4;
-    issues.push('localStorage不可用');
+    issues.push({
+      type: 'access_denied',
+      severity: 'high',
+      message: 'localStorage不可用',
+      timestamp: Date.now(),
+    });
   }
 
   if (!availability.cookiesAvailable) {
     healthScore -= 0.2;
-    issues.push('Cookies不可用');
+    issues.push({
+      type: 'access_denied',
+      severity: 'medium',
+      message: 'Cookies不可用',
+      timestamp: Date.now(),
+    });
   }
 
   // 检查数据新鲜度
   if (stats.freshness < 0.5) {
     healthScore -= 0.2;
-    issues.push('数据过期');
+    issues.push({
+      type: 'validation_error',
+      severity: 'medium',
+      message: '数据过期',
+      timestamp: Date.now(),
+    });
   }
 
   // 检查存储大小
   const maxSize = 5 * 1024 * 1024; // 5MB
   if (stats.totalSize > maxSize * 0.8) {
     healthScore -= 0.1;
-    issues.push('存储空间使用过多');
+    issues.push({
+      type: 'storage_full',
+      severity: 'medium',
+      message: '存储空间使用过多',
+      timestamp: Date.now(),
+    });
   }
 
   // 检查历史记录数量
   if (stats.historyStats.totalEntries > 1000) {
     healthScore -= 0.1;
-    issues.push('历史记录过多');
+    issues.push({
+      type: 'validation_error',
+      severity: 'low',
+      message: '历史记录过多',
+      timestamp: Date.now(),
+    });
   }
 
   // 确定健康状态
@@ -179,18 +205,22 @@ export function calculateHealthCheck(): StorageHealthCheck {
   }
 
   return {
+    isHealthy: healthScore >= 0.8,
     status,
-    score: Math.max(0, healthScore),
     issues,
-    lastCheck: Date.now(),
-    availability,
-    recommendations: generateHealthRecommendations(healthScore, issues),
-    storageQuota: {
-      used: stats.totalSize,
-      available: maxSize - stats.totalSize,
-      total: maxSize,
-      usagePercentage: (stats.totalSize / maxSize) * 100,
+    performance: {
+      readLatency: 0, // 需要实际测量
+      writeLatency: 0, // 需要实际测量
+      errorRate: 0, // 需要从错误统计中获取
+      availability: availability.localStorageAvailable ? 1 : 0,
     },
+    storage: {
+      used: stats.totalSize,
+      available: 5 * 1024 * 1024 - stats.totalSize, // 假设5MB限制
+      quota: 5 * 1024 * 1024,
+      utilization: stats.totalSize / (5 * 1024 * 1024),
+    },
+    lastCheck: Date.now(),
   };
 }
 
@@ -255,30 +285,35 @@ function checkStorageAvailability(): {
  * 生成健康建议
  * Generate health recommendations
  */
-function generateHealthRecommendations(healthScore: number, issues: string[]): string[] {
+function generateHealthRecommendations(healthScore: number, issues: Array<{
+  type: ErrorType;
+  severity: PriorityLevel;
+  message: string;
+  timestamp: number;
+}>): string[] {
   const recommendations: string[] = [];
 
   if (healthScore < 0.5) {
     recommendations.push('建议立即检查存储系统配置');
   }
 
-  if (issues.includes('localStorage不可用')) {
+  if (issues.some(issue => issue.message === 'localStorage不可用')) {
     recommendations.push('检查浏览器设置，确保localStorage已启用');
   }
 
-  if (issues.includes('Cookies不可用')) {
+  if (issues.some(issue => issue.message === 'Cookies不可用')) {
     recommendations.push('检查浏览器Cookie设置');
   }
 
-  if (issues.includes('数据过期')) {
+  if (issues.some(issue => issue.message === '数据过期')) {
     recommendations.push('考虑清理过期数据或更新数据');
   }
 
-  if (issues.includes('存储空间使用过多')) {
+  if (issues.some(issue => issue.message === '存储空间使用过多')) {
     recommendations.push('清理不必要的历史记录');
   }
 
-  if (issues.includes('历史记录过多')) {
+  if (issues.some(issue => issue.message === '历史记录过多')) {
     recommendations.push('定期清理旧的检测历史记录');
   }
 

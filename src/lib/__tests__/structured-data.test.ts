@@ -470,7 +470,7 @@ describe('Structured Data Generation', () => {
     it('should handle invalid structured data types', async () => {
       const data = await generateLocalizedStructuredData(
         'en',
-        'InvalidType' as unknown,
+        'InvalidType' as any,
         {},
       );
 
@@ -490,7 +490,7 @@ describe('Structured Data Generation', () => {
         const data = await generateLocalizedStructuredData(
           'en',
           testCase.type,
-          testCase.data as unknown,
+          testCase.data as any,
         );
 
         expect(data).toHaveProperty('@context', 'https://schema.org');
@@ -736,7 +736,7 @@ describe('Structured Data Generation', () => {
     it('should handle unknown structured data types', async () => {
       const result = await generateLocalizedStructuredData(
         'en',
-        'UnknownType' as unknown,
+        'UnknownType' as any,
         {},
       );
 

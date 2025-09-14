@@ -8,7 +8,7 @@
 'use client';
 
 import type { Locale } from '@/types/i18n';
-;
+import { logger } from '@/lib/logger';
 import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
 import { LocaleValidationManager } from './locale-storage-maintenance-validation';
@@ -16,10 +16,33 @@ import type {
   UserLocalePreference,
   LocaleDetectionHistory,
   StorageOperationResult,
-  ExportData,
-  ImportData,
+  DataExport,
+  DataImportResult,
 } from './locale-storage-types';
 import { STORAGE_KEYS } from './locale-storage-types';
+
+/**
+ * 导出数据接口
+ * Export data interface
+ */
+interface ExportData {
+  preference?: UserLocalePreference;
+  override?: Locale;
+  history?: LocaleDetectionHistory;
+  version: string;
+  timestamp: number;
+  metadata: {
+    userAgent: string;
+    exportedBy: string;
+    dataIntegrity: string;
+  };
+}
+
+/**
+ * 导入数据接口
+ * Import data interface
+ */
+interface ImportData extends ExportData {}
 
 /**
  * 语言存储导入导出管理器
@@ -34,13 +57,13 @@ export class LocaleImportExportManager {
     return {
       preference: LocalStorageManager.get<UserLocalePreference>(
         STORAGE_KEYS.LOCALE_PREFERENCE
-      ),
+      ) || undefined,
       override: LocalStorageManager.get<Locale>(
         STORAGE_KEYS.USER_LOCALE_OVERRIDE
-      ),
+      ) || undefined,
       history: LocalStorageManager.get<LocaleDetectionHistory>(
         STORAGE_KEYS.LOCALE_DETECTION_HISTORY
-      ),
+      ) || undefined,
       version: '1.0.0',
       timestamp: Date.now(),
       metadata: {
@@ -64,8 +87,8 @@ export class LocaleImportExportManager {
       if (data.version && data.version !== '1.0.0') {
         return {
           success: false,
-          message: `不支持的数据版本: ${data.version}`,
           timestamp: Date.now(),
+          error: `不支持的数据版本: ${data.version}`,
         };
       }
 
@@ -103,18 +126,15 @@ export class LocaleImportExportManager {
 
       return {
         success: errors.length === 0,
-        message: errors.length === 0
-          ? `成功导入 ${importedItems} 项数据`
-          : `导入完成，但有 ${errors.length} 个错误`,
         timestamp: Date.now(),
         data: { importedItems, errors },
+        ...(errors.length > 0 && { error: `导入完成，但有 ${errors.length} 个错误` }),
       };
     } catch (error) {
       return {
         success: false,
-        message: `导入数据失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -139,9 +159,8 @@ export class LocaleImportExportManager {
     } catch (error) {
       return {
         success: false,
-        message: `JSON解析失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('JSON parse error'),
+        error: error instanceof Error ? error.message : 'JSON解析错误',
       };
     }
   }
@@ -160,16 +179,14 @@ export class LocaleImportExportManager {
 
       return {
         success: true,
-        message: '备份创建成功',
         timestamp: Date.now(),
         data: { backupKey, backupData: exportData },
       };
     } catch (error) {
       return {
         success: false,
-        message: `创建备份失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -185,8 +202,8 @@ export class LocaleImportExportManager {
       if (!backupData) {
         return {
           success: false,
-          message: '备份数据不存在',
           timestamp: Date.now(),
+          error: '备份数据不存在',
         };
       }
 
@@ -194,7 +211,6 @@ export class LocaleImportExportManager {
       if (importResult.success) {
         return {
           success: true,
-          message: '备份恢复成功',
           timestamp: Date.now(),
           data: importResult.data,
         };
@@ -203,9 +219,8 @@ export class LocaleImportExportManager {
     } catch (error) {
       return {
         success: false,
-        message: `恢复备份失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -273,8 +288,8 @@ export class LocaleImportExportManager {
       if (!backupKey.startsWith('locale_backup_')) {
         return {
           success: false,
-          message: '无效的备份键名',
           timestamp: Date.now(),
+          error: '无效的备份键名',
         };
       }
 
@@ -282,16 +297,14 @@ export class LocaleImportExportManager {
 
       return {
         success: true,
-        message: '备份删除成功',
         timestamp: Date.now(),
         data: { deletedKey: backupKey },
       };
     } catch (error) {
       return {
         success: false,
-        message: `删除备份失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -336,7 +349,7 @@ export class LocaleImportExportManager {
         success: false,
         message: `清理旧备份失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
+        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }

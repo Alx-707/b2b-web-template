@@ -91,7 +91,7 @@ describe('i18n Routing Configuration', () => {
         '/terms',
       ];
 
-      const pathnames = mockDefineRouting.mock.calls[0][0].pathnames;
+      const pathnames = mockDefineRouting.mock.calls[0]?.[0]?.pathnames;
 
       expectedPaths.forEach(path => {
         expect(pathnames).toHaveProperty(path, path);
@@ -99,18 +99,18 @@ describe('i18n Routing Configuration', () => {
     });
 
     it('应该使用always模式的locale前缀', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
-      expect(config.localePrefix).toBe('always');
+      const config = mockDefineRouting.mock.calls[0]?.[0];
+      expect(config?.localePrefix).toBe('always');
     });
 
     it('应该启用alternateLinks', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
-      expect(config.alternateLinks).toBe(true);
+      const config = mockDefineRouting.mock.calls[0]?.[0];
+      expect(config?.alternateLinks).toBe(true);
     });
 
     it('应该启用localeDetection', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
-      expect(config.localeDetection).toBe(true);
+      const config = mockDefineRouting.mock.calls[0]?.[0];
+      expect(config?.localeDetection).toBe(true);
     });
   });
 
@@ -157,8 +157,8 @@ describe('i18n Routing Configuration', () => {
 
   describe('路径名配置', () => {
     it('应该为所有路径使用相同的值（Shared Pathnames）', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
-      const pathnames = config.pathnames;
+      const config = mockDefineRouting.mock.calls[0]?.[0];
+      const pathnames = config?.pathnames;
 
       // 验证所有路径名都是字符串，而不是对象（表示使用Shared Pathnames）
       Object.entries(pathnames).forEach(([key, value]) => {
@@ -168,8 +168,8 @@ describe('i18n Routing Configuration', () => {
     });
 
     it('应该包含主要页面路径', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
-      const pathnames = config.pathnames;
+      const config = mockDefineRouting.mock.calls[0]?.[0];
+      const pathnames = config?.pathnames;
 
       const mainPages = ['/', '/about', '/contact', '/products', '/blog'];
       mainPages.forEach(page => {
@@ -178,7 +178,7 @@ describe('i18n Routing Configuration', () => {
     });
 
     it('应该包含功能页面路径', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       const pathnames = config.pathnames;
 
       const featurePages = ['/diagnostics', '/pricing', '/support'];
@@ -188,7 +188,7 @@ describe('i18n Routing Configuration', () => {
     });
 
     it('应该包含法律页面路径', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       const pathnames = config.pathnames;
 
       const legalPages = ['/privacy', '/terms'];
@@ -200,17 +200,17 @@ describe('i18n Routing Configuration', () => {
 
   describe('语言配置', () => {
     it('应该支持英文和中文', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       expect(config.locales).toEqual(['en', 'zh']);
     });
 
     it('应该将英文设为默认语言', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       expect(config.defaultLocale).toBe('en');
     });
 
     it('应该验证语言代码格式', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       config.locales.forEach((locale: string) => {
         expect(locale).toMatch(/^[a-z]{2}$/);
       });
@@ -219,31 +219,31 @@ describe('i18n Routing Configuration', () => {
 
   describe('SEO配置', () => {
     it('应该启用hreflang链接生成', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       expect(config.alternateLinks).toBe(true);
     });
 
     it('应该启用智能语言检测', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       expect(config.localeDetection).toBe(true);
     });
   });
 
   describe('边缘情况处理', () => {
     it('应该处理空路径', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       expect(config.pathnames['/']).toBe('/');
     });
 
     it('应该处理所有路径都有前导斜杠', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       Object.keys(config.pathnames).forEach(path => {
         expect(path).toMatch(/^\//);
       });
     });
 
     it('应该确保路径名一致性', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       Object.entries(config.pathnames).forEach(([key, value]) => {
         expect(key).toBe(value);
       });
@@ -252,7 +252,7 @@ describe('i18n Routing Configuration', () => {
 
   describe('配置完整性', () => {
     it('应该包含所有必需的配置项', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
       const requiredFields = [
         'locales',
         'defaultLocale',
@@ -268,7 +268,7 @@ describe('i18n Routing Configuration', () => {
     });
 
     it('应该有合理的配置值', () => {
-      const config = mockDefineRouting.mock.calls[0][0];
+      const config = mockDefineRouting.mock.calls[0]?.[0];
 
       expect(Array.isArray(config.locales)).toBe(true);
       expect(config.locales.length).toBeGreaterThan(0);

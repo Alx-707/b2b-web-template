@@ -7,7 +7,6 @@
 import type { Locale } from '@/types/i18n';
 ;
 import { logger } from '@/lib/logger';
-import { TEST_APP_CONSTANTS } from '@/constants/test-constants';
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './locale-constants';
 import type { LocaleDetectionResult } from './locale-detection-types';
 ;
@@ -59,7 +58,7 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
         locale: userPreference.locale,
         source: DETECTION_SOURCES.STORED,
         confidence: userPreference.confidence || CONFIDENCE_WEIGHTS.STORED_PREFERENCE,
-        details: { storedPreference: userPreference },
+        details: { userOverride: userPreference.locale },
       };
     }
 
@@ -232,7 +231,7 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
     let bestLocale = DEFAULT_LOCALE;
     let bestScore = 0;
     let bestSources: DetectionSource[] = [];
-    let bestConfidence = CONFIDENCE_WEIGHTS.DEFAULT_FALLBACK;
+    let bestConfidence: number = CONFIDENCE_WEIGHTS.DEFAULT_FALLBACK;
 
     for (const [locale, stats] of localeStats.entries()) {
       // 综合得分 = 权重总和 + 一致性奖励
@@ -266,11 +265,11 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
     }
 
     // 添加统计信息
-    details.detectionStats = {
+    details.detectionStats = JSON.stringify({
       totalSources: detectionResults.length,
       consistentSources: localeStats.get(bestLocale)?.count || 0,
       score: bestScore,
-    };
+    });
 
     return {
       locale: bestLocale,
@@ -356,7 +355,7 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
     if (source === DETECTION_SOURCES.COMBINED) {
       reliability += 0.1; // 组合检测更可靠
     }
-    if (details?.detectionStats?.consistentSources > 1) {
+    if ((details?.detectionStats?.consistentSources ?? 0) > 1) {
       reliability += 0.05; // 一致性检测更可靠
     }
     reliability = Math.min(reliability, 1.0);

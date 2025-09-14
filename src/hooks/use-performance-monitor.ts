@@ -139,6 +139,7 @@ export function usePerformanceMonitor(
         }
       };
     }
+    return undefined;
   }, [isMonitoring, monitoringInterval, refreshMetrics]);
 
   // 组件卸载时清理
@@ -160,6 +161,7 @@ export function usePerformanceMonitor(
 
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [enableLoadTimeMonitoring, measurements]);
 
   // 返回性能监控接口

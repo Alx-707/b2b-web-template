@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { UnsafeLocaleCode } from '@/types';
 import { DEFAULT_LOCALE } from '../locale-constants';
 import { useClientLocaleDetection } from '../locale-detection-hooks';
 import type { LocaleDetectionResult } from '../locale-detection-types';

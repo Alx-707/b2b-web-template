@@ -197,7 +197,7 @@ export class AlertSystemSender {
       total: this.alertHistory.length,
       warnings,
       criticals,
-      lastAlert,
+      ...(lastAlert && { lastAlert }),
     };
   }
 

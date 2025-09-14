@@ -61,7 +61,7 @@ describe('useIntersectionObserver', () => {
 
     // Ensure window exists
     if (typeof global.window === 'undefined') {
-      global.window = {} as unknown;
+      global.window = {} as Window & typeof globalThis;
     }
     global.window.IntersectionObserver = mockIntersectionObserver;
   });

@@ -22,7 +22,7 @@ export interface ToolConflictResult {
  * Tool conflict checker
  */
 export class PerformanceToolConflictChecker {
-  private knownTools = [
+  private _knownTools = [
     'React DevTools',
     'Redux DevTools',
     'Vue DevTools',

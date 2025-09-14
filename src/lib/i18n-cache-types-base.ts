@@ -187,9 +187,9 @@ export const CACHE_CONSTANTS = {
  */
 export class CacheError extends Error {
   public readonly code: string;
-  public readonly details?: Record<string, unknown>;
+  public readonly details?: Record<string, unknown> | undefined;
 
-  constructor(message: string, code: string = 'CACHE_ERROR', details?: Record<string, unknown>) {
+  constructor(message: string, code: string = 'CACHE_ERROR', details?: Record<string, unknown> | undefined) {
     super(message);
     this.name = 'CacheError';
     this.code = code;
@@ -270,7 +270,7 @@ export function isCacheEvent(value: unknown): value is CacheEvent {
  * Basic utility functions
  */
 export function createCacheKey(locale: Locale, namespace?: string, key?: string): string {
-  const parts = [locale];
+  const parts: string[] = [locale];
   if (namespace) parts.push(namespace);
   if (key) parts.push(key);
   return parts.join(':');
@@ -280,8 +280,8 @@ export function parseCacheKey(cacheKey: string): { locale: Locale; namespace?: s
   const parts = cacheKey.split(':');
   return {
     locale: parts[0] as Locale,
-    namespace: parts[1],
-    key: parts[2],
+    ...(parts[1] && { namespace: parts[1] }),
+    ...(parts[2] && { key: parts[2] }),
   };
 }
 

@@ -16,6 +16,7 @@ const BASE_NUMBERS = {
 
   // 存储和大小基础单位
   BYTES_PER_KB: 1024,
+  KB_PER_MB: 1024,
 
   // 百分比和比例基础
   PERCENTAGE_FULL: 100,
@@ -107,8 +108,19 @@ export const CONTENT_LIMITS = {
   MAX_NESTED_CALLBACKS: 3,
 
   /** 最大文件大小 - 1MB (1024 * 1024 bytes) */
-  MAX_FILE_SIZE: BASE_NUMBERS.BYTES_PER_KB * BASE_NUMBERS.BYTES_PER_KB,
+  MAX_FILE_SIZE: BASE_NUMBERS.BYTES_PER_KB * BASE_NUMBERS.KB_PER_MB,
 } as const;
+
+/** 内存大小常量 */
+export const MEMORY_CONSTANTS = {
+  /** 1MB的字节数 */
+  MB: BASE_NUMBERS.BYTES_PER_KB * BASE_NUMBERS.KB_PER_MB,
+  /** 1KB的字节数 */
+  KB: BASE_NUMBERS.BYTES_PER_KB,
+} as const;
+
+/** MB常量 - 用于向后兼容 */
+export const MB = MEMORY_CONSTANTS.MB;
 
 /** 分页和列表常量 */
 export const PAGINATION_CONSTANTS = {

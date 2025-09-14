@@ -4,7 +4,7 @@
  */
 
 import type { TemplateMessage } from '../whatsapp-template-types';
-import type { WhatsAppContact, LocationData, ContactData } from '../whatsapp-base-types';
+import type { LocationData, ContactData } from '../whatsapp-base-types';
 
 /**
  * 发送消息请求

@@ -47,3 +47,6 @@ next-env.d.ts
 reports/quick-quality-report.json
 reports/test-results.json
 reports/html.meta.json.gz
+
+# ESLint cache
+.eslintcache

@@ -17,7 +17,7 @@ import { TranslationManager } from './translation-manager';
 import { TranslationValidators } from './translation-validators';
 
 // 导入拆分的模块
-export { AITranslationService, QualityBenchmark, QualityComparison, ValidationResult, BatchTranslationInput } from './translation-quality-types';
+export type { AITranslationService, QualityBenchmark, QualityComparison, ValidationResult, BatchTranslationInput } from './translation-quality-types';
 
 /**
  * 翻译质量分析器

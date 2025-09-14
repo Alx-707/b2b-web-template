@@ -2,11 +2,20 @@ import type {
   DiagnosticReport,
   PageComparison,
   PerformanceTrend,
-} from './web-vitals-diagnostics-utils';
+  PagePerformanceGroup,
+} from './web-vitals-diagnostics-constants';
 
 /**
  * Web Vitals 诊断相关类型定义
  */
+
+// 重新导出基础类型
+export type {
+  DiagnosticReport,
+  PageComparison,
+  PerformanceTrend,
+  PagePerformanceGroup,
+};
 
 /**
  * Web Vitals 诊断状态接口
@@ -25,7 +34,7 @@ export interface DiagnosticsReturnParams {
   state: WebVitalsDiagnosticsState;
   refreshDiagnostics: () => Promise<void>;
   getPerformanceTrends: () => PerformanceTrend[] | null;
-  getPageComparison: () => PageComparison[];
+  getPageComparison: () => PagePerformanceGroup[];
   exportReport: (_format?: 'json' | 'csv') => void;
   clearHistory: () => void;
 }
@@ -40,7 +49,7 @@ export interface UseWebVitalsDiagnosticsReturn {
   error: string | null;
   refreshDiagnostics: () => Promise<void>;
   getPerformanceTrends: () => PerformanceTrend[] | null;
-  getPageComparison: () => PageComparison[];
+  getPageComparison: () => PagePerformanceGroup[];
   exportReport: (_format?: 'json' | 'csv') => void;
   clearHistory: () => void;
 }
@@ -58,7 +67,7 @@ export interface WebVitalsDataPersistence {
  */
 export interface WebVitalsAnalysisFunctions {
   getPerformanceTrends: () => PerformanceTrend[] | null;
-  getPageComparison: () => PageComparison[];
+  getPageComparison: () => PagePerformanceGroup[];
 }
 
 /**
@@ -132,7 +141,7 @@ export interface WebVitalsDiagnosticsError {
 /**
  * 诊断事件类型
  */
-export type WebVitalsDiagnosticsEventType = 
+export type WebVitalsDiagnosticsEventType =
   | 'report-generated'
   | 'data-loaded'
   | 'data-saved'

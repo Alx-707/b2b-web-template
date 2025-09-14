@@ -26,9 +26,12 @@ export const themeAnalytics = new ThemeAnalytics();
 
 // 导出便利函数，用于向后兼容
 export const recordThemePreference = (theme: string) => themeAnalytics.recordThemePreference(theme);
-export const recordThemeSwitch = (fromTheme: string, toTheme: string, duration?: number) =>
-  themeAnalytics.recordThemeSwitch(fromTheme, toTheme, duration);
-export const sendThemeReport = () => themeAnalytics.sendReport();
+export const recordThemeSwitch = (fromTheme: string, toTheme: string, duration?: number) => {
+  const now = Date.now();
+  const startTime = duration ? now - duration : now;
+  themeAnalytics.recordThemeSwitch(fromTheme, toTheme, startTime, now);
+};
+export const sendThemeReport = () => themeAnalytics.sendPerformanceReport();
 
 
 

@@ -2,8 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["vitest/globals", "node"],
-    "allowJs": true,
+    "types": ["node"],
     "skipLibCheck": true,
 
     // 最严格的类型检查
@@ -19,9 +18,9 @@
     "strictPropertyInitialization": true,
     "alwaysStrict": true,
 
-    // 最严格的代码质量检查
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // 最严格的代码质量检查 - 未使用变量检查交由ESLint统一处理
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
     "noPropertyAccessFromIndexSignature": false, // Allow dot notation for better DX (changed from true)
@@ -57,7 +56,13 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
 
@@ -66,27 +71,49 @@
 
     // === 开发工具豁免 - 仅开发环境使用，不影响生产代码质量 ===
     // 开发者工具面板和调试插件
-    "src/components/dev-tools/**/*.{ts,tsx}",
-    "src/app/[locale]/dev-tools/**/*.{ts,tsx}",
-    "src/app/[locale]/react-scan-demo/**/*.{ts,tsx}",
-    "src/app/[locale]/diagnostics/**/*.{ts,tsx}",
+    "src/components/dev-tools/**/*.ts",
+    "src/components/dev-tools/**/*.tsx",
+    "src/app/[locale]/dev-tools/**/*.ts",
+    "src/app/[locale]/dev-tools/**/*.tsx",
+    "src/app/[locale]/react-scan-demo/**/*.ts",
+    "src/app/[locale]/react-scan-demo/**/*.tsx",
+    "src/app/[locale]/diagnostics/**/*.ts",
+    "src/app/[locale]/diagnostics/**/*.tsx",
     "src/lib/dev-tools-positioning.ts",
     "src/lib/performance-monitoring-coordinator.ts",
     "src/lib/react-scan-config.ts",
 
     // 测试文件和测试工具
-    "**/__tests__/**/*.{ts,tsx}",
-    "**/*.test.{ts,tsx}",
-    "**/*.spec.{ts,tsx}",
-    "src/test/**/*.{ts,tsx}",
-    "src/testing/**/*.{ts,tsx}",
-    "tests/**/*.{ts,tsx}",
-    "__mocks__/**/*.{ts,tsx,js}",
+    "**/__tests__/**/*.ts",
+    "**/__tests__/**/*.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "src/test/**/*.ts",
+    "src/test/**/*.tsx",
+    "src/testing/**/*.ts",
+    "src/testing/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "__mocks__/**/*.ts",
+    "__mocks__/**/*.tsx",
+    "__mocks__/**/*.js",
+    "src/**/__tests__/**/*.ts",
+    "src/**/__tests__/**/*.tsx",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
 
     // 构建脚本和配置文件
-    "scripts/**/*.{ts,js}",
-    "config/**/*.{ts,js}",
-    "*.config.{ts,js,mjs}",
+    "scripts/**/*.ts",
+    "scripts/**/*.js",
+    "config/**/*.ts",
+    "config/**/*.js",
+    "*.config.ts",
+    "*.config.js",
+    "*.config.mjs",
     "instrumentation*.ts",
 
     // 开发环境特定常量

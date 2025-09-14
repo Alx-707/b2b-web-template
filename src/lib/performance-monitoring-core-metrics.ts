@@ -1,7 +1,7 @@
 /**
  * 性能监控核心指标管理
  * Performance Monitoring Core Metrics Management
- * 
+ *
  * 负责性能指标的记录、存储、清理和实时分析功能
  */
 
@@ -10,6 +10,9 @@ import type {
   PerformanceConfig,
   PerformanceMetricType,
   PerformanceMetricSource,
+  ComponentPerformanceData,
+  NetworkPerformanceData,
+  BundlePerformanceData,
 } from './performance-monitoring-types';
 import { MB } from '@/constants/units';
 import { logger } from '@/lib/logger';
@@ -34,7 +37,7 @@ export class PerformanceMetricsManager {
    */
   private setupPeriodicCleanup(): void {
     const cleanupInterval = this.config.global?.dataRetentionTime || 5 * 60 * 1000; // 5分钟
-    
+
     this.cleanupInterval = setInterval(() => {
       this.cleanupOldMetrics();
     }, cleanupInterval);
@@ -50,7 +53,7 @@ export class PerformanceMetricsManager {
     const maxMetrics = this.config.global?.maxMetrics || 1000;
 
     // 按时间清理
-    this.metrics = this.metrics.filter(metric => 
+    this.metrics = this.metrics.filter(metric =>
       now - metric.timestamp < retentionTime
     );
 
@@ -92,7 +95,7 @@ export class PerformanceMetricsManager {
     };
 
     this.metrics.push(fullMetric);
-    
+
     // 实时分析
     this.analyzeRealtimeMetric(fullMetric);
 
@@ -121,38 +124,73 @@ export class PerformanceMetricsManager {
   }
 
   /**
+   * 类型守卫：检查是否为组件性能数据
+   * Type guard: check if data is component performance data
+   */
+  private isComponentData(data: unknown): data is ComponentPerformanceData {
+    return typeof data === 'object' && data !== null && 'renderTime' in data;
+  }
+
+  /**
+   * 类型守卫：检查是否为网络性能数据
+   * Type guard: check if data is network performance data
+   */
+  private isNetworkData(data: unknown): data is NetworkPerformanceData {
+    return typeof data === 'object' && data !== null && 'responseTime' in data;
+  }
+
+  /**
+   * 类型守卫：检查是否为打包性能数据
+   * Type guard: check if data is bundle performance data
+   */
+  private isBundleData(data: unknown): data is BundlePerformanceData {
+    return typeof data === 'object' && data !== null && 'size' in data;
+  }
+
+  /**
    * 实时分析指标
    * Analyze realtime metric
    */
   private analyzeRealtimeMetric(metric: PerformanceMetrics): void {
     // 检查是否有性能问题需要立即关注
-    const moduleConfig = this.getModuleConfig(metric.type);
-    if (!moduleConfig?.thresholds) {
-      return;
-    }
-
     let isSlowPerformance = false;
     let threshold = 0;
 
     switch (metric.type) {
       case 'component':
-        threshold = moduleConfig.thresholds.renderTime || 100;
-        isSlowPerformance = (metric.value || 0) > threshold;
+        if (this.isComponentData(metric.data) && this.config.component?.thresholds) {
+          threshold = this.config.component.thresholds.renderTime || 100;
+          isSlowPerformance = (Number(metric.data.renderTime) || 0) > threshold;
+        }
         break;
       case 'network':
-        threshold = moduleConfig.thresholds.responseTime || 1000;
-        isSlowPerformance = (metric.value || 0) > threshold;
+        if (this.isNetworkData(metric.data) && this.config.network?.thresholds) {
+          threshold = this.config.network.thresholds.responseTime || 1000;
+          isSlowPerformance = (Number(metric.data.responseTime) || 0) > threshold;
+        }
         break;
       case 'bundle':
-        threshold = moduleConfig.thresholds.size || MB; // 1MB
-        isSlowPerformance = (metric.value || 0) > threshold;
+        if (this.isBundleData(metric.data) && this.config.bundle?.thresholds) {
+          threshold = this.config.bundle.thresholds.size || MB; // 1MB
+          isSlowPerformance = (Number(metric.data.size) || 0) > threshold;
+        }
         break;
     }
 
     if (isSlowPerformance) {
+      // 安全获取值用于日志记录
+      let value: number | undefined;
+      if (this.isComponentData(metric.data)) {
+        value = metric.data.renderTime;
+      } else if (this.isNetworkData(metric.data)) {
+        value = metric.data.responseTime;
+      } else if (this.isBundleData(metric.data)) {
+        value = metric.data.size;
+      }
+
       logger.warn(`Performance warning: ${metric.type} metric exceeded threshold`, {
-        metric: metric.name,
-        value: metric.value,
+        metric: metric.id || metric.type,
+        value: value || 0,
         threshold,
         source: metric.source,
       });
@@ -173,7 +211,7 @@ export class PerformanceMetricsManager {
    */
   getMetricsInTimeWindow(timeWindow: number): PerformanceMetrics[] {
     const now = Date.now();
-    return this.metrics.filter(metric => 
+    return this.metrics.filter(metric =>
       now - metric.timestamp <= timeWindow
     );
   }
@@ -238,7 +276,17 @@ export class PerformanceMetricsManager {
     stats.timeRange.span = stats.timeRange.newest - stats.timeRange.oldest;
 
     // 计算平均值
-    const totalValue = this.metrics.reduce((sum, metric) => sum + (metric.value || 0), 0);
+    const totalValue = this.metrics.reduce((sum, metric) => {
+      let value = 0;
+      if (this.isComponentData(metric.data)) {
+        value = Number(metric.data.renderTime) || 0;
+      } else if (this.isNetworkData(metric.data)) {
+        value = Number(metric.data.responseTime) || 0;
+      } else if (this.isBundleData(metric.data)) {
+        value = Number(metric.data.size) || 0;
+      }
+      return sum + value;
+    }, 0);
     stats.averageValue = totalValue / this.metrics.length;
 
     return stats;
@@ -255,7 +303,7 @@ export class PerformanceMetricsManager {
 
     const stats = this.getMetricsStats();
     const timeSpanMinutes = stats.timeRange.span / (60 * 1000);
-    
+
     return timeSpanMinutes > 0 ? this.metrics.length / timeSpanMinutes : 0;
   }
 
@@ -304,7 +352,7 @@ export class PerformanceMetricsManager {
    */
   updateConfig(newConfig: PerformanceConfig): void {
     this.config = newConfig;
-    
+
     // 重新设置清理间隔
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
@@ -363,12 +411,12 @@ export class PerformanceMetricsManager {
 
     const m = metric as PerformanceMetrics;
     return !!(
-      m.id &&
-      m.name &&
       m.type &&
       m.source &&
       typeof m.timestamp === 'number' &&
-      m.timestamp > 0
+      m.timestamp > 0 &&
+      m.data &&
+      typeof m.data === 'object'
     );
   }
 

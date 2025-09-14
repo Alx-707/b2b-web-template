@@ -1,7 +1,7 @@
 /**
  * 国际化缓存高级配置和功能
  * I18n Cache Advanced Configuration and Features
- * 
+ *
  * 提供缓存系统的高级配置选项、策略和扩展功能
  */
 
@@ -27,7 +27,7 @@ export interface AdvancedCacheConfig {
   ttl: number;
   enablePersistence: boolean;
   storageKey: string;
-  
+
   // 高级功能配置
   compression: CacheCompressionConfig;
   encryption: CacheEncryptionConfig;
@@ -37,11 +37,11 @@ export interface AdvancedCacheConfig {
   security: CacheSecurityConfig;
   partitioning: CachePartitionConfig;
   sync: CacheSyncOptions;
-  
+
   // 策略配置
   evictionStrategy: 'lru' | 'lfu' | 'fifo' | 'ttl' | 'custom';
   customEvictionStrategy?: (items: Array<{ key: string; lastAccessed: number; hits: number }>) => string[];
-  
+
   // 预加载配置
   preload: {
     enabled: boolean;
@@ -51,7 +51,7 @@ export interface AdvancedCacheConfig {
     warmupOnInit: boolean;
     prefetchThreshold: number;
   };
-  
+
   // 调试和开发配置
   debug: {
     enabled: boolean;
@@ -255,7 +255,7 @@ export const DEFAULT_ADVANCED_CACHE_CONFIG: AdvancedCacheConfig = {
   ttl: 5 * 60 * 1000,
   enablePersistence: true,
   storageKey: 'i18n_cache',
-  
+
   // 压缩配置
   compression: {
     enableCompression: false,
@@ -263,7 +263,7 @@ export const DEFAULT_ADVANCED_CACHE_CONFIG: AdvancedCacheConfig = {
     threshold: 1024,
     level: 6,
   },
-  
+
   // 加密配置
   encryption: {
     enableEncryption: false,
@@ -271,7 +271,7 @@ export const DEFAULT_ADVANCED_CACHE_CONFIG: AdvancedCacheConfig = {
     keyDerivation: 'pbkdf2',
     saltLength: 16,
   },
-  
+
   // 监控配置
   monitoring: {
     enableMonitoring: true,
@@ -282,7 +282,7 @@ export const DEFAULT_ADVANCED_CACHE_CONFIG: AdvancedCacheConfig = {
       loadTimeAbove: 1000,
     },
   },
-  
+
   // 备份配置
   backup: {
     enableBackup: false,
@@ -291,7 +291,7 @@ export const DEFAULT_ADVANCED_CACHE_CONFIG: AdvancedCacheConfig = {
     backupLocation: './cache-backups',
     compressionEnabled: true,
   },
-  
+
   // 性能配置
   performance: {
     enableLazyLoading: true,
@@ -301,7 +301,7 @@ export const DEFAULT_ADVANCED_CACHE_CONFIG: AdvancedCacheConfig = {
     retryAttempts: 3,
     retryDelay: 1000,
   },
-  
+
   // 安全配置
   security: {
     enableAccessControl: false,
@@ -311,25 +311,25 @@ export const DEFAULT_ADVANCED_CACHE_CONFIG: AdvancedCacheConfig = {
     sanitizeKeys: true,
     validateValues: true,
   },
-  
+
   // 分区配置
   partitioning: {
     enablePartitioning: false,
-    partitionKey: (key: string) => key.split(':')[0],
+    partitionKey: (key: string) => key.split(':')[0] || key,
     maxPartitions: 10,
     partitionStrategy: 'hash',
   },
-  
+
   // 同步配置
   sync: {
     enableSync: false,
     syncInterval: 30000,
     conflictResolution: 'local',
   },
-  
+
   // 策略配置
   evictionStrategy: 'lru',
-  
+
   // 预加载配置
   preload: {
     enabled: true,
@@ -339,7 +339,7 @@ export const DEFAULT_ADVANCED_CACHE_CONFIG: AdvancedCacheConfig = {
     warmupOnInit: false,
     prefetchThreshold: 0.8,
   },
-  
+
   // 调试配置
   debug: {
     enabled: process.env.NODE_ENV === 'development',

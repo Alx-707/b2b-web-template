@@ -17,6 +17,17 @@ import type {
   StorageOperationResult,
   ValidationResult,
 } from './locale-storage-types';
+
+/**
+ * 存储验证数据结构
+ * Storage validation data structure
+ */
+interface StorageValidationData {
+  hasLocalData: boolean;
+  hasCookieData: boolean;
+  localDataValid: boolean;
+  cookieDataValid: boolean;
+}
 import { STORAGE_KEYS } from './locale-storage-types';
 
 /**
@@ -52,18 +63,25 @@ export class LocaleValidationManager {
       const syncIssues = this.validateStorageSync();
       issues.push(...syncIssues);
 
-      return {
-        success: issues.length === 0,
-        message: issues.length === 0 ? '存储数据完整性验证通过' : `发现 ${issues.length} 个问题`,
-        timestamp: Date.now(),
-        data: { issues },
-      };
+      if (issues.length === 0) {
+        return {
+          success: true,
+          timestamp: Date.now(),
+          data: { issues },
+        };
+      } else {
+        return {
+          success: false,
+          error: `发现 ${issues.length} 个问题`,
+          timestamp: Date.now(),
+          data: { issues },
+        };
+      }
     } catch (error) {
       return {
         success: false,
-        message: `验证存储完整性失败: ${error instanceof Error ? error.message : '未知错误'}`,
+        error: `验证存储完整性失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
       };
     }
   }
@@ -144,13 +162,13 @@ export class LocaleValidationManager {
    * 验证特定存储键的数据
    * Validate data for specific storage key
    */
-  static validateSpecificData(key: keyof typeof STORAGE_KEYS): ValidationResult {
+  static validateSpecificData(key: keyof typeof STORAGE_KEYS): ValidationResult<StorageValidationData> {
     try {
       const storageKey = STORAGE_KEYS[key];
       const localData = LocalStorageManager.get(storageKey);
       const cookieData = CookieManager.get(storageKey);
 
-      const result: ValidationResult = {
+      const result: ValidationResult<StorageValidationData> = {
         isValid: true,
         errors: [],
         warnings: [],
@@ -166,14 +184,14 @@ export class LocaleValidationManager {
       if (localData !== null) {
         if (key === 'LOCALE_PREFERENCE') {
           const isValid = this.validatePreferenceData(localData as UserLocalePreference);
-          result.data.localDataValid = isValid;
+          result.data!.localDataValid = isValid;
           if (!isValid) {
             result.isValid = false;
             result.errors.push('localStorage中的偏好数据格式无效');
           }
         } else if (key === 'LOCALE_DETECTION_HISTORY') {
           const isValid = this.validateHistoryData(localData as LocaleDetectionHistory);
-          result.data.localDataValid = isValid;
+          result.data!.localDataValid = isValid;
           if (!isValid) {
             result.isValid = false;
             result.errors.push('localStorage中的历史数据格式无效');
@@ -187,7 +205,7 @@ export class LocaleValidationManager {
           if (key === 'LOCALE_PREFERENCE') {
             const parsed = JSON.parse(cookieData) as UserLocalePreference;
             const isValid = this.validatePreferenceData(parsed);
-            result.data.cookieDataValid = isValid;
+            result.data!.cookieDataValid = isValid;
             if (!isValid) {
               result.isValid = false;
               result.errors.push('Cookie中的偏好数据格式无效');
@@ -195,7 +213,7 @@ export class LocaleValidationManager {
           }
         } catch {
           result.isValid = false;
-          result.data.cookieDataValid = false;
+          result.data!.cookieDataValid = false;
           result.errors.push('Cookie数据JSON格式错误');
         }
       }
@@ -278,18 +296,25 @@ export class LocaleValidationManager {
         issues.push('localStorage和Cookie中的语言覆盖设置不一致');
       }
 
-      return {
-        success: issues.length === 0,
-        message: issues.length === 0 ? '数据一致性检查通过' : `发现 ${issues.length} 个一致性问题`,
-        timestamp: Date.now(),
-        data: { issues, warnings },
-      };
+      if (issues.length === 0) {
+        return {
+          success: true,
+          timestamp: Date.now(),
+          data: { issues, warnings },
+        };
+      } else {
+        return {
+          success: false,
+          error: `发现 ${issues.length} 个一致性问题`,
+          timestamp: Date.now(),
+          data: { issues, warnings },
+        };
+      }
     } catch (error) {
       return {
         success: false,
-        message: `数据一致性检查失败: ${error instanceof Error ? error.message : '未知错误'}`,
+        error: `数据一致性检查失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
       };
     }
   }
@@ -367,16 +392,14 @@ export class LocaleValidationManager {
 
       return {
         success: true,
-        message: fixedIssues > 0 ? `已修复 ${fixedIssues} 个同步问题` : '没有同步问题需要修复',
         timestamp: Date.now(),
         data: { fixedIssues, actions },
       };
     } catch (error) {
       return {
         success: false,
-        message: `修复同步问题失败: ${error instanceof Error ? error.message : '未知错误'}`,
+        error: `修复同步问题失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error : new Error('Unknown error'),
       };
     }
   }

@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 ;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { GET } from '../route';
+import { GET } from '@/app/api/test-content/__tests__/route';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const { mockGetAllPages, mockGetAllPosts, mockGetContentStats, mockLogger } =

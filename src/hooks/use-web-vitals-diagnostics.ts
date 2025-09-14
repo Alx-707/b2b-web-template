@@ -57,13 +57,12 @@ const useWebVitalsRefresh = (
 
     return {
       timestamp: Date.now(),
-      url: typeof window !== 'undefined' ? window.location.href : 'test-url',
-      cls: vitals.cls || Math.random() * 0.1,
-      lcp: vitals.lcp || 1000 + Math.random() * 2000,
-      fid: vitals.fid || Math.random() * 100,
-      fcp: vitals.fcp || 800 + Math.random() * 1200,
-      ttfb: vitals.ttfb || 200 + Math.random() * 800,
-      performanceScore: 85 + Math.random() * 15,
+      vitals: vitals,
+      score: 85 + Math.random() * 15,
+      issues: [],
+      recommendations: [],
+      pageUrl: typeof window !== 'undefined' ? window.location.href : 'test-url',
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'test-agent',
     };
   }, []);
 

@@ -213,7 +213,7 @@ describe('usePerformanceMonitor', () => {
     it('should perform automatic monitoring when enabled', () => {
       const { result } = renderHook(() =>
         usePerformanceMonitor({
-          autoMonitoring: true,
+          enableAutoBaseline: true,
           monitoringInterval: 1000,
         }),
       );
@@ -229,7 +229,7 @@ describe('usePerformanceMonitor', () => {
     it('should not perform automatic monitoring when disabled', () => {
       const { result } = renderHook(() =>
         usePerformanceMonitor({
-          autoMonitoring: false,
+          enableAutoBaseline: false,
         }),
       );
 
@@ -244,7 +244,7 @@ describe('usePerformanceMonitor', () => {
     it('should clear interval when monitoring stops', () => {
       const { result } = renderHook(() =>
         usePerformanceMonitor({
-          autoMonitoring: true,
+          enableAutoBaseline: true,
           monitoringInterval: 1000,
         }),
       );
@@ -309,7 +309,7 @@ describe('usePerformanceMonitor', () => {
     it('should cleanup on unmount', () => {
       const { result, unmount } = renderHook(() =>
         usePerformanceMonitor({
-          autoMonitoring: true,
+          enableAutoBaseline: true,
           monitoringInterval: 1000,
         }),
       );
@@ -472,7 +472,7 @@ describe('usePerformanceMonitor', () => {
     it('should handle extremely high monitoring intervals', () => {
       const { result } = renderHook(() =>
         usePerformanceMonitor({
-          autoMonitoring: true,
+          enableAutoBaseline: true,
           monitoringInterval: 999999999,
         }),
       );
@@ -609,14 +609,12 @@ describe('usePerformanceMonitor', () => {
     it('should handle autoBaseline configuration', () => {
       const { result } = renderHook(() =>
         usePerformanceMonitor({
-          autoBaseline: true,
-          alertConfig: {
-            enabled: true,
-            thresholds: {
-              cls: { warning: 0.1, critical: 0.25 },
-              lcp: { warning: 2500, critical: 4000 },
-              fid: { warning: 100, critical: 300 },
-            },
+          enableAutoBaseline: true,
+          enableAlerts: true,
+          alertThresholds: {
+            loadTime: 2500,
+            renderTime: 100,
+            memoryUsage: 300,
           },
         }),
       );
