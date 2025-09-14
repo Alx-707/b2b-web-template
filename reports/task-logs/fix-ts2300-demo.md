@@ -37,3 +37,17 @@ Duplicate exports of `PreloaderFactory` and `TranslationPreloader` in `i18n-prel
 - Re-ran `pnpm run type-check`
 - `PerformanceMetrics` duplicate resolved.
 - First remaining TS2300: `src/types/whatsapp-api-types.ts(14,507): error TS2300: Duplicate identifier 'WhatsAppApiErrorResponse'.`
+
+## WhatsAppApiErrorResponse Fix
+
+### Initial Error
+- `pnpm run type-check`
+- `src/types/whatsapp-api-types.ts(14,507): error TS2300: Duplicate identifier 'WhatsAppApiErrorResponse'.`
+
+### Plan
+`whatsapp-api-types.ts` re-exported `WhatsAppApiErrorResponse`, `WhatsAppApiError`, and `isWhatsAppApiError` from both `whatsapp-api-responses` and `whatsapp-api-errors`. Removed the redundant re-exports from the `whatsapp-api-responses` section so each identifier is exported only once.
+
+### Verification
+- Re-ran `pnpm run type-check`
+- `WhatsAppApiErrorResponse` duplicate resolved.
+- First remaining TS2300: `src/types/whatsapp-webhook-types.ts(12,144): error TS2300: Duplicate identifier 'isWebhookVerificationRequest'.`

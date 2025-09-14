@@ -11,9 +11,9 @@ export type { SendMessageRequest, MediaUploadRequest, AnalyticsRequest, BatchReq
 // 函数导出
 export { isSendMessageRequest, isMediaUploadRequest, isAnalyticsRequest, isBatchRequest } from './whatsapp-api-requests';
 
-export type { SendMessageResponse, WhatsAppApiResponse, WhatsAppServiceResponse, MediaUploadResponse, MediaRetrieveResponse, PhoneNumberInfo, PhoneNumbersResponse, BusinessProfile, BusinessProfileResponse, TemplateStatus, TemplatesResponse, AnalyticsDataPoint, AnalyticsResponse, BatchResponse, RateLimitInfo, AccountInfoResponse, AppSettingsResponse, QualityRatingResponse, MessageStatusResponse, UserBlockStatusResponse, WebhookVerificationResponse, PaginationCursors, PaginationInfo, PaginatedResponse, WhatsAppApiErrorResponse, WhatsAppApiError, WhatsAppApiResponseType } from './whatsapp-api-responses';
+export type { SendMessageResponse, WhatsAppApiResponse, WhatsAppServiceResponse, MediaUploadResponse, MediaRetrieveResponse, PhoneNumberInfo, PhoneNumbersResponse, BusinessProfile, BusinessProfileResponse, TemplateStatus, TemplatesResponse, AnalyticsDataPoint, AnalyticsResponse, BatchResponse, RateLimitInfo, AccountInfoResponse, AppSettingsResponse, QualityRatingResponse, MessageStatusResponse, UserBlockStatusResponse, WebhookVerificationResponse, PaginationCursors, PaginationInfo, PaginatedResponse, WhatsAppApiResponseType } from './whatsapp-api-responses';
 
-export { isSendMessageResponse, isMediaUploadResponse, isWhatsAppApiError, isSuccessResponse, isErrorResponse } from './whatsapp-api-responses';
+export { isSendMessageResponse, isMediaUploadResponse, isSuccessResponse, isErrorResponse } from './whatsapp-api-responses';
 
 export type { ApiConfig, ExtendedApiConfig, EnvironmentConfig, WebhookConfig, ClientConfig, ApiEndpoint, HttpMethod, ApiVersion, MessageType, MediaType, TemplateStatusType, QualityRating, ThroughputLevel, AnalyticsGranularity, AnalyticsMetricType, ErrorCode } from './whatsapp-api-config';
 
