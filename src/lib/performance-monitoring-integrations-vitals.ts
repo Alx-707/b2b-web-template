@@ -9,7 +9,10 @@ import type {
   PerformanceConfig,
   PerformanceMetrics,
 } from './performance-monitoring-types';
-import { isTestEnvironment, isDevelopmentEnvironment } from './performance-monitoring-types';
+import {
+  isDevelopmentEnvironment,
+  isTestEnvironment,
+} from './performance-monitoring-types';
 
 /**
  * Web Vitals 集成钩子返回类型
@@ -17,7 +20,11 @@ import { isTestEnvironment, isDevelopmentEnvironment } from './performance-monit
  */
 export interface WebVitalsIntegration {
   enabled: boolean;
-  recordWebVital: (name: string, value: number, rating: 'good' | 'needs-improvement' | 'poor') => void;
+  recordWebVital: (
+    name: string,
+    value: number,
+    rating: 'good' | 'needs-improvement' | 'poor',
+  ) => void;
   recordCustomMetric: (name: string, value: number, unit?: string) => void;
 }
 
@@ -27,12 +34,16 @@ export interface WebVitalsIntegration {
  */
 export function useWebVitalsIntegration(
   config: PerformanceConfig,
-  recordMetric: (metric: Omit<PerformanceMetrics, 'timestamp'>) => void
+  recordMetric: (metric: Omit<PerformanceMetrics, 'timestamp'>) => void,
 ): WebVitalsIntegration {
   return {
     enabled: config.webVitals?.enabled || false,
 
-    recordWebVital: (name: string, value: number, rating: 'good' | 'needs-improvement' | 'poor') => {
+    recordWebVital: (
+      name: string,
+      value: number,
+      rating: 'good' | 'needs-improvement' | 'poor',
+    ) => {
       if (!config.webVitals?.enabled) return;
 
       recordMetric({
@@ -111,7 +122,9 @@ export function checkEnvironmentCompatibility(): EnvironmentCompatibilityResult 
     }
 
     if (!process.env.ANALYZE && process.env.NODE_ENV === 'development') {
-      recommendations.push('考虑定期运行 ANALYZE=true npm run build 来分析包大小');
+      recommendations.push(
+        '考虑定期运行 ANALYZE=true npm run build 来分析包大小',
+      );
     }
   }
 
@@ -119,7 +132,9 @@ export function checkEnvironmentCompatibility(): EnvironmentCompatibilityResult 
   if (environment === 'production') {
     if (process.env.NEXT_PUBLIC_DISABLE_REACT_SCAN !== 'true') {
       issues.push('生产环境中 React Scan 未被禁用');
-      recommendations.push('在生产环境中设置 NEXT_PUBLIC_DISABLE_REACT_SCAN=true');
+      recommendations.push(
+        '在生产环境中设置 NEXT_PUBLIC_DISABLE_REACT_SCAN=true',
+      );
     }
 
     if (process.env.ANALYZE === 'true') {
@@ -168,7 +183,8 @@ export function performHealthCheck(config: PerformanceConfig): {
       details.reactScan = 'React Scan is properly configured for development';
     } else {
       status.reactScan = 'warning';
-      details.reactScan = 'React Scan is enabled in non-development environment';
+      details.reactScan =
+        'React Scan is enabled in non-development environment';
     }
   } else {
     status.reactScan = 'healthy';
@@ -179,10 +195,12 @@ export function performHealthCheck(config: PerformanceConfig): {
   if (config.webEvalAgent.enabled) {
     if (isTestEnvironment()) {
       status.webEvalAgent = 'healthy';
-      details.webEvalAgent = 'Web Eval Agent is properly configured for testing';
+      details.webEvalAgent =
+        'Web Eval Agent is properly configured for testing';
     } else {
       status.webEvalAgent = 'warning';
-      details.webEvalAgent = 'Web Eval Agent is enabled outside test environment';
+      details.webEvalAgent =
+        'Web Eval Agent is enabled outside test environment';
     }
   } else {
     status.webEvalAgent = 'healthy';
@@ -201,7 +219,7 @@ export function performHealthCheck(config: PerformanceConfig): {
     ? 'Size Limit monitoring is active'
     : 'Size Limit monitoring is disabled';
 
-  const isHealthy = Object.values(status).every(s => s !== 'error');
+  const isHealthy = Object.values(status).every((s) => s !== 'error');
 
   return {
     isHealthy,
@@ -228,23 +246,35 @@ export function validateWebVitalsConfig(config: PerformanceConfig): {
     }
 
     if (config.webVitals.enabled) {
-      if (config.webVitals.reportAllChanges && typeof config.webVitals.reportAllChanges !== 'boolean') {
+      if (
+        config.webVitals.reportAllChanges &&
+        typeof config.webVitals.reportAllChanges !== 'boolean'
+      ) {
         warnings.push('Web Vitals reportAllChanges should be a boolean');
       }
 
       if (config.webVitals.thresholds) {
         const thresholds = config.webVitals.thresholds;
 
-        if (thresholds.LCP && (typeof thresholds.LCP !== 'object' || !thresholds.LCP.good || !thresholds.LCP.poor)) {
-          warnings.push('Web Vitals LCP thresholds should have good and poor values');
+        if (
+          thresholds.lcp &&
+          (typeof thresholds.lcp !== 'number' || thresholds.lcp <= 0)
+        ) {
+          warnings.push('Web Vitals LCP threshold should be a positive number');
         }
 
-        if (thresholds.FID && (typeof thresholds.FID !== 'object' || !thresholds.FID.good || !thresholds.FID.poor)) {
-          warnings.push('Web Vitals FID thresholds should have good and poor values');
+        if (
+          thresholds.fid &&
+          (typeof thresholds.fid !== 'number' || thresholds.fid <= 0)
+        ) {
+          warnings.push('Web Vitals FID threshold should be a positive number');
         }
 
-        if (thresholds.CLS && (typeof thresholds.CLS !== 'object' || !thresholds.CLS.good || !thresholds.CLS.poor)) {
-          warnings.push('Web Vitals CLS thresholds should have good and poor values');
+        if (
+          thresholds.cls &&
+          (typeof thresholds.cls !== 'number' || thresholds.cls <= 0)
+        ) {
+          warnings.push('Web Vitals CLS threshold should be a positive number');
         }
       }
     }
@@ -262,17 +292,23 @@ export function validateWebVitalsConfig(config: PerformanceConfig): {
  * Web Vitals performance analyzer
  */
 export class WebVitalsAnalyzer {
-  private vitals = new Map<string, {
-    values: number[];
-    ratings: Array<'good' | 'needs-improvement' | 'poor'>;
-    lastUpdated: number;
-  }>();
+  private vitals = new Map<
+    string,
+    {
+      values: number[];
+      ratings: Array<'good' | 'needs-improvement' | 'poor'>;
+      lastUpdated: number;
+    }
+  >();
 
-  private customMetrics = new Map<string, {
-    values: number[];
-    unit: string;
-    lastUpdated: number;
-  }>();
+  private customMetrics = new Map<
+    string,
+    {
+      values: number[];
+      unit: string;
+      lastUpdated: number;
+    }
+  >();
 
   private config: PerformanceConfig;
 
@@ -284,7 +320,11 @@ export class WebVitalsAnalyzer {
    * 记录Web Vital指标
    * Record Web Vital metric
    */
-  recordWebVital(name: string, value: number, rating: 'good' | 'needs-improvement' | 'poor'): void {
+  recordWebVital(
+    name: string,
+    value: number,
+    rating: 'good' | 'needs-improvement' | 'poor',
+  ): void {
     if (!this.config.webVitals?.enabled) return;
 
     const current = this.vitals.get(name) || {
@@ -335,23 +375,35 @@ export class WebVitalsAnalyzer {
    * Get Web Vitals report
    */
   getWebVitalsReport(): {
-    vitals: Record<string, {
-      average: number;
-      latest: number;
-      trend: 'improving' | 'stable' | 'degrading';
-      rating: 'good' | 'needs-improvement' | 'poor';
-    }>;
+    vitals: Record<
+      string,
+      {
+        average: number;
+        latest: number;
+        trend: 'improving' | 'stable' | 'degrading';
+        rating: 'good' | 'needs-improvement' | 'poor';
+      }
+    >;
     score: number;
     recommendations: string[];
   } {
-    const vitals: Record<string, { average: number; latest: number; trend: 'improving' | 'stable' | 'degrading'; rating: 'good' | 'needs-improvement' | 'poor' }> = {};
+    const vitals: Record<
+      string,
+      {
+        average: number;
+        latest: number;
+        trend: 'improving' | 'stable' | 'degrading';
+        rating: 'good' | 'needs-improvement' | 'poor';
+      }
+    > = {};
     let totalScore = 0;
     let vitalCount = 0;
 
     for (const [name, data] of this.vitals.entries()) {
       if (data.values.length === 0) continue;
 
-      const average = data.values.reduce((sum, val) => sum + val, 0) / data.values.length;
+      const average =
+        data.values.reduce((sum, val) => sum + val, 0) / data.values.length;
       const latest = data.values[data.values.length - 1] ?? 0;
       const latestRating = data.ratings[data.ratings.length - 1] ?? 'poor';
 
@@ -361,8 +413,10 @@ export class WebVitalsAnalyzer {
         const recent = data.values.slice(-5);
         const older = data.values.slice(-10, -5);
         if (recent.length > 0 && older.length > 0) {
-          const recentAvg = recent.reduce((sum, val) => sum + val, 0) / recent.length;
-          const olderAvg = older.reduce((sum, val) => sum + val, 0) / older.length;
+          const recentAvg =
+            recent.reduce((sum, val) => sum + val, 0) / recent.length;
+          const olderAvg =
+            older.reduce((sum, val) => sum + val, 0) / older.length;
 
           if (recentAvg < olderAvg * 0.9) trend = 'improving';
           else if (recentAvg > olderAvg * 1.1) trend = 'degrading';
@@ -377,7 +431,12 @@ export class WebVitalsAnalyzer {
       };
 
       // 计算分数
-      const ratingScore = latestRating === 'good' ? 100 : latestRating === 'needs-improvement' ? 50 : 0;
+      const ratingScore =
+        latestRating === 'good'
+          ? 100
+          : latestRating === 'needs-improvement'
+            ? 50
+            : 0;
       totalScore += ratingScore;
       vitalCount += 1;
     }
@@ -388,7 +447,9 @@ export class WebVitalsAnalyzer {
     const recommendations: string[] = [];
     for (const [name, data] of Object.entries(vitals)) {
       if (data.rating === 'poor') {
-        recommendations.push(`${name} needs improvement (current: ${data.latest.toFixed(2)})`);
+        recommendations.push(
+          `${name} needs improvement (current: ${data.latest.toFixed(2)})`,
+        );
       }
       if (data.trend === 'degrading') {
         recommendations.push(`${name} performance is degrading over time`);

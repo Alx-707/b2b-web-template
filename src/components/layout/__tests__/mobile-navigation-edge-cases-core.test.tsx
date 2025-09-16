@@ -5,10 +5,10 @@
  * 注意：高级边界情况测试请参考 mobile-navigation-edge-cases.test.tsx
  */
 
+import { usePathname } from 'next/navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MobileNavigation } from '../mobile-navigation';
 
@@ -24,8 +24,8 @@ vi.mock('next/navigation', () => ({
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
-  Menu: () => <span data-testid="menu-icon">☰</span>,
-  X: () => <span data-testid="close-icon">✕</span>,
+  Menu: () => <span data-testid='menu-icon'>☰</span>,
+  X: () => <span data-testid='close-icon'>✕</span>,
 }));
 
 describe('Mobile Navigation - 核心边界情况测试', () => {
@@ -36,22 +36,26 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
     vi.clearAllMocks();
 
     // Setup default mocks
-    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-      if (key === 'navigation.home') return 'Home';
-      if (key === 'navigation.about') return 'About';
-      if (key === 'navigation.services') return 'Services';
-      if (key === 'navigation.contact') return 'Contact';
-      if (key === 'navigation.menu') return 'Menu';
-      if (key === 'navigation.close') return 'Close';
-      return key;
-    });
+    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+      (key: string) => {
+        if (key === 'navigation.home') return 'Home';
+        if (key === 'navigation.about') return 'About';
+        if (key === 'navigation.services') return 'Services';
+        if (key === 'navigation.contact') return 'Contact';
+        if (key === 'navigation.menu') return 'Menu';
+        if (key === 'navigation.close') return 'Close';
+        return key;
+      },
+    );
 
     (usePathname as ReturnType<typeof vi.fn>).mockReturnValue('/');
   });
 
   describe('基础错误处理', () => {
     it('优雅处理缺失的翻译', () => {
-      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(() => undefined);
+      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+        () => undefined,
+      );
 
       expect(() => {
         render(<MobileNavigation />);
@@ -59,7 +63,9 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
     });
 
     it('优雅处理未定义的路径名', () => {
-      (usePathname as ReturnType<typeof vi.fn>).mockReturnValue(undefined as unknown as string);
+      (usePathname as ReturnType<typeof vi.fn>).mockReturnValue(
+        undefined as unknown as string,
+      );
 
       expect(() => {
         render(<MobileNavigation />);
@@ -77,10 +83,12 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
     });
 
     it('处理空翻译值', () => {
-      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-        if (key === 'navigation.menu') return null;
-        return key;
-      });
+      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+        (key: string) => {
+          if (key === 'navigation.menu') return null;
+          return key;
+        },
+      );
 
       expect(() => {
         render(<MobileNavigation />);
@@ -88,10 +96,12 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
     });
 
     it('处理空翻译字符串', () => {
-      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-        if (key === 'navigation.menu') return '';
-        return key;
-      });
+      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+        (key: string) => {
+          if (key === 'navigation.menu') return '';
+          return key;
+        },
+      );
 
       expect(() => {
         render(<MobileNavigation />);
@@ -131,7 +141,7 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
       await user.click(trigger);
 
       // 在打开状态下更改属性
-      rerender(<MobileNavigation className="updated" />);
+      rerender(<MobileNavigation className='updated' />);
 
       expect(trigger).toBeInTheDocument();
     });
@@ -162,9 +172,9 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
     it('处理多个实例', () => {
       render(
         <div>
-          <MobileNavigation data-testid="nav1" />
-          <MobileNavigation data-testid="nav2" />
-        </div>
+          <MobileNavigation data-testid='nav1' />
+          <MobileNavigation data-testid='nav2' />
+        </div>,
       );
 
       const nav1 = screen.getByTestId('nav1');
@@ -179,8 +189,10 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
     it('处理无效的路径名格式', () => {
       const invalidPaths = ['', '///', 'invalid-path', null, undefined];
 
-      invalidPaths.forEach(path => {
-        (usePathname as ReturnType<typeof vi.fn>).mockReturnValue(path as unknown as string);
+      invalidPaths.forEach((path) => {
+        (usePathname as ReturnType<typeof vi.fn>).mockReturnValue(
+          path as unknown as string,
+        );
 
         expect(() => {
           render(<MobileNavigation />);
@@ -221,7 +233,9 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
       }).not.toThrow();
 
       expect(() => {
-        render(<MobileNavigation data-testid={undefined as unknown as string} />);
+        render(
+          <MobileNavigation data-testid={undefined as unknown as string} />,
+        );
       }).not.toThrow();
     });
   });
@@ -242,7 +256,8 @@ describe('Mobile Navigation - 核心边界情况测试', () => {
     it('优雅处理缺失的DOM API', () => {
       // Mock缺失的API
       const originalAddEventListener = window.addEventListener;
-      window.addEventListener = undefined as unknown as typeof window.addEventListener;
+      window.addEventListener =
+        undefined as unknown as typeof window.addEventListener;
 
       expect(() => {
         render(<MobileNavigation />);

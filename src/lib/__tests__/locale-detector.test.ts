@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { UnsafeLocaleCode, MockStorageManager, MockGeolocation } from '@/types';
+import type {
+  MockGeolocation,
+  MockStorageManager,
+  UnsafeLocaleCode,
+} from '@/types';
 import { SmartLocaleDetector } from '../locale-detector';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置

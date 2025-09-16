@@ -29,11 +29,11 @@ function fixImportTypeInFile(filePath) {
     let newContent = content;
 
     // 修复每个类型导入
-    TYPE_IMPORTS.forEach(typeName => {
+    TYPE_IMPORTS.forEach((typeName) => {
       // 匹配 import { TypeName } from 'module' 模式
       const importRegex = new RegExp(
         `import\\s*{([^}]*\\b${typeName}\\b[^}]*)}\\s*from\\s*(['"][^'"]+['"])`,
-        'g'
+        'g',
       );
 
       newContent = newContent.replace(importRegex, (match, imports, module) => {
@@ -43,12 +43,12 @@ function fixImportTypeInFile(filePath) {
         }
 
         // 分离类型导入和值导入
-        const importList = imports.split(',').map(imp => imp.trim());
+        const importList = imports.split(',').map((imp) => imp.trim());
         const typeImports = [];
         const valueImports = [];
 
-        importList.forEach(imp => {
-          if (TYPE_IMPORTS.some(type => imp.includes(type))) {
+        importList.forEach((imp) => {
+          if (TYPE_IMPORTS.some((type) => imp.includes(type))) {
             typeImports.push(imp);
           } else {
             valueImports.push(imp);
@@ -56,7 +56,7 @@ function fixImportTypeInFile(filePath) {
         });
 
         let result = '';
-        
+
         // 添加type import
         if (typeImports.length > 0) {
           result += `import type { ${typeImports.join(', ')} } from ${module};\n`;
@@ -93,7 +93,7 @@ function fixImportTypeInDirectory(dirPath) {
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
   let fixedCount = 0;
 
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     const fullPath = path.join(dirPath, entry.name);
 
     if (entry.isDirectory()) {
@@ -118,18 +118,18 @@ function main() {
   console.log('🚀 开始修复verbatimModuleSyntax导致的import type问题...\n');
 
   const startTime = Date.now();
-  
+
   // 修复src目录
   const srcFixedCount = fixImportTypeInDirectory('./src');
-  
+
   // 修复app目录
   const appFixedCount = fixImportTypeInDirectory('./src/app');
-  
+
   // 修复根目录的特定文件
   const rootFiles = ['mdx-components.tsx'];
   let rootFixedCount = 0;
-  
-  rootFiles.forEach(file => {
+
+  rootFiles.forEach((file) => {
     if (fs.existsSync(file)) {
       if (fixImportTypeInFile(file)) {
         rootFixedCount++;
@@ -152,10 +152,11 @@ function main() {
   } catch (error) {
     console.log('⚠️ 仍有TypeScript错误，需要进一步修复');
     // 显示剩余错误的前10行
-    const errorOutput = error.stdout?.toString() || error.stderr?.toString() || '';
+    const errorOutput =
+      error.stdout?.toString() || error.stderr?.toString() || '';
     const errorLines = errorOutput.split('\n').slice(0, 10);
     console.log('剩余错误示例:');
-    errorLines.forEach(line => {
+    errorLines.forEach((line) => {
       if (line.trim()) {
         console.log(`  ${line}`);
       }

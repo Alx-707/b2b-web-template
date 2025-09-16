@@ -162,7 +162,8 @@ Object.defineProperty(MockPerformanceObserver, 'supportedEntryTypes', {
   configurable: true,
 });
 
-globalThis.PerformanceObserver = MockPerformanceObserver as unknown as typeof PerformanceObserver;
+globalThis.PerformanceObserver =
+  MockPerformanceObserver as unknown as typeof PerformanceObserver;
 
 // Mock environment variables - 使用vi.stubEnv而不是直接修改process.env
 vi.stubEnv('NODE_ENV', 'test');

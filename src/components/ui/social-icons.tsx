@@ -181,7 +181,7 @@ export const SocialIconLink: FC<SocialIconLinkProps> = (props) => {
         target='_blank'
         rel='noopener noreferrer'
         aria-label={ariaLabel}
-        className={`inline-flex items-center justify-center rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground ${className}`}
+        className={`text-muted-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center rounded-md p-2 transition-colors ${className}`}
         {...(dataTestId && { 'data-testid': dataTestId })}
       >
         {children || (

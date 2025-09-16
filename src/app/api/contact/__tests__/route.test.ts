@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET, POST } from '@/app/api/contact/__tests__/route';
 
@@ -126,12 +125,16 @@ describe('Contact API Route', () => {
         _def: {},
         _type: undefined as any,
       };
-      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(mockExtendedSchema as any);
+      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(
+        mockExtendedSchema as any,
+      );
 
       // Mock successful service responses
       mockAirtableService.createContact.mockResolvedValue({ id: 'record-123' });
       mockResendService.sendContactFormEmail.mockResolvedValue('email-123');
-      mockResendService.sendConfirmationEmail.mockResolvedValue('confirmation-123');
+      mockResendService.sendConfirmationEmail.mockResolvedValue(
+        'confirmation-123',
+      );
 
       // Mock Turnstile verification
       global.fetch = vi.fn().mockResolvedValue({
@@ -171,7 +174,9 @@ describe('Contact API Route', () => {
         _def: {},
         _type: undefined as any,
       };
-      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(mockExtendedSchema as any);
+      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(
+        mockExtendedSchema as any,
+      );
 
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'POST',
@@ -213,7 +218,9 @@ describe('Contact API Route', () => {
         _def: {},
         _type: undefined as any,
       };
-      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(mockExtendedSchema as any);
+      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(
+        mockExtendedSchema as any,
+      );
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
@@ -253,12 +260,18 @@ describe('Contact API Route', () => {
         _def: {},
         _type: undefined as any,
       };
-      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(mockExtendedSchema as any);
+      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(
+        mockExtendedSchema as any,
+      );
 
       // Mock failed Turnstile verification
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({ success: false, 'error-codes': ['invalid-input-response'] }),
+        json: () =>
+          Promise.resolve({
+            'success': false,
+            'error-codes': ['invalid-input-response'],
+          }),
       });
 
       const request = new NextRequest('http://localhost:3000/api/contact', {
@@ -274,7 +287,9 @@ describe('Contact API Route', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Security verification failed. Please try again.');
+      expect(data.error).toBe(
+        'Security verification failed. Please try again.',
+      );
     });
 
     it('应该处理服务不可用的情况', async () => {
@@ -294,7 +309,9 @@ describe('Contact API Route', () => {
         _def: {},
         _type: undefined as any,
       };
-      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(mockExtendedSchema as any);
+      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(
+        mockExtendedSchema as any,
+      );
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
@@ -333,7 +350,9 @@ describe('Contact API Route', () => {
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('An unexpected error occurred. Please try again later.');
+      expect(data.error).toBe(
+        'An unexpected error occurred. Please try again later.',
+      );
     });
   });
 
@@ -351,7 +370,7 @@ describe('Contact API Route', () => {
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'GET',
         headers: {
-          'authorization': 'Bearer test-admin-token',
+          authorization: 'Bearer test-admin-token',
         },
       });
 
@@ -367,7 +386,7 @@ describe('Contact API Route', () => {
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'GET',
         headers: {
-          'authorization': 'Bearer invalid-token',
+          authorization: 'Bearer invalid-token',
         },
       });
 
@@ -396,7 +415,7 @@ describe('Contact API Route', () => {
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'GET',
         headers: {
-          'authorization': 'Bearer test-admin-token',
+          authorization: 'Bearer test-admin-token',
         },
       });
 
@@ -440,7 +459,9 @@ describe('Contact API Route', () => {
         _def: {},
         _type: undefined as any,
       };
-      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(mockExtendedSchema as any);
+      vi.mocked(mockValidations.contactFormSchema.extend).mockReturnValue(
+        mockExtendedSchema as any,
+      );
 
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'POST',

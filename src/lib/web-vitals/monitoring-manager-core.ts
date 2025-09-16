@@ -8,9 +8,9 @@ import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
 import { PerformanceAlertSystem } from './alert-system';
 import { PerformanceBaselineManager } from './baseline-manager';
 import { EnhancedWebVitalsCollector } from './collector';
-import { PerformanceRegressionDetector } from './regression-detector';
 import { MonitoringReportGenerator } from './monitoring-report-generator';
 import { MonitoringUtils } from './monitoring-utils';
+import { PerformanceRegressionDetector } from './regression-detector';
 import type {
   DetailedWebVitals,
   PerformanceAlertConfig,
@@ -35,7 +35,9 @@ export class PerformanceMonitoringManager {
     this.baselineManager = new PerformanceBaselineManager();
     this.regressionDetector = new PerformanceRegressionDetector();
     this.alertSystem = new PerformanceAlertSystem();
-    this.reportGenerator = new MonitoringReportGenerator(this.regressionDetector);
+    this.reportGenerator = new MonitoringReportGenerator(
+      this.regressionDetector,
+    );
   }
 
   /**

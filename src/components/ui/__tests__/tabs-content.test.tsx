@@ -138,7 +138,7 @@ describe('TabsContent Component', () => {
   it('maintains content state when switching tabs', async () => {
     const TestComponent = () => {
       const [inputValue, setInputValue] = React.useState('');
-      
+
       return (
         <Tabs defaultValue='tab1'>
           <TabsList>
@@ -163,7 +163,7 @@ describe('TabsContent Component', () => {
     render(<TestComponent />);
 
     const input = screen.getByTestId('tab1-input');
-    
+
     // Type in the input
     await user.type(input, 'Hello');
     expect(input).toHaveValue('Hello');
@@ -174,7 +174,7 @@ describe('TabsContent Component', () => {
 
     // Switch back to tab1
     await user.click(screen.getByText('Tab 1'));
-    
+
     // Input value should be preserved
     expect(screen.getByTestId('tab1-input')).toHaveValue('Hello');
   });

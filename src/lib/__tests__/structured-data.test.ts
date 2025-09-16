@@ -619,7 +619,8 @@ describe('Structured Data Generation', () => {
     });
 
     it('should not create memory leaks with repeated calls', async () => {
-      const initialMemory = (performance as unknown).memory?.usedJSHeapSize || 0;
+      const initialMemory =
+        (performance as unknown).memory?.usedJSHeapSize || 0;
 
       // Perform many operations
       for (let i = 0; i < 1000; i++) {

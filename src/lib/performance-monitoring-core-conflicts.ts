@@ -99,17 +99,26 @@ export class PerformanceToolConflictChecker {
     if (typeof window === 'undefined') return;
 
     // 检查React DevTools
-    if ((window as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown }).__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+    if (
+      (window as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown })
+        .__REACT_DEVTOOLS_GLOBAL_HOOK__
+    ) {
       detectedTools.push('React DevTools');
     }
 
     // 检查Redux DevTools
-    if ((window as { __REDUX_DEVTOOLS_EXTENSION__?: unknown }).__REDUX_DEVTOOLS_EXTENSION__) {
+    if (
+      (window as { __REDUX_DEVTOOLS_EXTENSION__?: unknown })
+        .__REDUX_DEVTOOLS_EXTENSION__
+    ) {
       detectedTools.push('Redux DevTools');
     }
 
     // 检查Vue DevTools
-    if ((window as { __VUE_DEVTOOLS_GLOBAL_HOOK__?: unknown }).__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+    if (
+      (window as { __VUE_DEVTOOLS_GLOBAL_HOOK__?: unknown })
+        .__VUE_DEVTOOLS_GLOBAL_HOOK__
+    ) {
       detectedTools.push('Vue DevTools');
     }
 
@@ -119,12 +128,20 @@ export class PerformanceToolConflictChecker {
     }
 
     // 检查Sentry
-    if ((window as { Sentry?: unknown; __SENTRY__?: unknown }).Sentry || (window as { Sentry?: unknown; __SENTRY__?: unknown }).__SENTRY__) {
+    if (
+      (window as { Sentry?: unknown; __SENTRY__?: unknown }).Sentry ||
+      (window as { Sentry?: unknown; __SENTRY__?: unknown }).__SENTRY__
+    ) {
       detectedTools.push('Sentry');
     }
 
     // 检查Google Analytics
-    if ((window as { gtag?: unknown; ga?: unknown; dataLayer?: unknown }).gtag || (window as { gtag?: unknown; ga?: unknown; dataLayer?: unknown }).ga || (window as { gtag?: unknown; ga?: unknown; dataLayer?: unknown }).dataLayer) {
+    if (
+      (window as { gtag?: unknown; ga?: unknown; dataLayer?: unknown }).gtag ||
+      (window as { gtag?: unknown; ga?: unknown; dataLayer?: unknown }).ga ||
+      (window as { gtag?: unknown; ga?: unknown; dataLayer?: unknown })
+        .dataLayer
+    ) {
       detectedTools.push('Google Analytics');
     }
 
@@ -154,13 +171,18 @@ export class PerformanceToolConflictChecker {
    * 检查性能API冲突
    * Check Performance API conflicts
    */
-  private checkPerformanceAPIConflicts(conflicts: string[], warnings: string[]): void {
+  private checkPerformanceAPIConflicts(
+    conflicts: string[],
+    warnings: string[],
+  ): void {
     if (typeof window === 'undefined' || !window.performance) return;
 
     // 检查PerformanceObserver是否被多次使用
     const performanceObserverCount = this.countPerformanceObservers();
     if (performanceObserverCount > 3) {
-      warnings.push(`检测到 ${performanceObserverCount} 个 PerformanceObserver 实例，可能影响性能`);
+      warnings.push(
+        `检测到 ${performanceObserverCount} 个 PerformanceObserver 实例，可能影响性能`,
+      );
     }
 
     // 检查User Timing API使用情况
@@ -185,7 +207,10 @@ export class PerformanceToolConflictChecker {
    * 检查开发者工具冲突
    * Check DevTools conflicts
    */
-  private checkDevToolsConflicts(conflicts: string[], warnings: string[]): void {
+  private checkDevToolsConflicts(
+    conflicts: string[],
+    warnings: string[],
+  ): void {
     if (typeof window === 'undefined') return;
 
     // 检查是否在开发模式
@@ -194,12 +219,26 @@ export class PerformanceToolConflictChecker {
     if (isDevelopment) {
       let devToolsCount = 0;
 
-      if ((window as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown }).__REACT_DEVTOOLS_GLOBAL_HOOK__) devToolsCount += 1;
-      if ((window as { __REDUX_DEVTOOLS_EXTENSION__?: unknown }).__REDUX_DEVTOOLS_EXTENSION__) devToolsCount += 1;
-      if ((window as { __VUE_DEVTOOLS_GLOBAL_HOOK__?: unknown }).__VUE_DEVTOOLS_GLOBAL_HOOK__) devToolsCount += 1;
+      if (
+        (window as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown })
+          .__REACT_DEVTOOLS_GLOBAL_HOOK__
+      )
+        devToolsCount += 1;
+      if (
+        (window as { __REDUX_DEVTOOLS_EXTENSION__?: unknown })
+          .__REDUX_DEVTOOLS_EXTENSION__
+      )
+        devToolsCount += 1;
+      if (
+        (window as { __VUE_DEVTOOLS_GLOBAL_HOOK__?: unknown })
+          .__VUE_DEVTOOLS_GLOBAL_HOOK__
+      )
+        devToolsCount += 1;
 
       if (devToolsCount > 2) {
-        warnings.push(`开发环境中检测到 ${devToolsCount} 个开发者工具，可能影响性能测试准确性`);
+        warnings.push(
+          `开发环境中检测到 ${devToolsCount} 个开发者工具，可能影响性能测试准确性`,
+        );
       }
     }
 
@@ -207,8 +246,16 @@ export class PerformanceToolConflictChecker {
     if (!isDevelopment) {
       const prodDevTools: string[] = [];
 
-      if ((window as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown }).__REACT_DEVTOOLS_GLOBAL_HOOK__) prodDevTools.push('React DevTools');
-      if ((window as { __REDUX_DEVTOOLS_EXTENSION__?: unknown }).__REDUX_DEVTOOLS_EXTENSION__) prodDevTools.push('Redux DevTools');
+      if (
+        (window as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown })
+          .__REACT_DEVTOOLS_GLOBAL_HOOK__
+      )
+        prodDevTools.push('React DevTools');
+      if (
+        (window as { __REDUX_DEVTOOLS_EXTENSION__?: unknown })
+          .__REDUX_DEVTOOLS_EXTENSION__
+      )
+        prodDevTools.push('Redux DevTools');
 
       if (prodDevTools.length > 0) {
         conflicts.push(`生产环境中检测到开发工具: ${prodDevTools.join(', ')}`);
@@ -223,22 +270,30 @@ export class PerformanceToolConflictChecker {
   private checkThirdPartyToolConflicts(
     detectedTools: string[],
     conflicts: string[],
-    warnings: string[]
+    warnings: string[],
   ): void {
-    const monitoringTools = detectedTools.filter(tool =>
-      ['Sentry', 'LogRocket', 'FullStory', 'New Relic', 'DataDog'].includes(tool)
+    const monitoringTools = detectedTools.filter((tool) =>
+      ['Sentry', 'LogRocket', 'FullStory', 'New Relic', 'DataDog'].includes(
+        tool,
+      ),
     );
 
     if (monitoringTools.length > 2) {
-      warnings.push(`检测到多个监控工具: ${monitoringTools.join(', ')}，可能导致性能开销`);
+      warnings.push(
+        `检测到多个监控工具: ${monitoringTools.join(', ')}，可能导致性能开销`,
+      );
     }
 
-    const analyticsTools = detectedTools.filter(tool =>
-      ['Google Analytics', 'Adobe Analytics', 'Mixpanel', 'Amplitude'].includes(tool)
+    const analyticsTools = detectedTools.filter((tool) =>
+      ['Google Analytics', 'Adobe Analytics', 'Mixpanel', 'Amplitude'].includes(
+        tool,
+      ),
     );
 
     if (analyticsTools.length > 2) {
-      warnings.push(`检测到多个分析工具: ${analyticsTools.join(', ')}，建议整合数据收集`);
+      warnings.push(
+        `检测到多个分析工具: ${analyticsTools.join(', ')}，建议整合数据收集`,
+      );
     }
 
     // 检查工具间的已知冲突
@@ -249,15 +304,21 @@ export class PerformanceToolConflictChecker {
    * 检查已知冲突
    * Check known conflicts
    */
-  private checkKnownConflicts(detectedTools: string[], conflicts: string[]): void {
+  private checkKnownConflicts(
+    detectedTools: string[],
+    conflicts: string[],
+  ): void {
     // LogRocket 和 FullStory 可能冲突
-    if (detectedTools.includes('LogRocket') && detectedTools.includes('FullStory')) {
+    if (
+      detectedTools.includes('LogRocket') &&
+      detectedTools.includes('FullStory')
+    ) {
       conflicts.push('LogRocket 和 FullStory 同时使用可能导致会话录制冲突');
     }
 
     // 多个性能监控工具可能冲突
-    const performanceTools = detectedTools.filter(tool =>
-      ['New Relic', 'DataDog', 'AppDynamics', 'Dynatrace'].includes(tool)
+    const performanceTools = detectedTools.filter((tool) =>
+      ['New Relic', 'DataDog', 'AppDynamics', 'Dynatrace'].includes(tool),
     );
 
     if (performanceTools.length > 1) {
@@ -272,7 +333,7 @@ export class PerformanceToolConflictChecker {
   private generateRecommendations(
     detectedTools: string[],
     conflicts: string[],
-    recommendations: string[]
+    recommendations: string[],
   ): void {
     if (conflicts.length > 0) {
       recommendations.push('建议审查和整合监控工具，避免功能重复');
@@ -285,7 +346,10 @@ export class PerformanceToolConflictChecker {
     }
 
     const isDevelopment = process.env.NODE_ENV === 'development';
-    if (!isDevelopment && detectedTools.some(tool => tool.includes('DevTools'))) {
+    if (
+      !isDevelopment &&
+      detectedTools.some((tool) => tool.includes('DevTools'))
+    ) {
       recommendations.push('生产环境中应移除开发者工具以提高性能');
     }
 
@@ -309,8 +373,12 @@ export class PerformanceToolConflictChecker {
     if ((window as { webVitals?: unknown }).webVitals) count += 1;
 
     // 检查其他可能的监控工具
-    if ((window as { __PERFORMANCE_OBSERVERS__?: unknown[] }).__PERFORMANCE_OBSERVERS__) {
-      count += (window as { __PERFORMANCE_OBSERVERS__?: unknown[] }).__PERFORMANCE_OBSERVERS__!.length;
+    if (
+      (window as { __PERFORMANCE_OBSERVERS__?: unknown[] })
+        .__PERFORMANCE_OBSERVERS__
+    ) {
+      count += (window as { __PERFORMANCE_OBSERVERS__?: unknown[] })
+        .__PERFORMANCE_OBSERVERS__!.length;
     }
 
     return count;
@@ -340,7 +408,11 @@ export class PerformanceToolConflictChecker {
 
     try {
       // 尝试获取事件监听器信息（仅在开发环境中可用）
-      const listeners = (window as { getEventListeners?: (target: unknown) => Record<string, unknown[]> }).getEventListeners?.(window)?.[eventType];
+      const listeners = (
+        window as {
+          getEventListeners?: (target: unknown) => Record<string, unknown[]>;
+        }
+      ).getEventListeners?.(window)?.[eventType];
       return listeners ? listeners.length : 0;
     } catch {
       return 0;
@@ -362,12 +434,14 @@ export class PerformanceToolConflictChecker {
 
     const toolDetails = {
       'React DevTools': {
-        detected: !!(window as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown }).__REACT_DEVTOOLS_GLOBAL_HOOK__,
+        detected: !!(window as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown })
+          .__REACT_DEVTOOLS_GLOBAL_HOOK__,
         impact: 'low' as const,
         description: 'React 开发者工具，用于调试 React 组件',
       },
       'Redux DevTools': {
-        detected: !!(window as { __REDUX_DEVTOOLS_EXTENSION__?: unknown }).__REDUX_DEVTOOLS_EXTENSION__,
+        detected: !!(window as { __REDUX_DEVTOOLS_EXTENSION__?: unknown })
+          .__REDUX_DEVTOOLS_EXTENSION__,
         impact: 'low' as const,
         description: 'Redux 开发者工具，用于调试状态管理',
       },
@@ -377,7 +451,9 @@ export class PerformanceToolConflictChecker {
         description: '错误监控和性能监控平台',
       },
       'Google Analytics': {
-        detected: !!(window as { gtag?: unknown; ga?: unknown }).gtag || !!(window as { gtag?: unknown; ga?: unknown }).ga,
+        detected:
+          !!(window as { gtag?: unknown; ga?: unknown }).gtag ||
+          !!(window as { gtag?: unknown; ga?: unknown }).ga,
         impact: 'medium' as const,
         description: '网站分析和用户行为跟踪工具',
       },
@@ -401,7 +477,7 @@ export class PerformanceToolConflictChecker {
     actions: string[];
     timeline: string;
   }[] {
-    return conflicts.map(conflict => {
+    return conflicts.map((conflict) => {
       if (conflict.includes('生产环境') || conflict.includes('APM工具')) {
         return {
           priority: 'high' as const,
@@ -417,22 +493,14 @@ export class PerformanceToolConflictChecker {
       if (conflict.includes('多个工具') || conflict.includes('性能事件')) {
         return {
           priority: 'medium' as const,
-          actions: [
-            '评估工具的必要性',
-            '实施条件加载策略',
-            '优化工具配置',
-          ],
+          actions: ['评估工具的必要性', '实施条件加载策略', '优化工具配置'],
           timeline: '1 周内完成',
         };
       }
 
       return {
         priority: 'low' as const,
-        actions: [
-          '监控工具使用情况',
-          '定期检查工具冲突',
-          '优化工具配置',
-        ],
+        actions: ['监控工具使用情况', '定期检查工具冲突', '优化工具配置'],
         timeline: '2 周内完成',
       };
     });

@@ -1,7 +1,6 @@
 // @ts-nocheck - 开发工具豁免：仅开发环境使用，不影响生产代码质量
 'use client';
 
-
 interface DevToolConfig {
   id: string;
   name: string;
@@ -18,7 +17,11 @@ interface ControlPanelProps {
   onToggleTool: (_toolId: string) => void;
 }
 
-export function ControlPanel({ layoutInfo, onToggleAll, onToggleTool }: ControlPanelProps) {
+export function ControlPanel({
+  layoutInfo,
+  onToggleAll,
+  onToggleTool,
+}: ControlPanelProps) {
   return (
     <div className='space-y-4'>
       {/* 全局控制 */}
@@ -42,9 +45,8 @@ export function ControlPanel({ layoutInfo, onToggleAll, onToggleTool }: ControlP
             <div className='flex-1'>
               <div className='text-xs font-medium'>{config.name}</div>
               <div className='text-xs text-gray-500'>
-                位置: ({config.position.x}, {config.position.y}) |
-                大小: {config.size.width}×{config.size.height} |
-                层级: {config.zIndex}
+                位置: ({config.position.x}, {config.position.y}) | 大小:{' '}
+                {config.size.width}×{config.size.height} | 层级: {config.zIndex}
               </div>
             </div>
             <button
@@ -68,7 +70,8 @@ export function ControlPanel({ layoutInfo, onToggleAll, onToggleTool }: ControlP
           可见工具: {layoutInfo.filter(({ config }) => config.isVisible).length}
         </div>
         <div>
-          隐藏工具: {layoutInfo.filter(({ config }) => !config.isVisible).length}
+          隐藏工具:{' '}
+          {layoutInfo.filter(({ config }) => !config.isVisible).length}
         </div>
       </div>
 
@@ -88,7 +91,11 @@ interface StatusIndicatorProps {
   _onClick: () => void;
 }
 
-export function StatusIndicator({ toolCount, isVisible, _onClick }: StatusIndicatorProps) {
+export function StatusIndicator({
+  toolCount,
+  isVisible,
+  _onClick,
+}: StatusIndicatorProps) {
   if (process.env.NODE_ENV !== 'development') {
     return null;
   }
@@ -96,7 +103,7 @@ export function StatusIndicator({ toolCount, isVisible, _onClick }: StatusIndica
   return (
     <div
       _onClick={_onClick}
-      className={`fixed bottom-4 right-4 z-[9999] cursor-pointer rounded-full p-2 shadow-lg transition-all duration-200 ${
+      className={`fixed right-4 bottom-4 z-[9999] cursor-pointer rounded-full p-2 shadow-lg transition-all duration-200 ${
         isVisible
           ? 'bg-blue-500 text-white hover:bg-blue-600'
           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -121,7 +128,7 @@ export function Overlay({ isVisible, children }: OverlayProps) {
   }
 
   return (
-    <div className='fixed inset-0 z-[9998] flex items-center justify-center bg-black bg-opacity-50'>
+    <div className='bg-opacity-50 fixed inset-0 z-[9998] flex items-center justify-center bg-black'>
       <div className='max-h-[80vh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-4 shadow-xl'>
         {children}
       </div>

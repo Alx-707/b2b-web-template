@@ -57,7 +57,9 @@ describe('AccessibilityManager Static Methods', () => {
 
       const result = AccessibilityUtils.prefersReducedMotion();
       expect(result).toBe(true);
-      expect(mockWindow.matchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)');
+      expect(mockWindow.matchMedia).toHaveBeenCalledWith(
+        '(prefers-reduced-motion: reduce)',
+      );
     });
 
     it('should return false when user does not prefer reduced motion', () => {
@@ -74,7 +76,9 @@ describe('AccessibilityManager Static Methods', () => {
 
       const result = AccessibilityUtils.prefersHighContrast();
       expect(result).toBe(true);
-      expect(mockWindow.matchMedia).toHaveBeenCalledWith('(prefers-contrast: high)');
+      expect(mockWindow.matchMedia).toHaveBeenCalledWith(
+        '(prefers-contrast: high)',
+      );
     });
 
     it('should return false when user does not prefer high contrast', () => {
@@ -111,7 +115,9 @@ describe('AccessibilityManager Static Methods', () => {
 
       const result = AccessibilityUtils.prefersDarkColorScheme();
       expect(result).toBe(true);
-      expect(mockWindow.matchMedia).toHaveBeenCalledWith('(prefers-color-scheme: dark)');
+      expect(mockWindow.matchMedia).toHaveBeenCalledWith(
+        '(prefers-color-scheme: dark)',
+      );
     });
 
     it('should return false when user does not prefer dark color scheme', () => {
@@ -177,7 +183,10 @@ describe('AccessibilityManager Static Methods', () => {
     });
 
     it('should check contrast compliance', () => {
-      const result = AccessibilityUtils.checkColorContrast('#000000', '#ffffff');
+      const result = AccessibilityUtils.checkColorContrast(
+        '#000000',
+        '#ffffff',
+      );
 
       expect(result).toBe(true);
       expect(mockCheckContrastCompliance).toHaveBeenCalledWith(
@@ -212,7 +221,7 @@ describe('AccessibilityManager Static Methods', () => {
         'aria-label': '主题切换按钮，当前主题：light',
         'aria-pressed': 'true',
         'aria-expanded': 'true',
-        role: 'button',
+        'role': 'button',
       });
     });
 

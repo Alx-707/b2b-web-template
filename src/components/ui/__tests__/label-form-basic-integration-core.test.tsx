@@ -32,10 +32,13 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
         <form onSubmit={handleSubmit}>
           <div>
             <Label htmlFor='step1-field'>Step 1 Field</Label>
-            <input id='step1-field' type='text' />
+            <input
+              id='step1-field'
+              type='text'
+            />
           </div>
           <button type='submit'>Next Step</button>
-        </form>
+        </form>,
       );
 
       const input = screen.getByLabelText('Step 1 Field');
@@ -52,7 +55,7 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
       const fields = Array.from({ length: 10 }, (_, i) => ({
         id: `field-${i}`,
         label: `Field ${i + 1}`,
-        type: 'text'
+        type: 'text',
       }));
 
       render(
@@ -60,10 +63,13 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
           {fields.map((field) => (
             <div key={field.id}>
               <Label htmlFor={field.id}>{field.label}</Label>
-              <input id={field.id} type={field.type} />
+              <input
+                id={field.id}
+                type={field.type}
+              />
             </div>
           ))}
-        </form>
+        </form>,
       );
 
       // Test that all fields render correctly
@@ -78,9 +84,13 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
       render(
         <form>
           <Label htmlFor='required-field'>Required Field *</Label>
-          <input id='required-field' type='text' required />
+          <input
+            id='required-field'
+            type='text'
+            required
+          />
           <button type='submit'>Submit</button>
-        </form>
+        </form>,
       );
 
       const submitButton = screen.getByRole('button', { name: 'Submit' });
@@ -100,22 +110,31 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
             <legend>Personal Information</legend>
             <div>
               <Label htmlFor='first-name'>First Name</Label>
-              <input id='first-name' type='text' />
+              <input
+                id='first-name'
+                type='text'
+              />
             </div>
             <div>
               <Label htmlFor='last-name'>Last Name</Label>
-              <input id='last-name' type='text' />
+              <input
+                id='last-name'
+                type='text'
+              />
             </div>
             <div>
               <Label htmlFor='phone'>Phone</Label>
-              <input id='phone' type='tel' />
+              <input
+                id='phone'
+                type='tel'
+              />
             </div>
             <div>
               <Label htmlFor='address'>Address</Label>
               <textarea id='address' />
             </div>
           </fieldset>
-        </form>
+        </form>,
       );
 
       expect(screen.getByText('Personal Information')).toBeInTheDocument();
@@ -131,36 +150,57 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
 
       render(
         <div>
-          <form onSubmit={handleLoginSubmit} data-testid='login-form'>
+          <form
+            onSubmit={handleLoginSubmit}
+            data-testid='login-form'
+          >
             <h2>Login</h2>
             <div>
               <Label htmlFor='login-email'>Email</Label>
-              <input id='login-email' type='email' />
+              <input
+                id='login-email'
+                type='email'
+              />
             </div>
             <div>
               <Label htmlFor='login-password'>Password</Label>
-              <input id='login-password' type='password' />
+              <input
+                id='login-password'
+                type='password'
+              />
             </div>
             <button type='submit'>Login</button>
           </form>
 
-          <form onSubmit={handleSignupSubmit} data-testid='signup-form'>
+          <form
+            onSubmit={handleSignupSubmit}
+            data-testid='signup-form'
+          >
             <h2>Sign Up</h2>
             <div>
               <Label htmlFor='signup-name'>Name</Label>
-              <input id='signup-name' type='text' />
+              <input
+                id='signup-name'
+                type='text'
+              />
             </div>
             <div>
               <Label htmlFor='signup-email'>Email</Label>
-              <input id='signup-email' type='email' />
+              <input
+                id='signup-email'
+                type='email'
+              />
             </div>
             <div>
               <Label htmlFor='signup-password'>Password</Label>
-              <input id='signup-password' type='password' />
+              <input
+                id='signup-password'
+                type='password'
+              />
             </div>
             <button type='submit'>Sign Up</button>
           </form>
-        </div>
+        </div>,
       );
 
       const loginForm = screen.getByTestId('login-form');
@@ -186,51 +226,87 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
         <form>
           <div>
             <Label htmlFor='text-input'>Text Input</Label>
-            <input id='text-input' type='text' />
+            <input
+              id='text-input'
+              type='text'
+            />
           </div>
           <div>
             <Label htmlFor='email-input'>Email Input</Label>
-            <input id='email-input' type='email' />
+            <input
+              id='email-input'
+              type='email'
+            />
           </div>
           <div>
             <Label htmlFor='password-input'>Password Input</Label>
-            <input id='password-input' type='password' />
+            <input
+              id='password-input'
+              type='password'
+            />
           </div>
           <div>
             <Label htmlFor='number-input'>Number Input</Label>
-            <input id='number-input' type='number' />
+            <input
+              id='number-input'
+              type='number'
+            />
           </div>
           <div>
             <Label htmlFor='date-input'>Date Input</Label>
-            <input id='date-input' type='date' />
+            <input
+              id='date-input'
+              type='date'
+            />
           </div>
           <div>
             <Label htmlFor='time-input'>Time Input</Label>
-            <input id='time-input' type='time' />
+            <input
+              id='time-input'
+              type='time'
+            />
           </div>
           <div>
             <Label htmlFor='url-input'>URL Input</Label>
-            <input id='url-input' type='url' />
+            <input
+              id='url-input'
+              type='url'
+            />
           </div>
           <div>
             <Label htmlFor='tel-input'>Tel Input</Label>
-            <input id='tel-input' type='tel' />
+            <input
+              id='tel-input'
+              type='tel'
+            />
           </div>
           <div>
             <Label htmlFor='search-input'>Search Input</Label>
-            <input id='search-input' type='search' />
+            <input
+              id='search-input'
+              type='search'
+            />
           </div>
           <div>
             <Label htmlFor='color-input'>Color Input</Label>
-            <input id='color-input' type='color' />
+            <input
+              id='color-input'
+              type='color'
+            />
           </div>
           <div>
             <Label htmlFor='range-input'>Range Input</Label>
-            <input id='range-input' type='range' />
+            <input
+              id='range-input'
+              type='range'
+            />
           </div>
           <div>
             <Label htmlFor='file-input'>File Input</Label>
-            <input id='file-input' type='file' />
+            <input
+              id='file-input'
+              type='file'
+            />
           </div>
           <div>
             <Label htmlFor='textarea-input'>Textarea</Label>
@@ -243,7 +319,7 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
               <option value='option2'>Option 2</option>
             </select>
           </div>
-        </form>
+        </form>,
       );
 
       // Test that all inputs are properly associated with their labels
@@ -277,13 +353,19 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
             <legend>Preferences</legend>
             <div>
               <Label htmlFor='newsletter-checkbox'>
-                <input id='newsletter-checkbox' type='checkbox' />
+                <input
+                  id='newsletter-checkbox'
+                  type='checkbox'
+                />
                 Subscribe to newsletter
               </Label>
             </div>
             <div>
               <Label htmlFor='notifications-checkbox'>
-                <input id='notifications-checkbox' type='checkbox' />
+                <input
+                  id='notifications-checkbox'
+                  type='checkbox'
+                />
                 Enable notifications
               </Label>
             </div>
@@ -293,28 +375,47 @@ describe('Label Form Basic Integration - Advanced Tests', () => {
             <legend>Theme</legend>
             <div>
               <Label htmlFor='theme-light'>
-                <input id='theme-light' type='radio' name='theme' value='light' />
+                <input
+                  id='theme-light'
+                  type='radio'
+                  name='theme'
+                  value='light'
+                />
                 Light
               </Label>
             </div>
             <div>
               <Label htmlFor='theme-dark'>
-                <input id='theme-dark' type='radio' name='theme' value='dark' />
+                <input
+                  id='theme-dark'
+                  type='radio'
+                  name='theme'
+                  value='dark'
+                />
                 Dark
               </Label>
             </div>
             <div>
               <Label htmlFor='theme-auto'>
-                <input id='theme-auto' type='radio' name='theme' value='auto' />
+                <input
+                  id='theme-auto'
+                  type='radio'
+                  name='theme'
+                  value='auto'
+                />
                 Auto
               </Label>
             </div>
           </fieldset>
-        </form>
+        </form>,
       );
 
-      const newsletterCheckbox = screen.getByLabelText('Subscribe to newsletter');
-      const notificationsCheckbox = screen.getByLabelText('Enable notifications');
+      const newsletterCheckbox = screen.getByLabelText(
+        'Subscribe to newsletter',
+      );
+      const notificationsCheckbox = screen.getByLabelText(
+        'Enable notifications',
+      );
       const lightRadio = screen.getByLabelText('Light');
       const darkRadio = screen.getByLabelText('Dark');
       const autoRadio = screen.getByLabelText('Auto');

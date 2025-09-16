@@ -119,7 +119,7 @@ describe('I18n Performance - Cache Tests', () => {
             const value = cache.get(`concurrent-key-${i}`);
             expect(value).toBe(`value-${i}`);
             resolve();
-          })
+          }),
         );
       }
 

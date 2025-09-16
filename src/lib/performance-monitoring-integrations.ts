@@ -1,3 +1,40 @@
+// 向后兼容的重新导出
+import type { BundleAnalyzerIntegration } from './performance-monitoring-integrations-bundle';
+import {
+  BundleAnalyzerAnalyzer,
+  BundleAnalyzerUtils,
+  useBundleAnalyzerIntegration,
+  validateBundleAnalyzerConfig,
+} from './performance-monitoring-integrations-bundle';
+import type { ReactScanIntegration } from './performance-monitoring-integrations-react-scan';
+import {
+  ReactScanAnalyzer,
+  ReactScanUtils,
+  useReactScanIntegration,
+  validateReactScanConfig,
+} from './performance-monitoring-integrations-react-scan';
+import type {
+  EnvironmentCompatibilityResult,
+  WebVitalsIntegration,
+} from './performance-monitoring-integrations-vitals';
+import {
+  checkEnvironmentCompatibility,
+  performHealthCheck,
+  useWebVitalsIntegration,
+  validateWebVitalsConfig,
+  WebVitalsAnalyzer,
+} from './performance-monitoring-integrations-vitals';
+import type { WebEvalAgentIntegration } from './performance-monitoring-integrations-web-eval';
+import {
+  useWebEvalAgentIntegration,
+  validateWebEvalAgentConfig,
+  WebEvalAgentAnalyzer,
+} from './performance-monitoring-integrations-web-eval';
+import type {
+  PerformanceConfig,
+  PerformanceMetrics,
+} from './performance-monitoring-types';
+
 /**
  * 性能监控集成钩子和工具 - 主入口
  * Performance Monitoring Integrations - Main Entry Point
@@ -7,64 +44,36 @@
 
 // 重新导出所有模块的功能
 export type { ReactScanIntegration } from './performance-monitoring-integrations-react-scan';
-export { useReactScanIntegration, validateReactScanConfig, ReactScanAnalyzer, ReactScanUtils } from './performance-monitoring-integrations-react-scan';
-export type { WebEvalAgentIntegration } from './performance-monitoring-integrations-web-eval';
-export { useWebEvalAgentIntegration, validateWebEvalAgentConfig, WebEvalAgentAnalyzer } from './performance-monitoring-integrations-web-eval';
-export type { BundleAnalyzerIntegration } from './performance-monitoring-integrations-bundle';
-export { useBundleAnalyzerIntegration, validateBundleAnalyzerConfig, BundleAnalyzerAnalyzer, BundleAnalyzerUtils } from './performance-monitoring-integrations-bundle';
-export type { WebVitalsIntegration, EnvironmentCompatibilityResult } from './performance-monitoring-integrations-vitals';
-export { useWebVitalsIntegration, checkEnvironmentCompatibility, performHealthCheck, validateWebVitalsConfig, WebVitalsAnalyzer } from './performance-monitoring-integrations-vitals';
-
-// 向后兼容的重新导出
-import type {
-  PerformanceConfig,
-  PerformanceMetrics } from
-'./performance-monitoring-types';
-
-import type {
-  ReactScanIntegration } from
-'./performance-monitoring-integrations-react-scan';
-
-import {
+export {
   useReactScanIntegration,
   validateReactScanConfig,
   ReactScanAnalyzer,
-  ReactScanUtils } from
-'./performance-monitoring-integrations-react-scan';
-
-import type {
-  WebEvalAgentIntegration } from
-'./performance-monitoring-integrations-web-eval';
-
-import {
+  ReactScanUtils,
+} from './performance-monitoring-integrations-react-scan';
+export type { WebEvalAgentIntegration } from './performance-monitoring-integrations-web-eval';
+export {
   useWebEvalAgentIntegration,
   validateWebEvalAgentConfig,
-  WebEvalAgentAnalyzer } from
-'./performance-monitoring-integrations-web-eval';
-
-import type {
-  BundleAnalyzerIntegration } from
-'./performance-monitoring-integrations-bundle';
-
-import {
+  WebEvalAgentAnalyzer,
+} from './performance-monitoring-integrations-web-eval';
+export type { BundleAnalyzerIntegration } from './performance-monitoring-integrations-bundle';
+export {
   useBundleAnalyzerIntegration,
   validateBundleAnalyzerConfig,
   BundleAnalyzerAnalyzer,
-  BundleAnalyzerUtils } from
-'./performance-monitoring-integrations-bundle';
-
-import type {
+  BundleAnalyzerUtils,
+} from './performance-monitoring-integrations-bundle';
+export type {
   WebVitalsIntegration,
-  EnvironmentCompatibilityResult } from
-'./performance-monitoring-integrations-vitals';
-
-import {
+  EnvironmentCompatibilityResult,
+} from './performance-monitoring-integrations-vitals';
+export {
   useWebVitalsIntegration,
   checkEnvironmentCompatibility,
   performHealthCheck,
   validateWebVitalsConfig,
-  WebVitalsAnalyzer } from
-'./performance-monitoring-integrations-vitals';
+  WebVitalsAnalyzer,
+} from './performance-monitoring-integrations-vitals';
 
 // ==================== 向后兼容的类型别名 ====================
 
@@ -86,4 +95,5 @@ export type {
   WebVitalsIntegration as WebVitals,
 
   // 环境检查
-  EnvironmentCompatibilityResult as EnvironmentCheck };
+  EnvironmentCompatibilityResult as EnvironmentCheck,
+};

@@ -12,9 +12,9 @@
  * 基础功能测试请参考 label-form-advanced-integration-core.test.tsx
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Label } from '../label';
 
@@ -26,7 +26,6 @@ describe('Label Form Advanced Integration Special Tests', () => {
   });
 
   describe('特殊表单集成', () => {
-
     it('handles form validation with custom error messages', async () => {
       const CustomValidationForm = () => {
         const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -58,18 +57,32 @@ describe('Label Form Advanced Integration Special Tests', () => {
           <form onSubmit={handleSubmit}>
             <div>
               <Label htmlFor='validation-email'>Email</Label>
-              <input id='validation-email' name='email' type='email' />
+              <input
+                id='validation-email'
+                name='email'
+                type='email'
+              />
               {errors.email && (
-                <div data-testid='email-error' role='alert'>
+                <div
+                  data-testid='email-error'
+                  role='alert'
+                >
                   {errors.email}
                 </div>
               )}
             </div>
             <div>
               <Label htmlFor='validation-password'>Password</Label>
-              <input id='validation-password' name='password' type='password' />
+              <input
+                id='validation-password'
+                name='password'
+                type='password'
+              />
               {errors.password && (
-                <div data-testid='password-error' role='alert'>
+                <div
+                  data-testid='password-error'
+                  role='alert'
+                >
                   {errors.password}
                 </div>
               )}
@@ -86,8 +99,12 @@ describe('Label Form Advanced Integration Special Tests', () => {
       // Submit empty form
       await user.click(submitButton);
 
-      expect(screen.getByTestId('email-error')).toHaveTextContent('Email is required');
-      expect(screen.getByTestId('password-error')).toHaveTextContent('Password is required');
+      expect(screen.getByTestId('email-error')).toHaveTextContent(
+        'Email is required',
+      );
+      expect(screen.getByTestId('password-error')).toHaveTextContent(
+        'Password is required',
+      );
 
       // Fill with invalid data
       const emailInput = screen.getByLabelText('Email');
@@ -97,8 +114,12 @@ describe('Label Form Advanced Integration Special Tests', () => {
       await user.type(passwordInput, '123');
       await user.click(submitButton);
 
-      expect(screen.getByTestId('email-error')).toHaveTextContent('Email must be valid');
-      expect(screen.getByTestId('password-error')).toHaveTextContent('Password must be at least 8 characters');
+      expect(screen.getByTestId('email-error')).toHaveTextContent(
+        'Email must be valid',
+      );
+      expect(screen.getByTestId('password-error')).toHaveTextContent(
+        'Password must be at least 8 characters',
+      );
     });
 
     it('supports form with file inputs', async () => {
@@ -106,13 +127,21 @@ describe('Label Form Advanced Integration Special Tests', () => {
         <form>
           <div>
             <Label htmlFor='file-input'>Upload File</Label>
-            <input id='file-input' type='file' accept='.jpg,.png,.pdf' />
+            <input
+              id='file-input'
+              type='file'
+              accept='.jpg,.png,.pdf'
+            />
           </div>
           <div>
             <Label htmlFor='multiple-files'>Upload Multiple Files</Label>
-            <input id='multiple-files' type='file' multiple />
+            <input
+              id='multiple-files'
+              type='file'
+              multiple
+            />
           </div>
-        </form>
+        </form>,
       );
 
       const fileInput = screen.getByLabelText('Upload File');

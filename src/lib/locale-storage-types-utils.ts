@@ -7,7 +7,7 @@
 export {
   isUserLocalePreference,
   isLocaleDetectionHistory,
-  isStorageConfig,
+  isStorageSyncConfig,
 } from './locale-storage-types-utils/type-guards';
 
 // 重新导出验证函数

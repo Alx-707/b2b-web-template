@@ -11,8 +11,8 @@
  * - 基本组件集成
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
   Card,
@@ -42,13 +42,15 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardFooter>
             <button>Footer Action</button>
           </CardFooter>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Card Title')).toBeInTheDocument();
       expect(screen.getByText('Card Description')).toBeInTheDocument();
       expect(screen.getByText('Action')).toBeInTheDocument();
-      expect(screen.getByText('This is the main content of the card.')).toBeInTheDocument();
+      expect(
+        screen.getByText('This is the main content of the card.'),
+      ).toBeInTheDocument();
       expect(screen.getByText('Footer Action')).toBeInTheDocument();
     });
 
@@ -58,7 +60,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardContent>
             <p>Minimal card content</p>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Minimal card content')).toBeInTheDocument();
@@ -70,7 +72,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardHeader>
             <CardTitle>Standalone Header</CardTitle>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Standalone Header')).toBeInTheDocument();
@@ -82,7 +84,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardFooter>
             <button>Standalone Footer</button>
           </CardFooter>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Standalone Footer')).toBeInTheDocument();
@@ -100,10 +102,12 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardContent>
             <p>Content with proper semantics</p>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('Accessible Card').closest('[class*="card"]');
+      const card = screen
+        .getByText('Accessible Card')
+        .closest('[class*="card"]');
       expect(card).toBeInTheDocument();
     });
 
@@ -118,7 +122,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardFooter>
             <button>Focusable Footer</button>
           </CardFooter>
-        </Card>
+        </Card>,
       );
 
       const actionButton = screen.getByText('Focusable Action');
@@ -126,11 +130,11 @@ describe('Card Structure & Accessibility Tests - Core', () => {
 
       expect(actionButton).toBeInTheDocument();
       expect(footerButton).toBeInTheDocument();
-      
+
       // Both buttons should be focusable
       actionButton.focus();
       expect(actionButton).toHaveFocus();
-      
+
       footerButton.focus();
       expect(footerButton).toHaveFocus();
     });
@@ -142,7 +146,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
             <CardTitle>Main Title</CardTitle>
             <CardDescription>Supporting description</CardDescription>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
       const title = screen.getByText('Main Title');
@@ -163,7 +167,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardContent>
             <p>Integrated content</p>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Integration Test')).toBeInTheDocument();
@@ -179,7 +183,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardFooter>
             <button>Footer Integration</button>
           </CardFooter>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Content before footer')).toBeInTheDocument();
@@ -196,7 +200,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
               <button>Action 2</button>
             </CardAction>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Multiple Actions')).toBeInTheDocument();
@@ -210,7 +214,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
       const { container } = render(
         <Card>
           <CardContent>Test content</CardContent>
-        </Card>
+        </Card>,
       );
 
       const cardElement = container.firstChild as HTMLElement;
@@ -223,11 +227,18 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardHeader>
             <CardTitle>Header Test</CardTitle>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
-      const headerElement = screen.getByText('Header Test').closest('[class*="flex"]');
-      expect(headerElement).toHaveClass('flex', 'flex-col', 'space-y-1.5', 'p-6');
+      const headerElement = screen
+        .getByText('Header Test')
+        .closest('[class*="flex"]');
+      expect(headerElement).toHaveClass(
+        'flex',
+        'flex-col',
+        'space-y-1.5',
+        'p-6',
+      );
     });
 
     it('applies correct CSS classes to content', () => {
@@ -236,10 +247,12 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardContent>
             <p>Content styling test</p>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
-      const contentElement = screen.getByText('Content styling test').closest('[class*="p-6"]');
+      const contentElement = screen
+        .getByText('Content styling test')
+        .closest('[class*="p-6"]');
       expect(contentElement).toHaveClass('p-6', 'pt-0');
     });
 
@@ -249,10 +262,12 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardFooter>
             <button>Footer styling test</button>
           </CardFooter>
-        </Card>
+        </Card>,
       );
 
-      const footerElement = screen.getByText('Footer styling test').closest('[class*="flex"]');
+      const footerElement = screen
+        .getByText('Footer styling test')
+        .closest('[class*="flex"]');
       expect(footerElement).toHaveClass('flex', 'items-center', 'p-6', 'pt-0');
     });
   });
@@ -260,7 +275,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
   describe('边缘情况测试', () => {
     it('handles empty card gracefully', () => {
       render(<Card />);
-      
+
       const { container } = render(<Card />);
       const cardElement = container.firstChild as HTMLElement;
       expect(cardElement).toBeInTheDocument();
@@ -272,7 +287,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardHeader>
             <CardTitle>Only Title</CardTitle>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Only Title')).toBeInTheDocument();
@@ -284,7 +299,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
           <CardContent>
             <p>Only content</p>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Only content')).toBeInTheDocument();
@@ -299,7 +314,7 @@ describe('Card Structure & Accessibility Tests - Core', () => {
               <p>Nested paragraph</p>
             </div>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Nested heading')).toBeInTheDocument();

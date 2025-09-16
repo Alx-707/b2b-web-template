@@ -1,10 +1,23 @@
 import type { Locale } from '@/types/i18n';
-;
-import type { LocaleQualityReport, QualityIssue, QualityReport, QualityScore, TranslationManagerConfig, ValidationReport, QualityTrend } from '@/types/translation-manager';
+import type {
+  LocaleQualityReport,
+  QualityIssue,
+  QualityReport,
+  QualityScore,
+  QualityTrend,
+  TranslationManagerConfig,
+  ValidationReport,
+} from '@/types/translation-manager';
 import { QUALITY_SCORING } from '@/constants/i18n-constants';
-import { TranslationQualityChecker } from './translation-quality-checker';
-import { calculateConfidence, flattenTranslations, generateRecommendations, generateSuggestions, isEmptyTranslation,  } from './translation-utils';
 import { TranslationManagerSecurity } from './translation-manager-security';
+import { TranslationQualityChecker } from './translation-quality-checker';
+import {
+  calculateConfidence,
+  flattenTranslations,
+  generateRecommendations,
+  generateSuggestions,
+  isEmptyTranslation,
+} from './translation-utils';
 
 /**
  * 翻译质量管理器
@@ -26,53 +39,97 @@ export class TranslationQualityManager {
     translations: Partial<Record<Locale, Record<string, unknown>>>,
   ): Promise<ValidationReport> {
     const issues: QualityIssue[] = [];
-    const byLocale: Record<Locale, LocaleQualityReport> = {} as Record<Locale, LocaleQualityReport>;
+    const byLocale: Record<Locale, LocaleQualityReport> = {} as Record<
+      Locale,
+      LocaleQualityReport
+    >;
 
     for (const locale of this.config.locales) {
-      const localeTranslations = TranslationManagerSecurity.getTranslationsForLocale(translations, locale);
+      const localeTranslations =
+        TranslationManagerSecurity.getTranslationsForLocale(
+          translations,
+          locale,
+        );
       const flatTranslations = flattenTranslations(localeTranslations);
 
       // 检查缺失的翻译
-      const missingKeys = this.findMissingTranslations(flatTranslations, locale);
+      const missingKeys = this.findMissingTranslations(
+        flatTranslations,
+        locale,
+      );
       issues.push(...missingKeys);
 
       // 检查空翻译
       const emptyKeys = this.findEmptyTranslations(flatTranslations, locale);
       issues.push(...emptyKeys);
 
-      // 质量检查
-      const qualityIssues = await this.qualityChecker.checkTranslations(
-        flatTranslations,
-        locale,
-      );
+      // 质量检查 - 对每个翻译键进行检查
+      const qualityIssues: QualityIssue[] = [];
+      for (const [key, translation] of Object.entries(flatTranslations)) {
+        if (translation && typeof translation === 'string') {
+          const qualityResult = await this.qualityChecker.checkLingoTranslation(
+            key,
+            translation,
+          );
+          qualityIssues.push(...qualityResult.issues);
+        }
+      }
       issues.push(...qualityIssues);
 
       // 生成本地化报告
+      const qualityScore = this.calculateQualityScore(
+        flatTranslations,
+        qualityIssues,
+      );
+      const totalKeys = Object.keys(flatTranslations).length;
+      const translatedKeysCount = Object.keys(flatTranslations).filter(
+        (key) =>
+          !isEmptyTranslation(
+            TranslationManagerSecurity.getTranslationValue(
+              flatTranslations,
+              key,
+            ) || '',
+          ),
+      ).length;
+
       const localeReport: LocaleQualityReport = {
         locale,
-        totalKeys: Object.keys(flatTranslations).length,
-        translatedKeys: Object.keys(flatTranslations).filter(
-          key => !isEmptyTranslation(TranslationManagerSecurity.getTranslationValue(flatTranslations, key) || ''),
-        ).length,
+        totalKeys,
+        validKeys: translatedKeysCount,
+        translatedKeys: translatedKeysCount,
         missingKeys: missingKeys.length,
         emptyKeys: emptyKeys.length,
-        qualityIssues: qualityIssues.length,
-        score: this.calculateQualityScore(flatTranslations, qualityIssues).score,
+        issues: qualityIssues,
+        score: qualityScore.score,
+        timestamp: new Date().toISOString(),
+        confidence: qualityScore.confidence,
+        suggestions: generateSuggestions(qualityIssues),
       };
 
-      const qualityScore = this.calculateQualityScore(flatTranslations, qualityIssues);
-      TranslationManagerSecurity.setQualityScoreForLocale(byLocale, locale, qualityScore);
+      TranslationManagerSecurity.setQualityScoreForLocale(
+        byLocale,
+        locale,
+        qualityScore,
+      );
     }
+
+    const overallScore =
+      issues.length === 0 ? 100 : Math.max(0, 100 - issues.length * 5);
 
     return {
       isValid: issues.length === 0,
+      score: overallScore,
       issues,
+      recommendations: generateRecommendations(issues),
+      timestamp: new Date().toISOString(),
       byLocale,
       summary: {
         totalIssues: issues.length,
-        criticalIssues: issues.filter(issue => issue.severity === 'critical').length,
-        warningIssues: issues.filter(issue => issue.severity === 'warning').length,
-        infoIssues: issues.filter(issue => issue.severity === 'info').length,
+        criticalIssues: issues.filter((issue) => issue.severity === 'critical')
+          .length,
+        warningIssues: issues.filter((issue) => issue.severity === 'warning')
+          .length,
+        infoIssues: issues.filter((issue) => issue.severity === 'info').length,
       },
     };
   }
@@ -86,13 +143,31 @@ export class TranslationQualityManager {
     const validation = await this.validateTranslations(translations);
     const trends = await this.getQualityTrends();
 
+    // 计算整体质量分数
+    const overall: QualityScore = {
+      score: validation.score,
+      confidence: 0.8,
+      issues: validation.issues,
+      suggestions: generateSuggestions(validation.issues),
+    };
+
+    // 从验证报告中提取byLocale数据
+    const byLocale = {} as Record<Locale, QualityScore>;
+    Object.entries(validation.byLocale).forEach(([locale, report]) => {
+      byLocale[locale as Locale] = {
+        score: report.score,
+        confidence: report.confidence,
+        issues: report.issues,
+        suggestions: report.suggestions,
+      };
+    });
+
     return {
+      overall,
+      byLocale,
       timestamp: new Date().toISOString(),
       validation,
-      trends: {
-        period: '30d',
-        trends,
-      },
+      trends,
       recommendations: generateRecommendations(validation.issues),
       suggestions: generateSuggestions(validation.issues),
     };
@@ -113,7 +188,10 @@ export class TranslationQualityManager {
         continue;
       }
 
-      const value = TranslationManagerSecurity.getTranslationValue(flatTranslations, key);
+      const value = TranslationManagerSecurity.getTranslationValue(
+        flatTranslations,
+        key,
+      );
       if (!value) {
         issues.push({
           type: 'missing',
@@ -147,7 +225,10 @@ export class TranslationQualityManager {
         continue;
       }
 
-      const value = TranslationManagerSecurity.getTranslationValue(flatTranslations, key);
+      const value = TranslationManagerSecurity.getTranslationValue(
+        flatTranslations,
+        key,
+      );
       if (value && isEmptyTranslation(value)) {
         issues.push({
           type: 'missing',
@@ -171,12 +252,13 @@ export class TranslationQualityManager {
     qualityIssues: QualityIssue[],
   ): QualityScore {
     const totalKeys = Object.keys(flatTranslations).length;
-    const translatedKeys = Object.keys(flatTranslations).filter(
-      key => {
-        const value = TranslationManagerSecurity.getTranslationValue(flatTranslations, key);
-        return value && !isEmptyTranslation(value);
-      },
-    ).length;
+    const translatedKeys = Object.keys(flatTranslations).filter((key) => {
+      const value = TranslationManagerSecurity.getTranslationValue(
+        flatTranslations,
+        key,
+      );
+      return value && !isEmptyTranslation(value);
+    }).length;
 
     const completeness = totalKeys > 0 ? (translatedKeys / totalKeys) * 100 : 0;
     const accuracy = this.calculateAccuracy(qualityIssues);
@@ -185,11 +267,12 @@ export class TranslationQualityManager {
     const overall = (completeness + accuracy + consistency) / 3;
 
     return {
-      overall: Math.round(overall * 100) / 100,
-      completeness: Math.round(completeness * 100) / 100,
-      accuracy: Math.round(accuracy * 100) / 100,
-      consistency: Math.round(consistency * 100) / 100,
+      score: Math.round(overall * 100) / 100,
       confidence: calculateConfidence(qualityIssues),
+      issues: qualityIssues,
+      suggestions: generateSuggestions(qualityIssues),
+      grammar: Math.round(accuracy * 100) / 100,
+      consistency: Math.round(consistency * 100) / 100,
     };
   }
 
@@ -197,8 +280,12 @@ export class TranslationQualityManager {
    * 计算准确性评分
    */
   private calculateAccuracy(qualityIssues: QualityIssue[]): number {
-    const criticalIssues = qualityIssues.filter(issue => issue.severity === 'critical').length;
-    const warningIssues = qualityIssues.filter(issue => issue.severity === 'warning').length;
+    const criticalIssues = qualityIssues.filter(
+      (issue) => issue.severity === 'critical',
+    ).length;
+    const warningIssues = qualityIssues.filter(
+      (issue) => issue.severity === 'warning',
+    ).length;
 
     // 基础分数
     let score = 100;
@@ -213,7 +300,9 @@ export class TranslationQualityManager {
   /**
    * 计算一致性评分
    */
-  private calculateConsistency(flatTranslations: Record<string, string>): number {
+  private calculateConsistency(
+    flatTranslations: Record<string, string>,
+  ): number {
     // 简化的一致性检查
     // 实际实现可以包括术语一致性、格式一致性等
     const values = Object.values(flatTranslations);

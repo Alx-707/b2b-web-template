@@ -1,6 +1,6 @@
+import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MainNavigation, MainNavigationCompact } from '../main-navigation';
 import { renderWithProviders } from './test-utils';
@@ -33,7 +33,15 @@ vi.mock('next-intl', () => ({
 
 // Mock i18n routing
 vi.mock('@/i18n/routing', () => ({
-  Link: ({ children, href, ...props }: { children?: React.ReactNode; href?: string; [key: string]: any }) => (
+  Link: ({
+    children,
+    href,
+    ...props
+  }: {
+    children?: React.ReactNode;
+    href?: string;
+    [key: string]: any;
+  }) => (
     <a
       href={href}
       {...props}
@@ -114,7 +122,7 @@ vi.mock('@/lib/navigation', () => ({
 
 // Mock UI components
 vi.mock('@/components/ui/navigation-menu', () => ({
-  NavigationMenu: ({ children, ...props }: React.ComponentProps<"div">) => (
+  NavigationMenu: ({ children, ...props }: React.ComponentProps<'div'>) => (
     <nav
       {...props}
       data-testid='navigation-menu'
@@ -122,13 +130,17 @@ vi.mock('@/components/ui/navigation-menu', () => ({
       {children}
     </nav>
   ),
-  NavigationMenuList: ({ children }: React.ComponentProps<"div">) => (
+  NavigationMenuList: ({ children }: React.ComponentProps<'div'>) => (
     <ul data-testid='navigation-list'>{children}</ul>
   ),
-  NavigationMenuItem: ({ children }: React.ComponentProps<"div">) => (
+  NavigationMenuItem: ({ children }: React.ComponentProps<'div'>) => (
     <li data-testid='navigation-item'>{children}</li>
   ),
-  NavigationMenuLink: ({ children, asChild, ...props }: React.ComponentProps<"a"> & { asChild?: boolean }) => {
+  NavigationMenuLink: ({
+    children,
+    asChild,
+    ...props
+  }: React.ComponentProps<'a'> & { asChild?: boolean }) => {
     if (asChild) {
       return children;
     }

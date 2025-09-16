@@ -2,7 +2,8 @@
 'use client';
 
 import type { type ReactNode } from 'react';
-import { useEffect, useState } from 'react';;
+import { useEffect, useState } from 'react';
+
 interface CollapsibleDevToolProps {
   toolId: string;
   title: string;

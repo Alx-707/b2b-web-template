@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { type Locale } from '../routing';
-;
 
 // Mock next-intl/navigation
 const mockCreateNavigation = vi.fn();
@@ -93,7 +92,7 @@ describe('i18n Routing Configuration', () => {
 
       const pathnames = mockDefineRouting.mock.calls[0]?.[0]?.pathnames;
 
-      expectedPaths.forEach(path => {
+      expectedPaths.forEach((path) => {
         expect(pathnames).toHaveProperty(path, path);
       });
     });
@@ -121,7 +120,7 @@ describe('i18n Routing Configuration', () => {
           locales: ['en', 'zh'],
           defaultLocale: 'en',
           localePrefix: 'always',
-        })
+        }),
       );
     });
 
@@ -141,7 +140,7 @@ describe('i18n Routing Configuration', () => {
       // This is a compile-time test, but we can verify the expected values
       const expectedLocales: Locale[] = ['en', 'zh'];
 
-      expectedLocales.forEach(locale => {
+      expectedLocales.forEach((locale) => {
         expect(['en', 'zh']).toContain(locale);
       });
     });
@@ -172,7 +171,7 @@ describe('i18n Routing Configuration', () => {
       const pathnames = config?.pathnames;
 
       const mainPages = ['/', '/about', '/contact', '/products', '/blog'];
-      mainPages.forEach(page => {
+      mainPages.forEach((page) => {
         expect(pathnames).toHaveProperty(page);
       });
     });
@@ -182,7 +181,7 @@ describe('i18n Routing Configuration', () => {
       const pathnames = config.pathnames;
 
       const featurePages = ['/diagnostics', '/pricing', '/support'];
-      featurePages.forEach(page => {
+      featurePages.forEach((page) => {
         expect(pathnames).toHaveProperty(page);
       });
     });
@@ -192,7 +191,7 @@ describe('i18n Routing Configuration', () => {
       const pathnames = config.pathnames;
 
       const legalPages = ['/privacy', '/terms'];
-      legalPages.forEach(page => {
+      legalPages.forEach((page) => {
         expect(pathnames).toHaveProperty(page);
       });
     });
@@ -237,7 +236,7 @@ describe('i18n Routing Configuration', () => {
 
     it('应该处理所有路径都有前导斜杠', () => {
       const config = mockDefineRouting.mock.calls[0]?.[0];
-      Object.keys(config.pathnames).forEach(path => {
+      Object.keys(config.pathnames).forEach((path) => {
         expect(path).toMatch(/^\//);
       });
     });
@@ -262,7 +261,7 @@ describe('i18n Routing Configuration', () => {
         'localeDetection',
       ];
 
-      requiredFields.forEach(field => {
+      requiredFields.forEach((field) => {
         expect(config).toHaveProperty(field);
       });
     });

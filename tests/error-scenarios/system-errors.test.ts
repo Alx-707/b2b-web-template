@@ -73,8 +73,11 @@ class SystemErrorSimulator {
 
 // 错误处理器类
 class ErrorHandler {
-  private errorLog: Array<{ error: Error; timestamp: Date; context?: Record<string, unknown> }> =
-    [];
+  private errorLog: Array<{
+    error: Error;
+    timestamp: Date;
+    context?: Record<string, unknown>;
+  }> = [];
   private retryAttempts: Map<string, number> = new Map();
 
   // 处理系统错误
@@ -178,7 +181,11 @@ class ErrorHandler {
   }
 
   // 获取错误日志
-  getErrorLog(): Array<{ error: Error; timestamp: Date; context?: Record<string, unknown> }> {
+  getErrorLog(): Array<{
+    error: Error;
+    timestamp: Date;
+    context?: Record<string, unknown>;
+  }> {
     return [...this.errorLog];
   }
 
@@ -295,8 +302,10 @@ describe('System Error and Exception Handling Tests', () => {
     });
 
     it('should handle unhandled promise rejections', async () => {
-      const unhandledRejections: Array<{ reason: unknown; promise: Promise<unknown> }> =
-        [];
+      const unhandledRejections: Array<{
+        reason: unknown;
+        promise: Promise<unknown>;
+      }> = [];
 
       // Mock unhandled rejection handler
       const originalHandler = process.listeners('unhandledRejection');

@@ -43,7 +43,7 @@ describe('ProgressIndicator', () => {
         nearCompletion: '即将完成',
       };
       // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
+      return translations[key] || key; // key 来自测试数据，安全
     });
   });
 

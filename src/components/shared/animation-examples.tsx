@@ -10,12 +10,21 @@ export { AnimatedHeroIcon, AnimatedTitle } from './animations/icon-title';
 export { AnimatedButton, AnimatedCard } from './animations/card-button';
 
 // 重新导出表单和状态动画
-export { AnimatedInput, AnimatedProgress, AnimatedSuccess } from './animations/form-status';
+export {
+  AnimatedInput,
+  AnimatedProgress,
+  AnimatedSuccess,
+} from './animations/form-status';
 
 // 重新导出社交和交互动画
-export { AnimatedCollapsible, AnimatedSkeleton, AnimatedSocialLink } from './animations/social-interactive';
+export {
+  AnimatedCollapsible,
+  AnimatedSkeleton,
+  AnimatedSocialLink,
+} from './animations/social-interactive';
 
 // 重新导出示例和配置
-export { AnimationShowcase, customAnimations } from './animations/showcase-config';
-
-
+export {
+  AnimationShowcase,
+  customAnimations,
+} from './animations/showcase-config';

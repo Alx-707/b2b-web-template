@@ -1,10 +1,10 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 /**
  * 主题选项配置
@@ -14,20 +14,20 @@ const THEME_OPTIONS = [
     value: 'light',
     icon: Sun,
     labelKey: 'theme.light',
-    ariaLabelKey: 'theme.switchToLight'
+    ariaLabelKey: 'theme.switchToLight',
   },
   {
     value: 'dark',
     icon: Moon,
     labelKey: 'theme.dark',
-    ariaLabelKey: 'theme.switchToDark'
+    ariaLabelKey: 'theme.switchToDark',
   },
   {
     value: 'system',
     icon: Monitor,
     labelKey: 'theme.system',
-    ariaLabelKey: 'theme.switchToSystem'
-  }
+    ariaLabelKey: 'theme.switchToSystem',
+  },
 ] as const;
 
 /**
@@ -40,15 +40,15 @@ export type AnimationVariant = 'circle-blur' | 'framer-motion';
  */
 export interface HorizontalThemeToggleProps {
   /** 是否显示文字标签 */
-  showLabels?: boolean;
+  'showLabels'?: boolean;
   /** 组件尺寸 */
-  size?: 'sm' | 'default' | 'lg';
+  'size'?: 'sm' | 'default' | 'lg';
   /** 自定义样式类名 */
-  className?: string;
+  'className'?: string;
   /** 是否禁用动画效果 */
-  disableAnimations?: boolean;
+  'disableAnimations'?: boolean;
   /** 动画变体 */
-  animationVariant?: AnimationVariant;
+  'animationVariant'?: AnimationVariant;
   /** 测试ID */
   'data-testid'?: string;
 }
@@ -62,19 +62,19 @@ const getSizeClasses = (size: 'sm' | 'default' | 'lg') => {
       return {
         container: 'p-0.5',
         button: 'px-2 py-1 text-xs gap-1.5',
-        icon: 'h-3 w-3'
+        icon: 'h-3 w-3',
       };
     case 'lg':
       return {
         container: 'p-1',
         button: 'px-4 py-2 text-base gap-2',
-        icon: 'h-5 w-5'
+        icon: 'h-5 w-5',
       };
     default:
       return {
         container: 'p-0.5',
         button: 'px-3 py-1.5 text-sm gap-2',
-        icon: 'h-4 w-4'
+        icon: 'h-4 w-4',
       };
   }
 };
@@ -86,8 +86,8 @@ export function HorizontalThemeToggle({
   showLabels = false,
   size = 'default',
   className,
-  disableAnimations: _disableAnimations, // 忽略，简化版不支持动画
-  animationVariant: _animationVariant, // 忽略，简化版不支持动画变体
+  'disableAnimations': _disableAnimations, // 忽略，简化版不支持动画
+  'animationVariant': _animationVariant, // 忽略，简化版不支持动画变体
   'data-testid': testId = 'horizontal-theme-toggle',
 }: HorizontalThemeToggleProps) {
   const { theme, setTheme } = useTheme();
@@ -106,9 +106,9 @@ export function HorizontalThemeToggle({
     return (
       <div
         className={cn(
-          'inline-flex items-center rounded-lg border bg-background',
+          'bg-background inline-flex items-center rounded-lg border',
           sizeClasses.container,
-          className
+          className,
         )}
         data-testid={testId}
       >
@@ -118,12 +118,18 @@ export function HorizontalThemeToggle({
             className={cn(
               'flex items-center justify-center rounded-md transition-colors',
               sizeClasses.button,
-              'bg-muted animate-pulse'
+              'bg-muted animate-pulse',
             )}
           >
-            <div className={cn('rounded', sizeClasses.icon, 'bg-muted-foreground/20')} />
+            <div
+              className={cn(
+                'rounded',
+                sizeClasses.icon,
+                'bg-muted-foreground/20',
+              )}
+            />
             {showLabels && (
-              <div className="h-4 w-12 rounded bg-muted-foreground/20" />
+              <div className='bg-muted-foreground/20 h-4 w-12 rounded' />
             )}
           </div>
         ))}
@@ -134,11 +140,11 @@ export function HorizontalThemeToggle({
   return (
     <div
       className={cn(
-        'inline-flex items-center rounded-lg border bg-background',
+        'bg-background inline-flex items-center rounded-lg border',
         sizeClasses.container,
-        className
+        className,
       )}
-      role="radiogroup"
+      role='radiogroup'
       aria-label={t('theme.toggleLabel')}
       data-testid={testId}
     >
@@ -153,20 +159,19 @@ export function HorizontalThemeToggle({
             key={themeOption.value}
             className={cn(
               'flex items-center justify-center rounded-md transition-colors',
-              'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'hover:bg-muted focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
               sizeClasses.button,
-              isActive && 'bg-primary text-primary-foreground hover:bg-primary/90'
+              isActive &&
+                'bg-primary text-primary-foreground hover:bg-primary/90',
             )}
             onClick={() => setTheme(themeOption.value)}
             aria-label={ariaLabel}
-            role="radio"
+            role='radio'
             aria-checked={isActive}
-            type="button"
+            type='button'
           >
             <Icon className={cn(sizeClasses.icon)} />
-            {showLabels && (
-              <span className="font-medium">{label}</span>
-            )}
+            {showLabels && <span className='font-medium'>{label}</span>}
           </button>
         );
       })}

@@ -82,11 +82,17 @@ export function validateInputLength(
   }
 
   if (input.length < minLength) {
-    return { valid: false, error: `Input must be at least ${minLength} characters` };
+    return {
+      valid: false,
+      error: `Input must be at least ${minLength} characters`,
+    };
   }
 
   if (input.length > maxLength) {
-    return { valid: false, error: `Input must be no more than ${maxLength} characters` };
+    return {
+      valid: false,
+      error: `Input must be no more than ${maxLength} characters`,
+    };
   }
 
   return { valid: true };

@@ -314,7 +314,10 @@ export type Environment = 'development' | 'production' | 'test' | 'staging';
  * Get current environment
  */
 export function getCurrentEnvironment(): Environment {
-  if (process.env.NODE_ENV === 'test' || process.env.PLAYWRIGHT_TEST === 'true') {
+  if (
+    process.env.NODE_ENV === 'test' ||
+    process.env.PLAYWRIGHT_TEST === 'true'
+  ) {
     return 'test';
   }
   if (process.env.NODE_ENV === 'production') {
@@ -323,7 +326,10 @@ export function getCurrentEnvironment(): Environment {
   if (process.env.NODE_ENV === 'development') {
     return 'development';
   }
-  if (process.env.VERCEL_ENV === 'preview' || process.env.NODE_ENV === 'staging') {
+  if (
+    process.env.VERCEL_ENV === 'preview' ||
+    process.env.NODE_ENV === 'staging'
+  ) {
     return 'staging';
   }
   return 'development';
@@ -378,8 +384,7 @@ export function generateEnvironmentConfig(): PerformanceConfig {
     },
     webEvalAgent: {
       enabled:
-        isTest ||
-        process.env.NEXT_PUBLIC_ENABLE_WEB_EVAL_AGENT === 'true',
+        isTest || process.env.NEXT_PUBLIC_ENABLE_WEB_EVAL_AGENT === 'true',
       captureNetwork: true,
       captureLogs: true,
       captureScreenshots: isTest,
@@ -485,8 +490,10 @@ export function validateConfig(config: PerformanceConfig): {
 
   // 验证 Web Vitals 配置
   if (config.webVitals?.enabled) {
-    if (config.webVitals.sampleRate &&
-        (config.webVitals.sampleRate < 0 || config.webVitals.sampleRate > 1)) {
+    if (
+      config.webVitals.sampleRate &&
+      (config.webVitals.sampleRate < 0 || config.webVitals.sampleRate > 1)
+    ) {
       errors.push('Web Vitals sample rate must be between 0 and 1');
     }
   }
@@ -506,7 +513,11 @@ export function validateConfig(config: PerformanceConfig): {
     warnings.push('React Scan is enabled in production environment');
   }
 
-  if (config.bundleAnalyzer.enabled && config.bundleAnalyzer.openAnalyzer && isProductionEnvironment()) {
+  if (
+    config.bundleAnalyzer.enabled &&
+    config.bundleAnalyzer.openAnalyzer &&
+    isProductionEnvironment()
+  ) {
     warnings.push('Bundle analyzer auto-open is enabled in production');
   }
 

@@ -8,14 +8,13 @@
 'use client';
 
 import type { Locale } from '@/types/i18n';
-;
 import { CACHE_LIMITS } from '@/constants/i18n-constants';
 import { LocalStorageManager } from './locale-storage-local';
 import type {
   LocaleDetectionHistory,
   LocaleDetectionRecord,
-  StorageOperationResult,
   LocaleSource,
+  StorageOperationResult,
 } from './locale-storage-types';
 import { isLocaleDetectionHistory } from './locale-storage-types';
 
@@ -69,7 +68,8 @@ export class HistoryCacheManager {
     cacheAge: number;
     cacheSize: number;
   } {
-    const isCached = this.cache !== null && Date.now() - this.cacheTimestamp <= this.CACHE_TTL;
+    const isCached =
+      this.cache !== null && Date.now() - this.cacheTimestamp <= this.CACHE_TTL;
     const cacheAge = Date.now() - this.cacheTimestamp;
     const cacheSize = this.cache ? JSON.stringify(this.cache).length : 0;
 
@@ -91,7 +91,7 @@ export function addDetectionRecord(
   locale: Locale,
   source: LocaleSource,
   confidence: number,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): StorageOperationResult<LocaleDetectionHistory> {
   const startTime = Date.now();
 
@@ -147,7 +147,9 @@ export function getDetectionHistory(): StorageOperationResult<LocaleDetectionHis
     }
 
     // 从存储中获取
-    const stored = LocalStorageManager.get<LocaleDetectionHistory>('locale_detection_history');
+    const stored = LocalStorageManager.get<LocaleDetectionHistory>(
+      'locale_detection_history',
+    );
 
     if (!stored) {
       // 创建默认历史记录
@@ -175,7 +177,10 @@ export function getDetectionHistory(): StorageOperationResult<LocaleDetectionHis
       } catch (error) {
         return {
           success: false,
-          error: error instanceof Error ? error.message : 'Failed to create default history',
+          error:
+            error instanceof Error
+              ? error.message
+              : 'Failed to create default history',
           source: 'localStorage',
           timestamp: Date.now(),
           responseTime: Date.now() - startTime,
@@ -219,7 +224,9 @@ export function getDetectionHistory(): StorageOperationResult<LocaleDetectionHis
  * 更新检测历史
  * Update detection history
  */
-export function updateDetectionHistory(detection: LocaleDetectionRecord): StorageOperationResult<LocaleDetectionHistory> {
+export function updateDetectionHistory(
+  detection: LocaleDetectionRecord,
+): StorageOperationResult<LocaleDetectionHistory> {
   const existingResult = getDetectionHistory();
 
   if (!existingResult.success) {
@@ -277,7 +284,9 @@ export function updateDetectionHistory(detection: LocaleDetectionRecord): Storag
  * 验证历史数据格式
  * Validate history data format
  */
-export function validateHistoryData(history: unknown): history is LocaleDetectionHistory {
+export function validateHistoryData(
+  history: unknown,
+): history is LocaleDetectionHistory {
   return isLocaleDetectionHistory(history);
 }
 
@@ -323,7 +332,8 @@ export function getHistorySummary(): {
   return {
     totalRecords: records.length,
     lastUpdated: history.lastUpdated,
-    oldestRecord: records.length > 0 ? records[records.length - 1]!.timestamp : 0,
+    oldestRecord:
+      records.length > 0 ? records[records.length - 1]!.timestamp : 0,
     newestRecord: records.length > 0 ? records[0]!.timestamp : 0,
     cacheStatus: HistoryCacheManager.getCacheStatus(),
   };
@@ -352,7 +362,9 @@ export function needsCleanup(maxAge: number = 30 * 24 * 60 * 60 * 1000): {
 
   const history = historyResult.data;
   const cutoffTime = Date.now() - maxAge;
-  const expiredRecords = history.history.filter((record: any) => record.timestamp < cutoffTime);
+  const expiredRecords = history.history.filter(
+    (record: any) => record.timestamp < cutoffTime,
+  );
   const totalCount = history.history.length;
   const expiredCount = expiredRecords.length;
 

@@ -11,7 +11,6 @@
 
 // 输入验证和清理
 export {
-  sanitizeInput,
   isValidEmail,
   isValidUrl,
   sanitizeFilePath,

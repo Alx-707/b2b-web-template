@@ -1,12 +1,12 @@
 /**
  * 国际化缓存接口定义
  * I18n Cache Interface Definitions
- * 
+ *
  * 提供缓存系统所需的接口定义，包括存储、管理器、预加载器等
  */
 
 import type { I18nMetrics, Locale, Messages } from '@/types/i18n';
-import type { CacheStats, CacheEvent } from './i18n-cache-types-base';
+import type { CacheEvent, CacheStats } from './i18n-cache-types-base';
 
 /**
  * 缓存存储接口
@@ -233,7 +233,10 @@ export interface CacheObserver {
 export interface CacheMiddleware {
   beforeGet?(key: string): string | Promise<string>;
   afterGet?(key: string, value: unknown): unknown | Promise<unknown>;
-  beforeSet?(key: string, value: unknown): { key: string; value: unknown } | Promise<{ key: string; value: unknown }>;
+  beforeSet?(
+    key: string,
+    value: unknown,
+  ): { key: string; value: unknown } | Promise<{ key: string; value: unknown }>;
   afterSet?(key: string, value: unknown): void | Promise<void>;
   beforeDelete?(key: string): string | Promise<string>;
   afterDelete?(key: string): void | Promise<void>;
@@ -244,7 +247,9 @@ export interface CacheMiddleware {
  * Cache strategy interface
  */
 export interface CacheStrategyInterface {
-  shouldEvict(items: Array<{ key: string; lastAccessed: number; hits: number }>): string[];
+  shouldEvict(
+    items: Array<{ key: string; lastAccessed: number; hits: number }>,
+  ): string[];
   onAccess(key: string): void;
   onSet(key: string): void;
   onDelete(key: string): void;
@@ -271,10 +276,22 @@ export interface CacheAdapter<T = unknown> {
  * Cache factory interface
  */
 export interface CacheFactory {
-  createCache<T>(name: string, config?: Partial<Record<string, unknown>>): CacheStorage<T>;
-  createPersistentStorage(name: string, config?: Partial<Record<string, unknown>>): PersistentStorage;
-  createMetricsCollector(name: string, config?: Partial<Record<string, unknown>>): MetricsCollector;
-  createPreloader(name: string, config?: Partial<Record<string, unknown>>): Preloader;
+  createCache<T>(
+    name: string,
+    config?: Partial<Record<string, unknown>>,
+  ): CacheStorage<T>;
+  createPersistentStorage(
+    name: string,
+    config?: Partial<Record<string, unknown>>,
+  ): PersistentStorage;
+  createMetricsCollector(
+    name: string,
+    config?: Partial<Record<string, unknown>>,
+  ): MetricsCollector;
+  createPreloader(
+    name: string,
+    config?: Partial<Record<string, unknown>>,
+  ): Preloader;
 }
 
 /**
@@ -283,9 +300,15 @@ export interface CacheFactory {
  */
 export interface CacheEventEmitter {
   on<T = unknown>(event: string, listener: (data: CacheEvent<T>) => void): void;
-  off<T = unknown>(event: string, listener: (data: CacheEvent<T>) => void): void;
+  off<T = unknown>(
+    event: string,
+    listener: (data: CacheEvent<T>) => void,
+  ): void;
   emit<T = unknown>(event: string, data: CacheEvent<T>): void;
-  once<T = unknown>(event: string, listener: (data: CacheEvent<T>) => void): void;
+  once<T = unknown>(
+    event: string,
+    listener: (data: CacheEvent<T>) => void,
+  ): void;
   removeAllListeners(event?: string): void;
 }
 

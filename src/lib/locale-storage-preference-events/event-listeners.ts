@@ -6,15 +6,14 @@
 'use client';
 
 import type { Locale } from '@/types/i18n';
-;
+import { logger } from '@/lib/logger';
 import type {
-  UserLocalePreference,
+  LocaleSource,
   StorageEvent,
   StorageEventListener,
-  LocaleSource,
+  UserLocalePreference,
 } from '../locale-storage-types';
 import { recordPreferenceHistory } from './history-manager';
-import { logger } from '@/lib/logger';
 
 /**
  * 预定义事件监听器
@@ -25,7 +24,9 @@ import { logger } from '@/lib/logger';
  * 控制台日志监听器
  * Console log listener
  */
-export const consoleLogListener: StorageEventListener = (event: StorageEvent) => {
+export const consoleLogListener: StorageEventListener = (
+  event: StorageEvent,
+) => {
   const timestamp = new Date(event.timestamp).toLocaleTimeString();
 
   switch (event.type) {
@@ -56,7 +57,9 @@ export const consoleLogListener: StorageEventListener = (event: StorageEvent) =>
  * 历史记录监听器
  * History recording listener
  */
-export const historyRecordingListener: StorageEventListener = (event: StorageEvent) => {
+export const historyRecordingListener: StorageEventListener = (
+  event: StorageEvent,
+) => {
   if (event.type === 'preference_saved' && event.data) {
     const { locale, source, confidence } = event.data as {
       locale: Locale;

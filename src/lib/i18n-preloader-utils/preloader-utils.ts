@@ -7,8 +7,8 @@ import type { Locale, Messages } from '@/types/i18n';
 import type {
   IPreloader,
   PreloaderConfig,
+  PreloaderMetrics,
   PreloadResult,
-  PreloaderMetrics
 } from '../i18n-preloader-types';
 
 /**
@@ -39,7 +39,7 @@ export const PreloaderUtils = {
    */
   mergeConfigs(
     base: PreloaderConfig,
-    override: Partial<PreloaderConfig>
+    override: Partial<PreloaderConfig>,
   ): PreloaderConfig {
     return {
       ...base,
@@ -62,13 +62,13 @@ export const PreloaderUtils = {
   calculatePriority(locale: Locale, metrics: PreloaderMetrics): number {
     // 基础优先级
     const basePriority = locale === 'en' ? 10 : 5;
-    
+
     // 根据使用频率调整
     const usageBonus = Math.min(metrics.successfulPreloads * 0.1, 5);
-    
+
     // 根据错误率调整
     const errorPenalty = metrics.failedPreloads * 0.2;
-    
+
     return Math.max(basePriority + usageBonus - errorPenalty, 1);
   },
 
@@ -80,7 +80,7 @@ export const PreloaderUtils = {
     const status = result.success ? '✅' : '❌';
     const time = `${result.loadTime}ms`;
     const source = result.fromCache ? '(cached)' : '(network)';
-    
+
     return `${status} ${result.locale} ${time} ${source}`;
   },
 
@@ -97,16 +97,18 @@ export const PreloaderUtils = {
     details: string[];
   } {
     const total = results.length;
-    const successful = results.filter(r => r.success).length;
+    const successful = results.filter((r) => r.success).length;
     const failed = total - successful;
-    const cacheHits = results.filter(r => r.fromCache).length;
-    
+    const cacheHits = results.filter((r) => r.fromCache).length;
+
     const totalTime = results.reduce((sum, r) => sum + r.loadTime, 0);
     const averageTime = total > 0 ? totalTime / total : 0;
     const cacheHitRate = total > 0 ? cacheHits / total : 0;
-    
-    const details = results.map(result => PreloaderUtils.formatResult(result));
-    
+
+    const details = results.map((result) =>
+      PreloaderUtils.formatResult(result),
+    );
+
     return {
       total,
       successful,
@@ -129,28 +131,36 @@ export const PreloaderUtils = {
     const stats = preloader.getPreloadStats();
     const issues: string[] = [];
     const recommendations: string[] = [];
-    
+
     // 检查成功率
     if (stats.successRate < 0.8) {
       issues.push(`Low success rate: ${(stats.successRate * 100).toFixed(1)}%`);
       recommendations.push('Check network connectivity and API endpoints');
     }
-    
+
     // 检查平均加载时间
     if (stats.averageLoadTime > 5000) {
       issues.push(`High average load time: ${stats.averageLoadTime}ms`);
-      recommendations.push('Consider optimizing network requests or reducing payload size');
+      recommendations.push(
+        'Consider optimizing network requests or reducing payload size',
+      );
     }
-    
+
     // 检查错误数量
     if (stats.errorCount > 5) {
       issues.push(`High error count: ${stats.errorCount}`);
-      recommendations.push('Review error logs and implement better error handling');
+      recommendations.push(
+        'Review error logs and implement better error handling',
+      );
     }
-    
-    const status = issues.length === 0 ? 'healthy' : 
-                  issues.length <= 2 ? 'warning' : 'error';
-    
+
+    const status =
+      issues.length === 0
+        ? 'healthy'
+        : issues.length <= 2
+          ? 'warning'
+          : 'error';
+
     return { status, issues, recommendations };
   },
 

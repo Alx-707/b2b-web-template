@@ -182,7 +182,7 @@ describe('Tabs Integration and Edge Cases', () => {
       );
 
       expect(screen.getByText('Content 1')).toBeInTheDocument();
-      
+
       // Switch to tab2 (no content)
       // This should not cause errors
       expect(() => {
@@ -196,7 +196,7 @@ describe('Tabs Integration and Edge Cases', () => {
           <TabsList>
             <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
           </TabsList>
-          <TabsContent value='tab1'>   </TabsContent>
+          <TabsContent value='tab1'> </TabsContent>
         </Tabs>,
       );
 
@@ -260,7 +260,7 @@ describe('Tabs Integration and Edge Cases', () => {
 
       expect(screen.getByText('Only Tab')).toBeInTheDocument();
       expect(screen.getByText('Only Content')).toBeInTheDocument();
-      
+
       const trigger = screen.getByText('Only Tab');
       expect(trigger).toHaveAttribute('aria-selected', 'true');
     });

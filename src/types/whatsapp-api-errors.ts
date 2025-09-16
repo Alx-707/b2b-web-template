@@ -5,8 +5,6 @@
  * 提供API错误处理相关的类型定义和工具函数
  */
 
-
-
 /**
  * 基础API错误响应
  * Base API error response
@@ -98,8 +96,15 @@ export interface RateLimitError {
 export interface BusinessLogicError {
   name: 'BusinessLogicError';
   message: string;
-  code: 'INVALID_PHONE_NUMBER' | 'MESSAGE_UNDELIVERABLE' | 'TEMPLATE_NOT_APPROVED' | 'MEDIA_TOO_LARGE';
-  details?: Record<string, string | number | boolean | Record<string, unknown> | unknown[]>;
+  code:
+    | 'INVALID_PHONE_NUMBER'
+    | 'MESSAGE_UNDELIVERABLE'
+    | 'TEMPLATE_NOT_APPROVED'
+    | 'MEDIA_TOO_LARGE';
+  details?: Record<
+    string,
+    string | number | boolean | Record<string, unknown> | unknown[]
+  >;
   retryable: boolean;
 }
 
@@ -220,7 +225,10 @@ export interface ErrorReport {
   userAgent?: string;
   environment: string;
   version: string;
-  additionalData?: Record<string, string | number | boolean | Record<string, unknown> | unknown[]>;
+  additionalData?: Record<
+    string,
+    string | number | boolean | Record<string, unknown> | unknown[]
+  >;
 }
 
 /**
@@ -246,59 +254,66 @@ export interface ErrorHandlingConfig {
 export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    typeof (error as Record<string, unknown>).error === 'object' &&
-    'message' in ((error as Record<string, unknown>).error as Record<string, unknown>) &&
-    'type' in ((error as Record<string, unknown>).error as Record<string, unknown>) &&
-    'code' in ((error as Record<string, unknown>).error as Record<string, unknown>)
+      typeof error === 'object' &&
+      typeof (error as Record<string, unknown>).error === 'object' &&
+      'message' in
+        ((error as Record<string, unknown>).error as Record<string, unknown>) &&
+      'type' in
+        ((error as Record<string, unknown>).error as Record<string, unknown>) &&
+      'code' in
+        ((error as Record<string, unknown>).error as Record<string, unknown>),
   );
 }
 
 export function isNetworkError(error: unknown): error is NetworkError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'NetworkError'
+      typeof error === 'object' &&
+      (error as Record<string, unknown>).name === 'NetworkError',
   );
 }
 
 export function isValidationError(error: unknown): error is ValidationError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'ValidationError'
+      typeof error === 'object' &&
+      (error as Record<string, unknown>).name === 'ValidationError',
   );
 }
 
-export function isAuthenticationError(error: unknown): error is AuthenticationError {
+export function isAuthenticationError(
+  error: unknown,
+): error is AuthenticationError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'AuthenticationError'
+      typeof error === 'object' &&
+      (error as Record<string, unknown>).name === 'AuthenticationError',
   );
 }
 
 export function isRateLimitError(error: unknown): error is RateLimitError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'RateLimitError'
+      typeof error === 'object' &&
+      (error as Record<string, unknown>).name === 'RateLimitError',
   );
 }
 
-export function isBusinessLogicError(error: unknown): error is BusinessLogicError {
+export function isBusinessLogicError(
+  error: unknown,
+): error is BusinessLogicError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'BusinessLogicError'
+      typeof error === 'object' &&
+      (error as Record<string, unknown>).name === 'BusinessLogicError',
   );
 }
 
 export function isServerError(error: unknown): error is ServerError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'ServerError'
+      typeof error === 'object' &&
+      (error as Record<string, unknown>).name === 'ServerError',
   );
 }
 
@@ -394,7 +409,7 @@ export const ErrorUtils = {
    */
   createErrorDetails(
     error: WhatsAppError,
-    context: ErrorContext
+    context: ErrorContext,
   ): ErrorDetails {
     const category = ErrorUtils.categorizeError(error);
     const severity = ErrorUtils.assessSeverity(error);
@@ -471,7 +486,7 @@ export const ErrorUtils = {
     attempt: number,
     baseDelay: number = 1000,
     multiplier: number = 2,
-    maxDelay: number = 30000
+    maxDelay: number = 30000,
   ): number {
     const delay = baseDelay * Math.pow(multiplier, attempt - 1);
     return Math.min(delay, maxDelay);
@@ -484,7 +499,7 @@ export const ErrorUtils = {
   createErrorReport(
     errorDetails: ErrorDetails,
     environment: string = 'production',
-    version: string = '1.0.0'
+    version: string = '1.0.0',
   ): ErrorReport {
     return {
       id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,

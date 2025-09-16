@@ -384,40 +384,51 @@ export type WhatsAppApiResponseType =
  * 响应验证函数
  * Response validation functions
  */
-export function isSendMessageResponse(response: unknown): response is SendMessageResponse {
+export function isSendMessageResponse(
+  response: unknown,
+): response is SendMessageResponse {
   return Boolean(
     response &&
-    typeof response === 'object' &&
-    (response as Record<string, unknown>).messaging_product === 'whatsapp' &&
-    Array.isArray((response as Record<string, unknown>).contacts) &&
-    Array.isArray((response as Record<string, unknown>).messages)
+      typeof response === 'object' &&
+      (response as Record<string, unknown>).messaging_product === 'whatsapp' &&
+      Array.isArray((response as Record<string, unknown>).contacts) &&
+      Array.isArray((response as Record<string, unknown>).messages),
   );
 }
 
-export function isMediaUploadResponse(response: unknown): response is MediaUploadResponse {
+export function isMediaUploadResponse(
+  response: unknown,
+): response is MediaUploadResponse {
   return Boolean(
     response &&
-    typeof response === 'object' &&
-    typeof (response as Record<string, unknown>).id === 'string'
+      typeof response === 'object' &&
+      typeof (response as Record<string, unknown>).id === 'string',
   );
 }
 
 export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    typeof (error as Record<string, unknown>).error === 'object' &&
-    'message' in ((error as Record<string, unknown>).error as Record<string, unknown>) &&
-    'type' in ((error as Record<string, unknown>).error as Record<string, unknown>) &&
-    'code' in ((error as Record<string, unknown>).error as Record<string, unknown>)
+      typeof error === 'object' &&
+      typeof (error as Record<string, unknown>).error === 'object' &&
+      'message' in
+        ((error as Record<string, unknown>).error as Record<string, unknown>) &&
+      'type' in
+        ((error as Record<string, unknown>).error as Record<string, unknown>) &&
+      'code' in
+        ((error as Record<string, unknown>).error as Record<string, unknown>),
   );
 }
 
-export function isSuccessResponse<T>(response: ApiResponse<T>): response is ApiResponse<T> & { success: true; data: T } {
+export function isSuccessResponse<T>(
+  response: ApiResponse<T>,
+): response is ApiResponse<T> & { success: true; data: T } {
   return response.success && !!response.data;
 }
 
-export function isErrorResponse<T>(response: ApiResponse<T>): response is ApiResponse<T> & { success: false; error: WhatsAppApiError } {
+export function isErrorResponse<T>(
+  response: ApiResponse<T>,
+): response is ApiResponse<T> & { success: false; error: WhatsAppApiError } {
   return !response.success && !!response.error;
 }
 
@@ -438,7 +449,9 @@ export const ResponseUtils = {
    * 提取联系人信息
    * Extract contact info
    */
-  extractContactInfo(response: SendMessageResponse): { input: string; wa_id: string } | null {
+  extractContactInfo(
+    response: SendMessageResponse,
+  ): { input: string; wa_id: string } | null {
     return response.contacts?.[0] || null;
   },
 
@@ -463,7 +476,9 @@ export const ResponseUtils = {
    * 提取分页信息
    * Extract pagination info
    */
-  extractPaginationInfo<T>(response: PaginatedResponse<T>): PaginationInfo | null {
+  extractPaginationInfo<T>(
+    response: PaginatedResponse<T>,
+  ): PaginationInfo | null {
     return response.paging || null;
   },
 

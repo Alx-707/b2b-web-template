@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from '@/test/utils';
 import { act } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen } from '@/test/utils';
 import { ContactFormContainer } from '../contact-form-container';
 
 // Mock next-intl with comprehensive translations
@@ -38,7 +38,9 @@ const mockT = vi.fn((key: string) => {
     marketingConsent: 'I agree to receive marketing communications',
   };
   // eslint-disable-next-line security/detect-object-injection
-  return Object.prototype.hasOwnProperty.call(translations, key) ? translations[key] : key; // key 来自测试数据，安全
+  return Object.prototype.hasOwnProperty.call(translations, key)
+    ? translations[key]
+    : key; // key 来自测试数据，安全
 });
 
 vi.mock('next-intl', () => ({
@@ -47,7 +49,11 @@ vi.mock('next-intl', () => ({
 
 // Mock Turnstile component
 vi.mock('@marsidev/react-turnstile', () => ({
-  Turnstile: ({ onSuccess, onError, onExpire }: {
+  Turnstile: ({
+    onSuccess,
+    onError,
+    onExpire,
+  }: {
     onSuccess?: (_token: string) => void;
     onError?: (_error: string) => void;
     onExpire?: () => void;
@@ -139,8 +145,6 @@ const fillValidForm = async () => {
   });
 };
 
-
-
 describe('ContactFormContainer - 剩余高级测试', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -226,8 +230,6 @@ describe('ContactFormContainer - 剩余高级测试', () => {
       // 检查错误消息样式
       const alertElement = screen.getByRole('alert');
       expect(alertElement).toHaveClass('text-red-600');
-
     });
   });
-
 });

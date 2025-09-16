@@ -76,9 +76,11 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
         en: {
           ...mockEnTranslations,
           advanced: {
-            multipleParams: 'Hello {name}, you have {count} messages from {sender}',
+            multipleParams:
+              'Hello {name}, you have {count} messages from {sender}',
             nestedParams: 'Welcome to {location.city}, {location.country}',
-            conditionalParams: '{count, plural, =0 {no items} =1 {one item} other {# items}}',
+            conditionalParams:
+              '{count, plural, =0 {no items} =1 {one item} other {# items}}',
           },
         },
         zh: {
@@ -90,7 +92,8 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
           advanced: {
             multipleParams: '你好{name}，你有{count}条来自{sender}的消息',
             nestedParams: '欢迎来到{location.country}{location.city}',
-            conditionalParams: '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}}',
+            conditionalParams:
+              '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}}',
           },
         },
       });
@@ -108,8 +111,10 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
         en: {
           ...mockEnTranslations,
           advanced: {
-            multipleParams: 'Hello {name}, you have {count} messages from {sender}',
-            complexParams: 'User {user.id} ({user.name}) has {stats.points} points',
+            multipleParams:
+              'Hello {name}, you have {count} messages from {sender}',
+            complexParams:
+              'User {user.id} ({user.name}) has {stats.points} points',
           },
         },
         zh: {
@@ -129,9 +134,13 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
 
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(error =>
-        error.message.includes('sender') || error.message.includes('user.name')
-      )).toBe(true);
+      expect(
+        result.errors.some(
+          (error) =>
+            error.message.includes('sender') ||
+            error.message.includes('user.name'),
+        ),
+      ).toBe(true);
     });
 
     it('should handle arrays and complex data structures', async () => {
@@ -186,9 +195,12 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
         en: {
           ...mockEnTranslations,
           icu: {
-            plural: '{count, plural, =0 {no items} =1 {one item} other {# items}}',
-            select: '{gender, select, male {He} female {She} other {They}} will arrive',
-            selectordinal: '{position, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} place',
+            plural:
+              '{count, plural, =0 {no items} =1 {one item} other {# items}}',
+            select:
+              '{gender, select, male {He} female {She} other {They}} will arrive',
+            selectordinal:
+              '{position, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} place',
             number: 'Price: {price, number, currency}',
             date: 'Date: {date, date, short}',
           },
@@ -200,8 +212,10 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
             welcome: '欢迎来到{name}',
           },
           icu: {
-            plural: '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}}',
-            select: '{gender, select, male {他} female {她} other {他们}}将到达',
+            plural:
+              '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}}',
+            select:
+              '{gender, select, male {他} female {她} other {他们}}将到达',
             selectordinal: '第{position, selectordinal, other {#}}名',
             number: '价格：{price, number, currency}',
             date: '日期：{date, date, short}',
@@ -222,8 +236,10 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
         en: {
           ...mockEnTranslations,
           icu: {
-            validPlural: '{count, plural, =0 {no items} =1 {one item} other {# items}}',
-            invalidPlural: '{count, plural, =0 {no items} =1 {one item} other {# items}', // 缺少结束括号
+            validPlural:
+              '{count, plural, =0 {no items} =1 {one item} other {# items}}',
+            invalidPlural:
+              '{count, plural, =0 {no items} =1 {one item} other {# items}', // 缺少结束括号
           },
         },
         zh: {
@@ -233,8 +249,10 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
             welcome: '欢迎来到{name}',
           },
           icu: {
-            validPlural: '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}}',
-            invalidPlural: '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}', // 缺少结束括号
+            validPlural:
+              '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}}',
+            invalidPlural:
+              '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}', // 缺少结束括号
           },
         },
       });
@@ -243,9 +261,14 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
 
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(error =>
-        error.message.includes('ICU') || error.message.includes('syntax') || error.message.includes('bracket')
-      )).toBe(true);
+      expect(
+        result.errors.some(
+          (error) =>
+            error.message.includes('ICU') ||
+            error.message.includes('syntax') ||
+            error.message.includes('bracket'),
+        ),
+      ).toBe(true);
     });
 
     it('should handle mixed content types', async () => {
@@ -293,9 +316,5 @@ describe('I18n Validation - Advanced Scenarios Tests', () => {
       expect(result.errors).toHaveLength(0);
       expect(result.coverage).toBeGreaterThan(0);
     });
-
-
-
-
   });
 });

@@ -4,7 +4,7 @@
  */
 
 import type { EmailTemplateData } from './validations';
-import { emailTemplateDataSchema, validationHelpers,  } from './validations';;
+import { emailTemplateDataSchema, validationHelpers } from './validations';
 
 /**
  * 邮件配置常量

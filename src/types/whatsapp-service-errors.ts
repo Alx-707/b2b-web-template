@@ -29,7 +29,7 @@ export class WhatsAppError extends Error {
     code: number = 500,
     type: string = 'WhatsAppError',
     subcode?: number,
-    traceId?: string
+    traceId?: string,
   ) {
     super(message);
     this.name = 'WhatsAppError';
@@ -59,7 +59,7 @@ export class WhatsAppError extends Error {
       subcode: this.subcode,
       traceId: this.traceId,
       timestamp: this.timestamp,
-      stack: this.stack
+      stack: this.stack,
     };
   }
 
@@ -103,14 +103,14 @@ export class WhatsAppApiError extends WhatsAppError {
     message: string,
     code: number,
     apiError?: WhatsAppApiError['apiError'],
-    traceId?: string
+    traceId?: string,
   ) {
     super(
       message,
       code,
       'ApiError',
       apiError?.error_subcode,
-      traceId || apiError?.fbtrace_id
+      traceId || apiError?.fbtrace_id,
     );
     this.name = 'WhatsAppApiError';
     if (apiError !== undefined) {
@@ -121,10 +121,10 @@ export class WhatsAppApiError extends WhatsAppError {
   /**
    * Convert to JSON with API error details
    */
-  toJSON() {
+  override toJSON() {
     return {
       ...super.toJSON(),
-      apiError: this.apiError
+      apiError: this.apiError,
     };
   }
 
@@ -149,11 +149,7 @@ export class WhatsAppValidationError extends WhatsAppError {
   /** Value that failed validation */
   public readonly value?: unknown;
 
-  constructor(
-    message: string,
-    field?: string,
-    value?: unknown
-  ) {
+  constructor(message: string, field?: string, value?: unknown) {
     super(message, 400, 'ValidationError');
     this.name = 'WhatsAppValidationError';
     if (field !== undefined) {
@@ -167,22 +163,26 @@ export class WhatsAppValidationError extends WhatsAppError {
   /**
    * Convert to JSON with validation details
    */
-  toJSON() {
+  override toJSON() {
     return {
       ...super.toJSON(),
       field: this.field,
-      value: this.value
+      value: this.value,
     };
   }
 
   /**
    * Create validation error for specific field
    */
-  static forField(field: string, value: unknown, reason: string): WhatsAppValidationError {
+  static forField(
+    field: string,
+    value: unknown,
+    reason: string,
+  ): WhatsAppValidationError {
     return new WhatsAppValidationError(
       `Validation failed for field '${field}': ${reason}`,
       field,
-      value
+      value,
     );
   }
 
@@ -193,7 +193,7 @@ export class WhatsAppValidationError extends WhatsAppError {
     return new WhatsAppValidationError(
       `Required field '${field}' is missing`,
       field,
-      undefined
+      undefined,
     );
   }
 }
@@ -214,7 +214,7 @@ export class WhatsAppRateLimitError extends WhatsAppError {
     message: string,
     retryAfter?: number,
     limit?: number,
-    remaining?: number
+    remaining?: number,
   ) {
     super(message, 429, 'RateLimitError');
     this.name = 'WhatsAppRateLimitError';
@@ -232,12 +232,12 @@ export class WhatsAppRateLimitError extends WhatsAppError {
   /**
    * Convert to JSON with rate limit details
    */
-  toJSON() {
+  override toJSON() {
     return {
       ...super.toJSON(),
       retryAfter: this.retryAfter,
       limit: this.limit,
-      remaining: this.remaining
+      remaining: this.remaining,
     };
   }
 
@@ -267,11 +267,7 @@ export class WhatsAppNetworkError extends WhatsAppError {
   /** Whether this was a timeout error */
   public readonly isTimeout?: boolean;
 
-  constructor(
-    message: string,
-    originalError?: Error,
-    isTimeout?: boolean
-  ) {
+  constructor(message: string, originalError?: Error, isTimeout?: boolean) {
     super(message, 500, 'NetworkError');
     this.name = 'WhatsAppNetworkError';
     if (originalError !== undefined) {
@@ -285,11 +281,11 @@ export class WhatsAppNetworkError extends WhatsAppError {
   /**
    * Convert to JSON with network error details
    */
-  toJSON() {
+  override toJSON() {
     return {
       ...super.toJSON(),
       originalError: this.originalError?.message,
-      isTimeout: this.isTimeout
+      isTimeout: this.isTimeout,
     };
   }
 
@@ -300,7 +296,7 @@ export class WhatsAppNetworkError extends WhatsAppError {
     return new WhatsAppNetworkError(
       `Request timed out after ${timeoutMs}ms`,
       undefined,
-      true
+      true,
     );
   }
 
@@ -311,7 +307,7 @@ export class WhatsAppNetworkError extends WhatsAppError {
     return new WhatsAppNetworkError(
       `Network connection failed: ${originalError.message}`,
       originalError,
-      false
+      false,
     );
   }
 }
@@ -326,11 +322,7 @@ export class WhatsAppAuthError extends WhatsAppError {
   /** Whether the token is invalid */
   public readonly tokenInvalid?: boolean;
 
-  constructor(
-    message: string,
-    tokenExpired?: boolean,
-    tokenInvalid?: boolean
-  ) {
+  constructor(message: string, tokenExpired?: boolean, tokenInvalid?: boolean) {
     super(message, 401, 'AuthError');
     this.name = 'WhatsAppAuthError';
     if (tokenExpired !== undefined) {
@@ -344,11 +336,11 @@ export class WhatsAppAuthError extends WhatsAppError {
   /**
    * Convert to JSON with auth details
    */
-  toJSON() {
+  override toJSON() {
     return {
       ...super.toJSON(),
       tokenExpired: this.tokenExpired,
-      tokenInvalid: this.tokenInvalid
+      tokenInvalid: this.tokenInvalid,
     };
   }
 
@@ -356,22 +348,14 @@ export class WhatsAppAuthError extends WhatsAppError {
    * Create expired token error
    */
   static expiredToken(): WhatsAppAuthError {
-    return new WhatsAppAuthError(
-      'Access token has expired',
-      true,
-      false
-    );
+    return new WhatsAppAuthError('Access token has expired', true, false);
   }
 
   /**
    * Create invalid token error
    */
   static invalidToken(): WhatsAppAuthError {
-    return new WhatsAppAuthError(
-      'Access token is invalid',
-      false,
-      true
-    );
+    return new WhatsAppAuthError('Access token is invalid', false, true);
   }
 }
 
@@ -394,28 +378,36 @@ export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
 /**
  * Check if error is a WhatsApp validation error
  */
-export function isWhatsAppValidationError(error: unknown): error is WhatsAppValidationError {
+export function isWhatsAppValidationError(
+  error: unknown,
+): error is WhatsAppValidationError {
   return error instanceof WhatsAppValidationError;
 }
 
 /**
  * Check if error is a WhatsApp rate limit error
  */
-export function isWhatsAppRateLimitError(error: unknown): error is WhatsAppRateLimitError {
+export function isWhatsAppRateLimitError(
+  error: unknown,
+): error is WhatsAppRateLimitError {
   return error instanceof WhatsAppRateLimitError;
 }
 
 /**
  * Check if error is a WhatsApp network error
  */
-export function isWhatsAppNetworkError(error: unknown): error is WhatsAppNetworkError {
+export function isWhatsAppNetworkError(
+  error: unknown,
+): error is WhatsAppNetworkError {
   return error instanceof WhatsAppNetworkError;
 }
 
 /**
  * Check if error is a WhatsApp authentication error
  */
-export function isWhatsAppAuthError(error: unknown): error is WhatsAppAuthError {
+export function isWhatsAppAuthError(
+  error: unknown,
+): error is WhatsAppAuthError {
   return error instanceof WhatsAppAuthError;
 }
 
@@ -426,7 +418,7 @@ export function isWhatsAppAuthError(error: unknown): error is WhatsAppAuthError 
  */
 export function createErrorFromApiResponse(
   response: { status: number; data?: Record<string, unknown> },
-  traceId?: string
+  traceId?: string,
 ): WhatsAppError {
   const { status, data } = response;
 
@@ -435,25 +427,29 @@ export function createErrorFromApiResponse(
   }
 
   if (status === 429) {
-    const retryAfter = (data as Record<string, unknown>)?.error &&
+    const retryAfter =
+      (data as Record<string, unknown>)?.error &&
       typeof (data as Record<string, unknown>).error === 'object'
-      ? ((data as Record<string, unknown>).error as Record<string, unknown>).retry_after
-      : undefined;
-    return new WhatsAppRateLimitError(
-      'Rate limit exceeded',
-      retryAfter
-    );
+        ? ((data as Record<string, unknown>).error as Record<string, unknown>)
+            .retry_after
+        : undefined;
+    const retryAfterNumber =
+      typeof retryAfter === 'number' ? retryAfter : undefined;
+    return new WhatsAppRateLimitError('Rate limit exceeded', retryAfterNumber);
   }
 
   if (data?.error) {
-    const errorMessage = typeof data.error === 'object' && data.error !== null && 'message' in data.error
-      ? (data.error as Record<string, unknown>).message || 'API Error'
-      : 'API Error';
+    const errorMessage =
+      typeof data.error === 'object' &&
+      data.error !== null &&
+      'message' in data.error
+        ? (data.error as Record<string, unknown>).message || 'API Error'
+        : 'API Error';
     return new WhatsAppApiError(
       errorMessage as string,
       status,
       data.error,
-      traceId
+      traceId,
     );
   }
 
@@ -462,18 +458,21 @@ export function createErrorFromApiResponse(
     status,
     'HttpError',
     undefined,
-    traceId
+    traceId,
   );
 }
 
 /**
  * Get error severity level
  */
-export function getErrorSeverity(error: WhatsAppError): 'low' | 'medium' | 'high' | 'critical' {
+export function getErrorSeverity(
+  error: WhatsAppError,
+): 'low' | 'medium' | 'high' | 'critical' {
   if (error instanceof WhatsAppAuthError) return 'critical';
   if (error instanceof WhatsAppValidationError) return 'medium';
   if (error instanceof WhatsAppRateLimitError) return 'medium';
-  if (error instanceof WhatsAppNetworkError) return error.isTimeout ? 'medium' : 'high';
+  if (error instanceof WhatsAppNetworkError)
+    return error.isTimeout ? 'medium' : 'high';
   if (error instanceof WhatsAppApiError) {
     return error.code >= 500 ? 'high' : 'medium';
   }

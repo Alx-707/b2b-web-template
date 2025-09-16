@@ -11,9 +11,9 @@
  * - label-form-advanced-integration.test.tsx - Advanced form integration tests
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Label } from '../label';
 
@@ -32,18 +32,29 @@ describe('Label Form Integration Tests - Index', () => {
         <form onSubmit={handleSubmit}>
           <div>
             <Label htmlFor='name-input'>Name</Label>
-            <input id='name-input' type='text' required />
+            <input
+              id='name-input'
+              type='text'
+              required
+            />
           </div>
           <div>
             <Label htmlFor='email-input'>Email</Label>
-            <input id='email-input' type='email' required />
+            <input
+              id='email-input'
+              type='email'
+              required
+            />
           </div>
           <div>
             <Label htmlFor='message-input'>Message</Label>
-            <textarea id='message-input' required />
+            <textarea
+              id='message-input'
+              required
+            />
           </div>
           <button type='submit'>Submit</button>
-        </form>
+        </form>,
       );
 
       const nameLabel = screen.getByText('Name');
@@ -82,14 +93,21 @@ describe('Label Form Integration Tests - Index', () => {
         <form onSubmit={handleSubmit}>
           <div>
             <Label htmlFor='required-input'>Required Field *</Label>
-            <input id='required-input' type='text' required />
+            <input
+              id='required-input'
+              type='text'
+              required
+            />
           </div>
           <div>
             <Label htmlFor='optional-input'>Optional Field</Label>
-            <input id='optional-input' type='text' />
+            <input
+              id='optional-input'
+              type='text'
+            />
           </div>
           <button type='submit'>Submit</button>
-        </form>
+        </form>,
       );
 
       const submitButton = screen.getByRole('button', { name: 'Submit' });
@@ -109,25 +127,34 @@ describe('Label Form Integration Tests - Index', () => {
             <legend>Personal Information</legend>
             <div>
               <Label htmlFor='first-name'>First Name</Label>
-              <input id='first-name' type='text' />
+              <input
+                id='first-name'
+                type='text'
+              />
             </div>
             <div>
               <Label htmlFor='last-name'>Last Name</Label>
-              <input id='last-name' type='text' />
+              <input
+                id='last-name'
+                type='text'
+              />
             </div>
           </fieldset>
           <fieldset>
             <legend>Contact Information</legend>
             <div>
               <Label htmlFor='phone'>Phone</Label>
-              <input id='phone' type='tel' />
+              <input
+                id='phone'
+                type='tel'
+              />
             </div>
             <div>
               <Label htmlFor='address'>Address</Label>
               <textarea id='address' />
             </div>
           </fieldset>
-        </form>
+        </form>,
       );
 
       expect(screen.getByText('Personal Information')).toBeInTheDocument();
@@ -143,15 +170,24 @@ describe('Label Form Integration Tests - Index', () => {
         <form>
           <div>
             <Label htmlFor='text-input'>Text Input</Label>
-            <input id='text-input' type='text' />
+            <input
+              id='text-input'
+              type='text'
+            />
           </div>
           <div>
             <Label htmlFor='email-input'>Email Input</Label>
-            <input id='email-input' type='email' />
+            <input
+              id='email-input'
+              type='email'
+            />
           </div>
           <div>
             <Label htmlFor='password-input'>Password Input</Label>
-            <input id='password-input' type='password' />
+            <input
+              id='password-input'
+              type='password'
+            />
           </div>
           <div>
             <Label htmlFor='textarea-input'>Textarea</Label>
@@ -164,7 +200,7 @@ describe('Label Form Integration Tests - Index', () => {
               <option value='option2'>Option 2</option>
             </select>
           </div>
-        </form>
+        </form>,
       );
 
       // Test that all inputs are properly associated with their labels
@@ -194,11 +230,18 @@ describe('Label Form Integration Tests - Index', () => {
           <fieldset>
             <legend>Preferences</legend>
             <div>
-              <input id='newsletter' type='checkbox' />
+              <input
+                id='newsletter'
+                type='checkbox'
+              />
               <Label htmlFor='newsletter'>Subscribe to newsletter</Label>
             </div>
             <div>
-              <input id='terms' type='checkbox' required />
+              <input
+                id='terms'
+                type='checkbox'
+                required
+              />
               <Label htmlFor='terms'>Accept terms and conditions</Label>
             </div>
           </fieldset>
@@ -206,26 +249,40 @@ describe('Label Form Integration Tests - Index', () => {
           <fieldset>
             <legend>Contact Method</legend>
             <div>
-              <input id='contact-email' type='radio' name='contact' value='email' />
+              <input
+                id='contact-email'
+                type='radio'
+                name='contact'
+                value='email'
+              />
               <Label htmlFor='contact-email'>Email</Label>
             </div>
             <div>
-              <input id='contact-phone' type='radio' name='contact' value='phone' />
+              <input
+                id='contact-phone'
+                type='radio'
+                name='contact'
+                value='phone'
+              />
               <Label htmlFor='contact-phone'>Phone</Label>
             </div>
           </fieldset>
-        </form>
+        </form>,
       );
 
       // Test checkbox labels
       const newsletterLabel = screen.getByText('Subscribe to newsletter');
-      const newsletterCheckbox = screen.getByLabelText('Subscribe to newsletter');
+      const newsletterCheckbox = screen.getByLabelText(
+        'Subscribe to newsletter',
+      );
 
       await user.click(newsletterLabel);
       expect(newsletterCheckbox).toBeChecked();
 
       const termsLabel = screen.getByText('Accept terms and conditions');
-      const termsCheckbox = screen.getByLabelText('Accept terms and conditions');
+      const termsCheckbox = screen.getByLabelText(
+        'Accept terms and conditions',
+      );
 
       await user.click(termsLabel);
       expect(termsCheckbox).toBeChecked();
@@ -285,10 +342,14 @@ describe('Label Form Integration Tests - Index', () => {
         <form onSubmit={handleSubmit}>
           <div>
             <Label htmlFor='submit-test'>Test Field</Label>
-            <input id='submit-test' name='testField' type='text' />
+            <input
+              id='submit-test'
+              name='testField'
+              type='text'
+            />
           </div>
           <button type='submit'>Submit</button>
-        </form>
+        </form>,
       );
 
       const input = screen.getByLabelText('Test Field');

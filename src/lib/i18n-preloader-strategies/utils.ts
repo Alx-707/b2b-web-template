@@ -20,7 +20,11 @@ export const StrategyUtils = {
       return 'offline';
     }
 
-    const connection = (navigator as { connection?: { effectiveType?: string; downlink?: number } }).connection;
+    const connection = (
+      navigator as {
+        connection?: { effectiveType?: string; downlink?: number };
+      }
+    ).connection;
     if (connection) {
       const { effectiveType, downlink } = connection;
       if (effectiveType === '4g' && (downlink ?? 0) > 2) {
@@ -36,7 +40,11 @@ export const StrategyUtils = {
    * Check memory usage
    */
   getMemoryUsage(): number {
-    const memory = (performance as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory;
+    const memory = (
+      performance as {
+        memory?: { usedJSHeapSize: number; totalJSHeapSize: number };
+      }
+    ).memory;
     if (memory) {
       const { usedJSHeapSize, totalJSHeapSize } = memory;
       return usedJSHeapSize / totalJSHeapSize;
@@ -66,7 +74,7 @@ export const StrategyUtils = {
   calculateStrategyPriority(
     strategy: string,
     metrics: PreloaderMetrics,
-    conditions: { network: string; memory: number; time: string }
+    conditions: { network: string; memory: number; time: string },
   ): number {
     const config = strategyConfigs[strategy];
     if (!config) return 0;

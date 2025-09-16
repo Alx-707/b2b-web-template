@@ -13,9 +13,9 @@
  * - Dynamic content handling
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Label } from '../label';
 
@@ -32,8 +32,16 @@ describe('Label Component Composition Tests', () => {
         <div className='card'>{children}</div>
       );
 
-      const Button = ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
-        <button className='btn' {...props}>{children}</button>
+      const Button = ({
+        children,
+        ...props
+      }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+        <button
+          className='btn'
+          {...props}
+        >
+          {children}
+        </button>
       );
 
       render(
@@ -41,11 +49,14 @@ describe('Label Component Composition Tests', () => {
           <form>
             <div>
               <Label htmlFor='card-input'>Card Input</Label>
-              <input id='card-input' type='text' />
+              <input
+                id='card-input'
+                type='text'
+              />
             </div>
             <Button type='submit'>Submit</Button>
           </form>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Card Input')).toBeInTheDocument();
@@ -54,7 +65,11 @@ describe('Label Component Composition Tests', () => {
 
     it('works in modal/dialog contexts', () => {
       const Modal = ({ children }: { children: React.ReactNode }) => (
-        <div role='dialog' aria-modal='true' className='modal'>
+        <div
+          role='dialog'
+          aria-modal='true'
+          className='modal'
+        >
           {children}
         </div>
       );
@@ -63,9 +78,12 @@ describe('Label Component Composition Tests', () => {
         <Modal>
           <form>
             <Label htmlFor='modal-input'>Modal Input</Label>
-            <input id='modal-input' type='text' />
+            <input
+              id='modal-input'
+              type='text'
+            />
           </form>
-        </Modal>
+        </Modal>,
       );
 
       const dialog = screen.getByRole('dialog');
@@ -87,9 +105,12 @@ describe('Label Component Composition Tests', () => {
         <FieldGroup>
           <FieldWrapper>
             <Label htmlFor='nested-input'>Nested Input</Label>
-            <input id='nested-input' type='text' />
+            <input
+              id='nested-input'
+              type='text'
+            />
           </FieldWrapper>
-        </FieldGroup>
+        </FieldGroup>,
       );
 
       const label = screen.getByText('Nested Input');
@@ -102,12 +123,18 @@ describe('Label Component Composition Tests', () => {
         <form>
           <div>
             <Label htmlFor='always-name'>Name</Label>
-            <input id='always-name' type='text' />
+            <input
+              id='always-name'
+              type='text'
+            />
           </div>
           {showEmail && (
             <div>
               <Label htmlFor='conditional-email'>Email</Label>
-              <input id='conditional-email' type='email' />
+              <input
+                id='conditional-email'
+                type='email'
+              />
             </div>
           )}
         </form>
@@ -126,16 +153,17 @@ describe('Label Component Composition Tests', () => {
 
     it('handles dynamic label content', () => {
       const DynamicLabel = ({ count }: { count: number }) => (
-        <Label htmlFor='dynamic-input'>
-          Items ({count})
-        </Label>
+        <Label htmlFor='dynamic-input'>Items ({count})</Label>
       );
 
       const { rerender } = render(
         <div>
           <DynamicLabel count={0} />
-          <input id='dynamic-input' type='number' />
-        </div>
+          <input
+            id='dynamic-input'
+            type='number'
+          />
+        </div>,
       );
 
       expect(screen.getByText('Items (0)')).toBeInTheDocument();
@@ -143,15 +171,24 @@ describe('Label Component Composition Tests', () => {
       rerender(
         <div>
           <DynamicLabel count={5} />
-          <input id='dynamic-input' type='number' />
-        </div>
+          <input
+            id='dynamic-input'
+            type='number'
+          />
+        </div>,
       );
 
       expect(screen.getByText('Items (5)')).toBeInTheDocument();
     });
 
     it('works with complex form layouts', () => {
-      const FormSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
+      const FormSection = ({
+        title,
+        children,
+      }: {
+        title: string;
+        children: React.ReactNode;
+      }) => (
         <section>
           <h3>{title}</h3>
           {children}
@@ -172,11 +209,17 @@ describe('Label Component Composition Tests', () => {
             <FormRow>
               <FormColumn>
                 <Label htmlFor='first-name'>First Name</Label>
-                <input id='first-name' type='text' />
+                <input
+                  id='first-name'
+                  type='text'
+                />
               </FormColumn>
               <FormColumn>
                 <Label htmlFor='last-name'>Last Name</Label>
-                <input id='last-name' type='text' />
+                <input
+                  id='last-name'
+                  type='text'
+                />
               </FormColumn>
             </FormRow>
           </FormSection>
@@ -184,15 +227,21 @@ describe('Label Component Composition Tests', () => {
             <FormRow>
               <FormColumn>
                 <Label htmlFor='email'>Email</Label>
-                <input id='email' type='email' />
+                <input
+                  id='email'
+                  type='email'
+                />
               </FormColumn>
               <FormColumn>
                 <Label htmlFor='phone'>Phone</Label>
-                <input id='phone' type='tel' />
+                <input
+                  id='phone'
+                  type='tel'
+                />
               </FormColumn>
             </FormRow>
           </FormSection>
-        </form>
+        </form>,
       );
 
       expect(screen.getByText('Personal Information')).toBeInTheDocument();
@@ -207,25 +256,39 @@ describe('Label Component Composition Tests', () => {
       const CustomFormField = ({
         id,
         label,
-        type = 'text'
+        type = 'text',
       }: {
         id: string;
         label: string;
         type?: string;
       }) => (
         <div className='form-field'>
-          <Label htmlFor={id} className='form-label'>
+          <Label
+            htmlFor={id}
+            className='form-label'
+          >
             {label}
           </Label>
-          <input id={id} type={type} className='form-input' />
+          <input
+            id={id}
+            type={type}
+            className='form-input'
+          />
         </div>
       );
 
       render(
         <form>
-          <CustomFormField id='custom1' label='Custom Field 1' />
-          <CustomFormField id='custom2' label='Custom Field 2' type='email' />
-        </form>
+          <CustomFormField
+            id='custom1'
+            label='Custom Field 1'
+          />
+          <CustomFormField
+            id='custom2'
+            label='Custom Field 2'
+            type='email'
+          />
+        </form>,
       );
 
       const label1 = screen.getByText('Custom Field 1');
@@ -246,12 +309,19 @@ describe('Label Component Composition Tests', () => {
       render(
         <form>
           <StyledFormGroup>
-            <Label htmlFor='styled-input' className='styled-label'>
+            <Label
+              htmlFor='styled-input'
+              className='styled-label'
+            >
               Styled Input
             </Label>
-            <input id='styled-input' type='text' className='styled-input' />
+            <input
+              id='styled-input'
+              type='text'
+              className='styled-input'
+            />
           </StyledFormGroup>
-        </form>
+        </form>,
       );
 
       const label = screen.getByText('Styled Input');
@@ -262,7 +332,10 @@ describe('Label Component Composition Tests', () => {
     it('works with component libraries integration', () => {
       // Simulate integration with component libraries
       const LibraryCard = ({ children }: { children: React.ReactNode }) => (
-        <div className='lib-card' data-testid='library-card'>
+        <div
+          className='lib-card'
+          data-testid='library-card'
+        >
           {children}
         </div>
       );
@@ -283,10 +356,13 @@ describe('Label Component Composition Tests', () => {
           <form>
             <div>
               <Label htmlFor='lib-input'>Library Input</Label>
-              <LibraryInput id='lib-input' type='text' />
+              <LibraryInput
+                id='lib-input'
+                type='text'
+              />
             </div>
           </form>
-        </LibraryCard>
+        </LibraryCard>,
       );
 
       const card = screen.getByTestId('library-card');
@@ -300,7 +376,10 @@ describe('Label Component Composition Tests', () => {
     it('handles portal/teleport scenarios', () => {
       // Simulate portal rendering (like tooltips, dropdowns)
       const PortalContent = ({ children }: { children: React.ReactNode }) => (
-        <div id='portal-root' data-testid='portal-content'>
+        <div
+          id='portal-root'
+          data-testid='portal-content'
+        >
           {children}
         </div>
       );
@@ -309,12 +388,15 @@ describe('Label Component Composition Tests', () => {
         <div>
           <form>
             <Label htmlFor='portal-trigger'>Portal Trigger</Label>
-            <input id='portal-trigger' type='text' />
+            <input
+              id='portal-trigger'
+              type='text'
+            />
           </form>
           <PortalContent>
             <div>Portal content with label reference</div>
           </PortalContent>
-        </div>
+        </div>,
       );
 
       const label = screen.getByText('Portal Trigger');
@@ -339,9 +421,12 @@ describe('Label Component Composition Tests', () => {
         <ErrorBoundary>
           <form>
             <Label htmlFor='error-boundary-input'>Error Boundary Input</Label>
-            <input id='error-boundary-input' type='text' />
+            <input
+              id='error-boundary-input'
+              type='text'
+            />
           </form>
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       const label = screen.getByText('Error Boundary Input');
@@ -349,14 +434,17 @@ describe('Label Component Composition Tests', () => {
     });
 
     it('handles theme provider contexts', () => {
-      const ThemeProvider = ({ 
-        theme, 
-        children 
-      }: { 
-        theme: string; 
+      const ThemeProvider = ({
+        theme,
+        children,
+      }: {
+        theme: string;
         children: React.ReactNode;
       }) => (
-        <div className={`theme-${theme}`} data-theme={theme}>
+        <div
+          className={`theme-${theme}`}
+          data-theme={theme}
+        >
           {children}
         </div>
       );
@@ -365,14 +453,17 @@ describe('Label Component Composition Tests', () => {
         <ThemeProvider theme='dark'>
           <form>
             <Label htmlFor='themed-input'>Themed Input</Label>
-            <input id='themed-input' type='text' />
+            <input
+              id='themed-input'
+              type='text'
+            />
           </form>
-        </ThemeProvider>
+        </ThemeProvider>,
       );
 
       const label = screen.getByText('Themed Input');
       const themeContainer = label.closest('[data-theme]');
-      
+
       expect(themeContainer).toHaveAttribute('data-theme', 'dark');
       expect(themeContainer).toHaveClass('theme-dark');
     });

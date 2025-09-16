@@ -77,7 +77,10 @@ export function getRateLimitStatus(identifier: string): {
     };
   }
 
-  const remaining = Math.max(0, RATE_LIMIT_CONSTANTS.DEFAULT_MAX_REQUESTS - entry.count);
+  const remaining = Math.max(
+    0,
+    RATE_LIMIT_CONSTANTS.DEFAULT_MAX_REQUESTS - entry.count,
+  );
   return {
     remaining,
     resetTime: entry.resetTime,
@@ -127,7 +130,10 @@ export function getActiveLimits(): Array<{
         identifier,
         count: entry.count,
         resetTime: entry.resetTime,
-        remaining: Math.max(0, RATE_LIMIT_CONSTANTS.DEFAULT_MAX_REQUESTS - entry.count),
+        remaining: Math.max(
+          0,
+          RATE_LIMIT_CONSTANTS.DEFAULT_MAX_REQUESTS - entry.count,
+        ),
       });
     }
   }
@@ -212,7 +218,7 @@ export function slidingWindowRateLimit(
 ): boolean {
   const now = Date.now();
   const windowStart = now - windowMs;
-  
+
   let entry = slidingWindowStore.get(identifier);
   if (!entry) {
     entry = { timestamps: [] };
@@ -220,7 +226,9 @@ export function slidingWindowRateLimit(
   }
 
   // Remove old timestamps outside the window
-  entry.timestamps = entry.timestamps.filter(timestamp => timestamp > windowStart);
+  entry.timestamps = entry.timestamps.filter(
+    (timestamp) => timestamp > windowStart,
+  );
 
   // Check if we're within the limit
   if (entry.timestamps.length >= maxRequests) {

@@ -22,9 +22,9 @@ import { ThemeMenuItem } from '../theme-menu-item';
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
-  Sun: () => <div data-testid="sun-icon">Sun</div>,
-  Moon: () => <div data-testid="moon-icon">Moon</div>,
-  Monitor: () => <div data-testid="monitor-icon">Monitor</div>,
+  Sun: () => <div data-testid='sun-icon'>Sun</div>,
+  Moon: () => <div data-testid='moon-icon'>Moon</div>,
+  Monitor: () => <div data-testid='monitor-icon'>Monitor</div>,
 }));
 
 describe('Theme Menu Item - Main Interactions Tests', () => {
@@ -52,7 +52,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       await user.click(screen.getByRole('menuitem'));
@@ -68,7 +68,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onKeyDown={handleKeyDown}
-        />
+        />,
       );
 
       await user.type(screen.getByRole('menuitem'), 'a');
@@ -84,7 +84,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onKeyDown={handleKeyDown}
-        />
+        />,
       );
 
       await user.type(screen.getByRole('menuitem'), ' ');
@@ -101,7 +101,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -119,7 +119,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
           {...defaultProps}
           theme='dark'
           onClick={handleClick}
-        />
+        />,
       );
 
       await user.click(screen.getByRole('menuitem'));
@@ -136,7 +136,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       await user.type(screen.getByRole('menuitem'), '{enter}');
@@ -154,7 +154,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
             theme='dark'
             label='Dark Mode'
           />
-        </div>
+        </div>,
       );
 
       await user.tab();
@@ -171,7 +171,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onKeyDown={handleKeyDown}
-        />
+        />,
       );
 
       await user.type(screen.getByRole('menuitem'), '{escape}');
@@ -188,7 +188,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onKeyDown={handleKeyDown}
-        />
+        />,
       );
 
       await user.type(screen.getByRole('menuitem'), '{arrowdown}');
@@ -207,9 +207,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
       );
 
       const transitionsIndicator = screen.getByText('✨');
-      expect(transitionsIndicator).toHaveClass(
-        'text-xs',
-      );
+      expect(transitionsIndicator).toHaveClass('text-xs');
       expect(transitionsIndicator).toHaveAttribute('aria-hidden', 'true');
     });
 
@@ -224,10 +222,6 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
       expect(screen.queryByText('✨')).not.toBeInTheDocument();
     });
 
-
-
-
-
     it('handles selected item with view transitions correctly', () => {
       render(
         <ThemeMenuItem
@@ -240,10 +234,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
       );
 
       const menuItem = screen.getByRole('menuitem');
-      expect(menuItem).toHaveClass(
-        'transition-all',
-        'duration-200',
-      );
+      expect(menuItem).toHaveClass('transition-all', 'duration-200');
       expect(screen.getByText('●')).toBeInTheDocument();
       expect(screen.getByText('✨')).toBeInTheDocument();
     });
@@ -255,7 +246,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -272,7 +263,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <div>
           <ThemeMenuItem {...defaultProps} />
           <button>Other element</button>
-        </div>
+        </div>,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -294,7 +285,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={vi.fn()}
-        />
+        />,
       );
 
       // Should not throw error when clicked without onClick handler
@@ -307,7 +298,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onKeyDown={vi.fn()}
-        />
+        />,
       );
 
       // Should not throw error when key is pressed without onKeyDown handler
@@ -320,7 +311,7 @@ describe('Theme Menu Item - Main Interactions Tests', () => {
           {...defaultProps}
           theme='invalid-theme'
           currentTheme='invalid-current'
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');

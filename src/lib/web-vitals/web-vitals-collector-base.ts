@@ -50,6 +50,7 @@ export class WebVitalsCollectorBase {
       hardwareConcurrency?: number;
     };
     this.metrics.device = {
+      userAgent: navigator.userAgent,
       ...(nav.deviceMemory !== undefined && { memory: nav.deviceMemory }),
       ...(nav.hardwareConcurrency !== undefined && {
         cores: nav.hardwareConcurrency,
@@ -161,7 +162,8 @@ export class WebVitalsCollectorBase {
    * 获取默认的设备信息
    */
   protected getDefaultDevice() {
-    const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+    const deviceMemory = (navigator as Navigator & { deviceMemory?: number })
+      .deviceMemory;
     const hardwareConcurrency = navigator.hardwareConcurrency;
 
     return {
@@ -194,13 +196,15 @@ export class WebVitalsCollectorBase {
       fid: this.metrics.fid || 0,
       lcp: this.metrics.lcp || 0,
       fcp: this.metrics.fcp || 0,
+      firstPaint: this.metrics.firstPaint || 0,
       ttfb: this.metrics.ttfb || 0,
       domContentLoaded: this.metrics.domContentLoaded || 0,
       loadComplete: this.metrics.loadComplete || 0,
       page: this.metrics.page || this.getDefaultPage(),
       device: this.metrics.device || this.getDefaultDevice(),
       connection: this.metrics.connection || this.getDefaultConnection(),
-      resourceTiming: this.metrics.resourceTiming || this.getDefaultResourceTiming(),
+      resourceTiming:
+        this.metrics.resourceTiming || this.getDefaultResourceTiming(),
     };
   }
 

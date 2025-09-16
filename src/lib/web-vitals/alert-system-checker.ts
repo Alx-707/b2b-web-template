@@ -3,8 +3,19 @@
  * Performance Alert System - Metrics Checker
  */
 
-import { formatMetricValue, extractCoreMetrics, getDefaultResourceTiming, getDefaultConnection, getDefaultDevice, getDefaultPage } from './alert-helpers';
-import type { DetailedWebVitals, PerformanceAlertConfig, RegressionDetectionResult } from './types';
+import {
+  extractCoreMetrics,
+  formatMetricValue,
+  getDefaultConnection,
+  getDefaultDevice,
+  getDefaultPage,
+  getDefaultResourceTiming,
+} from './alert-helpers';
+import type {
+  DetailedWebVitals,
+  PerformanceAlertConfig,
+  RegressionDetectionResult,
+} from './types';
 
 /**
  * 预警信息接口
@@ -103,7 +114,8 @@ export class AlertSystemChecker {
     const alerts: AlertInfo[] = [];
 
     // 安全地转换 Record<string, number> 为 DetailedWebVitals 兼容格式
-    const detailedMetrics = AlertSystemChecker.convertToDetailedWebVitals(metrics);
+    const detailedMetrics =
+      AlertSystemChecker.convertToDetailedWebVitals(metrics);
     AlertSystemChecker.checkMetricThresholds(detailedMetrics, config, alerts);
 
     return alerts;

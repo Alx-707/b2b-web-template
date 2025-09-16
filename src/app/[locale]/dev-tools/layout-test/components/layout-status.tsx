@@ -23,9 +23,7 @@ export function LayoutStatus() {
           </div>
           <div className='rounded bg-gray-50 p-3 dark:bg-gray-800'>
             <div className='mb-1 font-medium'>左下角</div>
-            <div className='text-muted-foreground'>
-              React Scan Indicator
-            </div>
+            <div className='text-muted-foreground'>React Scan Indicator</div>
           </div>
           <div className='rounded bg-gray-50 p-3 dark:bg-gray-800'>
             <div className='mb-1 font-medium'>右下角</div>

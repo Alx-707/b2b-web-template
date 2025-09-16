@@ -281,7 +281,11 @@ export const createBrowserAPIMock = () => {
 export const createUIComponentMock = () => {
   return vi.hoisted(() => {
     // DropdownMenu组件Mock
-    const DropdownMenu = ({ children, open, onOpenChange }: MockDropdownMenuProps) => (
+    const DropdownMenu = ({
+      children,
+      open,
+      onOpenChange,
+    }: MockDropdownMenuProps) => (
       <div
         data-testid='dropdown-menu'
         data-open={open}
@@ -291,7 +295,11 @@ export const createUIComponentMock = () => {
       </div>
     );
 
-    const DropdownMenuContent = ({ children, align, ...props }: MockDropdownMenuContentProps) => (
+    const DropdownMenuContent = ({
+      children,
+      align,
+      ...props
+    }: MockDropdownMenuContentProps) => (
       <div
         data-testid='dropdown-content'
         data-align={align}
@@ -301,7 +309,9 @@ export const createUIComponentMock = () => {
       </div>
     );
 
-    const DropdownMenuTrigger = ({ children }: MockDropdownMenuTriggerProps) => (
+    const DropdownMenuTrigger = ({
+      children,
+    }: MockDropdownMenuTriggerProps) => (
       <div data-testid='dropdown-trigger'>{children}</div>
     );
 

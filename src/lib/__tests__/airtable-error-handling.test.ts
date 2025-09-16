@@ -1,5 +1,5 @@
-import type { AirtableServicePrivate } from '@/types/test-types';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { AirtableServicePrivate } from '@/types/test-types';
 
 // Mock Airtable
 const mockCreate = vi.fn();
@@ -237,9 +237,9 @@ describe('Airtable Error Handling Tests', () => {
       mockUpdate.mockClear();
       mockUpdate.mockRejectedValue(new Error('Update failed'));
 
-      await expect(service.updateContactStatus('rec123456', 'Contacted')).rejects.toThrow(
-        'Failed to update contact status',
-      );
+      await expect(
+        service.updateContactStatus('rec123456', 'Contacted'),
+      ).rejects.toThrow('Failed to update contact status');
     });
 
     it('should handle invalid record IDs', async () => {
@@ -256,9 +256,9 @@ describe('Airtable Error Handling Tests', () => {
       mockUpdate.mockClear();
       mockUpdate.mockRejectedValue(new Error('Record not found'));
 
-      await expect(service.updateContactStatus('invalid-id', 'Contacted')).rejects.toThrow(
-        'Failed to update contact status',
-      );
+      await expect(
+        service.updateContactStatus('invalid-id', 'Contacted'),
+      ).rejects.toThrow('Failed to update contact status');
     });
 
     it('should handle invalid status values', async () => {
@@ -275,9 +275,9 @@ describe('Airtable Error Handling Tests', () => {
       mockUpdate.mockClear();
       mockUpdate.mockRejectedValue(new Error('Invalid status value'));
 
-      await expect(service.updateContactStatus('rec123456', 'InvalidStatus')).rejects.toThrow(
-        'Failed to update contact status',
-      );
+      await expect(
+        service.updateContactStatus('rec123456', 'InvalidStatus'),
+      ).rejects.toThrow('Failed to update contact status');
     });
 
     it('should throw error when service is not configured', async () => {
@@ -287,9 +287,9 @@ describe('Airtable Error Handling Tests', () => {
       (service as unknown as AirtableServicePrivate).isConfigured = false;
       (service as unknown as AirtableServicePrivate).base = null;
 
-      await expect(service.updateContactStatus('rec123456', 'Contacted')).rejects.toThrow(
-        'Airtable service is not configured',
-      );
+      await expect(
+        service.updateContactStatus('rec123456', 'Contacted'),
+      ).rejects.toThrow('Airtable service is not configured');
     });
   });
 

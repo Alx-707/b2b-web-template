@@ -37,11 +37,11 @@ const {
   mockUseThemeToggle,
 } = mocks;
 export {
-    mockResolvedTheme,
-    mockSetTheme,
-    mockSystemTheme,
-    mockTheme,
-    mockUseThemeToggle
+  mockResolvedTheme,
+  mockSetTheme,
+  mockSystemTheme,
+  mockTheme,
+  mockUseThemeToggle,
 };
 
 vi.mock('next-themes', () => ({
@@ -59,7 +59,11 @@ vi.mock('@/hooks/use-theme-toggle', () => ({
 
 // Mock UI components
 vi.mock('@/components/ui/dropdown-menu', () => ({
-  DropdownMenu: ({ children, open, onOpenChange }: {
+  DropdownMenu: ({
+    children,
+    open,
+    onOpenChange,
+  }: {
     children?: React.ReactNode;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
@@ -95,7 +99,10 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
       {children}
     </div>
   ),
-  DropdownMenuTrigger: ({ children, asChild }: {
+  DropdownMenuTrigger: ({
+    children,
+    asChild,
+  }: {
     children?: React.ReactNode;
     asChild?: boolean;
   }) => {
@@ -133,7 +140,14 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
 }));
 
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, asChild, variant, size, className, ...props }: {
+  Button: ({
+    children,
+    asChild,
+    variant,
+    size,
+    className,
+    ...props
+  }: {
     children?: React.ReactNode;
     asChild?: boolean;
     variant?: string;
@@ -160,7 +174,10 @@ vi.mock('@/components/ui/button', () => ({
 
 // Mock Lucide icons
 vi.mock('lucide-react', () => ({
-  Sun: ({ className, ...props }: {
+  Sun: ({
+    className,
+    ...props
+  }: {
     className?: string;
     [key: string]: any;
   }) => (
@@ -172,7 +189,10 @@ vi.mock('lucide-react', () => ({
       ☀️
     </span>
   ),
-  Moon: ({ className, ...props }: {
+  Moon: ({
+    className,
+    ...props
+  }: {
     className?: string;
     [key: string]: any;
   }) => (
@@ -184,7 +204,10 @@ vi.mock('lucide-react', () => ({
       🌙
     </span>
   ),
-  Monitor: ({ className, ...props }: {
+  Monitor: ({
+    className,
+    ...props
+  }: {
     className?: string;
     [key: string]: any;
   }) => (

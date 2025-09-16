@@ -77,9 +77,9 @@ export class LocalStorageManager {
    */
   static getAll(): Record<string, unknown> {
     if (typeof window === 'undefined') return {};
-    
+
     const items: Record<string, unknown> = {};
-    
+
     try {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -95,7 +95,7 @@ export class LocalStorageManager {
         // console.warn('Failed to get all localStorage items:', error);
       }
     }
-    
+
     return items;
   }
 
@@ -120,9 +120,9 @@ export class LocalStorageManager {
    */
   static getUsageSize(): number {
     if (typeof window === 'undefined') return 0;
-    
+
     let totalSize = 0;
-    
+
     try {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -138,7 +138,7 @@ export class LocalStorageManager {
         // console.warn('Failed to calculate localStorage usage:', error);
       }
     }
-    
+
     return totalSize;
   }
 
@@ -148,11 +148,11 @@ export class LocalStorageManager {
    */
   static getItemSize(key: string): number {
     if (typeof window === 'undefined') return 0;
-    
+
     try {
       const value = localStorage.getItem(key);
       if (!value) return 0;
-      
+
       return new Blob([key + value]).size;
     } catch {
       return 0;
@@ -165,15 +165,15 @@ export class LocalStorageManager {
    */
   static isAvailable(): boolean {
     if (typeof window === 'undefined') return false;
-    
+
     try {
       const testKey = '__localStorage_test__';
       const testValue = 'test';
-      
+
       localStorage.setItem(testKey, testValue);
       const retrieved = localStorage.getItem(testKey);
       localStorage.removeItem(testKey);
-      
+
       return retrieved === testValue;
     } catch {
       return false;
@@ -186,10 +186,10 @@ export class LocalStorageManager {
    */
   static getRemainingSpace(): number {
     if (!this.isAvailable()) return 0;
-    
+
     const maxSize = 5 * 1024 * 1024; // 5MB 估算限制
     const usedSize = this.getUsageSize();
-    
+
     return Math.max(0, maxSize - usedSize);
   }
 
@@ -199,10 +199,10 @@ export class LocalStorageManager {
    */
   static isNearLimit(threshold: number = 0.8): boolean {
     if (!this.isAvailable()) return true;
-    
+
     const maxSize = 5 * 1024 * 1024; // 5MB 估算限制
     const usedSize = this.getUsageSize();
-    
+
     return usedSize / maxSize > threshold;
   }
 
@@ -215,7 +215,7 @@ export class LocalStorageManager {
       value,
       expiry: Date.now() + expiryMs,
     };
-    
+
     this.set(key, item);
   }
 
@@ -225,15 +225,15 @@ export class LocalStorageManager {
    */
   static getWithExpiry<T>(key: string): T | null {
     const item = this.get<{ value: T; expiry: number }>(key);
-    
+
     if (!item) return null;
-    
+
     // 检查是否过期
     if (Date.now() > item.expiry) {
       this.remove(key);
       return null;
     }
-    
+
     return item.value;
   }
 
@@ -253,11 +253,11 @@ export class LocalStorageManager {
    */
   static getMultiple<T>(keys: string[]): Record<string, T | null> {
     const result: Record<string, T | null> = {};
-    
+
     keys.forEach((key) => {
       result[key] = this.get<T>(key);
     });
-    
+
     return result;
   }
 
@@ -277,9 +277,9 @@ export class LocalStorageManager {
    */
   static getByPrefix<T>(prefix: string): Record<string, T> {
     const items: Record<string, T> = {};
-    
+
     if (typeof window === 'undefined') return items;
-    
+
     try {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -295,7 +295,7 @@ export class LocalStorageManager {
         // console.warn('Failed to get items by prefix:', error);
       }
     }
-    
+
     return items;
   }
 
@@ -305,9 +305,9 @@ export class LocalStorageManager {
    */
   static removeByPrefix(prefix: string): void {
     if (typeof window === 'undefined') return;
-    
+
     const keysToRemove: string[] = [];
-    
+
     try {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -315,7 +315,7 @@ export class LocalStorageManager {
           keysToRemove.push(key);
         }
       }
-      
+
       keysToRemove.forEach((key) => {
         this.remove(key);
       });

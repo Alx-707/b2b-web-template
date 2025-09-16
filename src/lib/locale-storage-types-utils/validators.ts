@@ -4,10 +4,9 @@
  */
 
 import { BaseValidators } from '../locale-storage-types-base';
-
 import type {
-  UserLocalePreference,
   LocaleDetectionHistory,
+  UserLocalePreference,
   ValidationResult,
 } from '../locale-storage-types-data';
 
@@ -20,7 +19,9 @@ import type {
  * 验证用户偏好
  * Validate user preference
  */
-export function validatePreference(preference: UserLocalePreference): ValidationResult {
+export function validatePreference(
+  preference: UserLocalePreference,
+): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -47,22 +48,34 @@ export function validatePreference(preference: UserLocalePreference): Validation
       errors.push('Metadata must be an object');
     } else {
       // 验证用户代理
-      if (preference.metadata.userAgent && typeof preference.metadata.userAgent !== 'string') {
+      if (
+        preference.metadata.userAgent &&
+        typeof preference.metadata.userAgent !== 'string'
+      ) {
         warnings.push('User agent should be a string');
       }
 
       // 验证IP国家
-      if (preference.metadata.ipCountry && typeof preference.metadata.ipCountry !== 'string') {
+      if (
+        preference.metadata.ipCountry &&
+        typeof preference.metadata.ipCountry !== 'string'
+      ) {
         warnings.push('IP country should be a string');
       }
 
       // 验证浏览器语言
-      if (preference.metadata.browserLanguages && !Array.isArray(preference.metadata.browserLanguages)) {
+      if (
+        preference.metadata.browserLanguages &&
+        !Array.isArray(preference.metadata.browserLanguages)
+      ) {
         warnings.push('Browser languages should be an array');
       }
 
       // 验证时区
-      if (preference.metadata.timezone && typeof preference.metadata.timezone !== 'string') {
+      if (
+        preference.metadata.timezone &&
+        typeof preference.metadata.timezone !== 'string'
+      ) {
         warnings.push('Timezone should be a string');
       }
     }
@@ -88,7 +101,9 @@ export function validatePreference(preference: UserLocalePreference): Validation
  * 验证检测历史
  * Validate detection history
  */
-export function validateDetectionHistory(history: LocaleDetectionHistory): ValidationResult {
+export function validateDetectionHistory(
+  history: LocaleDetectionHistory,
+): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -122,7 +137,9 @@ export function validateDetectionHistory(history: LocaleDetectionHistory): Valid
 
     // 验证时间顺序
     for (let i = 1; i < history.detections.length; i++) {
-      if (history.detections[i].timestamp < history.detections[i - 1].timestamp) {
+      const current = history.detections[i];
+      const previous = history.detections[i - 1];
+      if (current && previous && current.timestamp < previous.timestamp) {
         warnings.push('Detections are not in chronological order');
         break;
       }
@@ -135,7 +152,10 @@ export function validateDetectionHistory(history: LocaleDetectionHistory): Valid
   }
 
   // 验证总检测数
-  if (typeof history.totalDetections !== 'number' || history.totalDetections < 0) {
+  if (
+    typeof history.totalDetections !== 'number' ||
+    history.totalDetections < 0
+  ) {
     errors.push('Invalid totalDetections');
   }
 

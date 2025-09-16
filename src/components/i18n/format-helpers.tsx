@@ -1,9 +1,8 @@
 'use client';
 
-import type { DateFormatOptions } from '@/types/i18n-enhanced';
-import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { memo } from 'react';
-;
+import { useFormatter, useLocale, useTranslations } from 'next-intl';
+import type { DateFormatOptions } from '@/types/i18n-enhanced';
 
 interface FormatDateProps {
   date: Date | string | number;

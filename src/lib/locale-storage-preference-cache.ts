@@ -8,18 +8,17 @@
 'use client';
 
 import type { Locale } from '@/types/i18n';
-;
 import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
-import type {
-  UserLocalePreference,
-  StorageOperationResult,
-} from './locale-storage-types';
 import {
   getUserPreference,
   saveUserPreference,
-  validatePreferenceData
+  validatePreferenceData,
 } from './locale-storage-preference-core';
+import type {
+  StorageOperationResult,
+  UserLocalePreference,
+} from './locale-storage-types';
 
 // ==================== 缓存管理器 ====================
 
@@ -115,7 +114,8 @@ export function syncPreferenceData(): StorageOperationResult<{
 
   try {
     // 获取各存储源的数据
-    const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
+    const localPreference =
+      LocalStorageManager.get<UserLocalePreference>('locale_preference');
     const cookieLocale = CookieManager.get('locale_preference');
 
     let synced = false;
@@ -146,7 +146,10 @@ export function syncPreferenceData(): StorageOperationResult<{
 
     // 更新缓存
     if (primaryPreference) {
-      PreferenceCacheManager.updateCache('locale_preference', primaryPreference);
+      PreferenceCacheManager.updateCache(
+        'locale_preference',
+        primaryPreference,
+      );
     }
 
     return {
@@ -183,14 +186,17 @@ export function checkDataConsistency(): {
   const recommendations: string[] = [];
 
   try {
-    const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
+    const localPreference =
+      LocalStorageManager.get<UserLocalePreference>('locale_preference');
     const cookieLocale = CookieManager.get('locale_preference');
 
     // 检查 localStorage 数据有效性
     if (localPreference) {
       const validation = validatePreferenceData(localPreference);
       if (!validation.isValid) {
-        issues.push(`Invalid localStorage data: ${validation.errors.join(', ')}`);
+        issues.push(
+          `Invalid localStorage data: ${validation.errors.join(', ')}`,
+        );
         recommendations.push('Clear and recreate localStorage preference data');
       }
     }
@@ -198,7 +204,9 @@ export function checkDataConsistency(): {
     // 检查数据一致性
     if (localPreference && cookieLocale) {
       if (localPreference.locale !== cookieLocale) {
-        issues.push(`Locale mismatch: localStorage(${localPreference.locale}) vs cookies(${cookieLocale})`);
+        issues.push(
+          `Locale mismatch: localStorage(${localPreference.locale}) vs cookies(${cookieLocale})`,
+        );
         recommendations.push('Sync data between localStorage and cookies');
       }
     } else if (!localPreference && !cookieLocale) {
@@ -207,10 +215,13 @@ export function checkDataConsistency(): {
     }
 
     // 检查缓存一致性
-    const cachedPreference = PreferenceCacheManager.getCachedPreference('locale_preference');
+    const cachedPreference =
+      PreferenceCacheManager.getCachedPreference('locale_preference');
     if (cachedPreference && localPreference) {
-      if (cachedPreference.locale !== localPreference.locale ||
-          Math.abs(cachedPreference.timestamp - localPreference.timestamp) > 1000) {
+      if (
+        cachedPreference.locale !== localPreference.locale ||
+        Math.abs(cachedPreference.timestamp - localPreference.timestamp) > 1000
+      ) {
         issues.push('Cache data is inconsistent with localStorage');
         recommendations.push('Clear and refresh cache');
       }
@@ -224,7 +235,9 @@ export function checkDataConsistency(): {
   } catch (error) {
     return {
       isConsistent: false,
-      issues: [`Error checking consistency: ${error instanceof Error ? error.message : 'Unknown error'}`],
+      issues: [
+        `Error checking consistency: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      ],
       recommendations: ['Investigate storage access issues'],
     };
   }
@@ -261,7 +274,8 @@ export function fixDataInconsistency(): StorageOperationResult<{
     actions.push('Cleared cache');
 
     // 获取最可靠的数据源
-    const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
+    const localPreference =
+      LocalStorageManager.get<UserLocalePreference>('locale_preference');
     const cookieLocale = CookieManager.get('locale_preference');
 
     let authoritative: UserLocalePreference | null = null;
@@ -373,11 +387,14 @@ export function getStorageUsage(): {
 
       // 尝试获取配额信息
       if ('storage' in navigator && 'estimate' in navigator.storage) {
-        navigator.storage.estimate().then(estimate => {
-          usage.localStorage.quota = estimate.quota || 0;
-        }).catch(() => {
-          // 忽略错误
-        });
+        navigator.storage
+          .estimate()
+          .then((estimate) => {
+            usage.localStorage.quota = estimate.quota || 0;
+          })
+          .catch(() => {
+            // 忽略错误
+          });
       }
     }
   } catch {

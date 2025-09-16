@@ -6,22 +6,24 @@
 'use client';
 
 import { CACHE_LIMITS } from '@/constants/i18n-constants';
+import {
+  createDefaultHistory,
+  getDetectionHistory,
+  HistoryCacheManager,
+} from '../locale-storage-history-core';
 import { LocalStorageManager } from '../locale-storage-local';
 import type {
   LocaleDetectionRecord,
   StorageOperationResult,
 } from '../locale-storage-types';
-import {
-  getDetectionHistory,
-  createDefaultHistory,
-  HistoryCacheManager
-} from '../locale-storage-history-core';
 
 /**
  * 清理过期的检测记录
  * Cleanup expired detection records
  */
-export function cleanupExpiredDetections(maxAgeMs: number = 30 * 24 * 60 * 60 * 1000): StorageOperationResult<number> {
+export function cleanupExpiredDetections(
+  maxAgeMs: number = 30 * 24 * 60 * 60 * 1000,
+): StorageOperationResult<number> {
   const startTime = Date.now();
 
   try {
@@ -42,7 +44,9 @@ export function cleanupExpiredDetections(maxAgeMs: number = 30 * 24 * 60 * 60 * 
     const originalCount = history.history.length;
 
     // 过滤掉过期的记录
-    history.history = history.history.filter(record => record.timestamp > cutoffTime);
+    history.history = history.history.filter(
+      (record) => record.timestamp > cutoffTime,
+    );
 
     const removedCount = originalCount - history.history.length;
 
@@ -110,7 +114,7 @@ export function cleanupDuplicateDetections(): StorageOperationResult<number> {
     const seen = new Set<string>();
     const uniqueRecords: LocaleDetectionRecord[] = [];
 
-    history.history.forEach(record => {
+    history.history.forEach((record) => {
       // 创建记录的唯一标识符
       const key = `${record.locale}-${record.source}-${record.timestamp}-${record.confidence}`;
 
@@ -161,7 +165,9 @@ export function cleanupDuplicateDetections(): StorageOperationResult<number> {
  * 限制历史记录数量
  * Limit history record count
  */
-export function limitHistorySize(maxRecords: number = CACHE_LIMITS.MAX_DETECTION_HISTORY || 100): StorageOperationResult<number> {
+export function limitHistorySize(
+  maxRecords: number = CACHE_LIMITS.MAX_DETECTION_HISTORY || 100,
+): StorageOperationResult<number> {
   const startTime = Date.now();
 
   try {

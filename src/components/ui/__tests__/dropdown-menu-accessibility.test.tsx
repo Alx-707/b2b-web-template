@@ -2,15 +2,15 @@
  * @vitest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
 } from '../dropdown-menu';
 
 describe('DropdownMenu - Accessibility', () => {
@@ -40,7 +40,9 @@ describe('DropdownMenu - Accessibility', () => {
   it('provides proper ARIA attributes', () => {
     render(
       <DropdownMenu defaultOpen>
-        <DropdownMenuTrigger data-testid='trigger'>Open Menu</DropdownMenuTrigger>
+        <DropdownMenuTrigger data-testid='trigger'>
+          Open Menu
+        </DropdownMenuTrigger>
         <DropdownMenuContent data-testid='content'>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem>Edit</DropdownMenuItem>
@@ -62,8 +64,15 @@ describe('DropdownMenu - Accessibility', () => {
       <DropdownMenu defaultOpen>
         <DropdownMenuTrigger>Open</DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem data-testid='enabled-item'>Enabled</DropdownMenuItem>
-          <DropdownMenuItem disabled data-testid='disabled-item'>Disabled</DropdownMenuItem>
+          <DropdownMenuItem data-testid='enabled-item'>
+            Enabled
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled
+            data-testid='disabled-item'
+          >
+            Disabled
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>,
     );
@@ -93,10 +102,16 @@ describe('DropdownMenu - Accessibility', () => {
   it('supports screen readers with proper labeling', () => {
     render(
       <DropdownMenu defaultOpen>
-        <DropdownMenuTrigger data-testid='trigger' aria-label='Main menu'>
+        <DropdownMenuTrigger
+          data-testid='trigger'
+          aria-label='Main menu'
+        >
           Menu
         </DropdownMenuTrigger>
-        <DropdownMenuContent data-testid='content' aria-label='Menu options'>
+        <DropdownMenuContent
+          data-testid='content'
+          aria-label='Menu options'
+        >
           <DropdownMenuLabel>File Operations</DropdownMenuLabel>
           <DropdownMenuItem>New File</DropdownMenuItem>
           <DropdownMenuItem>Open File</DropdownMenuItem>
@@ -115,16 +130,20 @@ describe('DropdownMenu - Accessibility', () => {
   it('handles high contrast mode compatibility', () => {
     render(
       <DropdownMenu defaultOpen>
-        <DropdownMenuTrigger data-testid='trigger'>High Contrast Menu</DropdownMenuTrigger>
+        <DropdownMenuTrigger data-testid='trigger'>
+          High Contrast Menu
+        </DropdownMenuTrigger>
         <DropdownMenuContent data-testid='content'>
-          <DropdownMenuItem data-testid='item'>High Contrast Item</DropdownMenuItem>
+          <DropdownMenuItem data-testid='item'>
+            High Contrast Item
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>,
     );
 
     const content = screen.getByTestId('content');
     const item = screen.getByTestId('item');
-    
+
     // These elements should be properly styled for high contrast
     expect(content).toBeInTheDocument();
     expect(item).toBeInTheDocument();
@@ -133,9 +152,14 @@ describe('DropdownMenu - Accessibility', () => {
   it('supports ARIA live regions for dynamic content', () => {
     render(
       <DropdownMenu defaultOpen>
-        <DropdownMenuTrigger data-testid='trigger'>Dynamic Menu</DropdownMenuTrigger>
+        <DropdownMenuTrigger data-testid='trigger'>
+          Dynamic Menu
+        </DropdownMenuTrigger>
         <DropdownMenuContent data-testid='content'>
-          <div aria-live='polite' data-testid='live-region'>
+          <div
+            aria-live='polite'
+            data-testid='live-region'
+          >
             Menu status: Open
           </div>
           <DropdownMenuItem>Dynamic Item</DropdownMenuItem>
@@ -151,7 +175,9 @@ describe('DropdownMenu - Accessibility', () => {
   it('handles keyboard shortcuts accessibility', () => {
     render(
       <DropdownMenu defaultOpen>
-        <DropdownMenuTrigger data-testid='trigger'>Shortcut Menu</DropdownMenuTrigger>
+        <DropdownMenuTrigger data-testid='trigger'>
+          Shortcut Menu
+        </DropdownMenuTrigger>
         <DropdownMenuContent data-testid='content'>
           <DropdownMenuItem data-testid='item-with-shortcut'>
             <span>Copy</span>
@@ -163,7 +189,7 @@ describe('DropdownMenu - Accessibility', () => {
 
     const item = screen.getByTestId('item-with-shortcut');
     const shortcut = screen.getByLabelText('Keyboard shortcut: Control C');
-    
+
     expect(item).toBeInTheDocument();
     expect(shortcut).toBeInTheDocument();
     expect(shortcut).toHaveTextContent('⌘C');
@@ -173,7 +199,7 @@ describe('DropdownMenu - Accessibility', () => {
     // Mock reduced motion preference
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: vi.fn().mockImplementation(query => ({
+      value: vi.fn().mockImplementation((query) => ({
         matches: query === '(prefers-reduced-motion: reduce)',
         media: query,
         onchange: null,
@@ -187,7 +213,9 @@ describe('DropdownMenu - Accessibility', () => {
 
     render(
       <DropdownMenu defaultOpen>
-        <DropdownMenuTrigger data-testid='trigger'>Reduced Motion Menu</DropdownMenuTrigger>
+        <DropdownMenuTrigger data-testid='trigger'>
+          Reduced Motion Menu
+        </DropdownMenuTrigger>
         <DropdownMenuContent data-testid='content'>
           <DropdownMenuItem>Item</DropdownMenuItem>
         </DropdownMenuContent>
@@ -201,14 +229,14 @@ describe('DropdownMenu - Accessibility', () => {
   it('handles touch and mobile accessibility', () => {
     render(
       <DropdownMenu defaultOpen>
-        <DropdownMenuTrigger 
+        <DropdownMenuTrigger
           data-testid='trigger'
           style={{ minHeight: '44px', minWidth: '44px' }} // Touch target size
         >
           Mobile Menu
         </DropdownMenuTrigger>
         <DropdownMenuContent data-testid='content'>
-          <DropdownMenuItem 
+          <DropdownMenuItem
             data-testid='mobile-item'
             style={{ minHeight: '44px' }} // Touch target size
           >
@@ -220,7 +248,7 @@ describe('DropdownMenu - Accessibility', () => {
 
     const trigger = screen.getByTestId('trigger');
     const item = screen.getByTestId('mobile-item');
-    
+
     expect(trigger).toBeInTheDocument();
     expect(item).toBeInTheDocument();
   });

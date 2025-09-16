@@ -5,10 +5,8 @@
  * 注意：基础功能测试请参考 route-post-core.test.ts
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { NextRequest } from 'next/server';
-;
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from '@/app/api/csp-report/__tests__/route';
 
 describe('CSP Report API Route - 高级功能测试', () => {
@@ -69,21 +67,24 @@ describe('CSP Report API Route - 高级功能测试', () => {
     });
 
     it('应该处理并发请求', async () => {
-      const requests = Array(10).fill(null).map(() =>
-        new NextRequest('http://localhost:3000/api/csp-report', {
-          method: 'POST',
-          body: JSON.stringify(validCSPReport),
-          headers: {
-            'content-type': 'application/csp-report',
-          },
-        })
-      );
+      const requests = Array(10)
+        .fill(null)
+        .map(
+          () =>
+            new NextRequest('http://localhost:3000/api/csp-report', {
+              method: 'POST',
+              body: JSON.stringify(validCSPReport),
+              headers: {
+                'content-type': 'application/csp-report',
+              },
+            }),
+        );
 
       const _startTime = performance.now();
-      const responses = await Promise.all(requests.map(req => POST(req)));
+      const responses = await Promise.all(requests.map((req) => POST(req)));
       const endTime = performance.now();
 
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.status).toBe(204);
       });
       expect(endTime - _startTime).toBeLessThan(2000); // 并发处理应该在2秒内完成
@@ -229,7 +230,7 @@ describe('CSP Report API Route - 高级功能测试', () => {
           'document-uri': expect.any(String),
           'violated-directive': expect.any(String),
           'blocked-uri': expect.any(String),
-        })
+        }),
       );
     });
 

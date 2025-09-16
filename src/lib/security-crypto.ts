@@ -23,9 +23,7 @@ export async function hashPassword(
   const encoder = new TextEncoder();
   const saltBytes = salt
     ? encoder.encode(salt)
-    : crypto.getRandomValues(
-        new Uint8Array(CRYPTO_CONSTANTS.SALT_BYTE_LENGTH),
-      );
+    : crypto.getRandomValues(new Uint8Array(CRYPTO_CONSTANTS.SALT_BYTE_LENGTH));
   const passwordBytes = encoder.encode(password);
 
   const combined = new Uint8Array(saltBytes.length + passwordBytes.length);
@@ -86,7 +84,9 @@ export async function verifyPassword(
 /**
  * Generate a cryptographically secure random salt
  */
-export function generateSalt(length: number = CRYPTO_CONSTANTS.SALT_BYTE_LENGTH): string {
+export function generateSalt(
+  length: number = CRYPTO_CONSTANTS.SALT_BYTE_LENGTH,
+): string {
   const saltBytes = crypto.getRandomValues(new Uint8Array(length));
   return Array.from(saltBytes)
     .map((b) =>
@@ -105,7 +105,7 @@ export async function sha256Hash(data: string): Promise<string> {
   const dataBytes = encoder.encode(data);
   const hashBuffer = await crypto.subtle.digest('SHA-256', dataBytes);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  
+
   return hashArray
     .map((b) =>
       b
@@ -123,7 +123,7 @@ export async function sha512Hash(data: string): Promise<string> {
   const dataBytes = encoder.encode(data);
   const hashBuffer = await crypto.subtle.digest('SHA-512', dataBytes);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  
+
   return hashArray
     .map((b) =>
       b
@@ -155,7 +155,7 @@ export async function generateHMAC(
 
   const signature = await crypto.subtle.sign('HMAC', key, messageData);
   const signatureArray = Array.from(new Uint8Array(signature));
-  
+
   return signatureArray
     .map((b) =>
       b
@@ -191,11 +191,11 @@ export async function encryptData(
 ): Promise<{ encrypted: string; iv: string; salt: string }> {
   const encoder = new TextEncoder();
   const dataBytes = encoder.encode(data);
-  
+
   // Generate salt and IV
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
-  
+
   // Derive key from password
   const passwordKey = await crypto.subtle.importKey(
     'raw',
@@ -204,7 +204,7 @@ export async function encryptData(
     false,
     ['deriveKey'],
   );
-  
+
   const key = await crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
@@ -217,14 +217,14 @@ export async function encryptData(
     false,
     ['encrypt'],
   );
-  
+
   // Encrypt data
   const encrypted = await crypto.subtle.encrypt(
     { name: 'AES-GCM', iv },
     key,
     dataBytes,
   );
-  
+
   return {
     encrypted: Array.from(new Uint8Array(encrypted))
       .map((b) => b.toString(16).padStart(2, '0'))
@@ -248,7 +248,7 @@ export async function decryptData(
   password: string,
 ): Promise<string> {
   const encoder = new TextEncoder();
-  
+
   // Convert hex strings back to bytes
   const encrypted = new Uint8Array(
     encryptedHex.match(/.{2}/g)?.map((byte) => parseInt(byte, 16)) || [],
@@ -259,7 +259,7 @@ export async function decryptData(
   const salt = new Uint8Array(
     saltHex.match(/.{2}/g)?.map((byte) => parseInt(byte, 16)) || [],
   );
-  
+
   // Derive key from password
   const passwordKey = await crypto.subtle.importKey(
     'raw',
@@ -268,7 +268,7 @@ export async function decryptData(
     false,
     ['deriveKey'],
   );
-  
+
   const key = await crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
@@ -281,14 +281,14 @@ export async function decryptData(
     false,
     ['decrypt'],
   );
-  
+
   // Decrypt data
   const decrypted = await crypto.subtle.decrypt(
     { name: 'AES-GCM', iv },
     key,
     encrypted,
   );
-  
+
   return new TextDecoder().decode(decrypted);
 }
 
@@ -320,7 +320,7 @@ export async function importKey(keyHex: string): Promise<CryptoKey> {
   const keyBytes = new Uint8Array(
     keyHex.match(/.{2}/g)?.map((byte) => parseInt(byte, 16)) || [],
   );
-  
+
   return await crypto.subtle.importKey(
     'raw',
     keyBytes,
@@ -337,11 +337,11 @@ export function constantTimeCompare(a: string, b: string): boolean {
   if (a.length !== b.length) {
     return false;
   }
-  
+
   let result = 0;
   for (let i = 0; i < a.length; i++) {
     result |= a.charCodeAt(i) ^ b.charCodeAt(i);
   }
-  
+
   return result === 0;
 }

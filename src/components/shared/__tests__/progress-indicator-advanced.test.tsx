@@ -18,9 +18,9 @@ vi.mock('next-intl', () => ({
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
-  Check: () => <span data-testid="check-icon">✓</span>,
-  ChevronRight: () => <span data-testid="chevron-right-icon">→</span>,
-  Circle: () => <span data-testid="circle-icon">○</span>,
+  Check: () => <span data-testid='check-icon'>✓</span>,
+  ChevronRight: () => <span data-testid='chevron-right-icon'>→</span>,
+  Circle: () => <span data-testid='circle-icon'>○</span>,
 }));
 
 describe('ProgressIndicator - 高级功能测试', () => {
@@ -42,11 +42,7 @@ describe('ProgressIndicator - 高级功能测试', () => {
 
   describe('动画和过渡效果', () => {
     it('步骤切换时有过渡动画', async () => {
-      render(
-        <ProgressIndicator
-          currentStep={1}
-        />
-      );
+      render(<ProgressIndicator currentStep={1} />);
 
       // 验证当前步骤显示正确
       expect(screen.getByText('开发阶段')).toBeInTheDocument();
@@ -75,11 +71,7 @@ describe('ProgressIndicator - 高级功能测试', () => {
 
   describe('显示状态', () => {
     it('正确显示当前步骤状态', async () => {
-      render(
-        <ProgressIndicator
-          currentStep={2}
-        />
-      );
+      render(<ProgressIndicator currentStep={2} />);
 
       // 验证当前步骤高亮显示
       expect(screen.getByText('测试阶段')).toBeInTheDocument();
@@ -89,11 +81,7 @@ describe('ProgressIndicator - 高级功能测试', () => {
     });
 
     it('正确显示步骤完成状态', async () => {
-      render(
-        <ProgressIndicator
-          currentStep={3}
-        />
-      );
+      render(<ProgressIndicator currentStep={3} />);
 
       // 验证最终步骤
       expect(screen.getByText('发布阶段')).toBeInTheDocument();

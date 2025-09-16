@@ -4,7 +4,7 @@
 
 import type { ContentStats, Locale } from '@/types/content';
 import { getContentConfig } from '../content-utils';
-import { getAllPosts, getAllPages } from './queries';
+import { getAllPages, getAllPosts } from './queries';
 
 /**
  * Get content statistics

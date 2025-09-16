@@ -2,18 +2,18 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from '../sheet';
 
 // Mock Lucide React icons
@@ -187,7 +187,11 @@ describe('Sheet - Edge Cases', () => {
   });
 
   it('handles sheet with very long content', async () => {
-    const longContent = Array.from({ length: 50 }, (_, i) => `Paragraph ${i + 1}: This is a very long paragraph with lots of text content that should test how the sheet handles scrolling and overflow.`).join(' ');
+    const longContent = Array.from(
+      { length: 50 },
+      (_, i) =>
+        `Paragraph ${i + 1}: This is a very long paragraph with lots of text content that should test how the sheet handles scrolling and overflow.`,
+    ).join(' ');
 
     render(
       <Sheet defaultOpen>
@@ -229,7 +233,9 @@ describe('Sheet - Edge Cases', () => {
       const content = screen.getByTestId('sheet-content');
       expect(content).toBeInTheDocument();
       expect(content).toHaveTextContent('Special Characters: 🚀 ñáéíóú ©®™');
-      expect(content).toHaveTextContent('Unicode test: 中文 العربية русский 日本語 🎉🎊✨');
+      expect(content).toHaveTextContent(
+        'Unicode test: 中文 العربية русский 日本語 🎉🎊✨',
+      );
     });
   });
 
@@ -246,7 +252,7 @@ describe('Sheet - Edge Cases', () => {
             <div data-testid='counter'>Count: {count}</div>
             <button
               data-testid='increment-button'
-              onClick={() => setCount(c => c + 1)}
+              onClick={() => setCount((c) => c + 1)}
             >
               Increment
             </button>

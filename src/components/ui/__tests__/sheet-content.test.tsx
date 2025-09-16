@@ -2,16 +2,16 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetHeader,
-    SheetTitle
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
 } from '../sheet';
 
 // Mock Lucide React icons
@@ -68,7 +68,10 @@ describe('Sheet - Content & Interactions', () => {
       for (const side of sides) {
         const { unmount } = render(
           <Sheet defaultOpen>
-            <SheetContent side={side} data-testid={`sheet-content-${side}`}>
+            <SheetContent
+              side={side}
+              data-testid={`sheet-content-${side}`}
+            >
               <SheetTitle>Sheet {side}</SheetTitle>
             </SheetContent>
           </Sheet>,
@@ -95,14 +98,24 @@ describe('Sheet - Content & Interactions', () => {
 
       await waitFor(() => {
         const content = screen.getByTestId('sheet-content');
-        expect(content).toHaveClass('fixed', 'z-50', 'gap-4', 'bg-background', 'p-6', 'shadow-lg');
+        expect(content).toHaveClass(
+          'fixed',
+          'z-50',
+          'gap-4',
+          'bg-background',
+          'p-6',
+          'shadow-lg',
+        );
       });
     });
 
     it('applies custom className', async () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent className='custom-content' data-testid='sheet-content'>
+          <SheetContent
+            className='custom-content'
+            data-testid='sheet-content'
+          >
             <SheetTitle>Title</SheetTitle>
           </SheetContent>
         </Sheet>,
@@ -222,7 +235,10 @@ describe('Sheet - Content & Interactions', () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
-            <SheetClose className='custom-close' data-testid='close-button'>
+            <SheetClose
+              className='custom-close'
+              data-testid='close-button'
+            >
               Close
             </SheetClose>
           </SheetContent>

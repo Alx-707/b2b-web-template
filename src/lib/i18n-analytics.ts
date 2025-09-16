@@ -186,7 +186,10 @@ export class I18nAnalytics {
     };
   }
 
-  private async sendToAnalytics(eventType: string, data: unknown): Promise<void> {
+  private async sendToAnalytics(
+    eventType: string,
+    data: unknown,
+  ): Promise<void> {
     try {
       // Google Analytics 4
       if (typeof window !== 'undefined' && 'gtag' in window) {
@@ -322,7 +325,8 @@ export class I18nAnalytics {
 
     const avgLoadTime =
       loadTimeEvents.reduce((sum, e) => {
-        const loadTime = typeof e.metadata.loadTime === 'number' ? e.metadata.loadTime : 0;
+        const loadTime =
+          typeof e.metadata.loadTime === 'number' ? e.metadata.loadTime : 0;
         return sum + loadTime;
       }, 0) / loadTimeEvents.length;
 

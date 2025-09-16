@@ -12,13 +12,16 @@
  * - 组件生命周期
  */
 
+import React from 'react';
+import { usePathname } from 'next/navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useLocale, useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { EnhancedLocaleSwitcher, SimpleLocaleSwitcher } from '../enhanced-locale-switcher';
+import {
+  EnhancedLocaleSwitcher,
+  SimpleLocaleSwitcher,
+} from '../enhanced-locale-switcher';
 
 // Mock next-intl hooks
 vi.mock('next-intl', () => ({
@@ -62,7 +65,11 @@ vi.mock('lucide-react', () => ({
       data-testid='globe-icon'
       {...props}
     >
-      <circle cx='12' cy='12' r='10' />
+      <circle
+        cx='12'
+        cy='12'
+        r='10'
+      />
     </svg>
   ),
 }));
@@ -91,26 +98,32 @@ describe('Enhanced Locale Switcher - Modes Tests', () => {
     vi.clearAllMocks();
 
     // Setup default mocks
-    (useLocale as ReturnType<typeof vi.fn>).mockReturnValue(defaultMocks.locale);
-    (usePathname as ReturnType<typeof vi.fn>).mockReturnValue(defaultMocks.pathname);
-    (useTranslations as ReturnType<typeof vi.fn>).mockImplementation((namespace?: string) => {
-      if (namespace === 'LocaleSwitcher') {
-        return (key: string) => {
-          const keys = key.split('.');
-          let value: unknown = defaultMocks.translations;
-          for (const k of keys) {
-            // 安全的对象属性访问，避免对象注入
-            if (value && typeof value === 'object' && k in value) {
-              value = (value as Record<string, unknown>)[k];
-            } else {
-              return key; // 如果路径不存在，返回原始key
+    (useLocale as ReturnType<typeof vi.fn>).mockReturnValue(
+      defaultMocks.locale,
+    );
+    (usePathname as ReturnType<typeof vi.fn>).mockReturnValue(
+      defaultMocks.pathname,
+    );
+    (useTranslations as ReturnType<typeof vi.fn>).mockImplementation(
+      (namespace?: string) => {
+        if (namespace === 'LocaleSwitcher') {
+          return (key: string) => {
+            const keys = key.split('.');
+            let value: unknown = defaultMocks.translations;
+            for (const k of keys) {
+              // 安全的对象属性访问，避免对象注入
+              if (value && typeof value === 'object' && k in value) {
+                value = (value as Record<string, unknown>)[k];
+              } else {
+                return key; // 如果路径不存在，返回原始key
+              }
             }
-          }
-          return value as string || key;
-        };
-      }
-      return (key: string) => key;
-    });
+            return (value as string) || key;
+          };
+        }
+        return (key: string) => key;
+      },
+    );
   });
 
   describe('Compact模式测试', () => {
@@ -154,7 +167,12 @@ describe('Enhanced Locale Switcher - Modes Tests', () => {
     });
 
     it('applies compact-specific styling', () => {
-      render(<EnhancedLocaleSwitcher compact className='compact-custom' />);
+      render(
+        <EnhancedLocaleSwitcher
+          compact
+          className='compact-custom'
+        />,
+      );
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('compact-custom');
@@ -175,7 +193,12 @@ describe('Enhanced Locale Switcher - Modes Tests', () => {
     });
 
     it('supports responsive behavior in compact mode', () => {
-      render(<EnhancedLocaleSwitcher compact className='md:px-4 lg:px-6' />);
+      render(
+        <EnhancedLocaleSwitcher
+          compact
+          className='md:px-4 lg:px-6'
+        />,
+      );
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('md:px-4', 'lg:px-6');
@@ -354,7 +377,12 @@ describe('Enhanced Locale Switcher - Modes Tests', () => {
 
       expect(screen.getByRole('button')).toBeInTheDocument();
 
-      rerender(<EnhancedLocaleSwitcher compact className='new-class' />);
+      rerender(
+        <EnhancedLocaleSwitcher
+          compact
+          className='new-class'
+        />,
+      );
       expect(screen.getByRole('button')).toHaveClass('new-class');
     });
 

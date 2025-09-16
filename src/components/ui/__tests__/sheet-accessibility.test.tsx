@@ -2,18 +2,18 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from '../sheet';
 
 // Mock Lucide React icons
@@ -50,7 +50,9 @@ describe('Sheet - Accessibility', () => {
         <SheetContent data-testid='sheet-content'>
           <SheetHeader>
             <SheetTitle>Accessible Sheet</SheetTitle>
-            <SheetDescription>This is an accessible sheet dialog</SheetDescription>
+            <SheetDescription>
+              This is an accessible sheet dialog
+            </SheetDescription>
           </SheetHeader>
         </SheetContent>
       </Sheet>,
@@ -67,7 +69,9 @@ describe('Sheet - Accessibility', () => {
       const title = screen.getByText('Accessible Sheet');
       expect(title).toBeInTheDocument();
 
-      const description = screen.getByText('This is an accessible sheet dialog');
+      const description = screen.getByText(
+        'This is an accessible sheet dialog',
+      );
       expect(description).toBeInTheDocument();
     });
   });
@@ -173,7 +177,10 @@ describe('Sheet - Accessibility', () => {
           <SheetHeader>
             <SheetTitle>Keyboard Test</SheetTitle>
           </SheetHeader>
-          <input data-testid='text-input' placeholder='Enter text' />
+          <input
+            data-testid='text-input'
+            placeholder='Enter text'
+          />
           <button data-testid='action-button'>Action</button>
         </SheetContent>
       </Sheet>,

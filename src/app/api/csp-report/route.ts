@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-;
+import { logger } from '@/lib/logger';
 import type { CSPReport } from '@/config/security';
 import { env } from '../../../../env.mjs';
-import { logger } from '@/lib/logger';
 
 /**
  * CSP Report endpoint

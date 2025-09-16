@@ -19,9 +19,9 @@ import { ThemeMenuItem } from '../theme-menu-item';
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
-  Sun: () => <div data-testid="sun-icon">Sun</div>,
-  Moon: () => <div data-testid="moon-icon">Moon</div>,
-  Monitor: () => <div data-testid="monitor-icon">Monitor</div>,
+  Sun: () => <div data-testid='sun-icon'>Sun</div>,
+  Moon: () => <div data-testid='moon-icon'>Moon</div>,
+  Monitor: () => <div data-testid='monitor-icon'>Monitor</div>,
 }));
 
 describe('Theme Menu Item - Advanced Interactions Tests', () => {
@@ -54,10 +54,7 @@ describe('Theme Menu Item - Advanced Interactions Tests', () => {
       );
 
       const menuItem = screen.getByRole('menuitem');
-      expect(menuItem).toHaveClass(
-        'transition-all',
-        'duration-200',
-      );
+      expect(menuItem).toHaveClass('transition-all', 'duration-200');
       expect(screen.getByText('●')).toBeInTheDocument();
       expect(screen.getByText('✨')).toBeInTheDocument();
     });
@@ -104,6 +101,4 @@ describe('Theme Menu Item - Advanced Interactions Tests', () => {
       expect(menuItem).not.toHaveClass('duration-200');
     });
   });
-
 });
-

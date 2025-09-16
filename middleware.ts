@@ -108,7 +108,11 @@ function createTestResponse(): NextResponse {
 }
 
 // 辅助函数：创建增强的请求对象
-function createEnhancedRequest(request: NextRequest, detectionResult: ReturnType<typeof detectLocaleFromHeaders>, nonce: string): Request {
+function createEnhancedRequest(
+  request: NextRequest,
+  detectionResult: ReturnType<typeof detectLocaleFromHeaders>,
+  nonce: string,
+): Request {
   const enhancedRequest = new Request(request.url, {
     ...request,
     headers: new Headers(request.headers),
@@ -117,14 +121,20 @@ function createEnhancedRequest(request: NextRequest, detectionResult: ReturnType
   // 添加检测信息到请求头
   enhancedRequest.headers.set('x-detected-locale', detectionResult.locale);
   enhancedRequest.headers.set('x-detection-source', detectionResult.source);
-  enhancedRequest.headers.set('x-detection-confidence', detectionResult.confidence.toString());
+  enhancedRequest.headers.set(
+    'x-detection-confidence',
+    detectionResult.confidence.toString(),
+  );
   enhancedRequest.headers.set('x-csp-nonce', nonce);
 
   if (detectionResult.country) {
     enhancedRequest.headers.set('x-detected-country', detectionResult.country);
   }
   if (detectionResult.languages) {
-    enhancedRequest.headers.set('x-detected-language', detectionResult.languages.join(','));
+    enhancedRequest.headers.set(
+      'x-detected-language',
+      detectionResult.languages.join(','),
+    );
   }
 
   return enhancedRequest;
@@ -152,7 +162,11 @@ export default function middleware(request: NextRequest) {
   const detectionResult = detectLocaleFromHeaders(request);
 
   // 创建增强的请求对象
-  const enhancedRequest = createEnhancedRequest(request, detectionResult, nonce);
+  const enhancedRequest = createEnhancedRequest(
+    request,
+    detectionResult,
+    nonce,
+  );
 
   // 调用原始的 next-intl 中间件
   const response = intlMiddleware(enhancedRequest as NextRequest);

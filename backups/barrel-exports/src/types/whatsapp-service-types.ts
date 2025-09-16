@@ -1,3 +1,61 @@
+// 导入主要类型用于向后兼容
+import type {
+  Cache,
+  CacheConfig,
+  CacheEntry,
+  CircuitBreakerConfig,
+  CircuitBreakerState,
+  DEFAULT_CACHE_CONFIG,
+  DEFAULT_CIRCUIT_BREAKER_CONFIG,
+  DEFAULT_RETRY_CONFIG,
+  DEFAULT_SERVICE_OPTIONS,
+  LogEntry,
+  Logger,
+  LogLevel,
+  MessageStatus,
+  MessageType,
+  RetryConfig,
+  ServiceEnvironment,
+  ServiceEnvironmentConfig,
+  WhatsAppConfig,
+  WhatsAppServiceOptions,
+} from './whatsapp-service-config';
+import {
+  WhatsAppApiError,
+  WhatsAppAuthError,
+  WhatsAppError,
+  WhatsAppNetworkError,
+  WhatsAppRateLimitError,
+  WhatsAppValidationError,
+} from './whatsapp-service-errors';
+import type {
+  ApiRequest,
+  ApiResponse,
+  MessageRequest,
+  MessageResponse,
+  PluginManager,
+  ServiceBuilder,
+  ServiceFactory,
+  ServicePlugin,
+  WebhookConfig,
+  WebhookHandler,
+  WhatsAppServiceInterface,
+} from './whatsapp-service-interface';
+import type {
+  ErrorEvent,
+  HealthCheckEvent,
+  MessageDeliveredEvent,
+  MessageFailedEvent,
+  MessageReadEvent,
+  MessageSentEvent,
+  RateLimitEvent,
+  ServiceEvent,
+  ServiceHealth,
+  ServiceMetrics,
+  ServiceStatus,
+  WhatsAppServiceEvent,
+} from './whatsapp-service-monitoring';
+
 /**
  * WhatsApp Service Types - Main Entry Point
  * WhatsApp Service Configuration and Error Type Definitions
@@ -11,67 +69,6 @@ export * from './whatsapp-service-errors';
 export * from './whatsapp-service-monitoring';
 export * from './whatsapp-service-interface';
 
-// 导入主要类型用于向后兼容
-import type {
-  WhatsAppConfig,
-  WhatsAppServiceOptions,
-  ServiceEnvironmentConfig,
-  RetryConfig,
-  CircuitBreakerConfig,
-  CircuitBreakerState,
-  CacheConfig,
-  CacheEntry,
-  Cache,
-  LogEntry,
-  Logger,
-  MessageType,
-  MessageStatus,
-  ServiceEnvironment,
-  LogLevel,
-  DEFAULT_SERVICE_OPTIONS,
-  DEFAULT_RETRY_CONFIG,
-  DEFAULT_CIRCUIT_BREAKER_CONFIG,
-  DEFAULT_CACHE_CONFIG
-} from './whatsapp-service-config';
-
-import {
-  WhatsAppError,
-  WhatsAppApiError,
-  WhatsAppValidationError,
-  WhatsAppRateLimitError,
-  WhatsAppNetworkError,
-  WhatsAppAuthError
-} from './whatsapp-service-errors';
-
-import type {
-  ServiceHealth,
-  ServiceMetrics,
-  ServiceStatus,
-  ServiceEvent,
-  MessageSentEvent,
-  MessageDeliveredEvent,
-  MessageReadEvent,
-  MessageFailedEvent,
-  ErrorEvent,
-  HealthCheckEvent,
-  RateLimitEvent,
-  WhatsAppServiceEvent
-} from './whatsapp-service-monitoring';
-
-import type {
-  WhatsAppServiceInterface,
-  ApiRequest,
-  ApiResponse,
-  MessageRequest,
-  MessageResponse,
-  WebhookHandler,
-  WebhookConfig,
-  ServiceFactory,
-  ServiceBuilder,
-  ServicePlugin,
-  PluginManager
-} from './whatsapp-service-interface';
-
 // ==================== 向后兼容的常量导出 ====================
 
 /**
@@ -82,7 +79,7 @@ export {
   DEFAULT_SERVICE_OPTIONS,
   DEFAULT_RETRY_CONFIG,
   DEFAULT_CIRCUIT_BREAKER_CONFIG,
-  DEFAULT_CACHE_CONFIG
+  DEFAULT_CACHE_CONFIG,
 };
 // ==================== 向后兼容的类型别名 ====================
 
@@ -128,7 +125,7 @@ export type {
   ServiceFactory,
   ServiceBuilder,
   ServicePlugin,
-  PluginManager
+  PluginManager,
 };
 
 // ==================== 向后兼容的类导出 ====================
@@ -143,7 +140,7 @@ export {
   WhatsAppValidationError,
   WhatsAppRateLimitError,
   WhatsAppNetworkError,
-  WhatsAppAuthError
+  WhatsAppAuthError,
 };
 
 // ==================== 便捷工厂函数 ====================
@@ -157,7 +154,7 @@ export function createDefaultConfig(): WhatsAppConfig {
     accessToken: '',
     phoneNumberId: '',
     verifyToken: '',
-    apiVersion: 'v18.0'
+    apiVersion: 'v18.0',
   };
 }
 
@@ -187,8 +184,8 @@ export function createDefaultServiceStatus(): ServiceStatus {
       details: {
         api: 'available',
         webhook: 'not_configured',
-        phoneNumber: 'unverified'
-      }
+        phoneNumber: 'unverified',
+      },
     },
     metrics: {
       messagesSent: 0,
@@ -199,13 +196,13 @@ export function createDefaultServiceStatus(): ServiceStatus {
       apiErrors: 0,
       averageResponseTime: 0,
       uptime: 100,
-      lastReset: Date.now()
+      lastReset: Date.now(),
     },
     config: {
       phoneNumberId: '',
       apiVersion: 'v18.0',
-      webhookConfigured: false
-    }
+      webhookConfigured: false,
+    },
   };
 }
 

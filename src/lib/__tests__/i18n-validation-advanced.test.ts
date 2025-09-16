@@ -79,7 +79,8 @@ describe('I18n Validation - Advanced Tests Index', () => {
         en: {
           ...mockEnTranslations,
           advanced: {
-            multipleParams: 'Hello {name}, you have {count} messages from {sender}',
+            multipleParams:
+              'Hello {name}, you have {count} messages from {sender}',
             nestedParams: 'Welcome to {location.city}, {location.country}',
           },
         },
@@ -109,7 +110,8 @@ describe('I18n Validation - Advanced Tests Index', () => {
         en: {
           ...mockEnTranslations,
           advanced: {
-            multipleParams: 'Hello {name}, you have {count} messages from {sender}',
+            multipleParams:
+              'Hello {name}, you have {count} messages from {sender}',
           },
         },
         zh: {
@@ -128,7 +130,9 @@ describe('I18n Validation - Advanced Tests Index', () => {
 
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(error => error.message.includes('sender'))).toBe(true);
+      expect(
+        result.errors.some((error) => error.message.includes('sender')),
+      ).toBe(true);
     });
 
     it('should handle ICU message format', async () => {
@@ -137,8 +141,10 @@ describe('I18n Validation - Advanced Tests Index', () => {
         en: {
           ...mockEnTranslations,
           icu: {
-            plural: '{count, plural, =0 {no items} =1 {one item} other {# items}}',
-            select: '{gender, select, male {He} female {She} other {They}} will arrive',
+            plural:
+              '{count, plural, =0 {no items} =1 {one item} other {# items}}',
+            select:
+              '{gender, select, male {He} female {She} other {They}} will arrive',
           },
         },
         zh: {
@@ -148,8 +154,10 @@ describe('I18n Validation - Advanced Tests Index', () => {
             welcome: '欢迎来到{name}',
           },
           icu: {
-            plural: '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}}',
-            select: '{gender, select, male {他} female {她} other {他们}}将到达',
+            plural:
+              '{count, plural, =0 {没有项目} =1 {一个项目} other {#个项目}}',
+            select:
+              '{gender, select, male {他} female {她} other {他们}}将到达',
           },
         },
       });
@@ -186,10 +194,10 @@ describe('I18n Validation - Advanced Tests Index', () => {
 
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(error => error.message.includes('zh'))).toBe(true);
+      expect(result.errors.some((error) => error.message.includes('zh'))).toBe(
+        true,
+      );
     });
-
-
 
     it('should maintain performance with moderate datasets', async () => {
       // 创建中等大小的数据集
@@ -213,7 +221,7 @@ describe('I18n Validation - Advanced Tests Index', () => {
             Object.entries(moderateDataset).map(([key, _value]) => [
               key,
               `值 ${key.split('_')[1]} 包含 {param}`,
-            ])
+            ]),
           ),
         },
       });

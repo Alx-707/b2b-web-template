@@ -24,7 +24,7 @@ const TRANSFORM_CONFIG = {
   scanPatterns: [
     'src/**/*.{ts,tsx,js,jsx}',
     '!src/**/*.{test,spec}.{ts,tsx,js,jsx}',
-    '!src/**/*.d.ts'
+    '!src/**/*.d.ts',
   ],
 
   // 输出目录
@@ -48,8 +48,8 @@ const TRANSFORM_CONFIG = {
       'functionBind',
       'exportDefaultFrom',
       'exportNamespaceFrom',
-      'dynamicImport'
-    ]
+      'dynamicImport',
+    ],
   },
 
   // 转换选项
@@ -57,8 +57,8 @@ const TRANSFORM_CONFIG = {
     createBackup: true,
     dryRun: false,
     verbose: true,
-    preserveComments: true
-  }
+    preserveComments: true,
+  },
 };
 
 class BarrelExportTransformer {
@@ -74,7 +74,7 @@ class BarrelExportTransformer {
   }
 
   ensureDirectories() {
-    [this.outputDir, this.backupDir].forEach(dir => {
+    [this.outputDir, this.backupDir].forEach((dir) => {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
@@ -90,7 +90,7 @@ class BarrelExportTransformer {
       filesTransformed: 0,
       exportStarRemoved: 0,
       namedExportsAdded: 0,
-      errors: []
+      errors: [],
     };
   }
 
@@ -110,33 +110,36 @@ class BarrelExportTransformer {
           exportStarNodes.push({
             node: nodePath.node,
             source: nodePath.node.source.value,
-            line: nodePath.node.loc?.start.line
+            line: nodePath.node.loc?.start.line,
           });
         },
         ExportNamedDeclaration(nodePath) {
           if (nodePath.node.specifiers) {
-            nodePath.node.specifiers.forEach(spec => {
+            nodePath.node.specifiers.forEach((spec) => {
               if (spec.exported) {
                 existingExports.add(spec.exported.name);
               }
             });
           }
-        }
+        },
       });
 
       return { exportStarNodes, existingExports, ast, content };
     } catch (error) {
       // 记录错误但不要在处理中重置统计对象，避免引用丢失
-      (this.transformStats || (this.transformStats = {
-        filesProcessed: 0,
-        filesTransformed: 0,
-        exportStarRemoved: 0,
-        namedExportsAdded: 0,
-        errors: []
-      })).errors.push({
+      (
+        this.transformStats ||
+        (this.transformStats = {
+          filesProcessed: 0,
+          filesTransformed: 0,
+          exportStarRemoved: 0,
+          namedExportsAdded: 0,
+          errors: [],
+        })
+      ).errors.push({
         file: filePath,
         error: error.message,
-        type: 'parse_error'
+        type: 'parse_error',
       });
 
       console.error(`❌ 解析失败: ${filePath} - ${error.message}`);
@@ -167,7 +170,7 @@ class BarrelExportTransformer {
 
           // 处理 export { a, b }
           if (node.specifiers && node.specifiers.length > 0) {
-            node.specifiers.forEach(spec => {
+            node.specifiers.forEach((spec) => {
               if (spec.exported) {
                 exports.push(spec.exported.name);
               }
@@ -179,7 +182,7 @@ class BarrelExportTransformer {
             if (node.declaration.id) {
               exports.push(node.declaration.id.name);
             } else if (node.declaration.declarations) {
-              node.declaration.declarations.forEach(decl => {
+              node.declaration.declarations.forEach((decl) => {
                 if (decl.id && decl.id.name) {
                   exports.push(decl.id.name);
                 }
@@ -190,7 +193,7 @@ class BarrelExportTransformer {
 
         ExportDefaultDeclaration(nodePath) {
           exports.push('default');
-        }
+        },
       });
 
       return exports;
@@ -214,7 +217,16 @@ class BarrelExportTransformer {
     let resolvedPath = path.resolve(currentDir, modulePath);
 
     // 尝试不同的扩展名
-    const extensions = ['.ts', '.tsx', '.js', '.jsx', '/index.ts', '/index.tsx', '/index.js', '/index.jsx'];
+    const extensions = [
+      '.ts',
+      '.tsx',
+      '.js',
+      '.jsx',
+      '/index.ts',
+      '/index.tsx',
+      '/index.js',
+      '/index.jsx',
+    ];
 
     for (const ext of extensions) {
       const testPath = resolvedPath + ext;
@@ -236,13 +248,15 @@ class BarrelExportTransformer {
       }
 
       // 捕获稳定引用，避免在 traverse 回调中丢失 this 上下文
-      const stats = this.transformStats || (this.transformStats = {
-        filesProcessed: 0,
-        filesTransformed: 0,
-        exportStarRemoved: 0,
-        namedExportsAdded: 0,
-        errors: []
-      });
+      const stats =
+        this.transformStats ||
+        (this.transformStats = {
+          filesProcessed: 0,
+          filesTransformed: 0,
+          exportStarRemoved: 0,
+          namedExportsAdded: 0,
+          errors: [],
+        });
 
       stats.filesProcessed++;
 
@@ -265,7 +279,10 @@ class BarrelExportTransformer {
           const { node, source } = exportInfo;
 
           // 获取目标模块的导出
-          const moduleExports = await this.resolveExportsFromModule(source, filePath);
+          const moduleExports = await this.resolveExportsFromModule(
+            source,
+            filePath,
+          );
 
           if (moduleExports.length === 0) {
             if (this.options.verbose) {
@@ -275,7 +292,9 @@ class BarrelExportTransformer {
           }
 
           // 过滤掉已存在的导出
-          const newExports = moduleExports.filter(exp => !existingExports.has(exp));
+          const newExports = moduleExports.filter(
+            (exp) => !existingExports.has(exp),
+          );
 
           if (newExports.length === 0) {
             continue;
@@ -287,11 +306,11 @@ class BarrelExportTransformer {
             ExportAllDeclaration: (nodePath) => {
               if (nodePath.node === node) {
                 // 创建命名导出节点
-                const specifiers = newExports.map(exportName => {
+                const specifiers = newExports.map((exportName) => {
                   return {
                     type: 'ExportSpecifier',
                     local: { type: 'Identifier', name: exportName },
-                    exported: { type: 'Identifier', name: exportName }
+                    exported: { type: 'Identifier', name: exportName },
                   };
                 });
 
@@ -299,7 +318,7 @@ class BarrelExportTransformer {
                   type: 'ExportNamedDeclaration',
                   declaration: null,
                   specifiers: specifiers,
-                  source: node.source
+                  source: node.source,
                 };
 
                 // 替换节点
@@ -310,18 +329,20 @@ class BarrelExportTransformer {
                 stats.exportStarRemoved++;
                 stats.namedExportsAdded += newExports.length;
               }
-            }
+            },
           });
         } catch (exportError) {
           // 处理单个 export 处理错误（不重置统计对象）
           stats.errors.push({
             file: filePath,
             error: `Export processing error: ${exportError.message}`,
-            type: 'export_processing_error'
+            type: 'export_processing_error',
           });
 
           if (this.options.verbose) {
-            console.warn(`⚠️ 处理export时出错: ${filePath} - ${exportError.message}`);
+            console.warn(
+              `⚠️ 处理export时出错: ${filePath} - ${exportError.message}`,
+            );
           }
           continue; // 继续处理其他export
         }
@@ -331,7 +352,7 @@ class BarrelExportTransformer {
       if (hasChanges && !this.options.dryRun) {
         const result = generate(ast, {
           retainLines: true,
-          comments: this.options.preserveComments
+          comments: this.options.preserveComments,
         });
 
         fs.writeFileSync(filePath, result.code);
@@ -346,18 +367,20 @@ class BarrelExportTransformer {
       return hasChanges;
     } catch (error) {
       // 整个方法的错误处理（不重置统计对象）
-      const stats = this.transformStats || (this.transformStats = {
-        filesProcessed: 0,
-        filesTransformed: 0,
-        exportStarRemoved: 0,
-        namedExportsAdded: 0,
-        errors: []
-      });
+      const stats =
+        this.transformStats ||
+        (this.transformStats = {
+          filesProcessed: 0,
+          filesTransformed: 0,
+          exportStarRemoved: 0,
+          namedExportsAdded: 0,
+          errors: [],
+        });
 
       stats.errors.push({
         file: filePath,
         error: `Transform file error: ${error.message}`,
-        type: 'transform_file_error'
+        type: 'transform_file_error',
       });
 
       if (this.options.verbose) {
@@ -403,16 +426,19 @@ class BarrelExportTransformer {
       try {
         await this.transformFile(file);
       } catch (error) {
-        (this.transformStats || (this.transformStats = {
-          filesProcessed: 0,
-          filesTransformed: 0,
-          exportStarRemoved: 0,
-          namedExportsAdded: 0,
-          errors: []
-        })).errors.push({
+        (
+          this.transformStats ||
+          (this.transformStats = {
+            filesProcessed: 0,
+            filesTransformed: 0,
+            exportStarRemoved: 0,
+            namedExportsAdded: 0,
+            errors: [],
+          })
+        ).errors.push({
           file,
           error: error.message,
-          type: 'transform_error'
+          type: 'transform_error',
         });
         console.error(`❌ 转换失败: ${file} - ${error.message}`);
       }
@@ -446,13 +472,21 @@ class BarrelExportTransformer {
         success: this.transformStats.errors.length === 0,
         filesProcessed: this.transformStats.filesProcessed,
         filesTransformed: this.transformStats.filesTransformed,
-        transformationRate: this.transformStats.filesProcessed > 0
-          ? (this.transformStats.filesTransformed / this.transformStats.filesProcessed * 100).toFixed(2) + '%'
-          : '0%'
-      }
+        transformationRate:
+          this.transformStats.filesProcessed > 0
+            ? (
+                (this.transformStats.filesTransformed /
+                  this.transformStats.filesProcessed) *
+                100
+              ).toFixed(2) + '%'
+            : '0%',
+      },
     };
 
-    const reportPath = path.join(this.outputDir, `barrel-transform-${Date.now()}.json`);
+    const reportPath = path.join(
+      this.outputDir,
+      `barrel-transform-${Date.now()}.json`,
+    );
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
     console.log(`📄 报告已生成: ${reportPath}`);

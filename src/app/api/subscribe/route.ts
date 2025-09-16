@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-;
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
 
@@ -21,41 +20,48 @@ export async function POST(request: NextRequest) {
     // 3. 添加到邮件列表
 
     // 记录订阅信息
-    logger.info('新的邮件订阅', { email, pageType, timestamp: new Date().toISOString() });
+    logger.info('新的邮件订阅', {
+      email,
+      pageType,
+      timestamp: new Date().toISOString(),
+    });
 
     // 模拟处理延迟
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     return NextResponse.json(
       {
         success: true,
         message: 'Successfully subscribed to notifications',
-        email
+        email,
       },
-      { status: 200 }
+      { status: 200 },
     );
-
   } catch (_error) {
     // 忽略错误变量
-    logger.error('邮件订阅错误', {}, _error instanceof Error ? _error : new Error(String(_error)));
+    logger.error(
+      '邮件订阅错误',
+      {},
+      _error instanceof Error ? _error : new Error(String(_error)),
+    );
 
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         {
           success: false,
           message: 'Invalid email address',
-          errors: _error.issues
+          errors: _error.issues,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal server _error'
+        message: 'Internal server _error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -5,12 +5,12 @@
  * 提供与Bundle Analyzer工具的集成钩子，用于监控打包大小和优化
  */
 
+import { logger } from '@/lib/logger';
+import { KB, MB } from '@/constants/units';
 import type {
   PerformanceConfig,
   PerformanceMetrics,
 } from './performance-monitoring-types';
-import { logger } from '@/lib/logger';
-import { KB, MB } from '@/constants/units';
 
 /**
  * Bundle Analyzer 集成钩子返回类型
@@ -18,7 +18,11 @@ import { KB, MB } from '@/constants/units';
  */
 export interface BundleAnalyzerIntegration {
   enabled: boolean;
-  recordBundleSize: (bundleName: string, size: number, gzipSize?: number) => void;
+  recordBundleSize: (
+    bundleName: string,
+    size: number,
+    gzipSize?: number,
+  ) => void;
   recordChunkInfo: (chunkName: string, size: number, modules: string[]) => void;
   generateSizeReport: () => Record<string, unknown>;
 }
@@ -29,7 +33,7 @@ export interface BundleAnalyzerIntegration {
  */
 export function useBundleAnalyzerIntegration(
   config: PerformanceConfig,
-  recordMetric: (metric: Omit<PerformanceMetrics, 'timestamp'>) => void
+  recordMetric: (metric: Omit<PerformanceMetrics, 'timestamp'>) => void,
 ): BundleAnalyzerIntegration {
   const bundleData = new Map<string, { size: number; gzipSize?: number }>();
 
@@ -41,7 +45,7 @@ export function useBundleAnalyzerIntegration(
 
       bundleData.set(bundleName, {
         size,
-        ...(gzipSize !== undefined && { gzipSize })
+        ...(gzipSize !== undefined && { gzipSize }),
       });
 
       recordMetric({
@@ -104,14 +108,18 @@ export function validateBundleAnalyzerConfig(config: PerformanceConfig): {
   }
 
   if (config.bundleAnalyzer.enabled) {
-    if (config.bundleAnalyzer.port &&
-        (typeof config.bundleAnalyzer.port !== 'number' ||
-         config.bundleAnalyzer.port <= 0)) {
+    if (
+      config.bundleAnalyzer.port &&
+      (typeof config.bundleAnalyzer.port !== 'number' ||
+        config.bundleAnalyzer.port <= 0)
+    ) {
       warnings.push('Bundle Analyzer port should be a positive number');
     }
 
-    if (config.bundleAnalyzer.reportDir &&
-        typeof config.bundleAnalyzer.reportDir !== 'string') {
+    if (
+      config.bundleAnalyzer.reportDir &&
+      typeof config.bundleAnalyzer.reportDir !== 'string'
+    ) {
       warnings.push('Bundle Analyzer reportDir should be a string');
     }
   }
@@ -128,17 +136,23 @@ export function validateBundleAnalyzerConfig(config: PerformanceConfig): {
  * Bundle Analyzer performance analyzer
  */
 export class BundleAnalyzerAnalyzer {
-  private bundles = new Map<string, {
-    size: number;
-    gzipSize?: number;
-    timestamp: number;
-  }>();
+  private bundles = new Map<
+    string,
+    {
+      size: number;
+      gzipSize?: number;
+      timestamp: number;
+    }
+  >();
 
-  private chunks = new Map<string, {
-    size: number;
-    modules: string[];
-    timestamp: number;
-  }>();
+  private chunks = new Map<
+    string,
+    {
+      size: number;
+      modules: string[];
+      timestamp: number;
+    }
+  >();
 
   private config: PerformanceConfig;
 
@@ -210,14 +224,19 @@ export class BundleAnalyzerAnalyzer {
   } {
     const bundles = Array.from(this.bundles.entries());
     const totalSize = bundles.reduce((sum, [, bundle]) => sum + bundle.size, 0);
-    const totalGzipSize = bundles.reduce((sum, [, bundle]) => sum + (bundle.gzipSize || 0), 0);
+    const totalGzipSize = bundles.reduce(
+      (sum, [, bundle]) => sum + (bundle.gzipSize || 0),
+      0,
+    );
 
     const largestBundles = bundles
       .map(([name, bundle]) => ({
         name,
         size: bundle.size,
         ...(bundle.gzipSize !== undefined && { gzipSize: bundle.gzipSize }),
-        ...(bundle.gzipSize !== undefined && { compressionRatio: bundle.gzipSize / bundle.size }),
+        ...(bundle.gzipSize !== undefined && {
+          compressionRatio: bundle.gzipSize / bundle.size,
+        }),
       }))
       .sort((a, b) => b.size - a.size)
       .slice(0, 10);
@@ -225,20 +244,27 @@ export class BundleAnalyzerAnalyzer {
     const recommendations: string[] = [];
 
     // 生成优化建议
-    if (totalSize > 5 * 1024 * 1024) { // 5MB
-      recommendations.push('Total bundle size is large. Consider code splitting and lazy loading.');
+    if (totalSize > 5 * 1024 * 1024) {
+      // 5MB
+      recommendations.push(
+        'Total bundle size is large. Consider code splitting and lazy loading.',
+      );
     }
 
-    const largeBundles = largestBundles.filter(b => b.size > 1024 * 1024); // 1MB
+    const largeBundles = largestBundles.filter((b) => b.size > 1024 * 1024); // 1MB
     if (largeBundles.length > 0) {
-      recommendations.push(`${largeBundles.length} bundles are larger than 1MB. Consider splitting them.`);
+      recommendations.push(
+        `${largeBundles.length} bundles are larger than 1MB. Consider splitting them.`,
+      );
     }
 
-    const poorCompressionBundles = largestBundles.filter(b =>
-      b.compressionRatio && b.compressionRatio > 0.8
+    const poorCompressionBundles = largestBundles.filter(
+      (b) => b.compressionRatio && b.compressionRatio > 0.8,
     );
     if (poorCompressionBundles.length > 0) {
-      recommendations.push(`${poorCompressionBundles.length} bundles have poor compression ratios. Check for duplicate code.`);
+      recommendations.push(
+        `${poorCompressionBundles.length} bundles have poor compression ratios. Check for duplicate code.`,
+      );
     }
 
     return {
@@ -285,7 +311,7 @@ export class BundleAnalyzerAnalyzer {
     // 查找重复模块
     const moduleChunkMap = new Map<string, string[]>();
     chunks.forEach(([chunkName, chunk]) => {
-      chunk.modules.forEach(module => {
+      chunk.modules.forEach((module) => {
         if (!moduleChunkMap.has(module)) {
           moduleChunkMap.set(module, []);
         }
@@ -339,23 +365,31 @@ export class BundleAnalyzerAnalyzer {
 
     // Bundle优化建议
     if (bundleReport.totalSize > 5 * 1024 * 1024) {
-      suggestions.push('Consider implementing code splitting to reduce initial bundle size');
+      suggestions.push(
+        'Consider implementing code splitting to reduce initial bundle size',
+      );
     }
 
     if (bundleReport.largestBundles.length > 0) {
       const largest = bundleReport.largestBundles[0];
-      if (largest.size > 2 * 1024 * 1024) {
-        suggestions.push(`Bundle "${largest.name}" is very large (${this.formatSize(largest.size)}). Consider splitting it.`);
+      if (largest && largest.size > 2 * 1024 * 1024) {
+        suggestions.push(
+          `Bundle "${largest.name}" is very large (${this.formatSize(largest.size)}). Consider splitting it.`,
+        );
       }
     }
 
     // Chunk优化建议
     if (chunkReport.duplicateModules.length > 0) {
-      suggestions.push(`Found ${chunkReport.duplicateModules.length} duplicate modules. Consider creating shared chunks.`);
+      suggestions.push(
+        `Found ${chunkReport.duplicateModules.length} duplicate modules. Consider creating shared chunks.`,
+      );
     }
 
     if (chunkReport.totalChunks > 50) {
-      suggestions.push('Large number of chunks detected. Consider consolidating smaller chunks.');
+      suggestions.push(
+        'Large number of chunks detected. Consider consolidating smaller chunks.',
+      );
     }
 
     return suggestions;
@@ -380,7 +414,10 @@ export const BundleAnalyzerUtils = {
    * 计算压缩比
    * Calculate compression ratio
    */
-  calculateCompressionRatio(originalSize: number, compressedSize: number): number {
+  calculateCompressionRatio(
+    originalSize: number,
+    compressedSize: number,
+  ): number {
     return compressedSize / originalSize;
   },
 
@@ -399,11 +436,14 @@ export const BundleAnalyzerUtils = {
    * 估算加载时间
    * Estimate loading time
    */
-  estimateLoadingTime(size: number, connectionSpeed: 'slow' | 'fast' | 'average' = 'average'): number {
+  estimateLoadingTime(
+    size: number,
+    connectionSpeed: 'slow' | 'fast' | 'average' = 'average',
+  ): number {
     const speeds = {
-      slow: 1024 * 1024 / 8, // 1 Mbps in bytes per second
-      average: 5 * 1024 * 1024 / 8, // 5 Mbps
-      fast: 25 * 1024 * 1024 / 8, // 25 Mbps
+      slow: (1024 * 1024) / 8, // 1 Mbps in bytes per second
+      average: (5 * 1024 * 1024) / 8, // 5 Mbps
+      fast: (25 * 1024 * 1024) / 8, // 25 Mbps
     };
 
     return (size / speeds[connectionSpeed]) * 1000; // Return in milliseconds

@@ -1,3 +1,21 @@
+// 导入主要功能用于向后兼容
+import { PerformanceConfigManager } from './performance-monitoring-core-config';
+import {
+  PerformanceToolConflictChecker,
+  type ToolConflictResult,
+} from './performance-monitoring-core-conflicts';
+import { PerformanceMetricsManager } from './performance-monitoring-core-metrics';
+import {
+  PerformanceReportGenerator,
+  type PerformanceReport,
+} from './performance-monitoring-core-reports';
+import type {
+  PerformanceConfig,
+  PerformanceMetrics,
+  PerformanceMetricSource,
+  PerformanceMetricType,
+} from './performance-monitoring-types';
+
 /**
  * 性能监控核心协调器 - 主入口
  * Performance Monitoring Core Coordinator - Main Entry Point
@@ -6,23 +24,27 @@
  */
 
 // 重新导出所有模块的功能
-export { PerformanceConfigManager, createConfigManager, getDefaultConfig, validatePerformanceConfig } from './performance-monitoring-core-config';
-export { PerformanceMetricsManager, createMetricsManager } from './performance-monitoring-core-metrics';
+export {
+  PerformanceConfigManager,
+  createConfigManager,
+  getDefaultConfig,
+  validatePerformanceConfig,
+} from './performance-monitoring-core-config';
+export {
+  PerformanceMetricsManager,
+  createMetricsManager,
+} from './performance-monitoring-core-metrics';
 export type { PerformanceReport } from './performance-monitoring-core-reports';
-export { PerformanceReportGenerator, createReportGenerator } from './performance-monitoring-core-reports';
+export {
+  PerformanceReportGenerator,
+  createReportGenerator,
+} from './performance-monitoring-core-reports';
 export type { ToolConflictResult } from './performance-monitoring-core-conflicts';
-export { PerformanceToolConflictChecker, createConflictChecker, quickConflictCheck } from './performance-monitoring-core-conflicts';
-
-// 导入主要功能用于向后兼容
-import type {
-  PerformanceMetrics,
-  PerformanceConfig } from
-'./performance-monitoring-types';
-
-import { PerformanceConfigManager } from './performance-monitoring-core-config';
-import { PerformanceMetricsManager } from './performance-monitoring-core-metrics';
-import { PerformanceReportGenerator, type PerformanceReport } from './performance-monitoring-core-reports';
-import { PerformanceToolConflictChecker, type ToolConflictResult } from './performance-monitoring-core-conflicts';
+export {
+  PerformanceToolConflictChecker,
+  createConflictChecker,
+  quickConflictCheck,
+} from './performance-monitoring-core-conflicts';
 
 /**
  * 性能监控核心协调器类 - 向后兼容
@@ -36,8 +58,12 @@ export class PerformanceMonitoringCore {
 
   constructor(customConfig?: Partial<PerformanceConfig>) {
     this.configManager = new PerformanceConfigManager(customConfig);
-    this.metricsManager = new PerformanceMetricsManager(this.configManager.getConfig());
-    this.reportGenerator = new PerformanceReportGenerator(this.configManager.getConfig());
+    this.metricsManager = new PerformanceMetricsManager(
+      this.configManager.getConfig(),
+    );
+    this.reportGenerator = new PerformanceReportGenerator(
+      this.configManager.getConfig(),
+    );
     this.conflictChecker = new PerformanceToolConflictChecker();
   }
 
@@ -115,7 +141,9 @@ export class PerformanceMonitoringCore {
    * 生成详细性能报告
    * Generate detailed performance report
    */
-  generateDetailedReport(): ReturnType<PerformanceReportGenerator['generateDetailedReport']> {
+  generateDetailedReport(): ReturnType<
+    PerformanceReportGenerator['generateDetailedReport']
+  > {
     const metrics = this.metricsManager.getAllMetrics();
     return this.reportGenerator.generateDetailedReport(metrics);
   }
@@ -132,7 +160,9 @@ export class PerformanceMonitoringCore {
    * 获取工具详细信息
    * Get tool details
    */
-  getToolDetails(toolName: string): ReturnType<PerformanceToolConflictChecker['getToolDetails']> {
+  getToolDetails(
+    toolName: string,
+  ): ReturnType<PerformanceToolConflictChecker['getToolDetails']> {
     return this.conflictChecker.getToolDetails(toolName);
   }
 
@@ -183,5 +213,4 @@ export class PerformanceMonitoringCore {
  * 向后兼容的类型别名
  * Backward compatible type aliases
  */
-export type {
-  PerformanceMonitoringCore as PerformanceCoordinator };
+export type { PerformanceMonitoringCore as PerformanceCoordinator };

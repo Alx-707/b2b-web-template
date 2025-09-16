@@ -234,7 +234,11 @@ function getPerformanceScore(
   higherIsBetter = false,
 ): number {
   // 类型守卫：确保targets是一个包含性能阈值的对象
-  const safeTargets = targets as { excellent: number; good: number; acceptable: number } | null;
+  const safeTargets = targets as {
+    excellent: number;
+    good: number;
+    acceptable: number;
+  } | null;
   if (!safeTargets || typeof safeTargets !== 'object') {
     return PERFORMANCE_THRESHOLDS.POOR;
   }

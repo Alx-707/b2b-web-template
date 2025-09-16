@@ -3,16 +3,18 @@
  * WhatsApp Webhook Utility Class
  */
 
+import type { WebhookEntry, WebhookPayload } from '../whatsapp-webhook-base';
 import type {
-  WebhookPayload,
-  WebhookEntry,
-} from '../whatsapp-webhook-base';
+  EventFilter,
+  EventStatistics,
+  MessageReceivedEvent,
+  WebhookEvent,
+} from '../whatsapp-webhook-events';
 import type { IncomingWhatsAppMessage } from '../whatsapp-webhook-messages';
-import type { WebhookEvent, EventFilter, EventStatistics } from '../whatsapp-webhook-events';
 import type {
+  SignatureVerificationConfig,
   WebhookParsingResult,
   WebhookValidationResult,
-  SignatureVerificationConfig,
 } from './interfaces';
 
 /**
@@ -27,7 +29,11 @@ export class WebhookUtils {
   static parseWebhookPayload(payload: WebhookPayload): WebhookParsingResult {
     const startTime = Date.now();
     const events: WebhookEvent[] = [];
-    const errors: Array<{ entry_id?: string; error: string; raw_data?: Record<string, unknown> | string | unknown[] }> = [];
+    const errors: Array<{
+      entry_id?: string;
+      error: string;
+      raw_data?: Record<string, unknown> | string | unknown[];
+    }> = [];
 
     try {
       for (const entry of payload.entry) {
@@ -37,8 +43,9 @@ export class WebhookUtils {
         } catch (error) {
           errors.push({
             entry_id: entry.id,
-            error: error instanceof Error ? error.message : 'Unknown parsing error',
-            raw_data: entry as Record<string, unknown>,
+            error:
+              error instanceof Error ? error.message : 'Unknown parsing error',
+            raw_data: entry as unknown as Record<string, unknown>,
           });
         }
       }
@@ -58,10 +65,15 @@ export class WebhookUtils {
       return {
         success: false,
         events: [],
-        errors: [{
-          error: error instanceof Error ? error.message : 'Failed to parse webhook payload',
-          raw_data: payload as Record<string, unknown>,
-        }],
+        errors: [
+          {
+            error:
+              error instanceof Error
+                ? error.message
+                : 'Failed to parse webhook payload',
+            raw_data: payload as unknown as Record<string, unknown>,
+          },
+        ],
         metadata: {
           total_entries: payload.entry?.length || 0,
           parsed_entries: 0,
@@ -87,15 +99,21 @@ export class WebhookUtils {
       // 处理消息
       if (value.messages) {
         for (const message of value.messages) {
-          const contact = value.contacts?.find(c => c.wa_id === message.from);
-          events.push({
+          const contact = value.contacts?.find((c) => c.wa_id === message.from);
+          const messageEvent: MessageReceivedEvent = {
             type: 'message_received',
             timestamp,
             phone_number_id: phoneNumberId,
             from: message.from,
             message: message as IncomingWhatsAppMessage,
-            contact,
-          });
+          };
+
+          // 只有当contact存在时才设置可选属性
+          if (contact) {
+            messageEvent.contact = contact;
+          }
+
+          events.push(messageEvent);
         }
       }
 
@@ -141,7 +159,10 @@ export class WebhookUtils {
       return { is_valid: false, errors, warnings };
     }
 
-    if ((payload as Record<string, unknown>).object !== 'whatsapp_business_account') {
+    if (
+      (payload as Record<string, unknown>).object !==
+      'whatsapp_business_account'
+    ) {
       errors.push('Invalid object type, expected "whatsapp_business_account"');
     }
 
@@ -149,23 +170,31 @@ export class WebhookUtils {
       errors.push('Entry must be an array');
     } else {
       // 验证每个条目
-      ((payload as Record<string, unknown>).entry as Record<string, unknown>[]).forEach((entry: Record<string, unknown>, index: number) => {
+      (
+        (payload as Record<string, unknown>).entry as Record<string, unknown>[]
+      ).forEach((entry: Record<string, unknown>, index: number) => {
         if (!entry.id) {
           errors.push(`Entry ${index}: Missing id`);
         }
         if (!Array.isArray(entry.changes)) {
           errors.push(`Entry ${index}: Changes must be an array`);
         } else {
-          (entry.changes as Record<string, unknown>[]).forEach((change: Record<string, unknown>, changeIndex: number) => {
-            if (!change.value) {
-              errors.push(`Entry ${index}, Change ${changeIndex}: Missing value`);
-            }
-            const changeValue = change.value as Record<string, unknown>;
-            const metadata = changeValue?.metadata as Record<string, unknown>;
-            if (!metadata?.phone_number_id) {
-              errors.push(`Entry ${index}, Change ${changeIndex}: Missing phone_number_id`);
-            }
-          });
+          (entry.changes as Record<string, unknown>[]).forEach(
+            (change: Record<string, unknown>, changeIndex: number) => {
+              if (!change.value) {
+                errors.push(
+                  `Entry ${index}, Change ${changeIndex}: Missing value`,
+                );
+              }
+              const changeValue = change.value as Record<string, unknown>;
+              const metadata = changeValue?.metadata as Record<string, unknown>;
+              if (!metadata?.phone_number_id) {
+                errors.push(
+                  `Entry ${index}, Change ${changeIndex}: Missing phone_number_id`,
+                );
+              }
+            },
+          );
         }
       });
     }
@@ -185,7 +214,7 @@ export class WebhookUtils {
   static verifyWebhookSignature(
     payload: string,
     signature: string,
-    config: SignatureVerificationConfig
+    config: SignatureVerificationConfig,
   ): boolean {
     try {
       const crypto = require('crypto');
@@ -197,7 +226,7 @@ export class WebhookUtils {
       const receivedSignature = signature.replace(/^sha\d+=/, '');
       return crypto.timingSafeEqual(
         Buffer.from(expectedSignature, 'hex'),
-        Buffer.from(receivedSignature, 'hex')
+        Buffer.from(receivedSignature, 'hex'),
       );
     } catch (error) {
       return false;
@@ -223,25 +252,38 @@ export class WebhookUtils {
    * 过滤事件
    * Filter events
    */
-  static filterEvents(events: WebhookEvent[], filter: EventFilter): WebhookEvent[] {
-    return events.filter(event => {
+  static filterEvents(
+    events: WebhookEvent[],
+    filter: EventFilter,
+  ): WebhookEvent[] {
+    return events.filter((event) => {
       // 事件类型过滤
       if (filter.event_types && !filter.event_types.includes(event.type)) {
         return false;
       }
 
       // 电话号码过滤
-      if (filter.phone_number_ids && !filter.phone_number_ids.includes(event.phone_number_id)) {
+      if (
+        filter.phone_number_ids &&
+        !filter.phone_number_ids.includes(event.phone_number_id)
+      ) {
         return false;
       }
 
       // 发送者过滤
       if (filter.sender_filters && 'from' in event) {
-        const from = (event as Record<string, unknown>).from as string;
-        if (filter.sender_filters.include && !filter.sender_filters.include.includes(from)) {
+        const from = (event as unknown as Record<string, unknown>)
+          .from as string;
+        if (
+          filter.sender_filters.include &&
+          !filter.sender_filters.include.includes(from)
+        ) {
           return false;
         }
-        if (filter.sender_filters.exclude && filter.sender_filters.exclude.includes(from)) {
+        if (
+          filter.sender_filters.exclude &&
+          filter.sender_filters.exclude.includes(from)
+        ) {
           return false;
         }
       }
@@ -268,7 +310,7 @@ export class WebhookUtils {
     const eventsByType: Record<string, number> = {};
     const processingTimes: number[] = [];
 
-    events.forEach(event => {
+    events.forEach((event) => {
       eventsByType[event.type] = (eventsByType[event.type] || 0) + 1;
       // 模拟处理时间（实际应用中应该记录真实的处理时间）
       processingTimes.push(Math.random() * 100);
@@ -276,11 +318,13 @@ export class WebhookUtils {
 
     processingTimes.sort((a, b) => a - b);
 
-    return {
+    const result: EventStatistics = {
       total_events: events.length,
       events_by_type: eventsByType,
       processing_times: {
-        average_ms: processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length || 0,
+        average_ms:
+          processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length ||
+          0,
         min_ms: processingTimes[0] || 0,
         max_ms: processingTimes[processingTimes.length - 1] || 0,
         p95_ms: processingTimes[Math.floor(processingTimes.length * 0.95)] || 0,
@@ -288,7 +332,13 @@ export class WebhookUtils {
       },
       error_rate: 0, // 应该基于实际错误计算
       success_rate: 1, // 应该基于实际成功率计算
-      last_processed_at: events.length > 0 ? new Date().toISOString() : undefined,
     };
+
+    // 只有当有事件时才设置可选属性
+    if (events.length > 0) {
+      result.last_processed_at = new Date().toISOString();
+    }
+
+    return result;
   }
 }

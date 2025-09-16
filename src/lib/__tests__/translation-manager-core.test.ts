@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { TranslationManagerConfig } from '@/types/translation-manager';
-import { TranslationManagerCore } from '../translation-manager-core';
 import type {
   MockTranslationManagerConfig,
   TranslationManagerPrivate,
-  UnsafeLocaleCode
+  UnsafeLocaleCode,
 } from '@/types/test-types';
+import type { TranslationManagerConfig } from '@/types/translation-manager';
+import { TranslationManagerCore } from '../translation-manager-core';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const { mockTranslationQualityChecker, mockTranslationUtils } = vi.hoisted(
@@ -358,7 +358,9 @@ describe('TranslationManagerCore - Quality and Operations', () => {
       ];
 
       // 添加getQualityTrends方法的mock
-      (manager as TranslationManagerPrivate).getQualityTrends = vi.fn().mockResolvedValue(mockTrends);
+      (manager as TranslationManagerPrivate).getQualityTrends = vi
+        .fn()
+        .mockResolvedValue(mockTrends);
 
       // 直接Mock generateQualityReport方法来避免flattenTranslations问题
       const mockReport = {

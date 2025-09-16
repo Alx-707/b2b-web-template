@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TurnstileWidget, useTurnstile } from '../turnstile';
 
@@ -212,7 +212,11 @@ describe('TurnstileWidget', () => {
   describe('错误处理', () => {
     it('应该处理空的onVerify回调', () => {
       expect(() => {
-        render(<TurnstileWidget onVerify={undefined as unknown as (_token: string) => void} />);
+        render(
+          <TurnstileWidget
+            onVerify={undefined as unknown as (_token: string) => void}
+          />,
+        );
       }).not.toThrow();
     });
   });

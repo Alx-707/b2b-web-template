@@ -40,7 +40,13 @@ export function useEnhancedTranslations(
 
   // 增强的翻译函数
   const enhancedT = useCallback(
-    (key: string, values?: Record<string, string | number | boolean | Record<string, unknown> | unknown[]>) => {
+    (
+      key: string,
+      values?: Record<
+        string,
+        string | number | boolean | Record<string, unknown> | unknown[]
+      >,
+    ) => {
       const startTime = performance.now();
 
       try {
@@ -72,7 +78,13 @@ export function useEnhancedTranslations(
 
   // 批量翻译函数
   const batchT = useCallback(
-    (keys: string[], values?: Record<string, string | number | boolean | Record<string, unknown> | unknown[]>) => {
+    (
+      keys: string[],
+      values?: Record<
+        string,
+        string | number | boolean | Record<string, unknown> | unknown[]
+      >,
+    ) => {
       return keys.reduce(
         (acc, key) => {
           acc[key] = enhancedT(key, values);
@@ -90,7 +102,10 @@ export function useEnhancedTranslations(
       condition: boolean,
       trueKey: string,
       falseKey: string,
-      values?: Record<string, string | number | boolean | Record<string, unknown> | unknown[]>,
+      values?: Record<
+        string,
+        string | number | boolean | Record<string, unknown> | unknown[]
+      >,
     ) => {
       return enhancedT(condition ? trueKey : falseKey, values);
     },

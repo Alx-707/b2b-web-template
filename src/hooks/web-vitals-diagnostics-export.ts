@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 import { TEST_COUNT_CONSTANTS } from '@/constants/test-constants';
 import type {
   DiagnosticReport,
+  ExportFormat,
   WebVitalsDiagnosticsState,
   WebVitalsReportExport,
-  ExportFormat,
 } from './web-vitals-diagnostics-types';
 
 /**
@@ -44,7 +44,7 @@ export function exportCsvReport(historicalReports: DiagnosticReport[]): void {
     'Performance Score',
   ];
 
-  const csvRows = historicalReports.map(report => [
+  const csvRows = historicalReports.map((report) => [
     new Date(report.timestamp).toISOString(),
     report.pageUrl,
     report.vitals.cls.toFixed(3),
@@ -56,7 +56,7 @@ export function exportCsvReport(historicalReports: DiagnosticReport[]): void {
   ]);
 
   const csvContent = [csvHeaders, ...csvRows]
-    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .map((row) => row.map((cell) => `"${cell}"`).join(','))
     .join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -94,7 +94,12 @@ export function useReportExport(
         exportJsonReport(exportData);
       }
     },
-    [state.currentReport, state.historicalReports, getPerformanceTrends, getPageComparison],
+    [
+      state.currentReport,
+      state.historicalReports,
+      getPerformanceTrends,
+      getPageComparison,
+    ],
   );
 
   return { exportReport };
@@ -124,7 +129,8 @@ export function generateDetailedReport(
     },
     metadata: {
       version: '1.0.0',
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown',
+      userAgent:
+        typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown',
       url: typeof window !== 'undefined' ? window.location.href : 'Unknown',
     },
   };
@@ -189,23 +195,35 @@ function generateInsights(reports: DiagnosticReport[]): string[] {
 
   // CLS 分析
   if (averages.cls > 0.25) {
-    insights.push('High Cumulative Layout Shift detected. Consider optimizing layout stability.');
+    insights.push(
+      'High Cumulative Layout Shift detected. Consider optimizing layout stability.',
+    );
   } else if (averages.cls > 0.1) {
-    insights.push('Moderate Cumulative Layout Shift. Room for improvement in layout stability.');
+    insights.push(
+      'Moderate Cumulative Layout Shift. Room for improvement in layout stability.',
+    );
   }
 
   // LCP 分析
   if (averages.lcp > 4000) {
-    insights.push('Slow Largest Contentful Paint. Consider optimizing loading performance.');
+    insights.push(
+      'Slow Largest Contentful Paint. Consider optimizing loading performance.',
+    );
   } else if (averages.lcp > 2500) {
-    insights.push('Moderate Largest Contentful Paint. Some optimization opportunities exist.');
+    insights.push(
+      'Moderate Largest Contentful Paint. Some optimization opportunities exist.',
+    );
   }
 
   // FID 分析
   if (averages.fid > 300) {
-    insights.push('High First Input Delay. Consider optimizing JavaScript execution.');
+    insights.push(
+      'High First Input Delay. Consider optimizing JavaScript execution.',
+    );
   } else if (averages.fid > 100) {
-    insights.push('Moderate First Input Delay. Some interactivity improvements possible.');
+    insights.push(
+      'Moderate First Input Delay. Some interactivity improvements possible.',
+    );
   }
 
   // 趋势分析
@@ -220,7 +238,9 @@ function generateInsights(reports: DiagnosticReport[]): string[] {
       if (recentAvg.performanceScore > olderAvg.performanceScore) {
         insights.push('Performance is improving over time.');
       } else if (recentAvg.performanceScore < olderAvg.performanceScore) {
-        insights.push('Performance is declining over time. Consider investigating recent changes.');
+        insights.push(
+          'Performance is declining over time. Consider investigating recent changes.',
+        );
       }
     }
   }
@@ -250,7 +270,7 @@ export function exportExcelReport(historicalReports: DiagnosticReport[]): void {
     'Status',
   ];
 
-  const rows = historicalReports.map(report => {
+  const rows = historicalReports.map((report) => {
     const date = new Date(report.timestamp);
     const status = getPerformanceStatus(report);
 
@@ -269,7 +289,7 @@ export function exportExcelReport(historicalReports: DiagnosticReport[]): void {
   });
 
   const csvContent = [headers, ...rows]
-    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .map((row) => row.map((cell) => `"${cell}"`).join(','))
     .join('\n');
 
   const blob = new Blob([csvContent], { type: 'application/vnd.ms-excel' });

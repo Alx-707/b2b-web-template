@@ -5,13 +5,13 @@
 
 import type { I18nMetrics, Locale, TranslationError } from '@/types/i18n';
 import { CACHE_LIMITS } from '@/constants/i18n-constants';
+import type { EventCollector } from './i18n-event-collector';
 import type {
   MonitoringConfig,
-  PerformanceData,
   MonitoringEventType,
+  PerformanceData,
 } from './i18n-monitoring-types';
 import { ErrorLevel } from './i18n-monitoring-types';
-import type { EventCollector } from './i18n-event-collector';
 
 // 性能监控器
 export class PerformanceMonitor {

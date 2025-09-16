@@ -63,7 +63,7 @@ export interface ThemePerformanceSummary {
 /**
  * 主题分析事件类型
  */
-export type ThemeAnalyticsEvent = 
+export type ThemeAnalyticsEvent =
   | 'theme-switch'
   | 'theme-preference'
   | 'performance-issue'

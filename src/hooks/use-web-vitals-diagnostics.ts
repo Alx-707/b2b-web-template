@@ -2,26 +2,28 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { enhancedWebVitalsCollector } from '@/lib/enhanced-web-vitals';
+import { useReportExport } from './web-vitals-diagnostics-export';
+import {
+  useWebVitalsDataPersistence,
+  useWebVitalsInitialization,
+} from './web-vitals-diagnostics-persistence';
+import type {
+  DiagnosticsReturnParams,
+  UseWebVitalsDiagnosticsReturn,
+  WebVitalsDiagnosticsState,
+} from './web-vitals-diagnostics-types';
 import {
   calculatePageComparison,
   calculatePerformanceTrends,
   type DiagnosticReport,
 } from './web-vitals-diagnostics-utils';
-import type {
-  WebVitalsDiagnosticsState,
-  DiagnosticsReturnParams,
-  UseWebVitalsDiagnosticsReturn,
-} from './web-vitals-diagnostics-types';
-import {
-  useWebVitalsDataPersistence,
-  useWebVitalsInitialization,
-} from './web-vitals-diagnostics-persistence';
-import { useReportExport } from './web-vitals-diagnostics-export';
 
 /**
  * 创建诊断Hook的返回对象
  */
-const createDiagnosticsReturn = (params: DiagnosticsReturnParams): UseWebVitalsDiagnosticsReturn => {
+const createDiagnosticsReturn = (
+  params: DiagnosticsReturnParams,
+): UseWebVitalsDiagnosticsReturn => {
   const {
     state,
     refreshDiagnostics,
@@ -61,20 +63,22 @@ const useWebVitalsRefresh = (
       score: 85 + Math.random() * 15,
       issues: [],
       recommendations: [],
-      pageUrl: typeof window !== 'undefined' ? window.location.href : 'test-url',
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'test-agent',
+      pageUrl:
+        typeof window !== 'undefined' ? window.location.href : 'test-url',
+      userAgent:
+        typeof navigator !== 'undefined' ? navigator.userAgent : 'test-agent',
     };
   }, []);
 
   const refreshDiagnostics = useCallback(async () => {
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
       const newReport = generateReport();
       const historicalReports = loadHistoricalData();
       const updatedReports = [...historicalReports, newReport];
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         currentReport: newReport,
         historicalReports: updatedReports,
@@ -83,7 +87,7 @@ const useWebVitalsRefresh = (
 
       saveToStorage(updatedReports);
     } catch (error) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isLoading: false,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -146,17 +150,29 @@ export function useWebVitalsDiagnostics(): UseWebVitalsDiagnosticsReturn {
   });
 
   // 初始化数据
-  const { initialData } = useWebVitalsInitialization(loadHistoricalData, async () => {});
+  const { initialData } = useWebVitalsInitialization(
+    loadHistoricalData,
+    async () => {},
+  );
 
   // 获取功能函数
-  const { refreshDiagnostics } = useWebVitalsRefresh(setState, loadHistoricalData, saveToStorage);
-  const { getPerformanceTrends, getPageComparison } = useAnalysisFunctions(state);
-  const { exportReport } = useReportExport(state, getPerformanceTrends, getPageComparison);
+  const { refreshDiagnostics } = useWebVitalsRefresh(
+    setState,
+    loadHistoricalData,
+    saveToStorage,
+  );
+  const { getPerformanceTrends, getPageComparison } =
+    useAnalysisFunctions(state);
+  const { exportReport } = useReportExport(
+    state,
+    getPerformanceTrends,
+    getPageComparison,
+  );
   const { clearHistory } = useDataManagement(setState);
 
   // 初始化历史数据
   useEffect(() => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       historicalReports: initialData.historicalReports,
     }));

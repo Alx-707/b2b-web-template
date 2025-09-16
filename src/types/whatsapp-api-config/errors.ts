@@ -3,8 +3,8 @@
  * WhatsApp API Error Handling
  */
 
-import type { ErrorCode } from './types';
 import type { ApiConfig, WebhookConfig } from './interfaces';
+import type { ErrorCode } from './types';
 
 /**
  * 错误代码映射
@@ -29,7 +29,7 @@ export const ERROR_CODE_MESSAGES: Record<ErrorCode, string> = {
   131047: 'Re-engagement message',
   131051: 'Unsupported message type',
   131052: 'Media download error',
-  131053: 'Media upload error'
+  131053: 'Media upload error',
 };
 
 /**
@@ -37,12 +37,12 @@ export const ERROR_CODE_MESSAGES: Record<ErrorCode, string> = {
  * Retryable error codes
  */
 export const RETRYABLE_ERROR_CODES: ErrorCode[] = [
-  131,      // Generic temporary error
-  131000,   // Generic temporary error
-  131014,   // Request timeout
-  131016,   // Service temporarily unavailable
-  131052,   // Media download error
-  131053    // Media upload error
+  131, // Generic temporary error
+  131000, // Generic temporary error
+  131014, // Request timeout
+  131016, // Service temporarily unavailable
+  131052, // Media download error
+  131053, // Media upload error
 ];
 
 /**
@@ -51,48 +51,50 @@ export const RETRYABLE_ERROR_CODES: ErrorCode[] = [
  */
 export function validateApiConfig(config: Partial<ApiConfig>): string[] {
   const errors: string[] = [];
-  
+
   if (!config.accessToken) {
     errors.push('Access token is required');
   }
-  
+
   if (!config.phoneNumberId) {
     errors.push('Phone number ID is required');
   }
-  
+
   if (config.timeout && config.timeout <= 0) {
     errors.push('Timeout must be greater than 0');
   }
-  
+
   if (config.retries && config.retries < 0) {
     errors.push('Retries must be non-negative');
   }
-  
+
   if (config.retryDelay && config.retryDelay <= 0) {
     errors.push('Retry delay must be greater than 0');
   }
-  
+
   return errors;
 }
 
-export function validateWebhookConfig(config: Partial<WebhookConfig>): string[] {
+export function validateWebhookConfig(
+  config: Partial<WebhookConfig>,
+): string[] {
   const errors: string[] = [];
-  
+
   if (!config.url) {
     errors.push('Webhook URL is required');
   }
-  
+
   if (!config.verifyToken) {
     errors.push('Verify token is required');
   }
-  
+
   if (config.fields && !Array.isArray(config.fields)) {
     errors.push('Fields must be an array');
   }
-  
+
   if (config.timeout && config.timeout <= 0) {
     errors.push('Timeout must be greater than 0');
   }
-  
+
   return errors;
 }

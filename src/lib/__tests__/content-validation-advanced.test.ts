@@ -7,13 +7,12 @@
  * - 边界情况测试
  */
 
+import { describe, expect, it } from 'vitest';
+import type { ContentType } from '@/types/content';
 import {
   TEST_CONTENT_LIMITS,
   TEST_COUNT_CONSTANTS,
 } from '@/constants/test-constants';
-import type { ContentType } from '@/types/content';
-;
-import { describe, expect, it } from 'vitest';
 import { validateContentMetadata } from '../content-validation';
 
 describe('Content Validation - Advanced Tests', () => {
@@ -108,7 +107,10 @@ describe('Content Validation - Advanced Tests', () => {
           excerpt: 'A'.repeat(TEST_CONTENT_LIMITS.DESCRIPTION_MAX + 1),
         };
 
-        const result = validateContentMetadata(metadataWithLongExcerpt, 'posts');
+        const result = validateContentMetadata(
+          metadataWithLongExcerpt,
+          'posts',
+        );
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
@@ -138,7 +140,10 @@ describe('Content Validation - Advanced Tests', () => {
           },
         };
 
-        const result = validateContentMetadata(metadataWithoutSeoTitle, 'posts');
+        const result = validateContentMetadata(
+          metadataWithoutSeoTitle,
+          'posts',
+        );
 
         expect(result.isValid).toBe(true);
         expect(result.warnings).toContain('SEO title is recommended');
@@ -180,7 +185,10 @@ describe('Content Validation - Advanced Tests', () => {
           },
         };
 
-        const result = validateContentMetadata(metadataWithLongSeoTitle, 'posts');
+        const result = validateContentMetadata(
+          metadataWithLongSeoTitle,
+          'posts',
+        );
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
@@ -256,7 +264,10 @@ describe('Content Validation - Advanced Tests', () => {
           anotherField: 123,
         };
 
-        const result = validateContentMetadata(metadataWithExtraFields, 'posts');
+        const result = validateContentMetadata(
+          metadataWithExtraFields,
+          'posts',
+        );
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
@@ -275,10 +286,6 @@ describe('Content Validation - Advanced Tests', () => {
           expect.stringContaining('Too many tags'),
         );
       });
-
-
-
-
 
       it('should handle maximum valid metadata', () => {
         const maximalMetadata = {

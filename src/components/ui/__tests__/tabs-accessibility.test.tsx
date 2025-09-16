@@ -255,7 +255,7 @@ describe('Tabs Accessibility', () => {
 
     // Focus tab2 again
     tab2.focus();
-    
+
     // Press Space to activate
     await user.keyboard(' ');
     expect(screen.getByText('Content 2')).toBeInTheDocument();
@@ -305,7 +305,7 @@ describe('Tabs Accessibility', () => {
 
     // Activate tab2
     await user.keyboard('{Enter}');
-    
+
     // Tab should move to tab2 content button
     await user.tab();
     const tab2Button = screen.getByTestId('tab2-button');

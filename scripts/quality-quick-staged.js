@@ -11,15 +11,13 @@ const { execSync, spawnSync } = require('child_process');
 function getStagedFiles() {
   try {
     const output = execSync(
-      "git diff --name-only --cached --diff-filter=ACMR",
-      { stdio: ['ignore', 'pipe', 'ignore'] }
+      'git diff --name-only --cached --diff-filter=ACMR',
+      { stdio: ['ignore', 'pipe', 'ignore'] },
     )
       .toString()
       .trim();
     if (!output) return [];
-    return output
-      .split('\n')
-      .filter((f) => /\.(js|jsx|ts|tsx)$/i.test(f));
+    return output.split('\n').filter((f) => /\.(js|jsx|ts|tsx)$/i.test(f));
   } catch {
     return [];
   }
@@ -49,4 +47,3 @@ function runESLint(files) {
 const files = getStagedFiles();
 const code = runESLint(files);
 process.exit(code);
-

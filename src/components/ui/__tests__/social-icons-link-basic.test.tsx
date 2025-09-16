@@ -26,13 +26,18 @@ describe('Social Icons Link - Basic Tests', () => {
 
   describe('基本渲染', () => {
     const defaultProps = {
-      href: 'https://twitter.com/example',
-      platform: 'twitter' as const,
+      'href': 'https://twitter.com/example',
+      'platform': 'twitter' as const,
       'aria-label': 'Follow us on Twitter',
     };
 
     it('renders link with icon', () => {
-      render(<SocialIconLink {...defaultProps} data-testid='social-link' />);
+      render(
+        <SocialIconLink
+          {...defaultProps}
+          data-testid='social-link'
+        />,
+      );
 
       const link = screen.getByTestId('social-link');
       expect(link).toBeInTheDocument();
@@ -43,21 +48,36 @@ describe('Social Icons Link - Basic Tests', () => {
     });
 
     it('applies correct href', () => {
-      render(<SocialIconLink {...defaultProps} data-testid='social-link' />);
+      render(
+        <SocialIconLink
+          {...defaultProps}
+          data-testid='social-link'
+        />,
+      );
 
       const link = screen.getByTestId('social-link');
       expect(link).toHaveAttribute('href', 'https://twitter.com/example');
     });
 
     it('applies aria-label', () => {
-      render(<SocialIconLink {...defaultProps} data-testid='social-link' />);
+      render(
+        <SocialIconLink
+          {...defaultProps}
+          data-testid='social-link'
+        />,
+      );
 
       const link = screen.getByTestId('social-link');
       expect(link).toHaveAttribute('aria-label', 'Follow us on Twitter');
     });
 
     it('opens in new tab by default', () => {
-      render(<SocialIconLink {...defaultProps} data-testid='social-link' />);
+      render(
+        <SocialIconLink
+          {...defaultProps}
+          data-testid='social-link'
+        />,
+      );
 
       const link = screen.getByTestId('social-link');
       expect(link).toHaveAttribute('target', '_blank');
@@ -69,7 +89,7 @@ describe('Social Icons Link - Basic Tests', () => {
         <SocialIconLink
           {...defaultProps}
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -81,7 +101,7 @@ describe('Social Icons Link - Basic Tests', () => {
         <SocialIconLink
           {...defaultProps}
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -91,13 +111,18 @@ describe('Social Icons Link - Basic Tests', () => {
 
   describe('样式类', () => {
     const defaultProps = {
-      href: 'https://twitter.com/example',
-      platform: 'twitter' as const,
+      'href': 'https://twitter.com/example',
+      'platform': 'twitter' as const,
       'aria-label': 'Follow us on Twitter',
     };
 
     it('applies default classes', () => {
-      render(<SocialIconLink {...defaultProps} data-testid='social-link' />);
+      render(
+        <SocialIconLink
+          {...defaultProps}
+          data-testid='social-link'
+        />,
+      );
 
       const link = screen.getByTestId('social-link');
       expect(link).toHaveClass(
@@ -109,7 +134,7 @@ describe('Social Icons Link - Basic Tests', () => {
         'text-muted-foreground',
         'transition-colors',
         'hover:bg-accent',
-        'hover:text-accent-foreground'
+        'hover:text-accent-foreground',
       );
     });
 
@@ -119,7 +144,7 @@ describe('Social Icons Link - Basic Tests', () => {
           {...defaultProps}
           className='custom-class'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -132,20 +157,25 @@ describe('Social Icons Link - Basic Tests', () => {
           {...defaultProps}
           className='bg-blue-500 text-white'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
-      expect(link).toHaveClass('bg-blue-500', 'text-white', 'inline-flex', 'items-center');
+      expect(link).toHaveClass(
+        'bg-blue-500',
+        'text-white',
+        'inline-flex',
+        'items-center',
+      );
     });
 
     it('supports focus styles', () => {
       render(
         <SocialIconLink
           {...defaultProps}
-          className='focus:ring-2 focus:ring-primary'
+          className='focus:ring-primary focus:ring-2'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -158,7 +188,7 @@ describe('Social Icons Link - Basic Tests', () => {
           {...defaultProps}
           className='pointer-events-none opacity-50'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -170,7 +200,7 @@ describe('Social Icons Link - Basic Tests', () => {
         <SocialIconLink
           {...defaultProps}
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -195,7 +225,7 @@ describe('Social Icons Link - Basic Tests', () => {
             platform={platform}
             aria-label={`Follow us on ${platform}`}
             data-testid={`social-link-${index}`}
-          />
+          />,
         );
 
         const link = screen.getByTestId(`social-link-${index}`);
@@ -209,13 +239,18 @@ describe('Social Icons Link - Basic Tests', () => {
 
   describe('键盘导航', () => {
     const defaultProps = {
-      href: 'https://twitter.com/example',
-      platform: 'twitter' as const,
+      'href': 'https://twitter.com/example',
+      'platform': 'twitter' as const,
       'aria-label': 'Follow us on Twitter',
     };
 
     it('handles keyboard navigation', async () => {
-      render(<SocialIconLink {...defaultProps} data-testid='social-link' />);
+      render(
+        <SocialIconLink
+          {...defaultProps}
+          data-testid='social-link'
+        />,
+      );
 
       const link = screen.getByTestId('social-link');
 
@@ -230,13 +265,18 @@ describe('Social Icons Link - Basic Tests', () => {
 
   describe('安全性', () => {
     const defaultProps = {
-      href: 'https://twitter.com/example',
-      platform: 'twitter' as const,
+      'href': 'https://twitter.com/example',
+      'platform': 'twitter' as const,
       'aria-label': 'Follow us on Twitter',
     };
 
     it('handles external link security', () => {
-      render(<SocialIconLink {...defaultProps} data-testid='social-link' />);
+      render(
+        <SocialIconLink
+          {...defaultProps}
+          data-testid='social-link'
+        />,
+      );
 
       const link = screen.getByTestId('social-link');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
@@ -245,8 +285,8 @@ describe('Social Icons Link - Basic Tests', () => {
 
   describe('HTML属性支持', () => {
     const defaultProps = {
-      href: 'https://twitter.com/example',
-      platform: 'twitter' as const,
+      'href': 'https://twitter.com/example',
+      'platform': 'twitter' as const,
       'aria-label': 'Follow us on Twitter',
     };
 
@@ -255,7 +295,7 @@ describe('Social Icons Link - Basic Tests', () => {
         <SocialIconLink
           {...defaultProps}
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -266,7 +306,10 @@ describe('Social Icons Link - Basic Tests', () => {
 
     it('handles component lifecycle correctly', () => {
       const { unmount, rerender } = render(
-        <SocialIconLink {...defaultProps} data-testid='social-link' />
+        <SocialIconLink
+          {...defaultProps}
+          data-testid='social-link'
+        />,
       );
 
       expect(screen.getByTestId('social-link')).toBeInTheDocument();
@@ -276,7 +319,7 @@ describe('Social Icons Link - Basic Tests', () => {
           {...defaultProps}
           href='https://github.com/example'
           data-testid='social-link'
-        />
+        />,
       );
 
       expect(screen.getByTestId('social-link')).toBeInTheDocument();
@@ -291,7 +334,7 @@ describe('Social Icons Link - Basic Tests', () => {
           data-platform='twitter'
           data-category='social'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -304,13 +347,13 @@ describe('Social Icons Link - Basic Tests', () => {
         <SocialIconLink
           {...defaultProps}
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
       expect(link).toHaveStyle({
         backgroundColor: 'red',
-        color: 'white'
+        color: 'white',
       });
     });
   });

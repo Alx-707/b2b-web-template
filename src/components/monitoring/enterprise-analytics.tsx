@@ -1,9 +1,9 @@
 'use client';
 
-import { logger } from '@/lib/logger';
+import React, { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { useLocale } from 'next-intl';
-import React, { useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 /**
  * 使用全局 logger（开发环境输出，生产环境静默）
@@ -75,7 +75,6 @@ function initWebVitals(locale: string): void {
         // 发送到Vercel Analytics
         if ('va' in window) {
           try {
-
             (window as any).va('track', 'Web Vital', {
               metric_name: metric.name,
               metric_value: metric.value,
@@ -127,7 +126,6 @@ function trackNavigation(locale: string): void {
   // 发送导航事件
   if ('va' in window) {
     try {
-
       (window as any).va('track', 'Navigation', {
         locale,
         url: window.location.href,
@@ -162,7 +160,6 @@ function initPerformanceMonitoring(locale: string): void {
         // 发送性能指标
         if ('va' in window) {
           try {
-
             (window as any).va('track', 'Performance', {
               ...metrics,
               locale,
@@ -209,7 +206,6 @@ export const enterpriseAnalytics = {
 
     if ('va' in window) {
       try {
-
         (window as any).va('track', eventName, properties);
       } catch (error) {
         logger.error('Failed to send to Vercel Analytics:', error);
@@ -218,7 +214,6 @@ export const enterpriseAnalytics = {
 
     if ('gtag' in window) {
       try {
-
         (window as any).gtag('event', eventName, properties);
       } catch (error) {
         logger.error('Failed to send to Google Analytics:', error);

@@ -5,13 +5,13 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from '../dropdown-menu';
 
 describe('DropdownMenu - Advanced Features', () => {
@@ -75,7 +75,10 @@ describe('DropdownMenu - Advanced Features', () => {
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger inset data-testid='sub-trigger'>
+              <DropdownMenuSubTrigger
+                inset
+                data-testid='sub-trigger'
+              >
                 Inset Sub Menu
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
@@ -96,10 +99,16 @@ describe('DropdownMenu - Advanced Features', () => {
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger className='custom-sub-trigger' data-testid='sub-trigger'>
+              <DropdownMenuSubTrigger
+                className='custom-sub-trigger'
+                data-testid='sub-trigger'
+              >
                 Sub Menu
               </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className='custom-sub-content' data-testid='sub-content'>
+              <DropdownMenuSubContent
+                className='custom-sub-content'
+                data-testid='sub-content'
+              >
                 <DropdownMenuItem>Sub Item</DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>

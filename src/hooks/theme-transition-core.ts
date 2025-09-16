@@ -2,16 +2,16 @@ import React from 'react';
 import { logger } from '@/lib/logger';
 import { themeAnalytics } from '@/lib/theme-analytics';
 import type {
+  ThemeTransitionConfig,
   ViewTransition,
   ViewTransitionAPI,
-  ThemeTransitionConfig
 } from './theme-transition-types';
 import {
-  DEFAULT_CONFIG,
-  supportsViewTransitions,
-  getClickCoordinates,
   calculateEndRadius,
+  DEFAULT_CONFIG,
+  getClickCoordinates,
   recordThemeTransition,
+  supportsViewTransitions,
 } from './theme-transition-utils';
 
 /**
@@ -150,25 +150,27 @@ export function executeCircularThemeTransition(
 
   const animationSetup = (transition: ViewTransition) => {
     // 设置圆形展开动画
-    transition.ready.then(() => {
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
-      ];
+    transition.ready
+      .then(() => {
+        const clipPath = [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${endRadius}px at ${x}px ${y}px)`,
+        ];
 
-      document.documentElement.animate(
-        {
-          clipPath,
-        },
-        {
-          duration: DEFAULT_CONFIG.animationDuration,
-          easing: DEFAULT_CONFIG.easing,
-          pseudoElement: '::view-transition-new(root)',
-        },
-      );
-    }).catch((error: Error) => {
-      logger.warn('Failed to setup circular animation', { error });
-    });
+        document.documentElement.animate(
+          {
+            clipPath,
+          },
+          {
+            duration: DEFAULT_CONFIG.animationDuration,
+            easing: DEFAULT_CONFIG.easing,
+            pseudoElement: '::view-transition-new(root)',
+          },
+        );
+      })
+      .catch((error: Error) => {
+        logger.warn('Failed to setup circular animation', { error });
+      });
   };
 
   executeThemeTransition(

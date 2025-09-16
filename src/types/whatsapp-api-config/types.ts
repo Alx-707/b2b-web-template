@@ -7,7 +7,7 @@
  * API端点类型
  * API endpoint types
  */
-export type ApiEndpoint = 
+export type ApiEndpoint =
   | 'messages'
   | 'media'
   | 'phone_numbers'
@@ -35,7 +35,7 @@ export type ApiVersion = 'v17.0' | 'v18.0' | 'v19.0' | 'v20.0';
  * 消息类型
  * Message types
  */
-export type MessageType = 
+export type MessageType =
   | 'text'
   | 'template'
   | 'image'
@@ -64,7 +64,12 @@ export type TemplateCategory = 'AUTHENTICATION' | 'MARKETING' | 'UTILITY';
  * 模板状态
  * Template status
  */
-export type TemplateStatusType = 'APPROVED' | 'PENDING' | 'REJECTED' | 'DISABLED' | 'PAUSED';
+export type TemplateStatusType =
+  | 'APPROVED'
+  | 'PENDING'
+  | 'REJECTED'
+  | 'DISABLED'
+  | 'PAUSED';
 
 /**
  * 质量评级
@@ -88,20 +93,23 @@ export type AnalyticsGranularity = 'HALF_HOUR' | 'DAY' | 'MONTH';
  * 分析指标类型
  * Analytics metric types
  */
-export type AnalyticsMetricType = 'cost' | 'conversation' | 'phone_number_quality_score';
+export type AnalyticsMetricType =
+  | 'cost'
+  | 'conversation'
+  | 'phone_number_quality_score';
 
 /**
  * 错误代码类型
  * Error code types
  */
-export type ErrorCode = 
-  | 100  // Generic user error
-  | 131  // Generic temporary error
-  | 132  // Generic limit reached
-  | 133  // Generic permission error
-  | 136  // Generic authentication error
-  | 190  // Access token error
-  | 368  // Temporarily blocked for policies violations
+export type ErrorCode =
+  | 100 // Generic user error
+  | 131 // Generic temporary error
+  | 132 // Generic limit reached
+  | 133 // Generic permission error
+  | 136 // Generic authentication error
+  | 190 // Access token error
+  | 368 // Temporarily blocked for policies violations
   | 131000 // Generic temporary error
   | 131005 // Request limit reached
   | 131008 // Required parameter is missing
@@ -113,4 +121,4 @@ export type ErrorCode =
   | 131047 // Re-engagement message
   | 131051 // Unsupported message type
   | 131052 // Media download error
-  | 131053 // Media upload error;
+  | 131053; // Media upload error;

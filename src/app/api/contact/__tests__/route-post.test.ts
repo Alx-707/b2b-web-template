@@ -10,7 +10,6 @@
  */
 
 import { NextRequest } from 'next/server';
-;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from '@/app/api/contact/__tests__/route';
 
@@ -123,8 +122,12 @@ describe('Contact API Route - POST Tests', () => {
     mockAirtableService.isReady.mockReturnValue(true);
     mockResendService.isReady.mockReturnValue(true);
     mockAirtableService.createContact.mockResolvedValue({ id: 'test-id' });
-    mockResendService.sendContactFormEmail.mockResolvedValue({ id: 'email-id' });
-    mockResendService.sendConfirmationEmail.mockResolvedValue({ id: 'confirm-id' });
+    mockResendService.sendContactFormEmail.mockResolvedValue({
+      id: 'email-id',
+    });
+    mockResendService.sendConfirmationEmail.mockResolvedValue({
+      id: 'confirm-id',
+    });
     mockValidationHelpers.validateEmail.mockReturnValue(true);
     mockValidationHelpers.sanitizeInput.mockImplementation((input) => input);
 
@@ -244,7 +247,9 @@ describe('Contact API Route - POST Tests', () => {
       });
 
       // Mock Turnstile service error
-      global.fetch = vi.fn().mockRejectedValue(new Error('Service unavailable'));
+      global.fetch = vi
+        .fn()
+        .mockRejectedValue(new Error('Service unavailable'));
 
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'POST',
@@ -304,7 +309,9 @@ describe('Contact API Route - POST Tests', () => {
       });
 
       // Mock Airtable service error
-      mockAirtableService.createContact.mockRejectedValue(new Error('Airtable error'));
+      mockAirtableService.createContact.mockRejectedValue(
+        new Error('Airtable error'),
+      );
 
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'POST',
@@ -331,7 +338,9 @@ describe('Contact API Route - POST Tests', () => {
       });
 
       // Mock Resend service error
-      mockResendService.sendContactFormEmail.mockRejectedValue(new Error('Resend error'));
+      mockResendService.sendContactFormEmail.mockRejectedValue(
+        new Error('Resend error'),
+      );
 
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'POST',

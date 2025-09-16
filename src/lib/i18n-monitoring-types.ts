@@ -31,7 +31,10 @@ export interface MonitoringEvent {
   timestamp: number;
   locale: Locale;
   message: string;
-  metadata?: Record<string, string | number | boolean | Record<string, unknown> | unknown[]>;
+  metadata?: Record<
+    string,
+    string | number | boolean | Record<string, unknown> | unknown[]
+  >;
   stackTrace?: string;
   userAgent?: string;
   url?: string;

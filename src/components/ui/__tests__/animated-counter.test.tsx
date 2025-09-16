@@ -1,16 +1,16 @@
-import {
-    TEST_COUNT_CONSTANTS,
-    TEST_EASING_CONSTANTS,
-    TEST_SAMPLE_CONSTANTS,
-    TEST_TIMEOUT_CONSTANTS,
-} from '@/constants/test-constants';
-import { act, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    AnimatedCounter,
-    easingFunctions,
-    formatters,
+  TEST_COUNT_CONSTANTS,
+  TEST_EASING_CONSTANTS,
+  TEST_SAMPLE_CONSTANTS,
+  TEST_TIMEOUT_CONSTANTS,
+} from '@/constants/test-constants';
+import {
+  AnimatedCounter,
+  easingFunctions,
+  formatters,
 } from '../animated-counter';
 
 // Mock dependencies

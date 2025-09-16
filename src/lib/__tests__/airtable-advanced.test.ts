@@ -1,5 +1,5 @@
-import type { AirtableServicePrivate } from '@/types/test-types';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { AirtableServicePrivate } from '@/types/test-types';
 
 // Mock Airtable
 const mockCreate = vi.fn();

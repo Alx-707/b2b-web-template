@@ -1,12 +1,12 @@
 /**
  * 核心动态组件导出配置
  */
-import { DynamicProgressIndicator, DynamicAnimatedIcon } from './high-priority';
-import { 
-  DynamicAnimatedCounter, 
-  DynamicDropdownMenu, 
-  DynamicTabs, 
-  DynamicCarousel 
+import { DynamicAnimatedIcon, DynamicProgressIndicator } from './high-priority';
+import {
+  DynamicAnimatedCounter,
+  DynamicCarousel,
+  DynamicDropdownMenu,
+  DynamicTabs,
 } from './ui-components';
 
 // ==================== 导出所有核心组件 ====================

@@ -6,14 +6,12 @@
 'use client';
 
 import { CACHE_LIMITS } from '@/constants/i18n-constants';
-import type {
-  StorageOperationResult,
-} from '../locale-storage-types';
 import { getDetectionHistory } from '../locale-storage-history-core';
+import type { StorageOperationResult } from '../locale-storage-types';
 import {
-  cleanupExpiredDetections,
   cleanupDuplicateDetections,
-  limitHistorySize
+  cleanupExpiredDetections,
+  limitHistorySize,
 } from './cleanup';
 
 /**
@@ -65,7 +63,9 @@ export function performMaintenance(options: {
 
     // 获取最终计数
     const historyResult = getDetectionHistory();
-    const finalCount = historyResult.success ? historyResult.data!.history.length : 0;
+    const finalCount = historyResult.success
+      ? historyResult.data!.history.length
+      : 0;
 
     return {
       success: true,
@@ -126,7 +126,9 @@ export function getMaintenanceRecommendations(): {
 
   // 检查过期记录
   const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-  const expiredCount = records.filter(r => r.timestamp < thirtyDaysAgo).length;
+  const expiredCount = records.filter(
+    (r) => r.timestamp < thirtyDaysAgo,
+  ).length;
 
   if (expiredCount > 0) {
     recommendations.push(`发现 ${expiredCount} 条过期记录，建议清理`);
@@ -137,7 +139,7 @@ export function getMaintenanceRecommendations(): {
   const uniqueKeys = new Set();
   let duplicateCount = 0;
 
-  records.forEach(record => {
+  records.forEach((record) => {
     const key = `${record.locale}-${record.source}-${record.timestamp}`;
     if (uniqueKeys.has(key)) {
       duplicateCount += 1;
@@ -151,8 +153,13 @@ export function getMaintenanceRecommendations(): {
   }
 
   // 检查数据完整性
-  const invalidRecords = records.filter(record =>
-    !record.locale || !record.source || !record.timestamp || record.confidence < 0 || record.confidence > 1
+  const invalidRecords = records.filter(
+    (record) =>
+      !record.locale ||
+      !record.source ||
+      !record.timestamp ||
+      record.confidence < 0 ||
+      record.confidence > 1,
   );
 
   if (invalidRecords.length > 0) {
@@ -164,11 +171,12 @@ export function getMaintenanceRecommendations(): {
     recommendations.push('历史记录状态良好，无需维护');
   }
 
-  const estimatedBenefit = urgency === 'high'
-    ? '显著提升性能和稳定性'
-    : urgency === 'medium'
-    ? '改善存储效率'
-    : '保持系统整洁';
+  const estimatedBenefit =
+    urgency === 'high'
+      ? '显著提升性能和稳定性'
+      : urgency === 'medium'
+        ? '改善存储效率'
+        : '保持系统整洁';
 
   return {
     recommendations,

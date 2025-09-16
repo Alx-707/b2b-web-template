@@ -10,25 +10,23 @@ interface AutomatedTestSectionProps {
 export function AutomatedTestSection({
   testResults,
   isRunning,
-  onRunTests
+  onRunTests,
 }: AutomatedTestSectionProps) {
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">
-        自动化测试
-      </h2>
+    <div className='mb-8 rounded-lg border bg-white p-6 shadow-sm'>
+      <h2 className='mb-4 text-xl font-semibold text-gray-900'>自动化测试</h2>
       <button
         onClick={onRunTests}
         disabled={isRunning}
-        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className='rounded-lg bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50'
       >
         {isRunning ? '正在测试...' : '运行无障碍性测试'}
       </button>
 
       {testResults && (
-        <div className="mt-6">
-          <h3 className="font-medium text-gray-900 mb-2">测试结果：</h3>
-          <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-auto whitespace-pre-wrap font-mono">
+        <div className='mt-6'>
+          <h3 className='mb-2 font-medium text-gray-900'>测试结果：</h3>
+          <pre className='overflow-auto rounded-lg bg-gray-900 p-4 font-mono text-sm whitespace-pre-wrap text-gray-100'>
             {testResults}
           </pre>
         </div>

@@ -1,11 +1,11 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import reactYouMightNotNeedAnEffect from 'eslint-plugin-react-you-might-not-need-an-effect';
 import security from 'eslint-plugin-security';
 import securityNode from 'eslint-plugin-security-node';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -150,7 +150,10 @@ export default [
       'prefer-const': 'error',
       'no-duplicate-imports': 'error',
       'no-unused-expressions': 'error',
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      'no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
       'no-undef': 'error',
       'no-unreachable': 'error',
       'no-unreachable-loop': 'error',
@@ -159,13 +162,16 @@ export default [
       'no-empty': 'error', // 禁止空代码块
       'no-empty-function': 'error', // 禁止空函数
       'no-implicit-coercion': 'error', // 禁止隐式类型转换
-      'no-magic-numbers': ['error', {
-        ignore: [0, 1, -1], // 仅允许最基本的数字
-        ignoreArrayIndexes: false, // 数组索引也要常量化
-        ignoreDefaultValues: false, // 默认值也要常量化
-        enforceConst: true,
-        detectObjects: true, // 检测对象中的魔法数字
-      }],
+      'no-magic-numbers': [
+        'error',
+        {
+          ignore: [0, 1, -1], // 仅允许最基本的数字
+          ignoreArrayIndexes: false, // 数组索引也要常量化
+          ignoreDefaultValues: false, // 默认值也要常量化
+          enforceConst: true,
+          detectObjects: true, // 检测对象中的魔法数字
+        },
+      ],
 
       // Best practices (最严格)
       'eqeqeq': ['error', 'always'],
@@ -360,8 +366,14 @@ export default [
 
       // 🎯 行业标准：测试文件允许any类型（Mock对象复杂性）
       '@typescript-eslint/no-explicit-any': 'off', // 测试文件允许any类型 - 符合行业标准
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }], // 严格清理未使用变量
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }], // 保持代码整洁
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ], // 严格清理未使用变量
+      'no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ], // 保持代码整洁
       '@typescript-eslint/no-require-imports': 'off', // 测试中可能需要require导入
 
       // 安全规则统一为error级别
@@ -425,7 +437,10 @@ export default [
       '@typescript-eslint/ban-ts-comment': 'warn', // 开发工具允许@ts-nocheck（仅开发环境）
 
       // 开发工具特定但合理的豁免
-      'no-underscore-dangle': ['error', { allow: ['__REACT_SCAN__', '__DEV__'] }],
+      'no-underscore-dangle': [
+        'error',
+        { allow: ['__REACT_SCAN__', '__DEV__'] },
+      ],
       'security/detect-object-injection': 'error', // 开发工具动态访问，统一为error级别
       'no-empty-function': 'warn', // 开发工具占位符
       'consistent-return': 'warn', // 开发工具复杂逻辑
@@ -448,8 +463,9 @@ export default [
         'error',
         {
           selector: 'ExportAllDeclaration',
-          message: '🚫 架构重构期间禁止新增 export * 重新导出。请使用命名导出：export { specificExport } from "./module"'
-        }
+          message:
+            '🚫 架构重构期间禁止新增 export * 重新导出。请使用命名导出：export { specificExport } from "./module"',
+        },
       ],
 
       // 禁止相对路径导入（强制使用@/别名）
@@ -459,11 +475,12 @@ export default [
           patterns: [
             {
               group: ['../*', './*'],
-              message: '🚫 请使用 @/ 路径别名替代相对路径导入，例如：import { something } from "@/lib/module"'
-            }
-          ]
-        }
-      ]
+              message:
+                '🚫 请使用 @/ 路径别名替代相对路径导入，例如：import { something } from "@/lib/module"',
+            },
+          ],
+        },
+      ],
     },
   },
 
@@ -535,10 +552,4 @@ export default [
       'tina/__generated__/**', // 忽略TinaCMS生成的文件
     ],
   },
-
-
-
-
-
-
 ];

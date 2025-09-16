@@ -2,14 +2,14 @@
  * @vitest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuPortal,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuPortal,
+  DropdownMenuTrigger,
 } from '../dropdown-menu';
 
 describe('DropdownMenu - Basic Components', () => {
@@ -45,7 +45,10 @@ describe('DropdownMenu - Basic Components', () => {
     it('accepts open and onOpenChange props', () => {
       const onOpenChange = vi.fn();
       render(
-        <DropdownMenu open={true} onOpenChange={onOpenChange}>
+        <DropdownMenu
+          open={true}
+          onOpenChange={onOpenChange}
+        >
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent data-testid='content'>
             <div>Content</div>
@@ -119,7 +122,10 @@ describe('DropdownMenu - Basic Components', () => {
     it('applies custom className', () => {
       render(
         <DropdownMenu>
-          <DropdownMenuTrigger className='custom-trigger' data-testid='trigger'>
+          <DropdownMenuTrigger
+            className='custom-trigger'
+            data-testid='trigger'
+          >
             Open Menu
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -152,7 +158,10 @@ describe('DropdownMenu - Basic Components', () => {
     it('handles disabled state', () => {
       render(
         <DropdownMenu>
-          <DropdownMenuTrigger disabled data-testid='trigger'>
+          <DropdownMenuTrigger
+            disabled
+            data-testid='trigger'
+          >
             Disabled Trigger
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -210,7 +219,10 @@ describe('DropdownMenu - Basic Components', () => {
       render(
         <DropdownMenu defaultOpen>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-          <DropdownMenuContent className='custom-content' data-testid='content'>
+          <DropdownMenuContent
+            className='custom-content'
+            data-testid='content'
+          >
             <div>Content</div>
           </DropdownMenuContent>
         </DropdownMenu>,
@@ -222,12 +234,15 @@ describe('DropdownMenu - Basic Components', () => {
 
     it('supports different side positions', () => {
       const sides = ['top', 'right', 'bottom', 'left'] as const;
-      
+
       sides.forEach((side) => {
         const { unmount } = render(
           <DropdownMenu defaultOpen>
             <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-            <DropdownMenuContent side={side} data-testid={`content-${side}`}>
+            <DropdownMenuContent
+              side={side}
+              data-testid={`content-${side}`}
+            >
               <div>Content {side}</div>
             </DropdownMenuContent>
           </DropdownMenu>,
@@ -235,19 +250,22 @@ describe('DropdownMenu - Basic Components', () => {
 
         const content = screen.getByTestId(`content-${side}`);
         expect(content).toBeInTheDocument();
-        
+
         unmount();
       });
     });
 
     it('supports different alignments', () => {
       const alignments = ['start', 'center', 'end'] as const;
-      
+
       alignments.forEach((align) => {
         const { unmount } = render(
           <DropdownMenu defaultOpen>
             <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-            <DropdownMenuContent align={align} data-testid={`content-${align}`}>
+            <DropdownMenuContent
+              align={align}
+              data-testid={`content-${align}`}
+            >
               <div>Content {align}</div>
             </DropdownMenuContent>
           </DropdownMenu>,
@@ -255,7 +273,7 @@ describe('DropdownMenu - Basic Components', () => {
 
         const content = screen.getByTestId(`content-${align}`);
         expect(content).toBeInTheDocument();
-        
+
         unmount();
       });
     });
@@ -264,9 +282,9 @@ describe('DropdownMenu - Basic Components', () => {
       render(
         <DropdownMenu defaultOpen>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-          <DropdownMenuContent 
-            sideOffset={10} 
-            alignOffset={5} 
+          <DropdownMenuContent
+            sideOffset={10}
+            alignOffset={5}
             data-testid='content'
           >
             <div>Content with offsets</div>

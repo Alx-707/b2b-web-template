@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-;
 import { logger } from '@/lib/logger';
-import { HOURS_24_IN_MS, HOURS_2_IN_MS } from '../types';
+import { HOURS_2_IN_MS, HOURS_24_IN_MS } from '../types';
 
 /**
  * GET /api/monitoring/dashboard

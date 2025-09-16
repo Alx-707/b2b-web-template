@@ -189,7 +189,11 @@ export class CacheError extends Error {
   public readonly code: string;
   public readonly details?: Record<string, unknown> | undefined;
 
-  constructor(message: string, code: string = 'CACHE_ERROR', details?: Record<string, unknown> | undefined) {
+  constructor(
+    message: string,
+    code: string = 'CACHE_ERROR',
+    details?: Record<string, unknown> | undefined,
+  ) {
     super(message);
     this.name = 'CacheError';
     this.code = code;
@@ -269,14 +273,22 @@ export function isCacheEvent(value: unknown): value is CacheEvent {
  * 基础工具函数
  * Basic utility functions
  */
-export function createCacheKey(locale: Locale, namespace?: string, key?: string): string {
+export function createCacheKey(
+  locale: Locale,
+  namespace?: string,
+  key?: string,
+): string {
   const parts: string[] = [locale];
   if (namespace) parts.push(namespace);
   if (key) parts.push(key);
   return parts.join(':');
 }
 
-export function parseCacheKey(cacheKey: string): { locale: Locale; namespace?: string; key?: string } {
+export function parseCacheKey(cacheKey: string): {
+  locale: Locale;
+  namespace?: string;
+  key?: string;
+} {
   const parts = cacheKey.split(':');
   return {
     locale: parts[0] as Locale,
@@ -289,7 +301,9 @@ export function parseCacheKey(cacheKey: string): { locale: Locale; namespace?: s
  * 缓存配置验证函数
  * Cache configuration validation function
  */
-export function validateCacheConfig(config: Partial<CacheConfig>): CacheConfigValidation {
+export function validateCacheConfig(
+  config: Partial<CacheConfig>,
+): CacheConfigValidation {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -312,7 +326,10 @@ export function validateCacheConfig(config: Partial<CacheConfig>): CacheConfigVa
   }
 
   if (config.storageKey !== undefined) {
-    if (typeof config.storageKey !== 'string' || config.storageKey.length === 0) {
+    if (
+      typeof config.storageKey !== 'string' ||
+      config.storageKey.length === 0
+    ) {
       errors.push('storageKey must be a non-empty string');
     }
   }

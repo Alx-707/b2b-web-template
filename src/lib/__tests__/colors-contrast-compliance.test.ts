@@ -10,9 +10,9 @@
 import { _TEST_CONSTANTS } from '@/constants/test-constants';
 import {
   checkContrastCompliance,
+  darkThemeColors,
   generateCSSVariables,
   lightThemeColors,
-  darkThemeColors,
   validateThemeContrast,
   type OKLCHColor,
 } from '../colors';
@@ -89,7 +89,9 @@ describe('Color Contrast and Compliance Tests', () => {
       const extremeLight: OKLCHColor = { l: 2, c: 0, h: 0 };
       const extremeDark: OKLCHColor = { l: -0.5, c: 0, h: 0 };
 
-      expect(() => checkContrastCompliance(extremeLight, extremeDark, 'AA')).not.toThrow();
+      expect(() =>
+        checkContrastCompliance(extremeLight, extremeDark, 'AA'),
+      ).not.toThrow();
     });
 
     it('should handle NaN and Infinity values', () => {
@@ -97,8 +99,12 @@ describe('Color Contrast and Compliance Tests', () => {
       const infiniteColor: OKLCHColor = { l: Infinity, c: 0, h: 0 };
       const normalColor: OKLCHColor = { l: 0.5, c: 0, h: 0 };
 
-      expect(() => checkContrastCompliance(nanColor, normalColor, 'AA')).not.toThrow();
-      expect(() => checkContrastCompliance(infiniteColor, normalColor, 'AA')).not.toThrow();
+      expect(() =>
+        checkContrastCompliance(nanColor, normalColor, 'AA'),
+      ).not.toThrow();
+      expect(() =>
+        checkContrastCompliance(infiniteColor, normalColor, 'AA'),
+      ).not.toThrow();
     });
 
     it('should handle very precise color values', () => {

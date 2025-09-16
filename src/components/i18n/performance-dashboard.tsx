@@ -1,11 +1,11 @@
 'use client';
 
-import { useI18nPerformance } from '@/hooks/use-enhanced-translations';
-import {
-    evaluatePerformance,
-    PERFORMANCE_TARGETS,
-} from '@/lib/i18n-performance';
 import { useEffect, useState } from 'react';
+import {
+  evaluatePerformance,
+  PERFORMANCE_TARGETS,
+} from '@/lib/i18n-performance';
+import { useI18nPerformance } from '@/hooks/use-enhanced-translations';
 
 interface PerformanceMetrics {
   averageLoadTime: number;

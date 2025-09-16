@@ -7,13 +7,13 @@
 
 import type { Locale } from '@/types/i18n';
 import type {
+  CacheBackupConfig,
   CacheCompressionConfig,
   CacheEncryptionConfig,
   CacheMonitoringConfig,
-  CacheBackupConfig,
+  CachePartitionConfig,
   CachePerformanceConfig,
   CacheSecurityConfig,
-  CachePartitionConfig,
   CacheSyncOptions,
 } from './i18n-cache-types-interfaces';
 
@@ -40,7 +40,9 @@ export interface AdvancedCacheConfig {
 
   // 策略配置
   evictionStrategy: 'lru' | 'lfu' | 'fifo' | 'ttl' | 'custom';
-  customEvictionStrategy?: (items: Array<{ key: string; lastAccessed: number; hits: number }>) => string[];
+  customEvictionStrategy?: (
+    items: Array<{ key: string; lastAccessed: number; hits: number }>,
+  ) => string[];
 
   // 预加载配置
   preload: {
@@ -149,7 +151,11 @@ export interface CacheInvalidationConfig {
  */
 export interface CacheConsistencyConfig {
   level: 'eventual' | 'strong' | 'weak';
-  conflictResolution: 'last_write_wins' | 'first_write_wins' | 'merge' | 'custom';
+  conflictResolution:
+    | 'last_write_wins'
+    | 'first_write_wins'
+    | 'merge'
+    | 'custom';
   customConflictResolver?: (local: unknown, remote: unknown) => unknown;
   versioningStrategy: 'timestamp' | 'vector_clock' | 'sequence' | 'custom';
   maxVersionHistory: number;
@@ -436,7 +442,10 @@ export class CacheConfigFactory {
    * 合并配置
    * Merge configurations
    */
-  static mergeConfigs(base: AdvancedCacheConfig, override: Partial<AdvancedCacheConfig>): AdvancedCacheConfig {
+  static mergeConfigs(
+    base: AdvancedCacheConfig,
+    override: Partial<AdvancedCacheConfig>,
+  ): AdvancedCacheConfig {
     return {
       ...base,
       ...override,

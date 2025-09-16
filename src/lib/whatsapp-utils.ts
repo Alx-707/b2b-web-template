@@ -37,47 +37,53 @@ export class WhatsAppUtils {
    * 验证模板参数
    */
   static validateTemplateParameters(parameters: string[]): boolean {
-    return parameters.every(param => 
-      typeof param === 'string' && 
-      param.length > 0 && 
-      param.length <= 1024
+    return parameters.every(
+      (param) =>
+        typeof param === 'string' && param.length > 0 && param.length <= 1024,
     );
   }
 
   /**
    * 验证按钮配置
    */
-  static validateButtons(buttons: Array<{ id: string; title: string }>): boolean {
+  static validateButtons(
+    buttons: Array<{ id: string; title: string }>,
+  ): boolean {
     if (buttons.length === 0 || buttons.length > 3) {
       return false;
     }
 
-    return buttons.every(button => 
-      typeof button.id === 'string' && 
-      typeof button.title === 'string' &&
-      button.id.length > 0 && 
-      button.id.length <= 256 &&
-      button.title.length > 0 && 
-      button.title.length <= 20
+    return buttons.every(
+      (button) =>
+        typeof button.id === 'string' &&
+        typeof button.title === 'string' &&
+        button.id.length > 0 &&
+        button.id.length <= 256 &&
+        button.title.length > 0 &&
+        button.title.length <= 20,
     );
   }
 
   /**
    * 验证列表行配置
    */
-  static validateListRows(rows: Array<{ id: string; title: string; description?: string }>): boolean {
+  static validateListRows(
+    rows: Array<{ id: string; title: string; description?: string }>,
+  ): boolean {
     if (rows.length === 0 || rows.length > 10) {
       return false;
     }
 
-    return rows.every(row => 
-      typeof row.id === 'string' && 
-      typeof row.title === 'string' &&
-      row.id.length > 0 && 
-      row.id.length <= 200 &&
-      row.title.length > 0 && 
-      row.title.length <= 24 &&
-      (!row.description || (row.description.length > 0 && row.description.length <= 72))
+    return rows.every(
+      (row) =>
+        typeof row.id === 'string' &&
+        typeof row.title === 'string' &&
+        row.id.length > 0 &&
+        row.id.length <= 200 &&
+        row.title.length > 0 &&
+        row.title.length <= 24 &&
+        (!row.description ||
+          (row.description.length > 0 && row.description.length <= 72)),
     );
   }
 

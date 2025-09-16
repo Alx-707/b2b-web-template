@@ -298,7 +298,11 @@ export const waitForElement = (testId: string, timeout = 1000) => {
 /**
  * 验证Mock调用的辅助函数
  */
-export const expectMockCalled = (mockFn: unknown, times = 1, args?: unknown[]) => {
+export const expectMockCalled = (
+  mockFn: unknown,
+  times = 1,
+  args?: unknown[],
+) => {
   expect(mockFn).toHaveBeenCalledTimes(times);
   if (args) {
     expect(mockFn).toHaveBeenCalledWith(...args);

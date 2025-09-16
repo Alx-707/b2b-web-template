@@ -14,10 +14,10 @@
  * - mobile-navigation-edge-cases.test.tsx - 边界情况和错误处理测试
  */
 
+import { usePathname } from 'next/navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MobileMenuButton, MobileNavigation } from '../mobile-navigation';
 
@@ -45,18 +45,20 @@ describe('Mobile Navigation - Integration Tests', () => {
     vi.clearAllMocks();
 
     // Setup default mocks
-    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-      const translations: Record<string, string> = {
-        'navigation.home': 'Home',
-        'navigation.about': 'About',
-        'navigation.services': 'Services',
-        'navigation.contact': 'Contact',
-        'navigation.menu': 'Menu',
-        'navigation.close': 'Close',
-      };
-      // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
-    });
+    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+      (key: string) => {
+        const translations: Record<string, string> = {
+          'navigation.home': 'Home',
+          'navigation.about': 'About',
+          'navigation.services': 'Services',
+          'navigation.contact': 'Contact',
+          'navigation.menu': 'Menu',
+          'navigation.close': 'Close',
+        };
+        // eslint-disable-next-line security/detect-object-injection
+        return translations[key] || key; // key 来自测试数据，安全
+      },
+    );
 
     (usePathname as ReturnType<typeof vi.fn>).mockReturnValue('/');
   });
@@ -111,7 +113,12 @@ describe('Mobile Navigation - Integration Tests', () => {
 
   describe('MobileMenuButton 集成测试', () => {
     it('renders with correct initial state', () => {
-      render(<MobileMenuButton isOpen={false} onClick={() => {}} />);
+      render(
+        <MobileMenuButton
+          isOpen={false}
+          onClick={() => {}}
+        />,
+      );
 
       const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
@@ -119,12 +126,22 @@ describe('Mobile Navigation - Integration Tests', () => {
     });
 
     it('handles state changes correctly', () => {
-      const { rerender } = render(<MobileMenuButton isOpen={false} onClick={() => {}} />);
+      const { rerender } = render(
+        <MobileMenuButton
+          isOpen={false}
+          onClick={() => {}}
+        />,
+      );
 
       let button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-expanded', 'false');
 
-      rerender(<MobileMenuButton isOpen={true} onClick={() => {}} />);
+      rerender(
+        <MobileMenuButton
+          isOpen={true}
+          onClick={() => {}}
+        />,
+      );
 
       button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-expanded', 'true');
@@ -132,7 +149,12 @@ describe('Mobile Navigation - Integration Tests', () => {
 
     it('calls onClick when clicked', async () => {
       const handleClick = vi.fn();
-      render(<MobileMenuButton isOpen={false} onClick={handleClick} />);
+      render(
+        <MobileMenuButton
+          isOpen={false}
+          onClick={handleClick}
+        />,
+      );
 
       const button = screen.getByRole('button');
       await user.click(button);
@@ -141,17 +163,33 @@ describe('Mobile Navigation - Integration Tests', () => {
     });
 
     it('shows correct icons for different states', () => {
-      const { rerender } = render(<MobileMenuButton isOpen={false} onClick={() => {}} />);
+      const { rerender } = render(
+        <MobileMenuButton
+          isOpen={false}
+          onClick={() => {}}
+        />,
+      );
 
       expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
 
-      rerender(<MobileMenuButton isOpen={true} onClick={() => {}} />);
+      rerender(
+        <MobileMenuButton
+          isOpen={true}
+          onClick={() => {}}
+        />,
+      );
 
       expect(screen.getByTestId('close-icon')).toBeInTheDocument();
     });
 
     it('supports custom className', () => {
-      render(<MobileMenuButton isOpen={false} onClick={() => {}} className='custom-button' />);
+      render(
+        <MobileMenuButton
+          isOpen={false}
+          onClick={() => {}}
+          className='custom-button'
+        />,
+      );
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('custom-button');
@@ -160,7 +198,9 @@ describe('Mobile Navigation - Integration Tests', () => {
 
   describe('错误处理和边界情况', () => {
     it('handles missing translations gracefully', () => {
-      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(() => undefined);
+      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+        () => undefined,
+      );
 
       expect(() => {
         render(<MobileNavigation />);
@@ -168,7 +208,9 @@ describe('Mobile Navigation - Integration Tests', () => {
     });
 
     it('handles undefined pathname gracefully', () => {
-      (usePathname as ReturnType<typeof vi.fn>).mockReturnValue(undefined as unknown);
+      (usePathname as ReturnType<typeof vi.fn>).mockReturnValue(
+        undefined as unknown,
+      );
 
       expect(() => {
         render(<MobileNavigation />);
@@ -197,5 +239,4 @@ describe('Mobile Navigation - Integration Tests', () => {
       expect(trigger).toBeInTheDocument();
     });
   });
-
 });

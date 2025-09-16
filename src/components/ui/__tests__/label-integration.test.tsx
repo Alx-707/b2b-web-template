@@ -12,9 +12,9 @@
  * - label-component-composition.test.tsx - Component composition tests
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Label } from '../label';
 
@@ -30,13 +30,19 @@ describe('Label Integration Tests - Index', () => {
       <form>
         <div>
           <Label htmlFor='integration-name'>Name</Label>
-          <input id='integration-name' type='text' />
+          <input
+            id='integration-name'
+            type='text'
+          />
         </div>
         <div>
           <Label htmlFor='integration-email'>Email</Label>
-          <input id='integration-email' type='email' />
+          <input
+            id='integration-email'
+            type='email'
+          />
         </div>
-      </form>
+      </form>,
     );
 
     const nameLabel = screen.getByText('Name');
@@ -57,11 +63,17 @@ describe('Label Integration Tests - Index', () => {
       <form>
         <div>
           <Label htmlFor='text-input'>Text Input</Label>
-          <input id='text-input' type='text' />
+          <input
+            id='text-input'
+            type='text'
+          />
         </div>
         <div>
           <Label htmlFor='email-input'>Email Input</Label>
-          <input id='email-input' type='email' />
+          <input
+            id='email-input'
+            type='email'
+          />
         </div>
         <div>
           <Label htmlFor='textarea-input'>Textarea</Label>
@@ -74,7 +86,7 @@ describe('Label Integration Tests - Index', () => {
             <option value='option2'>Option 2</option>
           </select>
         </div>
-      </form>
+      </form>,
     );
 
     expect(screen.getByLabelText('Text Input')).toBeInTheDocument();
@@ -87,8 +99,11 @@ describe('Label Integration Tests - Index', () => {
     render(
       <div>
         <Label htmlFor='clickable-input'>Clickable Label</Label>
-        <input id='clickable-input' type='text' />
-      </div>
+        <input
+          id='clickable-input'
+          type='text'
+        />
+      </div>,
     );
 
     const label = screen.getByText('Clickable Label');
@@ -108,8 +123,11 @@ describe('Label Integration Tests - Index', () => {
     render(
       <FormGroup>
         <Label htmlFor='nested-input'>Nested Input</Label>
-        <input id='nested-input' type='text' />
-      </FormGroup>
+        <input
+          id='nested-input'
+          type='text'
+        />
+      </FormGroup>,
     );
 
     const label = screen.getByText('Nested Input');
@@ -125,12 +143,18 @@ describe('Label Integration Tests - Index', () => {
       <form>
         <div>
           <Label htmlFor='always-visible'>Always Visible</Label>
-          <input id='always-visible' type='text' />
+          <input
+            id='always-visible'
+            type='text'
+          />
         </div>
         {showField && (
           <div>
             <Label htmlFor='conditional-field'>Conditional Field</Label>
-            <input id='conditional-field' type='text' />
+            <input
+              id='conditional-field'
+              type='text'
+            />
           </div>
         )}
       </form>
@@ -151,7 +175,10 @@ describe('Label Integration Tests - Index', () => {
     const DynamicForm = ({ prefix }: { prefix: string }) => (
       <div>
         <Label htmlFor='dynamic-input'>{prefix} Input</Label>
-        <input id='dynamic-input' type='text' />
+        <input
+          id='dynamic-input'
+          type='text'
+        />
       </div>
     );
 
@@ -169,16 +196,26 @@ describe('Label Integration Tests - Index', () => {
     render(
       <form>
         <div>
-          <Label htmlFor='required-input' className='required'>
+          <Label
+            htmlFor='required-input'
+            className='required'
+          >
             Required Field *
           </Label>
-          <input id='required-input' type='text' required />
+          <input
+            id='required-input'
+            type='text'
+            required
+          />
         </div>
         <div>
           <Label htmlFor='optional-input'>Optional Field</Label>
-          <input id='optional-input' type='text' />
+          <input
+            id='optional-input'
+            type='text'
+          />
         </div>
-      </form>
+      </form>,
     );
 
     const requiredLabel = screen.getByText('Required Field *');
@@ -202,7 +239,7 @@ describe('Label Integration Tests - Index', () => {
           />
           <div id='input-help'>This is help text for the input</div>
         </div>
-      </form>
+      </form>,
     );
 
     const input = screen.getByLabelText('Accessible Input');
@@ -244,11 +281,17 @@ describe('Label Integration Tests - Index', () => {
   it('supports custom styling and classes', () => {
     render(
       <div>
-        <Label htmlFor='styled-input' className='custom-label-class'>
+        <Label
+          htmlFor='styled-input'
+          className='custom-label-class'
+        >
           Styled Label
         </Label>
-        <input id='styled-input' type='text' />
-      </div>
+        <input
+          id='styled-input'
+          type='text'
+        />
+      </div>,
     );
 
     const label = screen.getByText('Styled Label');

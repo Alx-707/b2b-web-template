@@ -2,24 +2,24 @@
  * @vitest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from '../dropdown-menu';
 
 describe('DropdownMenu - Complex Structure', () => {
@@ -32,7 +32,7 @@ describe('DropdownMenu - Complex Structure', () => {
         <DropdownMenuContent data-testid='main-content'>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuGroup>
             <DropdownMenuItem data-testid='profile-item'>
               Profile
@@ -47,46 +47,61 @@ describe('DropdownMenu - Complex Structure', () => {
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuGroup>
-          
+
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuGroup>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger data-testid='invite-trigger'>
                 Invite users
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
-                <DropdownMenuItem data-testid='email-item'>Email</DropdownMenuItem>
-                <DropdownMenuItem data-testid='message-item'>Message</DropdownMenuItem>
+                <DropdownMenuItem data-testid='email-item'>
+                  Email
+                </DropdownMenuItem>
+                <DropdownMenuItem data-testid='message-item'>
+                  Message
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem data-testid='more-item'>More...</DropdownMenuItem>
+                <DropdownMenuItem data-testid='more-item'>
+                  More...
+                </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           </DropdownMenuGroup>
-          
+
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuCheckboxItem data-testid='notifications-checkbox'>
             Show notifications
           </DropdownMenuCheckboxItem>
-          
+
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuRadioGroup value='bottom'>
             <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
-            <DropdownMenuRadioItem value='top' data-testid='radio-top'>
+            <DropdownMenuRadioItem
+              value='top'
+              data-testid='radio-top'
+            >
               Top
             </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value='bottom' data-testid='radio-bottom'>
+            <DropdownMenuRadioItem
+              value='bottom'
+              data-testid='radio-bottom'
+            >
               Bottom
             </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value='right' data-testid='radio-right'>
+            <DropdownMenuRadioItem
+              value='right'
+              data-testid='radio-right'
+            >
               Right
             </DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
-          
+
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuItem data-testid='logout-item'>
             Log out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
@@ -106,7 +121,7 @@ describe('DropdownMenu - Complex Structure', () => {
     expect(screen.getByTestId('notifications-checkbox')).toBeInTheDocument();
     expect(screen.getByTestId('radio-bottom')).toBeInTheDocument();
     expect(screen.getByTestId('logout-item')).toBeInTheDocument();
-    
+
     // Verify shortcuts are rendered
     expect(screen.getByText('⇧⌘P')).toBeInTheDocument();
     expect(screen.getByText('⌘B')).toBeInTheDocument();
@@ -164,9 +179,9 @@ describe('DropdownMenu - Complex Structure', () => {
             <DropdownMenuItem data-testid='action-1'>Action 1</DropdownMenuItem>
             <DropdownMenuItem data-testid='action-2'>Action 2</DropdownMenuItem>
           </DropdownMenuGroup>
-          
+
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuGroup>
             <DropdownMenuLabel>Preferences</DropdownMenuLabel>
             <DropdownMenuCheckboxItem data-testid='pref-1'>
@@ -176,15 +191,21 @@ describe('DropdownMenu - Complex Structure', () => {
               Preference 2
             </DropdownMenuCheckboxItem>
           </DropdownMenuGroup>
-          
+
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuRadioGroup value='option1'>
             <DropdownMenuLabel>Options</DropdownMenuLabel>
-            <DropdownMenuRadioItem value='option1' data-testid='option-1'>
+            <DropdownMenuRadioItem
+              value='option1'
+              data-testid='option-1'
+            >
               Option 1
             </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value='option2' data-testid='option-2'>
+            <DropdownMenuRadioItem
+              value='option2'
+              data-testid='option-2'
+            >
               Option 2
             </DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
@@ -196,11 +217,11 @@ describe('DropdownMenu - Complex Structure', () => {
     expect(screen.getByText('Actions')).toBeInTheDocument();
     expect(screen.getByTestId('action-1')).toBeInTheDocument();
     expect(screen.getByTestId('action-2')).toBeInTheDocument();
-    
+
     expect(screen.getByText('Preferences')).toBeInTheDocument();
     expect(screen.getByTestId('pref-1')).toBeInTheDocument();
     expect(screen.getByTestId('pref-2')).toBeInTheDocument();
-    
+
     expect(screen.getByText('Options')).toBeInTheDocument();
     expect(screen.getByTestId('option-1')).toBeInTheDocument();
     expect(screen.getByTestId('option-2')).toBeInTheDocument();
@@ -215,13 +236,13 @@ describe('DropdownMenu - Complex Structure', () => {
             Copy
             <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
           </DropdownMenuItem>
-          
+
           <DropdownMenuItem data-testid='item-without-shortcut'>
             Paste
           </DropdownMenuItem>
-          
+
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger data-testid='sub-with-shortcut'>
               More Actions
@@ -229,8 +250,7 @@ describe('DropdownMenu - Complex Structure', () => {
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuItem data-testid='sub-item-1'>
-                Sub Action 1
-                <DropdownMenuShortcut>⌘1</DropdownMenuShortcut>
+                Sub Action 1<DropdownMenuShortcut>⌘1</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem data-testid='sub-item-2'>
                 Sub Action 2
@@ -244,15 +264,15 @@ describe('DropdownMenu - Complex Structure', () => {
     // Verify items with and without shortcuts
     expect(screen.getByTestId('item-with-shortcut')).toBeInTheDocument();
     expect(screen.getByText('⌘C')).toBeInTheDocument();
-    
+
     expect(screen.getByTestId('item-without-shortcut')).toBeInTheDocument();
-    
+
     expect(screen.getByTestId('sub-with-shortcut')).toBeInTheDocument();
     expect(screen.getByText('⌘M')).toBeInTheDocument();
-    
+
     expect(screen.getByTestId('sub-item-1')).toBeInTheDocument();
     expect(screen.getByText('⌘1')).toBeInTheDocument();
-    
+
     expect(screen.getByTestId('sub-item-2')).toBeInTheDocument();
   });
 

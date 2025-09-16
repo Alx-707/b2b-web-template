@@ -78,12 +78,17 @@ describe('useKeyboardNavigation Events Tests', () => {
           // Test navigation functions directly
           if (mockEvent.key === 'ArrowDown' || mockEvent.key === 'ArrowRight') {
             result.current.focusNext();
-          } else if (mockEvent.key === 'ArrowUp' || mockEvent.key === 'ArrowLeft') {
+          } else if (
+            mockEvent.key === 'ArrowUp' ||
+            mockEvent.key === 'ArrowLeft'
+          ) {
             result.current.focusPrevious();
           }
         });
 
-        expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
+        expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(
+          -1,
+        );
       });
     });
 
@@ -145,7 +150,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           enabled: true,
-          orientation: 'horizontal'
+          orientation: 'horizontal',
         }),
       );
 
@@ -166,7 +171,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           enabled: true,
-          orientation: 'vertical'
+          orientation: 'vertical',
         }),
       );
 
@@ -187,7 +192,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           enabled: true,
-          orientation: 'both'
+          orientation: 'both',
         }),
       );
 
@@ -201,7 +206,9 @@ describe('useKeyboardNavigation Events Tests', () => {
           result.current.focusNext();
         });
 
-        expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
+        expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(
+          -1,
+        );
       });
     });
   });
@@ -213,7 +220,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           enabled: true,
-          onNavigate: mockOnNavigate
+          onNavigate: mockOnNavigate,
         }),
       );
 
@@ -233,7 +240,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           enabled: true,
-          onNavigate: errorCallback
+          onNavigate: errorCallback,
         }),
       );
 

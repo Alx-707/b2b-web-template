@@ -1,17 +1,17 @@
 // @ts-nocheck - 开发工具豁免：仅开发环境使用，不影响生产代码质量
 'use client';
 
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
 import { REACT_SCAN_CONFIG } from '@/constants/react-scan';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 
 // React Scan 类型定义
 interface _ReactScanStats {
@@ -90,11 +90,7 @@ export function OptimizedComponent({ count }: { count: number }) {
   // 使用 useMemo 缓存昂贵计算
   const expensiveCalculation = useMemo(() => {
     let result = 0;
-    for (
-      let i = 0;
-      i < DEV_TOOLS_CONSTANTS.REACT_SCAN.MAX_RENDERS;
-      i++
-    ) {
+    for (let i = 0; i < DEV_TOOLS_CONSTANTS.REACT_SCAN.MAX_RENDERS; i++) {
       result += Math.random();
     }
     return result;
@@ -246,8 +242,8 @@ export function ReactScanStats() {
             <p className='text-2xl font-bold'>{stats.componentsTracked}</p>
           </div>
         </div>
-        <div className='mt-4 pt-4 border-_t'>
-          <p className='text-xs text-muted-foreground'>
+        <div className='border-_t mt-4 pt-4'>
+          <p className='text-muted-foreground text-xs'>
             最后更新: {stats.lastUpdate}
           </p>
         </div>
@@ -262,7 +258,11 @@ interface ControlPanelProps {
   onTriggerRender: () => void;
 }
 
-export function ControlPanel({ count, onIncrement, onTriggerRender }: ControlPanelProps) {
+export function ControlPanel({
+  count,
+  onIncrement,
+  onTriggerRender,
+}: ControlPanelProps) {
   return (
     <Card>
       <CardHeader>
@@ -272,11 +272,18 @@ export function ControlPanel({ count, onIncrement, onTriggerRender }: ControlPan
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='flex flex-col sm:flex-row gap-4'>
-          <Button _onClick={onIncrement} className='flex-1'>
+        <div className='flex flex-col gap-4 sm:flex-row'>
+          <Button
+            _onClick={onIncrement}
+            className='flex-1'
+          >
             增加计数 ({count})
           </Button>
-          <Button _onClick={onTriggerRender} variant='outline' className='flex-1'>
+          <Button
+            _onClick={onTriggerRender}
+            variant='outline'
+            className='flex-1'
+          >
             触发不必要渲染
           </Button>
         </div>

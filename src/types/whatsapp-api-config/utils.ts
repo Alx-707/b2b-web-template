@@ -3,11 +3,11 @@
  * WhatsApp API Utility Functions
  */
 
-import type { ApiConfig } from './interfaces';
-import type { ApiVersion, MessageType, MediaType, ErrorCode } from './types';
-import { API_VERSIONS, MESSAGE_TYPES, MEDIA_TYPES } from './constants';
+import { API_VERSIONS, MEDIA_TYPES, MESSAGE_TYPES } from './constants';
 import { DEFAULT_API_CONFIG } from './defaults';
 import { ERROR_CODE_MESSAGES, RETRYABLE_ERROR_CODES } from './errors';
+import type { ApiConfig } from './interfaces';
+import type { ApiVersion, ErrorCode, MediaType, MessageType } from './types';
 
 /**
  * 配置工具函数
@@ -18,7 +18,10 @@ export const ConfigUtils = {
    * 合并配置
    * Merge configurations
    */
-  mergeConfigs<T extends Record<string, unknown>>(base: T, override: Partial<T>): T {
+  mergeConfigs<T extends Record<string, unknown>>(
+    base: T,
+    override: Partial<T>,
+  ): T {
     return { ...base, ...override };
   },
 
@@ -39,7 +42,7 @@ export const ConfigUtils = {
       'Authorization': `Bearer ${config.accessToken}`,
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'User-Agent': config.userAgent || DEFAULT_API_CONFIG.userAgent!
+      'User-Agent': config.userAgent || DEFAULT_API_CONFIG.userAgent!,
     };
   },
 

@@ -6,15 +6,14 @@
 import type { Locale } from '@/types/i18n';
 import type {
   IPreloader,
-  PreloadStrategy,
   PreloadOptions,
+  PreloadStrategy,
 } from '../i18n-preloader-types';
-
 // 导入基础策略以便复用
 import {
   immediateStrategy,
+  lazyStrategy,
   progressiveStrategy,
-  lazyStrategy
 } from './basic-strategies';
 
 /**
@@ -24,7 +23,7 @@ import {
 export const batchStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   const batchSize = 2;
   const batches: Locale[][] = [];
@@ -36,7 +35,7 @@ export const batchStrategy: PreloadStrategy = async (
   for (const batch of batches) {
     await preloader.preloadMultipleLocales(batch, options);
     // 批次间延迟
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 };
 
@@ -47,7 +46,7 @@ export const batchStrategy: PreloadStrategy = async (
 export const adaptiveStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   const stats = preloader.getPreloadStats();
 
@@ -71,11 +70,13 @@ export const adaptiveStrategy: PreloadStrategy = async (
 export const networkAwareStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   // 检测网络状况
   const isOnline = navigator.onLine;
-  const connection = (navigator as { connection?: { effectiveType?: string; downlink?: number } }).connection;
+  const connection = (
+    navigator as { connection?: { effectiveType?: string; downlink?: number } }
+  ).connection;
 
   if (!isOnline) {
     // 离线状态，不进行预加载
@@ -108,7 +109,7 @@ export const networkAwareStrategy: PreloadStrategy = async (
 export const timeAwareStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   const now = new Date();
   const hour = now.getHours();
@@ -133,10 +134,14 @@ export const timeAwareStrategy: PreloadStrategy = async (
 export const memoryAwareStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   // 检查可用内存
-  const memory = (performance as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory;
+  const memory = (
+    performance as {
+      memory?: { usedJSHeapSize: number; totalJSHeapSize: number };
+    }
+  ).memory;
 
   if (memory) {
     const { usedJSHeapSize, totalJSHeapSize } = memory;

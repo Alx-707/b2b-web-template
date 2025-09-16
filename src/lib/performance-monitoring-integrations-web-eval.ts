@@ -1,15 +1,15 @@
 /**
  * Web Eval Agent 性能监控集成
  * Web Eval Agent Performance Monitoring Integration
- * 
+ *
  * 提供与Web Eval Agent工具的集成钩子，用于监控用户交互和页面性能
  */
 
+import { logger } from '@/lib/logger';
 import type {
   PerformanceConfig,
   PerformanceMetrics,
 } from './performance-monitoring-types';
-import { logger } from '@/lib/logger';
 
 /**
  * Web Eval Agent 集成钩子返回类型
@@ -17,8 +17,19 @@ import { logger } from '@/lib/logger';
  */
 export interface WebEvalAgentIntegration {
   enabled: boolean;
-  recordUserInteraction: (action: string, timing: number, success: boolean, details?: Record<string, unknown>) => void;
-  recordNetworkRequest: (url: string, method: string, status: number, timing: number, size?: number) => void;
+  recordUserInteraction: (
+    action: string,
+    timing: number,
+    success: boolean,
+    details?: Record<string, unknown>,
+  ) => void;
+  recordNetworkRequest: (
+    url: string,
+    method: string,
+    status: number,
+    timing: number,
+    size?: number,
+  ) => void;
   recordPageLoad: (url: string, timing: Record<string, number>) => void;
   recordError: (error: Error, context?: Record<string, unknown>) => void;
 }
@@ -29,12 +40,17 @@ export interface WebEvalAgentIntegration {
  */
 export function useWebEvalAgentIntegration(
   config: PerformanceConfig,
-  recordMetric: (metric: Omit<PerformanceMetrics, 'timestamp'>) => void
+  recordMetric: (metric: Omit<PerformanceMetrics, 'timestamp'>) => void,
 ): WebEvalAgentIntegration {
   return {
     enabled: config.webEvalAgent.enabled,
 
-    recordUserInteraction: (action: string, timing: number, success: boolean, details = {}) => {
+    recordUserInteraction: (
+      action: string,
+      timing: number,
+      success: boolean,
+      details = {},
+    ) => {
       if (!config.webEvalAgent.enabled) return;
 
       recordMetric({
@@ -52,8 +68,15 @@ export function useWebEvalAgentIntegration(
       });
     },
 
-    recordNetworkRequest: (url: string, method: string, status: number, timing: number, size = 0) => {
-      if (!config.webEvalAgent.enabled || !config.webEvalAgent.captureNetwork) return;
+    recordNetworkRequest: (
+      url: string,
+      method: string,
+      status: number,
+      timing: number,
+      size = 0,
+    ) => {
+      if (!config.webEvalAgent.enabled || !config.webEvalAgent.captureNetwork)
+        return;
 
       recordMetric({
         source: 'web-eval-agent',
@@ -89,7 +112,8 @@ export function useWebEvalAgentIntegration(
     },
 
     recordError: (error: Error, context = {}) => {
-      if (!config.webEvalAgent.enabled || !config.webEvalAgent.captureLogs) return;
+      if (!config.webEvalAgent.enabled || !config.webEvalAgent.captureLogs)
+        return;
 
       recordMetric({
         source: 'web-eval-agent',
@@ -140,10 +164,14 @@ export function validateWebEvalAgentConfig(config: PerformanceConfig): {
       warnings.push('Web Eval Agent captureLogs should be a boolean');
     }
 
-    if (config.webEvalAgent.maxInteractionsPerSession && 
-        (typeof config.webEvalAgent.maxInteractionsPerSession !== 'number' || 
-         config.webEvalAgent.maxInteractionsPerSession <= 0)) {
-      warnings.push('Web Eval Agent maxInteractionsPerSession should be a positive number');
+    if (
+      config.webEvalAgent.maxInteractionsPerSession &&
+      (typeof config.webEvalAgent.maxInteractionsPerSession !== 'number' ||
+        config.webEvalAgent.maxInteractionsPerSession <= 0)
+    ) {
+      warnings.push(
+        'Web Eval Agent maxInteractionsPerSession should be a positive number',
+      );
     }
   }
 
@@ -159,12 +187,15 @@ export function validateWebEvalAgentConfig(config: PerformanceConfig): {
  * Web Eval Agent performance analyzer
  */
 export class WebEvalAgentAnalyzer {
-  private interactions = new Map<string, {
-    count: number;
-    totalTime: number;
-    successCount: number;
-    lastInteraction: number;
-  }>();
+  private interactions = new Map<
+    string,
+    {
+      count: number;
+      totalTime: number;
+      successCount: number;
+      lastInteraction: number;
+    }
+  >();
 
   private networkRequests: Array<{
     url: string;
@@ -197,7 +228,12 @@ export class WebEvalAgentAnalyzer {
    * 记录用户交互
    * Record user interaction
    */
-  recordInteraction(action: string, timing: number, success: boolean, _details?: Record<string, unknown>): void {
+  recordInteraction(
+    action: string,
+    timing: number,
+    success: boolean,
+    _details?: Record<string, unknown>,
+  ): void {
     if (!this.config.webEvalAgent.enabled) return;
 
     const current = this.interactions.get(action) || {
@@ -215,9 +251,12 @@ export class WebEvalAgentAnalyzer {
     this.interactions.set(action, current);
 
     // 检查是否超过会话限制
-    const maxInteractions = this.config.webEvalAgent.maxInteractionsPerSession || 1000;
+    const maxInteractions =
+      this.config.webEvalAgent.maxInteractionsPerSession || 1000;
     if (current.count > maxInteractions) {
-      logger.warn(`Interaction ${action} has exceeded session limit`, { maxInteractions });
+      logger.warn(`Interaction ${action} has exceeded session limit`, {
+        maxInteractions,
+      });
     }
   }
 
@@ -225,8 +264,18 @@ export class WebEvalAgentAnalyzer {
    * 记录网络请求
    * Record network request
    */
-  recordNetworkRequest(url: string, method: string, status: number, timing: number, size = 0): void {
-    if (!this.config.webEvalAgent.enabled || !this.config.webEvalAgent.captureNetwork) return;
+  recordNetworkRequest(
+    url: string,
+    method: string,
+    status: number,
+    timing: number,
+    size = 0,
+  ): void {
+    if (
+      !this.config.webEvalAgent.enabled ||
+      !this.config.webEvalAgent.captureNetwork
+    )
+      return;
 
     this.networkRequests.push({
       url,
@@ -267,7 +316,11 @@ export class WebEvalAgentAnalyzer {
    * Record error
    */
   recordError(error: Error, context: Record<string, unknown> = {}): void {
-    if (!this.config.webEvalAgent.enabled || !this.config.webEvalAgent.captureLogs) return;
+    if (
+      !this.config.webEvalAgent.enabled ||
+      !this.config.webEvalAgent.captureLogs
+    )
+      return;
 
     this.errors.push({
       error,
@@ -299,9 +352,18 @@ export class WebEvalAgentAnalyzer {
     recommendations: string[];
   } {
     const interactions = Array.from(this.interactions.entries());
-    const totalInteractions = interactions.reduce((sum, [, metrics]) => sum + metrics.count, 0);
-    const totalTime = interactions.reduce((sum, [, metrics]) => sum + metrics.totalTime, 0);
-    const totalSuccesses = interactions.reduce((sum, [, metrics]) => sum + metrics.successCount, 0);
+    const totalInteractions = interactions.reduce(
+      (sum, [, metrics]) => sum + metrics.count,
+      0,
+    );
+    const totalTime = interactions.reduce(
+      (sum, [, metrics]) => sum + metrics.totalTime,
+      0,
+    );
+    const totalSuccesses = interactions.reduce(
+      (sum, [, metrics]) => sum + metrics.successCount,
+      0,
+    );
 
     const topSlowActions = interactions
       .map(([action, metrics]) => ({
@@ -318,14 +380,18 @@ export class WebEvalAgentAnalyzer {
     // 生成建议
     if (topSlowActions.length > 0) {
       const slowestAction = topSlowActions[0];
-      if (slowestAction.averageTime > 1000) {
-        recommendations.push(`Action "${slowestAction.action}" is slow (${slowestAction.averageTime.toFixed(0)}ms average)`);
+      if (slowestAction && slowestAction.averageTime > 1000) {
+        recommendations.push(
+          `Action "${slowestAction.action}" is slow (${slowestAction.averageTime.toFixed(0)}ms average)`,
+        );
       }
     }
 
-    const lowSuccessActions = topSlowActions.filter(a => a.successRate < 0.9);
+    const lowSuccessActions = topSlowActions.filter((a) => a.successRate < 0.9);
     if (lowSuccessActions.length > 0) {
-      recommendations.push(`${lowSuccessActions.length} actions have low success rates. Consider improving error handling.`);
+      recommendations.push(
+        `${lowSuccessActions.length} actions have low success rates. Consider improving error handling.`,
+      );
     }
 
     return {
@@ -361,14 +427,22 @@ export class WebEvalAgentAnalyzer {
     }>;
   } {
     const totalRequests = this.networkRequests.length;
-    const totalTime = this.networkRequests.reduce((sum, req) => sum + req.timing, 0);
-    const successfulRequests = this.networkRequests.filter(req => req.status >= 200 && req.status < 300);
-    const totalDataTransferred = this.networkRequests.reduce((sum, req) => sum + req.size, 0);
+    const totalTime = this.networkRequests.reduce(
+      (sum, req) => sum + req.timing,
+      0,
+    );
+    const successfulRequests = this.networkRequests.filter(
+      (req) => req.status >= 200 && req.status < 300,
+    );
+    const totalDataTransferred = this.networkRequests.reduce(
+      (sum, req) => sum + req.size,
+      0,
+    );
 
     const slowestRequests = [...this.networkRequests]
       .sort((a, b) => b.timing - a.timing)
       .slice(0, 10)
-      .map(req => ({
+      .map((req) => ({
         url: req.url,
         method: req.method,
         timing: req.timing,
@@ -376,8 +450,8 @@ export class WebEvalAgentAnalyzer {
       }));
 
     const errorRequests = this.networkRequests
-      .filter(req => req.status >= 400)
-      .map(req => ({
+      .filter((req) => req.status >= 400)
+      .map((req) => ({
         url: req.url,
         method: req.method,
         status: req.status,
@@ -409,11 +483,13 @@ export class WebEvalAgentAnalyzer {
   } {
     const totalPageLoads = this.pageLoads.length;
     const totalLoadTime = this.pageLoads.reduce((sum, page) => {
-      return sum + (page.timing.loadComplete || page.timing.domContentLoaded || 0);
+      return (
+        sum + (page.timing.loadComplete || page.timing.domContentLoaded || 0)
+      );
     }, 0);
 
     const slowestPages = this.pageLoads
-      .map(page => ({
+      .map((page) => ({
         url: page.url,
         loadTime: page.timing.loadComplete || page.timing.domContentLoaded || 0,
         timestamp: page.timestamp,

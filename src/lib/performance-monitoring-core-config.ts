@@ -5,13 +5,14 @@
  * 负责性能监控的配置管理、验证和合并功能
  */
 
+import { logger } from '@/lib/logger';
 import { PERFORMANCE_CONSTANTS } from '@/constants/performance';
 import { MB } from '@/constants/units';
-import { logger } from '@/lib/logger';
-import type {
-  PerformanceConfig,
+import type { PerformanceConfig } from './performance-monitoring-types';
+import {
+  generateEnvironmentConfig,
+  validateConfig,
 } from './performance-monitoring-types';
-import { generateEnvironmentConfig, validateConfig } from './performance-monitoring-types';
 
 /**
  * 配置管理器
@@ -30,7 +31,9 @@ export class PerformanceConfigManager {
    * 初始化配置
    * Initialize configuration
    */
-  private initializeConfig(customConfig?: Partial<PerformanceConfig>): PerformanceConfig {
+  private initializeConfig(
+    customConfig?: Partial<PerformanceConfig>,
+  ): PerformanceConfig {
     // 生成默认配置
     const defaultConfig = generateEnvironmentConfig();
 
@@ -42,7 +45,9 @@ export class PerformanceConfigManager {
     // 验证配置
     const validation = validateConfig(mergedConfig);
     if (!validation.isValid) {
-      logger.warn('Performance monitoring config validation failed', { errors: validation.errors });
+      logger.warn('Performance monitoring config validation failed', {
+        errors: validation.errors,
+      });
       // 使用默认配置作为后备
       return defaultConfig;
     }
@@ -56,7 +61,7 @@ export class PerformanceConfigManager {
    */
   mergeConfig(
     defaultConfig: PerformanceConfig,
-    customConfig: Partial<PerformanceConfig>
+    customConfig: Partial<PerformanceConfig>,
   ): PerformanceConfig {
     const merged: PerformanceConfig = {
       reactScan: {
@@ -76,34 +81,44 @@ export class PerformanceConfigManager {
         ...customConfig.sizeLimit,
       },
       ...(defaultConfig.webVitals && {
-        webVitals: customConfig.webVitals ? {
-          ...defaultConfig.webVitals,
-          ...customConfig.webVitals,
-        } : defaultConfig.webVitals,
+        webVitals: customConfig.webVitals
+          ? {
+              ...defaultConfig.webVitals,
+              ...customConfig.webVitals,
+            }
+          : defaultConfig.webVitals,
       }),
       ...(defaultConfig.component && {
-        component: customConfig.component ? {
-          ...defaultConfig.component,
-          ...customConfig.component,
-        } : defaultConfig.component,
+        component: customConfig.component
+          ? {
+              ...defaultConfig.component,
+              ...customConfig.component,
+            }
+          : defaultConfig.component,
       }),
       ...(defaultConfig.network && {
-        network: customConfig.network ? {
-          ...defaultConfig.network,
-          ...customConfig.network,
-        } : defaultConfig.network,
+        network: customConfig.network
+          ? {
+              ...defaultConfig.network,
+              ...customConfig.network,
+            }
+          : defaultConfig.network,
       }),
       ...(defaultConfig.bundle && {
-        bundle: customConfig.bundle ? {
-          ...defaultConfig.bundle,
-          ...customConfig.bundle,
-        } : defaultConfig.bundle,
+        bundle: customConfig.bundle
+          ? {
+              ...defaultConfig.bundle,
+              ...customConfig.bundle,
+            }
+          : defaultConfig.bundle,
       }),
       ...(defaultConfig.global && {
-        global: customConfig.global ? {
-          ...defaultConfig.global,
-          ...customConfig.global,
-        } : defaultConfig.global,
+        global: customConfig.global
+          ? {
+              ...defaultConfig.global,
+              ...customConfig.global,
+            }
+          : defaultConfig.global,
       }),
     };
 
@@ -128,7 +143,9 @@ export class PerformanceConfigManager {
     // 重新验证配置
     const validation = validateConfig(this.config);
     if (!validation.isValid) {
-      logger.warn('Updated performance config validation failed', { errors: validation.errors });
+      logger.warn('Updated performance config validation failed', {
+        errors: validation.errors,
+      });
     }
   }
 
@@ -169,8 +186,13 @@ export class PerformanceConfigManager {
    * 获取特定模块的配置
    * Get specific module configuration
    */
-  getModuleConfig<T extends keyof PerformanceConfig>(module: T): PerformanceConfig[T] {
-    return { ...this.config[module] };
+  getModuleConfig<T extends keyof PerformanceConfig>(
+    module: T,
+  ): PerformanceConfig[T] {
+    const moduleConfig = this.config[module];
+    return typeof moduleConfig === 'object' && moduleConfig !== null
+      ? ({ ...moduleConfig } as PerformanceConfig[T])
+      : moduleConfig;
   }
 
   /**
@@ -179,17 +201,20 @@ export class PerformanceConfigManager {
    */
   updateModuleConfig<T extends keyof PerformanceConfig>(
     module: T,
-    config: Partial<PerformanceConfig[T]>
+    config: Partial<PerformanceConfig[T]>,
   ): void {
-    this.config[module] = {
-      ...this.config[module],
-      ...config,
-    };
+    const currentConfig = this.config[module];
+    this.config[module] =
+      typeof currentConfig === 'object' && currentConfig !== null
+        ? ({ ...currentConfig, ...config } as PerformanceConfig[T])
+        : (config as PerformanceConfig[T]);
 
     // 验证更新后的配置
     const validation = validateConfig(this.config);
     if (!validation.isValid) {
-      logger.warn(`Updated ${module} config validation failed`, { errors: validation.errors });
+      logger.warn(`Updated ${module} config validation failed`, {
+        errors: validation.errors,
+      });
     }
   }
 
@@ -212,7 +237,9 @@ export class PerformanceConfigManager {
       // 验证导入的配置
       const validation = validateConfig(importedConfig);
       if (!validation.isValid) {
-        logger.error('Imported config validation failed', { errors: validation.errors });
+        logger.error('Imported config validation failed', {
+          errors: validation.errors,
+        });
         return false;
       }
 
@@ -248,8 +275,11 @@ export class PerformanceConfigManager {
     return {
       isEnabled: global?.enabled || false,
       enabledModules,
-      dataRetentionTime: global?.dataRetentionTime || PERFORMANCE_CONSTANTS.DEFAULT_RETENTION_TIME,
-      maxMetrics: global?.maxMetrics || PERFORMANCE_CONSTANTS.DEFAULT_MAX_METRICS,
+      dataRetentionTime:
+        global?.dataRetentionTime ||
+        PERFORMANCE_CONSTANTS.DEFAULT_RETENTION_TIME,
+      maxMetrics:
+        global?.maxMetrics || PERFORMANCE_CONSTANTS.DEFAULT_MAX_METRICS,
       thresholds: {
         componentRenderTime: component?.thresholds?.renderTime || 100,
         networkResponseTime: network?.thresholds?.responseTime || 1000,
@@ -273,7 +303,10 @@ export class PerformanceConfigManager {
     if (current.global?.enabled !== otherConfig.global?.enabled) {
       differences.push('global.enabled');
     }
-    if (current.global?.dataRetentionTime !== otherConfig.global?.dataRetentionTime) {
+    if (
+      current.global?.dataRetentionTime !==
+      otherConfig.global?.dataRetentionTime
+    ) {
       differences.push('global.dataRetentionTime');
     }
     if (current.global?.maxMetrics !== otherConfig.global?.maxMetrics) {
@@ -284,7 +317,10 @@ export class PerformanceConfigManager {
     if (current.component?.enabled !== otherConfig.component?.enabled) {
       differences.push('component.enabled');
     }
-    if (current.component?.thresholds?.renderTime !== otherConfig.component?.thresholds?.renderTime) {
+    if (
+      current.component?.thresholds?.renderTime !==
+      otherConfig.component?.thresholds?.renderTime
+    ) {
       differences.push('component.thresholds.renderTime');
     }
 
@@ -292,7 +328,10 @@ export class PerformanceConfigManager {
     if (current.network?.enabled !== otherConfig.network?.enabled) {
       differences.push('network.enabled');
     }
-    if (current.network?.thresholds?.responseTime !== otherConfig.network?.thresholds?.responseTime) {
+    if (
+      current.network?.thresholds?.responseTime !==
+      otherConfig.network?.thresholds?.responseTime
+    ) {
       differences.push('network.thresholds.responseTime');
     }
 
@@ -300,7 +339,9 @@ export class PerformanceConfigManager {
     if (current.bundle?.enabled !== otherConfig.bundle?.enabled) {
       differences.push('bundle.enabled');
     }
-    if (current.bundle?.thresholds?.size !== otherConfig.bundle?.thresholds?.size) {
+    if (
+      current.bundle?.thresholds?.size !== otherConfig.bundle?.thresholds?.size
+    ) {
       differences.push('bundle.thresholds.size');
     }
 
@@ -354,8 +395,18 @@ export class PerformanceConfigManager {
       return false;
     }
 
-    const targetConfig = this.configHistory[this.configHistory.length - steps - 1];
-    this.config = { ...targetConfig.config };
+    const targetConfig =
+      this.configHistory[this.configHistory.length - steps - 1];
+    const newConfig: any = {};
+    if (targetConfig?.config) {
+      Object.keys(targetConfig.config).forEach((key) => {
+        const value = (targetConfig.config as any)[key];
+        if (value !== undefined) {
+          newConfig[key] = value;
+        }
+      });
+    }
+    this.config = newConfig;
     this.recordConfigChange(`Rollback ${steps} steps`);
 
     return true;
@@ -366,7 +417,9 @@ export class PerformanceConfigManager {
  * 创建配置管理器实例
  * Create configuration manager instance
  */
-export function createConfigManager(customConfig?: Partial<PerformanceConfig>): PerformanceConfigManager {
+export function createConfigManager(
+  customConfig?: Partial<PerformanceConfig>,
+): PerformanceConfigManager {
   return new PerformanceConfigManager(customConfig);
 }
 
@@ -382,6 +435,8 @@ export function getDefaultConfig(): PerformanceConfig {
  * 验证配置对象
  * Validate configuration object
  */
-export function validatePerformanceConfig(config: unknown): ReturnType<typeof validateConfig> {
+export function validatePerformanceConfig(
+  config: unknown,
+): ReturnType<typeof validateConfig> {
   return validateConfig(config as PerformanceConfig);
 }

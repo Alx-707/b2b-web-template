@@ -1,22 +1,21 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { useCallback, useEffect, useState } from 'react';
 import type { LocaleDetectionResult } from '@/lib/locale-detection';
 import { useClientLocaleDetection } from '@/lib/locale-detection';
 import type { UserLocalePreference } from '@/lib/locale-storage';
 import { useLocaleStorage } from '@/lib/locale-storage';
-import { useCallback, useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { EnhancedLocaleSwitcher } from './enhanced-locale-switcher';
-;
 
 // 工具函数
 const getConfidenceColor = (confidence: number) => {
@@ -89,7 +88,9 @@ const StorageStats = ({ stats, onClearOverride }: StorageStatsProps) => (
       <div className='space-y-2'>
         <div className='flex items-center space-x-2'>
           <span>有偏好设置:</span>
-          <Badge variant={(stats as any).hasPreference ? 'default' : 'secondary'}>
+          <Badge
+            variant={(stats as any).hasPreference ? 'default' : 'secondary'}
+          >
             {(stats as any).hasPreference ? '是' : '否'}
           </Badge>
         </div>
@@ -103,7 +104,9 @@ const StorageStats = ({ stats, onClearOverride }: StorageStatsProps) => (
       <div className='space-y-2'>
         <div className='flex items-center space-x-2'>
           <span>当前语言:</span>
-          <Badge variant='outline'>{(stats as any).currentLocale || '未设置'}</Badge>
+          <Badge variant='outline'>
+            {(stats as any).currentLocale || '未设置'}
+          </Badge>
         </div>
         <div className='flex items-center space-x-2'>
           <span>检测次数:</span>

@@ -4,16 +4,16 @@
  * 提供高性能的 LRU 缓存，支持 TTL、持久化存储和性能监控
  */
 
+import { logger } from '@/lib/logger';
 import type {
   CacheConfig,
+  CacheEvent,
+  CacheEventType,
   CacheItem,
   CacheStats,
   CacheStorage,
-  CacheEvent,
-  CacheEventType,
-  MetricsCollector
+  MetricsCollector,
 } from './i18n-cache-types';
-import { logger } from '@/lib/logger';
 
 // LRU 缓存实现
 export class LRUCache<T> implements CacheStorage<T> {
@@ -129,12 +129,16 @@ export class LRUCache<T> implements CacheStorage<T> {
 
   // 获取所有值
   values(): IterableIterator<T> {
-    return Array.from(this.cache.values()).map(item => item.data)[Symbol.iterator]();
+    return Array.from(this.cache.values())
+      .map((item) => item.data)
+      [Symbol.iterator]();
   }
 
   // 获取所有条目
   entries(): IterableIterator<[string, T]> {
-    const entries = Array.from(this.cache.entries()).map(([key, item]) => [key, item.data] as [string, T]);
+    const entries = Array.from(this.cache.entries()).map(
+      ([key, item]) => [key, item.data] as [string, T],
+    );
     return entries[Symbol.iterator]();
   }
 
@@ -159,9 +163,9 @@ export class LRUCache<T> implements CacheStorage<T> {
     const items = Array.from(this.cache.values());
     const now = Date.now();
 
-    const ages = items.map(item => now - item.timestamp);
-    const hits = items.map(item => item.hits);
-    const ttls = items.map(item => item.ttl);
+    const ages = items.map((item) => now - item.timestamp);
+    const hits = items.map((item) => item.hits);
+    const ttls = items.map((item) => item.ttl);
 
     return {
       ...this.getStats(),
@@ -170,21 +174,25 @@ export class LRUCache<T> implements CacheStorage<T> {
         min: Math.min(...ages),
         max: Math.max(...ages),
         median: this.calculateMedian(ages),
-        average: ages.length > 0 ? ages.reduce((a, b) => a + b, 0) / ages.length : 0,
+        average:
+          ages.length > 0 ? ages.reduce((a, b) => a + b, 0) / ages.length : 0,
       },
       hitDistribution: {
         min: Math.min(...hits),
         max: Math.max(...hits),
         median: this.calculateMedian(hits),
-        average: hits.length > 0 ? hits.reduce((a, b) => a + b, 0) / hits.length : 0,
+        average:
+          hits.length > 0 ? hits.reduce((a, b) => a + b, 0) / hits.length : 0,
       },
       ttlDistribution: {
         min: Math.min(...ttls),
         max: Math.max(...ttls),
         median: this.calculateMedian(ttls),
-        average: ttls.length > 0 ? ttls.reduce((a, b) => a + b, 0) / ttls.length : 0,
+        average:
+          ttls.length > 0 ? ttls.reduce((a, b) => a + b, 0) / ttls.length : 0,
       },
-      expiredItems: items.filter(item => now - item.timestamp > item.ttl).length,
+      expiredItems: items.filter((item) => now - item.timestamp > item.ttl)
+        .length,
       utilizationRate: (this.cache.size / this.config.maxSize) * 100,
     };
   }
@@ -219,7 +227,7 @@ export class LRUCache<T> implements CacheStorage<T> {
   // 批量获取
   getMultiple(keys: string[]): Map<string, T | null> {
     const result = new Map<string, T | null>();
-    keys.forEach(key => {
+    keys.forEach((key) => {
       result.set(key, this.get(key));
     });
     return result;
@@ -235,7 +243,7 @@ export class LRUCache<T> implements CacheStorage<T> {
   // 批量删除
   deleteMultiple(keys: string[]): number {
     let deletedCount = 0;
-    keys.forEach(key => {
+    keys.forEach((key) => {
       if (this.delete(key)) {
         deletedCount += 1;
       }
@@ -352,19 +360,19 @@ export class LRUCache<T> implements CacheStorage<T> {
     // 由于 MetricsCollector 已经处理了基本事件，这里主要用于扩展
     // TODO: 实现事件发射逻辑
     // 当前暂时不创建事件对象，避免未使用变量警告
-    void type; void key; void data; // 避免参数未使用警告
+    void type;
+    void key;
+    void data; // 避免参数未使用警告
   }
 }
 
 // 创建 LRU 缓存实例的工厂函数
 export function createLRUCache<T>(
   config: CacheConfig,
-  metricsCollector: MetricsCollector
+  metricsCollector: MetricsCollector,
 ): LRUCache<T> {
   return new LRUCache<T>(config, metricsCollector);
 }
 
 // 导出类型别名
-export type {
-  LRUCache as Cache,
-};
+export type { LRUCache as Cache };

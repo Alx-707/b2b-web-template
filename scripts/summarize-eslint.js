@@ -26,9 +26,11 @@ for (const f of files) {
   for (const m of f.messages) {
     const key = m.ruleId || 'unknown';
     const entry = byRule.get(key) || { errors: 0, warnings: 0 };
-    if (m.severity === 2) entry.errors += 1; else entry.warnings += 1;
+    if (m.severity === 2) entry.errors += 1;
+    else entry.warnings += 1;
     byRule.set(key, entry);
-    if (!messageSamples.has(key) && m.message) messageSamples.set(key, m.message);
+    if (!messageSamples.has(key) && m.message)
+      messageSamples.set(key, m.message);
   }
 }
 
@@ -38,7 +40,8 @@ const countMsgIncludes = (substr, filterRulePrefix = null) => {
   let n = 0;
   for (const f of files) {
     for (const m of f.messages) {
-      if (filterRulePrefix && !(m.ruleId || '').startsWith(filterRulePrefix)) continue;
+      if (filterRulePrefix && !(m.ruleId || '').startsWith(filterRulePrefix))
+        continue;
       if ((m.message || '').includes(substr)) n++;
     }
   }
@@ -50,7 +53,8 @@ const anyRule = '@typescript-eslint/no-explicit-any';
 const anyStats = get(anyRule);
 
 // Category 2: 安全相关（security*）
-let securityErrors = 0, securityWarnings = 0;
+let securityErrors = 0,
+  securityWarnings = 0;
 for (const [ruleId, stat] of byRule.entries()) {
   if (ruleId.startsWith('security/') || ruleId.startsWith('security-node/')) {
     securityErrors += stat.errors;
@@ -60,8 +64,12 @@ for (const [ruleId, stat] of byRule.entries()) {
 const securityTotal = securityErrors + securityWarnings;
 
 // Specific security message splits (best-effort by message text)
-const genericObjectInjection = countMsgIncludes('Generic Object Injection Sink');
-const variableAssignedToInjection = countMsgIncludes('Variable Assigned to Object Injection Sink');
+const genericObjectInjection = countMsgIncludes(
+  'Generic Object Injection Sink',
+);
+const variableAssignedToInjection = countMsgIncludes(
+  'Variable Assigned to Object Injection Sink',
+);
 
 // Category 3: console
 const consoleStats = get('no-console');
@@ -83,7 +91,7 @@ for (const f of files) {
 }
 // sort top items
 const magicBreakdown = Array.from(magicNumbers.entries())
-  .sort((a,b)=>b[1]-a[1])
+  .sort((a, b) => b[1] - a[1])
   .slice(0, 12)
   .map(([num, cnt]) => ({ number: Number(num), count: cnt }));
 
@@ -105,7 +113,10 @@ const unusedCombined = {
 const unusedNameCounts = new Map();
 for (const f of files) {
   for (const m of f.messages) {
-    if (m.ruleId === 'no-unused-vars' || m.ruleId === '@typescript-eslint/no-unused-vars') {
+    if (
+      m.ruleId === 'no-unused-vars' ||
+      m.ruleId === '@typescript-eslint/no-unused-vars'
+    ) {
       const mm = m.message.match(/'([^']+)' is defined but never used/);
       if (mm) {
         const name = mm[1];
@@ -115,7 +126,7 @@ for (const f of files) {
   }
 }
 const unusedTop = Array.from(unusedNameCounts.entries())
-  .sort((a,b)=>b[1]-a[1])
+  .sort((a, b) => b[1] - a[1])
   .slice(0, 10)
   .map(([name, count]) => ({ name, count }));
 
@@ -125,7 +136,11 @@ const tNotDefined = (() => {
   let n = 0;
   for (const f of files) {
     for (const m of f.messages) {
-      if (m.ruleId === 'no-undef' && (m.message || '').includes("'t' is not defined")) n++;
+      if (
+        m.ruleId === 'no-undef' &&
+        (m.message || '').includes("'t' is not defined")
+      )
+        n++;
     }
   }
   return n;
@@ -151,7 +166,7 @@ const summary = {
   },
   console: consoleStats,
   magicNumbers: {
-    total: (magicStats.errors + magicStats.warnings),
+    total: magicStats.errors + magicStats.warnings,
     top: magicBreakdown,
   },
   complexity: {
@@ -162,7 +177,11 @@ const summary = {
     noPlusPlus: complexityStats.noPlusPlus,
   },
   unused: {
-    total: unusedCombined.js.errors + unusedCombined.js.warnings + unusedCombined.ts.errors + unusedCombined.ts.warnings,
+    total:
+      unusedCombined.js.errors +
+      unusedCombined.js.warnings +
+      unusedCombined.ts.errors +
+      unusedCombined.ts.warnings,
     js: unusedCombined.js,
     ts: unusedCombined.ts,
     topNames: unusedTop,

@@ -1,7 +1,6 @@
 import type { Locale } from '@/types/i18n';
-;
-import { logger } from '@/lib/logger';
 import type { QualityScore } from '@/types/translation-manager';
+import { logger } from '@/lib/logger';
 
 /**
  * 翻译管理器安全工具类
@@ -170,10 +169,7 @@ export class TranslationManagerSecurity {
   /**
    * 安全地获取嵌套对象值
    */
-  static getNestedValue(
-    obj: Record<string, unknown>,
-    path: string,
-  ): unknown {
+  static getNestedValue(obj: Record<string, unknown>, path: string): unknown {
     const keys = path.split('.');
     let current = obj;
 
@@ -182,7 +178,11 @@ export class TranslationManagerSecurity {
         return undefined;
       }
 
-      if (current && typeof current === 'object' && Object.prototype.hasOwnProperty.call(current, key)) {
+      if (
+        current &&
+        typeof current === 'object' &&
+        Object.prototype.hasOwnProperty.call(current, key)
+      ) {
         current = current[key] as Record<string, unknown>;
       } else {
         return undefined;

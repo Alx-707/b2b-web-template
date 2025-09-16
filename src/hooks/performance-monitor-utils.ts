@@ -1,13 +1,13 @@
 import React from 'react';
 import type {
+  MonitoringControls,
   PerformanceAlert,
   PerformanceAlertSystem,
   PerformanceAlertThresholds,
   PerformanceMetrics,
   PerformanceMonitorReturnParams,
-  UsePerformanceMonitorOptions,
   PerformanceMonitorState,
-  MonitoringControls,
+  UsePerformanceMonitorOptions,
 } from './performance-monitor-types';
 
 /**
@@ -27,7 +27,9 @@ export const PERFORMANCE_CONSTANTS = {
 export const DEFAULT_ALERT_THRESHOLDS: Required<PerformanceAlertThresholds> = {
   loadTime: 3000, // 3秒
   renderTime: 16, // 16毫秒 (60fps)
-  memoryUsage: PERFORMANCE_CONSTANTS.MEMORY_THRESHOLD_MB * PERFORMANCE_CONSTANTS.MEMORY_BYTES_PER_MB,
+  memoryUsage:
+    PERFORMANCE_CONSTANTS.MEMORY_THRESHOLD_MB *
+    PERFORMANCE_CONSTANTS.MEMORY_BYTES_PER_MB,
 };
 
 /**
@@ -246,7 +248,10 @@ export const checkPerformanceThresholds = (
     addAlert({
       level: 'warning',
       message: `Slow render time detected: ${formatTime(metrics.renderTime)}`,
-      data: { renderTime: metrics.renderTime, threshold: thresholds.renderTime },
+      data: {
+        renderTime: metrics.renderTime,
+        threshold: thresholds.renderTime,
+      },
     });
   }
 
@@ -255,7 +260,10 @@ export const checkPerformanceThresholds = (
     addAlert({
       level: 'error',
       message: `High memory usage detected: ${formatMemoryUsage(metrics.memoryUsage)}`,
-      data: { memoryUsage: metrics.memoryUsage, threshold: thresholds.memoryUsage },
+      data: {
+        memoryUsage: metrics.memoryUsage,
+        threshold: thresholds.memoryUsage,
+      },
     });
   }
 };

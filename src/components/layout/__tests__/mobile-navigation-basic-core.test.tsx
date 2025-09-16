@@ -14,10 +14,10 @@
  * - 事件处理
  */
 
+import { usePathname } from 'next/navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MobileNavigation } from '../mobile-navigation';
 
@@ -41,16 +41,18 @@ describe('Mobile Navigation - Basic Core Tests', () => {
     vi.clearAllMocks();
 
     // Setup default mocks
-    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-      const translations: Record<string, string> = {
-        'navigation.home': 'Home',
-        'navigation.about': 'About',
-        'navigation.services': 'Services',
-        'navigation.contact': 'Contact',
-      };
-      // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
-    });
+    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+      (key: string) => {
+        const translations: Record<string, string> = {
+          'navigation.home': 'Home',
+          'navigation.about': 'About',
+          'navigation.services': 'Services',
+          'navigation.contact': 'Contact',
+        };
+        // eslint-disable-next-line security/detect-object-injection
+        return translations[key] || key; // key 来自测试数据，安全
+      },
+    );
 
     (usePathname as ReturnType<typeof vi.fn>).mockReturnValue('/');
   });
@@ -228,8 +230,6 @@ describe('Mobile Navigation - Basic Core Tests', () => {
       expect(trigger).toHaveAttribute('aria-expanded', 'true');
     });
 
-
-
     it('handles rapid toggle interactions', async () => {
       render(<MobileNavigation />);
 
@@ -248,7 +248,7 @@ describe('Mobile Navigation - Basic Core Tests', () => {
         <div>
           <MobileNavigation />
           <div data-testid='outside'>Outside content</div>
-        </div>
+        </div>,
       );
 
       const trigger = screen.getByRole('button');

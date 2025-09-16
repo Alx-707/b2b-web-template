@@ -1,14 +1,14 @@
 'use client';
 
-import {
-    MONITORING_INTERVALS,
-    WEB_VITALS_THRESHOLDS,
-} from '@/constants/performance-constants';
-import {
-    webVitalsMonitor,
-    type WebVitalsMetrics,
-} from '@/lib/web-vitals-monitor';
 import { useEffect, useState } from 'react';
+import {
+  webVitalsMonitor,
+  type WebVitalsMetrics,
+} from '@/lib/web-vitals-monitor';
+import {
+  MONITORING_INTERVALS,
+  WEB_VITALS_THRESHOLDS,
+} from '@/constants/performance-constants';
 
 // 工具函数：获取指标颜色
 const getMetricColor = (value: number, good: number, poor: number): string => {

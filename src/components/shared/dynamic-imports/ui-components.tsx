@@ -6,7 +6,10 @@
  * UI组件的动态导入定义
  */
 import dynamic from 'next/dynamic';
-import { ComponentLoadingFallback, MinimalLoadingFallback } from '../dynamic-imports-base';
+import {
+  ComponentLoadingFallback,
+  MinimalLoadingFallback,
+} from '../dynamic-imports-base';
 
 // ==================== UI组件 ====================
 

@@ -71,7 +71,7 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
       console.error = vi.fn();
 
       const promises = Array.from({ length: 5 }, () =>
-        cacheManager.getMessages('invalid' as Locale)
+        cacheManager.getMessages('invalid' as Locale),
       );
 
       try {
@@ -124,8 +124,8 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
       const results = await Promise.allSettled(promises);
 
       // Should have some successes and some failures
-      const successes = results.filter(r => r.status === 'fulfilled');
-      const failures = results.filter(r => r.status === 'rejected');
+      const successes = results.filter((r) => r.status === 'fulfilled');
+      const failures = results.filter((r) => r.status === 'rejected');
 
       expect(successes.length).toBeGreaterThan(0);
       expect(failures.length).toBeGreaterThan(0);
@@ -148,11 +148,11 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
       }
 
       const results = await Promise.allSettled(operations);
-      
+
       // Should have a mix of successes and failures
-      const successes = results.filter(r => r.status === 'fulfilled');
+      const successes = results.filter((r) => r.status === 'fulfilled');
       expect(successes.length).toBeGreaterThan(0);
-      
+
       // Cache should still be functional
       const stats = cacheManager.getCacheStats();
       expect(stats.size).toBeGreaterThan(0);
@@ -168,7 +168,7 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
 
       // Simulate memory pressure by creating many cache entries
       const promises = Array.from({ length: 50 }, (_, i) =>
-        largeCacheManager.getMessages(i % 2 === 0 ? 'en' : 'zh')
+        largeCacheManager.getMessages(i % 2 === 0 ? 'en' : 'zh'),
       );
 
       await Promise.all(promises);
@@ -186,7 +186,7 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
       cacheManager.clearCache();
 
       expect(cacheManager.getCacheStats().size).toBe(0);
-      
+
       // Metrics should be reset
       const metrics = cacheManager.getMetrics();
       expect(metrics.cacheHitRate).toBe(0);
@@ -220,7 +220,7 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
           stressOperations.push(cacheManager.resetMetrics());
         } else {
           stressOperations.push(
-            cacheManager.getMessages(i % 2 === 0 ? 'en' : 'zh')
+            cacheManager.getMessages(i % 2 === 0 ? 'en' : 'zh'),
           );
         }
       }
@@ -242,7 +242,7 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
 
       // Load some valid data
       await cacheManager.getMessages('en');
-      
+
       // Try to cause errors while performing operations
       const mixedOperations = [];
       for (let i = 0; i < 10; i++) {
@@ -294,19 +294,20 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
 
       // Create a cascade of operations that might fail
       const cascadeOperations = [];
-      
+
       for (let i = 0; i < 5; i++) {
         cascadeOperations.push(
-          cacheManager.getMessages('invalid' as Locale)
+          cacheManager
+            .getMessages('invalid' as Locale)
             .catch(() => cacheManager.getMessages('en'))
-            .catch(() => cacheManager.getMessages('zh'))
+            .catch(() => cacheManager.getMessages('zh')),
         );
       }
 
       const results = await Promise.allSettled(cascadeOperations);
-      
+
       // At least some operations should succeed (fallback to valid locales)
-      const successes = results.filter(r => r.status === 'fulfilled');
+      const successes = results.filter((r) => r.status === 'fulfilled');
       expect(successes.length).toBeGreaterThan(0);
 
       console.error = originalConsoleError;

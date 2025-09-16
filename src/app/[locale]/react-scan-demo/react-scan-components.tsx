@@ -30,22 +30,22 @@ export function IneffientComponent({ count }: { count: number }) {
   }
 
   return (
-    <Card className="border-red-200 bg-red-50">
+    <Card className='border-red-200 bg-red-50'>
       <CardHeader>
-        <CardTitle className="text-red-700">
-          低效组件 <Badge variant="destructive">未优化</Badge>
+        <CardTitle className='text-red-700'>
+          低效组件 <Badge variant='destructive'>未优化</Badge>
         </CardTitle>
         <CardDescription>
           这个组件故意设计得低效，会在每次渲染时执行昂贵计算
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <p>计数: {count}</p>
           <p>时间戳: {expensiveObject.timestamp}</p>
           <p>随机数: {expensiveObject.random.toFixed(4)}</p>
           <p>昂贵计算结果: {expensiveCalculation.toFixed(2)}</p>
-          <div className="text-sm text-red-600">
+          <div className='text-sm text-red-600'>
             ⚠️ 每次渲染都会重新计算所有值
           </div>
         </div>
@@ -61,11 +61,7 @@ export function OptimizedComponent({ count }: { count: number }) {
   // 使用 useMemo 缓存昂贵计算
   const expensiveCalculation = useMemo(() => {
     let result = 0;
-    for (
-      let i = 0;
-      i < 100000;
-      i++
-    ) {
+    for (let i = 0; i < 100000; i++) {
       result += Math.random();
     }
     return result;
@@ -82,22 +78,28 @@ export function OptimizedComponent({ count }: { count: number }) {
   );
 
   return (
-    <Card className="border-green-200 bg-green-50">
+    <Card className='border-green-200 bg-green-50'>
       <CardHeader>
-        <CardTitle className="text-green-700">
-          优化组件 <Badge variant="default" className="bg-green-600">已优化</Badge>
+        <CardTitle className='text-green-700'>
+          优化组件{' '}
+          <Badge
+            variant='default'
+            className='bg-green-600'
+          >
+            已优化
+          </Badge>
         </CardTitle>
         <CardDescription>
           这个组件使用了 useMemo 来优化性能，避免不必要的重新计算
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <p>计数: {count}</p>
           <p>时间戳: {cachedObject.timestamp}</p>
           <p>随机数: {cachedObject.random.toFixed(4)}</p>
           <p>昂贵计算结果: {expensiveCalculation.toFixed(2)}</p>
-          <div className="text-sm text-green-600">
+          <div className='text-sm text-green-600'>
             ✅ 使用 useMemo 缓存计算结果
           </div>
         </div>
@@ -109,32 +111,38 @@ export function OptimizedComponent({ count }: { count: number }) {
 /**
  * 演示组件容器
  */
-export function DemoComponentsContainer({ 
-  count, 
-  onTriggerRender 
-}: { 
-  count: number; 
+export function DemoComponentsContainer({
+  count,
+  onTriggerRender,
+}: {
+  count: number;
   onTriggerRender: () => void;
 }) {
   const [showComponents, setShowComponents] = useState(true);
 
   const toggleComponents = useCallback(() => {
-    setShowComponents(prev => !prev);
+    setShowComponents((prev) => !prev);
   }, []);
 
   return (
-    <div className="space-y-6">
-      <div className="flex gap-4">
-        <Button onClick={onTriggerRender} variant="outline">
+    <div className='space-y-6'>
+      <div className='flex gap-4'>
+        <Button
+          onClick={onTriggerRender}
+          variant='outline'
+        >
           触发重新渲染
         </Button>
-        <Button onClick={toggleComponents} variant="outline">
+        <Button
+          onClick={toggleComponents}
+          variant='outline'
+        >
           {showComponents ? '隐藏' : '显示'}组件
         </Button>
       </div>
 
       {showComponents && (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className='grid gap-6 md:grid-cols-2'>
           <IneffientComponent count={count} />
           <OptimizedComponent count={count} />
         </div>
@@ -146,9 +154,16 @@ export function DemoComponentsContainer({
 /**
  * 性能测试组件
  */
-export function PerformanceTestComponent({ iterations = 1000 }: { iterations?: number }) {
+export function PerformanceTestComponent({
+  iterations = 1000,
+}: {
+  iterations?: number;
+}) {
   const [isRunning, setIsRunning] = useState(false);
-  const [results, setResults] = useState<{ inefficient: number; optimized: number } | null>(null);
+  const [results, setResults] = useState<{
+    inefficient: number;
+    optimized: number;
+  } | null>(null);
 
   const runPerformanceTest = useCallback(async () => {
     setIsRunning(true);
@@ -188,31 +203,29 @@ export function PerformanceTestComponent({ iterations = 1000 }: { iterations?: n
     <Card>
       <CardHeader>
         <CardTitle>性能测试</CardTitle>
-        <CardDescription>
-          比较优化和未优化组件的性能差异
-        </CardDescription>
+        <CardDescription>比较优化和未优化组件的性能差异</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          <Button 
-            onClick={runPerformanceTest} 
+        <div className='space-y-4'>
+          <Button
+            onClick={runPerformanceTest}
             disabled={isRunning}
-            className="w-full"
+            className='w-full'
           >
             {isRunning ? '测试中...' : `运行性能测试 (${iterations} 次迭代)`}
           </Button>
 
           {results && (
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-                <h4 className="font-semibold text-red-700">未优化组件</h4>
-                <p className="text-2xl font-bold text-red-600">
+            <div className='grid gap-4 md:grid-cols-2'>
+              <div className='rounded-lg border border-red-200 bg-red-50 p-4'>
+                <h4 className='font-semibold text-red-700'>未优化组件</h4>
+                <p className='text-2xl font-bold text-red-600'>
                   {results.inefficient.toFixed(2)}ms
                 </p>
               </div>
-              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-                <h4 className="font-semibold text-green-700">优化组件</h4>
-                <p className="text-2xl font-bold text-green-600">
+              <div className='rounded-lg border border-green-200 bg-green-50 p-4'>
+                <h4 className='font-semibold text-green-700'>优化组件</h4>
+                <p className='text-2xl font-bold text-green-600'>
                   {results.optimized.toFixed(2)}ms
                 </p>
               </div>
@@ -220,9 +233,15 @@ export function PerformanceTestComponent({ iterations = 1000 }: { iterations?: n
           )}
 
           {results && (
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">
-                性能提升: {((results.inefficient - results.optimized) / results.inefficient * 100).toFixed(1)}%
+            <div className='text-center'>
+              <p className='text-muted-foreground text-sm'>
+                性能提升:{' '}
+                {(
+                  ((results.inefficient - results.optimized) /
+                    results.inefficient) *
+                  100
+                ).toFixed(1)}
+                %
               </p>
             </div>
           )}

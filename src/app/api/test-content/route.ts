@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-;
 import { getAllPages, getAllPosts, getContentStats } from '@/lib/content';
 import { logger } from '@/lib/logger';
 

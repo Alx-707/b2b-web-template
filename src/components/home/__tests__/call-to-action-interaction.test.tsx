@@ -30,25 +30,60 @@ vi.mock('@/hooks/use-intersection-observer', () => ({
 // Mock Lucide React图标
 vi.mock('lucide-react', () => ({
   ArrowRight: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='arrow-right-icon'>→</span>
+    <span
+      className={className}
+      data-testid='arrow-right-icon'
+    >
+      →
+    </span>
   ),
   BookOpen: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='book-open-icon'>📖</span>
+    <span
+      className={className}
+      data-testid='book-open-icon'
+    >
+      📖
+    </span>
   ),
   Download: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='download-icon'>⬇️</span>
+    <span
+      className={className}
+      data-testid='download-icon'
+    >
+      ⬇️
+    </span>
   ),
   ExternalLink: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='external-link-icon'>🔗</span>
+    <span
+      className={className}
+      data-testid='external-link-icon'
+    >
+      🔗
+    </span>
   ),
   Github: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='github-icon'>🐙</span>
+    <span
+      className={className}
+      data-testid='github-icon'
+    >
+      🐙
+    </span>
   ),
   MessageCircle: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='message-circle-icon'>💬</span>
+    <span
+      className={className}
+      data-testid='message-circle-icon'
+    >
+      💬
+    </span>
   ),
   Star: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='star-icon'>⭐</span>
+    <span
+      className={className}
+      data-testid='star-icon'
+    >
+      ⭐
+    </span>
   ),
 }));
 
@@ -57,7 +92,8 @@ describe('CallToAction Component - Interaction Tests', () => {
   const defaultTranslations = {
     'badge': 'Open Source',
     'title': 'Ready to Get Started?',
-    'subtitle': 'Join thousands of developers building amazing projects with our tools.',
+    'subtitle':
+      'Join thousands of developers building amazing projects with our tools.',
     'github.primary.text': 'View on GitHub',
     'github.primary.description': 'Explore the source code',
     'github.secondary.text': 'Star on GitHub',
@@ -76,7 +112,10 @@ describe('CallToAction Component - Interaction Tests', () => {
     vi.clearAllMocks();
 
     // 设置默认的翻译Mock
-    const mockT = vi.fn((key: string) => defaultTranslations[key as keyof typeof defaultTranslations] || key);
+    const mockT = vi.fn(
+      (key: string) =>
+        defaultTranslations[key as keyof typeof defaultTranslations] || key,
+    );
     mockUseTranslations.mockReturnValue(mockT);
 
     // 设置默认的Intersection Observer Mock
@@ -93,7 +132,7 @@ describe('CallToAction Component - Interaction Tests', () => {
 
       // 使用Tab键导航到第一个链接
       await user.tab();
-      
+
       // 验证第一个可聚焦元素获得焦点
       const firstLink = screen.getByRole('link', { name: /view on github/i });
       expect(firstLink).toHaveFocus();
@@ -113,7 +152,7 @@ describe('CallToAction Component - Interaction Tests', () => {
 
       // 模拟Enter键按下
       await user.keyboard('{Enter}');
-      
+
       // 验证链接仍然存在（没有导航错误）
       expect(githubLink).toBeInTheDocument();
     });
@@ -127,7 +166,7 @@ describe('CallToAction Component - Interaction Tests', () => {
 
       // 模拟空格键按下
       await user.keyboard(' ');
-      
+
       // 验证链接仍然存在
       expect(githubLink).toBeInTheDocument();
     });
@@ -138,7 +177,9 @@ describe('CallToAction Component - Interaction Tests', () => {
       // GitHub链接
       const githubLink = screen.getByRole('link', { name: /view on github/i });
       const starLink = screen.getByRole('link', { name: /star on github/i });
-      const discussionsLink = screen.getByRole('link', { name: /discussions/i });
+      const discussionsLink = screen.getByRole('link', {
+        name: /discussions/i,
+      });
       const issuesLink = screen.getByRole('link', { name: /issues/i });
 
       // 验证外部链接有正确的target属性
@@ -152,7 +193,9 @@ describe('CallToAction Component - Interaction Tests', () => {
       render(<CallToAction />);
 
       const docsLink = screen.getByRole('link', { name: /documentation/i });
-      const communityLink = screen.getByRole('link', { name: /join community/i });
+      const communityLink = screen.getByRole('link', {
+        name: /join community/i,
+      });
 
       // 验证内部链接没有target="_blank"
       expect(docsLink).not.toHaveAttribute('target', '_blank');
@@ -166,9 +209,9 @@ describe('CallToAction Component - Interaction Tests', () => {
 
       const externalLinks = screen
         .getAllByRole('link')
-        .filter(link => link.getAttribute('target') === '_blank');
+        .filter((link) => link.getAttribute('target') === '_blank');
 
-      externalLinks.forEach(link => {
+      externalLinks.forEach((link) => {
         expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       });
     });
@@ -194,10 +237,18 @@ describe('CallToAction Component - Interaction Tests', () => {
       render(<CallToAction />);
 
       // 验证链接有描述性的可访问名称
-      expect(screen.getByRole('link', { name: /view on github/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /star on github/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /documentation/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /join community/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /view on github/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /star on github/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /documentation/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /join community/i }),
+      ).toBeInTheDocument();
     });
 
     it('应该支持屏幕阅读器', () => {
@@ -205,8 +256,10 @@ describe('CallToAction Component - Interaction Tests', () => {
 
       // 验证重要内容对屏幕阅读器可见
       const title = screen.getByText('Ready to Get Started?');
-      const subtitle = screen.getByText('Join thousands of developers building amazing projects with our tools.');
-      
+      const subtitle = screen.getByText(
+        'Join thousands of developers building amazing projects with our tools.',
+      );
+
       expect(title).toBeInTheDocument();
       expect(subtitle).toBeInTheDocument();
     });
@@ -281,7 +334,9 @@ describe('CallToAction Component - Interaction Tests', () => {
     it('应该处理缺失的翻译键', () => {
       const mockT = vi.fn((key: string) => {
         if (key === 'nonexistent.key') return undefined;
-        return defaultTranslations[key as keyof typeof defaultTranslations] || key;
+        return (
+          defaultTranslations[key as keyof typeof defaultTranslations] || key
+        );
       });
       mockUseTranslations.mockReturnValue(mockT);
 
@@ -291,7 +346,10 @@ describe('CallToAction Component - Interaction Tests', () => {
 
   describe('性能优化', () => {
     it('应该只调用必要的翻译', () => {
-      const mockT = vi.fn((key: string) => defaultTranslations[key as keyof typeof defaultTranslations] || key);
+      const mockT = vi.fn(
+        (key: string) =>
+          defaultTranslations[key as keyof typeof defaultTranslations] || key,
+      );
       mockUseTranslations.mockReturnValue(mockT);
 
       render(<CallToAction />);

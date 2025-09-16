@@ -6,7 +6,10 @@
  */
 
 import type { WhatsAppContact } from './whatsapp-base-types';
-import type { MessageStatusUpdate, WebhookError } from './whatsapp-webhook-base';
+import type {
+  MessageStatusUpdate,
+  WebhookError,
+} from './whatsapp-webhook-base';
 import type { IncomingWhatsAppMessage } from './whatsapp-webhook-messages';
 
 /**
@@ -91,7 +94,10 @@ export interface AccountUpdateEvent {
   timestamp: string;
   phone_number_id: string;
   update_type: 'profile' | 'business_info' | 'settings';
-  changes: Record<string, string | number | boolean | Record<string, unknown> | unknown[]>;
+  changes: Record<
+    string,
+    string | number | boolean | Record<string, unknown> | unknown[]
+  >;
 }
 
 /**
@@ -129,7 +135,10 @@ export interface SecurityEvent {
   type: 'security_event';
   timestamp: string;
   phone_number_id: string;
-  event_type: 'suspicious_activity' | 'rate_limit_exceeded' | 'unauthorized_access';
+  event_type:
+    | 'suspicious_activity'
+    | 'rate_limit_exceeded'
+    | 'unauthorized_access';
   details: {
     source_ip?: string;
     user_agent?: string;
@@ -167,7 +176,9 @@ export interface WebhookProcessor {
   onUserStatusChange?: (event: UserStatusChangeEvent) => Promise<void> | void;
   onAccountUpdate?: (event: AccountUpdateEvent) => Promise<void> | void;
   onTemplateStatus?: (event: TemplateStatusEvent) => Promise<void> | void;
-  onPhoneNumberQuality?: (event: PhoneNumberQualityEvent) => Promise<void> | void;
+  onPhoneNumberQuality?: (
+    event: PhoneNumberQualityEvent,
+  ) => Promise<void> | void;
   onSecurityEvent?: (event: SecurityEvent) => Promise<void> | void;
   onError?: (event: WebhookErrorEvent) => Promise<void> | void;
   onUnknownEvent?: (event: unknown) => Promise<void> | void;
@@ -256,14 +267,14 @@ export const WEBHOOK_EVENT_TYPES = [
   'template_status',
   'phone_number_quality',
   'security_event',
-  'webhook_error'
+  'webhook_error',
 ] as const;
 
 export const MESSAGE_EVENT_TYPES = [
   'message_received',
   'message_status',
   'message_read',
-  'message_delivery'
+  'message_delivery',
 ] as const;
 
 export const SYSTEM_EVENT_TYPES = [
@@ -271,50 +282,66 @@ export const SYSTEM_EVENT_TYPES = [
   'template_status',
   'phone_number_quality',
   'security_event',
-  'webhook_error'
+  'webhook_error',
 ] as const;
 
 /**
  * 事件类型
  * Event types
  */
-export type WebhookEventType = typeof WEBHOOK_EVENT_TYPES[number];
-export type MessageEventType = typeof MESSAGE_EVENT_TYPES[number];
-export type SystemEventType = typeof SYSTEM_EVENT_TYPES[number];
+export type WebhookEventType = (typeof WEBHOOK_EVENT_TYPES)[number];
+export type MessageEventType = (typeof MESSAGE_EVENT_TYPES)[number];
+export type SystemEventType = (typeof SYSTEM_EVENT_TYPES)[number];
 
 /**
  * 类型守卫函数
  * Type guard functions
  */
-export function isMessageReceivedEvent(event: WebhookEvent): event is MessageReceivedEvent {
+export function isMessageReceivedEvent(
+  event: WebhookEvent,
+): event is MessageReceivedEvent {
   return event.type === 'message_received';
 }
 
-export function isMessageStatusEvent(event: WebhookEvent): event is MessageStatusEvent {
+export function isMessageStatusEvent(
+  event: WebhookEvent,
+): event is MessageStatusEvent {
   return event.type === 'message_status';
 }
 
-export function isMessageReadEvent(event: WebhookEvent): event is MessageReadEvent {
+export function isMessageReadEvent(
+  event: WebhookEvent,
+): event is MessageReadEvent {
   return event.type === 'message_read';
 }
 
-export function isMessageDeliveryEvent(event: WebhookEvent): event is MessageDeliveryEvent {
+export function isMessageDeliveryEvent(
+  event: WebhookEvent,
+): event is MessageDeliveryEvent {
   return event.type === 'message_delivery';
 }
 
-export function isUserStatusChangeEvent(event: WebhookEvent): event is UserStatusChangeEvent {
+export function isUserStatusChangeEvent(
+  event: WebhookEvent,
+): event is UserStatusChangeEvent {
   return event.type === 'user_status_change';
 }
 
-export function isAccountUpdateEvent(event: WebhookEvent): event is AccountUpdateEvent {
+export function isAccountUpdateEvent(
+  event: WebhookEvent,
+): event is AccountUpdateEvent {
   return event.type === 'account_update';
 }
 
-export function isTemplateStatusEvent(event: WebhookEvent): event is TemplateStatusEvent {
+export function isTemplateStatusEvent(
+  event: WebhookEvent,
+): event is TemplateStatusEvent {
   return event.type === 'template_status';
 }
 
-export function isPhoneNumberQualityEvent(event: WebhookEvent): event is PhoneNumberQualityEvent {
+export function isPhoneNumberQualityEvent(
+  event: WebhookEvent,
+): event is PhoneNumberQualityEvent {
   return event.type === 'phone_number_quality';
 }
 
@@ -322,15 +349,30 @@ export function isSecurityEvent(event: WebhookEvent): event is SecurityEvent {
   return event.type === 'security_event';
 }
 
-export function isWebhookErrorEvent(event: WebhookEvent): event is WebhookErrorEvent {
+export function isWebhookErrorEvent(
+  event: WebhookEvent,
+): event is WebhookErrorEvent {
   return event.type === 'webhook_error';
 }
 
-export function isMessageEvent(event: WebhookEvent): event is MessageReceivedEvent | MessageStatusEvent | MessageReadEvent | MessageDeliveryEvent {
+export function isMessageEvent(
+  event: WebhookEvent,
+): event is
+  | MessageReceivedEvent
+  | MessageStatusEvent
+  | MessageReadEvent
+  | MessageDeliveryEvent {
   return MESSAGE_EVENT_TYPES.includes(event.type as MessageEventType);
 }
 
-export function isSystemEvent(event: WebhookEvent): event is AccountUpdateEvent | TemplateStatusEvent | PhoneNumberQualityEvent | SecurityEvent | WebhookErrorEvent {
+export function isSystemEvent(
+  event: WebhookEvent,
+): event is
+  | AccountUpdateEvent
+  | TemplateStatusEvent
+  | PhoneNumberQualityEvent
+  | SecurityEvent
+  | WebhookErrorEvent {
   return SYSTEM_EVENT_TYPES.includes(event.type as SystemEventType);
 }
 
@@ -382,8 +424,11 @@ export function getEventTimestamp(event: WebhookEvent): Date {
   return new Date(event.timestamp);
 }
 
-export function isEventExpired(event: WebhookEvent, maxAgeMs: number = 24 * 60 * 60 * 1000): boolean {
+export function isEventExpired(
+  event: WebhookEvent,
+  maxAgeMs: number = 24 * 60 * 60 * 1000,
+): boolean {
   const eventTime = getEventTimestamp(event);
   const now = new Date();
-  return (now.getTime() - eventTime.getTime()) > maxAgeMs;
+  return now.getTime() - eventTime.getTime() > maxAgeMs;
 }

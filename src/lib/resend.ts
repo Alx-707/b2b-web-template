@@ -1,3 +1,6 @@
+// 创建单例实例
+import { ResendService } from './resend-core';
+
 /**
  * Resend邮件服务 - 统一导出入口
  * Resend email service - unified export entry
@@ -14,10 +17,4 @@ export { ResendTemplates } from './resend-templates';
 export { EMAIL_CONFIG } from './resend-utils';
 export type { EmailTemplateData } from './validations';
 
-// 创建单例实例
-import { ResendService } from './resend-core';
 export const resendService = new ResendService();
-
-
-
-

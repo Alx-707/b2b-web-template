@@ -11,9 +11,9 @@
  * - 基础字段集
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Label } from '../label';
 
@@ -32,14 +32,22 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form onSubmit={handleSubmit}>
           <div>
             <Label htmlFor='name'>Name</Label>
-            <input id='name' type='text' required />
+            <input
+              id='name'
+              type='text'
+              required
+            />
           </div>
           <div>
             <Label htmlFor='email'>Email</Label>
-            <input id='email' type='email' required />
+            <input
+              id='email'
+              type='email'
+              required
+            />
           </div>
           <button type='submit'>Submit</button>
-        </form>
+        </form>,
       );
 
       // Test basic form functionality
@@ -59,13 +67,21 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form>
           <div>
             <Label htmlFor='required-field'>Required Field *</Label>
-            <input id='required-field' type='text' required aria-invalid='true' />
+            <input
+              id='required-field'
+              type='text'
+              required
+              aria-invalid='true'
+            />
           </div>
           <div>
             <Label htmlFor='optional-field'>Optional Field</Label>
-            <input id='optional-field' type='text' />
+            <input
+              id='optional-field'
+              type='text'
+            />
           </div>
-        </form>
+        </form>,
       );
 
       const requiredInput = screen.getByLabelText('Required Field *');
@@ -83,17 +99,25 @@ describe('Label Form Basic Integration - Essential Tests', () => {
             <legend>Personal Information</legend>
             <div>
               <Label htmlFor='first-name'>First Name</Label>
-              <input id='first-name' type='text' />
+              <input
+                id='first-name'
+                type='text'
+              />
             </div>
             <div>
               <Label htmlFor='last-name'>Last Name</Label>
-              <input id='last-name' type='text' />
+              <input
+                id='last-name'
+                type='text'
+              />
             </div>
           </fieldset>
-        </form>
+        </form>,
       );
 
-      const fieldset = screen.getByRole('group', { name: 'Personal Information' });
+      const fieldset = screen.getByRole('group', {
+        name: 'Personal Information',
+      });
       const firstNameInput = screen.getByLabelText('First Name');
       const lastNameInput = screen.getByLabelText('Last Name');
 
@@ -109,17 +133,26 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form>
           <div>
             <Label htmlFor='field1'>Field 1</Label>
-            <input id='field1' type='text' />
+            <input
+              id='field1'
+              type='text'
+            />
           </div>
           <div>
             <Label htmlFor='field2'>Field 2</Label>
-            <input id='field2' type='text' />
+            <input
+              id='field2'
+              type='text'
+            />
           </div>
           <div>
             <Label htmlFor='field3'>Field 3</Label>
-            <input id='field3' type='text' />
+            <input
+              id='field3'
+              type='text'
+            />
           </div>
-        </form>
+        </form>,
       );
 
       const field1 = screen.getByLabelText('Field 1');
@@ -142,13 +175,19 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form>
           <div>
             <Label htmlFor='clickable1'>Clickable Label 1</Label>
-            <input id='clickable1' type='text' />
+            <input
+              id='clickable1'
+              type='text'
+            />
           </div>
           <div>
             <Label htmlFor='clickable2'>Clickable Label 2</Label>
-            <input id='clickable2' type='email' />
+            <input
+              id='clickable2'
+              type='email'
+            />
           </div>
-        </form>
+        </form>,
       );
 
       const label1 = screen.getByText('Clickable Label 1');
@@ -170,17 +209,20 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form>
           <div>
             <Label htmlFor='error-field'>Field with Error</Label>
-            <input 
-              id='error-field' 
-              type='text' 
+            <input
+              id='error-field'
+              type='text'
               aria-invalid='true'
               aria-describedby='error-message'
             />
-            <div id='error-message' role='alert'>
+            <div
+              id='error-message'
+              role='alert'
+            >
               This field has an error
             </div>
           </div>
-        </form>
+        </form>,
       );
 
       const input = screen.getByLabelText('Field with Error');
@@ -196,7 +238,7 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <div>
           <Label htmlFor='missing-input'>Label for Missing Input</Label>
           {/* No corresponding input */}
-        </div>
+        </div>,
       );
 
       const label = screen.getByText('Label for Missing Input');
@@ -210,28 +252,52 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form>
           <div>
             <Label htmlFor='text-input'>Text Input</Label>
-            <input id='text-input' type='text' />
+            <input
+              id='text-input'
+              type='text'
+            />
           </div>
           <div>
             <Label htmlFor='email-input'>Email Input</Label>
-            <input id='email-input' type='email' />
+            <input
+              id='email-input'
+              type='email'
+            />
           </div>
           <div>
             <Label htmlFor='password-input'>Password Input</Label>
-            <input id='password-input' type='password' />
+            <input
+              id='password-input'
+              type='password'
+            />
           </div>
           <div>
             <Label htmlFor='number-input'>Number Input</Label>
-            <input id='number-input' type='number' />
+            <input
+              id='number-input'
+              type='number'
+            />
           </div>
-        </form>
+        </form>,
       );
 
       // Test all input types are properly associated
-      expect(screen.getByLabelText('Text Input')).toHaveAttribute('type', 'text');
-      expect(screen.getByLabelText('Email Input')).toHaveAttribute('type', 'email');
-      expect(screen.getByLabelText('Password Input')).toHaveAttribute('type', 'password');
-      expect(screen.getByLabelText('Number Input')).toHaveAttribute('type', 'number');
+      expect(screen.getByLabelText('Text Input')).toHaveAttribute(
+        'type',
+        'text',
+      );
+      expect(screen.getByLabelText('Email Input')).toHaveAttribute(
+        'type',
+        'email',
+      );
+      expect(screen.getByLabelText('Password Input')).toHaveAttribute(
+        'type',
+        'password',
+      );
+      expect(screen.getByLabelText('Number Input')).toHaveAttribute(
+        'type',
+        'number',
+      );
     });
 
     it('works with checkboxes and radios', async () => {
@@ -239,17 +305,30 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form>
           <div>
             <Label htmlFor='checkbox1'>Checkbox Option</Label>
-            <input id='checkbox1' type='checkbox' />
+            <input
+              id='checkbox1'
+              type='checkbox'
+            />
           </div>
           <div>
             <Label htmlFor='radio1'>Radio Option 1</Label>
-            <input id='radio1' type='radio' name='radio-group' value='1' />
+            <input
+              id='radio1'
+              type='radio'
+              name='radio-group'
+              value='1'
+            />
           </div>
           <div>
             <Label htmlFor='radio2'>Radio Option 2</Label>
-            <input id='radio2' type='radio' name='radio-group' value='2' />
+            <input
+              id='radio2'
+              type='radio'
+              name='radio-group'
+              value='2'
+            />
           </div>
-        </form>
+        </form>,
       );
 
       const checkbox = screen.getByLabelText('Checkbox Option');
@@ -277,15 +356,15 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form>
           <div>
             <Label htmlFor='accessible-input'>Accessible Input</Label>
-            <input 
-              id='accessible-input' 
-              type='text' 
+            <input
+              id='accessible-input'
+              type='text'
               aria-describedby='help-text'
               required
             />
             <div id='help-text'>This field is required</div>
           </div>
-        </form>
+        </form>,
       );
 
       const input = screen.getByLabelText('Accessible Input');
@@ -301,13 +380,16 @@ describe('Label Form Basic Integration - Essential Tests', () => {
         <form>
           <div>
             <Label htmlFor='sr-input'>Screen Reader Input</Label>
-            <input id='sr-input' type='text' />
+            <input
+              id='sr-input'
+              type='text'
+            />
           </div>
-        </form>
+        </form>,
       );
 
       const input = screen.getByLabelText('Screen Reader Input');
-      
+
       // Test that input can be found by accessible name
       expect(input).toBeInTheDocument();
       expect(input).toHaveAccessibleName('Screen Reader Input');

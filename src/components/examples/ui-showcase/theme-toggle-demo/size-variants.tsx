@@ -6,21 +6,27 @@ import { HorizontalThemeToggle } from '@/components/theme/horizontal-theme-toggl
 export function SizeVariants() {
   return (
     <div>
-      <h4 className="font-semibold mb-3">📏 尺寸变体</h4>
-      <div className="space-y-4">
+      <h4 className='mb-3 font-semibold'>📏 尺寸变体</h4>
+      <div className='space-y-4'>
         <div>
-          <span className="text-sm text-muted-foreground mb-2 block">默认尺寸</span>
+          <span className='text-muted-foreground mb-2 block text-sm'>
+            默认尺寸
+          </span>
           <HorizontalThemeToggle />
         </div>
 
         <div>
-          <span className="text-sm text-muted-foreground mb-2 block">小尺寸</span>
-          <HorizontalThemeToggle size="sm" />
+          <span className='text-muted-foreground mb-2 block text-sm'>
+            小尺寸
+          </span>
+          <HorizontalThemeToggle size='sm' />
         </div>
 
         <div>
-          <span className="text-sm text-muted-foreground mb-2 block">大尺寸</span>
-          <HorizontalThemeToggle size="lg" />
+          <span className='text-muted-foreground mb-2 block text-sm'>
+            大尺寸
+          </span>
+          <HorizontalThemeToggle size='lg' />
         </div>
       </div>
     </div>

@@ -2,10 +2,10 @@
  * @vitest-environment jsdom
  */
 
+import { usePathname } from 'next/navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MobileNavigation } from '../mobile-navigation';
 
@@ -33,18 +33,20 @@ describe('Mobile Navigation - Advanced Integration Tests', () => {
     vi.clearAllMocks();
 
     // Setup default mocks
-    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-      const translations: Record<string, string> = {
-        'navigation.home': 'Home',
-        'navigation.about': 'About',
-        'navigation.services': 'Services',
-        'navigation.contact': 'Contact',
-        'navigation.menu': 'Menu',
-        'navigation.close': 'Close',
-      };
-      // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
-    });
+    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+      (key: string) => {
+        const translations: Record<string, string> = {
+          'navigation.home': 'Home',
+          'navigation.about': 'About',
+          'navigation.services': 'Services',
+          'navigation.contact': 'Contact',
+          'navigation.menu': 'Menu',
+          'navigation.close': 'Close',
+        };
+        // eslint-disable-next-line security/detect-object-injection
+        return translations[key] || key; // key 来自测试数据，安全
+      },
+    );
 
     (usePathname as ReturnType<typeof vi.fn>).mockReturnValue('/');
   });
@@ -133,7 +135,9 @@ describe('Mobile Navigation - Advanced Integration Tests', () => {
     });
 
     it('handles missing translations gracefully', async () => {
-      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => key);
+      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+        (key: string) => key,
+      );
 
       render(<MobileNavigation />);
 
@@ -152,7 +156,7 @@ describe('Mobile Navigation - Advanced Integration Tests', () => {
       await user.click(trigger);
 
       const links = screen.getAllByRole('link');
-      const linkTexts = links.map(link => link.textContent);
+      const linkTexts = links.map((link) => link.textContent);
 
       expect(linkTexts).toEqual(['Home', 'About', 'Services', 'Contact']);
     });
@@ -165,7 +169,7 @@ describe('Mobile Navigation - Advanced Integration Tests', () => {
 
       const links = screen.getAllByRole('link');
 
-      links.forEach(link => {
+      links.forEach((link) => {
         expect(link).toHaveClass('block', 'px-4', 'py-2');
       });
     });
@@ -181,18 +185,20 @@ describe('Mobile Navigation - Advanced Integration Tests', () => {
     });
 
     it('handles long navigation item text', async () => {
-      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-        const translations: Record<string, string> = {
-          'navigation.home': 'Very Long Home Page Title',
-          'navigation.about': 'About Us and Our Company',
-          'navigation.services': 'Our Professional Services',
-          'navigation.contact': 'Contact Information',
-          'navigation.menu': 'Menu',
-          'navigation.close': 'Close',
-        };
-        // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
-      });
+      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+        (key: string) => {
+          const translations: Record<string, string> = {
+            'navigation.home': 'Very Long Home Page Title',
+            'navigation.about': 'About Us and Our Company',
+            'navigation.services': 'Our Professional Services',
+            'navigation.contact': 'Contact Information',
+            'navigation.menu': 'Menu',
+            'navigation.close': 'Close',
+          };
+          // eslint-disable-next-line security/detect-object-injection
+          return translations[key] || key; // key 来自测试数据，安全
+        },
+      );
 
       render(<MobileNavigation />);
 
@@ -283,7 +289,9 @@ describe('Mobile Navigation - Advanced Integration Tests', () => {
     });
 
     it('supports high contrast mode', () => {
-      render(<MobileNavigation className='forced-colors:border-[ButtonText]' />);
+      render(
+        <MobileNavigation className='forced-colors:border-[ButtonText]' />,
+      );
 
       const trigger = screen.getByRole('button');
       expect(trigger).toHaveClass('forced-colors:border-[ButtonText]');
@@ -336,24 +344,26 @@ describe('Mobile Navigation - Advanced Integration Tests', () => {
 
       const links = screen.getAllByRole('link');
 
-      links.forEach(link => {
+      links.forEach((link) => {
         expect(link).toHaveAttribute('href');
       });
     });
 
     it('supports internationalization', async () => {
-      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-        const translations: Record<string, string> = {
-          'navigation.home': '首页',
-          'navigation.about': '关于我们',
-          'navigation.services': '服务',
-          'navigation.contact': '联系我们',
-          'navigation.menu': '菜单',
-          'navigation.close': '关闭',
-        };
-        // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
-      });
+      (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+        (key: string) => {
+          const translations: Record<string, string> = {
+            'navigation.home': '首页',
+            'navigation.about': '关于我们',
+            'navigation.services': '服务',
+            'navigation.contact': '联系我们',
+            'navigation.menu': '菜单',
+            'navigation.close': '关闭',
+          };
+          // eslint-disable-next-line security/detect-object-injection
+          return translations[key] || key; // key 来自测试数据，安全
+        },
+      );
 
       render(<MobileNavigation />);
 

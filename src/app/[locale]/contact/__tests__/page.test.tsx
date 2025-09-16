@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 // 导入要测试的组件
 import ContactPage, { generateMetadata } from '@/app/[locale]/contact/page';
@@ -21,7 +21,11 @@ vi.mock('@/components/contact/contact-form', () => ({
 
 // Mock UI components
 vi.mock('@/components/ui/card', () => ({
-  Card: ({ children, className, ...props }: React.PropsWithChildren<{
+  Card: ({
+    children,
+    className,
+    ...props
+  }: React.PropsWithChildren<{
     className?: string;
     [key: string]: unknown;
   }>) => (

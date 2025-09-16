@@ -21,7 +21,12 @@ import { SocialIconMapper } from '../social-icons';
 describe('Social Icons Mapper Tests', () => {
   describe('SocialIconMapper', () => {
     it('renders Twitter icon for "twitter" input', () => {
-      render(<SocialIconMapper platform='twitter' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='twitter'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -29,7 +34,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('renders LinkedIn icon for "linkedin" input', () => {
-      render(<SocialIconMapper platform='linkedin' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='linkedin'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -37,7 +47,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('renders GitHub icon for "github" input', () => {
-      render(<SocialIconMapper platform='github' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='github'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -45,7 +60,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('renders Facebook icon for "facebook" input', () => {
-      render(<SocialIconMapper platform='facebook' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='facebook'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -53,7 +73,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('renders Instagram icon for "instagram" input', () => {
-      render(<SocialIconMapper platform='instagram' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='instagram'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -61,7 +86,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('renders YouTube icon for "youtube" input', () => {
-      render(<SocialIconMapper platform='youtube' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='youtube'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -69,7 +99,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('renders external link icon for unknown platform', () => {
-      render(<SocialIconMapper platform='unknown' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='unknown'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -77,14 +112,24 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('handles case insensitive platform names', () => {
-      render(<SocialIconMapper platform='TWITTER' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='TWITTER'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
     });
 
     it('handles mixed case platform names', () => {
-      render(<SocialIconMapper platform='LiNkEdIn' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='LiNkEdIn'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -96,7 +141,7 @@ describe('Social Icons Mapper Tests', () => {
           platform='twitter'
           className='custom-class'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
@@ -104,7 +149,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('applies default size classes', () => {
-      render(<SocialIconMapper platform='twitter' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='twitter'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toHaveClass('h-4', 'w-4');
@@ -116,7 +166,7 @@ describe('Social Icons Mapper Tests', () => {
           platform='twitter'
           className='h-8 w-8'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
@@ -126,13 +176,13 @@ describe('Social Icons Mapper Tests', () => {
     it('maintains consistent sizing across platforms', () => {
       const platforms = ['twitter', 'linkedin', 'unknown'];
 
-      platforms.forEach(platform => {
+      platforms.forEach((platform) => {
         const { unmount } = render(
           <SocialIconMapper
             platform={platform}
             className='h-6 w-6'
             data-testid={`${platform}-icon`}
-          />
+          />,
         );
 
         const icon = screen.getByTestId(`${platform}-icon`);
@@ -143,7 +193,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('supports aria-hidden attribute', () => {
-      render(<SocialIconMapper platform='twitter' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='twitter'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toHaveAttribute('aria-hidden', 'true');
@@ -154,7 +209,7 @@ describe('Social Icons Mapper Tests', () => {
         <SocialIconMapper
           platform='twitter'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
@@ -162,7 +217,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('handles empty platform gracefully', () => {
-      render(<SocialIconMapper platform='' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform=''
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -170,7 +230,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('handles null platform gracefully', () => {
-      render(<SocialIconMapper platform='' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform=''
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -178,7 +243,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('handles undefined platform gracefully', () => {
-      render(<SocialIconMapper platform='' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform=''
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -190,7 +260,7 @@ describe('Social Icons Mapper Tests', () => {
         <SocialIconMapper
           platform='twitter'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
@@ -204,7 +274,7 @@ describe('Social Icons Mapper Tests', () => {
           platform='twitter'
           className='text-red-500'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
@@ -213,23 +283,40 @@ describe('Social Icons Mapper Tests', () => {
 
     it('handles component lifecycle correctly', () => {
       const { unmount, rerender } = render(
-        <SocialIconMapper platform='twitter' data-testid='mapped-icon' />
+        <SocialIconMapper
+          platform='twitter'
+          data-testid='mapped-icon'
+        />,
       );
 
       expect(screen.getByTestId('mapped-icon')).toBeInTheDocument();
 
-      rerender(<SocialIconMapper platform='linkedin' data-testid='mapped-icon' />);
+      rerender(
+        <SocialIconMapper
+          platform='linkedin'
+          data-testid='mapped-icon'
+        />,
+      );
       expect(screen.getByTestId('mapped-icon')).toBeInTheDocument();
 
       expect(() => unmount()).not.toThrow();
     });
 
     it('maintains performance with multiple renders', () => {
-      const platforms = ['twitter', 'linkedin', 'github', 'facebook', 'instagram'];
+      const platforms = [
+        'twitter',
+        'linkedin',
+        'github',
+        'facebook',
+        'instagram',
+      ];
 
-      platforms.forEach(platform => {
+      platforms.forEach((platform) => {
         const { unmount } = render(
-          <SocialIconMapper platform={platform} data-testid={`${platform}-icon`} />
+          <SocialIconMapper
+            platform={platform}
+            data-testid={`${platform}-icon`}
+          />,
         );
 
         const icon = screen.getByTestId(`${platform}-icon`);
@@ -244,7 +331,7 @@ describe('Social Icons Mapper Tests', () => {
         <SocialIconMapper
           platform='twitter'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
@@ -253,7 +340,12 @@ describe('Social Icons Mapper Tests', () => {
     });
 
     it('handles special characters in platform names', () => {
-      render(<SocialIconMapper platform='twitter-x' data-testid='mapped-icon' />);
+      render(
+        <SocialIconMapper
+          platform='twitter-x'
+          data-testid='mapped-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('mapped-icon');
       expect(icon).toBeInTheDocument();
@@ -266,11 +358,18 @@ describe('Social Icons Mapper Tests', () => {
           platform='twitter'
           className='h-4 w-4 md:h-6 md:w-6 lg:h-8 lg:w-8'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
-      expect(icon).toHaveClass('h-4', 'w-4', 'md:h-6', 'md:w-6', 'lg:h-8', 'lg:w-8');
+      expect(icon).toHaveClass(
+        'h-4',
+        'w-4',
+        'md:h-6',
+        'md:w-6',
+        'lg:h-8',
+        'lg:w-8',
+      );
     });
 
     it('supports color customization', () => {
@@ -279,7 +378,7 @@ describe('Social Icons Mapper Tests', () => {
           platform='twitter'
           className='text-blue-500 hover:text-blue-600'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
@@ -292,19 +391,26 @@ describe('Social Icons Mapper Tests', () => {
           platform='twitter'
           className='transition-colors duration-200 hover:scale-110'
           data-testid='mapped-icon'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapped-icon');
-      expect(icon).toHaveClass('transition-colors', 'duration-200', 'hover:scale-110');
+      expect(icon).toHaveClass(
+        'transition-colors',
+        'duration-200',
+        'hover:scale-110',
+      );
     });
 
     it('handles platform name normalization', () => {
       const variations = ['twitter', 'Twitter', 'TWITTER', 'tWiTtEr'];
 
-      variations.forEach(variation => {
+      variations.forEach((variation) => {
         const { unmount } = render(
-          <SocialIconMapper platform={variation} data-testid={`${variation}-icon`} />
+          <SocialIconMapper
+            platform={variation}
+            data-testid={`${variation}-icon`}
+          />,
         );
 
         const icon = screen.getByTestId(`${variation}-icon`);

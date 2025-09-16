@@ -5,9 +5,9 @@
  * 注意：高级测试场景请参考 enhanced-locale-switcher-language-switching.test.tsx
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { EnhancedLocaleSwitcher } from '../enhanced-locale-switcher';
 
@@ -40,18 +40,31 @@ vi.mock('next/navigation', () => ({
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
   Check: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg data-testid="check-icon" {...props}>
-      <path d="M9 12l2 2 4-4" />
+    <svg
+      data-testid='check-icon'
+      {...props}
+    >
+      <path d='M9 12l2 2 4-4' />
     </svg>
   ),
   ChevronDown: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg data-testid="chevron-down-icon" {...props}>
-      <path d="M6 9l6 6 6-6" />
+    <svg
+      data-testid='chevron-down-icon'
+      {...props}
+    >
+      <path d='M6 9l6 6 6-6' />
     </svg>
   ),
   Globe: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg data-testid="globe-icon" {...props}>
-      <circle cx="12" cy="12" r="10" />
+    <svg
+      data-testid='globe-icon'
+      {...props}
+    >
+      <circle
+        cx='12'
+        cy='12'
+        r='10'
+      />
     </svg>
   ),
 }));
@@ -88,7 +101,8 @@ describe('Enhanced Locale Switcher - 核心语言切换功能', () => {
       if (key === 'languages.zh') return '中文';
       if (key === 'languages') return defaultMocks.translations.languages;
       if (key === 'toggle') return defaultMocks.translations.toggle;
-      if (key === 'selectLanguage') return defaultMocks.translations.selectLanguage;
+      if (key === 'selectLanguage')
+        return defaultMocks.translations.selectLanguage;
       return key;
     });
 

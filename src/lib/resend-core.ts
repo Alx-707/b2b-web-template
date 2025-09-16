@@ -6,10 +6,9 @@
 import { Resend } from 'resend';
 import { env } from '@/../env.mjs';
 import { logger } from './logger';
-import type { EmailTemplateData } from './validations';
-;
-import { ResendUtils, EMAIL_CONFIG } from './resend-utils';
 import { ResendTemplates } from './resend-templates';
+import { EMAIL_CONFIG, ResendUtils } from './resend-utils';
+import type { EmailTemplateData } from './validations';
 
 /**
  * Resend邮件服务配置
@@ -83,8 +82,10 @@ export class ResendService {
 
       // 构建邮件内容
       const subject = ResendUtils.generateContactSubject(sanitizedData);
-      const htmlContent = ResendTemplates.generateContactEmailHtml(sanitizedData);
-      const textContent = ResendTemplates.generateContactEmailText(sanitizedData);
+      const htmlContent =
+        ResendTemplates.generateContactEmailHtml(sanitizedData);
+      const textContent =
+        ResendTemplates.generateContactEmailText(sanitizedData);
 
       // 发送邮件
       const result = await this.resend!.emails.send({
@@ -132,8 +133,10 @@ export class ResendService {
       const sanitizedData = ResendUtils.sanitizeEmailData(validatedData);
 
       const subject = ResendUtils.generateConfirmationSubject();
-      const htmlContent = ResendTemplates.generateConfirmationEmailHtml(sanitizedData);
-      const textContent = ResendTemplates.generateConfirmationEmailText(sanitizedData);
+      const htmlContent =
+        ResendTemplates.generateConfirmationEmailHtml(sanitizedData);
+      const textContent =
+        ResendTemplates.generateConfirmationEmailText(sanitizedData);
 
       const result = await this.resend!.emails.send({
         from: this.emailConfig.from,

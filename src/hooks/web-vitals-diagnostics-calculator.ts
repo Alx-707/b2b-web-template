@@ -7,7 +7,7 @@ import type { DetailedWebVitals } from '@/lib/enhanced-web-vitals';
 import {
   WEB_VITALS_CONSTANTS,
   type DiagnosticReport,
-  type PerformanceTrend
+  type PerformanceTrend,
 } from './web-vitals-diagnostics-constants';
 
 /**
@@ -19,7 +19,9 @@ export const calculatePerformanceTrends = (
   if (historicalReports.length < WEB_VITALS_CONSTANTS.SCORE_DIVISOR)
     return null;
 
-  const recentReports = historicalReports.slice(-WEB_VITALS_CONSTANTS.TREND_THRESHOLD);
+  const recentReports = historicalReports.slice(
+    -WEB_VITALS_CONSTANTS.TREND_THRESHOLD,
+  );
   const previousReports = historicalReports.slice(
     -WEB_VITALS_CONSTANTS.SCORE_MULTIPLIER_10,
     -WEB_VITALS_CONSTANTS.TREND_THRESHOLD,
@@ -78,7 +80,9 @@ export const calculatePerformanceTrends = (
       trend,
       change: Number(change.toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES)),
       recent: Number(recentAvg.toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES)),
-      previous: Number(previousAvg.toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES)),
+      previous: Number(
+        previousAvg.toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES),
+      ),
     };
   });
 };
@@ -140,7 +144,11 @@ export const calculatePercentageChange = (
   previous: number,
 ): number => {
   if (previous === 0) return current > 0 ? 100 : 0;
-  return Number(((current - previous) / previous * 100).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
+  return Number(
+    (((current - previous) / previous) * 100).toFixed(
+      WEB_VITALS_CONSTANTS.DECIMAL_PLACES,
+    ),
+  );
 };
 
 /**
@@ -149,7 +157,9 @@ export const calculatePercentageChange = (
 export const calculateAverage = (values: number[]): number => {
   if (values.length === 0) return 0;
   const sum = values.reduce((acc, val) => acc + val, 0);
-  return Number((sum / values.length).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
+  return Number(
+    (sum / values.length).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES),
+  );
 };
 
 /**
@@ -164,10 +174,14 @@ export const calculateMedian = (values: number[]): number => {
   if (sorted.length % 2 === 0) {
     const left = sorted[middle - 1] ?? 0;
     const right = sorted[middle] ?? 0;
-    return Number(((left + right) / 2).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
+    return Number(
+      ((left + right) / 2).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES),
+    );
   }
 
-  return Number((sorted[middle] ?? 0).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
+  return Number(
+    (sorted[middle] ?? 0).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES),
+  );
 };
 
 /**
@@ -179,7 +193,11 @@ export const calculateP95 = (values: number[]): number => {
   const sorted = [...values].sort((a, b) => a - b);
   const index = Math.ceil(sorted.length * 0.95) - 1;
 
-  return Number((sorted[Math.max(0, index)] ?? 0).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES));
+  return Number(
+    (sorted[Math.max(0, index)] ?? 0).toFixed(
+      WEB_VITALS_CONSTANTS.DECIMAL_PLACES,
+    ),
+  );
 };
 
 /**
@@ -201,8 +219,12 @@ export const calculateMetricStats = (values: number[]) => {
     average: calculateAverage(values),
     median: calculateMedian(values),
     p95: calculateP95(values),
-    min: Number(Math.min(...values).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES)),
-    max: Number(Math.max(...values).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES)),
+    min: Number(
+      Math.min(...values).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES),
+    ),
+    max: Number(
+      Math.max(...values).toFixed(WEB_VITALS_CONSTANTS.DECIMAL_PLACES),
+    ),
     count: values.length,
   };
 };
@@ -221,7 +243,9 @@ export const calculatePerformanceGrade = (score: number): string => {
 /**
  * 计算改善潜力
  */
-export const calculateImprovementPotential = (vitals: DetailedWebVitals): number => {
+export const calculateImprovementPotential = (
+  vitals: DetailedWebVitals,
+): number => {
   let potential = 0;
 
   if (vitals.lcp && vitals.lcp > WEB_VITALS_CONSTANTS.LCP_GOOD) {

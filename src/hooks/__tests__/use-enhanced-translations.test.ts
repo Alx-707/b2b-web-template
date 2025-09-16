@@ -4,7 +4,10 @@ import {
   TEST_COUNT_CONSTANTS,
   TEST_SAMPLE_CONSTANTS,
 } from '@/constants/test-constants';
-import type { NumberFormatConstructor, DateTimeFormatConstructor } from '@/types';
+import type {
+  DateTimeFormatConstructor,
+  NumberFormatConstructor,
+} from '@/types';
 import {
   useEnhancedTranslations,
   useI18nPerformance,
@@ -315,7 +318,9 @@ describe('useEnhancedTranslations', () => {
         throw new Error('Format error');
       }) as any;
       // Add required static method
-      (mockNumberFormat as any).supportedLocalesOf = vi.fn().mockReturnValue([]);
+      (mockNumberFormat as any).supportedLocalesOf = vi
+        .fn()
+        .mockReturnValue([]);
       Intl.NumberFormat = mockNumberFormat as NumberFormatConstructor;
 
       const { result } = renderHook(() => useEnhancedTranslations());
@@ -343,7 +348,9 @@ describe('useEnhancedTranslations', () => {
         throw new Error('Format error');
       }) as any;
       // Add required static method
-      (mockDateTimeFormat as any).supportedLocalesOf = vi.fn().mockReturnValue([]);
+      (mockDateTimeFormat as any).supportedLocalesOf = vi
+        .fn()
+        .mockReturnValue([]);
       Intl.DateTimeFormat = mockDateTimeFormat as DateTimeFormatConstructor;
 
       const { result } = renderHook(() => useEnhancedTranslations());

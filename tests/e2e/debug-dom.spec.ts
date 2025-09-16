@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 import type {
+  MockNextHydrationStatus,
   MockPerformanceNavigationEntry,
   MockReactFiberNode,
   MockWindowWithReact,
-  MockNextHydrationStatus
 } from '@/types/test-types';
 
 test.describe('DOM Structure Debug', () => {
@@ -83,8 +83,10 @@ test.describe('DOM Structure Debug', () => {
           .getEntriesByType('navigation')
           .map((entry: PerformanceEntry) => ({
             name: entry.name,
-            transferSize: (entry as MockPerformanceNavigationEntry).transferSize,
-            responseStatus: (entry as MockPerformanceNavigationEntry).responseStatus,
+            transferSize: (entry as MockPerformanceNavigationEntry)
+              .transferSize,
+            responseStatus: (entry as MockPerformanceNavigationEntry)
+              .responseStatus,
           }));
       });
       console.log('🌐 Network status:', networkFailures);
@@ -268,15 +270,18 @@ test.describe('DOM Structure Debug', () => {
     console.log('⚛️ React hydration status:', isHydrated);
 
     // 检查Next.js hydration状态
-    const nextHydrationStatus = await page.evaluate((): MockNextHydrationStatus => {
-      const windowWithNext = window as MockWindowWithReact;
-      return {
-        hasNextData: Boolean(windowWithNext.__NEXT_DATA__),
-        hasNextRouter: Boolean(windowWithNext.__NEXT_ROUTER__),
-        documentReadyState: document.readyState,
-        scriptsLoaded: document.querySelectorAll('script[src*="_next"]').length,
-      };
-    });
+    const nextHydrationStatus = await page.evaluate(
+      (): MockNextHydrationStatus => {
+        const windowWithNext = window as MockWindowWithReact;
+        return {
+          hasNextData: Boolean(windowWithNext.__NEXT_DATA__),
+          hasNextRouter: Boolean(windowWithNext.__NEXT_ROUTER__),
+          documentReadyState: document.readyState,
+          scriptsLoaded: document.querySelectorAll('script[src*="_next"]')
+            .length,
+        };
+      },
+    );
 
     console.log('🔄 Next.js hydration status:', nextHydrationStatus);
 

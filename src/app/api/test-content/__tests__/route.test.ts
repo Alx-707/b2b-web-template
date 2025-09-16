@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET } from '@/app/api/test-content/__tests__/route';
 

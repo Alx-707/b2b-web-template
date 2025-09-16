@@ -1,12 +1,10 @@
 import type { Locale } from '@/types/i18n';
-;
 import {
   BROWSER_LOCALE_MAP,
   DEFAULT_LOCALE,
   SUPPORTED_LOCALES,
 } from './locale-constants';
 import type { LocaleDetectionResult } from './locale-detection-types';
-;
 import { LocaleStorageManager } from './locale-storage';
 
 /**

@@ -224,7 +224,11 @@ export interface PreloaderCache {
  */
 export interface PreloaderNetwork {
   loadMessages(locale: Locale, options?: PreloadOptions): Promise<Messages>;
-  loadSpecificKeys(locale: Locale, keys: string[], options?: PreloadOptions): Promise<Partial<Messages>>;
+  loadSpecificKeys(
+    locale: Locale,
+    keys: string[],
+    options?: PreloadOptions,
+  ): Promise<Partial<Messages>>;
   checkNetworkStatus(): Promise<{
     online: boolean;
     speed: 'fast' | 'slow';
@@ -282,7 +286,10 @@ export interface PreloaderFactoryConfig {
 export interface IPreloader {
   // 基础预加载方法
   preloadLocale(locale: Locale, options?: PreloadOptions): Promise<Messages>;
-  preloadMultipleLocales(locales: Locale[], options?: PreloadOptions): Promise<CacheOperationResult<Messages>[]>;
+  preloadMultipleLocales(
+    locales: Locale[],
+    options?: PreloadOptions,
+  ): Promise<CacheOperationResult<Messages>[]>;
   preloadMissingTranslations(locale: Locale, keys: string[]): Promise<void>;
 
   // 智能预加载
@@ -320,16 +327,14 @@ export interface IPreloader {
 export type PreloadStrategy = (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => Promise<void>;
 
 /**
  * 预加载器工厂函数类型
  * Preloader factory function type
  */
-export type PreloaderFactory = (
-  config: PreloaderFactoryConfig
-) => IPreloader;
+export type PreloaderFactory = (config: PreloaderFactoryConfig) => IPreloader;
 
 /**
  * 预加载器中间件类型
@@ -337,7 +342,7 @@ export type PreloaderFactory = (
  */
 export type PreloaderMiddleware = (
   locale: Locale,
-  next: () => Promise<Messages>
+  next: () => Promise<Messages>,
 ) => Promise<Messages>;
 
 /**
@@ -363,7 +368,7 @@ export class PreloaderError extends Error {
     message: string,
     public locale?: Locale,
     public code?: string,
-    public retryable: boolean = true
+    public retryable: boolean = true,
   ) {
     super(message);
     this.name = 'PreloaderError';
@@ -372,21 +377,36 @@ export class PreloaderError extends Error {
 
 export class PreloaderTimeoutError extends PreloaderError {
   constructor(locale: Locale, timeout: number) {
-    super(`Preload timeout for locale ${locale} after ${timeout}ms`, locale, 'TIMEOUT', true);
+    super(
+      `Preload timeout for locale ${locale} after ${timeout}ms`,
+      locale,
+      'TIMEOUT',
+      true,
+    );
     this.name = 'PreloaderTimeoutError';
   }
 }
 
 export class PreloaderNetworkError extends PreloaderError {
   constructor(locale: Locale, originalError: Error) {
-    super(`Network error while preloading ${locale}: ${originalError.message}`, locale, 'NETWORK', true);
+    super(
+      `Network error while preloading ${locale}: ${originalError.message}`,
+      locale,
+      'NETWORK',
+      true,
+    );
     this.name = 'PreloaderNetworkError';
   }
 }
 
 export class PreloaderCacheError extends PreloaderError {
   constructor(locale: Locale, operation: string) {
-    super(`Cache error during ${operation} for locale ${locale}`, locale, 'CACHE', false);
+    super(
+      `Cache error during ${operation} for locale ${locale}`,
+      locale,
+      'CACHE',
+      false,
+    );
     this.name = 'PreloaderCacheError';
   }
 }
@@ -468,12 +488,12 @@ export function isPreloadResult(obj: unknown): obj is PreloadResult {
 export function isPreloadState(obj: unknown): obj is PreloadState {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    typeof (obj as PreloadState).isPreloading === 'boolean' &&
-    typeof (obj as PreloadState).progress === 'number' &&
-    typeof (obj as PreloadState).totalLocales === 'number' &&
-    typeof (obj as PreloadState).completedLocales === 'number' &&
-    Array.isArray((obj as PreloadState).errors)
+      typeof obj === 'object' &&
+      typeof (obj as PreloadState).isPreloading === 'boolean' &&
+      typeof (obj as PreloadState).progress === 'number' &&
+      typeof (obj as PreloadState).totalLocales === 'number' &&
+      typeof (obj as PreloadState).completedLocales === 'number' &&
+      Array.isArray((obj as PreloadState).errors),
   );
 }
 
@@ -485,7 +505,9 @@ export function isPreloaderError(error: unknown): error is PreloaderError {
  * 工具类型
  * Utility types
  */
-export type PreloadEventHandler<T = Record<string, unknown>> = (data: T) => void;
+export type PreloadEventHandler<T = Record<string, unknown>> = (
+  data: T,
+) => void;
 export type PreloadEventMap = {
   [K in keyof PreloaderEvents]: PreloaderEvents[K];
 };

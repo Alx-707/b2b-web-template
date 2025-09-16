@@ -1,8 +1,8 @@
 import type {
   DiagnosticReport,
   PageComparison,
-  PerformanceTrend,
   PagePerformanceGroup,
+  PerformanceTrend,
 } from './web-vitals-diagnostics-constants';
 
 /**
@@ -161,4 +161,6 @@ export interface WebVitalsDiagnosticsEvent {
 /**
  * 诊断监听器类型
  */
-export type WebVitalsDiagnosticsListener = (event: WebVitalsDiagnosticsEvent) => void;
+export type WebVitalsDiagnosticsListener = (
+  event: WebVitalsDiagnosticsEvent,
+) => void;

@@ -29,14 +29,21 @@ const METRICS_CONFIG = {
     javascript: 'src/**/*.{js,jsx}',
     all: 'src/**/*.{ts,tsx,js,jsx}',
     i18n: 'src/lib/*i18n*',
-    tests: 'src/**/*.{test,spec}.{ts,tsx,js,jsx}'
+    tests: 'src/**/*.{test,spec}.{ts,tsx,js,jsx}',
   },
 
   // 域定义
   domains: [
-    'security', 'content', 'accessibility', 'resend', 'whatsapp',
-    'performance-monitoring', 'i18n', 'locale-storage', 'web-vitals',
-    'theme-analytics'
+    'security',
+    'content',
+    'accessibility',
+    'resend',
+    'whatsapp',
+    'performance-monitoring',
+    'i18n',
+    'locale-storage',
+    'web-vitals',
+    'theme-analytics',
   ],
 
   // 质量阈值
@@ -44,8 +51,8 @@ const METRICS_CONFIG = {
     exportStar: { current: 97, phase1: 30, final: 0 },
     tsErrors: { current: 2759, phase1: 1500, phase2: 500, final: 0 },
     eslintIssues: { current: 2075, target: 200 },
-    totalFiles: { current: 644, target: 300 }
-  }
+    totalFiles: { current: 644, target: 300 },
+  },
 };
 
 class ArchitectureMetrics {
@@ -63,7 +70,7 @@ class ArchitectureMetrics {
       circularDependencies: 0,
       crossDomainDependencies: 0,
       fileSizeStats: {},
-      domainStats: {}
+      domainStats: {},
     };
   }
 
@@ -119,7 +126,7 @@ class ArchitectureMetrics {
     try {
       const result = execSync('pnpm tsc --noEmit --skipLibCheck', {
         encoding: 'utf8',
-        stdio: 'pipe'
+        stdio: 'pipe',
       });
       this.metrics.typeScriptErrors = 0;
     } catch (error) {
@@ -142,7 +149,7 @@ class ArchitectureMetrics {
       // 使用现有的quality-quick-staged脚本来获取ESLint统计
       const result = execSync('node scripts/quality-quick-staged.js --json', {
         encoding: 'utf8',
-        stdio: 'pipe'
+        stdio: 'pipe',
       });
 
       const qualityData = JSON.parse(result);
@@ -150,15 +157,18 @@ class ArchitectureMetrics {
     } catch (error) {
       // 备用方案：直接运行ESLint
       try {
-        const result = execSync('pnpm eslint src --format json --max-warnings 10000', {
-          encoding: 'utf8',
-          stdio: 'pipe'
-        });
+        const result = execSync(
+          'pnpm eslint src --format json --max-warnings 10000',
+          {
+            encoding: 'utf8',
+            stdio: 'pipe',
+          },
+        );
 
         const eslintResults = JSON.parse(result);
         let totalIssues = 0;
 
-        eslintResults.forEach(file => {
+        eslintResults.forEach((file) => {
           totalIssues += file.errorCount + file.warningCount;
         });
 
@@ -170,7 +180,7 @@ class ArchitectureMetrics {
           if (output) {
             const eslintResults = JSON.parse(output);
             let totalIssues = 0;
-            eslintResults.forEach(file => {
+            eslintResults.forEach((file) => {
               totalIssues += file.errorCount + file.warningCount;
             });
             this.metrics.eslintIssues = totalIssues;
@@ -204,7 +214,10 @@ class ArchitectureMetrics {
     console.log(`✅ 总文件数: ${this.metrics.totalFiles}`);
     console.log(`✅ i18n文件数: ${this.metrics.i18nFiles}`);
 
-    return { totalFiles: this.metrics.totalFiles, i18nFiles: this.metrics.i18nFiles };
+    return {
+      totalFiles: this.metrics.totalFiles,
+      i18nFiles: this.metrics.i18nFiles,
+    };
   }
 
   /**
@@ -232,13 +245,16 @@ class ArchitectureMetrics {
       max: sizes[sizes.length - 1] || 0,
       median: sizes[Math.floor(sizes.length / 2)] || 0,
       p75: sizes[Math.floor(sizes.length * 0.75)] || 0,
-      p90: sizes[Math.floor(sizes.length * 0.90)] || 0,
+      p90: sizes[Math.floor(sizes.length * 0.9)] || 0,
       p95: sizes[Math.floor(sizes.length * 0.95)] || 0,
-      average: sizes.length > 0 ? sizes.reduce((a, b) => a + b, 0) / sizes.length : 0
+      average:
+        sizes.length > 0 ? sizes.reduce((a, b) => a + b, 0) / sizes.length : 0,
     };
 
     this.metrics.fileSizeStats = stats;
-    console.log(`✅ 文件大小统计完成 (中位数: ${Math.round(stats.median)} bytes)`);
+    console.log(
+      `✅ 文件大小统计完成 (中位数: ${Math.round(stats.median)} bytes)`,
+    );
 
     return stats;
   }
@@ -265,15 +281,17 @@ class ArchitectureMetrics {
       metadata: {
         timestamp: this.metrics.timestamp,
         version: '1.0.0',
-        project: 'tucsenberg-web-frontier'
+        project: 'tucsenberg-web-frontier',
       },
       metrics: this.metrics,
       thresholds: METRICS_CONFIG.thresholds,
       analysis: {
-        phase1Ready: this.metrics.exportStarCount <= METRICS_CONFIG.thresholds.exportStar.phase1,
+        phase1Ready:
+          this.metrics.exportStarCount <=
+          METRICS_CONFIG.thresholds.exportStar.phase1,
         qualityTrend: this.calculateQualityTrend(),
-        recommendations: this.generateRecommendations()
-      }
+        recommendations: this.generateRecommendations(),
+      },
     };
 
     // 保存JSON报告
@@ -297,20 +315,41 @@ class ArchitectureMetrics {
     const { thresholds } = METRICS_CONFIG;
 
     return {
-      exportStarProgress: Math.max(0, (thresholds.exportStar.current - exportStarCount) / thresholds.exportStar.current * 100),
-      tsErrorProgress: Math.max(0, (thresholds.tsErrors.current - typeScriptErrors) / thresholds.tsErrors.current * 100),
-      eslintProgress: Math.max(0, (thresholds.eslintIssues.current - eslintIssues) / thresholds.eslintIssues.current * 100)
+      exportStarProgress: Math.max(
+        0,
+        ((thresholds.exportStar.current - exportStarCount) /
+          thresholds.exportStar.current) *
+          100,
+      ),
+      tsErrorProgress: Math.max(
+        0,
+        ((thresholds.tsErrors.current - typeScriptErrors) /
+          thresholds.tsErrors.current) *
+          100,
+      ),
+      eslintProgress: Math.max(
+        0,
+        ((thresholds.eslintIssues.current - eslintIssues) /
+          thresholds.eslintIssues.current) *
+          100,
+      ),
     };
   }
 
   generateRecommendations() {
     const recommendations = [];
 
-    if (this.metrics.exportStarCount > METRICS_CONFIG.thresholds.exportStar.phase1) {
-      recommendations.push('优先处理export *重新导出，当前数量超出第一阶段目标');
+    if (
+      this.metrics.exportStarCount > METRICS_CONFIG.thresholds.exportStar.phase1
+    ) {
+      recommendations.push(
+        '优先处理export *重新导出，当前数量超出第一阶段目标',
+      );
     }
 
-    if (this.metrics.typeScriptErrors > METRICS_CONFIG.thresholds.tsErrors.phase1) {
+    if (
+      this.metrics.typeScriptErrors > METRICS_CONFIG.thresholds.tsErrors.phase1
+    ) {
       recommendations.push('TypeScript错误数量较高，建议分阶段修复');
     }
 
@@ -333,11 +372,13 @@ class ArchitectureMetrics {
 
 ## Export * 按域分布
 
-${Object.entries(report.metrics.exportStarByDomain).map(([domain, count]) => `- ${domain}: ${count}`).join('\n')}
+${Object.entries(report.metrics.exportStarByDomain)
+  .map(([domain, count]) => `- ${domain}: ${count}`)
+  .join('\n')}
 
 ## 建议
 
-${report.analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
+${report.analysis.recommendations.map((rec) => `- ${rec}`).join('\n')}
 `;
   }
 
@@ -378,7 +419,7 @@ async function main() {
 
 // 如果直接运行此脚本
 if (require.main === module) {
-  main().catch(error => {
+  main().catch((error) => {
     console.error('❌ 脚本执行失败:', error);
     process.exit(1);
   });

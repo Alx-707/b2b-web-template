@@ -1,3 +1,8 @@
+// 导入核心功能
+import { PerformanceMonitoringCore } from './performance-monitoring-core';
+import type { PerformanceConfig } from './performance-monitoring-types';
+import { generateEnvironmentConfig } from './performance-monitoring-types';
+
 /**
  * 性能监控协调器 - 主入口文件
  * Performance Monitoring Coordinator - Main Entry Point
@@ -14,11 +19,6 @@
 export * from './performance-monitoring-types';
 export * from './performance-monitoring-core';
 export * from './performance-monitoring-integrations';
-
-// 导入核心功能
-import { PerformanceMonitoringCore } from './performance-monitoring-core';
-import type { PerformanceConfig } from './performance-monitoring-types';
-import { generateEnvironmentConfig } from './performance-monitoring-types';
 
 /**
  * 性能监控协调器 - 向后兼容的主类
@@ -45,7 +45,7 @@ export const performanceCoordinator = new PerformanceMonitoringCoordinator();
  * Create performance monitoring coordinator instance
  */
 export function createPerformanceCoordinator(
-  customConfig?: Partial<PerformanceConfig>
+  customConfig?: Partial<PerformanceConfig>,
 ): PerformanceMonitoringCoordinator {
   return new PerformanceMonitoringCoordinator(customConfig);
 }

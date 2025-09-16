@@ -105,14 +105,14 @@ describe('I18n Performance - Monitor Tests', () => {
 
     it('should handle concurrent metric recording', () => {
       const promises = [];
-      
+
       for (let i = 0; i < 100; i++) {
         promises.push(
           new Promise<void>((resolve) => {
             I18nPerformanceMonitor.recordLoadTime(i);
             I18nPerformanceMonitor.recordCacheHit();
             resolve();
-          })
+          }),
         );
       }
 

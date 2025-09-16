@@ -6,26 +6,25 @@
  */
 
 import type { Locale, Messages } from '@/types/i18n';
+import { logger } from '@/lib/logger';
 import type {
-  Preloader,
-  MetricsCollector,
+  CacheOperationResult,
   CacheStorage,
-  CacheOperationResult
+  MetricsCollector,
+  Preloader,
 } from './i18n-cache-types';
 import type {
+  IPreloader,
+  PreloaderConfig,
+  PreloadOptions,
   PreloadState,
   PreloadStats,
-  PreloadOptions,
-  IPreloader,
-  PreloaderConfig
 } from './i18n-preloader-types';
 import {
   PreloaderError,
+  PreloaderNetworkError,
   PreloaderTimeoutError,
-  PreloaderNetworkError
 } from './i18n-preloader-types';
-
-import { logger } from '@/lib/logger';
 
 /**
  * 翻译预加载器核心实现
@@ -47,7 +46,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
   constructor(
     cache: CacheStorage<Messages>,
     metricsCollector: MetricsCollector,
-    config?: Partial<PreloaderConfig>
+    config?: Partial<PreloaderConfig>,
   ) {
     this.cache = cache;
     this.metricsCollector = metricsCollector;
@@ -65,7 +64,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
         maxLocales: 3,
         minUsageThreshold: 0.1,
         usageWindow: 24,
-        preloadTrigger: 'idle'
+        preloadTrigger: 'idle',
       },
       memoryLimit: 50 * 1024 * 1024,
       networkThrottling: false,
@@ -85,7 +84,10 @@ export class TranslationPreloader implements Preloader, IPreloader {
    * 预加载指定语言
    * Preload specific locale
    */
-  async preloadLocale(locale: Locale, options?: PreloadOptions): Promise<Messages> {
+  async preloadLocale(
+    locale: Locale,
+    options?: PreloadOptions,
+  ): Promise<Messages> {
     const startTime = Date.now();
 
     try {
@@ -107,9 +109,10 @@ export class TranslationPreloader implements Preloader, IPreloader {
       options?.onSuccess?.(locale, messages);
       return messages;
     } catch (error) {
-      const preloaderError = error instanceof Error
-        ? new PreloaderNetworkError(locale, error)
-        : new PreloaderError(`Failed to preload locale ${locale}`, locale);
+      const preloaderError =
+        error instanceof Error
+          ? new PreloaderNetworkError(locale, error)
+          : new PreloaderError(`Failed to preload locale ${locale}`, locale);
 
       options?.onError?.(preloaderError, locale);
       throw preloaderError;
@@ -158,7 +161,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
    */
   async preloadMultipleLocales(
     locales: Locale[],
-    options?: PreloadOptions
+    options?: PreloadOptions,
   ): Promise<CacheOperationResult<Messages>[]> {
     if (this.preloadState.isPreloading) {
       throw new PreloaderError('Preloading is already in progress');
@@ -192,12 +195,18 @@ export class TranslationPreloader implements Preloader, IPreloader {
 
         // 更新进度
         this.preloadState.completedLocales += batch.length;
-        this.preloadState.progress = (this.preloadState.completedLocales / this.preloadState.totalLocales) * 100;
+        this.preloadState.progress =
+          (this.preloadState.completedLocales /
+            this.preloadState.totalLocales) *
+          100;
 
         options?.onProgress?.(this.preloadState.progress);
 
         // 批次间延迟
-        if (i < batches.length - 1 && this.preloadConfig.delayBetweenBatches > 0) {
+        if (
+          i < batches.length - 1 &&
+          this.preloadConfig.delayBetweenBatches > 0
+        ) {
           await this.delay(this.preloadConfig.delayBetweenBatches);
         }
       }
@@ -276,7 +285,10 @@ export class TranslationPreloader implements Preloader, IPreloader {
    * 预加载缺失的翻译
    * Preload missing translations
    */
-  async preloadMissingTranslations(locale: Locale, keys: string[]): Promise<void> {
+  async preloadMissingTranslations(
+    locale: Locale,
+    keys: string[],
+  ): Promise<void> {
     try {
       const messages = await this.loadSpecificKeys(locale, keys);
 
@@ -285,7 +297,10 @@ export class TranslationPreloader implements Preloader, IPreloader {
       const merged = { ...existing, ...messages } as Messages;
       this.cache.set(locale, merged);
     } catch (error) {
-      logger.error(`Failed to preload missing translations for ${locale}:`, error);
+      logger.error(
+        `Failed to preload missing translations for ${locale}:`,
+        error,
+      );
     }
   }
 
@@ -305,9 +320,10 @@ export class TranslationPreloader implements Preloader, IPreloader {
       errorCount: state.errors.length,
       duration,
       averageLoadTime: duration / Math.max(state.completedLocales, 1),
-      successRate: state.totalLocales > 0
-        ? (state.completedLocales - state.errors.length) / state.totalLocales
-        : 0,
+      successRate:
+        state.totalLocales > 0
+          ? (state.completedLocales - state.errors.length) / state.totalLocales
+          : 0,
     };
   }
 
@@ -335,11 +351,17 @@ export class TranslationPreloader implements Preloader, IPreloader {
    * 从服务器加载消息
    * Load messages from server
    */
-  private async loadMessagesFromServer(locale: Locale, options?: PreloadOptions): Promise<Messages> {
+  private async loadMessagesFromServer(
+    locale: Locale,
+    options?: PreloadOptions,
+  ): Promise<Messages> {
     try {
       // 这里应该是实际的 API 调用
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), options?.timeout || this.preloadConfig.timeout);
+      const timeoutId = setTimeout(
+        () => controller.abort(),
+        options?.timeout || this.preloadConfig.timeout,
+      );
 
       const response = await fetch(`/api/messages/${locale}`, {
         signal: controller.signal,
@@ -348,14 +370,19 @@ export class TranslationPreloader implements Preloader, IPreloader {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error(`Failed to load messages for ${locale}: ${response.statusText}`);
+        throw new Error(
+          `Failed to load messages for ${locale}: ${response.statusText}`,
+        );
       }
 
       return await response.json();
     } catch (error) {
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          throw new PreloaderTimeoutError(locale, options?.timeout || this.preloadConfig.timeout);
+          throw new PreloaderTimeoutError(
+            locale,
+            options?.timeout || this.preloadConfig.timeout,
+          );
         }
         throw new PreloaderNetworkError(locale, error);
       }
@@ -367,7 +394,10 @@ export class TranslationPreloader implements Preloader, IPreloader {
    * 加载特定键的翻译
    * Load specific translation keys
    */
-  private async loadSpecificKeys(locale: Locale, keys: string[]): Promise<Partial<Messages>> {
+  private async loadSpecificKeys(
+    locale: Locale,
+    keys: string[],
+  ): Promise<Partial<Messages>> {
     try {
       const response = await fetch(`/api/messages/${locale}/keys`, {
         method: 'POST',
@@ -379,7 +409,9 @@ export class TranslationPreloader implements Preloader, IPreloader {
       } as RequestInit);
 
       if (!response.ok) {
-        throw new Error(`Failed to load specific keys for ${locale}: ${response.statusText}`);
+        throw new Error(
+          `Failed to load specific keys for ${locale}: ${response.statusText}`,
+        );
       }
 
       return await response.json();
@@ -409,30 +441,32 @@ export class TranslationPreloader implements Preloader, IPreloader {
    */
   private async processBatch(
     batch: Locale[],
-    options?: PreloadOptions
+    options?: PreloadOptions,
   ): Promise<CacheOperationResult<Messages>[]> {
-    const promises = batch.map(async (locale): Promise<CacheOperationResult<Messages>> => {
-      try {
-        const messages = await this.preloadLocale(locale, options);
-        return {
-          success: true,
-          data: messages,
-          fromCache: false,
-          loadTime: Date.now(),
-        };
-      } catch (error) {
-        this.preloadState.errors.push({
-          locale,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        });
+    const promises = batch.map(
+      async (locale): Promise<CacheOperationResult<Messages>> => {
+        try {
+          const messages = await this.preloadLocale(locale, options);
+          return {
+            success: true,
+            data: messages,
+            fromCache: false,
+            loadTime: Date.now(),
+          };
+        } catch (error) {
+          this.preloadState.errors.push({
+            locale,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
 
-        return {
-          success: false,
-          error: error instanceof Error ? error.message : 'Unknown error',
-          fromCache: false,
-        };
-      }
-    });
+          return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            fromCache: false,
+          };
+        }
+      },
+    );
 
     return Promise.all(promises);
   }
@@ -443,8 +477,8 @@ export class TranslationPreloader implements Preloader, IPreloader {
    */
   private getRelatedLocales(locale: Locale): Locale[] {
     const relatedMap: Record<Locale, Locale[]> = {
-      'en': ['zh'],
-      'zh': ['en'],
+      en: ['zh'],
+      zh: ['en'],
     };
 
     return relatedMap[locale] || [];
@@ -455,7 +489,7 @@ export class TranslationPreloader implements Preloader, IPreloader {
    * Delay function
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**

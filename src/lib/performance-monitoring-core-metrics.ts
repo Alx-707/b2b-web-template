@@ -5,17 +5,17 @@
  * 负责性能指标的记录、存储、清理和实时分析功能
  */
 
+import { logger } from '@/lib/logger';
+import { MB } from '@/constants/units';
 import type {
-  PerformanceMetrics,
-  PerformanceConfig,
-  PerformanceMetricType,
-  PerformanceMetricSource,
+  BundlePerformanceData,
   ComponentPerformanceData,
   NetworkPerformanceData,
-  BundlePerformanceData,
+  PerformanceConfig,
+  PerformanceMetrics,
+  PerformanceMetricSource,
+  PerformanceMetricType,
 } from './performance-monitoring-types';
-import { MB } from '@/constants/units';
-import { logger } from '@/lib/logger';
 
 /**
  * 指标管理器
@@ -36,7 +36,8 @@ export class PerformanceMetricsManager {
    * Setup periodic cleanup
    */
   private setupPeriodicCleanup(): void {
-    const cleanupInterval = this.config.global?.dataRetentionTime || 5 * 60 * 1000; // 5分钟
+    const cleanupInterval =
+      this.config.global?.dataRetentionTime || 5 * 60 * 1000; // 5分钟
 
     this.cleanupInterval = setInterval(() => {
       this.cleanupOldMetrics();
@@ -49,12 +50,13 @@ export class PerformanceMetricsManager {
    */
   private cleanupOldMetrics(): void {
     const now = Date.now();
-    const retentionTime = this.config.global?.dataRetentionTime || 5 * 60 * 1000;
+    const retentionTime =
+      this.config.global?.dataRetentionTime || 5 * 60 * 1000;
     const maxMetrics = this.config.global?.maxMetrics || 1000;
 
     // 按时间清理
-    this.metrics = this.metrics.filter(metric =>
-      now - metric.timestamp < retentionTime
+    this.metrics = this.metrics.filter(
+      (metric) => now - metric.timestamp < retentionTime,
     );
 
     // 按数量清理（保留最新的）
@@ -101,7 +103,8 @@ export class PerformanceMetricsManager {
 
     // 立即清理如果超出限制
     const maxMetrics = this.config.global?.maxMetrics || 1000;
-    if (this.metrics.length > maxMetrics * 1.1) { // 10%缓冲
+    if (this.metrics.length > maxMetrics * 1.1) {
+      // 10%缓冲
       this.cleanupOldMetrics();
     }
   }
@@ -158,15 +161,22 @@ export class PerformanceMetricsManager {
 
     switch (metric.type) {
       case 'component':
-        if (this.isComponentData(metric.data) && this.config.component?.thresholds) {
+        if (
+          this.isComponentData(metric.data) &&
+          this.config.component?.thresholds
+        ) {
           threshold = this.config.component.thresholds.renderTime || 100;
           isSlowPerformance = (Number(metric.data.renderTime) || 0) > threshold;
         }
         break;
       case 'network':
-        if (this.isNetworkData(metric.data) && this.config.network?.thresholds) {
+        if (
+          this.isNetworkData(metric.data) &&
+          this.config.network?.thresholds
+        ) {
           threshold = this.config.network.thresholds.responseTime || 1000;
-          isSlowPerformance = (Number(metric.data.responseTime) || 0) > threshold;
+          isSlowPerformance =
+            (Number(metric.data.responseTime) || 0) > threshold;
         }
         break;
       case 'bundle':
@@ -188,12 +198,15 @@ export class PerformanceMetricsManager {
         value = metric.data.size;
       }
 
-      logger.warn(`Performance warning: ${metric.type} metric exceeded threshold`, {
-        metric: metric.id || metric.type,
-        value: value || 0,
-        threshold,
-        source: metric.source,
-      });
+      logger.warn(
+        `Performance warning: ${metric.type} metric exceeded threshold`,
+        {
+          metric: metric.id || metric.type,
+          value: value || 0,
+          threshold,
+          source: metric.source,
+        },
+      );
     }
   }
 
@@ -211,8 +224,8 @@ export class PerformanceMetricsManager {
    */
   getMetricsInTimeWindow(timeWindow: number): PerformanceMetrics[] {
     const now = Date.now();
-    return this.metrics.filter(metric =>
-      now - metric.timestamp <= timeWindow
+    return this.metrics.filter(
+      (metric) => now - metric.timestamp <= timeWindow,
     );
   }
 
@@ -221,7 +234,7 @@ export class PerformanceMetricsManager {
    * Get metrics by type
    */
   getMetricsByType(type: PerformanceMetricType): PerformanceMetrics[] {
-    return this.metrics.filter(metric => metric.type === type);
+    return this.metrics.filter((metric) => metric.type === type);
   }
 
   /**
@@ -229,7 +242,7 @@ export class PerformanceMetricsManager {
    * Get metrics by source
    */
   getMetricsBySource(source: PerformanceMetricSource): PerformanceMetrics[] {
-    return this.metrics.filter(metric => metric.source === source);
+    return this.metrics.filter((metric) => metric.source === source);
   }
 
   /**
@@ -264,13 +277,13 @@ export class PerformanceMetricsManager {
     }
 
     // 统计类型分布
-    this.metrics.forEach(metric => {
+    this.metrics.forEach((metric) => {
       stats.byType[metric.type] = (stats.byType[metric.type] || 0) + 1;
       stats.bySource[metric.source] = (stats.bySource[metric.source] || 0) + 1;
     });
 
     // 计算时间范围
-    const timestamps = this.metrics.map(m => m.timestamp);
+    const timestamps = this.metrics.map((m) => m.timestamp);
     stats.timeRange.oldest = Math.min(...timestamps);
     stats.timeRange.newest = Math.max(...timestamps);
     stats.timeRange.span = stats.timeRange.newest - stats.timeRange.oldest;
@@ -322,7 +335,7 @@ export class PerformanceMetricsManager {
    * Find specific metric
    */
   findMetric(id: string): PerformanceMetrics | undefined {
-    return this.metrics.find(metric => metric.id === id);
+    return this.metrics.find((metric) => metric.id === id);
   }
 
   /**
@@ -330,7 +343,7 @@ export class PerformanceMetricsManager {
    * Remove metric
    */
   removeMetric(id: string): boolean {
-    const index = this.metrics.findIndex(metric => metric.id === id);
+    const index = this.metrics.findIndex((metric) => metric.id === id);
     if (index > -1) {
       this.metrics.splice(index, 1);
       return true;
@@ -367,7 +380,7 @@ export class PerformanceMetricsManager {
   exportMetrics(): {
     metrics: PerformanceMetrics[];
     exportTime: number;
-    stats: ReturnType<typeof this.getMetricsStats>;
+    stats: any;
   } {
     return {
       metrics: [...this.metrics],
@@ -386,7 +399,7 @@ export class PerformanceMetricsManager {
     }
 
     let importedCount = 0;
-    data.forEach(metric => {
+    data.forEach((metric) => {
       // 验证指标数据
       if (this.isValidMetric(metric)) {
         this.metrics.push(metric);
@@ -437,6 +450,8 @@ export class PerformanceMetricsManager {
  * 创建指标管理器
  * Create metrics manager
  */
-export function createMetricsManager(config: PerformanceConfig): PerformanceMetricsManager {
+export function createMetricsManager(
+  config: PerformanceConfig,
+): PerformanceMetricsManager {
   return new PerformanceMetricsManager(config);
 }

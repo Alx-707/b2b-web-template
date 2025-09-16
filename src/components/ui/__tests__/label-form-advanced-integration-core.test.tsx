@@ -12,9 +12,9 @@
  * - 表单提交处理
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Label } from '../label';
 
@@ -31,25 +31,23 @@ describe('Label Form Advanced Integration Core Tests', () => {
         const [fields, setFields] = React.useState([{ id: 1, value: '' }]);
 
         const addField = () => {
-          const newId = Math.max(...fields.map(f => f.id)) + 1;
+          const newId = Math.max(...fields.map((f) => f.id)) + 1;
           setFields([...fields, { id: newId, value: '' }]);
         };
 
         const removeField = (id: number) => {
-          setFields(fields.filter(f => f.id !== id));
+          setFields(fields.filter((f) => f.id !== id));
         };
 
         const updateField = (id: number, value: string) => {
-          setFields(fields.map(f => f.id === id ? { ...f, value } : f));
+          setFields(fields.map((f) => (f.id === id ? { ...f, value } : f)));
         };
 
         return (
           <form>
             {fields.map((field, index) => (
               <div key={field.id}>
-                <Label htmlFor={`field-${field.id}`}>
-                  Field {index + 1}
-                </Label>
+                <Label htmlFor={`field-${field.id}`}>Field {index + 1}</Label>
                 <input
                   id={`field-${field.id}`}
                   value={field.value}
@@ -58,7 +56,7 @@ describe('Label Form Advanced Integration Core Tests', () => {
                 />
                 {fields.length > 1 && (
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => removeField(field.id)}
                     data-testid={`remove-${field.id}`}
                   >
@@ -68,9 +66,9 @@ describe('Label Form Advanced Integration Core Tests', () => {
               </div>
             ))}
             <button
-              type="button"
+              type='button'
               onClick={addField}
-              data-testid="add-field"
+              data-testid='add-field'
             >
               Add Field
             </button>
@@ -106,17 +104,20 @@ describe('Label Form Advanced Integration Core Tests', () => {
       render(
         <form>
           <div>
-            <Label htmlFor="reset-input">Reset Test</Label>
+            <Label htmlFor='reset-input'>Reset Test</Label>
             <input
-              id="reset-input"
-              defaultValue="initial"
-              data-testid="reset-input"
+              id='reset-input'
+              defaultValue='initial'
+              data-testid='reset-input'
             />
           </div>
-          <button type="reset" data-testid="reset-button">
+          <button
+            type='reset'
+            data-testid='reset-button'
+          >
             Reset
           </button>
-        </form>
+        </form>,
       );
 
       const input = screen.getByTestId('reset-input');
@@ -136,14 +137,14 @@ describe('Label Form Advanced Integration Core Tests', () => {
 
         return (
           <form>
-            <Label htmlFor="controlled-input">Controlled Input</Label>
+            <Label htmlFor='controlled-input'>Controlled Input</Label>
             <input
-              id="controlled-input"
+              id='controlled-input'
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              data-testid="controlled-input"
+              data-testid='controlled-input'
             />
-            <div data-testid="display-value">Value: {value}</div>
+            <div data-testid='display-value'>Value: {value}</div>
           </form>
         );
       };
@@ -170,17 +171,20 @@ describe('Label Form Advanced Integration Core Tests', () => {
 
       render(
         <form onSubmit={handleSubmit}>
-          <Label htmlFor="submit-input">Submit Test</Label>
+          <Label htmlFor='submit-input'>Submit Test</Label>
           <input
-            id="submit-input"
-            name="submit-input"
-            defaultValue="test value"
-            data-testid="submit-input"
+            id='submit-input'
+            name='submit-input'
+            defaultValue='test value'
+            data-testid='submit-input'
           />
-          <button type="submit" data-testid="submit-button">
+          <button
+            type='submit'
+            data-testid='submit-button'
+          >
             Submit
           </button>
-        </form>
+        </form>,
       );
 
       await user.click(screen.getByTestId('submit-button'));
@@ -194,27 +198,40 @@ describe('Label Form Advanced Integration Core Tests', () => {
             <fieldset>
               <legend>Personal Information</legend>
               <div>
-                <Label htmlFor="nested-name">Name</Label>
-                <input id="nested-name" data-testid="nested-name" />
+                <Label htmlFor='nested-name'>Name</Label>
+                <input
+                  id='nested-name'
+                  data-testid='nested-name'
+                />
               </div>
               <div>
-                <Label htmlFor="nested-email">Email</Label>
-                <input id="nested-email" type="email" data-testid="nested-email" />
+                <Label htmlFor='nested-email'>Email</Label>
+                <input
+                  id='nested-email'
+                  type='email'
+                  data-testid='nested-email'
+                />
               </div>
             </fieldset>
             <fieldset>
               <legend>Address</legend>
               <div>
-                <Label htmlFor="nested-street">Street</Label>
-                <input id="nested-street" data-testid="nested-street" />
+                <Label htmlFor='nested-street'>Street</Label>
+                <input
+                  id='nested-street'
+                  data-testid='nested-street'
+                />
               </div>
               <div>
-                <Label htmlFor="nested-city">City</Label>
-                <input id="nested-city" data-testid="nested-city" />
+                <Label htmlFor='nested-city'>City</Label>
+                <input
+                  id='nested-city'
+                  data-testid='nested-city'
+                />
               </div>
             </fieldset>
           </div>
-        </form>
+        </form>,
       );
 
       // Test all nested inputs are accessible
@@ -224,10 +241,18 @@ describe('Label Form Advanced Integration Core Tests', () => {
       expect(screen.getByTestId('nested-city')).toBeInTheDocument();
 
       // Test labels are properly associated
-      expect(screen.getByLabelText('Name')).toBe(screen.getByTestId('nested-name'));
-      expect(screen.getByLabelText('Email')).toBe(screen.getByTestId('nested-email'));
-      expect(screen.getByLabelText('Street')).toBe(screen.getByTestId('nested-street'));
-      expect(screen.getByLabelText('City')).toBe(screen.getByTestId('nested-city'));
+      expect(screen.getByLabelText('Name')).toBe(
+        screen.getByTestId('nested-name'),
+      );
+      expect(screen.getByLabelText('Email')).toBe(
+        screen.getByTestId('nested-email'),
+      );
+      expect(screen.getByLabelText('Street')).toBe(
+        screen.getByTestId('nested-street'),
+      );
+      expect(screen.getByLabelText('City')).toBe(
+        screen.getByTestId('nested-city'),
+      );
 
       // Test form interaction
       await user.type(screen.getByTestId('nested-name'), 'John Doe');
@@ -236,7 +261,9 @@ describe('Label Form Advanced Integration Core Tests', () => {
       await user.type(screen.getByTestId('nested-city'), 'Anytown');
 
       expect(screen.getByTestId('nested-name')).toHaveValue('John Doe');
-      expect(screen.getByTestId('nested-email')).toHaveValue('john@example.com');
+      expect(screen.getByTestId('nested-email')).toHaveValue(
+        'john@example.com',
+      );
       expect(screen.getByTestId('nested-street')).toHaveValue('123 Main St');
       expect(screen.getByTestId('nested-city')).toHaveValue('Anytown');
     });
@@ -245,9 +272,9 @@ describe('Label Form Advanced Integration Core Tests', () => {
   describe('边缘情况处理', () => {
     it('handles empty form gracefully', async () => {
       render(
-        <form data-testid="empty-form">
+        <form data-testid='empty-form'>
           <Label>Empty Form Label</Label>
-        </form>
+        </form>,
       );
 
       expect(screen.getByTestId('empty-form')).toBeInTheDocument();
@@ -260,7 +287,7 @@ describe('Label Form Advanced Integration Core Tests', () => {
           <Label>Label 1</Label>
           <Label>Label 2</Label>
           <Label>Label 3</Label>
-        </form>
+        </form>,
       );
 
       expect(screen.getByText('Label 1')).toBeInTheDocument();

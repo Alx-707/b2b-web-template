@@ -46,7 +46,7 @@ export function ReactScanAnalyzerCore() {
 
       // 分析组件渲染历史
       const renderHistory: ComponentStats[] = [];
-      
+
       // 基础数据收集
       const totalRenders = internals.totalRenders || 0;
       const totalTime = internals.totalTime || 0;
@@ -114,15 +114,26 @@ export function ReactScanAnalyzerCore() {
         <h3 className='text-lg font-semibold'>React Scan Analyzer</h3>
         <div className='flex gap-2'>
           {!isRecording ? (
-            <Button _onClick={startRecording} size='sm'>
+            <Button
+              _onClick={startRecording}
+              size='sm'
+            >
               Start Recording
             </Button>
           ) : (
-            <Button _onClick={stopRecording} size='sm' variant='destructive'>
+            <Button
+              _onClick={stopRecording}
+              size='sm'
+              variant='destructive'
+            >
               Stop Recording
             </Button>
           )}
-          <Button _onClick={clearData} size='sm' variant='outline'>
+          <Button
+            _onClick={clearData}
+            size='sm'
+            variant='outline'
+          >
             Clear
           </Button>
         </div>
@@ -132,18 +143,18 @@ export function ReactScanAnalyzerCore() {
         <div className='space-y-4'>
           {/* 基础统计信息 */}
           <div className='grid grid-cols-3 gap-4'>
-            <div className='rounded-lg bg-muted p-3'>
-              <div className='text-sm text-muted-foreground'>Total Renders</div>
+            <div className='bg-muted rounded-lg p-3'>
+              <div className='text-muted-foreground text-sm'>Total Renders</div>
               <div className='text-2xl font-bold'>{scanData.totalRenders}</div>
             </div>
-            <div className='rounded-lg bg-muted p-3'>
-              <div className='text-sm text-muted-foreground'>Total Time</div>
+            <div className='bg-muted rounded-lg p-3'>
+              <div className='text-muted-foreground text-sm'>Total Time</div>
               <div className='text-2xl font-bold'>
                 {scanData.totalTime.toFixed(2)}ms
               </div>
             </div>
-            <div className='rounded-lg bg-muted p-3'>
-              <div className='text-sm text-muted-foreground'>Average Time</div>
+            <div className='bg-muted rounded-lg p-3'>
+              <div className='text-muted-foreground text-sm'>Average Time</div>
               <div className='text-2xl font-bold'>
                 {scanData.averageTime.toFixed(2)}ms
               </div>
@@ -162,7 +173,7 @@ export function ReactScanAnalyzerCore() {
                   >
                     <div>
                       <div className='font-medium'>{component.name}</div>
-                      <div className='text-sm text-muted-foreground'>
+                      <div className='text-muted-foreground text-sm'>
                         Renders: {component.renderCount} | Avg:{' '}
                         {component.averageRenderTime.toFixed(2)}ms
                       </div>
@@ -204,14 +215,15 @@ export function ReactScanAnalyzerCore() {
       )}
 
       {!scanData && !isRecording && (
-        <div className='text-center text-muted-foreground'>
+        <div className='text-muted-foreground text-center'>
           Click "Start Recording" to begin analyzing React component renders.
         </div>
       )}
 
       {isRecording && (
-        <div className='text-center text-muted-foreground'>
-          Recording in progress... Interact with the application to collect data.
+        <div className='text-muted-foreground text-center'>
+          Recording in progress... Interact with the application to collect
+          data.
         </div>
       )}
     </Card>

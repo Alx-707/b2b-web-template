@@ -23,18 +23,20 @@ const FILE_SIZE_LIMITS = {
 
 // Mock FormValidator class
 class FormValidator {
-  validateFileUpload(file: { 
-    name: string; 
-    size: number; 
-    type: string 
-  }): { isValid: boolean; error?: string } {
+  validateFileUpload(file: { name: string; size: number; type: string }): {
+    isValid: boolean;
+    error?: string;
+  } {
     if (!file.name) return { isValid: false, error: 'File name is required' };
-    
+
     // Check file size
-    if (file.size > FILE_SIZE_LIMITS.MAX_FILE_SIZE_MB * FILE_SIZE_LIMITS.BYTES_PER_MB) {
+    if (
+      file.size >
+      FILE_SIZE_LIMITS.MAX_FILE_SIZE_MB * FILE_SIZE_LIMITS.BYTES_PER_MB
+    ) {
       return { isValid: false, error: 'File too large' };
     }
-    
+
     // Check dangerous file types
     const dangerousTypes = [
       'application/x-msdownload',
@@ -42,11 +44,11 @@ class FormValidator {
       'application/x-bat',
       'application/x-executable',
     ];
-    
+
     if (dangerousTypes.includes(file.type)) {
       return { isValid: false, error: 'File type is dangerous' };
     }
-    
+
     // Check allowed file types
     const allowedTypes = [
       'image/jpeg',
@@ -55,21 +57,22 @@ class FormValidator {
       'text/plain',
       'application/pdf',
     ];
-    
+
     if (!allowedTypes.includes(file.type)) {
       return { isValid: false, error: 'File type not allowed' };
     }
-    
+
     return { isValid: true };
   }
 
-  validateTextContent(content: string): { 
-    isValid: boolean; 
-    sanitized: string; 
-    error?: string 
+  validateTextContent(content: string): {
+    isValid: boolean;
+    sanitized: string;
+    error?: string;
   } {
-    if (!content) return { isValid: false, sanitized: '', error: 'Content is required' };
-    
+    if (!content)
+      return { isValid: false, sanitized: '', error: 'Content is required' };
+
     // Sanitize content by removing dangerous characters
     const sanitized = content
       .replace(/'/g, '&#39;')
@@ -77,7 +80,7 @@ class FormValidator {
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/&/g, '&amp;');
-    
+
     // Check for SQL injection patterns
     const sqlPatterns = [
       /(\bOR\b|\bAND\b).*=.*=/i,
@@ -85,17 +88,19 @@ class FormValidator {
       /\bDELETE\b.*\bFROM\b/i,
       /\bUNION\b.*\bSELECT\b/i,
     ];
-    
-    const hasSqlInjection = sqlPatterns.some(pattern => pattern.test(content));
-    
+
+    const hasSqlInjection = sqlPatterns.some((pattern) =>
+      pattern.test(content),
+    );
+
     if (hasSqlInjection) {
-      return { 
-        isValid: false, 
-        sanitized, 
-        error: 'Potential SQL injection detected' 
+      return {
+        isValid: false,
+        sanitized,
+        error: 'Potential SQL injection detected',
       };
     }
-    
+
     return { isValid: true, sanitized };
   }
 
@@ -111,10 +116,10 @@ class FormValidator {
     return { isValid: true };
   }
 
-  validatePassword(password: string): { 
-    isValid: boolean; 
-    error?: string; 
-    strength?: 'weak' | 'medium' | 'strong' 
+  validatePassword(password: string): {
+    isValid: boolean;
+    error?: string;
+    strength?: 'weak' | 'medium' | 'strong';
   } {
     if (!password) return { isValid: false, error: 'Password is required' };
     if (password.length < 8) {
@@ -155,7 +160,8 @@ class FormValidator {
   validateAge(age: number): { isValid: boolean; error?: string } {
     if (age < 0) return { isValid: false, error: 'Age cannot be negative' };
     if (age > 150) return { isValid: false, error: 'Age too high' };
-    if (!Number.isInteger(age)) return { isValid: false, error: 'Age must be integer' };
+    if (!Number.isInteger(age))
+      return { isValid: false, error: 'Age must be integer' };
     return { isValid: true };
   }
 }
@@ -199,7 +205,8 @@ describe('Form Validation Security Tests', () => {
     it('should reject files that are too large', () => {
       const largeFile = {
         name: 'large-file.jpg',
-        size: FILE_SIZE_LIMITS.LARGE_FILE_SIZE_MB * FILE_SIZE_LIMITS.BYTES_PER_MB,
+        size:
+          FILE_SIZE_LIMITS.LARGE_FILE_SIZE_MB * FILE_SIZE_LIMITS.BYTES_PER_MB,
         type: 'image/jpeg',
       };
 
@@ -326,17 +333,17 @@ describe('Form Validation Security Tests', () => {
     });
 
     it('should handle concurrent validation requests', () => {
-      const promises = Array.from({ length: 50 }, (_, i) => 
+      const promises = Array.from({ length: 50 }, (_, i) =>
         Promise.resolve().then(() => {
           validator.validateEmail(`user${i}@example.com`);
           validator.validatePassword(`Password${i}!`);
           return i;
-        })
+        }),
       );
 
       return Promise.all(promises).then((results) => {
         expect(results).toHaveLength(50);
-        expect(results.every(r => typeof r === 'number')).toBe(true);
+        expect(results.every((r) => typeof r === 'number')).toBe(true);
       });
     });
   });

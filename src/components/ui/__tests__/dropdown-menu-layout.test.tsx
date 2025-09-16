@@ -2,17 +2,17 @@
  * @vitest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
 } from '../dropdown-menu';
 
 describe('DropdownMenu - Layout Components', () => {
@@ -55,7 +55,10 @@ describe('DropdownMenu - Layout Components', () => {
         <DropdownMenu defaultOpen>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel className='custom-label' data-testid='menu-label'>
+            <DropdownMenuLabel
+              className='custom-label'
+              data-testid='menu-label'
+            >
               Custom Label
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -71,7 +74,10 @@ describe('DropdownMenu - Layout Components', () => {
         <DropdownMenu defaultOpen>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel inset data-testid='menu-label'>
+            <DropdownMenuLabel
+              inset
+              data-testid='menu-label'
+            >
               Inset Label
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -135,7 +141,10 @@ describe('DropdownMenu - Layout Components', () => {
         <DropdownMenu defaultOpen>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuSeparator className='custom-separator' data-testid='separator' />
+            <DropdownMenuSeparator
+              className='custom-separator'
+              data-testid='separator'
+            />
           </DropdownMenuContent>
         </DropdownMenu>,
       );
@@ -190,7 +199,12 @@ describe('DropdownMenu - Layout Components', () => {
       );
 
       const shortcut = screen.getByTestId('shortcut');
-      expect(shortcut).toHaveClass('ml-auto', 'text-xs', 'tracking-widest', 'opacity-60');
+      expect(shortcut).toHaveClass(
+        'ml-auto',
+        'text-xs',
+        'tracking-widest',
+        'opacity-60',
+      );
     });
 
     it('applies custom className', () => {
@@ -198,7 +212,10 @@ describe('DropdownMenu - Layout Components', () => {
         <DropdownMenu defaultOpen>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuShortcut className='custom-shortcut' data-testid='shortcut'>
+            <DropdownMenuShortcut
+              className='custom-shortcut'
+              data-testid='shortcut'
+            >
               ⌘K
             </DropdownMenuShortcut>
           </DropdownMenuContent>
@@ -211,7 +228,7 @@ describe('DropdownMenu - Layout Components', () => {
 
     it('renders different shortcut formats', () => {
       const shortcuts = ['⌘K', 'Ctrl+K', 'Alt+F4', 'Shift+Enter'];
-      
+
       shortcuts.forEach((shortcutText, index) => {
         const { unmount } = render(
           <DropdownMenu defaultOpen>
@@ -226,7 +243,7 @@ describe('DropdownMenu - Layout Components', () => {
 
         const shortcut = screen.getByTestId(`shortcut-${index}`);
         expect(shortcut).toHaveTextContent(shortcutText);
-        
+
         unmount();
       });
     });
@@ -255,7 +272,10 @@ describe('DropdownMenu - Layout Components', () => {
         <DropdownMenu defaultOpen>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuGroup className='custom-group' data-testid='menu-group'>
+            <DropdownMenuGroup
+              className='custom-group'
+              data-testid='menu-group'
+            >
               <div>Group Content</div>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -284,7 +304,7 @@ describe('DropdownMenu - Layout Components', () => {
       const item1 = screen.getByTestId('item-1');
       const item2 = screen.getByTestId('item-2');
       const item3 = screen.getByTestId('item-3');
-      
+
       expect(group).toBeInTheDocument();
       expect(group).toContainElement(item1);
       expect(group).toContainElement(item2);
@@ -307,7 +327,7 @@ describe('DropdownMenu - Layout Components', () => {
 
       const outerGroup = screen.getByTestId('outer-group');
       const innerGroup = screen.getByTestId('inner-group');
-      
+
       expect(outerGroup).toBeInTheDocument();
       expect(innerGroup).toBeInTheDocument();
       expect(outerGroup).toContainElement(innerGroup);

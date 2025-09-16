@@ -11,7 +11,7 @@ import { STORAGE_CONSTANTS } from '../locale-storage-types-base';
  */
 export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
-  delay: number
+  delay: number,
 ): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout | null = null;
   let lastExecTime = 0;
@@ -26,10 +26,13 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      timeoutId = setTimeout(() => {
-        func(...args);
-        lastExecTime = Date.now();
-      }, delay - (currentTime - lastExecTime));
+      timeoutId = setTimeout(
+        () => {
+          func(...args);
+          lastExecTime = Date.now();
+        },
+        delay - (currentTime - lastExecTime),
+      );
     }
   };
 }
@@ -40,7 +43,7 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
  */
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
-  delay: number
+  delay: number,
 ): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout | null = null;
 
@@ -59,7 +62,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
 export async function retry<T>(
   func: () => Promise<T>,
   maxAttempts: number = STORAGE_CONSTANTS.MAX_RETRY_ATTEMPTS,
-  delay: number = STORAGE_CONSTANTS.RETRY_DELAY
+  delay: number = STORAGE_CONSTANTS.RETRY_DELAY,
 ): Promise<T> {
   let lastError: Error;
 
@@ -73,7 +76,7 @@ export async function retry<T>(
         throw lastError;
       }
 
-      await new Promise(resolve => setTimeout(resolve, delay * attempt));
+      await new Promise((resolve) => setTimeout(resolve, delay * attempt));
     }
   }
 

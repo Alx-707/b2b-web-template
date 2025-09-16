@@ -1,7 +1,9 @@
 /**
  * 主题切换动画工具函数
  */
-export const createCircleBlurAnimation = (buttonElement: HTMLElement | null) => {
+export const createCircleBlurAnimation = (
+  buttonElement: HTMLElement | null,
+) => {
   if (!buttonElement) return '';
 
   const rect = buttonElement.getBoundingClientRect();
@@ -42,12 +44,13 @@ export const applyThemeAnimation = (
   buttonElement: HTMLButtonElement | null,
   animationVariant: 'circle-blur' | 'framer-motion',
   shouldDisableAnimations: boolean,
-  setTheme: (theme: string) => void
+  setTheme: (theme: string) => void,
 ) => {
   // 确定使用的动画变体
-  const shouldUseCircleBlur = animationVariant === 'circle-blur' &&
-                             !shouldDisableAnimations &&
-                             'startViewTransition' in document;
+  const shouldUseCircleBlur =
+    animationVariant === 'circle-blur' &&
+    !shouldDisableAnimations &&
+    'startViewTransition' in document;
 
   if (shouldUseCircleBlur && buttonElement) {
     // 创建动画样式

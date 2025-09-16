@@ -173,7 +173,7 @@ export class CookieManager {
     if (process.env.NODE_ENV === 'development') {
       console.warn(
         'Cookie expiry cannot be retrieved directly from JavaScript. ' +
-        'Consider storing expiry information separately if needed.',
+          'Consider storing expiry information separately if needed.',
       );
     }
     return null;
@@ -189,11 +189,11 @@ export class CookieManager {
     try {
       const testKey = '__cookie_test__';
       const testValue = 'test';
-      
+
       this.set(testKey, testValue);
       const retrieved = this.get(testKey);
       this.remove(testKey);
-      
+
       return retrieved === testValue;
     } catch {
       return false;
@@ -207,7 +207,7 @@ export class CookieManager {
   static getSize(name: string): number {
     const value = this.get(name);
     if (!value) return 0;
-    
+
     // 计算 Cookie 的总大小（名称 + 值 + 分隔符）
     return new Blob([`${name}=${value}`]).size;
   }
@@ -218,7 +218,7 @@ export class CookieManager {
    */
   static getTotalSize(): number {
     if (typeof document === 'undefined') return 0;
-    
+
     return new Blob([document.cookie]).size;
   }
 
@@ -229,7 +229,7 @@ export class CookieManager {
   static isNearLimit(threshold: number = 0.8): boolean {
     const maxSize = 4096; // 标准 Cookie 大小限制
     const currentSize = this.getTotalSize();
-    
+
     return currentSize / maxSize > threshold;
   }
 }

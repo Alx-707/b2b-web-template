@@ -38,14 +38,20 @@ describe('AnimatedCounter - Formatters and Easing', () => {
   describe('Easing Functions', () => {
     it('linear easing function works correctly', () => {
       const linearEasing = (t: number) => t;
-      render(<AnimatedCounter to={100} duration={1000} easing={linearEasing} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          easing={linearEasing}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
       // At 50% time with linear easing, should be 50% of target
       currentTime = 500;
       mockPerformanceNow.mockReturnValue(currentTime);
-      animationFrameCallbacks.forEach(callback => callback());
+      animationFrameCallbacks.forEach((callback) => callback());
 
       const midValue = parseInt(counter.textContent || '0', 10);
       expect(midValue).toBeCloseTo(50, 0);
@@ -53,14 +59,20 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('ease-in easing function works correctly', () => {
       const easeInEasing = (t: number) => t * t;
-      render(<AnimatedCounter to={100} duration={1000} easing={easeInEasing} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          easing={easeInEasing}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
       // At 50% time with quadratic ease-in, should be 25% of target
       currentTime = 500;
       mockPerformanceNow.mockReturnValue(currentTime);
-      animationFrameCallbacks.forEach(callback => callback());
+      animationFrameCallbacks.forEach((callback) => callback());
 
       const midValue = parseInt(counter.textContent || '0', 10);
       expect(midValue).toBeCloseTo(25, 0);
@@ -68,14 +80,20 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('ease-out easing function works correctly', () => {
       const easeOutEasing = (t: number) => 1 - (1 - t) * (1 - t);
-      render(<AnimatedCounter to={100} duration={1000} easing={easeOutEasing} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          easing={easeOutEasing}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
       // At 50% time with quadratic ease-out, should be 75% of target
       currentTime = 500;
       mockPerformanceNow.mockReturnValue(currentTime);
-      animationFrameCallbacks.forEach(callback => callback());
+      animationFrameCallbacks.forEach((callback) => callback());
 
       const midValue = parseInt(counter.textContent || '0', 10);
       expect(midValue).toBeCloseTo(75, 0);
@@ -87,7 +105,13 @@ describe('AnimatedCounter - Formatters and Easing', () => {
         return 1 - 2 * (1 - t) * (1 - t);
       };
 
-      render(<AnimatedCounter to={100} duration={1000} easing={bounceEasing} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          easing={bounceEasing}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -95,7 +119,13 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('handles easing function that returns values outside [0,1]', () => {
       const overshootEasing = (t: number) => t * t * t - t * 0.5;
-      render(<AnimatedCounter to={100} duration={1000} easing={overshootEasing} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          easing={overshootEasing}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -112,7 +142,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('integer formatter works correctly', () => {
       const integerFormatter = (to: number) => Math.round(to).toString();
-      render(<AnimatedCounter to={123.456} formatter={integerFormatter} />);
+      render(
+        <AnimatedCounter
+          to={123.456}
+          formatter={integerFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('123');
@@ -120,7 +155,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('currency formatter works correctly', () => {
       const currencyFormatter = (to: number) => `$${to.toFixed(2)}`;
-      render(<AnimatedCounter to={123.456} formatter={currencyFormatter} />);
+      render(
+        <AnimatedCounter
+          to={123.456}
+          formatter={currencyFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('$123.46');
@@ -128,7 +168,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('percentage formatter works correctly', () => {
       const percentageFormatter = (to: number) => `${to.toFixed(1)}%`;
-      render(<AnimatedCounter to={85.7} formatter={percentageFormatter} />);
+      render(
+        <AnimatedCounter
+          to={85.7}
+          formatter={percentageFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('85.7%');
@@ -136,7 +181,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('thousand separator formatter works correctly', () => {
       const thousandFormatter = (to: number) => to.toLocaleString();
-      render(<AnimatedCounter to={1234567} formatter={thousandFormatter} />);
+      render(
+        <AnimatedCounter
+          to={1234567}
+          formatter={thousandFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter.textContent).toMatch(/1,234,567|1 234 567/); // Different locales
@@ -144,7 +194,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('custom unit formatter works correctly', () => {
       const unitFormatter = (to: number) => `${to.toFixed(0)} items`;
-      render(<AnimatedCounter to={42} formatter={unitFormatter} />);
+      render(
+        <AnimatedCounter
+          to={42}
+          formatter={unitFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('42 items');
@@ -152,7 +207,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('scientific notation formatter works correctly', () => {
       const scientificFormatter = (to: number) => to.toExponential(2);
-      render(<AnimatedCounter to={1234567} formatter={scientificFormatter} />);
+      render(
+        <AnimatedCounter
+          to={1234567}
+          formatter={scientificFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('1.23e+6');
@@ -160,7 +220,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('handles formatter that returns empty string', () => {
       const emptyFormatter = () => '';
-      render(<AnimatedCounter to={100} formatter={emptyFormatter} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          formatter={emptyFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('');
@@ -173,7 +238,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
       // Should not crash the component
       expect(() => {
-        render(<AnimatedCounter to={100} formatter={errorFormatter} />);
+        render(
+          <AnimatedCounter
+            to={100}
+            formatter={errorFormatter}
+          />,
+        );
       }).not.toThrow();
     });
 
@@ -185,7 +255,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
         return `${(to / 1000000).toFixed(1)}M`;
       };
 
-      render(<AnimatedCounter to={1500} formatter={complexFormatter} />);
+      render(
+        <AnimatedCounter
+          to={1500}
+          formatter={complexFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('1.5K');
@@ -193,12 +268,18 @@ describe('AnimatedCounter - Formatters and Easing', () => {
 
     it('formatter receives correct value during animation', () => {
       const formatterSpy = vi.fn((to: number) => to.toString());
-      render(<AnimatedCounter to={100} duration={1000} formatter={formatterSpy} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          formatter={formatterSpy}
+        />,
+      );
 
       // Advance animation
       currentTime = 500;
       mockPerformanceNow.mockReturnValue(currentTime);
-      animationFrameCallbacks.forEach(callback => callback());
+      animationFrameCallbacks.forEach((callback) => callback());
 
       // Formatter should have been called with intermediate values
       expect(formatterSpy).toHaveBeenCalled();
@@ -206,7 +287,7 @@ describe('AnimatedCounter - Formatters and Easing', () => {
       expect(calls.length).toBeGreaterThan(1);
 
       // Should have received values between 0 and 100
-      const values = calls.map(call => call[0]);
+      const values = calls.map((call) => call[0]);
       expect(Math.min(...values)).toBeGreaterThanOrEqual(0);
       expect(Math.max(...values)).toBeLessThanOrEqual(100);
     });
@@ -216,7 +297,11 @@ describe('AnimatedCounter - Formatters and Easing', () => {
       const formatter2 = (to: number) => `B${to}`;
 
       const { rerender } = render(
-        <AnimatedCounter to={100} duration={1000} formatter={formatter1} />
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          formatter={formatter1}
+        />,
       );
 
       const counter = screen.getByRole('status');
@@ -225,7 +310,13 @@ describe('AnimatedCounter - Formatters and Easing', () => {
       expect(counter.textContent).toMatch(/^A/);
 
       // Change formatter mid-animation
-      rerender(<AnimatedCounter to={100} duration={1000} formatter={formatter2} />);
+      rerender(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          formatter={formatter2}
+        />,
+      );
 
       // Should now use second formatter
       expect(counter.textContent).toMatch(/^B/);
@@ -235,7 +326,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
       const localeFormatter = (to: number) =>
         to.toLocaleString('de-DE', { minimumFractionDigits: 2 });
 
-      render(<AnimatedCounter to={1234.56} formatter={localeFormatter} />);
+      render(
+        <AnimatedCounter
+          to={1234.56}
+          formatter={localeFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       // German locale uses comma for decimal separator
@@ -250,7 +346,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
         return to.toString();
       };
 
-      render(<AnimatedCounter to={1500000000} formatter={bigNumberFormatter} />);
+      render(
+        <AnimatedCounter
+          to={1500000000}
+          formatter={bigNumberFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('1.5B');
@@ -263,7 +364,12 @@ describe('AnimatedCounter - Formatters and Easing', () => {
         return '0';
       };
 
-      render(<AnimatedCounter to={-50} formatter={signFormatter} />);
+      render(
+        <AnimatedCounter
+          to={-50}
+          formatter={signFormatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('-50');

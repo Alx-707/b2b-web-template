@@ -6,10 +6,9 @@
 'use client';
 
 import type { Locale } from '@/types/i18n';
-;
 import type {
-  UserLocalePreference,
   StorageEvent,
+  UserLocalePreference,
 } from '../locale-storage-types';
 
 /**
@@ -23,7 +22,7 @@ import type {
  */
 export function createPreferenceSavedEvent(
   preference: UserLocalePreference,
-  source: string
+  source: string,
 ): StorageEvent {
   return {
     type: 'preference_saved',
@@ -45,7 +44,7 @@ export function createPreferenceSavedEvent(
  */
 export function createPreferenceLoadedEvent(
   preference: UserLocalePreference,
-  source: string
+  source: string,
 ): StorageEvent {
   return {
     type: 'preference_loaded',
@@ -67,7 +66,7 @@ export function createPreferenceLoadedEvent(
  */
 export function createOverrideSetEvent(
   locale: Locale,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): StorageEvent {
   return {
     type: 'override_set',
@@ -102,7 +101,7 @@ export function createOverrideClearedEvent(): StorageEvent {
  */
 export function createSyncEvent(
   synced: boolean,
-  details: Record<string, unknown>
+  details: Record<string, unknown>,
 ): StorageEvent {
   return {
     type: 'preference_sync',
@@ -122,7 +121,7 @@ export function createSyncEvent(
  */
 export function createPreferenceErrorEvent(
   operation: string,
-  error: string
+  error: string,
 ): StorageEvent {
   return {
     type: 'preference_error',

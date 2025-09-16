@@ -51,10 +51,10 @@ class FormValidator {
     return { isValid: true };
   }
 
-  validatePassword(password: string): { 
-    isValid: boolean; 
-    error?: string; 
-    strength?: 'weak' | 'medium' | 'strong' 
+  validatePassword(password: string): {
+    isValid: boolean;
+    error?: string;
+    strength?: 'weak' | 'medium' | 'strong';
   } {
     if (!password) return { isValid: false, error: 'Password is required' };
     if (password.length < VALIDATION_LIMITS.PASSWORD_MIN_LENGTH) {
@@ -95,7 +95,8 @@ class FormValidator {
   validateAge(age: number): { isValid: boolean; error?: string } {
     if (age < 0) return { isValid: false, error: 'Age cannot be negative' };
     if (age > 150) return { isValid: false, error: 'Age too high' };
-    if (!Number.isInteger(age)) return { isValid: false, error: 'Age must be integer' };
+    if (!Number.isInteger(age))
+      return { isValid: false, error: 'Age must be integer' };
     return { isValid: true };
   }
 }
@@ -217,7 +218,13 @@ describe('Form Validation Basic Tests', () => {
     });
 
     it('should reject invalid usernames', () => {
-      const invalidUsernames = ['', 'a', 'user@domain', 'user space', 'user#123'];
+      const invalidUsernames = [
+        '',
+        'a',
+        'user@domain',
+        'user space',
+        'user#123',
+      ];
 
       invalidUsernames.forEach((username) => {
         const result = validator.validateUsername(username);

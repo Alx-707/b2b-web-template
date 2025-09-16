@@ -9,15 +9,11 @@
  */
 
 import { NextRequest } from 'next/server';
-;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET } from '@/app/api/contact/__tests__/route';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
-const {
-  mockAirtableService,
-  mockLogger,
-} = vi.hoisted(() => {
+const { mockAirtableService, mockLogger } = vi.hoisted(() => {
   return {
     mockAirtableService: {
       isReady: vi.fn(),
@@ -167,7 +163,9 @@ describe('Contact API Route - GET Tests', () => {
     });
 
     it('应该处理Airtable服务错误', async () => {
-      mockAirtableService.getStatistics.mockRejectedValue(new Error('Service error'));
+      mockAirtableService.getStatistics.mockRejectedValue(
+        new Error('Service error'),
+      );
 
       const request = new NextRequest('http://localhost:3000/api/contact', {
         method: 'GET',
@@ -248,7 +246,7 @@ describe('Contact API Route - GET Tests', () => {
       await GET(request);
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
-        expect.stringContaining('Unauthorized access attempt')
+        expect.stringContaining('Unauthorized access attempt'),
       );
     });
 

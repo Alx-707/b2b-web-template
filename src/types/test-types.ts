@@ -108,7 +108,11 @@ export type ThemeMode = 'light' | 'dark' | 'system';
  * 不安全的语言代码类型 - 用于安全性测试
  * 包含可能导致原型污染的危险字符串
  */
-export type UnsafeLocaleCode = '__proto__' | 'constructor' | 'prototype' | string;
+export type UnsafeLocaleCode =
+  | '__proto__'
+  | 'constructor'
+  | 'prototype'
+  | string;
 
 /**
  * 性能指标接口
@@ -156,7 +160,7 @@ export interface MockAnalyticsConfig {
  * Jest Mock函数类型
  * 用于类型化Jest模拟函数
  */
-export type MockFunction<T extends (..._args: unknown[]) => unknown> = T & {
+export type MockFunction<T extends (..._args: any[]) => any> = T & {
   mock: {
     calls: unknown[][];
     results: Array<{ type: 'return' | 'throw'; value: unknown }>;
@@ -336,9 +340,18 @@ export interface CSSVariablesTest {
  * 用于测试中模拟Intl.NumberFormat
  */
 export interface NumberFormatConstructor {
-  new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat;
-  (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat;
-  supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: string }): string[];
+  new (
+    locales?: string | string[],
+    options?: Intl.NumberFormatOptions,
+  ): Intl.NumberFormat;
+  (
+    locales?: string | string[],
+    options?: Intl.NumberFormatOptions,
+  ): Intl.NumberFormat;
+  supportedLocalesOf(
+    locales: string | string[],
+    options?: { localeMatcher?: string },
+  ): string[];
 }
 
 /**
@@ -346,9 +359,18 @@ export interface NumberFormatConstructor {
  * 用于测试中模拟Intl.DateTimeFormat
  */
 export interface DateTimeFormatConstructor {
-  new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat;
-  (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat;
-  supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: string }): string[];
+  new (
+    locales?: string | string[],
+    options?: Intl.DateTimeFormatOptions,
+  ): Intl.DateTimeFormat;
+  (
+    locales?: string | string[],
+    options?: Intl.DateTimeFormatOptions,
+  ): Intl.DateTimeFormat;
+  supportedLocalesOf(
+    locales: string | string[],
+    options?: { localeMatcher?: string },
+  ): string[];
 }
 
 /**
@@ -357,7 +379,9 @@ export interface DateTimeFormatConstructor {
  */
 export interface MockStorageManager {
   getUserPreference: MockFunction<() => string | null>;
-  getDetectionHistory: MockFunction<() => Array<{ locale: string; timestamp: number }>>;
+  getDetectionHistory: MockFunction<
+    () => Array<{ locale: string; timestamp: number }>
+  >;
   getUserOverride: MockFunction<() => string | null>;
   setUserPreference: MockFunction<(locale: string) => void>;
   setUserOverride: MockFunction<(locale: string) => void>;
@@ -369,8 +393,18 @@ export interface MockStorageManager {
  * 用于测试中模拟地理位置API
  */
 export interface MockGeolocation {
-  getCurrentPosition: MockFunction<(success: (position: GeolocationPosition) => void, error?: (error: GeolocationPositionError) => void) => void>;
-  watchPosition: MockFunction<(success: (position: GeolocationPosition) => void, error?: (error: GeolocationPositionError) => void) => number>;
+  getCurrentPosition: MockFunction<
+    (
+      success: (position: GeolocationPosition) => void,
+      error?: (error: GeolocationPositionError) => void,
+    ) => void
+  >;
+  watchPosition: MockFunction<
+    (
+      success: (position: GeolocationPosition) => void,
+      error?: (error: GeolocationPositionError) => void,
+    ) => number
+  >;
   clearWatch: MockFunction<(watchId: number) => void>;
 }
 
@@ -383,7 +417,7 @@ export interface MockGeolocation {
  * 支持更复杂的模拟场景
  */
 export type ExtendedMockFunction<
-  T extends (..._args: unknown[]) => unknown = (..._args: unknown[]) => unknown,
+  T extends (..._args: any[]) => any = (..._args: any[]) => any,
 > = MockFunction<T> & {
   mockReturnValueOnce: (_value: ReturnType<T>) => ExtendedMockFunction<T>;
   mockResolvedValueOnce: (

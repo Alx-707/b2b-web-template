@@ -119,8 +119,14 @@ test.describe('Web Eval Agent Integration', () => {
     // Verify reasonable performance
     if (metrics && typeof metrics === 'object' && 'navigation' in metrics) {
       const { navigation } = metrics as Record<string, unknown>;
-      if (navigation && typeof navigation === 'object' && navigation !== null && 'loadComplete' in navigation) {
-        const loadComplete = (navigation as Record<string, unknown>).loadComplete;
+      if (
+        navigation &&
+        typeof navigation === 'object' &&
+        navigation !== null &&
+        'loadComplete' in navigation
+      ) {
+        const loadComplete = (navigation as Record<string, unknown>)
+          .loadComplete;
         if (typeof loadComplete === 'number') {
           expect(loadComplete).toBeLessThan(5000); // 5 seconds max
         }

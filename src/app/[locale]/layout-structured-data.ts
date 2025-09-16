@@ -1,5 +1,5 @@
 import type { Locale } from '@/lib/structured-data';
-import { generateLocalizedStructuredData,  } from '@/lib/structured-data';;
+import { generateLocalizedStructuredData } from '@/lib/structured-data';
 
 /**
  * 页面结构化数据接口

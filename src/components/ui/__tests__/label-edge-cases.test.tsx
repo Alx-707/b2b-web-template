@@ -14,9 +14,9 @@
  * - label-edge-cases-basic.test.tsx - 基本边缘情况测试
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Label } from '../label';
 
@@ -59,7 +59,7 @@ describe('Label Edge Cases - Main Tests', () => {
         return (
           <Label
             data-testid='state-changing'
-            onClick={() => setCount(c => c + 1)}
+            onClick={() => setCount((c) => c + 1)}
           >
             Count: {count}
           </Label>
@@ -86,7 +86,7 @@ describe('Label Edge Cases - Main Tests', () => {
           data-testid='null-props'
         >
           Content
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('null-props');
@@ -122,14 +122,14 @@ describe('Label Edge Cases - Main Tests', () => {
     });
 
     it('handles empty string as text content', () => {
-      render(<Label data-testid='empty-string'>{''}  </Label>);
+      render(<Label data-testid='empty-string'>{''} </Label>);
 
       const label = screen.getByTestId('empty-string');
       expect(label).toHaveTextContent('  ');
     });
 
     it('handles whitespace-only content', () => {
-      render(<Label data-testid='whitespace'>   </Label>);
+      render(<Label data-testid='whitespace'> </Label>);
 
       const label = screen.getByTestId('whitespace');
       expect(label).toHaveTextContent('   ');
@@ -143,7 +143,11 @@ describe('Label Edge Cases - Main Tests', () => {
     });
 
     it('handles HTML entities in content', () => {
-      render(<Label data-testid='entities'>&lt;div&gt; &amp; &quot;quotes&quot;</Label>);
+      render(
+        <Label data-testid='entities'>
+          &lt;div&gt; &amp; &quot;quotes&quot;
+        </Label>,
+      );
 
       const label = screen.getByTestId('entities');
       expect(label).toHaveTextContent('<div> & "quotes"');
@@ -153,7 +157,7 @@ describe('Label Edge Cases - Main Tests', () => {
       render(
         <Label data-testid='mixed-content'>
           Text {42} {true && 'conditional'} <span>JSX</span>
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('mixed-content');
@@ -165,12 +169,10 @@ describe('Label Edge Cases - Main Tests', () => {
         <Label data-testid='nested-content'>
           <div>
             <span>
-              <strong>
-                Deeply nested
-              </strong>
+              <strong>Deeply nested</strong>
             </span>
           </div>
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('nested-content');
@@ -179,9 +181,7 @@ describe('Label Edge Cases - Main Tests', () => {
 
     it('handles conditional rendering', () => {
       const ConditionalLabel = ({ show }: { show: boolean }) => (
-        <Label data-testid='conditional'>
-          {show ? 'Visible' : null}
-        </Label>
+        <Label data-testid='conditional'>{show ? 'Visible' : null}</Label>
       );
 
       const { rerender } = render(<ConditionalLabel show={false} />);
@@ -192,8 +192,6 @@ describe('Label Edge Cases - Main Tests', () => {
       label = screen.getByTestId('conditional');
       expect(label).toHaveTextContent('Visible');
     });
-
-
 
     it('handles memory leaks with event listeners', () => {
       const MemoryLeakLabel = () => {
@@ -223,9 +221,7 @@ describe('Label Edge Cases - Main Tests', () => {
 
     it('handles performance with many re-renders', () => {
       const PerformanceLabel = ({ count }: { count: number }) => (
-        <Label data-testid='performance'>
-          Render count: {count}
-        </Label>
+        <Label data-testid='performance'>Render count: {count}</Label>
       );
 
       const { rerender } = render(<PerformanceLabel count={0} />);
@@ -248,7 +244,7 @@ describe('Label Edge Cases - Main Tests', () => {
           data-testid='accessibility'
         >
           Accessible content
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('accessibility');
@@ -260,10 +256,25 @@ describe('Label Edge Cases - Main Tests', () => {
     it('handles keyboard navigation edge cases', async () => {
       render(
         <div>
-          <Label tabIndex={0} data-testid='keyboard-1'>Label 1</Label>
-          <Label tabIndex={0} data-testid='keyboard-2'>Label 2</Label>
-          <Label tabIndex={-1} data-testid='keyboard-3'>Label 3</Label>
-        </div>
+          <Label
+            tabIndex={0}
+            data-testid='keyboard-1'
+          >
+            Label 1
+          </Label>
+          <Label
+            tabIndex={0}
+            data-testid='keyboard-2'
+          >
+            Label 2
+          </Label>
+          <Label
+            tabIndex={-1}
+            data-testid='keyboard-3'
+          >
+            Label 3
+          </Label>
+        </div>,
       );
 
       const label1 = screen.getByTestId('keyboard-1');
@@ -288,11 +299,14 @@ describe('Label Edge Cases - Main Tests', () => {
           data-testid='high-contrast'
         >
           High contrast content
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('high-contrast');
-      expect(label).toHaveClass('contrast-more:border-2', 'contrast-more:border-black');
+      expect(label).toHaveClass(
+        'contrast-more:border-2',
+        'contrast-more:border-black',
+      );
     });
   });
 });

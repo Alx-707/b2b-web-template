@@ -7,13 +7,12 @@
  * - 基本数据类型验证
  */
 
+import { describe, expect, it } from 'vitest';
+import type { _ContentType } from '@/types/content';
 import {
   TEST_CONTENT_LIMITS,
   TEST_COUNT_CONSTANTS,
 } from '@/constants/test-constants';
-import type { _ContentType } from '@/types/content';
-;
-import { describe, expect, it } from 'vitest';
 import { validateContentMetadata } from '../content-validation';
 
 describe('Content Validation - Basic Tests', () => {
@@ -107,7 +106,10 @@ describe('Content Validation - Basic Tests', () => {
           ...metadataWithoutMultiple
         } = validMetadata;
 
-        const result = validateContentMetadata(metadataWithoutMultiple, 'posts');
+        const result = validateContentMetadata(
+          metadataWithoutMultiple,
+          'posts',
+        );
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Title is required');
@@ -138,7 +140,9 @@ describe('Content Validation - Basic Tests', () => {
         const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Published date must be a valid ISO date');
+        expect(result.errors).toContain(
+          'Published date must be a valid ISO date',
+        );
       });
 
       it('should fail validation with invalid updatedAt date format', () => {
@@ -150,7 +154,9 @@ describe('Content Validation - Basic Tests', () => {
         const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Updated date must be a valid ISO date');
+        expect(result.errors).toContain(
+          'Updated date must be a valid ISO date',
+        );
       });
 
       it('should fail validation when updatedAt is before publishedAt', () => {
@@ -194,8 +200,6 @@ describe('Content Validation - Basic Tests', () => {
         expect(result.errors).toHaveLength(0);
       });
 
-
-
       it('should fail validation with timestamp numbers', () => {
         const metadata = {
           ...validMetadata,
@@ -205,7 +209,9 @@ describe('Content Validation - Basic Tests', () => {
         const result = validateContentMetadata(metadata, 'posts');
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Published date must be a valid ISO date');
+        expect(result.errors).toContain(
+          'Published date must be a valid ISO date',
+        );
       });
     });
 
@@ -245,8 +251,6 @@ describe('Content Validation - Basic Tests', () => {
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Excerpt must be a string');
       });
-
-
 
       it('should validate array elements in tags', () => {
         const metadata = {

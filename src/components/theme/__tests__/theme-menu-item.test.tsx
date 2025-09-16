@@ -1,6 +1,6 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Monitor, Moon, Sun } from 'lucide-react';
-import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { ThemeMenuItem } from '../theme-menu-item';
 
@@ -13,7 +13,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     onKeyDown,
     role,
     ...props
-  }: React.ComponentProps<"div">) => (
+  }: React.ComponentProps<'div'>) => (
     <div
       role={role}
       className={className}

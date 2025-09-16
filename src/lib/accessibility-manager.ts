@@ -4,13 +4,15 @@
  * 无障碍性支持库 - 管理器类
  * 提供主题切换的无障碍性功能，确保WCAG 2.1 AA级合规
  */
-
 import {
   DELAY_CONSTANTS,
   PERCENTAGE_CONSTANTS,
 } from '@/constants/app-constants';
+import {
+  THEME_ANNOUNCEMENTS,
+  type ScreenReaderConfig,
+} from './accessibility-types';
 import { logger } from './logger';
-import { THEME_ANNOUNCEMENTS, type ScreenReaderConfig } from './accessibility-types';
 
 /**
  * 无障碍性管理器

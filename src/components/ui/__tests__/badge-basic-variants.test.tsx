@@ -50,7 +50,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
       'focus:outline-none',
       'focus:ring-2',
       'focus:ring-ring',
-      'focus:ring-offset-2'
+      'focus:ring-offset-2',
     );
   });
 
@@ -65,21 +65,33 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
     render(<Badge variant='default'>Default Variant</Badge>);
 
     const badge = screen.getByText('Default Variant');
-    expect(badge).toHaveClass('border-transparent', 'bg-primary', 'text-primary-foreground');
+    expect(badge).toHaveClass(
+      'border-transparent',
+      'bg-primary',
+      'text-primary-foreground',
+    );
   });
 
   it('renders secondary variant correctly', () => {
     render(<Badge variant='secondary'>Secondary Variant</Badge>);
 
     const badge = screen.getByText('Secondary Variant');
-    expect(badge).toHaveClass('border-transparent', 'bg-secondary', 'text-secondary-foreground');
+    expect(badge).toHaveClass(
+      'border-transparent',
+      'bg-secondary',
+      'text-secondary-foreground',
+    );
   });
 
   it('renders destructive variant correctly', () => {
     render(<Badge variant='destructive'>Destructive Variant</Badge>);
 
     const badge = screen.getByText('Destructive Variant');
-    expect(badge).toHaveClass('border-transparent', 'bg-destructive', 'text-destructive-foreground');
+    expect(badge).toHaveClass(
+      'border-transparent',
+      'bg-destructive',
+      'text-destructive-foreground',
+    );
   });
 
   it('renders outline variant correctly', () => {
@@ -93,7 +105,11 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
     render(<Badge>No Variant</Badge>);
 
     const badge = screen.getByText('No Variant');
-    expect(badge).toHaveClass('border-transparent', 'bg-primary', 'text-primary-foreground');
+    expect(badge).toHaveClass(
+      'border-transparent',
+      'bg-primary',
+      'text-primary-foreground',
+    );
   });
 
   it('handles invalid variant gracefully', () => {
@@ -120,7 +136,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
       'transition-colors',
       'border-transparent',
       'bg-secondary',
-      'text-secondary-foreground'
+      'text-secondary-foreground',
     );
   });
 
@@ -149,7 +165,10 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
     render(<Badge variant='outline'>Outline Hover</Badge>);
 
     const badge = screen.getByText('Outline Hover');
-    expect(badge).toHaveClass('hover:bg-accent', 'hover:text-accent-foreground');
+    expect(badge).toHaveClass(
+      'hover:bg-accent',
+      'hover:text-accent-foreground',
+    );
   });
 
   it('applies custom className', () => {
@@ -160,10 +179,21 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
   });
 
   it('merges custom className with default classes', () => {
-    render(<Badge className='custom-class' variant='secondary'>Merged Classes</Badge>);
+    render(
+      <Badge
+        className='custom-class'
+        variant='secondary'
+      >
+        Merged Classes
+      </Badge>,
+    );
 
     const badge = screen.getByText('Merged Classes');
-    expect(badge).toHaveClass('custom-class', 'bg-secondary', 'text-secondary-foreground');
+    expect(badge).toHaveClass(
+      'custom-class',
+      'bg-secondary',
+      'text-secondary-foreground',
+    );
   });
 
   it('supports additional HTML attributes', () => {
@@ -175,7 +205,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
         data-custom='value'
       >
         Attributes Test
-      </Badge>
+      </Badge>,
     );
 
     const badge = screen.getByText('Attributes Test');
@@ -189,13 +219,13 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
     render(
       <Badge style={{ backgroundColor: 'red', color: 'white' }}>
         Styled Badge
-      </Badge>
+      </Badge>,
     );
 
     const badge = screen.getByText('Styled Badge');
     expect(badge).toHaveStyle({
       backgroundColor: 'red',
-      color: 'white'
+      color: 'white',
     });
   });
 
@@ -211,18 +241,21 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
   it('supports onMouseEnter and onMouseLeave handlers', () => {
     const handleMouseEnter = vi.fn();
     const handleMouseLeave = vi.fn();
-    
+
     render(
-      <Badge onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <Badge
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         Hover Badge
-      </Badge>
+      </Badge>,
     );
 
     const badge = screen.getByText('Hover Badge');
-    
+
     fireEvent.mouseEnter(badge);
     expect(handleMouseEnter).toHaveBeenCalledTimes(1);
-    
+
     fireEvent.mouseLeave(badge);
     expect(handleMouseLeave).toHaveBeenCalledTimes(1);
   });
@@ -230,18 +263,22 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
   it('supports onFocus and onBlur handlers', () => {
     const handleFocus = vi.fn();
     const handleBlur = vi.fn();
-    
+
     render(
-      <Badge onFocus={handleFocus} onBlur={handleBlur} tabIndex={0}>
+      <Badge
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        tabIndex={0}
+      >
         Focus Badge
-      </Badge>
+      </Badge>,
     );
 
     const badge = screen.getByText('Focus Badge');
-    
+
     badge.focus();
     expect(handleFocus).toHaveBeenCalledTimes(1);
-    
+
     badge.blur();
     expect(handleBlur).toHaveBeenCalledTimes(1);
   });
@@ -269,7 +306,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
         aria-atomic='true'
       >
         ARIA Badge
-      </Badge>
+      </Badge>,
     );
 
     const badge = screen.getByText('ARIA Badge');
@@ -286,7 +323,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
         data-priority='high'
       >
         Data Badge
-      </Badge>
+      </Badge>,
     );
 
     const badge = screen.getByTestId('custom-badge');
@@ -302,7 +339,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
         contentEditable={false}
       >
         Boolean Badge
-      </Badge>
+      </Badge>,
     );
 
     const badge = screen.getByText('Boolean Badge');
@@ -350,7 +387,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
     render(
       <Badge>
         <span>JSX Content</span>
-      </Badge>
+      </Badge>,
     );
 
     const badge = screen.getByText('JSX Content');
@@ -362,7 +399,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
       <Badge>
         <span>First</span>
         <span>Second</span>
-      </Badge>
+      </Badge>,
     );
 
     expect(screen.getByText('First')).toBeInTheDocument();
@@ -372,11 +409,19 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
   it('renders with icons', () => {
     render(
       <Badge>
-        <svg data-testid='icon' width='12' height='12'>
-          <circle cx='6' cy='6' r='6' />
+        <svg
+          data-testid='icon'
+          width='12'
+          height='12'
+        >
+          <circle
+            cx='6'
+            cy='6'
+            r='6'
+          />
         </svg>
         With Icon
-      </Badge>
+      </Badge>,
     );
 
     expect(screen.getByTestId('icon')).toBeInTheDocument();
@@ -384,7 +429,8 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
   });
 
   it('renders long text content', () => {
-    const longText = 'This is a very long badge text that might wrap or be truncated';
+    const longText =
+      'This is a very long badge text that might wrap or be truncated';
     render(<Badge>{longText}</Badge>);
 
     const badge = screen.getByText(longText);
@@ -419,7 +465,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
           <span>Nested</span>
           <strong>Components</strong>
         </div>
-      </Badge>
+      </Badge>,
     );
 
     expect(screen.getByText('Nested')).toBeInTheDocument();
@@ -427,7 +473,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
   });
 
   it('handles whitespace correctly', () => {
-    render(<Badge>  Whitespace  Test  </Badge>);
+    render(<Badge> Whitespace Test </Badge>);
 
     const badge = screen.getByText('Whitespace Test');
     expect(badge).toHaveTextContent('  Whitespace  Test  ');
@@ -439,7 +485,7 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
       <Badge>
         Base Content
         {showExtra && <span> Extra</span>}
-      </Badge>
+      </Badge>,
     );
 
     expect(screen.getByText('Base Content')).toBeInTheDocument();
@@ -453,10 +499,10 @@ describe('Badge Basic Rendering & Variants Tests - Index', () => {
         {items.map((item, index) => (
           <span key={index}>{item}</span>
         ))}
-      </Badge>
+      </Badge>,
     );
 
-    items.forEach(item => {
+    items.forEach((item) => {
       expect(screen.getByText(item)).toBeInTheDocument();
     });
   });

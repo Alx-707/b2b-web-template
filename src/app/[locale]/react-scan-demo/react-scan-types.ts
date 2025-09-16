@@ -19,10 +19,13 @@ export interface ReactScanGlobal {
     totalRenders?: number;
     componentsScanned?: number;
   };
-  components?: Record<string, {
-    renderCount: number;
-    renderTime: number;
-  }>;
+  components?: Record<
+    string,
+    {
+      renderCount: number;
+      renderTime: number;
+    }
+  >;
 }
 
 /**

@@ -19,9 +19,9 @@ import { ThemeMenuItem } from '../theme-menu-item';
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
-  Sun: () => <div data-testid="sun-icon">Sun</div>,
-  Moon: () => <div data-testid="moon-icon">Moon</div>,
-  Monitor: () => <div data-testid="monitor-icon">Monitor</div>,
+  Sun: () => <div data-testid='sun-icon'>Sun</div>,
+  Moon: () => <div data-testid='moon-icon'>Moon</div>,
+  Monitor: () => <div data-testid='monitor-icon'>Monitor</div>,
 }));
 
 describe('Theme Menu Item - Core Basic Interactions Tests', () => {
@@ -49,7 +49,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -65,7 +65,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -81,7 +81,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -101,7 +101,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -118,7 +118,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -135,7 +135,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={handleClick}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -167,7 +167,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
           {...defaultProps}
           onClick={handleClick}
           supportsViewTransitions={true}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -185,7 +185,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
           {...defaultProps}
           onClick={handleClick}
           supportsViewTransitions={false}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -197,11 +197,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
 
   describe('核心可访问性', () => {
     it('has correct ARIA attributes', () => {
-      render(
-        <ThemeMenuItem
-          {...defaultProps}
-        />
-      );
+      render(<ThemeMenuItem {...defaultProps} />);
 
       const menuItem = screen.getByRole('menuitem');
       expect(menuItem).toHaveAttribute('aria-label', 'Switch to light mode');
@@ -211,9 +207,9 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="light"
-        />
+          theme='light'
+          currentTheme='light'
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -224,9 +220,9 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          theme="light"
-          currentTheme="dark"
-        />
+          theme='light'
+          currentTheme='dark'
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -239,29 +235,21 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          label="Test Label"
-        />
+          label='Test Label'
+        />,
       );
 
       expect(screen.getByText('Test Label')).toBeInTheDocument();
     });
 
     it('renders with icon', () => {
-      render(
-        <ThemeMenuItem
-          {...defaultProps}
-        />
-      );
+      render(<ThemeMenuItem {...defaultProps} />);
 
       expect(screen.getByTestId('sun-icon')).toBeInTheDocument();
     });
 
     it('applies correct CSS classes', () => {
-      render(
-        <ThemeMenuItem
-          {...defaultProps}
-        />
-      );
+      render(<ThemeMenuItem {...defaultProps} />);
 
       const menuItem = screen.getByRole('menuitem');
       expect(menuItem).toHaveClass('flex', 'items-center', 'gap-2');
@@ -275,7 +263,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           onClick={vi.fn()}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -288,8 +276,8 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          label=""
-        />
+          label=''
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -301,7 +289,7 @@ describe('Theme Menu Item - Core Basic Interactions Tests', () => {
         <ThemeMenuItem
           {...defaultProps}
           icon={Sun}
-        />
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');

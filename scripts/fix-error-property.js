@@ -13,16 +13,16 @@ const path = require('path');
 function fixErrorPropertyInFile(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
-    
+
     // 替换 ._error 为 .error
     const newContent = content.replace(/\._error\b/g, '.error');
-    
+
     if (content !== newContent) {
       fs.writeFileSync(filePath, newContent);
       console.log(`✅ 修复: ${filePath}`);
       return true;
     }
-    
+
     return false;
   } catch (error) {
     console.error(`❌ 修复失败 ${filePath}:`, error.message);
@@ -49,8 +49,8 @@ function main() {
   ];
 
   let fixedCount = 0;
-  
-  filesToFix.forEach(file => {
+
+  filesToFix.forEach((file) => {
     if (fs.existsSync(file)) {
       if (fixErrorPropertyInFile(file)) {
         fixedCount++;

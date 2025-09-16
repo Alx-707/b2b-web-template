@@ -55,23 +55,32 @@ describe('I18n Validation - Edge Cases Tests', () => {
 
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(error => error.message.includes('zh'))).toBe(true);
+      expect(result.errors.some((error) => error.message.includes('zh'))).toBe(
+        true,
+      );
     });
 
     it('should handle malformed translation data', async () => {
       // 设置格式错误的翻译数据
       setMockConfig({
         en: mockEnTranslations,
-        zh: 'invalid string instead of object' as unknown as Record<string, unknown>,
+        zh: 'invalid string instead of object' as unknown as Record<
+          string,
+          unknown
+        >,
       });
 
       const result = await validateTranslations();
 
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(error =>
-        error.message.includes('malformed') || error.message.includes('invalid')
-      )).toBe(true);
+      expect(
+        result.errors.some(
+          (error) =>
+            error.message.includes('malformed') ||
+            error.message.includes('invalid'),
+        ),
+      ).toBe(true);
     });
 
     it('should handle circular references', async () => {
@@ -208,8 +217,8 @@ describe('I18n Validation - Edge Cases Tests', () => {
 
     it('should handle very long translation strings', async () => {
       // 创建非常长的翻译字符串
-      const longString = `${'A'.repeat(10000)  } with {param} at the end`;
-      const longStringZh = `${'中'.repeat(10000)  } 包含 {param} 在结尾`;
+      const longString = `${'A'.repeat(10000)} with {param} at the end`;
+      const longStringZh = `${'中'.repeat(10000)} 包含 {param} 在结尾`;
 
       setMockConfig({
         en: {
@@ -301,7 +310,7 @@ describe('I18n Validation - Edge Cases Tests', () => {
       const results = await Promise.all(promises);
 
       // 所有结果应该一致
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
         expect(typeof result.isValid).toBe('boolean');
         expect(result.isValid).toBe(results[0]?.isValid);
@@ -342,7 +351,7 @@ describe('I18n Validation - Edge Cases Tests', () => {
                   array: Array.from({ length: 100 }, (_, j) => `项目_${j}`),
                 },
               },
-            ])
+            ]),
           ),
         },
       });

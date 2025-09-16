@@ -4,10 +4,10 @@
 
 /* eslint-disable security/detect-object-injection */
 
-import type { PageType, Locale, LocalizedPath } from './types';
-import { PATHS_CONFIG } from './paths-config';
 import { LOCALES_CONFIG } from './locales-config';
+import { PATHS_CONFIG } from './paths-config';
 import { SITE_CONFIG } from './site-config';
+import type { Locale, LocalizedPath, PageType } from './types';
 
 /**
  * 获取本地化路径

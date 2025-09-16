@@ -5,8 +5,8 @@
 
 import type { EnvironmentType } from '../locale-storage-types-base';
 import type { ValidationResult } from '../locale-storage-types-data';
-import type { StorageConfig } from './interfaces';
 import { DEFAULT_STORAGE_CONFIG } from './defaults';
+import type { StorageConfig } from './interfaces';
 import { CONFIG_PRESETS } from './presets';
 import { CONFIG_VALIDATION_RULES } from './validation';
 
@@ -80,7 +80,9 @@ export const ConfigFactory = {
     }
 
     // 验证类型
-    for (const [field, expectedType] of Object.entries(CONFIG_VALIDATION_RULES.types)) {
+    for (const [field, expectedType] of Object.entries(
+      CONFIG_VALIDATION_RULES.types,
+    )) {
       const value = this.getNestedValue(cfg, field);
       if (value !== undefined && typeof value !== expectedType) {
         errors.push(`Field '${field}' must be of type ${expectedType}`);
@@ -88,7 +90,9 @@ export const ConfigFactory = {
     }
 
     // 验证范围
-    for (const [field, range] of Object.entries(CONFIG_VALIDATION_RULES.ranges)) {
+    for (const [field, range] of Object.entries(
+      CONFIG_VALIDATION_RULES.ranges,
+    )) {
       const value = this.getNestedValue(cfg, field) as number;
       if (typeof value === 'number') {
         if (range.min !== undefined && value < range.min) {
@@ -101,15 +105,21 @@ export const ConfigFactory = {
     }
 
     // 验证枚举
-    for (const [field, allowedValues] of Object.entries(CONFIG_VALIDATION_RULES.enums)) {
+    for (const [field, allowedValues] of Object.entries(
+      CONFIG_VALIDATION_RULES.enums,
+    )) {
       const value = this.getNestedValue(cfg, field) as string;
       if (typeof value === 'string' && !allowedValues.includes(value)) {
-        errors.push(`Field '${field}' must be one of: ${allowedValues.join(', ')}`);
+        errors.push(
+          `Field '${field}' must be one of: ${allowedValues.join(', ')}`,
+        );
       }
     }
 
     // 自定义验证
-    for (const [field, validator] of Object.entries(CONFIG_VALIDATION_RULES.custom)) {
+    for (const [field, validator] of Object.entries(
+      CONFIG_VALIDATION_RULES.custom,
+    )) {
       const value = this.getNestedValue(cfg, field);
       if (value !== undefined && !validator(value)) {
         errors.push(`Field '${field}' failed custom validation`);
@@ -129,7 +139,9 @@ export const ConfigFactory = {
    */
   getNestedValue(obj: Record<string, unknown>, path: string): unknown {
     return path.split('.').reduce((current: unknown, key: string) => {
-      return current && typeof current === 'object' ? (current as Record<string, unknown>)[key] : undefined;
+      return current && typeof current === 'object'
+        ? (current as Record<string, unknown>)[key]
+        : undefined;
     }, obj as unknown);
   },
 } as const;

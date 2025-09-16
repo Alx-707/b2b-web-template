@@ -7,8 +7,11 @@
  * - airtable-advanced.test.ts - Advanced functionality and error handling
  */
 
-import type { AirtableServicePrivate, DynamicImportModule } from '@/types/test-types';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type {
+  AirtableServicePrivate,
+  DynamicImportModule,
+} from '@/types/test-types';
 
 // Mock Airtable
 const mockCreate = vi.fn();
@@ -85,7 +88,8 @@ describe('Airtable Tests - Index', () => {
       }));
 
       const module = await import('../airtable');
-      const ServiceClass = (module as DynamicImportModule).default || module.AirtableService;
+      const ServiceClass =
+        (module as DynamicImportModule).default || module.AirtableService;
       const service = new ServiceClass();
 
       expect(service).toBeDefined();
@@ -101,7 +105,8 @@ describe('Airtable Tests - Index', () => {
       }));
 
       const module = await import('../airtable');
-      const ServiceClass = (module as DynamicImportModule).default || module.AirtableService;
+      const ServiceClass =
+        (module as DynamicImportModule).default || module.AirtableService;
       const service = new ServiceClass();
 
       expect(service).toBeDefined();
@@ -257,7 +262,10 @@ describe('Airtable Tests - Index', () => {
         },
       ]);
 
-      const result = await service.updateContactStatus('rec123456', 'Contacted');
+      const result = await service.updateContactStatus(
+        'rec123456',
+        'Contacted',
+      );
 
       expect(result).toEqual({
         id: 'rec123456',
@@ -280,9 +288,9 @@ describe('Airtable Tests - Index', () => {
       (service as unknown as AirtableServicePrivate).isConfigured = false;
       (service as unknown as AirtableServicePrivate).base = null;
 
-      await expect(service.updateContactStatus('rec123456', 'Contacted')).rejects.toThrow(
-        'Airtable service is not configured',
-      );
+      await expect(
+        service.updateContactStatus('rec123456', 'Contacted'),
+      ).rejects.toThrow('Airtable service is not configured');
     });
   });
 

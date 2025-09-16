@@ -1,3 +1,37 @@
+// 向后兼容的重新导出
+import type { I18nMetrics, Locale, Messages } from '@/types/i18n';
+import type {
+  AdvancedCacheConfig,
+  CacheClusterConfig,
+  CacheShardingConfig,
+} from './i18n-cache-types-advanced';
+import type {
+  CacheConfig,
+  CacheEvent,
+  CacheEventListener,
+  CacheEventType,
+  CacheItem,
+  CacheStats,
+  CacheStrategy,
+} from './i18n-cache-types-base';
+import type {
+  CacheManager,
+  CacheStorage,
+  MetricsCollector,
+  PersistentStorage,
+  Preloader,
+} from './i18n-cache-types-interfaces';
+import {
+  CacheDebugUtils,
+  CacheEventUtils,
+  CacheKeyUtils,
+  CacheSerializationUtils,
+  CacheSizeUtils,
+  CacheStatsUtils,
+  CacheTimeUtils,
+  CacheValidationUtils,
+} from './i18n-cache-types-utils';
+
 /**
  * 国际化缓存基础类型定义 - 主入口
  * I18n Cache Base Type Definitions - Main Entry Point
@@ -6,53 +40,85 @@
  */
 
 // 重新导出所有模块的功能 - 类型导出
-export type { CacheConfig, CacheItem, CacheStats, PreloadConfig, CacheOperationResult, CacheEventType, CacheEvent, CacheEventListener, CacheStrategy, CacheConfigValidation, CacheHealthCheck, CacheDebugInfo, CacheError, CacheValidationError, CacheStorageError, CacheSerializationError } from './i18n-cache-types-base';
-
-// 常量和函数导出
-export { DEFAULT_CACHE_CONFIG, DEFAULT_PRELOAD_CONFIG, CACHE_CONSTANTS, isCacheItem, isCacheConfig, isCacheEvent, createCacheKey, parseCacheKey, validateCacheConfig } from './i18n-cache-types-base';
-
-export type { CacheStorage, PersistentStorage, MetricsCollector, Preloader, CacheManager, SerializationOptions, CacheExportData, CacheSyncOptions, CachePartitionConfig, CacheCompressionConfig, CacheEncryptionConfig, CacheMonitoringConfig, CacheBackupConfig, CacheRecoveryOptions, CachePerformanceConfig, CacheSecurityConfig, CacheObserver, CacheMiddleware, CacheStrategyInterface, CacheAdapter, CacheFactory, CacheEventEmitter, CachePlugin, CacheLifecycleHooks, CacheStatsCollector } from './i18n-cache-types-interfaces';
-
-export type { AdvancedCacheConfig, CacheClusterConfig, CacheShardingConfig, CacheWarmingConfig, CacheInvalidationConfig, CacheConsistencyConfig, CacheRateLimitConfig, CacheQualityConfig, CacheExtensionConfig, CacheEnvironmentConfig } from './i18n-cache-types-advanced';
-
-export { DEFAULT_ADVANCED_CACHE_CONFIG, CacheConfigFactory } from './i18n-cache-types-advanced';
-
-export { CacheKeyUtils, CacheTimeUtils, CacheSizeUtils, CacheStatsUtils, CacheValidationUtils, CacheSerializationUtils, CacheEventUtils, CacheDebugUtils } from './i18n-cache-types-utils';
-
-// 向后兼容的重新导出
-import type { I18nMetrics, Locale, Messages } from '@/types/i18n';
-
-import type {
+export type {
   CacheConfig,
   CacheItem,
   CacheStats,
+  PreloadConfig,
+  CacheOperationResult,
   CacheEventType,
   CacheEvent,
   CacheEventListener,
-  CacheStrategy } from
-'./i18n-cache-types-base';
+  CacheStrategy,
+  CacheConfigValidation,
+  CacheHealthCheck,
+  CacheDebugInfo,
+  CacheError,
+  CacheValidationError,
+  CacheStorageError,
+  CacheSerializationError,
+} from './i18n-cache-types-base';
 
-import type {
+// 常量和函数导出
+export {
+  DEFAULT_CACHE_CONFIG,
+  DEFAULT_PRELOAD_CONFIG,
+  CACHE_CONSTANTS,
+  isCacheItem,
+  isCacheConfig,
+  isCacheEvent,
+  createCacheKey,
+  parseCacheKey,
+  validateCacheConfig,
+} from './i18n-cache-types-base';
+
+export type {
   CacheStorage,
   PersistentStorage,
   MetricsCollector,
   Preloader,
-  CacheManager
+  CacheManager,
+  SerializationOptions,
+  CacheExportData,
+  CacheSyncOptions,
+  CachePartitionConfig,
+  CacheCompressionConfig,
+  CacheEncryptionConfig,
+  CacheMonitoringConfig,
+  CacheBackupConfig,
+  CacheRecoveryOptions,
+  CachePerformanceConfig,
+  CacheSecurityConfig,
+  CacheObserver,
+  CacheMiddleware,
+  CacheStrategyInterface,
+  CacheAdapter,
+  CacheFactory,
+  CacheEventEmitter,
+  CachePlugin,
+  CacheLifecycleHooks,
+  CacheStatsCollector,
 } from './i18n-cache-types-interfaces';
 
-import type {
+export type {
   AdvancedCacheConfig,
   CacheClusterConfig,
-  CacheShardingConfig
+  CacheShardingConfig,
+  CacheWarmingConfig,
+  CacheInvalidationConfig,
+  CacheConsistencyConfig,
+  CacheRateLimitConfig,
+  CacheQualityConfig,
+  CacheExtensionConfig,
+  CacheEnvironmentConfig,
 } from './i18n-cache-types-advanced';
 
+export {
+  DEFAULT_ADVANCED_CACHE_CONFIG,
+  CacheConfigFactory,
+} from './i18n-cache-types-advanced';
 
-
-
-
-
-
-import {
+export {
   CacheKeyUtils,
   CacheTimeUtils,
   CacheSizeUtils,
@@ -60,8 +126,8 @@ import {
   CacheValidationUtils,
   CacheSerializationUtils,
   CacheEventUtils,
-  CacheDebugUtils } from
-'./i18n-cache-types-utils';
+  CacheDebugUtils,
+} from './i18n-cache-types-utils';
 
 // ==================== 向后兼容的类型别名 ====================
 
@@ -91,4 +157,5 @@ export type {
   // 工具类型
   CacheEventType as EventType,
   CacheStrategy as Strategy,
-  CacheEventListener as EventListener };
+  CacheEventListener as EventListener,
+};

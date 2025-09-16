@@ -12,8 +12,8 @@
  * - Ref转发
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
 import { createRef } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Badge } from '../badge';
 
@@ -28,9 +28,12 @@ describe('Badge Custom Props - Core Tests', () => {
 
     it('merges multiple classNames', () => {
       render(
-        <Badge className='custom-1 custom-2' variant='secondary'>
+        <Badge
+          className='custom-1 custom-2'
+          variant='secondary'
+        >
           Multiple Classes
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Multiple Classes');
@@ -41,7 +44,7 @@ describe('Badge Custom Props - Core Tests', () => {
       render(
         <Badge style={{ backgroundColor: 'red', color: 'white' }}>
           Styled Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Styled Badge');
@@ -53,9 +56,12 @@ describe('Badge Custom Props - Core Tests', () => {
 
     it('supports data attributes', () => {
       render(
-        <Badge data-testid='test-badge' data-custom='value'>
+        <Badge
+          data-testid='test-badge'
+          data-custom='value'
+        >
           Data Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByTestId('test-badge');
@@ -64,9 +70,12 @@ describe('Badge Custom Props - Core Tests', () => {
 
     it('supports aria attributes', () => {
       render(
-        <Badge aria-label='Custom badge' aria-describedby='badge-desc'>
+        <Badge
+          aria-label='Custom badge'
+          aria-describedby='badge-desc'
+        >
           Accessible Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Accessible Badge');
@@ -91,9 +100,12 @@ describe('Badge Custom Props - Core Tests', () => {
       const handleMouseLeave = vi.fn();
 
       render(
-        <Badge onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <Badge
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           Hover Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Hover Badge');
@@ -120,9 +132,13 @@ describe('Badge Custom Props - Core Tests', () => {
       const handleBlur = vi.fn();
 
       render(
-        <Badge onFocus={handleFocus} onBlur={handleBlur} tabIndex={0}>
+        <Badge
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          tabIndex={0}
+        >
           Focusable Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Focusable Badge');
@@ -218,7 +234,7 @@ describe('Badge Custom Props - Core Tests', () => {
           variant='outline'
         >
           Complex Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByTestId('complex');
@@ -235,9 +251,12 @@ describe('Badge Custom Props - Core Tests', () => {
 
     it('handles prop precedence correctly', () => {
       render(
-        <Badge className='base-class' variant='destructive'>
+        <Badge
+          className='base-class'
+          variant='destructive'
+        >
           Precedence Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Precedence Badge');
@@ -250,9 +269,12 @@ describe('Badge Custom Props - Core Tests', () => {
   describe('Edge Cases', () => {
     it('handles undefined props gracefully', () => {
       render(
-        <Badge className={undefined} style={undefined}>
+        <Badge
+          className={undefined}
+          style={undefined}
+        >
           Undefined Props
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Undefined Props');
@@ -261,9 +283,12 @@ describe('Badge Custom Props - Core Tests', () => {
 
     it('handles empty string props', () => {
       render(
-        <Badge className='' title=''>
+        <Badge
+          className=''
+          title=''
+        >
           Empty Props
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Empty Props');
@@ -271,11 +296,7 @@ describe('Badge Custom Props - Core Tests', () => {
     });
 
     it('handles null event handlers', () => {
-      render(
-        <Badge onClick={undefined}>
-          Null Handler
-        </Badge>
-      );
+      render(<Badge onClick={undefined}>Null Handler</Badge>);
 
       const badge = screen.getByText('Null Handler');
       expect(() => fireEvent.click(badge)).not.toThrow();
@@ -285,14 +306,14 @@ describe('Badge Custom Props - Core Tests', () => {
   describe('Performance Considerations', () => {
     it('renders efficiently with many props', () => {
       const manyProps = {
-        className: 'prop-1 prop-2 prop-3',
+        'className': 'prop-1 prop-2 prop-3',
         'data-prop1': 'value1',
         'data-prop2': 'value2',
         'data-prop3': 'value3',
         'aria-label': 'Many props badge',
         'aria-describedby': 'desc',
-        title: 'Many props title',
-        style: { margin: '4px', padding: '8px' },
+        'title': 'Many props title',
+        'style': { margin: '4px', padding: '8px' },
       };
 
       render(<Badge {...manyProps}>Many Props Badge</Badge>);

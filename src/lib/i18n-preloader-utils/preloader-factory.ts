@@ -4,17 +4,14 @@
  */
 
 import type { Messages } from '@/types/i18n';
-import type { 
-  MetricsCollector, 
-  CacheStorage
-} from '../i18n-cache-types';
+import type { CacheStorage, MetricsCollector } from '../i18n-cache-types';
+import { TranslationPreloader } from '../i18n-preloader-core';
 import type {
   IPreloader,
   PreloaderConfig,
   PreloaderPlugin,
-  PreloadEventHandler
+  PreloadEventHandler,
 } from '../i18n-preloader-types';
-import { TranslationPreloader } from '../i18n-preloader-core';
 
 /**
  * 预加载器工厂类
@@ -45,12 +42,12 @@ export class PreloaderFactory {
   createPreloader(
     cache: CacheStorage<Messages>,
     metricsCollector: MetricsCollector,
-    config?: Partial<PreloaderConfig>
+    config?: Partial<PreloaderConfig>,
   ): IPreloader {
     const preloader = new TranslationPreloader(cache, metricsCollector, config);
-    
+
     // 安装插件
-    this.plugins.forEach(plugin => {
+    this.plugins.forEach((plugin) => {
       plugin.install(preloader);
     });
 

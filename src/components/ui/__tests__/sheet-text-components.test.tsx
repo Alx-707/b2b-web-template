@@ -2,16 +2,11 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetTitle,
-} from '../sheet';
+import { Sheet, SheetContent, SheetDescription, SheetTitle } from '../sheet';
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
@@ -65,7 +60,11 @@ describe('Sheet - Text Components', () => {
 
       await waitFor(() => {
         const title = screen.getByTestId('sheet-title');
-        expect(title).toHaveClass('text-lg', 'font-semibold', 'text-foreground');
+        expect(title).toHaveClass(
+          'text-lg',
+          'font-semibold',
+          'text-foreground',
+        );
       });
     });
 
@@ -73,7 +72,10 @@ describe('Sheet - Text Components', () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
-            <SheetTitle className='custom-title' data-testid='sheet-title'>
+            <SheetTitle
+              className='custom-title'
+              data-testid='sheet-title'
+            >
               Title
             </SheetTitle>
           </SheetContent>
@@ -90,7 +92,10 @@ describe('Sheet - Text Components', () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
-            <SheetTitle asChild data-testid='sheet-title'>
+            <SheetTitle
+              asChild
+              data-testid='sheet-title'
+            >
               <h1>Main Title</h1>
             </SheetTitle>
           </SheetContent>
@@ -105,8 +110,9 @@ describe('Sheet - Text Components', () => {
     });
 
     it('handles long titles gracefully', async () => {
-      const longTitle = 'This is a very long title that should wrap properly and not break the layout of the sheet component';
-      
+      const longTitle =
+        'This is a very long title that should wrap properly and not break the layout of the sheet component';
+
       render(
         <Sheet defaultOpen>
           <SheetContent>
@@ -181,7 +187,10 @@ describe('Sheet - Text Components', () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
-            <SheetDescription className='custom-description' data-testid='sheet-description'>
+            <SheetDescription
+              className='custom-description'
+              data-testid='sheet-description'
+            >
               Description
             </SheetDescription>
           </SheetContent>
@@ -195,8 +204,9 @@ describe('Sheet - Text Components', () => {
     });
 
     it('handles long descriptions', async () => {
-      const longDescription = 'This is a very long description that provides detailed information about the sheet content and what the user can expect to find or do within this dialog. It should wrap properly and maintain good readability.';
-      
+      const longDescription =
+        'This is a very long description that provides detailed information about the sheet content and what the user can expect to find or do within this dialog. It should wrap properly and maintain good readability.';
+
       render(
         <Sheet defaultOpen>
           <SheetContent>
@@ -218,7 +228,8 @@ describe('Sheet - Text Components', () => {
         <Sheet defaultOpen>
           <SheetContent>
             <SheetDescription data-testid='sheet-description'>
-              This description has <em>emphasized</em> and <strong>strong</strong> text.
+              This description has <em>emphasized</em> and{' '}
+              <strong>strong</strong> text.
             </SheetDescription>
           </SheetContent>
         </Sheet>,
@@ -226,7 +237,9 @@ describe('Sheet - Text Components', () => {
 
       await waitFor(() => {
         const description = screen.getByTestId('sheet-description');
-        expect(description).toHaveTextContent('This description has emphasized and strong text.');
+        expect(description).toHaveTextContent(
+          'This description has emphasized and strong text.',
+        );
         expect(description.querySelector('em')).toBeInTheDocument();
         expect(description.querySelector('strong')).toBeInTheDocument();
       });
@@ -246,7 +259,9 @@ describe('Sheet - Text Components', () => {
 
       await waitFor(() => {
         const description = screen.getByTestId('sheet-description');
-        expect(description).toHaveTextContent('First paragraph of the description.Second paragraph with more details.');
+        expect(description).toHaveTextContent(
+          'First paragraph of the description.Second paragraph with more details.',
+        );
         expect(description.querySelectorAll('p')).toHaveLength(2);
       });
     });
@@ -265,7 +280,9 @@ describe('Sheet - Text Components', () => {
       await waitFor(() => {
         const description = screen.getByTestId('sheet-description');
         expect(description).toBeInTheDocument();
-        expect(description).toHaveTextContent('Standalone description without title');
+        expect(description).toHaveTextContent(
+          'Standalone description without title',
+        );
       });
     });
   });
@@ -286,7 +303,7 @@ describe('Sheet - Text Components', () => {
       await waitFor(() => {
         const title = screen.getByTestId('sheet-title');
         const description = screen.getByTestId('sheet-description');
-        
+
         expect(title).toBeInTheDocument();
         expect(description).toBeInTheDocument();
         expect(title).toHaveTextContent('Combined Title');
@@ -309,9 +326,11 @@ describe('Sheet - Text Components', () => {
       await waitFor(() => {
         const title = screen.getByTestId('sheet-title');
         const description = screen.getByTestId('sheet-description');
-        
+
         // Title should come before description in DOM order
-        expect(title.compareDocumentPosition(description)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+        expect(title.compareDocumentPosition(description)).toBe(
+          Node.DOCUMENT_POSITION_FOLLOWING,
+        );
       });
     });
   });

@@ -12,8 +12,8 @@
  * 基础功能测试请参考 page-rendering-basic-core.test.tsx
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import ContactPage from '@/app/[locale]/contact/__tests__/page';
 
@@ -25,8 +25,19 @@ vi.mock('next-intl/server', () => ({
 
 // Mock next/image
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string; alt: string }) => (
-    <img src={src} alt={alt} {...props} />
+  default: ({
+    src,
+    alt,
+    ...props
+  }: React.ImgHTMLAttributes<HTMLImageElement> & {
+    src: string;
+    alt: string;
+  }) => (
+    <img
+      src={src}
+      alt={alt}
+      {...props}
+    />
   ),
 }));
 
@@ -40,9 +51,7 @@ vi.mock('lucide-react', () => ({
 // Mock components
 vi.mock('@/components/layout/header', () => ({
   Header: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid='header'>
-      {children}
-    </div>
+    <div data-testid='header'>{children}</div>
   ),
 }));
 
@@ -64,8 +73,6 @@ describe('Contact Page Rendering - Advanced Tests', () => {
   });
 
   describe('高级时间格式测试', () => {
-
-
     it('应该渲染营业时间信息', async () => {
       const ContactPageComponent = await ContactPage({
         params: Promise.resolve(mockParams),
@@ -97,8 +104,6 @@ describe('Contact Page Rendering - Advanced Tests', () => {
   });
 
   describe('高级图标容器样式测试', () => {
-
-
     it('应该有正确的图标容器样式', async () => {
       const ContactPageComponent = await ContactPage({
         params: Promise.resolve(mockParams),

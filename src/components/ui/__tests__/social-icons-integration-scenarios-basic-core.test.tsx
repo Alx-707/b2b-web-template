@@ -14,10 +14,7 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import {
-    SocialIconLink,
-    SocialIconMapper
-} from '../social-icons';
+import { SocialIconLink, SocialIconMapper } from '../social-icons';
 
 describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
   describe('核心导航菜单集成', () => {
@@ -42,7 +39,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
               />
             </li>
           </ul>
-        </nav>
+        </nav>,
       );
 
       const twitterLink = screen.getByTestId('nav-twitter');
@@ -50,8 +47,14 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
 
       expect(twitterLink).toBeInTheDocument();
       expect(linkedinLink).toBeInTheDocument();
-      expect(twitterLink).toHaveAttribute('href', 'https://twitter.com/example');
-      expect(linkedinLink).toHaveAttribute('href', 'https://linkedin.com/in/example');
+      expect(twitterLink).toHaveAttribute(
+        'href',
+        'https://twitter.com/example',
+      );
+      expect(linkedinLink).toHaveAttribute(
+        'href',
+        'https://linkedin.com/in/example',
+      );
     });
 
     it('maintains accessibility in navigation context', () => {
@@ -63,7 +66,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
             aria-label='GitHub Profile'
             data-testid='nav-github'
           />
-        </nav>
+        </nav>,
       );
 
       const githubLink = screen.getByTestId('nav-github');
@@ -76,7 +79,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
     it('works in basic footer layouts', () => {
       render(
         <footer>
-          <div className="social-links">
+          <div className='social-links'>
             <SocialIconLink
               href='https://twitter.com/company'
               platform='twitter'
@@ -92,7 +95,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
               data-testid='footer-github'
             />
           </div>
-        </footer>
+        </footer>,
       );
 
       const twitterLink = screen.getByTestId('footer-twitter');
@@ -115,7 +118,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
             aria-label='Connect with us on LinkedIn'
             data-testid='footer-linkedin'
           />
-        </footer>
+        </footer>,
       );
 
       const linkedinLink = screen.getByTestId('footer-linkedin');
@@ -127,12 +130,12 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
     it('maps basic platforms correctly', () => {
       const platforms = ['twitter', 'github', 'linkedin'] as const;
 
-      platforms.forEach(platform => {
+      platforms.forEach((platform) => {
         render(
           <SocialIconMapper
             platform={platform}
             data-testid={`mapper-${platform}`}
-          />
+          />,
         );
 
         const icon = screen.getByTestId(`mapper-${platform}`);
@@ -145,7 +148,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
         <SocialIconMapper
           platform='unknown'
           data-testid='mapper-unknown'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('mapper-unknown');
@@ -156,7 +159,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
   describe('基础响应式布局', () => {
     it('applies responsive classes correctly', () => {
       render(
-        <div className="flex space-x-2 md:space-x-4">
+        <div className='flex space-x-2 md:space-x-4'>
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
@@ -173,7 +176,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
             aria-label='Follow us on GitHub'
             data-testid='responsive-github'
           />
-        </div>
+        </div>,
       );
 
       const twitterLink = screen.getByTestId('responsive-twitter');
@@ -185,7 +188,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
 
     it('maintains layout structure in responsive containers', () => {
       render(
-        <div className="grid grid-cols-3 gap-2 md:flex md:space-x-4">
+        <div className='grid grid-cols-3 gap-2 md:flex md:space-x-4'>
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
@@ -204,7 +207,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
             aria-label='Connect with us on LinkedIn'
             data-testid='grid-linkedin'
           />
-        </div>
+        </div>,
       );
 
       const twitterLink = screen.getByTestId('grid-twitter');
@@ -226,7 +229,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           className='text-blue-500 hover:text-blue-600'
           aria-label='Follow us on Twitter'
           data-testid='themed-twitter'
-        />
+        />,
       );
 
       const twitterLink = screen.getByTestId('themed-twitter');
@@ -241,7 +244,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           className='text-gray-600 dark:text-gray-300'
           aria-label='Follow us on GitHub'
           data-testid='dark-github'
-        />
+        />,
       );
 
       const githubLink = screen.getByTestId('dark-github');
@@ -257,7 +260,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           platform='twitter'
           aria-label='Follow us on Twitter'
           data-testid='empty-href'
-        />
+        />,
       );
 
       const link = screen.getByTestId('empty-href');
@@ -272,7 +275,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           platform=''
           aria-label='Follow us'
           data-testid='missing-platform'
-        />
+        />,
       );
 
       const link = screen.getByTestId('missing-platform');
@@ -287,7 +290,7 @@ describe('Social Icons Integration Scenarios - Core Basic Tests', () => {
           iconSize={20}
           aria-label='Follow us on Twitter'
           data-testid='invalid-size'
-        />
+        />,
       );
 
       const link = screen.getByTestId('invalid-size');

@@ -12,17 +12,19 @@
  * - 样式应用
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Moon, Sun } from 'lucide-react';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { ThemeMenuItem } from '../theme-menu-item';
 
 // Mock the DropdownMenuItem component
 vi.mock('@/components/ui/dropdown-menu', () => ({
-  DropdownMenuItem: ({ children, ...props }: React.ComponentProps<"div">) => (
-    <div role="menuitem" {...props}>
+  DropdownMenuItem: ({ children, ...props }: React.ComponentProps<'div'>) => (
+    <div
+      role='menuitem'
+      {...props}
+    >
       {children}
     </div>
   ),
@@ -91,8 +93,8 @@ describe('Theme Menu Item - Rendering Tests', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          label="Custom Theme"
-        />
+          label='Custom Theme'
+        />,
       );
 
       expect(screen.getByText('Custom Theme')).toBeInTheDocument();
@@ -102,8 +104,8 @@ describe('Theme Menu Item - Rendering Tests', () => {
       render(
         <ThemeMenuItem
           {...defaultProps}
-          ariaLabel="Custom aria label"
-        />
+          ariaLabel='Custom aria label'
+        />,
       );
 
       const menuItem = screen.getByRole('menuitem');
@@ -227,7 +229,7 @@ describe('Theme Menu Item - Rendering Tests', () => {
           {...defaultProps}
           theme='light'
           currentTheme='light'
-        />
+        />,
       );
 
       let menuItem = screen.getByRole('menuitem');
@@ -238,7 +240,7 @@ describe('Theme Menu Item - Rendering Tests', () => {
           {...defaultProps}
           theme='dark'
           currentTheme='dark'
-        />
+        />,
       );
 
       menuItem = screen.getByRole('menuitem');
@@ -253,7 +255,7 @@ describe('Theme Menu Item - Rendering Tests', () => {
           {...defaultProps}
           theme='light'
           icon={Sun}
-        />
+        />,
       );
 
       const icon = screen.getByRole('menuitem').querySelector('svg');
@@ -267,7 +269,7 @@ describe('Theme Menu Item - Rendering Tests', () => {
           {...defaultProps}
           theme='dark'
           icon={Moon}
-        />
+        />,
       );
 
       const icon = screen.getByRole('menuitem').querySelector('svg');
@@ -276,7 +278,12 @@ describe('Theme Menu Item - Rendering Tests', () => {
     });
 
     it('handles missing icon gracefully', () => {
-      render(<ThemeMenuItem {...defaultProps} icon={Sun} />);
+      render(
+        <ThemeMenuItem
+          {...defaultProps}
+          icon={Sun}
+        />,
+      );
 
       const menuItem = screen.getByRole('menuitem');
       expect(menuItem).toBeInTheDocument();
@@ -294,7 +301,8 @@ describe('Theme Menu Item - Rendering Tests', () => {
 
   describe('边界情况', () => {
     it('handles undefined currentTheme gracefully', () => {
-      const { currentTheme: currentTheme, ...propsWithoutCurrentTheme } = defaultProps;
+      const { currentTheme: currentTheme, ...propsWithoutCurrentTheme } =
+        defaultProps;
       render(<ThemeMenuItem {...propsWithoutCurrentTheme} />);
 
       expect(screen.queryByLabelText('当前选中')).not.toBeInTheDocument();
@@ -315,7 +323,12 @@ describe('Theme Menu Item - Rendering Tests', () => {
     });
 
     it('handles missing aria-label gracefully', () => {
-      render(<ThemeMenuItem {...defaultProps} ariaLabel="Default aria label" />);
+      render(
+        <ThemeMenuItem
+          {...defaultProps}
+          ariaLabel='Default aria label'
+        />,
+      );
 
       const menuItem = screen.getByRole('menuitem');
       expect(menuItem).toBeInTheDocument();

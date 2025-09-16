@@ -6,7 +6,11 @@
 
 import type { I18nMetrics, Locale } from '@/types/i18n';
 import { logger } from '@/lib/logger';
-import type { MetricsCollector, CacheEvent, CacheEventListener } from './i18n-cache-types';
+import type {
+  CacheEvent,
+  CacheEventListener,
+  MetricsCollector,
+} from './i18n-cache-types';
 
 // 性能指标收集器实现
 export class I18nMetricsCollector implements MetricsCollector {
@@ -41,7 +45,7 @@ export class I18nMetricsCollector implements MetricsCollector {
     this.emitEvent({
       type: 'hit',
       timestamp: Date.now(),
-      metadata: { loadTime: time }
+      metadata: { loadTime: time },
     });
   }
 
@@ -57,8 +61,8 @@ export class I18nMetricsCollector implements MetricsCollector {
       metadata: {
         totalHits: this.cacheHits,
         totalRequests: this.totalRequests,
-        hitRate: this.metrics.cacheHitRate
-      }
+        hitRate: this.metrics.cacheHitRate,
+      },
     });
   }
 
@@ -72,8 +76,8 @@ export class I18nMetricsCollector implements MetricsCollector {
       timestamp: Date.now(),
       metadata: {
         totalRequests: this.totalRequests,
-        hitRate: this.metrics.cacheHitRate
-      }
+        hitRate: this.metrics.cacheHitRate,
+      },
     });
   }
 
@@ -87,8 +91,8 @@ export class I18nMetricsCollector implements MetricsCollector {
       timestamp: Date.now(),
       metadata: {
         totalErrors: this.errors,
-        errorRate: this.metrics.errorRate
-      }
+        errorRate: this.metrics.errorRate,
+      },
     });
   }
 
@@ -103,8 +107,8 @@ export class I18nMetricsCollector implements MetricsCollector {
       metadata: {
         locale,
         usageCount: this.localeUsageCount[locale],
-        totalUsage: this.getTotalLocaleUsage()
-      }
+        totalUsage: this.getTotalLocaleUsage(),
+      },
     });
   }
 
@@ -133,14 +137,15 @@ export class I18nMetricsCollector implements MetricsCollector {
     this.emitEvent({
       type: 'clear',
       timestamp: Date.now(),
-      metadata: { reason: 'metrics_reset' }
+      metadata: { reason: 'metrics_reset' },
     });
   }
 
   // 获取详细统计信息
   getDetailedStats() {
     const uptime = Date.now() - this.startTime;
-    const requestsPerMinute = this.totalRequests > 0 ? (this.totalRequests / (uptime / 60000)) : 0;
+    const requestsPerMinute =
+      this.totalRequests > 0 ? this.totalRequests / (uptime / 60000) : 0;
 
     return {
       uptime,
@@ -179,7 +184,7 @@ export class I18nMetricsCollector implements MetricsCollector {
   private emitEvent(event: CacheEvent): void {
     const listeners = this.eventListeners.get(event.type);
     if (listeners) {
-      listeners.forEach(listener => {
+      listeners.forEach((listener) => {
         try {
           listener(event);
         } catch (error) {
@@ -191,7 +196,7 @@ export class I18nMetricsCollector implements MetricsCollector {
     // 也发送给通用监听器
     const allListeners = this.eventListeners.get('*');
     if (allListeners) {
-      allListeners.forEach(listener => {
+      allListeners.forEach((listener) => {
         try {
           listener(event);
         } catch (error) {
@@ -203,16 +208,14 @@ export class I18nMetricsCollector implements MetricsCollector {
 
   // 更新缓存命中率
   private updateCacheHitRate(): void {
-    this.metrics.cacheHitRate = this.totalRequests > 0
-      ? (this.cacheHits / this.totalRequests) * 100
-      : 0;
+    this.metrics.cacheHitRate =
+      this.totalRequests > 0 ? (this.cacheHits / this.totalRequests) * 100 : 0;
   }
 
   // 更新错误率
   private updateErrorRate(): void {
-    this.metrics.errorRate = this.totalRequests > 0
-      ? (this.errors / this.totalRequests) * 100
-      : 0;
+    this.metrics.errorRate =
+      this.totalRequests > 0 ? (this.errors / this.totalRequests) * 100 : 0;
   }
 
   // 更新语言使用情况
@@ -221,17 +224,21 @@ export class I18nMetricsCollector implements MetricsCollector {
     if (total > 0) {
       this.metrics.localeUsage = Object.keys(this.localeUsageCount).reduce(
         (acc, locale) => {
-          acc[locale as Locale] = ((this.localeUsageCount[locale] ?? 0) / total) * 100;
+          acc[locale as Locale] =
+            ((this.localeUsageCount[locale] ?? 0) / total) * 100;
           return acc;
         },
-        {} as Record<Locale, number>
+        {} as Record<Locale, number>,
       );
     }
   }
 
   // 获取总语言使用次数
   private getTotalLocaleUsage(): number {
-    return Object.values(this.localeUsageCount).reduce((sum, count) => sum + count, 0);
+    return Object.values(this.localeUsageCount).reduce(
+      (sum, count) => sum + count,
+      0,
+    );
   }
 
   // 计算加载时间百分位数
@@ -332,7 +339,10 @@ export class I18nMetricsCollector implements MetricsCollector {
   }
 
   // 生成性能建议
-  private generateRecommendations(stats: Record<string, unknown>, grade: string): string[] {
+  private generateRecommendations(
+    stats: Record<string, unknown>,
+    grade: string,
+  ): string[] {
     const recommendations: string[] = [];
 
     if (this.metrics.cacheHitRate < 80) {
@@ -344,10 +354,13 @@ export class I18nMetricsCollector implements MetricsCollector {
     }
 
     if (this.metrics.loadTime > 100) {
-      recommendations.push('平均加载时间较长，考虑启用预加载或优化翻译文件大小');
+      recommendations.push(
+        '平均加载时间较长，考虑启用预加载或优化翻译文件大小',
+      );
     }
 
-    const requestsPerMinute = typeof stats.requestsPerMinute === 'number' ? stats.requestsPerMinute : 0;
+    const requestsPerMinute =
+      typeof stats.requestsPerMinute === 'number' ? stats.requestsPerMinute : 0;
     if (requestsPerMinute > 100) {
       recommendations.push('请求频率较高，建议增加缓存容量');
     }
@@ -381,6 +394,4 @@ export function formatMetrics(metrics: I18nMetrics): string {
 }
 
 // 导出类型别名
-export type {
-  I18nMetricsCollector as MetricsCollector,
-};
+export type { I18nMetricsCollector as MetricsCollector };

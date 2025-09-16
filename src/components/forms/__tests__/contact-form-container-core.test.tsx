@@ -14,22 +14,30 @@ global.fetch = vi.fn();
 
 // Mock Turnstile
 vi.mock('@/components/ui/turnstile', () => ({
-  Turnstile: ({ onSuccess, onError, onExpire }: { onSuccess?: (token: string) => void; onError?: (error: string) => void; onExpire?: () => void }) => (
-    <div data-testid="turnstile-mock">
+  Turnstile: ({
+    onSuccess,
+    onError,
+    onExpire,
+  }: {
+    onSuccess?: (token: string) => void;
+    onError?: (error: string) => void;
+    onExpire?: () => void;
+  }) => (
+    <div data-testid='turnstile-mock'>
       <button
-        data-testid="turnstile-success"
+        data-testid='turnstile-success'
         onClick={() => onSuccess?.('mock-token')}
       >
         Success
       </button>
       <button
-        data-testid="turnstile-error"
+        data-testid='turnstile-error'
         onClick={() => onError?.('mock-error')}
       >
         Error
       </button>
       <button
-        data-testid="turnstile-expire"
+        data-testid='turnstile-expire'
         onClick={() => onExpire?.()}
       >
         Expire

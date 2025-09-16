@@ -11,12 +11,11 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import {
-    ExternalLinkIcon,
-    LinkedInIcon,
-    SocialIconLink,
-    TwitterIcon,
+  ExternalLinkIcon,
+  LinkedInIcon,
+  SocialIconLink,
+  TwitterIcon,
 } from '../social-icons';
 
 describe('Social Icons Accessibility - Basic Tests', () => {
@@ -33,7 +32,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           <TwitterIcon data-testid='twitter' />
           <LinkedInIcon data-testid='linkedin' />
           <ExternalLinkIcon data-testid='external' />
-        </div>
+        </div>,
       );
 
       const twitter = screen.getByTestId('twitter');
@@ -46,7 +45,12 @@ describe('Social Icons Accessibility - Basic Tests', () => {
     });
 
     it('icons can override aria-hidden when needed', () => {
-      render(<TwitterIcon aria-hidden='false' data-testid='twitter' />);
+      render(
+        <TwitterIcon
+          aria-hidden='false'
+          data-testid='twitter'
+        />,
+      );
 
       const icon = screen.getByTestId('twitter');
       expect(icon).toHaveAttribute('aria-hidden', 'false');
@@ -54,7 +58,10 @@ describe('Social Icons Accessibility - Basic Tests', () => {
 
     it('icons support aria-label for accessibility', () => {
       render(
-        <TwitterIcon aria-label='Twitter icon' data-testid='twitter' />
+        <TwitterIcon
+          aria-label='Twitter icon'
+          data-testid='twitter'
+        />,
       );
 
       const icon = screen.getByTestId('twitter');
@@ -69,7 +76,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           label='Twitter'
           ariaLabel='Follow us on Twitter'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -85,7 +92,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           label='Twitter'
           ariaLabel='Twitter'
           data-testid='external-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('external-link');
@@ -101,7 +108,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           label='Twitter'
           ariaLabel='Twitter'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -122,11 +129,13 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           <div id='twitter-description'>
             Follow our Twitter account for updates
           </div>
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
-      const description = screen.getByText('Follow our Twitter account for updates');
+      const description = screen.getByText(
+        'Follow our Twitter account for updates',
+      );
 
       expect(link).toHaveAttribute('aria-describedby', 'twitter-description');
       expect(description).toBeInTheDocument();
@@ -141,7 +150,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           ariaLabel='Twitter'
           aria-expanded='false'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -167,7 +176,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
             ariaLabel='LinkedIn'
             data-testid='linkedin-link'
           />
-        </div>
+        </div>,
       );
 
       const twitterLink = screen.getByTestId('twitter-link');
@@ -189,7 +198,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           label='Twitter'
           ariaLabel='Twitter'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -217,7 +226,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
             ariaLabel='Twitter'
             data-testid='twitter-link'
           />
-        </div>
+        </div>,
       );
 
       const twitterLink = screen.getByTestId('twitter-link');
@@ -239,7 +248,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
             data-testid='social-link'
           />
           <button data-testid='after'>After</button>
-        </div>
+        </div>,
       );
 
       const beforeButton = screen.getByTestId('before');
@@ -267,7 +276,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           ariaLabel='Twitter'
           className='focus:ring-2 focus:ring-offset-2'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -283,7 +292,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           ariaLabel='Twitter'
           className='text-blue-600 hover:text-blue-800'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -295,7 +304,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
         <TwitterIcon
           className='forced-colors:text-[ButtonText]'
           data-testid='twitter'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('twitter');
@@ -311,7 +320,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           ariaLabel='Twitter'
           className='motion-reduce:transition-none'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -323,7 +332,10 @@ describe('Social Icons Accessibility - Basic Tests', () => {
     it('supports screen reader announcements', () => {
       render(
         <div>
-          <div aria-live='polite' id='announcements'></div>
+          <div
+            aria-live='polite'
+            id='announcements'
+          ></div>
           <SocialIconLink
             href='https://twitter.com/example'
             icon='twitter'
@@ -331,7 +343,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
             ariaLabel='Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const announcements = screen.getByRole('status');
@@ -349,7 +361,7 @@ describe('Social Icons Accessibility - Basic Tests', () => {
           label='Twitter'
           ariaLabel='Click Twitter link'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');

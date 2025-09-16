@@ -6,24 +6,20 @@
  */
 
 import type {
+  LogLevel,
+  MessageStatus,
+  MessageType,
+  ServiceEnvironment,
   WhatsAppConfig,
   WhatsAppServiceOptions,
-  MessageType,
-  MessageStatus,
-  ServiceEnvironment,
-  LogLevel
 } from './whatsapp-service-config';
-
+import type { WhatsAppError } from './whatsapp-service-errors';
 import type {
-  ServiceStatus,
   ServiceHealth,
   ServiceMetrics,
-  WhatsAppServiceEvent
+  ServiceStatus,
+  WhatsAppServiceEvent,
 } from './whatsapp-service-monitoring';
-
-import type {
-  WhatsAppError
-} from './whatsapp-service-errors';
 
 // ==================== Main Service Interface ====================
 
@@ -33,53 +29,56 @@ import type {
  */
 export interface WhatsAppServiceInterface {
   // ==================== Configuration Methods ====================
-  
+
   /**
    * Initialize the service with configuration and options
    * @param config - WhatsApp API configuration
    * @param options - Optional service configuration
    */
-  initialize: (config: WhatsAppConfig, options?: WhatsAppServiceOptions) => Promise<void>;
-  
+  initialize: (
+    config: WhatsAppConfig,
+    options?: WhatsAppServiceOptions,
+  ) => Promise<void>;
+
   /**
    * Get current service status
    * @returns Current service status including health and metrics
    */
   getStatus: () => ServiceStatus;
-  
+
   /**
    * Perform health check and get health status
    * @returns Promise resolving to current health status
    */
   getHealth: () => Promise<ServiceHealth>;
-  
+
   /**
    * Get service metrics
    * @returns Current service metrics
    */
   getMetrics: () => ServiceMetrics;
-  
+
   /**
    * Reset service metrics
    */
   resetMetrics: () => void;
 
   // ==================== Messaging Methods ====================
-  
+
   /**
    * Send a single message
    * @param request - Message request object
    * @returns Promise resolving to message response
    */
   sendMessage: (request: unknown) => Promise<unknown>;
-  
+
   /**
    * Send multiple messages in bulk
    * @param requests - Array of message request objects
    * @returns Promise resolving to array of message responses
    */
   sendBulkMessages: (requests: unknown[]) => Promise<unknown[]>;
-  
+
   /**
    * Send a text message
    * @param to - Recipient phone number
@@ -87,7 +86,7 @@ export interface WhatsAppServiceInterface {
    * @returns Promise resolving to message response
    */
   sendTextMessage: (to: string, text: string) => Promise<unknown>;
-  
+
   /**
    * Send a template message
    * @param to - Recipient phone number
@@ -96,13 +95,13 @@ export interface WhatsAppServiceInterface {
    * @returns Promise resolving to message response
    */
   sendTemplateMessage: (
-    to: string, 
-    templateName: string, 
-    templateData?: Record<string, unknown>
+    to: string,
+    templateName: string,
+    templateData?: Record<string, unknown>,
   ) => Promise<unknown>;
 
   // ==================== Media Methods ====================
-  
+
   /**
    * Upload media file
    * @param file - File to upload (File object or Buffer)
@@ -110,14 +109,14 @@ export interface WhatsAppServiceInterface {
    * @returns Promise resolving to media upload response with ID
    */
   uploadMedia: (file: File | Buffer, type: string) => Promise<{ id: string }>;
-  
+
   /**
    * Get media URL from media ID
    * @param mediaId - Media ID from upload
    * @returns Promise resolving to media URL
    */
   getMediaUrl: (mediaId: string) => Promise<{ url: string }>;
-  
+
   /**
    * Download media from URL
    * @param url - Media URL
@@ -126,21 +125,21 @@ export interface WhatsAppServiceInterface {
   downloadMedia: (url: string) => Promise<Buffer>;
 
   // ==================== Utility Methods ====================
-  
+
   /**
    * Validate phone number format
    * @param phoneNumber - Phone number to validate
    * @returns True if phone number is valid
    */
   validatePhoneNumber: (phoneNumber: string) => boolean;
-  
+
   /**
    * Format phone number to WhatsApp format
    * @param phoneNumber - Phone number to format
    * @returns Formatted phone number
    */
   formatPhoneNumber: (phoneNumber: string) => string;
-  
+
   /**
    * Validate message content
    * @param message - Message object to validate
@@ -149,53 +148,53 @@ export interface WhatsAppServiceInterface {
   validateMessage: (message: unknown) => boolean;
 
   // ==================== Event Methods ====================
-  
+
   /**
    * Add event listener
    * @param event - Event name
    * @param listener - Event listener function
    */
   on: (event: string, listener: (data: unknown) => void) => void;
-  
+
   /**
    * Remove event listener
    * @param event - Event name
    * @param listener - Event listener function to remove
    */
   off: (event: string, listener: (data: unknown) => void) => void;
-  
+
   /**
    * Emit event
    * @param event - Event name
    * @param data - Event data
    */
   emit: (event: string, data: unknown) => void;
-  
+
   /**
    * Remove all event listeners
    */
   removeAllListeners: () => void;
 
   // ==================== Lifecycle Methods ====================
-  
+
   /**
    * Start the service
    * @returns Promise that resolves when service is started
    */
   start: () => Promise<void>;
-  
+
   /**
    * Stop the service
    * @returns Promise that resolves when service is stopped
    */
   stop: () => Promise<void>;
-  
+
   /**
    * Restart the service
    * @returns Promise that resolves when service is restarted
    */
   restart: () => Promise<void>;
-  
+
   /**
    * Check if service is running
    * @returns True if service is running
@@ -305,7 +304,7 @@ export type {
   ServiceMetrics as Metrics,
   WhatsAppServiceInterface as ServiceInterface,
   WhatsAppServiceEvent as ServiceEvent,
-  WhatsAppError as ServiceError
+  WhatsAppError as ServiceError,
 };
 
 // ==================== Factory Types ====================
@@ -316,7 +315,7 @@ export type {
  */
 export type ServiceFactory = (
   config: WhatsAppConfig,
-  options?: WhatsAppServiceOptions
+  options?: WhatsAppServiceOptions,
 ) => WhatsAppServiceInterface;
 
 /**
@@ -377,11 +376,13 @@ export interface PluginManager {
 /**
  * Check if object implements WhatsApp service interface
  */
-export function isWhatsAppService(obj: unknown): obj is WhatsAppServiceInterface {
+export function isWhatsAppService(
+  obj: unknown,
+): obj is WhatsAppServiceInterface {
   if (!obj || typeof obj !== 'object') return false;
-  
+
   const service = obj as Partial<WhatsAppServiceInterface>;
-  
+
   return !!(
     typeof service.initialize === 'function' &&
     typeof service.getStatus === 'function' &&
@@ -409,8 +410,8 @@ export function createDefaultServiceStatus(): ServiceStatus {
       details: {
         api: 'available',
         webhook: 'not_configured',
-        phoneNumber: 'unverified'
-      }
+        phoneNumber: 'unverified',
+      },
     },
     metrics: {
       messagesSent: 0,
@@ -421,12 +422,12 @@ export function createDefaultServiceStatus(): ServiceStatus {
       apiErrors: 0,
       averageResponseTime: 0,
       uptime: 100,
-      lastReset: Date.now()
+      lastReset: Date.now(),
     },
     config: {
       phoneNumberId: '',
       apiVersion: 'v18.0',
-      webhookConfigured: false
-    }
+      webhookConfigured: false,
+    },
   };
 }

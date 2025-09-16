@@ -52,7 +52,7 @@ describe('Badge Basic Rendering Tests', () => {
         'focus:outline-none',
         'focus:ring-2',
         'focus:ring-ring',
-        'focus:ring-offset-2'
+        'focus:ring-offset-2',
       );
     });
 
@@ -77,21 +77,33 @@ describe('Badge Basic Rendering Tests', () => {
       render(<Badge variant='default'>Default Variant</Badge>);
 
       const badge = screen.getByText('Default Variant');
-      expect(badge).toHaveClass('border-transparent', 'bg-primary', 'text-primary-foreground');
+      expect(badge).toHaveClass(
+        'border-transparent',
+        'bg-primary',
+        'text-primary-foreground',
+      );
     });
 
     it('renders secondary variant correctly', () => {
       render(<Badge variant='secondary'>Secondary Variant</Badge>);
 
       const badge = screen.getByText('Secondary Variant');
-      expect(badge).toHaveClass('border-transparent', 'bg-secondary', 'text-secondary-foreground');
+      expect(badge).toHaveClass(
+        'border-transparent',
+        'bg-secondary',
+        'text-secondary-foreground',
+      );
     });
 
     it('renders destructive variant correctly', () => {
       render(<Badge variant='destructive'>Destructive Variant</Badge>);
 
       const badge = screen.getByText('Destructive Variant');
-      expect(badge).toHaveClass('border-transparent', 'bg-destructive', 'text-destructive-foreground');
+      expect(badge).toHaveClass(
+        'border-transparent',
+        'bg-destructive',
+        'text-destructive-foreground',
+      );
     });
 
     it('renders outline variant correctly', () => {
@@ -105,7 +117,11 @@ describe('Badge Basic Rendering Tests', () => {
       render(<Badge>No Variant</Badge>);
 
       const badge = screen.getByText('No Variant');
-      expect(badge).toHaveClass('border-transparent', 'bg-primary', 'text-primary-foreground');
+      expect(badge).toHaveClass(
+        'border-transparent',
+        'bg-primary',
+        'text-primary-foreground',
+      );
     });
 
     it('handles invalid variant gracefully', () => {
@@ -132,7 +148,7 @@ describe('Badge Basic Rendering Tests', () => {
         'transition-colors',
         'border-transparent',
         'bg-secondary',
-        'text-secondary-foreground'
+        'text-secondary-foreground',
       );
     });
 
@@ -161,20 +177,30 @@ describe('Badge Basic Rendering Tests', () => {
       render(<Badge variant='outline'>Outline Hover</Badge>);
 
       const badge = screen.getByText('Outline Hover');
-      expect(badge).toHaveClass('hover:bg-accent', 'hover:text-accent-foreground');
+      expect(badge).toHaveClass(
+        'hover:bg-accent',
+        'hover:text-accent-foreground',
+      );
     });
   });
 
   describe('Visual States', () => {
     it('maintains consistent sizing across variants', () => {
-      const variants = ['default', 'secondary', 'destructive', 'outline'] as const;
+      const variants = [
+        'default',
+        'secondary',
+        'destructive',
+        'outline',
+      ] as const;
 
-      variants.forEach(variant => {
-        const { unmount } = render(<Badge variant={variant}>{variant} Badge</Badge>);
-        
+      variants.forEach((variant) => {
+        const { unmount } = render(
+          <Badge variant={variant}>{variant} Badge</Badge>,
+        );
+
         const badge = screen.getByText(`${variant} Badge`);
         expect(badge).toHaveClass('px-2.5', 'py-0.5', 'text-xs');
-        
+
         unmount();
       });
     });
@@ -187,7 +213,7 @@ describe('Badge Basic Rendering Tests', () => {
         'focus:outline-none',
         'focus:ring-2',
         'focus:ring-ring',
-        'focus:ring-offset-2'
+        'focus:ring-offset-2',
       );
     });
 
@@ -247,7 +273,7 @@ describe('Badge Basic Rendering Tests', () => {
           <Badge variant='secondary'>Secondary Action</Badge>
           <Badge variant='outline'>Tertiary Action</Badge>
           <Badge variant='destructive'>Danger Action</Badge>
-        </div>
+        </div>,
       );
 
       const primary = screen.getByText('Primary Action');
@@ -262,35 +288,49 @@ describe('Badge Basic Rendering Tests', () => {
     });
 
     it('supports responsive design patterns', () => {
-      render(<Badge className='sm:px-3 sm:py-1 sm:text-sm'>Responsive Badge</Badge>);
+      render(
+        <Badge className='sm:px-3 sm:py-1 sm:text-sm'>Responsive Badge</Badge>,
+      );
 
       const badge = screen.getByText('Responsive Badge');
       expect(badge).toHaveClass('sm:px-3', 'sm:py-1', 'sm:text-sm');
     });
 
     it('works with dark mode classes', () => {
-      render(<Badge className='dark:bg-gray-800 dark:text-gray-200'>Dark Mode Badge</Badge>);
+      render(
+        <Badge className='dark:bg-gray-800 dark:text-gray-200'>
+          Dark Mode Badge
+        </Badge>,
+      );
 
       const badge = screen.getByText('Dark Mode Badge');
       expect(badge).toHaveClass('dark:bg-gray-800', 'dark:text-gray-200');
     });
 
     it('supports custom color schemes', () => {
-      render(<Badge className='bg-blue-500 text-white hover:bg-blue-600'>Custom Color</Badge>);
+      render(
+        <Badge className='bg-blue-500 text-white hover:bg-blue-600'>
+          Custom Color
+        </Badge>,
+      );
 
       const badge = screen.getByText('Custom Color');
-      expect(badge).toHaveClass('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+      expect(badge).toHaveClass(
+        'bg-blue-500',
+        'text-white',
+        'hover:bg-blue-600',
+      );
     });
 
     it('maintains accessibility with custom styles', () => {
       render(
-        <Badge 
-          className='bg-yellow-400 text-black' 
-          role='status' 
+        <Badge
+          className='bg-yellow-400 text-black'
+          role='status'
           aria-label='Warning status'
         >
           High Contrast
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('High Contrast');
@@ -300,10 +340,18 @@ describe('Badge Basic Rendering Tests', () => {
     });
 
     it('handles gradient backgrounds', () => {
-      render(<Badge className='bg-gradient-to-r from-purple-500 to-pink-500'>Gradient Badge</Badge>);
+      render(
+        <Badge className='bg-gradient-to-r from-purple-500 to-pink-500'>
+          Gradient Badge
+        </Badge>,
+      );
 
       const badge = screen.getByText('Gradient Badge');
-      expect(badge).toHaveClass('bg-gradient-to-r', 'from-purple-500', 'to-pink-500');
+      expect(badge).toHaveClass(
+        'bg-gradient-to-r',
+        'from-purple-500',
+        'to-pink-500',
+      );
     });
 
     it('supports shadow effects', () => {

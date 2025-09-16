@@ -5,12 +5,9 @@
  */
 
 import type { Locale } from '@/types/i18n';
-;
 import { logger } from '@/lib/logger';
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './locale-constants';
 import type { LocaleDetectionResult } from './locale-detection-types';
-;
-import { LocaleStorageManager } from './locale-storage';
 import { BaseLocaleDetector } from './locale-detector-base';
 import type { DetectionSource } from './locale-detector-constants';
 import {
@@ -18,6 +15,7 @@ import {
   DETECTION_SOURCES,
   QUALITY_THRESHOLDS,
 } from './locale-detector-constants';
+import { LocaleStorageManager } from './locale-storage';
 
 /**
  * 检测结果接口
@@ -57,7 +55,8 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
       return {
         locale: userPreference.locale,
         source: DETECTION_SOURCES.STORED,
-        confidence: userPreference.confidence || CONFIDENCE_WEIGHTS.STORED_PREFERENCE,
+        confidence:
+          userPreference.confidence || CONFIDENCE_WEIGHTS.STORED_PREFERENCE,
         details: { userOverride: userPreference.locale },
       };
     }
@@ -92,7 +91,8 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
       return {
         locale: userPreference.locale,
         source: DETECTION_SOURCES.STORED,
-        confidence: userPreference.confidence || CONFIDENCE_WEIGHTS.STORED_PREFERENCE,
+        confidence:
+          userPreference.confidence || CONFIDENCE_WEIGHTS.STORED_PREFERENCE,
         details: { userOverride: userPreference.locale },
       };
     }
@@ -147,15 +147,19 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
 
     try {
       // 并行执行所有检测方法
-      const [geoLocale, browserLocale, timeZoneLocale, ipLocale] = await Promise.allSettled([
-        this.detectFromGeolocation(),
-        Promise.resolve(this.detectFromBrowser()),
-        Promise.resolve(this.detectFromTimeZone()),
-        this.detectFromIP(),
-      ]);
+      const [geoLocale, browserLocale, timeZoneLocale, ipLocale] =
+        await Promise.allSettled([
+          this.detectFromGeolocation(),
+          Promise.resolve(this.detectFromBrowser()),
+          Promise.resolve(this.detectFromTimeZone()),
+          this.detectFromIP(),
+        ]);
 
       // 处理地理位置检测结果
-      if (geoLocale.status === 'fulfilled' && geoLocale.value !== DEFAULT_LOCALE) {
+      if (
+        geoLocale.status === 'fulfilled' &&
+        geoLocale.value !== DEFAULT_LOCALE
+      ) {
         results.push({
           locale: geoLocale.value,
           source: DETECTION_SOURCES.GEO,
@@ -165,7 +169,10 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
       }
 
       // 处理浏览器语言检测结果
-      if (browserLocale.status === 'fulfilled' && browserLocale.value !== DEFAULT_LOCALE) {
+      if (
+        browserLocale.status === 'fulfilled' &&
+        browserLocale.value !== DEFAULT_LOCALE
+      ) {
         results.push({
           locale: browserLocale.value,
           source: DETECTION_SOURCES.BROWSER,
@@ -175,7 +182,10 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
       }
 
       // 处理时区检测结果
-      if (timeZoneLocale.status === 'fulfilled' && timeZoneLocale.value !== DEFAULT_LOCALE) {
+      if (
+        timeZoneLocale.status === 'fulfilled' &&
+        timeZoneLocale.value !== DEFAULT_LOCALE
+      ) {
         results.push({
           locale: timeZoneLocale.value,
           source: DETECTION_SOURCES.TIMEZONE,
@@ -185,7 +195,10 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
       }
 
       // 处理IP检测结果
-      if (ipLocale.status === 'fulfilled' && ipLocale.value !== DEFAULT_LOCALE) {
+      if (
+        ipLocale.status === 'fulfilled' &&
+        ipLocale.value !== DEFAULT_LOCALE
+      ) {
         results.push({
           locale: ipLocale.value,
           source: DETECTION_SOURCES.GEO, // IP检测归类为地理位置检测
@@ -204,11 +217,18 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
    * 分析最佳语言选择
    * Analyze best locale choice
    */
-  private analyzeBestLocale(detectionResults: DetectionResult[]): LocaleDetectionResult {
+  private analyzeBestLocale(
+    detectionResults: DetectionResult[],
+  ): LocaleDetectionResult {
     // 统计每种语言的出现次数和权重
     const localeStats = new Map<
       Locale,
-      { count: number; totalWeight: number; sources: DetectionSource[]; maxConfidence: number }
+      {
+        count: number;
+        totalWeight: number;
+        sources: DetectionSource[];
+        maxConfidence: number;
+      }
     >();
 
     for (const result of detectionResults) {
@@ -222,7 +242,10 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
       current.count += 1;
       current.totalWeight += result.weight;
       current.sources.push(result.source);
-      current.maxConfidence = Math.max(current.maxConfidence, result.confidence);
+      current.maxConfidence = Math.max(
+        current.maxConfidence,
+        result.confidence,
+      );
 
       localeStats.set(result.locale, current);
     }
@@ -235,7 +258,8 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
 
     for (const [locale, stats] of localeStats.entries()) {
       // 综合得分 = 权重总和 + 一致性奖励
-      const consistencyBonus = stats.count > 1 ? QUALITY_THRESHOLDS.CONSISTENCY_BONUS : 0;
+      const consistencyBonus =
+        stats.count > 1 ? QUALITY_THRESHOLDS.CONSISTENCY_BONUS : 0;
       const score = stats.totalWeight + consistencyBonus;
 
       if (score > bestScore) {
@@ -246,7 +270,7 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
         // 计算最终置信度
         const baseConfidence = Math.min(
           stats.totalWeight / detectionResults.length,
-          QUALITY_THRESHOLDS.HIGH_CONFIDENCE
+          QUALITY_THRESHOLDS.HIGH_CONFIDENCE,
         );
         bestConfidence = Math.min(baseConfidence + consistencyBonus, 1.0);
       }
@@ -273,9 +297,10 @@ export class SmartLocaleDetector extends BaseLocaleDetector {
 
     return {
       locale: bestLocale,
-      source: bestSources.length > QUALITY_THRESHOLDS.MIN_SOURCES_FOR_COMBINED
-        ? DETECTION_SOURCES.COMBINED
-        : bestSources[0] || DETECTION_SOURCES.DEFAULT,
+      source:
+        bestSources.length > QUALITY_THRESHOLDS.MIN_SOURCES_FOR_COMBINED
+          ? DETECTION_SOURCES.COMBINED
+          : bestSources[0] || DETECTION_SOURCES.DEFAULT,
       confidence: bestConfidence,
       details,
     };

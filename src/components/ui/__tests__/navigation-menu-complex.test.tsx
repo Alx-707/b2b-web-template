@@ -2,17 +2,17 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
 } from '../navigation-menu';
 
 // Mock Lucide React icons
@@ -60,23 +60,30 @@ describe('NavigationMenu - Complex Structures', () => {
                 <li className='row-span-3'>
                   <NavigationMenuLink
                     href='/'
-                    className='flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md'
+                    className='from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-gradient-to-b p-6 no-underline outline-none select-none focus:shadow-md'
                   >
-                    <div className='mb-2 mt-4 text-lg font-medium'>
+                    <div className='mt-4 mb-2 text-lg font-medium'>
                       shadcn/ui
                     </div>
-                    <p className='text-sm leading-tight text-muted-foreground'>
-                      Beautifully designed components built with Radix UI and Tailwind CSS.
+                    <p className='text-muted-foreground text-sm leading-tight'>
+                      Beautifully designed components built with Radix UI and
+                      Tailwind CSS.
                     </p>
                   </NavigationMenuLink>
                 </li>
                 <li>
-                  <NavigationMenuLink href='/docs' data-testid='docs-link'>
+                  <NavigationMenuLink
+                    href='/docs'
+                    data-testid='docs-link'
+                  >
                     Introduction
                   </NavigationMenuLink>
                 </li>
                 <li>
-                  <NavigationMenuLink href='/docs/installation' data-testid='installation-link'>
+                  <NavigationMenuLink
+                    href='/docs/installation'
+                    data-testid='installation-link'
+                  >
                     Installation
                   </NavigationMenuLink>
                 </li>
@@ -88,12 +95,18 @@ describe('NavigationMenu - Complex Structures', () => {
             <NavigationMenuContent>
               <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]'>
                 <li>
-                  <NavigationMenuLink href='/docs/primitives/alert-dialog' data-testid='alert-dialog-link'>
+                  <NavigationMenuLink
+                    href='/docs/primitives/alert-dialog'
+                    data-testid='alert-dialog-link'
+                  >
                     Alert Dialog
                   </NavigationMenuLink>
                 </li>
                 <li>
-                  <NavigationMenuLink href='/docs/primitives/hover-card' data-testid='hover-card-link'>
+                  <NavigationMenuLink
+                    href='/docs/primitives/hover-card'
+                    data-testid='hover-card-link'
+                  >
                     Hover Card
                   </NavigationMenuLink>
                 </li>
@@ -101,7 +114,10 @@ describe('NavigationMenu - Complex Structures', () => {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink href='/docs' data-testid='documentation-link'>
+            <NavigationMenuLink
+              href='/docs'
+              data-testid='documentation-link'
+            >
               Documentation
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -148,13 +164,22 @@ describe('NavigationMenu - Complex Structures', () => {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <div className='grid gap-3 p-4'>
-                <NavigationMenuLink href='/section1' data-testid='section1-link'>
+                <NavigationMenuLink
+                  href='/section1'
+                  data-testid='section1-link'
+                >
                   Section 1
                 </NavigationMenuLink>
-                <NavigationMenuLink href='/section2' data-testid='section2-link'>
+                <NavigationMenuLink
+                  href='/section2'
+                  data-testid='section2-link'
+                >
                   Section 2
                 </NavigationMenuLink>
-                <NavigationMenuLink href='/section3' data-testid='section3-link'>
+                <NavigationMenuLink
+                  href='/section3'
+                  data-testid='section3-link'
+                >
                   Section 3
                 </NavigationMenuLink>
               </div>
@@ -202,7 +227,9 @@ describe('NavigationMenu - Complex Structures', () => {
     expect(screen.getByTestId('item-1')).toHaveTextContent('Item 2');
 
     // Update items
-    rerender(<TestComponent items={['New Item 1', 'New Item 2', 'New Item 3']} />);
+    rerender(
+      <TestComponent items={['New Item 1', 'New Item 2', 'New Item 3']} />,
+    );
 
     // Updated items should be rendered
     expect(screen.getByTestId('item-0')).toHaveTextContent('New Item 1');

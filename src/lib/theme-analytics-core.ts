@@ -4,14 +4,13 @@
  * 主题分析核心类
  * Theme analytics core class
  */
-
 import * as Sentry from '@sentry/nextjs';
-import type { 
-  ThemePerformanceMetrics, 
-  ThemeUsageStats, 
-  ThemeSwitchPattern,
+import type {
   ThemeAnalyticsConfig,
-  ThemePerformanceSummary
+  ThemePerformanceMetrics,
+  ThemePerformanceSummary,
+  ThemeSwitchPattern,
+  ThemeUsageStats,
 } from './theme-analytics-types';
 import { ThemeAnalyticsUtils } from './theme-analytics-utils';
 
@@ -61,7 +60,10 @@ export class ThemeAnalytics {
     endTime: number,
     supportsViewTransitions: boolean = false,
   ): void {
-    if (!this.config.enabled || !ThemeAnalyticsUtils.shouldSample(this.config.sampleRate)) {
+    if (
+      !this.config.enabled ||
+      !ThemeAnalyticsUtils.shouldSample(this.config.sampleRate)
+    ) {
       return;
     }
 
@@ -83,7 +85,12 @@ export class ThemeAnalytics {
     this.lastSwitchTime = now;
 
     // 更新使用统计
-    ThemeAnalyticsUtils.updateUsageStats(this.usageStats, toTheme, now, this.lastSwitchTime);
+    ThemeAnalyticsUtils.updateUsageStats(
+      this.usageStats,
+      toTheme,
+      now,
+      this.lastSwitchTime,
+    );
 
     // 发送到Sentry
     ThemeAnalyticsUtils.sendPerformanceMetrics(metrics);
@@ -95,7 +102,12 @@ export class ThemeAnalytics {
 
     // 分析切换模式
     if (this.config.enableUserBehaviorAnalysis) {
-      ThemeAnalyticsUtils.analyzeSwitchPattern(this.switchPatterns, fromTheme, toTheme, switchDuration);
+      ThemeAnalyticsUtils.analyzeSwitchPattern(
+        this.switchPatterns,
+        fromTheme,
+        toTheme,
+        switchDuration,
+      );
     }
 
     // 清理旧数据
@@ -141,7 +153,10 @@ export class ThemeAnalytics {
    * 获取性能摘要
    */
   getPerformanceSummary(): ThemePerformanceSummary {
-    return ThemeAnalyticsUtils.generatePerformanceSummary(this.performanceMetrics, this.usageStats);
+    return ThemeAnalyticsUtils.generatePerformanceSummary(
+      this.performanceMetrics,
+      this.usageStats,
+    );
   }
 
   /**
@@ -178,13 +193,16 @@ export class ThemeAnalytics {
     });
 
     // 发送切换模式分析
-    if (this.config.enableUserBehaviorAnalysis && this.switchPatterns.length > 0) {
+    if (
+      this.config.enableUserBehaviorAnalysis &&
+      this.switchPatterns.length > 0
+    ) {
       const topPatterns = this.switchPatterns
         .sort((a, b) => b.frequency - a.frequency)
         .slice(0, 3);
 
       Sentry.setContext('theme-patterns', {
-        topPatterns: topPatterns.map(p => ({
+        topPatterns: topPatterns.map((p) => ({
           sequence: p.sequence.join(' → '),
           frequency: p.frequency,
           avgDuration: Math.round(p.avgDuration),
@@ -229,7 +247,8 @@ export class ThemeAnalytics {
     const minutesInHour = 60;
     const secondsInMinute = 60;
     const millisecondsInSecond = 1000;
-    const maxAge = hoursInDay * minutesInHour * secondsInMinute * millisecondsInSecond; // 24小时
+    const maxAge =
+      hoursInDay * minutesInHour * secondsInMinute * millisecondsInSecond; // 24小时
 
     ThemeAnalyticsUtils.cleanupOldData(this.performanceMetrics, maxAge);
 

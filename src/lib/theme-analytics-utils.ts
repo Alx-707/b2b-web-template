@@ -6,9 +6,9 @@
 import * as Sentry from '@sentry/nextjs';
 import type {
   ThemePerformanceMetrics,
-  ThemeUsageStats,
+  ThemePerformanceSummary,
   ThemeSwitchPattern,
-  ThemePerformanceSummary
+  ThemeUsageStats,
 } from './theme-analytics-types';
 
 /**
@@ -24,7 +24,7 @@ export class ThemeAnalyticsUtils {
       const array = new Uint32Array(1);
       crypto.getRandomValues(array);
       const maxUint32 = 0xffffffff;
-      const randomValue = array[0] / maxUint32;
+      const randomValue = (array[0] || 0) / maxUint32;
       return randomValue < sampleRate;
     }
 
@@ -114,8 +114,8 @@ export class ThemeAnalyticsUtils {
     const sequence = [fromTheme, toTheme];
     const sequenceKey = sequence.join('-');
 
-    const existing = switchPatterns.find(p =>
-      p.sequence.join('-') === sequenceKey
+    const existing = switchPatterns.find(
+      (p) => p.sequence.join('-') === sequenceKey,
     );
 
     if (existing) {
@@ -142,7 +142,7 @@ export class ThemeAnalyticsUtils {
 
     // 清理性能指标
     const validMetrics = performanceMetrics.filter(
-      metric => metric.timestamp > cutoffTime
+      (metric) => metric.timestamp > cutoffTime,
     );
 
     // 清空原数组并添加有效数据
@@ -169,20 +169,24 @@ export class ThemeAnalyticsUtils {
       };
     }
 
-    const durations = performanceMetrics.map(m => m.switchDuration);
-    const averageDuration = durations.reduce((a, b) => a + b, 0) / durations.length;
-    const slowSwitches = durations.filter(d => d > 100).length; // 超过100ms的切换
+    const durations = performanceMetrics.map((m) => m.switchDuration);
+    const averageDuration =
+      durations.reduce((a, b) => a + b, 0) / durations.length;
+    const slowSwitches = durations.filter((d) => d > 100).length; // 超过100ms的切换
     const fastestSwitch = Math.min(...durations);
     const slowestSwitch = Math.max(...durations);
 
     // 找出最常用的主题
     const usageArray = Array.from(usageStats.values());
-    const mostUsedTheme = usageArray.length > 0
-      ? usageArray.reduce((a, b) => a.count > b.count ? a : b).theme
-      : 'system';
+    const mostUsedTheme =
+      usageArray.length > 0
+        ? usageArray.reduce((a, b) => (a.count > b.count ? a : b)).theme
+        : 'system';
 
     // 检查View Transitions支持
-    const viewTransitionSupport = performanceMetrics.some(m => m.supportsViewTransitions);
+    const viewTransitionSupport = performanceMetrics.some(
+      (m) => m.supportsViewTransitions,
+    );
 
     return {
       totalSwitches: performanceMetrics.length,
@@ -198,7 +202,9 @@ export class ThemeAnalyticsUtils {
   /**
    * 格式化性能数据用于报告
    */
-  static formatPerformanceData(summary: ThemePerformanceSummary): Record<string, unknown> {
+  static formatPerformanceData(
+    summary: ThemePerformanceSummary,
+  ): Record<string, unknown> {
     return {
       total_switches: summary.totalSwitches,
       avg_duration_ms: Math.round(summary.averageDuration),

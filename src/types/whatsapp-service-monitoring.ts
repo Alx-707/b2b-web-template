@@ -228,12 +228,12 @@ export interface RateLimitEvent extends ServiceEvent {
 /**
  * Union type for all WhatsApp service events
  */
-export type WhatsAppServiceEvent = 
-  | MessageSentEvent 
-  | MessageDeliveredEvent 
+export type WhatsAppServiceEvent =
+  | MessageSentEvent
+  | MessageDeliveredEvent
   | MessageReadEvent
   | MessageFailedEvent
-  | ErrorEvent 
+  | ErrorEvent
   | HealthCheckEvent
   | RateLimitEvent;
 
@@ -295,10 +295,7 @@ export interface AlertConfig {
 /**
  * Calculate service uptime percentage
  */
-export function calculateUptime(
-  totalTime: number,
-  downTime: number
-): number {
+export function calculateUptime(totalTime: number, downTime: number): number {
   if (totalTime <= 0) return 100;
   return Math.max(0, Math.min(100, ((totalTime - downTime) / totalTime) * 100));
 }
@@ -308,7 +305,7 @@ export function calculateUptime(
  */
 export function calculateErrorRate(
   totalRequests: number,
-  errorCount: number
+  errorCount: number,
 ): number {
   if (totalRequests <= 0) return 0;
   return Math.min(100, (errorCount / totalRequests) * 100);
@@ -320,18 +317,18 @@ export function calculateErrorRate(
 export function determineHealthStatus(
   errorRate: number,
   responseTime: number,
-  uptime: number
+  uptime: number,
 ): 'healthy' | 'degraded' | 'unhealthy' {
   // Unhealthy thresholds
   if (errorRate > 10 || responseTime > 5000 || uptime < 95) {
     return 'unhealthy';
   }
-  
+
   // Degraded thresholds
   if (errorRate > 5 || responseTime > 2000 || uptime < 99) {
     return 'degraded';
   }
-  
+
   return 'healthy';
 }
 
@@ -348,7 +345,7 @@ export function createDefaultMetrics(): ServiceMetrics {
     apiErrors: 0,
     averageResponseTime: 0,
     uptime: 100,
-    lastReset: Date.now()
+    lastReset: Date.now(),
   };
 }
 
@@ -365,8 +362,8 @@ export function createDefaultHealth(): ServiceHealth {
     details: {
       api: 'available',
       webhook: 'not_configured',
-      phoneNumber: 'unverified'
-    }
+      phoneNumber: 'unverified',
+    },
   };
 }
 
@@ -375,15 +372,16 @@ export function createDefaultHealth(): ServiceHealth {
  */
 export function updateMetrics(
   current: ServiceMetrics,
-  update: Partial<ServiceMetrics>
+  update: Partial<ServiceMetrics>,
 ): ServiceMetrics {
   return {
     ...current,
     ...update,
     // Recalculate average response time if new response time provided
-    averageResponseTime: update.averageResponseTime !== undefined 
-      ? update.averageResponseTime
-      : current.averageResponseTime
+    averageResponseTime:
+      update.averageResponseTime !== undefined
+        ? update.averageResponseTime
+        : current.averageResponseTime,
   };
 }
 
@@ -392,7 +390,7 @@ export function updateMetrics(
  */
 export function needsAttention(
   health: ServiceHealth,
-  metrics: ServiceMetrics
+  metrics: ServiceMetrics,
 ): boolean {
   return (
     health.status !== 'healthy' ||

@@ -22,7 +22,7 @@ describe('Label - Accessibility', () => {
         data-testid='aria-label'
       >
         ARIA Label
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByTestId('aria-label');
@@ -32,9 +32,12 @@ describe('Label - Accessibility', () => {
 
   it('supports aria-required for required fields', () => {
     render(
-      <Label aria-required='true' htmlFor='required-input'>
+      <Label
+        aria-required='true'
+        htmlFor='required-input'
+      >
         Required Field
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByText('Required Field');
@@ -43,9 +46,12 @@ describe('Label - Accessibility', () => {
 
   it('supports aria-invalid for error states', () => {
     render(
-      <Label aria-invalid='true' htmlFor='error-input'>
+      <Label
+        aria-invalid='true'
+        htmlFor='error-input'
+      >
         Error Field
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByText('Error Field');
@@ -55,11 +61,14 @@ describe('Label - Accessibility', () => {
   it('supports aria-labelledby for complex labeling', () => {
     render(
       <div>
-        <Label id='label-1' aria-labelledby='label-2'>
+        <Label
+          id='label-1'
+          aria-labelledby='label-2'
+        >
           Primary Label
         </Label>
         <Label id='label-2'>Secondary Label</Label>
-      </div>
+      </div>,
     );
 
     const primaryLabel = screen.getByText('Primary Label');
@@ -71,7 +80,7 @@ describe('Label - Accessibility', () => {
       <Label data-testid='sr-label'>
         Visible text
         <span className='sr-only'>Screen reader only text</span>
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByTestId('sr-label');
@@ -81,9 +90,12 @@ describe('Label - Accessibility', () => {
   it('handles keyboard navigation', async () => {
     const handleKeyDown = vi.fn();
     render(
-      <Label tabIndex={0} onKeyDown={handleKeyDown}>
+      <Label
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+      >
         Keyboard Label
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByText('Keyboard Label');
@@ -95,9 +107,12 @@ describe('Label - Accessibility', () => {
 
   it('supports high contrast mode', () => {
     render(
-      <Label className='high-contrast' data-testid='contrast-label'>
+      <Label
+        className='high-contrast'
+        data-testid='contrast-label'
+      >
         High Contrast Label
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByTestId('contrast-label');
@@ -108,7 +123,7 @@ describe('Label - Accessibility', () => {
     // Mock reduced motion preference
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: vi.fn().mockImplementation(query => ({
+      value: vi.fn().mockImplementation((query) => ({
         matches: query === '(prefers-reduced-motion: reduce)',
         media: query,
         onchange: null,
@@ -128,9 +143,12 @@ describe('Label - Accessibility', () => {
 
   it('provides proper focus indicators', async () => {
     render(
-      <Label tabIndex={0} data-testid='focusable-label'>
+      <Label
+        tabIndex={0}
+        data-testid='focusable-label'
+      >
         Focusable Label
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByTestId('focusable-label');
@@ -146,7 +164,7 @@ describe('Label - Accessibility', () => {
         data-testid='touch-label'
       >
         Touch Target
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByTestId('touch-label');
@@ -157,11 +175,17 @@ describe('Label - Accessibility', () => {
   it('handles focus management with associated inputs', async () => {
     render(
       <div>
-        <Label htmlFor='focus-input' tabIndex={0}>
+        <Label
+          htmlFor='focus-input'
+          tabIndex={0}
+        >
           Focus Label
         </Label>
-        <input id='focus-input' type='text' />
-      </div>
+        <input
+          id='focus-input'
+          type='text'
+        />
+      </div>,
     );
 
     const label = screen.getByText('Focus Label');
@@ -178,9 +202,12 @@ describe('Label - Accessibility', () => {
 
   it('supports role attribute for semantic meaning', () => {
     render(
-      <Label role='heading' aria-level={2}>
+      <Label
+        role='heading'
+        aria-level={2}
+      >
         Heading Label
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByRole('heading', { level: 2 });
@@ -198,10 +225,14 @@ describe('Label - Accessibility', () => {
         >
           Complex Field
         </Label>
-        <input id='complex-input' type='text' aria-invalid='true' />
+        <input
+          id='complex-input'
+          type='text'
+          aria-invalid='true'
+        />
         <div id='help-text'>Help text</div>
         <div id='error-text'>Error message</div>
-      </div>
+      </div>,
     );
 
     const label = screen.getByTestId('complex-label');
@@ -217,7 +248,7 @@ describe('Label - Accessibility', () => {
         data-testid='wcag-label'
       >
         WCAG Compliant Label
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByTestId('wcag-label');
@@ -233,7 +264,7 @@ describe('Label - Accessibility', () => {
         data-testid='live-label'
       >
         Live Region Label
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByTestId('live-label');
@@ -249,7 +280,7 @@ describe('Label - Accessibility', () => {
         data-testid='i18n-label'
       >
         International Label
-      </Label>
+      </Label>,
     );
 
     const label = screen.getByTestId('i18n-label');

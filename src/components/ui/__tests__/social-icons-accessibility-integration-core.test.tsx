@@ -15,10 +15,10 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    ExternalLinkIcon,
-    LinkedInIcon,
-    SocialIconLink,
-    TwitterIcon
+  ExternalLinkIcon,
+  LinkedInIcon,
+  SocialIconLink,
+  TwitterIcon,
 } from '../social-icons';
 
 describe('Social Icons Accessibility & Integration - Core Tests', () => {
@@ -44,7 +44,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
             label='LinkedIn'
             ariaLabel='Connect with us on LinkedIn'
           />
-        </div>
+        </div>,
       );
 
       const twitterLink = screen.getByRole('link', { name: /twitter/i });
@@ -56,8 +56,12 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('has proper ARIA attributes', () => {
       render(
-        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-        </SocialIconLink>
+        <SocialIconLink
+          href='https://twitter.com/test'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
+        ></SocialIconLink>,
       );
 
       const link = screen.getByRole('link');
@@ -69,11 +73,19 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('supports keyboard navigation', async () => {
       render(
         <div>
-          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-          </SocialIconLink>
-          <SocialIconLink href='https://linkedin.com/in/test' icon='linkedin' label='LinkedIn' ariaLabel='Connect with us on LinkedIn'>
-          </SocialIconLink>
-        </div>
+          <SocialIconLink
+            href='https://twitter.com/test'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Follow us on Twitter'
+          ></SocialIconLink>
+          <SocialIconLink
+            href='https://linkedin.com/in/test'
+            icon='linkedin'
+            label='LinkedIn'
+            ariaLabel='Connect with us on LinkedIn'
+          ></SocialIconLink>
+        </div>,
       );
 
       const twitterLink = screen.getByRole('link', { name: /twitter/i });
@@ -89,8 +101,11 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles external link indicators', () => {
       render(
-        <SocialIconLink href='https://external.com' platform='external' aria-label='External link'>
-        </SocialIconLink>
+        <SocialIconLink
+          href='https://external.com'
+          platform='external'
+          aria-label='External link'
+        ></SocialIconLink>,
       );
 
       const link = screen.getByRole('link');
@@ -116,24 +131,38 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
               aria-label={`Follow us on ${link.platform}`}
             />
           ))}
-        </div>
+        </div>,
       );
 
-      expect(screen.getByRole('link', { name: /twitter/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /linkedin/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /twitter/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /linkedin/i }),
+      ).toBeInTheDocument();
     });
 
     it('handles multiple social icons in navigation', () => {
       render(
         <nav aria-label='Social Media Links'>
-          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-          </SocialIconLink>
-          <SocialIconLink href='https://linkedin.com/in/test' icon='linkedin' label='LinkedIn' ariaLabel='Connect with us on LinkedIn'>
-          </SocialIconLink>
-        </nav>
+          <SocialIconLink
+            href='https://twitter.com/test'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Follow us on Twitter'
+          ></SocialIconLink>
+          <SocialIconLink
+            href='https://linkedin.com/in/test'
+            icon='linkedin'
+            label='LinkedIn'
+            ariaLabel='Connect with us on LinkedIn'
+          ></SocialIconLink>
+        </nav>,
       );
 
-      const navigation = screen.getByRole('navigation', { name: 'Social Media Links' });
+      const navigation = screen.getByRole('navigation', {
+        name: 'Social Media Links',
+      });
       expect(navigation).toBeInTheDocument();
 
       const links = screen.getAllByRole('link');
@@ -145,12 +174,20 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
         <footer>
           <div>
             <h3>Follow Us</h3>
-            <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-            </SocialIconLink>
-            <SocialIconLink href='https://linkedin.com/in/test' icon='linkedin' label='LinkedIn' ariaLabel='Connect with us on LinkedIn'>
-            </SocialIconLink>
+            <SocialIconLink
+              href='https://twitter.com/test'
+              icon='twitter'
+              label='Twitter'
+              ariaLabel='Follow us on Twitter'
+            ></SocialIconLink>
+            <SocialIconLink
+              href='https://linkedin.com/in/test'
+              icon='linkedin'
+              label='LinkedIn'
+              ariaLabel='Connect with us on LinkedIn'
+            ></SocialIconLink>
           </div>
-        </footer>
+        </footer>,
       );
 
       const footer = screen.getByRole('contentinfo');
@@ -166,11 +203,19 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('handles responsive layout integration', () => {
       render(
         <div className='flex flex-wrap gap-4'>
-          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-          </SocialIconLink>
-          <SocialIconLink href='https://linkedin.com/in/test' icon='linkedin' label='LinkedIn' ariaLabel='Connect with us on LinkedIn'>
-          </SocialIconLink>
-        </div>
+          <SocialIconLink
+            href='https://twitter.com/test'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Follow us on Twitter'
+          ></SocialIconLink>
+          <SocialIconLink
+            href='https://linkedin.com/in/test'
+            icon='linkedin'
+            label='LinkedIn'
+            ariaLabel='Connect with us on LinkedIn'
+          ></SocialIconLink>
+        </div>,
       );
 
       const container = screen.getByRole('generic');
@@ -190,8 +235,12 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
       });
 
       render(
-        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-        </SocialIconLink>
+        <SocialIconLink
+          href='https://twitter.com/test'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
+        ></SocialIconLink>,
       );
 
       const link = screen.getByRole('link');
@@ -204,8 +253,12 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles keyboard activation', async () => {
       render(
-        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-        </SocialIconLink>
+        <SocialIconLink
+          href='https://twitter.com/test'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
+        ></SocialIconLink>,
       );
 
       const link = screen.getByRole('link');
@@ -217,8 +270,12 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('provides hover states', async () => {
       render(
-        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-        </SocialIconLink>
+        <SocialIconLink
+          href='https://twitter.com/test'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
+        ></SocialIconLink>,
       );
 
       const link = screen.getByRole('link');
@@ -234,8 +291,12 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
   describe('Error Handling', () => {
     it('handles missing href gracefully', () => {
       render(
-        <SocialIconLink href='' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-        </SocialIconLink>
+        <SocialIconLink
+          href=''
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
+        ></SocialIconLink>,
       );
 
       const link = screen.getByRole('link');
@@ -244,8 +305,11 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles unknown platform gracefully', () => {
       render(
-        <SocialIconLink href='https://example.com' platform='unknown' aria-label='Unknown platform'>
-        </SocialIconLink>
+        <SocialIconLink
+          href='https://example.com'
+          platform='unknown'
+          aria-label='Unknown platform'
+        ></SocialIconLink>,
       );
 
       const link = screen.getByRole('link');
@@ -254,9 +318,14 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles missing children gracefully', () => {
       render(
-        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
+        <SocialIconLink
+          href='https://twitter.com/test'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
+        >
           {/* No children */}
-        </SocialIconLink>
+        </SocialIconLink>,
       );
 
       const link = screen.getByRole('link');
@@ -268,9 +337,13 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('applies theme classes correctly', () => {
       render(
         <div className='dark'>
-          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-          </SocialIconLink>
-        </div>
+          <SocialIconLink
+            href='https://twitter.com/test'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Follow us on Twitter'
+          ></SocialIconLink>
+        </div>,
       );
 
       const container = screen.getByRole('generic');
@@ -283,9 +356,13 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
     it('handles light theme', () => {
       render(
         <div className='light'>
-          <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-          </SocialIconLink>
-        </div>
+          <SocialIconLink
+            href='https://twitter.com/test'
+            icon='twitter'
+            label='Twitter'
+            ariaLabel='Follow us on Twitter'
+          ></SocialIconLink>
+        </div>,
       );
 
       const container = screen.getByRole('generic');
@@ -316,7 +393,7 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
               </SocialIconLink>
             );
           })}
-        </div>
+        </div>,
       );
 
       const links = screen.getAllByRole('link');
@@ -325,15 +402,23 @@ describe('Social Icons Accessibility & Integration - Core Tests', () => {
 
     it('handles re-renders without issues', () => {
       const { rerender } = render(
-        <SocialIconLink href='https://twitter.com/test' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-        </SocialIconLink>
+        <SocialIconLink
+          href='https://twitter.com/test'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
+        ></SocialIconLink>,
       );
 
       expect(screen.getByRole('link')).toBeInTheDocument();
 
       rerender(
-        <SocialIconLink href='https://twitter.com/updated' icon='twitter' label='Twitter' ariaLabel='Follow us on Twitter'>
-        </SocialIconLink>
+        <SocialIconLink
+          href='https://twitter.com/updated'
+          icon='twitter'
+          label='Twitter'
+          ariaLabel='Follow us on Twitter'
+        ></SocialIconLink>,
       );
 
       const link = screen.getByRole('link');

@@ -2,19 +2,19 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from '../sheet';
 
 // Mock Lucide React icons
@@ -60,7 +60,10 @@ describe('Sheet - Integration', () => {
 
           <div className='grid gap-4 py-4'>
             <div className='grid grid-cols-4 items-center gap-4'>
-              <label htmlFor='name' className='text-right'>
+              <label
+                htmlFor='name'
+                className='text-right'
+              >
                 Name
               </label>
               <input
@@ -71,7 +74,10 @@ describe('Sheet - Integration', () => {
               />
             </div>
             <div className='grid grid-cols-4 items-center gap-4'>
-              <label htmlFor='email' className='text-right'>
+              <label
+                htmlFor='email'
+                className='text-right'
+              >
                 Email
               </label>
               <input
@@ -102,7 +108,11 @@ describe('Sheet - Integration', () => {
 
       // Check all components are rendered
       expect(screen.getByText('Complete Sheet Example')).toBeInTheDocument();
-      expect(screen.getByText('This sheet demonstrates all components working together')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'This sheet demonstrates all components working together',
+        ),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('name-input')).toBeInTheDocument();
       expect(screen.getByTestId('email-input')).toBeInTheDocument();
       expect(screen.getByTestId('cancel-button')).toBeInTheDocument();
@@ -132,14 +142,18 @@ describe('Sheet - Integration', () => {
     render(
       <div>
         <Sheet>
-          <SheetTrigger data-testid='sheet-1-trigger'>Open Sheet 1</SheetTrigger>
+          <SheetTrigger data-testid='sheet-1-trigger'>
+            Open Sheet 1
+          </SheetTrigger>
           <SheetContent data-testid='sheet-1-content'>
             <SheetTitle>Sheet 1</SheetTitle>
           </SheetContent>
         </Sheet>
 
         <Sheet>
-          <SheetTrigger data-testid='sheet-2-trigger'>Open Sheet 2</SheetTrigger>
+          <SheetTrigger data-testid='sheet-2-trigger'>
+            Open Sheet 2
+          </SheetTrigger>
           <SheetContent data-testid='sheet-2-content'>
             <SheetTitle>Sheet 2</SheetTitle>
           </SheetContent>
@@ -184,13 +198,22 @@ describe('Sheet - Integration', () => {
 
           <form data-testid='sheet-form'>
             <div className='space-y-4'>
-              <input data-testid='input-1' placeholder='Input 1' />
+              <input
+                data-testid='input-1'
+                placeholder='Input 1'
+              />
               <select data-testid='select-1'>
                 <option value='option1'>Option 1</option>
                 <option value='option2'>Option 2</option>
               </select>
-              <textarea data-testid='textarea-1' placeholder='Textarea' />
-              <button type='button' data-testid='form-button'>
+              <textarea
+                data-testid='textarea-1'
+                placeholder='Textarea'
+              />
+              <button
+                type='button'
+                data-testid='form-button'
+              >
                 Form Button
               </button>
             </div>

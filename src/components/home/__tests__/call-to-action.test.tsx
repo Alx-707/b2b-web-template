@@ -4,7 +4,7 @@
  * 基本集成测试，包括：
  * - 核心渲染功能测试
  * - 基本交互验证
- * 
+ *
  * 详细测试请参考：
  * - call-to-action-basic.test.tsx - 基础渲染和链接验证测试
  * - call-to-action-interaction.test.tsx - 用户交互和可访问性测试
@@ -32,25 +32,60 @@ vi.mock('@/hooks/use-intersection-observer', () => ({
 // Mock Lucide React图标
 vi.mock('lucide-react', () => ({
   ArrowRight: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='arrow-right-icon'>→</span>
+    <span
+      className={className}
+      data-testid='arrow-right-icon'
+    >
+      →
+    </span>
   ),
   BookOpen: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='book-open-icon'>📖</span>
+    <span
+      className={className}
+      data-testid='book-open-icon'
+    >
+      📖
+    </span>
   ),
   Download: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='download-icon'>⬇️</span>
+    <span
+      className={className}
+      data-testid='download-icon'
+    >
+      ⬇️
+    </span>
   ),
   ExternalLink: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='external-link-icon'>🔗</span>
+    <span
+      className={className}
+      data-testid='external-link-icon'
+    >
+      🔗
+    </span>
   ),
   Github: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='github-icon'>🐙</span>
+    <span
+      className={className}
+      data-testid='github-icon'
+    >
+      🐙
+    </span>
   ),
   MessageCircle: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='message-circle-icon'>💬</span>
+    <span
+      className={className}
+      data-testid='message-circle-icon'
+    >
+      💬
+    </span>
   ),
   Star: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='star-icon'>⭐</span>
+    <span
+      className={className}
+      data-testid='star-icon'
+    >
+      ⭐
+    </span>
   ),
 }));
 
@@ -59,7 +94,8 @@ describe('CallToAction Component - Integration Tests', () => {
   const defaultTranslations = {
     'badge': 'Open Source',
     'title': 'Ready to Get Started?',
-    'subtitle': 'Join thousands of developers building amazing projects with our tools.',
+    'subtitle':
+      'Join thousands of developers building amazing projects with our tools.',
     'github.primary.text': 'View on GitHub',
     'github.primary.description': 'Explore the source code',
     'github.secondary.text': 'Star on GitHub',
@@ -78,7 +114,10 @@ describe('CallToAction Component - Integration Tests', () => {
     vi.clearAllMocks();
 
     // 设置默认的翻译Mock
-    const mockT = vi.fn((key: string) => defaultTranslations[key as keyof typeof defaultTranslations] || key);
+    const mockT = vi.fn(
+      (key: string) =>
+        defaultTranslations[key as keyof typeof defaultTranslations] || key,
+    );
     mockUseTranslations.mockReturnValue(mockT);
 
     // 设置默认的Intersection Observer Mock
@@ -94,7 +133,11 @@ describe('CallToAction Component - Integration Tests', () => {
 
       // 验证主要元素存在
       expect(screen.getByText('Ready to Get Started?')).toBeInTheDocument();
-      expect(screen.getByText('Join thousands of developers building amazing projects with our tools.')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Join thousands of developers building amazing projects with our tools.',
+        ),
+      ).toBeInTheDocument();
       expect(screen.getByText('Open Source')).toBeInTheDocument();
     });
 
@@ -102,12 +145,20 @@ describe('CallToAction Component - Integration Tests', () => {
       render(<CallToAction />);
 
       // 验证主要GitHub按钮
-      expect(screen.getByRole('link', { name: /view on github/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /star on github/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /view on github/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /star on github/i }),
+      ).toBeInTheDocument();
 
       // 验证文档和社区链接
-      expect(screen.getByRole('link', { name: /documentation/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /join community/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /documentation/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /join community/i }),
+      ).toBeInTheDocument();
     });
 
     it('应该正确配置外部链接', () => {
@@ -179,7 +230,7 @@ describe('CallToAction Component - Integration Tests', () => {
 
       const firstLink = screen.getByRole('link', { name: /view on github/i });
       firstLink.focus();
-      
+
       expect(firstLink).toHaveFocus();
     });
 
@@ -189,7 +240,7 @@ describe('CallToAction Component - Integration Tests', () => {
       const githubLink = screen.getByRole('link', { name: /view on github/i });
       expect(githubLink).toHaveAttribute(
         'href',
-        'https://github.com/tucsenberg/tucsenberg-web-frontier'
+        'https://github.com/tucsenberg/tucsenberg-web-frontier',
       );
 
       const docsLink = screen.getByRole('link', { name: /documentation/i });
@@ -213,7 +264,10 @@ describe('CallToAction Component - Integration Tests', () => {
     });
 
     it('应该有合理的性能表现', () => {
-      const mockT = vi.fn((key: string) => defaultTranslations[key as keyof typeof defaultTranslations] || key);
+      const mockT = vi.fn(
+        (key: string) =>
+          defaultTranslations[key as keyof typeof defaultTranslations] || key,
+      );
       mockUseTranslations.mockReturnValue(mockT);
 
       render(<CallToAction />);
@@ -238,7 +292,7 @@ describe('CallToAction Component - Integration Tests', () => {
       const { rerender } = render(<CallToAction />);
 
       expect(() => rerender(<CallToAction />)).not.toThrow();
-      
+
       // 验证重新渲染后内容仍然存在
       expect(screen.getByText('Ready to Get Started?')).toBeInTheDocument();
     });

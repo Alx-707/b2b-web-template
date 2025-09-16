@@ -288,14 +288,17 @@ describe('i18n Request Configuration', () => {
 
   describe('性能监控', () => {
     it('应该记录加载时间', async () => {
-      global.performance.now = vi.fn()
+      global.performance.now = vi
+        .fn()
         .mockReturnValueOnce(100) // start time
         .mockReturnValueOnce(150); // end time
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         await configFn({ requestLocale: Promise.resolve('en') });
 
-        expect(mockI18nPerformanceMonitor.recordLoadTime).toHaveBeenCalledWith(50);
+        expect(mockI18nPerformanceMonitor.recordLoadTime).toHaveBeenCalledWith(
+          50,
+        );
 
         return {};
       });
@@ -304,7 +307,8 @@ describe('i18n Request Configuration', () => {
     });
 
     it('应该在元数据中包含性能信息', async () => {
-      global.performance.now = vi.fn()
+      global.performance.now = vi
+        .fn()
         .mockReturnValueOnce(100)
         .mockReturnValueOnce(200);
 
@@ -351,7 +355,9 @@ describe('i18n Request Configuration', () => {
   describe('边缘情况', () => {
     it('应该处理无效的locale', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
-        const result = await configFn({ requestLocale: Promise.resolve('invalid') });
+        const result = await configFn({
+          requestLocale: Promise.resolve('invalid'),
+        });
 
         expect(result.locale).toBe('en'); // 应该回退到默认locale
 
@@ -375,7 +381,9 @@ describe('i18n Request Configuration', () => {
 
     it('应该处理undefined的requestLocale', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
-        const result = await configFn({ requestLocale: Promise.resolve(undefined) });
+        const result = await configFn({
+          requestLocale: Promise.resolve(undefined),
+        });
 
         expect(result.locale).toBe('en'); // 应该回退到默认locale
 

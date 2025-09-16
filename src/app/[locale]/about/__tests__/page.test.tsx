@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import AboutPage, { generateMetadata } from '@/app/[locale]/about/__tests__/page';
+import AboutPage, {
+  generateMetadata,
+} from '@/app/[locale]/about/__tests__/page';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const { mockGetTranslations } = vi.hoisted(() => ({
@@ -14,17 +16,22 @@ vi.mock('next-intl/server', () => ({
 
 // Mock UnderConstruction组件
 vi.mock('@/components/shared/under-construction', () => ({
-  UnderConstruction: ({ pageType, currentStep, expectedDate, showProgress }: {
+  UnderConstruction: ({
+    pageType,
+    currentStep,
+    expectedDate,
+    showProgress,
+  }: {
     pageType: string;
     currentStep: number;
     expectedDate: string;
     showProgress: boolean;
   }) => (
-    <div data-testid="under-construction">
-      <div data-testid="page-type">{pageType}</div>
-      <div data-testid="current-step">{currentStep}</div>
-      <div data-testid="expected-date">{expectedDate}</div>
-      <div data-testid="show-progress">{showProgress.toString()}</div>
+    <div data-testid='under-construction'>
+      <div data-testid='page-type'>{pageType}</div>
+      <div data-testid='current-step'>{currentStep}</div>
+      <div data-testid='expected-date'>{expectedDate}</div>
+      <div data-testid='show-progress'>{showProgress.toString()}</div>
     </div>
   ),
 }));
@@ -64,7 +71,9 @@ describe('AboutPage', () => {
       // 验证传递给UnderConstruction的props
       expect(screen.getByTestId('page-type')).toHaveTextContent('about');
       expect(screen.getByTestId('current-step')).toHaveTextContent('2');
-      expect(screen.getByTestId('expected-date')).toHaveTextContent('2024年第二季度');
+      expect(screen.getByTestId('expected-date')).toHaveTextContent(
+        '2024年第二季度',
+      );
       expect(screen.getByTestId('show-progress')).toHaveTextContent('true');
     });
   });
@@ -208,7 +217,9 @@ describe('AboutPage', () => {
 
     it('应该使用正确的expectedDate', () => {
       render(<AboutPage />);
-      expect(screen.getByTestId('expected-date')).toHaveTextContent('2024年第二季度');
+      expect(screen.getByTestId('expected-date')).toHaveTextContent(
+        '2024年第二季度',
+      );
     });
 
     it('应该启用progress显示', () => {

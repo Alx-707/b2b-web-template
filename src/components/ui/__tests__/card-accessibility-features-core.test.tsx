@@ -21,12 +21,12 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from '../card';
 
 describe('Card Accessibility Features - Core Tests', () => {
@@ -36,7 +36,9 @@ describe('Card Accessibility Features - Core Tests', () => {
         <Card role='article'>
           <CardHeader>
             <CardTitle>Accessible Card</CardTitle>
-            <CardDescription>This card follows accessibility best practices</CardDescription>
+            <CardDescription>
+              This card follows accessibility best practices
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <p>Main content goes here</p>
@@ -44,7 +46,7 @@ describe('Card Accessibility Features - Core Tests', () => {
           <CardFooter>
             <button type='button'>Action</button>
           </CardFooter>
-        </Card>
+        </Card>,
       );
 
       const card = screen.getByRole('article');
@@ -58,12 +60,17 @@ describe('Card Accessibility Features - Core Tests', () => {
 
     it('supports ARIA attributes', () => {
       render(
-        <Card aria-labelledby='card-title' aria-describedby='card-description'>
+        <Card
+          aria-labelledby='card-title'
+          aria-describedby='card-description'
+        >
           <CardHeader>
             <CardTitle id='card-title'>Card with ARIA</CardTitle>
-            <CardDescription id='card-description'>Description for screen readers</CardDescription>
+            <CardDescription id='card-description'>
+              Description for screen readers
+            </CardDescription>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
       const card = screen.getByLabelText('Card with ARIA');
@@ -80,12 +87,12 @@ describe('Card Accessibility Features - Core Tests', () => {
             <button type='button'>Button 1</button>
             <button type='button'>Button 2</button>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       const buttons = screen.getAllByRole('button');
 
-      buttons.forEach(button => {
+      buttons.forEach((button) => {
         expect(button).toBeVisible();
       });
     });
@@ -100,7 +107,7 @@ describe('Card Accessibility Features - Core Tests', () => {
             <a href='#'>Link</a>
             <button type='button'>Button</button>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       const card = screen.getByRole('generic');
@@ -124,7 +131,7 @@ describe('Card Accessibility Features - Core Tests', () => {
               <h3>Subsection</h3>
             </CardContent>
           </Card>
-        </div>
+        </div>,
       );
 
       const pageTitle = screen.getByRole('heading', { level: 1 });
@@ -142,10 +149,12 @@ describe('Card Accessibility Features - Core Tests', () => {
           <CardHeader>
             <CardTitle>Live Region Card</CardTitle>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('Live Region Card').closest('[aria-live="polite"]');
+      const card = screen
+        .getByText('Live Region Card')
+        .closest('[aria-live="polite"]');
       expect(card).toBeInTheDocument();
     });
 
@@ -155,10 +164,12 @@ describe('Card Accessibility Features - Core Tests', () => {
           <CardHeader>
             <CardTitle>High Contrast Card</CardTitle>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('High Contrast Card').closest('.high-contrast');
+      const card = screen
+        .getByText('High Contrast Card')
+        .closest('.high-contrast');
       expect(card).toBeInTheDocument();
     });
 
@@ -168,10 +179,12 @@ describe('Card Accessibility Features - Core Tests', () => {
           <CardHeader>
             <CardTitle>Motion Reduced Card</CardTitle>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('Motion Reduced Card').closest('.reduce-motion');
+      const card = screen
+        .getByText('Motion Reduced Card')
+        .closest('.reduce-motion');
       expect(card).toBeInTheDocument();
     });
 
@@ -182,9 +195,12 @@ describe('Card Accessibility Features - Core Tests', () => {
             <CardTitle>Image Card</CardTitle>
           </CardHeader>
           <CardContent>
-            <img src='/profile.jpg' alt='User profile picture' />
+            <img
+              src='/profile.jpg'
+              alt='User profile picture'
+            />
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       const image = screen.getByAltText('User profile picture');
@@ -193,29 +209,41 @@ describe('Card Accessibility Features - Core Tests', () => {
 
     it('supports internationalization', () => {
       render(
-        <Card lang='es' dir='ltr'>
+        <Card
+          lang='es'
+          dir='ltr'
+        >
           <CardHeader>
             <CardTitle>Tarjeta en Español</CardTitle>
-            <CardDescription>Esta es una descripción en español</CardDescription>
+            <CardDescription>
+              Esta es una descripción en español
+            </CardDescription>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('Tarjeta en Español').closest('[lang="es"]');
+      const card = screen
+        .getByText('Tarjeta en Español')
+        .closest('[lang="es"]');
       expect(card).toHaveAttribute('dir', 'ltr');
     });
 
     it('handles right-to-left languages', () => {
       render(
-        <Card lang='ar' dir='rtl'>
+        <Card
+          lang='ar'
+          dir='rtl'
+        >
           <CardHeader>
             <CardTitle>بطاقة باللغة العربية</CardTitle>
             <CardDescription>هذا وصف باللغة العربية</CardDescription>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('بطاقة باللغة العربية').closest('[dir="rtl"]');
+      const card = screen
+        .getByText('بطاقة باللغة العربية')
+        .closest('[dir="rtl"]');
       expect(card).toHaveAttribute('lang', 'ar');
     });
 
@@ -225,26 +253,29 @@ describe('Card Accessibility Features - Core Tests', () => {
           <CardHeader>
             <CardTitle>High Contrast Text</CardTitle>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('High Contrast Text').closest('.high-contrast-text');
+      const card = screen
+        .getByText('High Contrast Text')
+        .closest('.high-contrast-text');
       expect(card).toBeInTheDocument();
     });
 
     it('provides skip links for complex cards', () => {
       render(
         <Card>
-          <a href='#card-content' className='skip-link'>
+          <a
+            href='#card-content'
+            className='skip-link'
+          >
             Skip to card content
           </a>
           <CardHeader>
             <CardTitle>Complex Card</CardTitle>
           </CardHeader>
-          <CardContent id='card-content'>
-            Main content
-          </CardContent>
-        </Card>
+          <CardContent id='card-content'>Main content</CardContent>
+        </Card>,
       );
 
       const skipLink = screen.getByText('Skip to card content');
@@ -256,11 +287,14 @@ describe('Card Accessibility Features - Core Tests', () => {
 
     it('supports assistive technology landmarks', () => {
       render(
-        <Card role='region' aria-labelledby='card-heading'>
+        <Card
+          role='region'
+          aria-labelledby='card-heading'
+        >
           <CardHeader>
             <CardTitle id='card-heading'>Landmark Card</CardTitle>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
       const region = screen.getByRole('region');
@@ -274,10 +308,20 @@ describe('Card Accessibility Features - Core Tests', () => {
             <CardTitle>Focus Indicator Card</CardTitle>
           </CardHeader>
           <CardContent>
-            <button type='button' className='focus-visible'>Button</button>
-            <a href='#' className='focus-visible'>Link</a>
+            <button
+              type='button'
+              className='focus-visible'
+            >
+              Button
+            </button>
+            <a
+              href='#'
+              className='focus-visible'
+            >
+              Link
+            </a>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       const button = screen.getByRole('button');
@@ -294,10 +338,20 @@ describe('Card Accessibility Features - Core Tests', () => {
             <CardTitle>Voice Control Card</CardTitle>
           </CardHeader>
           <CardContent>
-            <button type='button' aria-label='Edit item'>Edit</button>
-            <button type='button' aria-label='Delete item'>Delete</button>
+            <button
+              type='button'
+              aria-label='Edit item'
+            >
+              Edit
+            </button>
+            <button
+              type='button'
+              aria-label='Delete item'
+            >
+              Delete
+            </button>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       const editButton = screen.getByLabelText('Edit item');
@@ -314,11 +368,14 @@ describe('Card Accessibility Features - Core Tests', () => {
             <CardTitle>Status Update Card</CardTitle>
           </CardHeader>
           <CardContent>
-            <div role='status' aria-live='polite'>
+            <div
+              role='status'
+              aria-live='polite'
+            >
               Loading complete
             </div>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       const status = screen.getByRole('status');
@@ -328,19 +385,27 @@ describe('Card Accessibility Features - Core Tests', () => {
 
     it('handles error states accessibly', () => {
       render(
-        <Card aria-invalid='true' aria-describedby='error-message'>
+        <Card
+          aria-invalid='true'
+          aria-describedby='error-message'
+        >
           <CardHeader>
             <CardTitle>Error State Card</CardTitle>
           </CardHeader>
           <CardContent>
-            <div id='error-message' role='alert'>
+            <div
+              id='error-message'
+              role='alert'
+            >
               An error occurred
             </div>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('Error State Card').closest('[aria-invalid="true"]');
+      const card = screen
+        .getByText('Error State Card')
+        .closest('[aria-invalid="true"]');
       const errorMessage = screen.getByRole('alert');
 
       expect(card).toHaveAttribute('aria-describedby', 'error-message');

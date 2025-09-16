@@ -42,7 +42,10 @@ export interface EnhancedThemeHook {
   /** 基础主题切换函数（带防抖） */
   setTheme: (_theme: string) => void;
   /** 圆形动画主题切换函数（带防抖） */
-  setCircularTheme: (_theme: string, _clickEvent?: React.MouseEvent<HTMLElement>) => void;
+  setCircularTheme: (
+    _theme: string,
+    _clickEvent?: React.MouseEvent<HTMLElement>,
+  ) => void;
   /** 原始的 next-themes 返回值 */
   themes: string[] | undefined;
   forcedTheme: string | undefined;

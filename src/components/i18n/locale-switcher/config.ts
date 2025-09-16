@@ -1,6 +1,5 @@
 import { Globe, MapPin, Monitor } from 'lucide-react';
 import type { Locale } from '@/types/i18n';
-;
 
 export const TRANSITION_TIMEOUT = 1000;
 

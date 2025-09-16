@@ -7,11 +7,11 @@
 
 'use client';
 
+import { logger } from '@/lib/logger';
 import type {
   StorageEvent,
   StorageEventListener,
 } from './locale-storage-types';
-import { logger } from '@/lib/logger';
 
 // ==================== 事件管理 ====================
 
@@ -20,13 +20,17 @@ import { logger } from '@/lib/logger';
  * Event listener management
  */
 export class EventManager {
-  private static eventListeners: Map<string, StorageEventListener[]> = new Map();
+  private static eventListeners: Map<string, StorageEventListener[]> =
+    new Map();
 
   /**
    * 添加事件监听器
    * Add event listener
    */
-  static addEventListener(eventType: string, listener: StorageEventListener): void {
+  static addEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     if (!this.eventListeners.has(eventType)) {
       this.eventListeners.set(eventType, []);
     }
@@ -37,7 +41,10 @@ export class EventManager {
    * 移除事件监听器
    * Remove event listener
    */
-  static removeEventListener(eventType: string, listener: StorageEventListener): void {
+  static removeEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     const listeners = this.eventListeners.get(eventType);
     if (listeners) {
       const index = listeners.indexOf(listener);
@@ -66,7 +73,7 @@ export class EventManager {
   static emitEvent(event: StorageEvent): void {
     const listeners = this.eventListeners.get(event.type);
     if (listeners) {
-      listeners.forEach(listener => {
+      listeners.forEach((listener) => {
         try {
           listener(event);
         } catch (error) {
@@ -133,7 +140,7 @@ export class AccessLogger {
     operation: string,
     success: boolean,
     responseTime?: number,
-    error?: string
+    error?: string,
   ): void {
     const logEntry: AccessLogEntry = {
       key,
@@ -189,29 +196,32 @@ export class AccessLogger {
     recentErrors: AccessLogEntry[];
   } {
     const total = this.accessLog.length;
-    const successful = this.accessLog.filter(entry => entry.success).length;
+    const successful = this.accessLog.filter((entry) => entry.success).length;
     const successRate = total > 0 ? (successful / total) * 100 : 100;
 
     // 计算平均响应时间
     const responseTimes = this.accessLog
-      .filter(entry => entry.responseTime !== undefined)
-      .map(entry => entry.responseTime!);
-    const averageResponseTime = responseTimes.length > 0
-      ? responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length
-      : 0;
+      .filter((entry) => entry.responseTime !== undefined)
+      .map((entry) => entry.responseTime!);
+    const averageResponseTime =
+      responseTimes.length > 0
+        ? responseTimes.reduce((sum, time) => sum + time, 0) /
+          responseTimes.length
+        : 0;
 
     // 统计操作类型
     const operationCounts: Record<string, number> = {};
     const keyCounts: Record<string, number> = {};
 
     for (const entry of this.accessLog) {
-      operationCounts[entry.operation] = (operationCounts[entry.operation] || 0) + 1;
+      operationCounts[entry.operation] =
+        (operationCounts[entry.operation] || 0) + 1;
       keyCounts[entry.key] = (keyCounts[entry.key] || 0) + 1;
     }
 
     // 获取最近的错误
     const recentErrors = this.accessLog
-      .filter(entry => !entry.success)
+      .filter((entry) => !entry.success)
       .slice(0, 10);
 
     return {
@@ -255,7 +265,7 @@ export class ErrorLogger {
     error: string,
     context?: string,
     severity: ErrorLogEntry['severity'] = 'medium',
-    stack?: string
+    stack?: string,
   ): void {
     const errorEntry: ErrorLogEntry = {
       error,
@@ -326,7 +336,10 @@ export class ErrorLogger {
     };
 
     for (const entry of this.errorLog) {
-      if (entry.severity && severityDistribution[entry.severity] !== undefined) {
+      if (
+        entry.severity &&
+        severityDistribution[entry.severity] !== undefined
+      ) {
         severityDistribution[entry.severity]! += 1;
       }
     }
@@ -350,7 +363,10 @@ export class ErrorLogger {
    * 计算错误趋势
    * Calculate error trends
    */
-  private static calculateErrorTrends(): Array<{ date: string; count: number }> {
+  private static calculateErrorTrends(): Array<{
+    date: string;
+    count: number;
+  }> {
     const trends: Record<string, number> = {};
     const now = new Date();
 
@@ -381,29 +397,40 @@ export class ErrorLogger {
  * 清理分析数据
  * Cleanup analytics data
  */
-export function cleanupAnalyticsData(maxAge: number = 7 * 24 * 60 * 60 * 1000): void {
+export function cleanupAnalyticsData(
+  maxAge: number = 7 * 24 * 60 * 60 * 1000,
+): void {
   const cutoffTime = Date.now() - maxAge;
 
   // 清理访问日志
   const accessLog = AccessLogger.getAccessLog();
-  const filteredAccessLog = accessLog.filter(entry => entry.timestamp > cutoffTime);
+  const filteredAccessLog = accessLog.filter(
+    (entry) => entry.timestamp > cutoffTime,
+  );
   AccessLogger.clearAccessLog();
-  filteredAccessLog.forEach(entry => {
+  filteredAccessLog.forEach((entry) => {
     AccessLogger.logAccess(
       entry.key,
       entry.operation,
       entry.success,
       entry.responseTime,
-      entry.error
+      entry.error,
     );
   });
 
   // 清理错误日志
   const errorLog = ErrorLogger.getErrorLog();
-  const filteredErrorLog = errorLog.filter(entry => entry.timestamp > cutoffTime);
+  const filteredErrorLog = errorLog.filter(
+    (entry) => entry.timestamp > cutoffTime,
+  );
   ErrorLogger.clearErrorLog();
-  filteredErrorLog.forEach(entry => {
-    ErrorLogger.logError(entry.error, entry.context, entry.severity, entry.stack);
+  filteredErrorLog.forEach((entry) => {
+    ErrorLogger.logError(
+      entry.error,
+      entry.context,
+      entry.severity,
+      entry.stack,
+    );
   });
 
   // 触发清理事件

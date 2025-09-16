@@ -9,12 +9,12 @@
 
 import { LocalStorageManager } from './locale-storage-local';
 import type {
-  StorageStats,
+  ErrorType,
+  LocaleDetectionHistory,
+  PriorityLevel,
   StorageHealthCheck,
   StorageOperationResult,
-  LocaleDetectionHistory,
-  ErrorType,
-  PriorityLevel,
+  StorageStats,
 } from './locale-storage-types';
 import { estimateStorageSize } from './locale-storage-types';
 
@@ -28,9 +28,14 @@ export function calculateStorageStats(): StorageStats {
   const now = Date.now();
 
   // 获取所有存储的数据
-  const userPreference = LocalStorageManager.get('user-locale-preference') as any;
-  const detectionHistory = (LocalStorageManager.get('locale-detection-history') || { history: [], lastUpdated: 0 }) as any;
-  const fallbackLocale = (LocalStorageManager.get('fallback-locale') || 'en') as any;
+  const userPreference = LocalStorageManager.get(
+    'user-locale-preference',
+  ) as any;
+  const detectionHistory = (LocalStorageManager.get(
+    'locale-detection-history',
+  ) || { history: [], lastUpdated: 0 }) as any;
+  const fallbackLocale = (LocalStorageManager.get('fallback-locale') ||
+    'en') as any;
 
   // 计算存储大小
   const userPreferenceSize = estimateStorageSize(userPreference);
@@ -41,33 +46,38 @@ export function calculateStorageStats(): StorageStats {
   // 计算历史记录统计
   const historyCount = detectionHistory?.history?.length || 0;
   const uniqueLocales = new Set(
-    detectionHistory?.history?.map((h: any) => h.detectedLocale) || []
+    detectionHistory?.history?.map((h: any) => h.detectedLocale) || [],
   ).size;
 
   // 计算最近活动
   const lastActivity = Math.max(
     userPreference?.lastUpdated || 0,
     detectionHistory?.lastUpdated || 0,
-    fallbackLocale?.lastUpdated || 0
+    fallbackLocale?.lastUpdated || 0,
   );
 
   // 计算数据新鲜度 (0-1, 1表示最新)
   const maxAge = 7 * 24 * 60 * 60 * 1000; // 7天
   const dataAge = now - lastActivity;
-  const freshness = Math.max(0, 1 - (dataAge / maxAge));
+  const freshness = Math.max(0, 1 - dataAge / maxAge);
 
   return {
-    totalEntries: (userPreference ? 1 : 0) + (detectionHistory ? 1 : 0) + (fallbackLocale ? 1 : 0),
+    totalEntries:
+      (userPreference ? 1 : 0) +
+      (detectionHistory ? 1 : 0) +
+      (fallbackLocale ? 1 : 0),
     totalSize,
     lastAccessed: lastActivity,
     lastModified: lastActivity,
     accessCount: 0, // 需要从其他地方获取
     errorCount: 0, // 需要从其他地方获取
     freshness,
+    hasOverride: userPreference?.source === 'user_override' || false,
     historyStats: {
       totalEntries: historyCount,
       uniqueLocales,
-      oldestEntry: detectionHistory?.history?.[historyCount - 1]?.timestamp || 0,
+      oldestEntry:
+        detectionHistory?.history?.[historyCount - 1]?.timestamp || 0,
       newestEntry: detectionHistory?.history?.[0]?.timestamp || 0,
     },
   };
@@ -77,7 +87,9 @@ export function calculateStorageStats(): StorageStats {
  * 计算语言分布
  * Calculate locale distribution
  */
-function calculateLocaleDistribution(detectionHistory: LocaleDetectionHistory | null): Record<string, number> {
+function calculateLocaleDistribution(
+  detectionHistory: LocaleDetectionHistory | null,
+): Record<string, number> {
   if (!detectionHistory?.history) {
     return {};
   }
@@ -85,7 +97,8 @@ function calculateLocaleDistribution(detectionHistory: LocaleDetectionHistory | 
   const distribution: Record<string, number> = {};
 
   for (const entry of detectionHistory.history) {
-    const locale = (entry as any).detectedLocale || (entry as any).locale || 'unknown';
+    const locale =
+      (entry as any).detectedLocale || (entry as any).locale || 'unknown';
     distribution[locale] = (distribution[locale] || 0) + 1;
   }
 
@@ -266,7 +279,8 @@ function checkStorageAvailability(): {
     document.cookie = '__test_cookie__=test; path=/';
     result.cookiesAvailable = document.cookie.includes('__test_cookie__');
     // 清理测试 cookie
-    document.cookie = '__test_cookie__=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+    document.cookie =
+      '__test_cookie__=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
   } catch {
     // Cookies 不可用
   }
@@ -285,35 +299,38 @@ function checkStorageAvailability(): {
  * 生成健康建议
  * Generate health recommendations
  */
-function generateHealthRecommendations(healthScore: number, issues: Array<{
-  type: ErrorType;
-  severity: PriorityLevel;
-  message: string;
-  timestamp: number;
-}>): string[] {
+function generateHealthRecommendations(
+  healthScore: number,
+  issues: Array<{
+    type: ErrorType;
+    severity: PriorityLevel;
+    message: string;
+    timestamp: number;
+  }>,
+): string[] {
   const recommendations: string[] = [];
 
   if (healthScore < 0.5) {
     recommendations.push('建议立即检查存储系统配置');
   }
 
-  if (issues.some(issue => issue.message === 'localStorage不可用')) {
+  if (issues.some((issue) => issue.message === 'localStorage不可用')) {
     recommendations.push('检查浏览器设置，确保localStorage已启用');
   }
 
-  if (issues.some(issue => issue.message === 'Cookies不可用')) {
+  if (issues.some((issue) => issue.message === 'Cookies不可用')) {
     recommendations.push('检查浏览器Cookie设置');
   }
 
-  if (issues.some(issue => issue.message === '数据过期')) {
+  if (issues.some((issue) => issue.message === '数据过期')) {
     recommendations.push('考虑清理过期数据或更新数据');
   }
 
-  if (issues.some(issue => issue.message === '存储空间使用过多')) {
+  if (issues.some((issue) => issue.message === '存储空间使用过多')) {
     recommendations.push('清理不必要的历史记录');
   }
 
-  if (issues.some(issue => issue.message === '历史记录过多')) {
+  if (issues.some((issue) => issue.message === '历史记录过多')) {
     recommendations.push('定期清理旧的检测历史记录');
   }
 
@@ -363,17 +380,23 @@ export function calculateStorageEfficiency(stats: StorageStats): number {
   let efficiency = 1.0;
 
   // 数据新鲜度权重 40%
-  efficiency *= (0.6 + 0.4 * stats.freshness);
+  efficiency *= 0.6 + 0.4 * stats.freshness;
 
   // 存储利用率权重 30%
   const maxReasonableSize = 1024 * 1024; // 1MB
-  const sizeEfficiency = Math.min(1, maxReasonableSize / Math.max(stats.totalSize, 1));
-  efficiency *= (0.7 + 0.3 * sizeEfficiency);
+  const sizeEfficiency = Math.min(
+    1,
+    maxReasonableSize / Math.max(stats.totalSize, 1),
+  );
+  efficiency *= 0.7 + 0.3 * sizeEfficiency;
 
   // 历史记录质量权重 30%
   const maxReasonableEntries = 100;
-  const historyEfficiency = Math.min(1, maxReasonableEntries / Math.max(stats.historyStats.totalEntries, 1));
-  efficiency *= (0.7 + 0.3 * historyEfficiency);
+  const historyEfficiency = Math.min(
+    1,
+    maxReasonableEntries / Math.max(stats.historyStats.totalEntries, 1),
+  );
+  efficiency *= 0.7 + 0.3 * historyEfficiency;
 
   return Math.max(0, Math.min(1, efficiency));
 }

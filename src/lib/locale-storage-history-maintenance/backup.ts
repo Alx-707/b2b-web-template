@@ -9,8 +9,7 @@ import type {
   LocaleDetectionHistory,
   StorageOperationResult,
 } from '../locale-storage-types';
-import { exportHistory } from './import-export';
-import { importHistory } from './import-export';
+import { exportHistory, importHistory } from './import-export';
 
 /**
  * 创建历史记录备份
@@ -55,6 +54,8 @@ export function createBackup(): StorageOperationResult<{
  * 从备份恢复历史记录
  * Restore history from backup
  */
-export function restoreFromBackup(backup: LocaleDetectionHistory): StorageOperationResult<LocaleDetectionHistory> {
+export function restoreFromBackup(
+  backup: LocaleDetectionHistory,
+): StorageOperationResult<LocaleDetectionHistory> {
   return importHistory(backup);
 }

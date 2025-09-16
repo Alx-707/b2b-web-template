@@ -2,18 +2,18 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from '../sheet';
 
 // Mock Lucide React icons
@@ -119,7 +119,10 @@ describe('Sheet - Basic Components', () => {
     it('applies custom className', () => {
       render(
         <Sheet>
-          <SheetTrigger className='custom-trigger' data-testid='sheet-trigger'>
+          <SheetTrigger
+            className='custom-trigger'
+            data-testid='sheet-trigger'
+          >
             Open
           </SheetTrigger>
           <SheetContent>Content</SheetContent>
@@ -248,7 +251,13 @@ describe('Sheet - Basic Components', () => {
 
       await waitFor(() => {
         const header = screen.getByTestId('sheet-header');
-        expect(header).toHaveClass('flex', 'flex-col', 'space-y-2', 'text-center', 'sm:text-left');
+        expect(header).toHaveClass(
+          'flex',
+          'flex-col',
+          'space-y-2',
+          'text-center',
+          'sm:text-left',
+        );
       });
     });
 
@@ -256,7 +265,10 @@ describe('Sheet - Basic Components', () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
-            <SheetHeader className='custom-header' data-testid='sheet-header'>
+            <SheetHeader
+              className='custom-header'
+              data-testid='sheet-header'
+            >
               <SheetTitle>Title</SheetTitle>
             </SheetHeader>
           </SheetContent>
@@ -304,7 +316,13 @@ describe('Sheet - Basic Components', () => {
 
       await waitFor(() => {
         const footer = screen.getByTestId('sheet-footer');
-        expect(footer).toHaveClass('flex', 'flex-col-reverse', 'sm:flex-row', 'sm:justify-end', 'sm:space-x-2');
+        expect(footer).toHaveClass(
+          'flex',
+          'flex-col-reverse',
+          'sm:flex-row',
+          'sm:justify-end',
+          'sm:space-x-2',
+        );
       });
     });
 
@@ -312,7 +330,10 @@ describe('Sheet - Basic Components', () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
-            <SheetFooter className='custom-footer' data-testid='sheet-footer'>
+            <SheetFooter
+              className='custom-footer'
+              data-testid='sheet-footer'
+            >
               <button>Action</button>
             </SheetFooter>
           </SheetContent>

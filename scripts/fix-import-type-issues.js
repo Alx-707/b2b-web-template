@@ -131,45 +131,50 @@ function fixImportTypeInFile(filePath) {
     let modified = false;
 
     // 1. 修复错误的import type（应该是值导入）
-    VALUE_IMPORTS.forEach(importName => {
+    VALUE_IMPORTS.forEach((importName) => {
       // 匹配 import type { ImportName } from 'module' 模式
       const typeImportRegex = new RegExp(
         `import\\s+type\\s*{([^}]*\\b${importName}\\b[^}]*)}\\s*from\\s*(['"][^'"]+['"])`,
-        'g'
+        'g',
       );
 
-      newContent = newContent.replace(typeImportRegex, (match, imports, module) => {
-        const importList = imports.split(',').map(imp => imp.trim());
-        const valueImports = [];
-        const typeImports = [];
+      newContent = newContent.replace(
+        typeImportRegex,
+        (match, imports, module) => {
+          const importList = imports.split(',').map((imp) => imp.trim());
+          const valueImports = [];
+          const typeImports = [];
 
-        importList.forEach(imp => {
-          if (VALUE_IMPORTS.some(val => imp.includes(val))) {
-            valueImports.push(imp);
-          } else {
-            typeImports.push(imp);
+          importList.forEach((imp) => {
+            if (VALUE_IMPORTS.some((val) => imp.includes(val))) {
+              valueImports.push(imp);
+            } else {
+              typeImports.push(imp);
+            }
+          });
+
+          let result = '';
+
+          // 添加type import（如果有剩余的类型）
+          if (typeImports.length > 0) {
+            result += `import type { ${typeImports.join(', ')} } from ${module};\n`;
           }
-        });
 
-        let result = '';
+          // 添加value import
+          if (valueImports.length > 0) {
+            result += `import { ${valueImports.join(', ')} } from ${module};`;
+          }
 
-        // 添加type import（如果有剩余的类型）
-        if (typeImports.length > 0) {
-          result += `import type { ${typeImports.join(', ')} } from ${module};\n`;
-        }
+          if (result !== match) {
+            modified = true;
+            console.log(
+              `  修复 ${filePath}: ${importName} 从 type import 改为 value import`,
+            );
+          }
 
-        // 添加value import
-        if (valueImports.length > 0) {
-          result += `import { ${valueImports.join(', ')} } from ${module};`;
-        }
-
-        if (result !== match) {
-          modified = true;
-          console.log(`  修复 ${filePath}: ${importName} 从 type import 改为 value import`);
-        }
-
-        return result || match;
-      });
+          return result || match;
+        },
+      );
     });
 
     // 2. 移除多余的分号
@@ -178,50 +183,55 @@ function fixImportTypeInFile(filePath) {
     });
 
     // 3. 修复缺少的import type（应该是类型导入）
-    TYPE_ONLY_IMPORTS.forEach(importName => {
+    TYPE_ONLY_IMPORTS.forEach((importName) => {
       // 匹配 import { ImportName } from 'module' 模式（非type import）
       const valueImportRegex = new RegExp(
         `import\\s*{([^}]*\\b${importName}\\b[^}]*)}\\s*from\\s*(['"][^'"]+['"])`,
-        'g'
+        'g',
       );
 
-      newContent = newContent.replace(valueImportRegex, (match, imports, module) => {
-        // 跳过已经是type import的情况
-        if (match.includes('import type')) {
-          return match;
-        }
-
-        const importList = imports.split(',').map(imp => imp.trim());
-        const valueImports = [];
-        const typeImports = [];
-
-        importList.forEach(imp => {
-          if (TYPE_ONLY_IMPORTS.some(type => imp.includes(type))) {
-            typeImports.push(imp);
-          } else {
-            valueImports.push(imp);
+      newContent = newContent.replace(
+        valueImportRegex,
+        (match, imports, module) => {
+          // 跳过已经是type import的情况
+          if (match.includes('import type')) {
+            return match;
           }
-        });
 
-        let result = '';
+          const importList = imports.split(',').map((imp) => imp.trim());
+          const valueImports = [];
+          const typeImports = [];
 
-        // 添加type import
-        if (typeImports.length > 0) {
-          result += `import type { ${typeImports.join(', ')} } from ${module};\n`;
-        }
+          importList.forEach((imp) => {
+            if (TYPE_ONLY_IMPORTS.some((type) => imp.includes(type))) {
+              typeImports.push(imp);
+            } else {
+              valueImports.push(imp);
+            }
+          });
 
-        // 添加value import（如果有）
-        if (valueImports.length > 0) {
-          result += `import { ${valueImports.join(', ')} } from ${module};`;
-        }
+          let result = '';
 
-        if (result !== match && typeImports.length > 0) {
-          modified = true;
-          console.log(`  修复 ${filePath}: ${importName} 从 value import 改为 type import`);
-        }
+          // 添加type import
+          if (typeImports.length > 0) {
+            result += `import type { ${typeImports.join(', ')} } from ${module};\n`;
+          }
 
-        return result || match;
-      });
+          // 添加value import（如果有）
+          if (valueImports.length > 0) {
+            result += `import { ${valueImports.join(', ')} } from ${module};`;
+          }
+
+          if (result !== match && typeImports.length > 0) {
+            modified = true;
+            console.log(
+              `  修复 ${filePath}: ${importName} 从 value import 改为 type import`,
+            );
+          }
+
+          return result || match;
+        },
+      );
     });
 
     if (modified) {
@@ -251,7 +261,9 @@ function fixImportTypeInDirectory(dirPath) {
 
       if (stat.isDirectory()) {
         // 跳过node_modules和其他不需要处理的目录
-        if (!['node_modules', '.next', '.git', 'dist', 'build'].includes(item)) {
+        if (
+          !['node_modules', '.next', '.git', 'dist', 'build'].includes(item)
+        ) {
           processDirectory(fullPath);
         }
       } else if (stat.isFile() && /\.(ts|tsx)$/.test(item)) {
@@ -302,7 +314,7 @@ function main() {
     // 显示前10个错误
     const errorLines = errorOutput.split('\n').slice(0, 15);
     console.log('剩余错误示例:');
-    errorLines.forEach(line => {
+    errorLines.forEach((line) => {
       if (line.trim() && line.includes('error TS')) {
         console.log(`  ${line}`);
       }

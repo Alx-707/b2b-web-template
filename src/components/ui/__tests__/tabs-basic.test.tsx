@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../tabs';
 
@@ -59,7 +59,10 @@ describe('Tabs Basic Components', () => {
         const [value, setValue] = React.useState('tab1');
 
         return (
-          <Tabs value={value} onValueChange={setValue}>
+          <Tabs
+            value={value}
+            onValueChange={setValue}
+          >
             <TabsList>
               <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
               <TabsTrigger value='tab2'>Tab 2</TabsTrigger>

@@ -202,7 +202,10 @@ describe('i18n 核心功能单元测试', () => {
       ];
 
       const validateMessages = (messages: Record<string, unknown>) => {
-        const flattenKeys = (obj: Record<string, unknown>, prefix = ''): string[] => {
+        const flattenKeys = (
+          obj: Record<string, unknown>,
+          prefix = '',
+        ): string[] => {
           let keys: string[] = [];
           Object.keys(obj).forEach((key) => {
             const fullKey = prefix ? `${prefix}.${key}` : key;
@@ -330,7 +333,10 @@ describe('i18n 核心功能单元测试', () => {
 
   describe('配置对象生成', () => {
     it('应该生成完整的 i18n 配置对象', () => {
-      const generateConfig = (locale: string, messages: Record<string, unknown>) => {
+      const generateConfig = (
+        locale: string,
+        messages: Record<string, unknown>,
+      ) => {
         return {
           locale,
           messages: messages || {},

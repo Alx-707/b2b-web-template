@@ -1,5 +1,4 @@
 import type { Locale } from '@/types/i18n';
-;
 
 /**
  * 检测结果接口

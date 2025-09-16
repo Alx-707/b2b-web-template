@@ -9,7 +9,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import type { TestResults } from './utils';
-import { getMetricLabel, getMetricStatus, PERFORMANCE_CONSTANTS,  } from './utils';;
+import {
+  getMetricLabel,
+  getMetricStatus,
+  PERFORMANCE_CONSTANTS,
+} from './utils';
 
 // 子组件：页面头部
 export function PageHeader() {

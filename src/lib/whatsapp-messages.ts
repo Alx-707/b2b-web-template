@@ -28,7 +28,9 @@ export class WhatsAppMessageService {
   /**
    * 发送消息的通用方法
    */
-  async sendMessage(message: SendMessageRequest): Promise<WhatsAppServiceResponse> {
+  async sendMessage(
+    message: SendMessageRequest,
+  ): Promise<WhatsAppServiceResponse> {
     try {
       const response = await fetch(
         `${this.baseUrl}/${this.phoneNumberId}/messages`,
@@ -54,7 +56,11 @@ export class WhatsAppMessageService {
         data: data,
       };
     } catch (error) {
-      logger.error('WhatsApp API Error', {}, error instanceof Error ? error : new Error(String(error)));
+      logger.error(
+        'WhatsApp API Error',
+        {},
+        error instanceof Error ? error : new Error(String(error)),
+      );
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',

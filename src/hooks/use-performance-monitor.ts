@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { usePerformanceMeasurements } from './performance-monitor-measurements';
 import type {
   PerformanceAlert,
   PerformanceMetrics,
@@ -8,13 +9,12 @@ import type {
   UsePerformanceMonitorReturn,
 } from './performance-monitor-types';
 import {
-  createPerformanceAlertSystem,
   createMonitoringControls,
+  createPerformanceAlertSystem,
   createPerformanceMonitorReturn,
-  validateAndSanitizeOptions,
   generateAlertId,
+  validateAndSanitizeOptions,
 } from './performance-monitor-utils';
-import { usePerformanceMeasurements } from './performance-monitor-measurements';
 
 /**
  * 性能监控 Hook
@@ -61,7 +61,7 @@ export function usePerformanceMonitor(
         timestamp: Date.now(),
       };
 
-      setAlerts(prev => {
+      setAlerts((prev) => {
         const updated = [...prev, newAlert];
         // 限制警告数量
         if (updated.length > maxAlerts) {

@@ -1,8 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Locale } from '@/types/i18n';
-;
 import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
-import type { LocaleDetectionHistory, UserLocalePreference } from '../locale-storage';
+import type {
+  LocaleDetectionHistory,
+  UserLocalePreference,
+} from '../locale-storage';
 import { LocaleStorageManager } from '../locale-storage';
 
 // Mock constants

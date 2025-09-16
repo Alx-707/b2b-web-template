@@ -13,20 +13,20 @@ export const THEME_OPTIONS = [
     value: 'light',
     icon: Sun,
     labelKey: 'theme.light',
-    ariaLabelKey: 'theme.switchToLight'
+    ariaLabelKey: 'theme.switchToLight',
   },
   {
     value: 'dark',
     icon: Moon,
     labelKey: 'theme.dark',
-    ariaLabelKey: 'theme.switchToDark'
+    ariaLabelKey: 'theme.switchToDark',
   },
   {
     value: 'system',
     icon: Monitor,
     labelKey: 'theme.system',
-    ariaLabelKey: 'theme.switchToSystem'
-  }
+    ariaLabelKey: 'theme.switchToSystem',
+  },
 ] as const;
 
 /**
@@ -34,15 +34,15 @@ export const THEME_OPTIONS = [
  */
 export interface HorizontalThemeToggleProps {
   /** 是否显示文字标签 */
-  showLabels?: boolean;
+  'showLabels'?: boolean;
   /** 组件尺寸 */
-  size?: 'sm' | 'default' | 'lg';
+  'size'?: 'sm' | 'default' | 'lg';
   /** 自定义样式类名 */
-  className?: string;
+  'className'?: string;
   /** 是否禁用动画效果 */
-  disableAnimations?: boolean;
+  'disableAnimations'?: boolean;
   /** 动画变体 */
-  animationVariant?: AnimationVariant;
+  'animationVariant'?: AnimationVariant;
   /** 测试ID */
   'data-testid'?: string;
 }
@@ -56,19 +56,19 @@ export const getSizeClasses = (size: 'sm' | 'default' | 'lg') => {
       return {
         container: 'p-0.5',
         button: 'px-2 py-1 text-xs gap-1.5',
-        icon: 'h-3 w-3'
+        icon: 'h-3 w-3',
       };
     case 'lg':
       return {
         container: 'p-1',
         button: 'px-4 py-2 text-base gap-2',
-        icon: 'h-5 w-5'
+        icon: 'h-5 w-5',
       };
     default:
       return {
         container: 'p-0.5',
         button: 'px-3 py-1.5 text-sm gap-2',
-        icon: 'h-4 w-4'
+        icon: 'h-4 w-4',
       };
   }
 };

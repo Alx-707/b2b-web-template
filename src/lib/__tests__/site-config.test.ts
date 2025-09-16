@@ -224,19 +224,21 @@ describe('Site Configuration', () => {
 
     it('should have no undefined values in configurations', () => {
       const checkForUndefined = (obj: unknown, path = ''): void => {
-        Object.entries(obj as Record<string, unknown>).forEach(([key, value]) => {
-          const currentPath = path ? `${path}.${key}` : key;
-          if (value === undefined) {
-            throw new Error(`Undefined value found at ${currentPath}`);
-          }
-          if (
-            typeof value === 'object' &&
-            value !== null &&
-            !Array.isArray(value)
-          ) {
-            checkForUndefined(value, currentPath);
-          }
-        });
+        Object.entries(obj as Record<string, unknown>).forEach(
+          ([key, value]) => {
+            const currentPath = path ? `${path}.${key}` : key;
+            if (value === undefined) {
+              throw new Error(`Undefined value found at ${currentPath}`);
+            }
+            if (
+              typeof value === 'object' &&
+              value !== null &&
+              !Array.isArray(value)
+            ) {
+              checkForUndefined(value, currentPath);
+            }
+          },
+        );
       };
 
       expect(() => checkForUndefined(PROJECT_STATS)).not.toThrow();

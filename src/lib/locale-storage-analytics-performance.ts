@@ -7,11 +7,13 @@
 
 'use client';
 
-import type {
-  StorageStats,
-} from './locale-storage-types';
-import { AccessLogger, ErrorLogger, type AccessLogEntry } from './locale-storage-analytics-events';
 import { calculateStorageStats } from './locale-storage-analytics-core';
+import {
+  AccessLogger,
+  ErrorLogger,
+  type AccessLogEntry,
+} from './locale-storage-analytics-events';
+import type { StorageStats } from './locale-storage-types';
 
 // ==================== 使用模式分析 ====================
 
@@ -60,7 +62,11 @@ export function getUsagePatterns(): UsagePatterns {
   const averageSessionDuration = calculateAverageSessionDuration(accessLog);
 
   // 生成用户行为洞察
-  const userBehaviorInsights = generateBehaviorInsights(accessStats, peakUsageHours, averageSessionDuration);
+  const userBehaviorInsights = generateBehaviorInsights(
+    accessStats,
+    peakUsageHours,
+    averageSessionDuration,
+  );
 
   return {
     mostAccessedKeys,
@@ -113,20 +119,24 @@ function calculateAverageSessionDuration(accessLog: AccessLogEntry[]): number {
 function generateBehaviorInsights(
   accessStats: ReturnType<typeof AccessLogger.getAccessStats>,
   peakUsageHours: Array<{ hour: number; count: number }>,
-  averageSessionDuration: number
+  averageSessionDuration: number,
 ): string[] {
   const insights: string[] = [];
 
   // 成功率分析
   if (accessStats.successRate < 95) {
-    insights.push(`存储操作成功率较低 (${accessStats.successRate.toFixed(1)}%)，建议检查存储配置`);
+    insights.push(
+      `存储操作成功率较低 (${accessStats.successRate.toFixed(1)}%)，建议检查存储配置`,
+    );
   } else if (accessStats.successRate > 99) {
     insights.push('存储操作成功率优秀，系统运行稳定');
   }
 
   // 响应时间分析
   if (accessStats.averageResponseTime > 100) {
-    insights.push(`平均响应时间较慢 (${accessStats.averageResponseTime.toFixed(1)}ms)，可能需要优化`);
+    insights.push(
+      `平均响应时间较慢 (${accessStats.averageResponseTime.toFixed(1)}ms)，可能需要优化`,
+    );
   } else if (accessStats.averageResponseTime < 10) {
     insights.push('响应时间优秀，存储性能良好');
   }
@@ -189,8 +199,9 @@ export function getPerformanceMetrics(): PerformanceMetrics {
 
   // 计算吞吐量 (操作数/小时)
   const oneHourAgo = Date.now() - 60 * 60 * 1000;
-  const recentOperations = AccessLogger.getAccessLog()
-    .filter(entry => entry.timestamp > oneHourAgo).length;
+  const recentOperations = AccessLogger.getAccessLog().filter(
+    (entry) => entry.timestamp > oneHourAgo,
+  ).length;
   const throughput = recentOperations; // 每小时操作数
 
   // 计算效率分数
@@ -221,7 +232,7 @@ export function getPerformanceMetrics(): PerformanceMetrics {
 function calculateEfficiencyScore(
   accessStats: ReturnType<typeof AccessLogger.getAccessStats>,
   errorStats: ReturnType<typeof ErrorLogger.getErrorStats>,
-  storageStats: StorageStats
+  storageStats: StorageStats,
 ): number {
   let score = 1.0;
 
@@ -229,11 +240,14 @@ function calculateEfficiencyScore(
   score *= 0.7 + 0.3 * (accessStats.successRate / 100);
 
   // 响应时间权重 25%
-  const responseTimeScore = Math.max(0, 1 - (accessStats.averageResponseTime / 1000));
+  const responseTimeScore = Math.max(
+    0,
+    1 - accessStats.averageResponseTime / 1000,
+  );
   score *= 0.75 + 0.25 * responseTimeScore;
 
   // 错误率权重 25%
-  const errorRateScore = Math.max(0, 1 - (errorStats.errorRate / 100));
+  const errorRateScore = Math.max(0, 1 - errorStats.errorRate / 100);
   score *= 0.75 + 0.25 * errorRateScore;
 
   // 数据新鲜度权重 20%
@@ -324,7 +338,10 @@ export function getUsageTrends(days: number = 7): UsageTrends {
  * 计算每日操作数
  * Calculate daily operations
  */
-function calculateDailyOperations(accessLog: AccessLogEntry[], days: number): Array<{ date: string; operations: number }> {
+function calculateDailyOperations(
+  accessLog: AccessLogEntry[],
+  days: number,
+): Array<{ date: string; operations: number }> {
   const dailyOps: Record<string, number> = {};
   const now = new Date();
 
@@ -345,14 +362,20 @@ function calculateDailyOperations(accessLog: AccessLogEntry[], days: number): Ar
     }
   }
 
-  return Object.entries(dailyOps).map(([date, operations]) => ({ date, operations }));
+  return Object.entries(dailyOps).map(([date, operations]) => ({
+    date,
+    operations,
+  }));
 }
 
 /**
  * 计算增长率
  * Calculate growth rate
  */
-function calculateGrowthRate(dailyOperations: Array<{ date: string; operations: number }>, period: number): number {
+function calculateGrowthRate(
+  dailyOperations: Array<{ date: string; operations: number }>,
+  period: number,
+): number {
   if (dailyOperations.length < period) return 0;
 
   const recent = dailyOperations.slice(-period);
@@ -360,8 +383,10 @@ function calculateGrowthRate(dailyOperations: Array<{ date: string; operations: 
 
   if (previous.length === 0) return 0;
 
-  const recentAvg = recent.reduce((sum, day) => sum + day.operations, 0) / recent.length;
-  const previousAvg = previous.reduce((sum, day) => sum + day.operations, 0) / previous.length;
+  const recentAvg =
+    recent.reduce((sum, day) => sum + day.operations, 0) / recent.length;
+  const previousAvg =
+    previous.reduce((sum, day) => sum + day.operations, 0) / previous.length;
 
   return previousAvg > 0 ? ((recentAvg - previousAvg) / previousAvg) * 100 : 0;
 }
@@ -370,13 +395,15 @@ function calculateGrowthRate(dailyOperations: Array<{ date: string; operations: 
  * 分析季节性模式
  * Analyze seasonal patterns
  */
-function analyzeSeasonalPatterns(accessLog: AccessLogEntry[]): Array<{ period: string; avgOperations: number }> {
+function analyzeSeasonalPatterns(
+  accessLog: AccessLogEntry[],
+): Array<{ period: string; avgOperations: number }> {
   const patterns: Record<string, number[]> = {
-    '工作日': [],
-    '周末': [],
-    '上午': [],
-    '下午': [],
-    '晚上': [],
+    工作日: [],
+    周末: [],
+    上午: [],
+    下午: [],
+    晚上: [],
   };
 
   for (const entry of accessLog) {
@@ -413,7 +440,7 @@ function analyzeSeasonalPatterns(accessLog: AccessLogEntry[]): Array<{ period: s
  */
 function generatePredictions(
   dailyOperations: Array<{ date: string; operations: number }>,
-  futureDays: number
+  futureDays: number,
 ): Array<{ date: string; predictedOperations: number }> {
   if (dailyOperations.length < 3) {
     return [];
@@ -421,21 +448,28 @@ function generatePredictions(
 
   // 简单线性趋势预测
   const recent = dailyOperations.slice(-7); // 使用最近7天数据
-  const avgOperations = recent.reduce((sum, day) => sum + day.operations, 0) / recent.length;
+  const avgOperations =
+    recent.reduce((sum, day) => sum + day.operations, 0) / recent.length;
 
   // 计算趋势斜率
-  const trend = recent.length > 1
-    ? (recent[recent.length - 1]!.operations - recent[0]!.operations) / (recent.length - 1)
-    : 0;
+  const trend =
+    recent.length > 1
+      ? (recent[recent.length - 1]!.operations - recent[0]!.operations) /
+        (recent.length - 1)
+      : 0;
 
   const predictions: Array<{ date: string; predictedOperations: number }> = [];
 
   for (let i = 1; i <= futureDays; i++) {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + i);
-    const dateStr = futureDate.toISOString().split('T')[0] || futureDate.toISOString();
+    const dateStr =
+      futureDate.toISOString().split('T')[0] || futureDate.toISOString();
 
-    const predictedOperations = Math.max(0, Math.round(avgOperations + trend * i));
+    const predictedOperations = Math.max(
+      0,
+      Math.round(avgOperations + trend * i),
+    );
 
     predictions.push({
       date: dateStr,

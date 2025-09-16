@@ -7,7 +7,8 @@
 
 type LogArgs = [message?: unknown, ...optionalParams: unknown[]];
 
-const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test';
+const isDev =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test';
 
 function devOnly(fn: (...args: LogArgs) => void) {
   return (...args: LogArgs) => {

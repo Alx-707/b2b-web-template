@@ -6,15 +6,15 @@
  */
 
 import type { Locale } from '@/types/i18n';
+import type { AdvancedCacheConfig } from './i18n-cache-types-advanced';
 import type {
   CacheConfig,
-  CacheItem,
+  CacheConfigValidation,
   CacheEvent,
   CacheEventType,
+  CacheItem,
   CacheStats,
-  CacheConfigValidation,
 } from './i18n-cache-types-base';
-import type { AdvancedCacheConfig } from './i18n-cache-types-advanced';
 
 /**
  * 缓存键工具函数
@@ -36,7 +36,11 @@ export const CacheKeyUtils = {
    * 解析缓存键
    * Parse cache key
    */
-  parse(cacheKey: string): { locale: Locale; namespace?: string; key?: string } {
+  parse(cacheKey: string): {
+    locale: Locale;
+    namespace?: string;
+    key?: string;
+  } {
     const parts = cacheKey.split(':');
     return {
       locale: parts[0] as Locale,
@@ -58,7 +62,10 @@ export const CacheKeyUtils = {
    * Normalize cache key
    */
   normalize(key: string): string {
-    return key.toLowerCase().trim().replace(/[^a-z0-9:_-]/g, '_');
+    return key
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9:_-]/g, '_');
   },
 
   /**
@@ -188,7 +195,9 @@ export const CacheSizeUtils = {
 
     const [, value, unit] = match;
     if (!value || !unit) throw new Error(`Invalid size format: ${sizeStr}`);
-    return parseFloat(value) * (units[unit.toUpperCase() as keyof typeof units] || 1);
+    return (
+      parseFloat(value) * (units[unit.toUpperCase() as keyof typeof units] || 1)
+    );
   },
 } as const;
 
@@ -213,7 +222,10 @@ export const CacheStatsUtils = {
   calculateAverageAge(items: Array<{ timestamp: number }>): number {
     if (items.length === 0) return 0;
     const now = Date.now();
-    const totalAge = items.reduce((sum, item) => sum + (now - item.timestamp), 0);
+    const totalAge = items.reduce(
+      (sum, item) => sum + (now - item.timestamp),
+      0,
+    );
     return totalAge / items.length;
   },
 
@@ -232,7 +244,10 @@ export const CacheStatsUtils = {
    * 比较统计数据
    * Compare statistics
    */
-  compareStats(before: CacheStats, after: CacheStats): {
+  compareStats(
+    before: CacheStats,
+    after: CacheStats,
+  ): {
     sizeDiff: number;
     hitsDiff: number;
     ageDiff: number;
@@ -293,7 +308,10 @@ export const CacheValidationUtils = {
     }
 
     if (config.storageKey !== undefined) {
-      if (typeof config.storageKey !== 'string' || config.storageKey.length === 0) {
+      if (
+        typeof config.storageKey !== 'string' ||
+        config.storageKey.length === 0
+      ) {
         errors.push('storageKey must be a non-empty string');
       }
     }
@@ -315,7 +333,9 @@ export const CacheValidationUtils = {
    * 验证高级配置
    * Validate advanced configuration
    */
-  validateAdvancedConfig(config: Partial<AdvancedCacheConfig>): CacheConfigValidation {
+  validateAdvancedConfig(
+    config: Partial<AdvancedCacheConfig>,
+  ): CacheConfigValidation {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -326,21 +346,35 @@ export const CacheValidationUtils = {
 
     // 验证压缩配置
     if (config.compression) {
-      if (config.compression.enableCompression && config.compression.threshold < 0) {
+      if (
+        config.compression.enableCompression &&
+        config.compression.threshold < 0
+      ) {
         errors.push('compression threshold must be non-negative');
       }
-      if (config.compression.level !== undefined && (config.compression.level < 1 || config.compression.level > 9)) {
+      if (
+        config.compression.level !== undefined &&
+        (config.compression.level < 1 || config.compression.level > 9)
+      ) {
         errors.push('compression level must be between 1 and 9');
       }
     }
 
     // 验证性能配置
     if (config.performance) {
-      if (config.performance.maxConcurrentLoads !== undefined && config.performance.maxConcurrentLoads < 1) {
+      if (
+        config.performance.maxConcurrentLoads !== undefined &&
+        config.performance.maxConcurrentLoads < 1
+      ) {
         errors.push('maxConcurrentLoads must be at least 1');
       }
-      if (config.performance.loadTimeout !== undefined && config.performance.loadTimeout < 1000) {
-        warnings.push('loadTimeout is very short (<1s), consider increasing it');
+      if (
+        config.performance.loadTimeout !== undefined &&
+        config.performance.loadTimeout < 1000
+      ) {
+        warnings.push(
+          'loadTimeout is very short (<1s), consider increasing it',
+        );
       }
     }
 
@@ -365,7 +399,9 @@ export const CacheSerializationUtils = {
     try {
       return JSON.stringify(data);
     } catch (error) {
-      throw new Error(`Serialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Serialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   },
 
@@ -377,7 +413,9 @@ export const CacheSerializationUtils = {
     try {
       return JSON.parse(data) as T;
     } catch (error) {
-      throw new Error(`Deserialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Deserialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   },
 
@@ -428,10 +466,18 @@ export const CacheEventUtils = {
    * 过滤事件
    * Filter events
    */
-  filterEvents<T>(events: CacheEvent<T>[], type?: string, timeRange?: { start: number; end: number }): CacheEvent<T>[] {
-    return events.filter(event => {
+  filterEvents<T>(
+    events: CacheEvent<T>[],
+    type?: string,
+    timeRange?: { start: number; end: number },
+  ): CacheEvent<T>[] {
+    return events.filter((event) => {
       if (type && event.type !== type) return false;
-      if (timeRange && (event.timestamp < timeRange.start || event.timestamp > timeRange.end)) return false;
+      if (
+        timeRange &&
+        (event.timestamp < timeRange.start || event.timestamp > timeRange.end)
+      )
+        return false;
       return true;
     });
   },
@@ -442,7 +488,7 @@ export const CacheEventUtils = {
    */
   aggregateEvents<T>(events: CacheEvent<T>[]): Record<string, number> {
     const stats: Record<string, number> = {};
-    events.forEach(event => {
+    events.forEach((event) => {
       stats[event.type] = (stats[event.type] || 0) + 1;
     });
     return stats;
@@ -493,7 +539,9 @@ export const CacheDebugUtils = {
     if (typeof performance !== 'undefined' && performance.measure) {
       performance.measure(name, startMark, endMark);
       const entries = performance.getEntriesByName(name);
-      return entries.length > 0 ? (entries[entries.length - 1]?.duration ?? 0) : 0;
+      return entries.length > 0
+        ? (entries[entries.length - 1]?.duration ?? 0)
+        : 0;
     }
     return 0;
   },

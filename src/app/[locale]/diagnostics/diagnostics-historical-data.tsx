@@ -1,11 +1,11 @@
 // 诊断页面历史数据组件
 
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
 import { HistoryItem } from './diagnostics-constants';
 import { formatMetric, type SimpleWebVitals } from './utils';
@@ -56,15 +56,30 @@ interface HistoricalTrendProps {
  * 历史趋势组件
  * 显示特定指标的历史趋势
  */
-export function HistoricalTrend({ data, metricKey, title }: HistoricalTrendProps) {
+export function HistoricalTrend({
+  data,
+  metricKey,
+  title,
+}: HistoricalTrendProps) {
   if (data.length === 0) return null;
 
-  const values = data.map(record => record[metricKey as keyof SimpleWebVitals] as number);
+  const values = data.map(
+    (record) => record[metricKey as keyof SimpleWebVitals] as number,
+  );
   const average = values.reduce((sum, val) => sum + val, 0) / values.length;
   const latest = values[values.length - 1];
-  const trend = values.length > 1 ?
-    (latest && values[values.length - 2] !== undefined && latest > (values[values.length - 2] ?? 0) ? 'up' :
-     latest && values[values.length - 2] !== undefined && latest < (values[values.length - 2] ?? 0) ? 'down' : 'same') : 'same';
+  const trend =
+    values.length > 1
+      ? latest &&
+        values[values.length - 2] !== undefined &&
+        latest > (values[values.length - 2] ?? 0)
+        ? 'up'
+        : latest &&
+            values[values.length - 2] !== undefined &&
+            latest < (values[values.length - 2] ?? 0)
+          ? 'down'
+          : 'same'
+      : 'same';
 
   return (
     <Card>
@@ -79,34 +94,44 @@ export function HistoricalTrend({ data, metricKey, title }: HistoricalTrendProps
               <div className='text-2xl font-bold'>
                 {formatMetric(metricKey, latest || 0)}
               </div>
-              <div className='text-sm text-muted-foreground'>最新值</div>
+              <div className='text-muted-foreground text-sm'>最新值</div>
             </div>
             <div>
               <div className='text-2xl font-bold'>
                 {formatMetric(metricKey, average)}
               </div>
-              <div className='text-sm text-muted-foreground'>平均值</div>
+              <div className='text-muted-foreground text-sm'>平均值</div>
             </div>
             <div>
-              <div className={`text-2xl font-bold ${
-                trend === 'up' ? 'text-red-600' :
-                trend === 'down' ? 'text-green-600' :
-                'text-gray-600'
-              }`}>
+              <div
+                className={`text-2xl font-bold ${
+                  trend === 'up'
+                    ? 'text-red-600'
+                    : trend === 'down'
+                      ? 'text-green-600'
+                      : 'text-gray-600'
+                }`}
+              >
                 {trend === 'up' ? '↗️' : trend === 'down' ? '↘️' : '→'}
               </div>
-              <div className='text-sm text-muted-foreground'>趋势</div>
+              <div className='text-muted-foreground text-sm'>趋势</div>
             </div>
           </div>
 
           <div className='space-y-2'>
             {data.slice(-5).map((record, _index) => (
-              <div key={record.timestamp} className='flex items-center justify-between text-sm'>
+              <div
+                key={record.timestamp}
+                className='flex items-center justify-between text-sm'
+              >
                 <span className='text-muted-foreground'>
                   {new Date(record.timestamp).toLocaleString('zh-CN')}
                 </span>
                 <span className='font-medium'>
-                  {formatMetric(metricKey, record[metricKey as keyof SimpleWebVitals] as number)}
+                  {formatMetric(
+                    metricKey,
+                    record[metricKey as keyof SimpleWebVitals] as number,
+                  )}
                 </span>
               </div>
             ))}
@@ -129,12 +154,13 @@ interface HistoricalStatsProps {
 export function HistoricalStats({ data }: HistoricalStatsProps) {
   if (data.length === 0) return null;
 
-  const scores = data.map(record => record.score);
-  const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+  const scores = data.map((record) => record.score);
+  const averageScore =
+    scores.reduce((sum, score) => sum + score, 0) / scores.length;
   const maxScore = Math.max(...scores);
   const minScore = Math.min(...scores);
 
-  const goodRecords = data.filter(record => record.score >= 80).length;
+  const goodRecords = data.filter((record) => record.score >= 80).length;
   const improvementRate = (goodRecords / data.length) * 100;
 
   return (
@@ -147,22 +173,26 @@ export function HistoricalStats({ data }: HistoricalStatsProps) {
         <div className='grid grid-cols-2 gap-4'>
           <div className='space-y-4'>
             <div className='text-center'>
-              <div className='text-2xl font-bold'>{Math.round(averageScore)}</div>
-              <div className='text-sm text-muted-foreground'>平均评分</div>
+              <div className='text-2xl font-bold'>
+                {Math.round(averageScore)}
+              </div>
+              <div className='text-muted-foreground text-sm'>平均评分</div>
             </div>
             <div className='text-center'>
               <div className='text-2xl font-bold'>{Math.round(maxScore)}</div>
-              <div className='text-sm text-muted-foreground'>最高评分</div>
+              <div className='text-muted-foreground text-sm'>最高评分</div>
             </div>
           </div>
           <div className='space-y-4'>
             <div className='text-center'>
               <div className='text-2xl font-bold'>{Math.round(minScore)}</div>
-              <div className='text-sm text-muted-foreground'>最低评分</div>
+              <div className='text-muted-foreground text-sm'>最低评分</div>
             </div>
             <div className='text-center'>
-              <div className='text-2xl font-bold'>{Math.round(improvementRate)}%</div>
-              <div className='text-sm text-muted-foreground'>优秀率</div>
+              <div className='text-2xl font-bold'>
+                {Math.round(improvementRate)}%
+              </div>
+              <div className='text-muted-foreground text-sm'>优秀率</div>
             </div>
           </div>
         </div>
@@ -183,7 +213,7 @@ interface SimpleHistoricalDataProps {
  */
 export function SimpleHistoricalData({
   data,
-  maxItems = 5
+  maxItems = 5,
 }: SimpleHistoricalDataProps) {
   if (data.length === 0) return null;
 
@@ -202,21 +232,27 @@ export function SimpleHistoricalData({
               <div className='font-medium'>
                 {new Date(record.timestamp).toLocaleString('zh-CN')}
               </div>
-              <div className='text-sm text-muted-foreground'>
+              <div className='text-muted-foreground text-sm'>
                 评分: {Math.round(record.score)}
               </div>
             </div>
             <div className='flex space-x-3 text-sm'>
               <div className='text-center'>
-                <div className='font-medium'>{formatMetric('cls', record.cls)}</div>
+                <div className='font-medium'>
+                  {formatMetric('cls', record.cls)}
+                </div>
                 <div className='text-muted-foreground text-xs'>CLS</div>
               </div>
               <div className='text-center'>
-                <div className='font-medium'>{formatMetric('lcp', record.lcp)}</div>
+                <div className='font-medium'>
+                  {formatMetric('lcp', record.lcp)}
+                </div>
                 <div className='text-muted-foreground text-xs'>LCP</div>
               </div>
               <div className='text-center'>
-                <div className='font-medium'>{formatMetric('fid', record.fid)}</div>
+                <div className='font-medium'>
+                  {formatMetric('fid', record.fid)}
+                </div>
                 <div className='text-muted-foreground text-xs'>FID</div>
               </div>
             </div>
@@ -239,16 +275,16 @@ interface HistoricalDataFilterProps {
  */
 export function HistoricalDataFilter({
   data,
-  onFilterChange
+  onFilterChange,
 }: HistoricalDataFilterProps) {
   const filterByTimeRange = (days: number) => {
-    const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
-    const filtered = data.filter(record => record.timestamp >= cutoffTime);
+    const cutoffTime = Date.now() - days * 24 * 60 * 60 * 1000;
+    const filtered = data.filter((record) => record.timestamp >= cutoffTime);
     onFilterChange(filtered);
   };
 
   const filterByScore = (minScore: number) => {
-    const filtered = data.filter(record => record.score >= minScore);
+    const filtered = data.filter((record) => record.score >= minScore);
     onFilterChange(filtered);
   };
 

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-;
-import { getWhatsAppService } from '@/lib/whatsapp';
 import { logger } from '@/lib/logger';
+import { getWhatsAppService } from '@/lib/whatsapp';
 
 /**
  * WhatsApp Webhook 端点
@@ -43,7 +42,11 @@ export function GET(request: NextRequest) {
     );
   } catch (_error) {
     // 忽略错误变量
-    logger.error('WhatsApp webhook verification error', {}, _error instanceof Error ? _error : new Error(String(_error)));
+    logger.error(
+      'WhatsApp webhook verification error',
+      {},
+      _error instanceof Error ? _error : new Error(String(_error)),
+    );
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },
@@ -65,7 +68,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (_error) {
     // 忽略错误变量
-    logger.error('WhatsApp webhook message handling error', {}, _error instanceof Error ? _error : new Error(String(_error)));
+    logger.error(
+      'WhatsApp webhook message handling error',
+      {},
+      _error instanceof Error ? _error : new Error(String(_error)),
+    );
     return NextResponse.json(
       { error: 'Failed to process message' },
       { status: 500 },

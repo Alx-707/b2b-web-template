@@ -123,8 +123,12 @@ export interface ClientConfig {
     headers: Record<string, string>;
   };
   interceptors: {
-    request?: Array<(config: Record<string, unknown>) => Record<string, unknown>>;
-    response?: Array<(response: Record<string, unknown>) => Record<string, unknown>>;
+    request?: Array<
+      (config: Record<string, unknown>) => Record<string, unknown>
+    >;
+    response?: Array<
+      (response: Record<string, unknown>) => Record<string, unknown>
+    >;
     error?: Array<(error: unknown) => unknown>;
   };
 }

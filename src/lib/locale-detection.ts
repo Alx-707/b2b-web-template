@@ -1,5 +1,10 @@
 // Re-export all locale detection functionality from modular files
-export { SUPPORTED_LOCALES, DEFAULT_LOCALE, GEO_LOCALE_MAP, BROWSER_LOCALE_MAP } from './locale-constants';
+export {
+  SUPPORTED_LOCALES,
+  DEFAULT_LOCALE,
+  GEO_LOCALE_MAP,
+  BROWSER_LOCALE_MAP,
+} from './locale-constants';
 export { useClientLocaleDetection } from './locale-detection-hooks';
 export type { LocaleDetectionResult } from './locale-detection-types';
 export {
@@ -23,6 +28,6 @@ export {
   createBaseLocaleDetector,
   detectCurrentLocale,
   detectCurrentLocaleSync,
-  default
+  default,
 } from './locale-detector';
 export type { DetectionSource } from './locale-detector';

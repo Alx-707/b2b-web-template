@@ -1,3 +1,9 @@
+// 导入主要功能类
+import type { Locale } from '@/types/i18n';
+import type { LocaleDetectionResult } from './locale-detection-types';
+import { BaseLocaleDetector } from './locale-detector-base';
+import { SmartLocaleDetector as SmartDetector } from './locale-detector-smart';
+
 /**
  * 语言检测器 - 主入口文件
  * Locale Detector - Main Entry Point
@@ -9,12 +15,6 @@
 export * from './locale-detector-constants';
 export * from './locale-detector-base';
 export * from './locale-detector-smart';
-
-// 导入主要功能类
-import { SmartLocaleDetector as SmartDetector } from './locale-detector-smart';
-import { BaseLocaleDetector } from './locale-detector-base';
-import type { LocaleDetectionResult } from './locale-detection-types';
-import type { Locale } from '@/types/i18n';
 
 /**
  * 智能语言检测器 - 向后兼容的主类

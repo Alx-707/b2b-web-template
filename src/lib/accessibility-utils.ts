@@ -3,12 +3,14 @@
  * 提供静态工具方法和颜色解析功能
  */
 
+import { OPACITY_CONSTANTS } from '@/constants/app-constants';
 import {
-  OPACITY_CONSTANTS,
-} from '@/constants/app-constants';
+  KEYBOARD_KEYS,
+  type ColorSchemePreference,
+  type WCAGLevel,
+} from './accessibility-types';
 import { checkContrastCompliance, type OKLCHColor } from './colors';
 import { logger } from './logger';
-import { KEYBOARD_KEYS, type ColorSchemePreference, type WCAGLevel } from './accessibility-types';
 
 /**
  * 无障碍性工具类

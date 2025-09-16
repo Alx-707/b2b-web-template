@@ -3,8 +3,8 @@
  * Security headers and configuration utilities
  */
 
-import { env } from '../../env.mjs';
 import { logger } from '@/lib/logger';
+import { env } from '../../env.mjs';
 
 /**
  * Security headers for API responses
@@ -57,14 +57,15 @@ export function generateCSP(nonce?: string): string {
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'self'",
-    "upgrade-insecure-requests",
+    'upgrade-insecure-requests',
   ];
 
   if (nonce) {
     // Replace 'unsafe-inline' with nonce for scripts
-    const scriptIndex = policies.findIndex(p => p.startsWith('script-src'));
+    const scriptIndex = policies.findIndex((p) => p.startsWith('script-src'));
     if (scriptIndex !== -1) {
-      policies[scriptIndex] = `script-src 'self' 'nonce-${nonce}' https://challenges.cloudflare.com`;
+      policies[scriptIndex] =
+        `script-src 'self' 'nonce-${nonce}' https://challenges.cloudflare.com`;
     }
   }
 
@@ -82,12 +83,12 @@ export function generateStrictCSP(nonce: string): string {
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
     "connect-src 'self' https://api.resend.com https://api.airtable.com https://challenges.cloudflare.com",
-    "frame-src https://challenges.cloudflare.com",
+    'frame-src https://challenges.cloudflare.com',
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "upgrade-insecure-requests",
+    'upgrade-insecure-requests',
   ].join('; ');
 }
 
@@ -104,7 +105,8 @@ export function getCORSHeaders(origin?: string): Record<string, string> {
 
   const headers: Record<string, string> = {
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+    'Access-Control-Allow-Headers':
+      'Content-Type, Authorization, X-Requested-With',
     'Access-Control-Max-Age': '86400', // 24 hours
   };
 
@@ -226,7 +228,8 @@ export function getSecurityMiddlewareHeaders(
   }
 
   if (finalConfig.enableHSTS) {
-    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload';
+    headers['Strict-Transport-Security'] =
+      'max-age=31536000; includeSubDomains; preload';
   }
 
   if (finalConfig.enableXSSProtection) {
@@ -273,8 +276,10 @@ export function validateSecurityHeaders(headers: Record<string, string>): {
     'Permissions-Policy',
   ];
 
-  const missing = requiredHeaders.filter(header => !headers[header]);
-  const recommendations = recommendedHeaders.filter(header => !headers[header]);
+  const missing = requiredHeaders.filter((header) => !headers[header]);
+  const recommendations = recommendedHeaders.filter(
+    (header) => !headers[header],
+  );
 
   return {
     valid: missing.length === 0,
@@ -293,7 +298,7 @@ export function generateSecurityReport(): {
   headers: ReturnType<typeof validateSecurityHeaders>;
 } {
   const mockHeaders = getSecurityMiddlewareHeaders();
-  
+
   return {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'unknown',

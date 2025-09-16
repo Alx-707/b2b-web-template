@@ -4,7 +4,6 @@
  */
 
 import { NextRequest } from 'next/server';
-;
 import { logger } from '@/lib/logger';
 
 // 常量定义
@@ -51,7 +50,10 @@ export function checkRateLimit(
  * 验证Turnstile token
  * Verify Turnstile token
  */
-export async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+export async function verifyTurnstile(
+  token: string,
+  ip: string,
+): Promise<boolean> {
   try {
     const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
@@ -60,17 +62,20 @@ export async function verifyTurnstile(token: string, ip: string): Promise<boolea
       return false;
     }
 
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await fetch(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          secret: secretKey,
+          response: token,
+          remoteip: ip,
+        }),
       },
-      body: new URLSearchParams({
-        secret: secretKey,
-        response: token,
-        remoteip: ip,
-      }),
-    });
+    );
 
     const result = await response.json();
 
@@ -164,7 +169,7 @@ export function validateEnvironmentConfig(): {
     'AIRTABLE_BASE_ID',
   ];
 
-  const missingVars = requiredVars.filter(varName => {
+  const missingVars = requiredVars.filter((varName) => {
     // 安全的环境变量访问，避免对象注入
     const envValue = process.env[varName as keyof typeof process.env];
     return !envValue;
@@ -191,7 +196,7 @@ export function generateRequestId(): string {
 export function formatErrorResponse(
   message: string,
   statusCode: number,
-  details?: Record<string, unknown>
+  details?: Record<string, unknown>,
 ): {
   error: string;
   message: string;

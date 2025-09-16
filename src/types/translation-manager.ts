@@ -2,7 +2,6 @@
  * 翻译管理器相关类型定义
  */
 import type { Locale } from '@/types/i18n';
-;
 
 // 翻译质量评分接口
 export interface QualityScore {
@@ -30,9 +29,11 @@ export interface QualityIssue {
     | 'missing'
     | 'language'
     | 'accuracy';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical' | 'warning' | 'info';
   message: string;
   suggestion?: string;
+  locale?: Locale;
+  key?: string;
 }
 
 // 验证报告接口
@@ -42,6 +43,13 @@ export interface ValidationReport {
   issues: QualityIssue[];
   recommendations: string[];
   timestamp: string;
+  byLocale: Record<Locale, LocaleQualityReport>;
+  summary: {
+    totalIssues: number;
+    criticalIssues: number;
+    warningIssues: number;
+    infoIssues: number;
+  };
 }
 
 // 质量报告接口
@@ -51,6 +59,8 @@ export interface QualityReport {
   trends: QualityTrend[];
   recommendations: string[];
   timestamp: string;
+  validation: ValidationReport;
+  suggestions: string[];
 }
 
 // 质量趋势接口
@@ -73,6 +83,9 @@ export interface LocaleQualityReport {
   locale: Locale;
   totalKeys: number;
   validKeys: number;
+  translatedKeys: number;
+  missingKeys: number;
+  emptyKeys: number;
   issues: QualityIssue[];
   score: number;
   timestamp: string;
@@ -118,4 +131,34 @@ export interface TranslationQualityCheck {
   ): Promise<ValidationReport>;
 
   generateQualityReport(): Promise<QualityReport>;
+}
+
+/**
+ * 批量翻译输入接口
+ */
+export interface BatchTranslationInput {
+  key: string;
+  original: string;
+  translated: string;
+  locale: Locale;
+  humanReference?: string;
+  keys?: string[];
+  sourceLocale?: Locale;
+  targetLocales?: Locale[];
+  options?: {
+    useCache?: boolean;
+    validateQuality?: boolean;
+    overwriteExisting?: boolean;
+  };
+}
+
+/**
+ * 质量比较接口
+ */
+export interface QualityComparison {
+  baseline: QualityScore;
+  current: QualityScore;
+  improvement: number;
+  degradation: number;
+  recommendations: string[];
 }

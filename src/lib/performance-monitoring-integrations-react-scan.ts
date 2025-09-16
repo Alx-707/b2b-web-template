@@ -5,11 +5,11 @@
  * 提供与React Scan工具的集成钩子，用于监控React组件渲染性能
  */
 
+import { logger } from '@/lib/logger';
 import type {
   PerformanceConfig,
   PerformanceMetrics,
 } from './performance-monitoring-types';
-import { logger } from '@/lib/logger';
 
 /**
  * React Scan 集成钩子返回类型
@@ -17,9 +17,16 @@ import { logger } from '@/lib/logger';
  */
 export interface ReactScanIntegration {
   enabled: boolean;
-  recordRender: (componentName: string, renderCount: number, renderTime?: number) => void;
+  recordRender: (
+    componentName: string,
+    renderCount: number,
+    renderTime?: number,
+  ) => void;
   recordUnnecessaryRender: (componentName: string, reason: string) => void;
-  getComponentStats: () => Record<string, { renders: number; totalTime: number }>;
+  getComponentStats: () => Record<
+    string,
+    { renders: number; totalTime: number }
+  >;
 }
 
 /**
@@ -28,18 +35,28 @@ export interface ReactScanIntegration {
  */
 export function useReactScanIntegration(
   config: PerformanceConfig,
-  recordMetric: (metric: Omit<PerformanceMetrics, 'timestamp'>) => void
+  recordMetric: (metric: Omit<PerformanceMetrics, 'timestamp'>) => void,
 ): ReactScanIntegration {
-  const componentStats = new Map<string, { renders: number; totalTime: number }>();
+  const componentStats = new Map<
+    string,
+    { renders: number; totalTime: number }
+  >();
 
   return {
     enabled: config.reactScan.enabled,
 
-    recordRender: (componentName: string, renderCount: number, renderTime = 0) => {
+    recordRender: (
+      componentName: string,
+      renderCount: number,
+      renderTime = 0,
+    ) => {
       if (!config.reactScan.enabled) return;
 
       // 更新组件统计
-      const current = componentStats.get(componentName) || { renders: 0, totalTime: 0 };
+      const current = componentStats.get(componentName) || {
+        renders: 0,
+        totalTime: 0,
+      };
       current.renders += renderCount;
       current.totalTime += renderTime;
       componentStats.set(componentName, current);
@@ -61,7 +78,11 @@ export function useReactScanIntegration(
     },
 
     recordUnnecessaryRender: (componentName: string, reason: string) => {
-      if (!config.reactScan.enabled || !config.reactScan.trackUnnecessaryRenders) return;
+      if (
+        !config.reactScan.enabled ||
+        !config.reactScan.trackUnnecessaryRenders
+      )
+        return;
 
       recordMetric({
         source: 'react-scan',
@@ -109,14 +130,20 @@ export function validateReactScanConfig(config: PerformanceConfig): {
       warnings.push('React Scan trackUnnecessaryRenders should be a boolean');
     }
 
-    if (config.reactScan.maxTrackedComponents &&
-        (typeof config.reactScan.maxTrackedComponents !== 'number' ||
-         config.reactScan.maxTrackedComponents <= 0)) {
-      warnings.push('React Scan maxTrackedComponents should be a positive number');
+    if (
+      config.reactScan.maxTrackedComponents &&
+      (typeof config.reactScan.maxTrackedComponents !== 'number' ||
+        config.reactScan.maxTrackedComponents <= 0)
+    ) {
+      warnings.push(
+        'React Scan maxTrackedComponents should be a positive number',
+      );
     }
 
-    if (config.reactScan.showRenderTime !== undefined &&
-        typeof config.reactScan.showRenderTime !== 'boolean') {
+    if (
+      config.reactScan.showRenderTime !== undefined &&
+      typeof config.reactScan.showRenderTime !== 'boolean'
+    ) {
       warnings.push('React Scan showRenderTime should be a boolean');
     }
   }
@@ -133,12 +160,15 @@ export function validateReactScanConfig(config: PerformanceConfig): {
  * React Scan performance analyzer
  */
 export class ReactScanAnalyzer {
-  private componentMetrics = new Map<string, {
-    renders: number;
-    totalTime: number;
-    lastRender: number;
-    unnecessaryRenders: number;
-  }>();
+  private componentMetrics = new Map<
+    string,
+    {
+      renders: number;
+      totalTime: number;
+      lastRender: number;
+      unnecessaryRenders: number;
+    }
+  >();
 
   private config: PerformanceConfig;
 
@@ -169,7 +199,10 @@ export class ReactScanAnalyzer {
     // 检查是否为不必要的渲染
     if (this.isUnnecessaryRender(componentName, renderTime)) {
       current.unnecessaryRenders += 1;
-      this.recordUnnecessaryRender(componentName, 'High frequency rendering detected');
+      this.recordUnnecessaryRender(
+        componentName,
+        'High frequency rendering detected',
+      );
     }
   }
 
@@ -178,7 +211,11 @@ export class ReactScanAnalyzer {
    * Record unnecessary render
    */
   recordUnnecessaryRender(componentName: string, reason: string): void {
-    if (!this.config.reactScan.enabled || !this.config.reactScan.trackUnnecessaryRenders) return;
+    if (
+      !this.config.reactScan.enabled ||
+      !this.config.reactScan.trackUnnecessaryRenders
+    )
+      return;
 
     const current = this.componentMetrics.get(componentName);
     if (current) {
@@ -187,7 +224,9 @@ export class ReactScanAnalyzer {
 
     // 可以在这里添加日志或发送到监控服务
     if (this.config.debug) {
-      logger.warn(`Unnecessary render detected for ${componentName}`, { reason });
+      logger.warn(`Unnecessary render detected for ${componentName}`, {
+        reason,
+      });
     }
   }
 
@@ -195,7 +234,10 @@ export class ReactScanAnalyzer {
    * 检查是否为不必要的渲染
    * Check if render is unnecessary
    */
-  private isUnnecessaryRender(componentName: string, _renderTime: number): boolean {
+  private isUnnecessaryRender(
+    componentName: string,
+    _renderTime: number,
+  ): boolean {
     const current = this.componentMetrics.get(componentName);
     if (!current) return false;
 
@@ -223,8 +265,14 @@ export class ReactScanAnalyzer {
     recommendations: string[];
   } {
     const components = Array.from(this.componentMetrics.entries());
-    const totalRenders = components.reduce((sum, [, metrics]) => sum + metrics.renders, 0);
-    const totalTime = components.reduce((sum, [, metrics]) => sum + metrics.totalTime, 0);
+    const totalRenders = components.reduce(
+      (sum, [, metrics]) => sum + metrics.renders,
+      0,
+    );
+    const totalTime = components.reduce(
+      (sum, [, metrics]) => sum + metrics.totalTime,
+      0,
+    );
 
     const topSlowComponents = components
       .map(([name, metrics]) => ({
@@ -241,14 +289,21 @@ export class ReactScanAnalyzer {
     // 生成建议
     if (topSlowComponents.length > 0) {
       const slowestComponent = topSlowComponents[0];
-      if (slowestComponent.averageTime > 16) { // 超过一帧的时间
-        recommendations.push(`Consider optimizing ${slowestComponent.name} - average render time: ${slowestComponent.averageTime.toFixed(2)}ms`);
+      if (slowestComponent && slowestComponent.averageTime > 16) {
+        // 超过一帧的时间
+        recommendations.push(
+          `Consider optimizing ${slowestComponent.name} - average render time: ${slowestComponent.averageTime.toFixed(2)}ms`,
+        );
       }
     }
 
-    const unnecessaryRenderComponents = topSlowComponents.filter(c => c.unnecessaryRenders > 0);
+    const unnecessaryRenderComponents = topSlowComponents.filter(
+      (c) => c.unnecessaryRenders > 0,
+    );
     if (unnecessaryRenderComponents.length > 0) {
-      recommendations.push(`${unnecessaryRenderComponents.length} components have unnecessary renders. Consider using React.memo or useMemo.`);
+      recommendations.push(
+        `${unnecessaryRenderComponents.length} components have unnecessary renders. Consider using React.memo or useMemo.`,
+      );
     }
 
     return {
@@ -315,7 +370,9 @@ export const ReactScanUtils = {
    * 获取渲染性能等级
    * Get render performance rating
    */
-  getRenderPerformanceRating(renderTime: number): 'excellent' | 'good' | 'fair' | 'poor' {
+  getRenderPerformanceRating(
+    renderTime: number,
+  ): 'excellent' | 'good' | 'fair' | 'poor' {
     if (renderTime < 8) return 'excellent';
     if (renderTime < 16) return 'good';
     if (renderTime < 32) return 'fair';
@@ -326,7 +383,10 @@ export const ReactScanUtils = {
    * 计算渲染效率分数
    * Calculate render efficiency score
    */
-  calculateEfficiencyScore(totalRenders: number, unnecessaryRenders: number): number {
+  calculateEfficiencyScore(
+    totalRenders: number,
+    unnecessaryRenders: number,
+  ): number {
     if (totalRenders === 0) return 100;
     const efficiency = (totalRenders - unnecessaryRenders) / totalRenders;
     return Math.round(efficiency * 100);
@@ -344,17 +404,25 @@ export const ReactScanUtils = {
     const suggestions: string[] = [];
 
     if (componentStats.averageTime > 16) {
-      suggestions.push('Consider breaking down this component into smaller components');
+      suggestions.push(
+        'Consider breaking down this component into smaller components',
+      );
       suggestions.push('Use React.memo to prevent unnecessary re-renders');
     }
 
     if (componentStats.unnecessaryRenders > componentStats.renders * 0.3) {
-      suggestions.push('High rate of unnecessary renders detected - check prop dependencies');
-      suggestions.push('Consider using useMemo or useCallback for expensive computations');
+      suggestions.push(
+        'High rate of unnecessary renders detected - check prop dependencies',
+      );
+      suggestions.push(
+        'Consider using useMemo or useCallback for expensive computations',
+      );
     }
 
     if (componentStats.renders > 100) {
-      suggestions.push('High render frequency - consider implementing virtualization if rendering lists');
+      suggestions.push(
+        'High render frequency - consider implementing virtualization if rendering lists',
+      );
     }
 
     return suggestions;

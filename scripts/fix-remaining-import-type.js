@@ -9,8 +9,14 @@ console.log('🚀 开始修复剩余的import type问题...');
 // 获取所有有import type错误的文件
 function getFilesWithImportTypeErrors() {
   try {
-    const output = execSync('pnpm type-check 2>&1 | grep -E "(TS1484|TS1361)" | grep -o "src/[^(]*" | sort | uniq', { encoding: 'utf8' });
-    return output.trim().split('\n').filter(file => file.trim());
+    const output = execSync(
+      'pnpm type-check 2>&1 | grep -E "(TS1484|TS1361)" | grep -o "src/[^(]*" | sort | uniq',
+      { encoding: 'utf8' },
+    );
+    return output
+      .trim()
+      .split('\n')
+      .filter((file) => file.trim());
   } catch (error) {
     console.log('没有找到import type错误');
     return [];
@@ -35,19 +41,33 @@ function fixImportTypeInFile(filePath) {
       replacement: (match, imports, from) => {
         // 检查是否包含需要type-only import的类型
         const typeOnlyTypes = [
-          'QualityBenchmark', 'QualityComparison', 'QualityReport', 'TranslationManagerConfig',
-          'TranslationQualityCheck', 'ValidationReport', 'LocaleQualityReport', 'QualityIssue',
-          'QualityScore', 'TranslationSecurityConfig', 'SecurityReport', 'SecurityIssue',
-          'QualityCheckResult', 'QualityMetrics', 'TranslationQuality', 'QualityAnalysis',
-          'TranslationValidationConfig', 'ValidationError', 'ValidationResult'
+          'QualityBenchmark',
+          'QualityComparison',
+          'QualityReport',
+          'TranslationManagerConfig',
+          'TranslationQualityCheck',
+          'ValidationReport',
+          'LocaleQualityReport',
+          'QualityIssue',
+          'QualityScore',
+          'TranslationSecurityConfig',
+          'SecurityReport',
+          'SecurityIssue',
+          'QualityCheckResult',
+          'QualityMetrics',
+          'TranslationQuality',
+          'QualityAnalysis',
+          'TranslationValidationConfig',
+          'ValidationError',
+          'ValidationResult',
         ];
 
-        const importList = imports.split(',').map(imp => imp.trim());
+        const importList = imports.split(',').map((imp) => imp.trim());
         const typeImports = [];
         const valueImports = [];
 
-        importList.forEach(imp => {
-          if (typeOnlyTypes.some(type => imp.includes(type))) {
+        importList.forEach((imp) => {
+          if (typeOnlyTypes.some((type) => imp.includes(type))) {
             typeImports.push(imp);
           } else {
             valueImports.push(imp);
@@ -64,16 +84,17 @@ function fixImportTypeInFile(filePath) {
         }
 
         return result || match;
-      }
+      },
     },
     // STORAGE_KEYS 应该是值导入，不是类型导入
     {
-      pattern: /import type \{([^}]*),\s*STORAGE_KEYS,([^}]*)\} from '([^']+)';/g,
+      pattern:
+        /import type \{([^}]*),\s*STORAGE_KEYS,([^}]*)\} from '([^']+)';/g,
       replacement: (match, before, after, from) => {
         const beforeClean = before.trim() ? before.trim() + ',' : '';
         const afterClean = after.trim() ? ',' + after.trim() : '';
         return `import type {${beforeClean}${afterClean}} from '${from}';\nimport { STORAGE_KEYS } from '${from}';`;
-      }
+      },
     },
     {
       pattern: /import type \{\s*STORAGE_KEYS,([^}]*)\} from '([^']+)';/g,
@@ -84,7 +105,7 @@ function fixImportTypeInFile(filePath) {
         } else {
           return `import { STORAGE_KEYS } from '${from}';`;
         }
-      }
+      },
     },
     {
       pattern: /import type \{([^}]*),\s*STORAGE_KEYS\s*\} from '([^']+)';/g,
@@ -95,26 +116,29 @@ function fixImportTypeInFile(filePath) {
         } else {
           return `import { STORAGE_KEYS } from '${from}';`;
         }
-      }
+      },
     },
     // 其他常见的值导入错误
     {
-      pattern: /import type \{([^}]*),\s*(QUALITY_BENCHMARKS|TRANSLATION_LIMITS|VALIDATION_RULES|STORAGE_CONSTANTS),([^}]*)\} from '([^']+)';/g,
+      pattern:
+        /import type \{([^}]*),\s*(QUALITY_BENCHMARKS|TRANSLATION_LIMITS|VALIDATION_RULES|STORAGE_CONSTANTS),([^}]*)\} from '([^']+)';/g,
       replacement: (match, before, constant, after, from) => {
         const beforeClean = before.trim() ? before.trim() + ',' : '';
         const afterClean = after.trim() ? ',' + after.trim() : '';
         return `import type {${beforeClean}${afterClean}} from '${from}';\nimport { ${constant} } from '${from}';`;
-      }
+      },
     },
     // 单独的常量导入
     {
-      pattern: /import type \{\s*(STORAGE_CONSTANTS|QUALITY_BENCHMARKS|TRANSLATION_LIMITS|VALIDATION_RULES)\s*\} from '([^']+)';/g,
+      pattern:
+        /import type \{\s*(STORAGE_CONSTANTS|QUALITY_BENCHMARKS|TRANSLATION_LIMITS|VALIDATION_RULES)\s*\} from '([^']+)';/g,
       replacement: (match, constant, from) => {
         return `import { ${constant} } from '${from}';`;
-      }
+      },
     },
     {
-      pattern: /import type \{([^}]*),\s*(STORAGE_CONSTANTS|QUALITY_BENCHMARKS|TRANSLATION_LIMITS|VALIDATION_RULES)\s*\} from '([^']+)';/g,
+      pattern:
+        /import type \{([^}]*),\s*(STORAGE_CONSTANTS|QUALITY_BENCHMARKS|TRANSLATION_LIMITS|VALIDATION_RULES)\s*\} from '([^']+)';/g,
       replacement: (match, before, constant, from) => {
         const beforeClean = before.trim() ? before.trim() : '';
         if (beforeClean) {
@@ -122,8 +146,8 @@ function fixImportTypeInFile(filePath) {
         } else {
           return `import { ${constant} } from '${from}';`;
         }
-      }
-    }
+      },
+    },
   ];
 
   // 应用修复
@@ -159,7 +183,7 @@ function main() {
   }
 
   console.log(`📁 找到 ${files.length} 个文件需要修复:`);
-  files.forEach(file => console.log(`   - ${file}`));
+  files.forEach((file) => console.log(`   - ${file}`));
 
   let fixedCount = 0;
 
@@ -176,15 +200,23 @@ function main() {
   // 验证修复效果
   console.log('\n🔍 验证修复效果...');
   try {
-    const errorCount = execSync('pnpm type-check 2>&1 | grep -c "error TS"', { encoding: 'utf8' }).trim();
-    const importTypeErrors = execSync('pnpm type-check 2>&1 | grep -E "(TS1484|TS1361)" | wc -l', { encoding: 'utf8' }).trim();
+    const errorCount = execSync('pnpm type-check 2>&1 | grep -c "error TS"', {
+      encoding: 'utf8',
+    }).trim();
+    const importTypeErrors = execSync(
+      'pnpm type-check 2>&1 | grep -E "(TS1484|TS1361)" | wc -l',
+      { encoding: 'utf8' },
+    ).trim();
 
     console.log(`总错误数: ${errorCount}`);
     console.log(`剩余import type错误: ${importTypeErrors}`);
 
     if (parseInt(importTypeErrors) > 0) {
       console.log('\n剩余错误示例:');
-      const examples = execSync('pnpm type-check 2>&1 | grep -E "(TS1484|TS1361)" | head -5', { encoding: 'utf8' });
+      const examples = execSync(
+        'pnpm type-check 2>&1 | grep -E "(TS1484|TS1361)" | head -5',
+        { encoding: 'utf8' },
+      );
       console.log(examples);
     }
   } catch (error) {

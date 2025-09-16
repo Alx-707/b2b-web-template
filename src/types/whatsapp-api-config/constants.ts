@@ -13,7 +13,7 @@ export const API_ENDPOINTS = {
   BATCH: 'batch',
   WEBHOOKS: 'webhooks',
   ACCOUNT: 'account',
-  APPS: 'apps'
+  APPS: 'apps',
 } as const;
 
 export const HTTP_METHODS = {
@@ -21,7 +21,7 @@ export const HTTP_METHODS = {
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
-  PATCH: 'PATCH'
+  PATCH: 'PATCH',
 } as const;
 
 export const API_VERSIONS = {
@@ -29,7 +29,7 @@ export const API_VERSIONS = {
   V18: 'v18.0',
   V19: 'v19.0',
   V20: 'v20.0',
-  LATEST: 'v20.0'
+  LATEST: 'v20.0',
 } as const;
 
 export const MESSAGE_TYPES = {
@@ -43,7 +43,7 @@ export const MESSAGE_TYPES = {
   CONTACTS: 'contacts',
   INTERACTIVE: 'interactive',
   REACTION: 'reaction',
-  STICKER: 'sticker'
+  STICKER: 'sticker',
 } as const;
 
 export const MEDIA_TYPES = {
@@ -51,13 +51,13 @@ export const MEDIA_TYPES = {
   DOCUMENT: 'document',
   AUDIO: 'audio',
   VIDEO: 'video',
-  STICKER: 'sticker'
+  STICKER: 'sticker',
 } as const;
 
 export const TEMPLATE_CATEGORIES = {
   AUTHENTICATION: 'AUTHENTICATION',
   MARKETING: 'MARKETING',
-  UTILITY: 'UTILITY'
+  UTILITY: 'UTILITY',
 } as const;
 
 export const TEMPLATE_STATUSES = {
@@ -65,29 +65,29 @@ export const TEMPLATE_STATUSES = {
   PENDING: 'PENDING',
   REJECTED: 'REJECTED',
   DISABLED: 'DISABLED',
-  PAUSED: 'PAUSED'
+  PAUSED: 'PAUSED',
 } as const;
 
 export const QUALITY_RATINGS = {
   GREEN: 'GREEN',
   YELLOW: 'YELLOW',
   RED: 'RED',
-  UNKNOWN: 'UNKNOWN'
+  UNKNOWN: 'UNKNOWN',
 } as const;
 
 export const THROUGHPUT_LEVELS = {
   STANDARD: 'STANDARD',
-  HIGH: 'HIGH'
+  HIGH: 'HIGH',
 } as const;
 
 export const ANALYTICS_GRANULARITIES = {
   HALF_HOUR: 'HALF_HOUR',
   DAY: 'DAY',
-  MONTH: 'MONTH'
+  MONTH: 'MONTH',
 } as const;
 
 export const ANALYTICS_METRIC_TYPES = {
   COST: 'cost',
   CONVERSATION: 'conversation',
-  PHONE_NUMBER_QUALITY_SCORE: 'phone_number_quality_score'
+  PHONE_NUMBER_QUALITY_SCORE: 'phone_number_quality_score',
 } as const;

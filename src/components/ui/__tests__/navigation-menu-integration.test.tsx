@@ -2,17 +2,17 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
 } from '../navigation-menu';
 
 // Mock Lucide React icons
@@ -68,8 +68,12 @@ describe('NavigationMenu - Dropdown & State Management', () => {
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div data-testid='dropdown-content'>
-                  <NavigationMenuLink href='/product1'>Product 1</NavigationMenuLink>
-                  <NavigationMenuLink href='/product2'>Product 2</NavigationMenuLink>
+                  <NavigationMenuLink href='/product1'>
+                    Product 1
+                  </NavigationMenuLink>
+                  <NavigationMenuLink href='/product2'>
+                    Product 2
+                  </NavigationMenuLink>
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
@@ -249,7 +253,10 @@ describe('NavigationMenu - Dropdown & State Management', () => {
 
     it('handles navigation without viewport', () => {
       render(
-        <NavigationMenu viewport={false} data-testid='no-viewport-nav'>
+        <NavigationMenu
+          viewport={false}
+          data-testid='no-viewport-nav'
+        >
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger>Item 1</NavigationMenuTrigger>

@@ -1,19 +1,23 @@
 /**
  * 语言存储分析工具函数和缓存管理
  * Locale Storage Analytics Utilities and Cache Management
- * 
+ *
  * 负责缓存管理、数据导出和通用工具函数
  */
 
 'use client';
 
-import type {
-  StorageStats,
-  StorageHealthCheck,
-} from './locale-storage-types';
+import {
+  getStorageStats,
+  performHealthCheck,
+} from './locale-storage-analytics-core';
 import { AccessLogger, ErrorLogger } from './locale-storage-analytics-events';
-import { getStorageStats, performHealthCheck } from './locale-storage-analytics-core';
-import { getUsagePatterns, getPerformanceMetrics, getUsageTrends } from './locale-storage-analytics-performance';
+import {
+  getPerformanceMetrics,
+  getUsagePatterns,
+  getUsageTrends,
+} from './locale-storage-analytics-performance';
+import type { StorageHealthCheck, StorageStats } from './locale-storage-types';
 
 // ==================== 缓存管理 ====================
 
@@ -104,7 +108,7 @@ export class CacheManager {
       } else {
         expiredEntries += 1;
       }
-      
+
       // 估算内存使用量
       memoryUsage += JSON.stringify(entry).length * 2; // 粗略估算
     }
@@ -179,35 +183,39 @@ export function exportAnalyticsDataAsCsv(): string {
   // 访问日志CSV
   lines.push('=== Access Log ===');
   lines.push('Timestamp,Key,Operation,Success,Response Time,Error');
-  
+
   for (const entry of data.accessLog) {
-    lines.push([
-      new Date(entry.timestamp).toISOString(),
-      entry.key,
-      entry.operation,
-      entry.success.toString(),
-      entry.responseTime?.toString() || '',
-      entry.error || '',
-    ].join(','));
+    lines.push(
+      [
+        new Date(entry.timestamp).toISOString(),
+        entry.key,
+        entry.operation,
+        entry.success.toString(),
+        entry.responseTime?.toString() || '',
+        entry.error || '',
+      ].join(','),
+    );
   }
 
   lines.push('');
   lines.push('=== Error Log ===');
   lines.push('Timestamp,Error,Context,Severity');
-  
+
   for (const entry of data.errorLog) {
-    lines.push([
-      new Date(entry.timestamp).toISOString(),
-      entry.error,
-      entry.context || '',
-      entry.severity,
-    ].join(','));
+    lines.push(
+      [
+        new Date(entry.timestamp).toISOString(),
+        entry.error,
+        entry.context || '',
+        entry.severity,
+      ].join(','),
+    );
   }
 
   lines.push('');
   lines.push('=== Usage Trends ===');
   lines.push('Date,Operations');
-  
+
   for (const entry of data.usageTrends.dailyOperations) {
     lines.push([entry.date, entry.operations.toString()].join(','));
   }
@@ -258,7 +266,9 @@ export function validateAnalyticsData(): {
     // 检查数据时效性
     const now = Date.now();
     const oneHourAgo = now - 60 * 60 * 1000;
-    const recentAccess = accessLog.filter(entry => entry.timestamp > oneHourAgo);
+    const recentAccess = accessLog.filter(
+      (entry) => entry.timestamp > oneHourAgo,
+    );
 
     if (recentAccess.length === 0 && accessLog.length > 0) {
       issues.push('最近一小时无活动记录');
@@ -270,9 +280,10 @@ export function validateAnalyticsData(): {
     if (cacheStats.expiredEntries > cacheStats.validEntries) {
       recommendations.push('清理过期缓存以提高性能');
     }
-
   } catch (error) {
-    issues.push(`数据验证过程中发生错误: ${error instanceof Error ? error.message : '未知错误'}`);
+    issues.push(
+      `数据验证过程中发生错误: ${error instanceof Error ? error.message : '未知错误'}`,
+    );
   }
 
   return {
@@ -301,7 +312,8 @@ export function compressAnalyticsData(): {
   const compressedData = JSON.stringify(exportAnalyticsData());
   const compressedSize = compressedData.length;
 
-  const compressionRatio = originalSize > 0 ? (1 - compressedSize / originalSize) * 100 : 0;
+  const compressionRatio =
+    originalSize > 0 ? (1 - compressedSize / originalSize) * 100 : 0;
 
   return {
     originalSize,
@@ -342,7 +354,7 @@ export function optimizeAnalyticsStorage(): {
   };
 
   // 执行优化
-  
+
   // 1. 清理过期缓存
   CacheManager.cleanExpiredCache();
   results.push('清理了过期缓存');
@@ -351,13 +363,13 @@ export function optimizeAnalyticsStorage(): {
   if (beforeAccessLog.length > 1000) {
     const recentAccessLog = beforeAccessLog.slice(0, 1000);
     AccessLogger.clearAccessLog();
-    recentAccessLog.forEach(entry => {
+    recentAccessLog.forEach((entry) => {
       AccessLogger.logAccess(
         entry.key,
         entry.operation,
         entry.success,
         entry.responseTime,
-        entry.error
+        entry.error,
       );
     });
     results.push(`压缩访问日志：${beforeAccessLog.length} -> 1000 条`);
@@ -367,8 +379,13 @@ export function optimizeAnalyticsStorage(): {
   if (beforeErrorLog.length > 500) {
     const recentErrorLog = beforeErrorLog.slice(0, 500);
     ErrorLogger.clearErrorLog();
-    recentErrorLog.forEach(entry => {
-      ErrorLogger.logError(entry.error, entry.context, entry.severity, entry.stack);
+    recentErrorLog.forEach((entry) => {
+      ErrorLogger.logError(
+        entry.error,
+        entry.context,
+        entry.severity,
+        entry.stack,
+      );
     });
     results.push(`压缩错误日志：${beforeErrorLog.length} -> 500 条`);
   }

@@ -12,9 +12,9 @@
  * - 焦点事件
  */
 
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Label } from '../label';
 
@@ -29,9 +29,12 @@ describe('Label Event Handling - Basic Tests', () => {
     it('handles click events', async () => {
       const handleClick = vi.fn();
       render(
-        <Label onClick={handleClick} data-testid='clickable-label'>
+        <Label
+          onClick={handleClick}
+          data-testid='clickable-label'
+        >
           Clickable Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('clickable-label');
@@ -43,9 +46,12 @@ describe('Label Event Handling - Basic Tests', () => {
     it('handles double click events', async () => {
       const handleDoubleClick = vi.fn();
       render(
-        <Label onDoubleClick={handleDoubleClick} data-testid='double-click-label'>
+        <Label
+          onDoubleClick={handleDoubleClick}
+          data-testid='double-click-label'
+        >
           Double Click Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('double-click-label');
@@ -57,9 +63,12 @@ describe('Label Event Handling - Basic Tests', () => {
     it('handles context menu events', async () => {
       const handleContextMenu = vi.fn();
       render(
-        <Label onContextMenu={handleContextMenu} data-testid='context-label'>
+        <Label
+          onContextMenu={handleContextMenu}
+          data-testid='context-label'
+        >
           Context Menu Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('context-label');
@@ -85,7 +94,7 @@ describe('Label Event Handling - Basic Tests', () => {
           data-testid='mouse-label'
         >
           Mouse Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('mouse-label');
@@ -110,7 +119,7 @@ describe('Label Event Handling - Basic Tests', () => {
           data-testid='pointer-label'
         >
           Pointer Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('pointer-label');
@@ -125,9 +134,12 @@ describe('Label Event Handling - Basic Tests', () => {
       const handleWheel = vi.fn();
 
       render(
-        <Label onWheel={handleWheel} data-testid='wheel-label'>
+        <Label
+          onWheel={handleWheel}
+          data-testid='wheel-label'
+        >
           Wheel Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('wheel-label');
@@ -152,7 +164,7 @@ describe('Label Event Handling - Basic Tests', () => {
           data-testid='keyboard-label'
         >
           Keyboard Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('keyboard-label');
@@ -177,7 +189,7 @@ describe('Label Event Handling - Basic Tests', () => {
           data-testid='focus-label'
         >
           Focus Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('focus-label');
@@ -201,7 +213,7 @@ describe('Label Event Handling - Basic Tests', () => {
           data-testid='touch-label'
         >
           Touch Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('touch-label');
@@ -228,7 +240,7 @@ describe('Label Event Handling - Basic Tests', () => {
           data-testid='drag-label'
         >
           Drag Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('drag-label');
@@ -247,10 +259,13 @@ describe('Label Event Handling - Basic Tests', () => {
 
       render(
         <div onClick={parentClick}>
-          <Label onClick={labelClick} data-testid='propagation-label'>
+          <Label
+            onClick={labelClick}
+            data-testid='propagation-label'
+          >
             Propagation Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('propagation-label');
@@ -266,9 +281,12 @@ describe('Label Event Handling - Basic Tests', () => {
       });
 
       render(
-        <Label onClick={handleClick} data-testid='prevent-default-label'>
+        <Label
+          onClick={handleClick}
+          data-testid='prevent-default-label'
+        >
           Prevent Default Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('prevent-default-label');
@@ -285,11 +303,14 @@ describe('Label Event Handling - Basic Tests', () => {
       render(
         <div onClick={grandparentClick}>
           <div onClick={parentClick}>
-            <Label onClick={labelClick} data-testid='bubbling-label'>
+            <Label
+              onClick={labelClick}
+              data-testid='bubbling-label'
+            >
               Bubbling Label
             </Label>
           </div>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('bubbling-label');
@@ -306,10 +327,13 @@ describe('Label Event Handling - Basic Tests', () => {
 
       render(
         <div onClickCapture={captureHandler}>
-          <Label onClick={bubbleHandler} data-testid='capture-label'>
+          <Label
+            onClick={bubbleHandler}
+            data-testid='capture-label'
+          >
             Capture Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('capture-label');

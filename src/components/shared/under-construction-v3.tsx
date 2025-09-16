@@ -1,9 +1,9 @@
 'use client';
 
+import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
-import { useTranslations } from 'next-intl';
-import React, { useState } from 'react';
 import { PageHeader } from './under-construction-v3/page-header';
 import { SocialLinks } from './under-construction-v3/social-links';
 import { SubscriptionForm } from './under-construction-v3/subscription-form';
@@ -44,25 +44,22 @@ export function UnderConstructionV3({
         logger.error('订阅失败', { message: data.message });
       }
     } catch (_error) {
-    // 忽略错误变量
+      // 忽略错误变量
       logger.error('订阅请求失败', { error: _error as Error });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-
-
   return (
     <div
       className={cn(
-        'relative min-h-screen overflow-hidden bg-background',
+        'bg-background relative min-h-screen overflow-hidden',
         className,
       )}
     >
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16">
-        <div className="mx-auto w-full max-w-xl space-y-12 text-center">
-
+      <div className='relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16'>
+        <div className='mx-auto w-full max-w-xl space-y-12 text-center'>
           {/* 主要信息区 - 极简版 */}
           <PageHeader
             title={tPage('title')}
@@ -77,7 +74,6 @@ export function UnderConstructionV3({
             isSubmitting={isSubmitting}
             onSubmit={handleEmailSubscription}
             tPage={tPage}
-
           />
 
           {/* 社交媒体链接 - 精简版 */}

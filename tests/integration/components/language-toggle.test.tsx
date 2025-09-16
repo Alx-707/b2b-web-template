@@ -9,11 +9,11 @@
  * - Loading states
  */
 
-import { LanguageToggle } from '@/components/language-toggle';
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { LanguageToggle } from '@/components/language-toggle';
 
 // Mock next-intl hooks
 const mockUseTranslations = vi.fn();
@@ -29,7 +29,14 @@ vi.mock('next-intl', () => ({
 vi.mock('next-intl/navigation', () => ({
   usePathname: () => mockUsePathname(),
   createNavigation: () => ({
-    Link: ({ children, href, locale, onClick, className, ...props }: React.ComponentProps<"a"> & { href: string; locale: string }) => (
+    Link: ({
+      children,
+      href,
+      locale,
+      onClick,
+      className,
+      ...props
+    }: React.ComponentProps<'a'> & { href: string; locale: string }) => (
       <a
         data-testid={`language-link-${locale}`}
         href={href}
@@ -68,13 +75,19 @@ vi.mock('react', async () => {
 
 // Mock UI components
 vi.mock('@/components/ui/dropdown-menu', () => ({
-  DropdownMenu: ({ children }: React.ComponentProps<"div">) => (
+  DropdownMenu: ({ children }: React.ComponentProps<'div'>) => (
     <div data-testid='language-dropdown-menu'>{children}</div>
   ),
-  DropdownMenuTrigger: ({ children, asChild: _asChild }: React.ComponentProps<"div"> & { asChild?: boolean }) => (
+  DropdownMenuTrigger: ({
+    children,
+    asChild: _asChild,
+  }: React.ComponentProps<'div'> & { asChild?: boolean }) => (
     <div data-testid='language-dropdown-trigger'>{children}</div>
   ),
-  DropdownMenuContent: ({ children, align }: React.ComponentProps<"div"> & { align?: string }) => (
+  DropdownMenuContent: ({
+    children,
+    align,
+  }: React.ComponentProps<'div'> & { align?: string }) => (
     <div
       data-testid='language-dropdown-content'
       data-align={align}
@@ -82,13 +95,22 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
       {children}
     </div>
   ),
-  DropdownMenuItem: ({ children, asChild: _asChild }: React.ComponentProps<"div"> & { asChild?: boolean }) => (
+  DropdownMenuItem: ({
+    children,
+    asChild: _asChild,
+  }: React.ComponentProps<'div'> & { asChild?: boolean }) => (
     <div data-testid='language-dropdown-item'>{children}</div>
   ),
 }));
 
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, variant, size, disabled, ...props }: React.ComponentProps<"button"> & { variant?: string; size?: string }) => (
+  Button: ({
+    children,
+    variant,
+    size,
+    disabled,
+    ...props
+  }: React.ComponentProps<'button'> & { variant?: string; size?: string }) => (
     <button
       data-testid='language-toggle-button'
       data-variant={variant}
@@ -104,7 +126,7 @@ vi.mock('@/components/ui/button', () => ({
 // Mock Lucide icons
 vi.mock('lucide-react', () => ({
   Languages: () => <span data-testid='languages-icon'>🌐</span>,
-  Loader2: ({ className }: React.ComponentProps<"div">) => (
+  Loader2: ({ className }: React.ComponentProps<'div'>) => (
     <span
       data-testid='loader-icon'
       className={className}
@@ -112,7 +134,7 @@ vi.mock('lucide-react', () => ({
       ⏳
     </span>
   ),
-  Check: ({ className }: React.ComponentProps<"div">) => (
+  Check: ({ className }: React.ComponentProps<'div'>) => (
     <span
       data-testid='check-icon'
       className={className}

@@ -5,8 +5,12 @@
  * including text, image, interactive, and other specialized message formats.
  */
 
+import type {
+  ContactData,
+  LocationData,
+  WhatsAppContact,
+} from './whatsapp-base-types';
 import type { TemplateMessage } from './whatsapp-template-types';
-import type { WhatsAppContact, LocationData, ContactData } from './whatsapp-base-types';
 
 // Base Message Structure
 interface BaseMessage {
@@ -167,7 +171,7 @@ export interface StickerMessage extends BaseMessage {
 }
 
 // Union Types
-export type WhatsAppOutgoingMessage = 
+export type WhatsAppOutgoingMessage =
   | TextMessage
   | ImageMessage
   | DocumentMessage
@@ -180,7 +184,12 @@ export type WhatsAppOutgoingMessage =
   | ReactionMessage
   | StickerMessage;
 
-export type MediaMessage = ImageMessage | DocumentMessage | AudioMessage | VideoMessage | StickerMessage;
+export type MediaMessage =
+  | ImageMessage
+  | DocumentMessage
+  | AudioMessage
+  | VideoMessage
+  | StickerMessage;
 export type InteractiveMessageType = 'button' | 'list';
 
 // Message Builder Types
@@ -206,7 +215,9 @@ export interface MediaMessageBuilder extends MessageBuilder {
 export interface InteractiveMessageBuilder extends MessageBuilder {
   type: 'interactive';
   interactive_type: InteractiveMessageType;
-  header?: Omit<InteractiveHeader, 'type'> & { type?: InteractiveHeader['type'] };
+  header?: Omit<InteractiveHeader, 'type'> & {
+    type?: InteractiveHeader['type'];
+  };
   body: string;
   footer?: string;
   buttons?: Array<{ id: string; title: string }>;
@@ -215,59 +226,95 @@ export interface InteractiveMessageBuilder extends MessageBuilder {
 }
 
 // Type Guards
-export function isTextMessage(message: WhatsAppOutgoingMessage): message is TextMessage {
+export function isTextMessage(
+  message: WhatsAppOutgoingMessage,
+): message is TextMessage {
   return message.type === 'text';
 }
 
-export function isImageMessage(message: WhatsAppOutgoingMessage): message is ImageMessage {
+export function isImageMessage(
+  message: WhatsAppOutgoingMessage,
+): message is ImageMessage {
   return message.type === 'image';
 }
 
-export function isDocumentMessage(message: WhatsAppOutgoingMessage): message is DocumentMessage {
+export function isDocumentMessage(
+  message: WhatsAppOutgoingMessage,
+): message is DocumentMessage {
   return message.type === 'document';
 }
 
-export function isAudioMessage(message: WhatsAppOutgoingMessage): message is AudioMessage {
+export function isAudioMessage(
+  message: WhatsAppOutgoingMessage,
+): message is AudioMessage {
   return message.type === 'audio';
 }
 
-export function isVideoMessage(message: WhatsAppOutgoingMessage): message is VideoMessage {
+export function isVideoMessage(
+  message: WhatsAppOutgoingMessage,
+): message is VideoMessage {
   return message.type === 'video';
 }
 
-export function isLocationMessage(message: WhatsAppOutgoingMessage): message is LocationMessage {
+export function isLocationMessage(
+  message: WhatsAppOutgoingMessage,
+): message is LocationMessage {
   return message.type === 'location';
 }
 
-export function isContactsMessage(message: WhatsAppOutgoingMessage): message is ContactsMessage {
+export function isContactsMessage(
+  message: WhatsAppOutgoingMessage,
+): message is ContactsMessage {
   return message.type === 'contacts';
 }
 
-export function isTemplateMessage(message: WhatsAppOutgoingMessage): message is TemplateMessageRequest {
+export function isTemplateMessage(
+  message: WhatsAppOutgoingMessage,
+): message is TemplateMessageRequest {
   return message.type === 'template';
 }
 
-export function isInteractiveMessage(message: WhatsAppOutgoingMessage): message is InteractiveMessage {
+export function isInteractiveMessage(
+  message: WhatsAppOutgoingMessage,
+): message is InteractiveMessage {
   return message.type === 'interactive';
 }
 
-export function isReactionMessage(message: WhatsAppOutgoingMessage): message is ReactionMessage {
+export function isReactionMessage(
+  message: WhatsAppOutgoingMessage,
+): message is ReactionMessage {
   return message.type === 'reaction';
 }
 
-export function isStickerMessage(message: WhatsAppOutgoingMessage): message is StickerMessage {
+export function isStickerMessage(
+  message: WhatsAppOutgoingMessage,
+): message is StickerMessage {
   return message.type === 'sticker';
 }
 
-export function isMediaMessage(message: WhatsAppOutgoingMessage): message is MediaMessage {
-  return ['image', 'document', 'audio', 'video', 'sticker'].includes(message.type);
+export function isMediaMessage(
+  message: WhatsAppOutgoingMessage,
+): message is MediaMessage {
+  return ['image', 'document', 'audio', 'video', 'sticker'].includes(
+    message.type,
+  );
 }
 
-export function isButtonInteractive(interactive: InteractiveMessage['interactive']): interactive is InteractiveMessage['interactive'] & { type: 'button'; action: InteractiveButtonAction } {
+export function isButtonInteractive(
+  interactive: InteractiveMessage['interactive'],
+): interactive is InteractiveMessage['interactive'] & {
+  type: 'button';
+  action: InteractiveButtonAction;
+} {
   return interactive.type === 'button';
 }
 
-export function isListInteractive(interactive: InteractiveMessage['interactive']): interactive is InteractiveMessage['interactive'] & { type: 'list'; action: InteractiveListAction } {
+export function isListInteractive(
+  interactive: InteractiveMessage['interactive'],
+): interactive is InteractiveMessage['interactive'] & {
+  type: 'list';
+  action: InteractiveListAction;
+} {
   return interactive.type === 'list';
 }
 
@@ -278,7 +325,9 @@ export interface MessageValidationResult {
   warnings: string[];
 }
 
-export function validateTextMessage(message: TextMessage): MessageValidationResult {
+export function validateTextMessage(
+  message: TextMessage,
+): MessageValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -293,11 +342,16 @@ export function validateTextMessage(message: TextMessage): MessageValidationResu
   return { isValid: errors.length === 0, errors, warnings };
 }
 
-export function validateInteractiveMessage(message: InteractiveMessage): MessageValidationResult {
+export function validateInteractiveMessage(
+  message: InteractiveMessage,
+): MessageValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  if (!message.interactive.body.text || message.interactive.body.text.trim().length === 0) {
+  if (
+    !message.interactive.body.text ||
+    message.interactive.body.text.trim().length === 0
+  ) {
     errors.push('Interactive message body cannot be empty');
   }
 
@@ -314,7 +368,9 @@ export function validateInteractiveMessage(message: InteractiveMessage): Message
         errors.push(`Button ${index + 1} must have both id and title`);
       }
       if (button.reply.title.length > 20) {
-        warnings.push(`Button ${index + 1} title should not exceed 20 characters`);
+        warnings.push(
+          `Button ${index + 1} title should not exceed 20 characters`,
+        );
       }
     });
   }
@@ -335,12 +391,16 @@ export function validateInteractiveMessage(message: InteractiveMessage): Message
       if (!section.rows || section.rows.length === 0) {
         errors.push(`Section ${sectionIndex + 1} must have at least one row`);
       } else if (section.rows.length > 10) {
-        errors.push(`Section ${sectionIndex + 1} cannot have more than 10 rows`);
+        errors.push(
+          `Section ${sectionIndex + 1} cannot have more than 10 rows`,
+        );
       }
 
       section.rows?.forEach((row, rowIndex) => {
         if (!row.id || !row.title) {
-          errors.push(`Section ${sectionIndex + 1}, Row ${rowIndex + 1} must have both id and title`);
+          errors.push(
+            `Section ${sectionIndex + 1}, Row ${rowIndex + 1} must have both id and title`,
+          );
         }
       });
     });
@@ -361,7 +421,7 @@ export const MESSAGE_TYPES = [
   'template',
   'interactive',
   'reaction',
-  'sticker'
+  'sticker',
 ] as const;
 
 export const MEDIA_MESSAGE_TYPES = [
@@ -369,13 +429,10 @@ export const MEDIA_MESSAGE_TYPES = [
   'document',
   'audio',
   'video',
-  'sticker'
+  'sticker',
 ] as const;
 
-export const INTERACTIVE_TYPES = [
-  'button',
-  'list'
-] as const;
+export const INTERACTIVE_TYPES = ['button', 'list'] as const;
 
 // Export commonly used types with shorter names
 export type {
@@ -383,5 +440,5 @@ export type {
   TextMessage as Text,
   ImageMessage as Image,
   InteractiveMessage as Interactive,
-  TemplateMessageRequest as Template
+  TemplateMessageRequest as Template,
 };

@@ -1,9 +1,9 @@
 import '@/app/globals.css';
-import { routing } from '@/i18n/routing';
+import type { ReactNode } from 'react';
+import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
+import { routing } from '@/i18n/routing';
 
 interface LocaleLayoutProps {
   children: ReactNode;

@@ -1,6 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Locale } from '../paths';
-import { getLocalizedPath, getPageTypeFromPath, getPathnames, getRoutingConfig, getSitemapConfig, LOCALES_CONFIG, PATHS_CONFIG, SITE_CONFIG, validatePathsConfig, type LocalizedPath, type PageType,  } from '../paths';;
+import {
+  getLocalizedPath,
+  getPageTypeFromPath,
+  getPathnames,
+  getRoutingConfig,
+  getSitemapConfig,
+  LOCALES_CONFIG,
+  PATHS_CONFIG,
+  SITE_CONFIG,
+  validatePathsConfig,
+  type LocalizedPath,
+  type PageType,
+} from '../paths';
 
 describe('paths configuration', () => {
   describe('type definitions', () => {
@@ -443,7 +455,8 @@ describe('paths configuration', () => {
     });
 
     it('should not create memory leaks with repeated calls', () => {
-      const initialMemory = (performance as unknown).memory?.usedJSHeapSize || 0;
+      const initialMemory =
+        (performance as unknown).memory?.usedJSHeapSize || 0;
 
       // Perform many operations
       for (let i = 0; i < 10000; i++) {

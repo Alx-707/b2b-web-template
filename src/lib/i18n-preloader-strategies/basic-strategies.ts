@@ -6,8 +6,8 @@
 import type { Locale } from '@/types/i18n';
 import type {
   IPreloader,
-  PreloadStrategy,
   PreloadOptions,
+  PreloadStrategy,
 } from '../i18n-preloader-types';
 
 /**
@@ -17,7 +17,7 @@ import type {
 export const immediateStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   await preloader.preloadMultipleLocales(locales, options);
 };
@@ -29,7 +29,7 @@ export const immediateStrategy: PreloadStrategy = async (
 export const smartStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   _locales: Locale[],
-  _options?: PreloadOptions
+  _options?: PreloadOptions,
 ) => {
   await preloader.smartPreload();
 };
@@ -41,13 +41,13 @@ export const smartStrategy: PreloadStrategy = async (
 export const progressiveStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   for (const locale of locales) {
     if (preloader.isPreloading()) {
       await preloader.preloadLocale(locale, options);
       // 添加延迟以避免阻塞主线程
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
   }
 };
@@ -59,12 +59,12 @@ export const progressiveStrategy: PreloadStrategy = async (
 export const priorityStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   // 定义语言优先级
   const priorityMap: Record<Locale, number> = {
-    'en': 1,
-    'zh': 2,
+    en: 1,
+    zh: 2,
   };
 
   // 按优先级排序
@@ -90,7 +90,7 @@ export const priorityStrategy: PreloadStrategy = async (
 export const lazyStrategy: PreloadStrategy = async (
   preloader: IPreloader,
   locales: Locale[],
-  options?: PreloadOptions
+  options?: PreloadOptions,
 ) => {
   // 只预加载当前最需要的语言
   if (locales.length > 0) {

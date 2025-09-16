@@ -4,7 +4,6 @@
  */
 import React from 'react';
 import type { Locale } from './i18n';
-;
 
 // ==================== 格式化相关类型 ====================
 

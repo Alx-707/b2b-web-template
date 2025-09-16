@@ -25,5 +25,3 @@ export {
 export type { PathsConfig } from './paths/paths-config';
 export type { LocalesConfig } from './paths/locales-config';
 export type { SiteConfig } from './paths/site-config';
-
-

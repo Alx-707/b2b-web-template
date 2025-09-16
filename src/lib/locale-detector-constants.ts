@@ -1,11 +1,10 @@
 /**
  * 语言检测器常量定义
- * 
+ *
  * 包含语言代码映射、地理位置映射、时区映射等常量定义
  */
 
 import type { Locale } from '@/types/i18n';
-;
 
 // ==================== 语言代码映射常量 ====================
 
@@ -63,7 +62,7 @@ export const LANGUAGE_CODE_TO_LOCALE_MAP = new Map<string, Locale>([
   ['zh-cht', 'zh'],
   ['cmn', 'zh'],
   ['yue', 'zh'],
-  
+
   // 英文变体
   ['en', 'en'],
   ['en-us', 'en'],
@@ -125,7 +124,7 @@ export const COUNTRY_CODE_TO_LOCALE_MAP = new Map<string, Locale>([
   ['MO', 'zh'],
   ['SG', 'zh'],
   ['MY', 'zh'],
-  
+
   // 英文地区
   ['US', 'en'],
   ['GB', 'en'],
@@ -200,7 +199,7 @@ export const TIMEZONE_TO_LOCALE_MAP = new Map<string, Locale>([
   ['Asia/Chongqing', 'zh'],
   ['Asia/Harbin', 'zh'],
   ['Asia/Urumqi', 'zh'],
-  
+
   // 英文时区
   ['America/New_York', 'en'],
   ['America/Los_Angeles', 'en'],
@@ -262,7 +261,8 @@ export const DETECTION_SOURCES = {
   DEFAULT: 'default',
 } as const;
 
-export type DetectionSource = typeof DETECTION_SOURCES[keyof typeof DETECTION_SOURCES];
+export type DetectionSource =
+  (typeof DETECTION_SOURCES)[keyof typeof DETECTION_SOURCES];
 
 /**
  * 地理位置API配置

@@ -2,17 +2,12 @@
 
 import React, { useCallback, useMemo, useRef } from 'react';
 import { useTheme } from 'next-themes';
-import type {
-  EnhancedThemeHook
-} from './theme-transition-types';
-import {
-  DEFAULT_CONFIG,
-  createDebounce
-} from './theme-transition-utils';
 import {
   executeBasicThemeTransition,
   executeCircularThemeTransition,
 } from './theme-transition-core';
+import type { EnhancedThemeHook } from './theme-transition-types';
+import { createDebounce, DEFAULT_CONFIG } from './theme-transition-utils';
 
 /**
  * 增强的主题切换 Hook
@@ -33,7 +28,8 @@ export function useEnhancedTheme(): EnhancedThemeHook {
   // 使用 ref 来存储防抖函数，避免重复创建
   const debouncedSetThemeRef = useRef<((_theme: string) => void) | null>(null);
   const debouncedSetCircularThemeRef = useRef<
-    ((_theme: string, _clickEvent?: React.MouseEvent<HTMLElement>) => void) | null
+    | ((_theme: string, _clickEvent?: React.MouseEvent<HTMLElement>) => void)
+    | null
   >(null);
 
   // 创建防抖的基础主题切换函数
@@ -58,7 +54,12 @@ export function useEnhancedTheme(): EnhancedThemeHook {
       if (!debouncedSetCircularThemeRef.current) {
         debouncedSetCircularThemeRef.current = createDebounce(
           ((themeToSet: string, event?: React.MouseEvent<HTMLElement>) => {
-            executeCircularThemeTransition(originalSetTheme, themeToSet, theme, event);
+            executeCircularThemeTransition(
+              originalSetTheme,
+              themeToSet,
+              theme,
+              event,
+            );
           }) as any,
           DEFAULT_CONFIG.debounceDelay,
         );

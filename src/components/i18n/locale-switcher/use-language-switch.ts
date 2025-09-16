@@ -1,6 +1,5 @@
 import { useState, useTransition } from 'react';
 import type { Locale } from '@/types/i18n';
-;
 import { useLocaleStorage } from '@/lib/locale-storage';
 import { TRANSITION_TIMEOUT } from './config';
 

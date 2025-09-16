@@ -1,7 +1,10 @@
 import React from 'react';
 import { logger } from '@/lib/logger';
 import { recordThemeSwitch } from '@/lib/theme-analytics';
-import type { ThemeTransitionConfig, ThemeTransitionRecord } from './theme-transition-types';
+import type {
+  ThemeTransitionConfig,
+  ThemeTransitionRecord,
+} from './theme-transition-types';
 
 /**
  * 默认屏幕尺寸常量（用于 SSR 环境）
@@ -44,7 +47,9 @@ export const supportsViewTransitions = (() => {
 /**
  * 获取点击位置坐标
  */
-export function getClickCoordinates(clickEvent?: React.MouseEvent<HTMLElement>): {
+export function getClickCoordinates(
+  clickEvent?: React.MouseEvent<HTMLElement>,
+): {
   x: number;
   y: number;
 } {
@@ -56,12 +61,14 @@ export function getClickCoordinates(clickEvent?: React.MouseEvent<HTMLElement>):
   const centerX =
     typeof window !== 'undefined'
       ? window.innerWidth / DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR
-      : DEFAULT_SCREEN_DIMENSIONS.WIDTH / DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR;
+      : DEFAULT_SCREEN_DIMENSIONS.WIDTH /
+        DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR;
 
   const centerY =
     typeof window !== 'undefined'
       ? window.innerHeight / DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR
-      : DEFAULT_SCREEN_DIMENSIONS.HEIGHT / DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR;
+      : DEFAULT_SCREEN_DIMENSIONS.HEIGHT /
+        DEFAULT_SCREEN_DIMENSIONS.CENTER_DIVISOR;
 
   return { x: centerX, y: centerY };
 }
@@ -107,11 +114,7 @@ export function recordThemeTransition(record: ThemeTransitionRecord): void {
     record;
 
   try {
-    recordThemeSwitch(
-      fromTheme,
-      toTheme,
-      endTime - startTime,
-    );
+    recordThemeSwitch(fromTheme, toTheme, endTime - startTime);
 
     // 记录性能指标
     if (typeof window !== 'undefined' && window.performance) {

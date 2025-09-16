@@ -1,3 +1,80 @@
+// 向后兼容的重新导出
+import type {
+  MessageStatus,
+  WhatsAppContact,
+  WhatsAppError,
+  WhatsAppMessage,
+} from './whatsapp-base-types';
+import type {
+  CompleteWebhookConfig,
+  MessageContext,
+  MessageStatusUpdate,
+  WEBHOOK_FIELDS,
+  WebhookBatchConfig,
+  WebhookConfig,
+  WebhookEntry,
+  WebhookError,
+  WebhookFilterConfig,
+  WebhookMetadata,
+  WebhookMonitoringConfig,
+  WebhookPayload,
+  WebhookProcessingResult,
+  WebhookRetryConfig,
+  WebhookSecurityConfig,
+  WebhookStatus,
+  WebhookSubscription,
+  WebhookTransformConfig,
+  WebhookVerificationRequest,
+  WebhookVerificationResponse,
+} from './whatsapp-webhook-base';
+import type {
+  AccountUpdateEvent,
+  EventBatch,
+  EventFilter,
+  EventProcessingConfig,
+  EventStatistics,
+  MessageDeliveryEvent,
+  MessageReadEvent,
+  MessageReceivedEvent,
+  MessageStatusEvent,
+  PhoneNumberQualityEvent,
+  SecurityEvent,
+  TemplateStatusEvent,
+  UserStatusChangeEvent,
+  WEBHOOK_EVENT_TYPES,
+  WebhookErrorEvent,
+  WebhookEvent,
+  WebhookProcessor,
+} from './whatsapp-webhook-events';
+import type {
+  INCOMING_MESSAGE_TYPES,
+  IncomingAudioMessage,
+  IncomingButtonMessage,
+  IncomingContactsMessage,
+  IncomingDocumentMessage,
+  IncomingImageMessage,
+  IncomingInteractiveMessage,
+  IncomingLocationMessage,
+  IncomingOrderMessage,
+  IncomingReactionMessage,
+  IncomingStickerMessage,
+  IncomingSystemMessage,
+  IncomingTemplateReply,
+  IncomingTextMessage,
+  IncomingVideoMessage,
+  IncomingWhatsAppMessage,
+  INTERACTIVE_MESSAGE_TYPES,
+  MEDIA_MESSAGE_TYPES,
+} from './whatsapp-webhook-messages';
+import {
+  createWebhookError,
+  createWebhookVerificationResponse,
+  isRetryableError,
+  isTimestampValid,
+  isWebhookVerificationRequest,
+  WebhookUtils,
+} from './whatsapp-webhook-utils';
+
 /**
  * WhatsApp Webhook 类型定义 - 主入口
  * WhatsApp Webhook Type Definitions - Main Entry Point
@@ -10,82 +87,6 @@ export * from './whatsapp-webhook-base';
 export * from './whatsapp-webhook-messages';
 export * from './whatsapp-webhook-events';
 export * from './whatsapp-webhook-utils';
-
-// 向后兼容的重新导出
-import type { WhatsAppContact, WhatsAppMessage, WhatsAppError, MessageStatus } from './whatsapp-base-types';
-
-import type {
-  WebhookEntry,
-  WebhookPayload,
-  MessageStatusUpdate,
-  WebhookError,
-  MessageContext,
-  WebhookVerificationRequest,
-  WebhookVerificationResponse,
-  WebhookConfig,
-  WebhookSubscription,
-  WebhookProcessingResult,
-  WebhookSecurityConfig,
-  WebhookRetryConfig,
-  WebhookMonitoringConfig,
-  WebhookStatus,
-  WebhookMetadata,
-  WebhookBatchConfig,
-  WebhookFilterConfig,
-  WebhookTransformConfig,
-  CompleteWebhookConfig,
-  WEBHOOK_FIELDS,
-} from './whatsapp-webhook-base';
-
-import type {
-  IncomingTextMessage,
-  IncomingImageMessage,
-  IncomingDocumentMessage,
-  IncomingAudioMessage,
-  IncomingVideoMessage,
-  IncomingLocationMessage,
-  IncomingContactsMessage,
-  IncomingInteractiveMessage,
-  IncomingReactionMessage,
-  IncomingStickerMessage,
-  IncomingOrderMessage,
-  IncomingSystemMessage,
-  IncomingButtonMessage,
-  IncomingTemplateReply,
-  IncomingWhatsAppMessage,
-  INCOMING_MESSAGE_TYPES,
-  MEDIA_MESSAGE_TYPES,
-  INTERACTIVE_MESSAGE_TYPES,
-} from './whatsapp-webhook-messages';
-
-import type {
-  MessageReceivedEvent,
-  MessageStatusEvent,
-  WebhookErrorEvent,
-  MessageReadEvent,
-  MessageDeliveryEvent,
-  UserStatusChangeEvent,
-  AccountUpdateEvent,
-  TemplateStatusEvent,
-  PhoneNumberQualityEvent,
-  SecurityEvent,
-  WebhookEvent,
-  WebhookProcessor,
-  EventFilter,
-  EventProcessingConfig,
-  EventStatistics,
-  EventBatch,
-  WEBHOOK_EVENT_TYPES,
-} from './whatsapp-webhook-events';
-
-import {
-  WebhookUtils,
-  isWebhookVerificationRequest,
-  createWebhookVerificationResponse,
-  createWebhookError,
-  isRetryableError,
-  isTimestampValid,
-} from './whatsapp-webhook-utils';
 
 // ==================== 向后兼容的类型别名 ====================
 

@@ -1,9 +1,9 @@
 // @ts-nocheck - 开发工具豁免：仅开发环境使用，不影响生产代码质量
 'use client';
 
+import { useCallback, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { useCallback, useMemo, useState } from 'react';
 
 /**
  * React Scan 分析器高级功能组件
@@ -32,7 +32,8 @@ interface PerformanceInsight {
 
 export function ReactScanAnalyzerAdvanced() {
   const [componentStats, _setComponentStats] = useState<ComponentStats[]>([]);
-  const [_selectedComponent, _setSelectedComponent] = useState<ComponentStats | null>(null);
+  const [_selectedComponent, _setSelectedComponent] =
+    useState<ComponentStats | null>(null);
   const [_showDetails, _setShowDetails] = useState(false);
 
   // 生成性能洞察
@@ -57,7 +58,8 @@ export function ReactScanAnalyzerAdvanced() {
           type: 'error',
           component: component.name,
           message: `Slow render time: ${component.averageRenderTime.toFixed(2)}ms`,
-          suggestion: 'Optimize component logic or break into smaller components',
+          suggestion:
+            'Optimize component logic or break into smaller components',
           impact: 'high',
         });
       }
@@ -99,9 +101,15 @@ export function ReactScanAnalyzerAdvanced() {
     if (componentStats.length === 0) return 100;
 
     let score = 100;
-    const highImpactIssues = performanceInsights.filter(i => i.impact === 'high').length;
-    const mediumImpactIssues = performanceInsights.filter(i => i.impact === 'medium').length;
-    const lowImpactIssues = performanceInsights.filter(i => i.impact === 'low').length;
+    const highImpactIssues = performanceInsights.filter(
+      (i) => i.impact === 'high',
+    ).length;
+    const mediumImpactIssues = performanceInsights.filter(
+      (i) => i.impact === 'medium',
+    ).length;
+    const lowImpactIssues = performanceInsights.filter(
+      (i) => i.impact === 'low',
+    ).length;
 
     score -= highImpactIssues * 20;
     score -= mediumImpactIssues * 10;
@@ -120,10 +128,14 @@ export function ReactScanAnalyzerAdvanced() {
   // 获取洞察类型颜色
   const getInsightColor = (type: string) => {
     switch (type) {
-      case 'error': return 'bg-red-50 text-red-800 border-red-200';
-      case 'warning': return 'bg-yellow-50 text-yellow-800 border-yellow-200';
-      case 'info': return 'bg-blue-50 text-blue-800 border-blue-200';
-      default: return 'bg-gray-50 text-gray-800 border-gray-200';
+      case 'error':
+        return 'bg-red-50 text-red-800 border-red-200';
+      case 'warning':
+        return 'bg-yellow-50 text-yellow-800 border-yellow-200';
+      case 'info':
+        return 'bg-blue-50 text-blue-800 border-blue-200';
+      default:
+        return 'bg-gray-50 text-gray-800 border-gray-200';
     }
   };
 
@@ -148,7 +160,13 @@ export function ReactScanAnalyzerAdvanced() {
     a.download = `react-scan-report-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [performanceScore, componentStats, performanceInsights, slowestComponents, mostRenderedComponents]);
+  }, [
+    performanceScore,
+    componentStats,
+    performanceInsights,
+    slowestComponents,
+    mostRenderedComponents,
+  ]);
 
   return (
     <div className='space-y-6'>
@@ -156,33 +174,45 @@ export function ReactScanAnalyzerAdvanced() {
       <Card className='p-6'>
         <div className='mb-4 flex items-center justify-between'>
           <h3 className='text-lg font-semibold'>Performance Overview</h3>
-          <Button _onClick={exportReport} size='sm' variant='outline'>
+          <Button
+            _onClick={exportReport}
+            size='sm'
+            variant='outline'
+          >
             Export Report
           </Button>
         </div>
 
         <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
           <div className='text-center'>
-            <div className={`text-3xl font-bold ${getScoreColor(performanceScore)}`}>
+            <div
+              className={`text-3xl font-bold ${getScoreColor(performanceScore)}`}
+            >
               {performanceScore}
             </div>
-            <div className='text-sm text-muted-foreground'>Performance Score</div>
+            <div className='text-muted-foreground text-sm'>
+              Performance Score
+            </div>
           </div>
           <div className='text-center'>
             <div className='text-3xl font-bold'>{componentStats.length}</div>
-            <div className='text-sm text-muted-foreground'>Components</div>
+            <div className='text-muted-foreground text-sm'>Components</div>
           </div>
           <div className='text-center'>
             <div className='text-3xl font-bold text-red-600'>
-              {performanceInsights.filter(i => i.impact === 'high').length}
+              {performanceInsights.filter((i) => i.impact === 'high').length}
             </div>
-            <div className='text-sm text-muted-foreground'>High Impact Issues</div>
+            <div className='text-muted-foreground text-sm'>
+              High Impact Issues
+            </div>
           </div>
           <div className='text-center'>
             <div className='text-3xl font-bold text-yellow-600'>
-              {performanceInsights.filter(i => i.impact === 'medium').length}
+              {performanceInsights.filter((i) => i.impact === 'medium').length}
             </div>
-            <div className='text-sm text-muted-foreground'>Medium Impact Issues</div>
+            <div className='text-muted-foreground text-sm'>
+              Medium Impact Issues
+            </div>
           </div>
         </div>
       </Card>
@@ -227,7 +257,7 @@ export function ReactScanAnalyzerAdvanced() {
               >
                 <div>
                   <div className='font-medium'>{component.name}</div>
-                  <div className='text-sm text-muted-foreground'>
+                  <div className='text-muted-foreground text-sm'>
                     Average: {component.averageRenderTime.toFixed(2)}ms
                   </div>
                 </div>
@@ -235,7 +265,7 @@ export function ReactScanAnalyzerAdvanced() {
                   <div className='text-sm font-medium'>
                     {component.renderCount} renders
                   </div>
-                  <div className='text-sm text-muted-foreground'>
+                  <div className='text-muted-foreground text-sm'>
                     Total: {component.totalRenderTime.toFixed(2)}ms
                   </div>
                 </div>
@@ -248,7 +278,9 @@ export function ReactScanAnalyzerAdvanced() {
       {/* 渲染最频繁组件 */}
       {mostRenderedComponents.length > 0 && (
         <Card className='p-6'>
-          <h3 className='mb-4 text-lg font-semibold'>Most Rendered Components</h3>
+          <h3 className='mb-4 text-lg font-semibold'>
+            Most Rendered Components
+          </h3>
           <div className='space-y-2'>
             {mostRenderedComponents.map((component, index) => (
               <div
@@ -257,7 +289,7 @@ export function ReactScanAnalyzerAdvanced() {
               >
                 <div>
                   <div className='font-medium'>{component.name}</div>
-                  <div className='text-sm text-muted-foreground'>
+                  <div className='text-muted-foreground text-sm'>
                     {component.renderCount} renders
                   </div>
                 </div>
@@ -265,7 +297,7 @@ export function ReactScanAnalyzerAdvanced() {
                   <div className='text-sm font-medium'>
                     {component.averageRenderTime.toFixed(2)}ms avg
                   </div>
-                  <div className='text-sm text-muted-foreground'>
+                  <div className='text-muted-foreground text-sm'>
                     {component.isOptimized ? 'Optimized' : 'Not Optimized'}
                   </div>
                 </div>

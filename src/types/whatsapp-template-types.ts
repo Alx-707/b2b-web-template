@@ -56,32 +56,40 @@ export interface TemplateMessage {
 // Extended Template Types
 export interface HeaderComponent extends TemplateComponent {
   type: 'header';
-  parameters?: Array<TemplateParameter & {
-    type: 'text' | 'image' | 'document' | 'video';
-  }>;
+  parameters?: Array<
+    TemplateParameter & {
+      type: 'text' | 'image' | 'document' | 'video';
+    }
+  >;
 }
 
 export interface BodyComponent extends TemplateComponent {
   type: 'body';
-  parameters?: Array<TemplateParameter & {
-    type: 'text' | 'currency' | 'date_time';
-  }>;
+  parameters?: Array<
+    TemplateParameter & {
+      type: 'text' | 'currency' | 'date_time';
+    }
+  >;
 }
 
 export interface FooterComponent extends TemplateComponent {
   type: 'footer';
-  parameters?: Array<TemplateParameter & {
-    type: 'text';
-  }>;
+  parameters?: Array<
+    TemplateParameter & {
+      type: 'text';
+    }
+  >;
 }
 
 export interface ButtonComponent extends TemplateComponent {
   type: 'button';
   sub_type: 'quick_reply' | 'url' | 'phone_number';
   index: number;
-  parameters?: Array<TemplateParameter & {
-    type: 'text';
-  }>;
+  parameters?: Array<
+    TemplateParameter & {
+      type: 'text';
+    }
+  >;
 }
 
 // Template Builder Types
@@ -132,7 +140,7 @@ export const TEMPLATE_COMPONENT_TYPES = [
   'header',
   'body',
   'footer',
-  'button'
+  'button',
 ] as const;
 
 export const TEMPLATE_PARAMETER_TYPES = [
@@ -141,14 +149,10 @@ export const TEMPLATE_PARAMETER_TYPES = [
   'date_time',
   'image',
   'document',
-  'video'
+  'video',
 ] as const;
 
-export const BUTTON_SUB_TYPES = [
-  'quick_reply',
-  'url',
-  'phone_number'
-] as const;
+export const BUTTON_SUB_TYPES = ['quick_reply', 'url', 'phone_number'] as const;
 
 export const SUPPORTED_LANGUAGE_CODES = [
   'en_US', // English (US)
@@ -169,40 +173,60 @@ export const SUPPORTED_LANGUAGE_CODES = [
 ] as const;
 
 // Type Guards
-export function isValidTemplateComponentType(type: string): type is TemplateComponentType {
+export function isValidTemplateComponentType(
+  type: string,
+): type is TemplateComponentType {
   return TEMPLATE_COMPONENT_TYPES.includes(type as TemplateComponentType);
 }
 
-export function isValidTemplateParameterType(type: string): type is TemplateParameterType {
+export function isValidTemplateParameterType(
+  type: string,
+): type is TemplateParameterType {
   return TEMPLATE_PARAMETER_TYPES.includes(type as TemplateParameterType);
 }
 
-export function isValidButtonSubType(subType: string): subType is ButtonSubType {
+export function isValidButtonSubType(
+  subType: string,
+): subType is ButtonSubType {
   return BUTTON_SUB_TYPES.includes(subType as ButtonSubType);
 }
 
-export function isValidLanguageCode(code: string): code is typeof SUPPORTED_LANGUAGE_CODES[number] {
-  return SUPPORTED_LANGUAGE_CODES.includes(code as typeof SUPPORTED_LANGUAGE_CODES[number]);
+export function isValidLanguageCode(
+  code: string,
+): code is (typeof SUPPORTED_LANGUAGE_CODES)[number] {
+  return SUPPORTED_LANGUAGE_CODES.includes(
+    code as (typeof SUPPORTED_LANGUAGE_CODES)[number],
+  );
 }
 
-export function isHeaderComponent(component: TemplateComponent): component is HeaderComponent {
+export function isHeaderComponent(
+  component: TemplateComponent,
+): component is HeaderComponent {
   return component.type === 'header';
 }
 
-export function isBodyComponent(component: TemplateComponent): component is BodyComponent {
+export function isBodyComponent(
+  component: TemplateComponent,
+): component is BodyComponent {
   return component.type === 'body';
 }
 
-export function isFooterComponent(component: TemplateComponent): component is FooterComponent {
+export function isFooterComponent(
+  component: TemplateComponent,
+): component is FooterComponent {
   return component.type === 'footer';
 }
 
-export function isButtonComponent(component: TemplateComponent): component is ButtonComponent {
+export function isButtonComponent(
+  component: TemplateComponent,
+): component is ButtonComponent {
   return component.type === 'button';
 }
 
 // Template Validation Functions
-export function validateTemplateParameter(parameter: TemplateParameter): TemplateValidationResult {
+export function validateTemplateParameter(
+  parameter: TemplateParameter,
+): TemplateValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -248,11 +272,13 @@ export function validateTemplateParameter(parameter: TemplateParameter): Templat
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   };
 }
 
-export function validateTemplateComponent(component: TemplateComponent): TemplateValidationResult {
+export function validateTemplateComponent(
+  component: TemplateComponent,
+): TemplateValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -276,20 +302,28 @@ export function validateTemplateComponent(component: TemplateComponent): Templat
     component.parameters.forEach((param, index) => {
       const paramValidation = validateTemplateParameter(param);
       if (!paramValidation.isValid) {
-        errors.push(...paramValidation.errors.map(err => `Parameter ${index}: ${err}`));
+        errors.push(
+          ...paramValidation.errors.map((err) => `Parameter ${index}: ${err}`),
+        );
       }
-      warnings.push(...paramValidation.warnings.map(warn => `Parameter ${index}: ${warn}`));
+      warnings.push(
+        ...paramValidation.warnings.map(
+          (warn) => `Parameter ${index}: ${warn}`,
+        ),
+      );
     });
   }
 
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   };
 }
 
-export function validateTemplateMessage(template: TemplateMessage): TemplateValidationResult {
+export function validateTemplateMessage(
+  template: TemplateMessage,
+): TemplateValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -300,7 +334,9 @@ export function validateTemplateMessage(template: TemplateMessage): TemplateVali
   if (!template.language?.code) {
     errors.push('Template must have language code');
   } else if (!isValidLanguageCode(template.language.code)) {
-    warnings.push(`Language code ${template.language.code} may not be supported`);
+    warnings.push(
+      `Language code ${template.language.code} may not be supported`,
+    );
   }
 
   if (template.language?.policy !== 'deterministic') {
@@ -311,16 +347,24 @@ export function validateTemplateMessage(template: TemplateMessage): TemplateVali
     template.components.forEach((component, index) => {
       const componentValidation = validateTemplateComponent(component);
       if (!componentValidation.isValid) {
-        errors.push(...componentValidation.errors.map(err => `Component ${index}: ${err}`));
+        errors.push(
+          ...componentValidation.errors.map(
+            (err) => `Component ${index}: ${err}`,
+          ),
+        );
       }
-      warnings.push(...componentValidation.warnings.map(warn => `Component ${index}: ${warn}`));
+      warnings.push(
+        ...componentValidation.warnings.map(
+          (warn) => `Component ${index}: ${warn}`,
+        ),
+      );
     });
   }
 
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   };
 }
 
@@ -328,37 +372,39 @@ export function validateTemplateMessage(template: TemplateMessage): TemplateVali
 export function createTextParameter(text: string): TextParameterBuilder {
   return {
     type: 'text',
-    text
+    text,
   };
 }
 
 export function createCurrencyParameter(
   code: string,
   amount_1000: number,
-  fallback_value: string
+  fallback_value: string,
 ): CurrencyParameterBuilder {
   return {
     type: 'currency',
     code,
     amount_1000,
-    fallback_value
+    fallback_value,
   };
 }
 
-export function createDateTimeParameter(fallback_value: string): DateTimeParameterBuilder {
+export function createDateTimeParameter(
+  fallback_value: string,
+): DateTimeParameterBuilder {
   return {
     type: 'date_time',
-    fallback_value
+    fallback_value,
   };
 }
 
 export function createMediaParameter(
   type: 'image' | 'document' | 'video',
-  options: { id?: string; link?: string; filename?: string }
+  options: { id?: string; link?: string; filename?: string },
 ): MediaParameterBuilder {
   return {
     type,
-    ...options
+    ...options,
   };
 }
 
@@ -367,5 +413,5 @@ export type {
   TemplateMessage as Template,
   TemplateComponent as Component,
   TemplateParameter as Parameter,
-  TemplateLanguage as Language
+  TemplateLanguage as Language,
 };

@@ -8,58 +8,54 @@
 'use client';
 
 // 重新导出所有模块的功能
-export * from './locale-storage-analytics-core';
-export * from './locale-storage-analytics-events';
-export * from './locale-storage-analytics-performance';
-export * from './locale-storage-analytics-utils';
-
 // 导入主要功能用于向后兼容
 import {
-  getStorageStats,
-  performHealthCheck,
-  calculateStorageStats,
   calculateHealthCheck,
   calculateStorageEfficiency,
+  calculateStorageStats,
+  getStorageStats,
+  performHealthCheck,
 } from './locale-storage-analytics-core';
-
 import {
-  EventManager,
   AccessLogger,
-  ErrorLogger,
   cleanupAnalyticsData,
+  ErrorLogger,
+  EventManager,
 } from './locale-storage-analytics-events';
-
 import {
-  getUsagePatterns,
   getPerformanceMetrics,
+  getUsagePatterns,
   getUsageTrends,
-  type UsagePatterns,
   type PerformanceMetrics,
+  type UsagePatterns,
   type UsageTrends,
 } from './locale-storage-analytics-performance';
-
 import {
   CacheManager,
-  exportAnalyticsData,
-  exportAnalyticsDataAsJson,
-  exportAnalyticsDataAsCsv,
-  validateAnalyticsData,
   compressAnalyticsData,
-  optimizeAnalyticsStorage,
+  exportAnalyticsData,
+  exportAnalyticsDataAsCsv,
+  exportAnalyticsDataAsJson,
   formatByteSize,
   formatDuration,
   formatPercentage,
   generateUniqueId,
+  optimizeAnalyticsStorage,
+  validateAnalyticsData,
   type ExportData,
 } from './locale-storage-analytics-utils';
-
 import type {
-  StorageStats,
-  StorageHealthCheck,
-  StorageOperationResult,
   StorageEvent,
   StorageEventListener,
+  StorageHealthCheck,
+  StorageOperationResult,
+  StorageStats,
 } from './locale-storage-types';
+
+export * from './locale-storage-analytics-core';
+export * from './locale-storage-analytics-events';
+export * from './locale-storage-analytics-performance';
+export * from './locale-storage-analytics-utils';
 
 /**
  * 存储分析管理器 - 向后兼容类
@@ -92,7 +88,12 @@ export class LocaleStorageAnalytics {
       CacheManager.setCachedMetrics('storage_stats', stats);
 
       // 记录访问
-      AccessLogger.logAccess('storage_stats', 'read', true, Date.now() - startTime);
+      AccessLogger.logAccess(
+        'storage_stats',
+        'read',
+        true,
+        Date.now() - startTime,
+      );
 
       return {
         success: true,
@@ -102,9 +103,16 @@ export class LocaleStorageAnalytics {
         responseTime: Date.now() - startTime,
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       ErrorLogger.logError(errorMessage, 'getStorageStats');
-      AccessLogger.logAccess('storage_stats', 'read', false, Date.now() - startTime, errorMessage);
+      AccessLogger.logAccess(
+        'storage_stats',
+        'read',
+        false,
+        Date.now() - startTime,
+        errorMessage,
+      );
 
       return {
         success: false,
@@ -184,7 +192,10 @@ export class LocaleStorageAnalytics {
    * 添加事件监听器
    * Add event listener
    */
-  static addEventListener(eventType: string, listener: StorageEventListener): void {
+  static addEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     EventManager.addEventListener(eventType, listener);
   }
 
@@ -192,7 +203,10 @@ export class LocaleStorageAnalytics {
    * 移除事件监听器
    * Remove event listener
    */
-  static removeEventListener(eventType: string, listener: StorageEventListener): void {
+  static removeEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     EventManager.removeEventListener(eventType, listener);
   }
 

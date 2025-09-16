@@ -9,8 +9,6 @@
 'use client';
 
 // 重新导出所有模块的组件和功能
-export * from './dynamic-imports-base';
-export * from './dynamic-imports-core';
 // export * from './dynamic-imports-devtools'; // 暂时禁用，组件不存在
 // export * from './dynamic-imports-i18n'; // 暂时禁用，组件不存在
 // export * from './dynamic-imports-performance'; // 暂时禁用，组件不存在
@@ -18,6 +16,10 @@ export * from './dynamic-imports-core';
 
 // 导入主要组件集合
 import { CoreDynamicComponents } from './dynamic-imports-core';
+
+export * from './dynamic-imports-base';
+export * from './dynamic-imports-core';
+
 // import { DevToolsDynamicComponents, DevelopmentOnlyComponents } from './dynamic-imports-devtools'; // 暂时禁用
 // import { I18nDynamicComponents } from './dynamic-imports-i18n'; // 暂时禁用
 // import { DevelopmentPerformanceComponents, PerformanceDynamicComponents } from './dynamic-imports-performance'; // 暂时禁用

@@ -1,3 +1,41 @@
+// 向后兼容的重新导出
+import type { Locale, Messages } from '@/types/i18n';
+import type { PreloadConfig } from './i18n-cache-types';
+import { TranslationPreloader } from './i18n-preloader-core';
+import {
+  createStrategyManager,
+  getRecommendedStrategy,
+  PreloadStrategies,
+  PreloadStrategyManager,
+  StrategyUtils,
+} from './i18n-preloader-strategies';
+import type {
+  IPreloader,
+  PreloaderConfig,
+  PreloaderEvents,
+  PreloaderFactory,
+  PreloaderMetrics,
+  PreloaderPlugin,
+  PreloadOptions,
+  PreloadResult,
+  PreloadState,
+  PreloadStats,
+  PreloadStrategy,
+} from './i18n-preloader-types';
+import {
+  cleanupPreloaders,
+  createTranslationPreloader,
+  getDefaultPreloader,
+  globalPreloaderFactory,
+  globalPreloaderManager,
+  PreloaderFactory as PreloaderFactoryClass,
+  PreloaderManager,
+  PreloaderUtils,
+  preloadLocale,
+  setupPreloader,
+  smartPreload,
+} from './i18n-preloader-utils';
+
 /**
  * 翻译预加载器 - 主入口
  * Translation Preloader - Main Entry Point
@@ -6,55 +44,51 @@
  */
 
 // 重新导出所有模块的功能
-export type { PreloadOptions, SmartPreloadConfig, PreloadStrategyConfig, PreloaderConfig, PreloaderFactoryConfig, IPreloader, PreloadConfigKey } from './i18n-preloader-types';
-export { PRELOADER_CONSTANTS, PRELOADER_EVENTS, isPreloadResult, isPreloadState, isPreloaderError } from './i18n-preloader-types';
-export type { PreloaderStateManager, PreloaderCache, PreloaderNetwork, PreloaderScheduler, PreloaderMonitor, PreloadStrategy, PreloaderMiddleware, PreloaderPlugin, PreloaderError, PreloaderTimeoutError, PreloaderNetworkError, PreloaderCacheError } from './i18n-preloader-types';
-export type { PreloadState, PreloadStats, PreloadResult, BatchResult, PreloaderMetrics, PreloaderEvents, PreloadEventHandler, PreloadEventMap, PreloadStateKey, PreloadStatsKey } from './i18n-preloader-types';
-export { TranslationPreloader as CorePreloader } from './i18n-preloader-core';
-export * from './i18n-preloader-strategies';
-export * from './i18n-preloader-utils';
-
-// 向后兼容的重新导出
-import type { Locale, Messages } from '@/types/i18n';
-import type {
-  PreloadConfig
-} from './i18n-cache-types';
-
-import type {
+export type {
+  PreloadOptions,
+  SmartPreloadConfig,
+  PreloadStrategyConfig,
+  PreloaderConfig,
+  PreloaderFactoryConfig,
+  IPreloader,
+  PreloadConfigKey,
+} from './i18n-preloader-types';
+export {
+  PRELOADER_CONSTANTS,
+  PRELOADER_EVENTS,
+  isPreloadResult,
+  isPreloadState,
+  isPreloaderError,
+} from './i18n-preloader-types';
+export type {
+  PreloaderStateManager,
+  PreloaderCache,
+  PreloaderNetwork,
+  PreloaderScheduler,
+  PreloaderMonitor,
+  PreloadStrategy,
+  PreloaderMiddleware,
+  PreloaderPlugin,
+  PreloaderError,
+  PreloaderTimeoutError,
+  PreloaderNetworkError,
+  PreloaderCacheError,
+} from './i18n-preloader-types';
+export type {
   PreloadState,
   PreloadStats,
   PreloadResult,
-  PreloadOptions,
-  IPreloader,
-  PreloaderConfig,
-  PreloaderFactory,
-  PreloaderPlugin,
-  PreloadStrategy,
+  BatchResult,
   PreloaderMetrics,
   PreloaderEvents,
+  PreloadEventHandler,
+  PreloadEventMap,
+  PreloadStateKey,
+  PreloadStatsKey,
 } from './i18n-preloader-types';
-
-import { TranslationPreloader } from './i18n-preloader-core';
-import {
-  PreloadStrategies,
-  PreloadStrategyManager,
-  createStrategyManager,
-  getRecommendedStrategy,
-  StrategyUtils
-} from './i18n-preloader-strategies';
-import {
-  createTranslationPreloader,
-  PreloaderFactory as PreloaderFactoryClass,
-  PreloaderManager,
-  PreloaderUtils,
-  globalPreloaderManager,
-  globalPreloaderFactory,
-  setupPreloader,
-  getDefaultPreloader,
-  preloadLocale,
-  smartPreload,
-  cleanupPreloaders
-} from './i18n-preloader-utils';
+export { TranslationPreloader as CorePreloader } from './i18n-preloader-core';
+export * from './i18n-preloader-strategies';
+export * from './i18n-preloader-utils';
 
 // ==================== 向后兼容的类型别名 ====================
 

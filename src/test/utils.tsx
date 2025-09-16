@@ -3,9 +3,9 @@
  * 提供自定义渲染器和测试辅助函数
  */
 
+import React from 'react';
 import type { RenderOptions } from '@testing-library/react';
 import { render } from '@testing-library/react';
-import React from 'react';
 import { vi } from 'vitest';
 
 // import { ThemeProvider } from 'next-themes';
@@ -306,6 +306,5 @@ export const generateTestData = {
 export { customRender as render };
 
 // 重新导出testing-library的所有工具
-    export * from '@testing-library/react';
-    export { vi } from 'vitest';
-
+export * from '@testing-library/react';
+export { vi } from 'vitest';

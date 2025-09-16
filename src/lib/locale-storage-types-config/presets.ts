@@ -31,7 +31,7 @@ export const CONFIG_PRESETS: Record<string, Partial<StorageConfig>> = {
       logErrors: true,
     },
   },
-  
+
   // 生产环境预设
   production: {
     debug: {
@@ -60,7 +60,7 @@ export const CONFIG_PRESETS: Record<string, Partial<StorageConfig>> = {
       retryAttempts: 3,
     },
   },
-  
+
   // 测试环境预设
   test: {
     enableCookies: false,
@@ -81,7 +81,7 @@ export const CONFIG_PRESETS: Record<string, Partial<StorageConfig>> = {
       retryAttempts: 0,
     },
   },
-  
+
   // 高性能预设
   performance: {
     performance: {
@@ -102,7 +102,7 @@ export const CONFIG_PRESETS: Record<string, Partial<StorageConfig>> = {
       cache: 6 * 60 * 60 * 1000, // 6小时
     },
   },
-  
+
   // 安全预设
   security: {
     encryption: {
@@ -116,6 +116,9 @@ export const CONFIG_PRESETS: Record<string, Partial<StorageConfig>> = {
     sync: {
       enabled: true,
       conflictResolution: 'server',
+      interval: 300000, // 5 minutes
+      retryAttempts: 3,
+      timeout: 30000, // 30 seconds
       authentication: {
         type: 'oauth',
         credentials: {},

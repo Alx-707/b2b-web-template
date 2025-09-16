@@ -13,11 +13,11 @@ import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
 import { LocaleValidationManager } from './locale-storage-maintenance-validation';
 import type {
-  UserLocalePreference,
-  LocaleDetectionHistory,
-  StorageOperationResult,
   DataExport,
   DataImportResult,
+  LocaleDetectionHistory,
+  StorageOperationResult,
+  UserLocalePreference,
 } from './locale-storage-types';
 import { STORAGE_KEYS } from './locale-storage-types';
 
@@ -25,7 +25,7 @@ import { STORAGE_KEYS } from './locale-storage-types';
  * 导出数据接口
  * Export data interface
  */
-interface ExportData {
+export interface ExportData {
   preference?: UserLocalePreference;
   override?: Locale;
   history?: LocaleDetectionHistory;
@@ -42,7 +42,7 @@ interface ExportData {
  * 导入数据接口
  * Import data interface
  */
-interface ImportData extends ExportData {}
+export interface ImportData extends ExportData {}
 
 /**
  * 语言存储导入导出管理器
@@ -54,24 +54,33 @@ export class LocaleImportExportManager {
    * Export all storage data
    */
   static exportData(): ExportData {
-    return {
-      preference: LocalStorageManager.get<UserLocalePreference>(
-        STORAGE_KEYS.LOCALE_PREFERENCE
-      ) || undefined,
-      override: LocalStorageManager.get<Locale>(
-        STORAGE_KEYS.USER_LOCALE_OVERRIDE
-      ) || undefined,
-      history: LocalStorageManager.get<LocaleDetectionHistory>(
-        STORAGE_KEYS.LOCALE_DETECTION_HISTORY
-      ) || undefined,
+    const preference = LocalStorageManager.get<UserLocalePreference>(
+      STORAGE_KEYS.LOCALE_PREFERENCE,
+    );
+    const override = LocalStorageManager.get<Locale>(
+      STORAGE_KEYS.USER_LOCALE_OVERRIDE,
+    );
+    const history = LocalStorageManager.get<LocaleDetectionHistory>(
+      STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
+    );
+
+    const result: ExportData = {
       version: '1.0.0',
       timestamp: Date.now(),
       metadata: {
-        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown',
+        userAgent:
+          typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown',
         exportedBy: 'LocaleMaintenanceManager',
         dataIntegrity: this.calculateDataChecksum(),
       },
     };
+
+    // 只有当值存在时才设置可选属性
+    if (preference) result.preference = preference;
+    if (override) result.override = override;
+    if (history) result.history = history;
+
+    return result;
   }
 
   /**
@@ -95,8 +104,14 @@ export class LocaleImportExportManager {
       // 导入用户偏好数据
       if (data.preference) {
         if (LocaleValidationManager.validatePreferenceData(data.preference)) {
-          LocalStorageManager.set(STORAGE_KEYS.LOCALE_PREFERENCE, data.preference);
-          CookieManager.set(STORAGE_KEYS.LOCALE_PREFERENCE, JSON.stringify(data.preference));
+          LocalStorageManager.set(
+            STORAGE_KEYS.LOCALE_PREFERENCE,
+            data.preference,
+          );
+          CookieManager.set(
+            STORAGE_KEYS.LOCALE_PREFERENCE,
+            JSON.stringify(data.preference),
+          );
           importedItems += 1;
         } else {
           errors.push('用户偏好数据格式无效');
@@ -106,7 +121,10 @@ export class LocaleImportExportManager {
       // 导入用户覆盖设置
       if (data.override) {
         if (typeof data.override === 'string') {
-          LocalStorageManager.set(STORAGE_KEYS.USER_LOCALE_OVERRIDE, data.override);
+          LocalStorageManager.set(
+            STORAGE_KEYS.USER_LOCALE_OVERRIDE,
+            data.override,
+          );
           CookieManager.set(STORAGE_KEYS.USER_LOCALE_OVERRIDE, data.override);
           importedItems += 1;
         } else {
@@ -117,7 +135,10 @@ export class LocaleImportExportManager {
       // 导入检测历史数据
       if (data.history) {
         if (LocaleValidationManager.validateHistoryData(data.history)) {
-          LocalStorageManager.set(STORAGE_KEYS.LOCALE_DETECTION_HISTORY, data.history);
+          LocalStorageManager.set(
+            STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
+            data.history,
+          );
           importedItems += 1;
         } else {
           errors.push('检测历史数据格式无效');
@@ -128,7 +149,9 @@ export class LocaleImportExportManager {
         success: errors.length === 0,
         timestamp: Date.now(),
         data: { importedItems, errors },
-        ...(errors.length > 0 && { error: `导入完成，但有 ${errors.length} 个错误` }),
+        ...(errors.length > 0 && {
+          error: `导入完成，但有 ${errors.length} 个错误`,
+        }),
       };
     } catch (error) {
       return {
@@ -320,7 +343,7 @@ export class LocaleImportExportManager {
       if (backups.length <= maxBackups) {
         return {
           success: true,
-          message: '没有需要清理的旧备份',
+          error: '没有需要清理的旧备份',
           timestamp: Date.now(),
           data: { totalBackups: backups.length, maxBackups },
         };
@@ -340,16 +363,15 @@ export class LocaleImportExportManager {
 
       return {
         success: true,
-        message: `已清理 ${deletedCount} 个旧备份`,
+        error: `已清理 ${deletedCount} 个旧备份`,
         timestamp: Date.now(),
         data: { deletedCount, remainingBackups: backups.length - deletedCount },
       };
     } catch (error) {
       return {
         success: false,
-        message: `清理旧备份失败: ${error instanceof Error ? error.message : '未知错误'}`,
+        error: `清理旧备份失败: ${error instanceof Error ? error.message : '未知错误'}`,
         timestamp: Date.now(),
-        error: error instanceof Error ? error.message : '未知错误',
       };
     }
   }
@@ -365,12 +387,18 @@ export class LocaleImportExportManager {
       if (typeof data.timestamp !== 'number') return false;
 
       // 验证偏好数据（如果存在）
-      if (data.preference && !LocaleValidationManager.validatePreferenceData(data.preference)) {
+      if (
+        data.preference &&
+        !LocaleValidationManager.validatePreferenceData(data.preference)
+      ) {
         return false;
       }
 
       // 验证历史数据（如果存在）
-      if (data.history && !LocaleValidationManager.validateHistoryData(data.history)) {
+      if (
+        data.history &&
+        !LocaleValidationManager.validateHistoryData(data.history)
+      ) {
         return false;
       }
 
@@ -391,9 +419,15 @@ export class LocaleImportExportManager {
    */
   private static calculateDataChecksum(): string {
     try {
-      const preference = LocalStorageManager.get(STORAGE_KEYS.LOCALE_PREFERENCE);
-      const override = LocalStorageManager.get(STORAGE_KEYS.USER_LOCALE_OVERRIDE);
-      const history = LocalStorageManager.get(STORAGE_KEYS.LOCALE_DETECTION_HISTORY);
+      const preference = LocalStorageManager.get(
+        STORAGE_KEYS.LOCALE_PREFERENCE,
+      );
+      const override = LocalStorageManager.get(
+        STORAGE_KEYS.USER_LOCALE_OVERRIDE,
+      );
+      const history = LocalStorageManager.get(
+        STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
+      );
 
       const dataString = JSON.stringify({ preference, override, history });
 
@@ -401,7 +435,7 @@ export class LocaleImportExportManager {
       let hash = 0;
       for (let i = 0; i < dataString.length; i++) {
         const char = dataString.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
+        hash = (hash << 5) - hash + char;
         hash = hash & hash; // 转换为32位整数
       }
 
@@ -425,21 +459,23 @@ export class LocaleImportExportManager {
     lastModified: number;
   } {
     const preference = LocalStorageManager.get<UserLocalePreference>(
-      STORAGE_KEYS.LOCALE_PREFERENCE
+      STORAGE_KEYS.LOCALE_PREFERENCE,
     );
     const override = LocalStorageManager.get<Locale>(
-      STORAGE_KEYS.USER_LOCALE_OVERRIDE
+      STORAGE_KEYS.USER_LOCALE_OVERRIDE,
     );
     const history = LocalStorageManager.get<LocaleDetectionHistory>(
-      STORAGE_KEYS.LOCALE_DETECTION_HISTORY
+      STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
     );
 
     const exportData = this.exportData();
     const dataSize = JSON.stringify(exportData).length;
 
     let lastModified = 0;
-    if (preference?.timestamp) lastModified = Math.max(lastModified, preference.timestamp);
-    if (history?.lastUpdated) lastModified = Math.max(lastModified, history.lastUpdated);
+    if (preference?.timestamp)
+      lastModified = Math.max(lastModified, preference.timestamp);
+    if (history?.lastUpdated)
+      lastModified = Math.max(lastModified, history.lastUpdated);
 
     return {
       totalItems: [preference, override, history].filter(Boolean).length,

@@ -20,9 +20,12 @@ describe('Label Responsive - Advanced Tests', () => {
   describe('高级视觉效果', () => {
     it('supports dark mode variants', () => {
       render(
-        <Label className='text-gray-900 dark:text-gray-100' data-testid='dark-mode'>
+        <Label
+          className='text-gray-900 dark:text-gray-100'
+          data-testid='dark-mode'
+        >
           Dark Mode Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('dark-mode');
@@ -33,55 +36,86 @@ describe('Label Responsive - Advanced Tests', () => {
   describe('高级响应式颜色', () => {
     it('handles responsive colors', () => {
       render(
-        <Label className='text-gray-600 md:text-gray-700 lg:text-gray-800' data-testid='responsive-colors'>
+        <Label
+          className='text-gray-600 md:text-gray-700 lg:text-gray-800'
+          data-testid='responsive-colors'
+        >
           Responsive Colors
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-colors');
-      expect(label).toHaveClass('text-gray-600', 'md:text-gray-700', 'lg:text-gray-800');
+      expect(label).toHaveClass(
+        'text-gray-600',
+        'md:text-gray-700',
+        'lg:text-gray-800',
+      );
     });
 
     it('handles responsive borders', () => {
       render(
-        <Label className='border border-gray-200 md:border-gray-300 lg:border-gray-400' data-testid='responsive-borders'>
+        <Label
+          className='border border-gray-200 md:border-gray-300 lg:border-gray-400'
+          data-testid='responsive-borders'
+        >
           Responsive Borders
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-borders');
-      expect(label).toHaveClass('border', 'border-gray-200', 'md:border-gray-300', 'lg:border-gray-400');
+      expect(label).toHaveClass(
+        'border',
+        'border-gray-200',
+        'md:border-gray-300',
+        'lg:border-gray-400',
+      );
     });
   });
 
   describe('高级交互响应式', () => {
     it('handles responsive cursor', () => {
       render(
-        <Label className='cursor-default md:cursor-pointer lg:cursor-help' data-testid='responsive-cursor'>
+        <Label
+          className='cursor-default md:cursor-pointer lg:cursor-help'
+          data-testid='responsive-cursor'
+        >
           Responsive Cursor
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-cursor');
-      expect(label).toHaveClass('cursor-default', 'md:cursor-pointer', 'lg:cursor-help');
+      expect(label).toHaveClass(
+        'cursor-default',
+        'md:cursor-pointer',
+        'lg:cursor-help',
+      );
     });
 
     it('handles responsive pointer events', () => {
       render(
-        <Label className='pointer-events-none md:pointer-events-auto' data-testid='responsive-pointer'>
+        <Label
+          className='pointer-events-none md:pointer-events-auto'
+          data-testid='responsive-pointer'
+        >
           Responsive Pointer Events
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-pointer');
-      expect(label).toHaveClass('pointer-events-none', 'md:pointer-events-auto');
+      expect(label).toHaveClass(
+        'pointer-events-none',
+        'md:pointer-events-auto',
+      );
     });
 
     it('handles responsive visibility', () => {
       render(
-        <Label className='visible md:invisible lg:visible' data-testid='responsive-visibility'>
+        <Label
+          className='visible md:invisible lg:visible'
+          data-testid='responsive-visibility'
+        >
           Responsive Visibility
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-visibility');

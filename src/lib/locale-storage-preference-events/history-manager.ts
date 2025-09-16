@@ -5,11 +5,9 @@
 
 'use client';
 
-import { LocalStorageManager } from '../locale-storage-local';
 import { logger } from '@/lib/logger';
-import type {
-  UserLocalePreference,
-} from '../locale-storage-types';
+import { LocalStorageManager } from '../locale-storage-local';
+import type { UserLocalePreference } from '../locale-storage-types';
 
 /**
  * 偏好历史管理
@@ -25,20 +23,23 @@ export function getPreferenceHistory(): UserLocalePreference[] {
 
   try {
     // 从当前偏好开始
-    const currentPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
+    const currentPreference =
+      LocalStorageManager.get<UserLocalePreference>('locale_preference');
     if (currentPreference) {
       history.push(currentPreference);
     }
 
     // 从历史记录中获取
-    const storedHistory = LocalStorageManager.get<UserLocalePreference[]>('preference_history');
+    const storedHistory =
+      LocalStorageManager.get<UserLocalePreference[]>('preference_history');
     if (storedHistory && Array.isArray(storedHistory)) {
       history.push(...storedHistory);
     }
 
     // 去重并按时间排序
-    const uniqueHistory = history.filter((pref, index, arr) => 
-      arr.findIndex(p => p.timestamp === pref.timestamp) === index
+    const uniqueHistory = history.filter(
+      (pref, index, arr) =>
+        arr.findIndex((p) => p.timestamp === pref.timestamp) === index,
     );
 
     return uniqueHistory.sort((a, b) => b.timestamp - a.timestamp);
@@ -52,20 +53,23 @@ export function getPreferenceHistory(): UserLocalePreference[] {
  * 记录偏好历史
  * Record preference history
  */
-export function recordPreferenceHistory(preference: UserLocalePreference): void {
+export function recordPreferenceHistory(
+  preference: UserLocalePreference,
+): void {
   try {
     const history = getPreferenceHistory();
-    
+
     // 检查是否已存在相同的记录
-    const exists = history.some(p => 
-      p.locale === preference.locale && 
-      p.source === preference.source &&
-      Math.abs(p.timestamp - preference.timestamp) < 1000
+    const exists = history.some(
+      (p) =>
+        p.locale === preference.locale &&
+        p.source === preference.source &&
+        Math.abs(p.timestamp - preference.timestamp) < 1000,
     );
 
     if (!exists) {
       history.unshift(preference);
-      
+
       // 限制历史记录数量
       const maxHistory = 20;
       if (history.length > maxHistory) {
@@ -75,7 +79,9 @@ export function recordPreferenceHistory(preference: UserLocalePreference): void 
       LocalStorageManager.set('preference_history', history);
     }
   } catch (error) {
-    logger.error('Error recording preference history', { error: error as Error });
+    logger.error('Error recording preference history', {
+      error: error as Error,
+    });
   }
 }
 
@@ -87,6 +93,8 @@ export function clearPreferenceHistory(): void {
   try {
     LocalStorageManager.remove('preference_history');
   } catch (error) {
-    logger.error('Error clearing preference history', { error: error as Error });
+    logger.error('Error clearing preference history', {
+      error: error as Error,
+    });
   }
 }

@@ -176,7 +176,9 @@ export function setupAccessibilityTest() {
 }
 
 // Helper function to create accessibility manager instance
-export function createAccessibilityManager(config?: unknown): AccessibilityManager {
+export function createAccessibilityManager(
+  config?: unknown,
+): AccessibilityManager {
   return new AccessibilityManager({
     language: 'en',
     enableVoiceAnnouncements: true,

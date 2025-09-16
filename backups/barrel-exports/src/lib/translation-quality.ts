@@ -93,7 +93,10 @@ export class TranslationQualityAnalyzer {
     const baseScore = 100;
     const finalScore = Math.max(0, baseScore - totalPenalty);
 
-    const confidence = this.calculateConfidence(issues, Boolean(humanTranslation));
+    const confidence = this.calculateConfidence(
+      issues,
+      Boolean(humanTranslation),
+    );
     const suggestions = this.generateImprovementSuggestions(issues);
 
     return {

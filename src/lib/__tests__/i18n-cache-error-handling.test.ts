@@ -4,7 +4,7 @@
  * 基本错误处理集成测试，包括：
  * - 基本错误处理验证
  * - 错误恢复测试
- * 
+ *
  * 详细测试请参考：
  * - i18n-cache-error-basic.test.ts - 基本错误处理测试
  * - i18n-cache-error-advanced.test.ts - 高级错误处理测试
@@ -141,7 +141,9 @@ describe('I18nCacheManager - Error Handling Index', () => {
 
       // Test null locale
       try {
-        const result = await cacheManager.getMessages(null as unknown as Locale);
+        const result = await cacheManager.getMessages(
+          null as unknown as Locale,
+        );
         expect(result).toBeNull();
       } catch (error) {
         expect(error).toBeDefined();
@@ -167,11 +169,11 @@ describe('I18nCacheManager - Error Handling Index', () => {
       }
 
       const metrics = cacheManager.getMetrics();
-      
+
       // Should have some successful operations recorded
       expect(metrics.localeUsage.en).toBeGreaterThan(0);
       expect(metrics.localeUsage.zh).toBeGreaterThan(0);
-      
+
       // Should have some errors recorded
       expect(metrics.errorRate).toBeGreaterThan(0);
 
@@ -195,8 +197,8 @@ describe('I18nCacheManager - Error Handling Index', () => {
       const results = await Promise.allSettled(promises);
 
       // Should have some successes and some failures
-      const successes = results.filter(r => r.status === 'fulfilled');
-      const failures = results.filter(r => r.status === 'rejected');
+      const successes = results.filter((r) => r.status === 'fulfilled');
+      const failures = results.filter((r) => r.status === 'rejected');
 
       expect(successes.length).toBeGreaterThan(0);
       expect(failures.length).toBeGreaterThan(0);
@@ -237,7 +239,7 @@ describe('I18nCacheManager - Error Handling Index', () => {
     it('should handle cache operations during errors', async () => {
       // Load some valid data
       await cacheManager.getMessages('en');
-      
+
       const originalConsoleError = console.error;
       console.error = vi.fn();
 
@@ -271,7 +273,7 @@ describe('I18nCacheManager - Error Handling Index', () => {
           stressOperations.push(cacheManager.getMessages('invalid' as Locale));
         } else {
           stressOperations.push(
-            cacheManager.getMessages(i % 2 === 0 ? 'en' : 'zh')
+            cacheManager.getMessages(i % 2 === 0 ? 'en' : 'zh'),
           );
         }
       }

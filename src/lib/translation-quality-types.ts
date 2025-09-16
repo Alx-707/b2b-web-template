@@ -2,7 +2,6 @@
  * 翻译质量检查相关的类型定义
  */
 import type { Locale } from '@/types/i18n';
-;
 import type { QualityIssue, QualityScore } from '@/types/translation-manager';
 
 // AI翻译服务接口

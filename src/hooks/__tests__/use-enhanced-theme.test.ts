@@ -129,9 +129,7 @@ describe('useEnhancedTheme', () => {
   it('should provide setCircularTheme function', () => {
     const { result } = renderHook(() => useEnhancedTheme());
 
-    expect(typeof result.current.setCircularTheme).toBe(
-      'function',
-    );
+    expect(typeof result.current.setCircularTheme).toBe('function');
 
     act(() => {
       result.current.setCircularTheme('dark');
@@ -401,9 +399,7 @@ describe('useEnhancedTheme', () => {
         act(() => {
           for (let i = 0; i < 10; i++) {
             result.current.setTheme(i % 2 === 0 ? 'light' : 'dark');
-            result.current.setCircularTheme(
-              i % 2 === 0 ? 'dark' : 'light',
-            );
+            result.current.setCircularTheme(i % 2 === 0 ? 'dark' : 'light');
           }
         });
       }).not.toThrow();

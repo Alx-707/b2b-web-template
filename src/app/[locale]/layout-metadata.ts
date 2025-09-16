@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import type { Locale } from '@/lib/seo-metadata';
-import { generateLocalizedMetadata } from '@/lib/seo-metadata';
-import { createPageSEOConfig,  } from '@/lib/seo-metadata';
+import {
+  createPageSEOConfig,
+  generateLocalizedMetadata,
+} from '@/lib/seo-metadata';
 import { routing } from '@/i18n/routing';
 
 /**

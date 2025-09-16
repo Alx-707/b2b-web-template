@@ -17,7 +17,3 @@ export { AirtableService } from './airtable/service';
 
 // 重新导出单例实例
 export { airtableService } from './airtable/instance';
-
-
-
-

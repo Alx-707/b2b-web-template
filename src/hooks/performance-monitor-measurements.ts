@@ -1,14 +1,12 @@
 import React from 'react';
+import { logger } from '@/lib/logger';
 import type {
   PerformanceAlert,
   PerformanceAlertThresholds,
-  PerformanceMetrics,
   PerformanceMeasurements,
+  PerformanceMetrics,
 } from './performance-monitor-types';
-import {
-  checkMemoryUsageAlert,
-} from './performance-monitor-utils';
-import { logger } from '@/lib/logger';
+import { checkMemoryUsageAlert } from './performance-monitor-utils';
 
 /**
  * 创建性能测量函数的辅助函数
@@ -20,15 +18,16 @@ export function usePerformanceMeasurements(
   setMetrics: React.Dispatch<React.SetStateAction<PerformanceMetrics | null>>,
   startTime: React.MutableRefObject<number>,
 ): PerformanceMeasurements {
-
   const measureLoadTime = React.useCallback(() => {
     try {
       if (typeof window !== 'undefined' && window.performance) {
-        const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+        const navigation = performance.getEntriesByType(
+          'navigation',
+        )[0] as PerformanceNavigationTiming;
         if (navigation) {
           const loadTime = navigation.loadEventEnd - navigation.startTime;
 
-          setMetrics(prev => ({
+          setMetrics((prev) => ({
             renderTime: 0,
             ...(prev || {}),
             loadTime,
@@ -53,7 +52,7 @@ export function usePerformanceMeasurements(
       if (startTime.current !== null) {
         const renderTime = performance.now() - startTime.current;
 
-        setMetrics(prev => ({
+        setMetrics((prev) => ({
           loadTime: 0,
           ...(prev || {}),
           renderTime,
@@ -70,14 +69,20 @@ export function usePerformanceMeasurements(
     } catch (error) {
       logger.warn('Failed to measure render time', { error: error as Error });
     }
-  }, [enableAlerts, alertThresholds.renderTime, addAlert, setMetrics, startTime]);
+  }, [
+    enableAlerts,
+    alertThresholds.renderTime,
+    addAlert,
+    setMetrics,
+    startTime,
+  ]);
 
   const measureMemoryUsage = React.useCallback(() => {
     try {
       if (typeof window !== 'undefined' && window.performance?.memory) {
         const memoryUsage = window.performance.memory.usedJSHeapSize;
 
-        setMetrics(prev => ({
+        setMetrics((prev) => ({
           loadTime: 0,
           renderTime: 0,
           ...(prev || {}),
@@ -85,7 +90,11 @@ export function usePerformanceMeasurements(
         }));
 
         if (enableAlerts) {
-          checkMemoryUsageAlert(memoryUsage, alertThresholds.memoryUsage, addAlert);
+          checkMemoryUsageAlert(
+            memoryUsage,
+            alertThresholds.memoryUsage,
+            addAlert,
+          );
         }
       }
     } catch (error) {
@@ -107,7 +116,11 @@ export const measureNetworkLatency = async (): Promise<number | null> => {
   try {
     if (typeof window !== 'undefined' && (navigator as any).connection) {
       // 使用 Network Information API (如果可用)
-      const connection = (navigator as any).connection as { rtt?: number; effectiveType?: string; downlink?: number };
+      const connection = (navigator as any).connection as {
+        rtt?: number;
+        effectiveType?: string;
+        downlink?: number;
+      };
       if (connection.rtt) {
         return connection.rtt;
       }
@@ -135,7 +148,9 @@ export const measureFirstContentfulPaint = (): number | null => {
   try {
     if (typeof window !== 'undefined' && window.performance) {
       const paintEntries = performance.getEntriesByType('paint');
-      const fcpEntry = paintEntries.find(entry => entry.name === 'first-contentful-paint');
+      const fcpEntry = paintEntries.find(
+        (entry) => entry.name === 'first-contentful-paint',
+      );
       return fcpEntry ? fcpEntry.startTime : null;
     }
     return null;
@@ -187,7 +202,10 @@ export const measureCumulativeLayoutShift = (): Promise<number | null> => {
 
         const observer = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
-            const layoutShiftEntry = entry as unknown as { hadRecentInput?: boolean; value: number };
+            const layoutShiftEntry = entry as unknown as {
+              hadRecentInput?: boolean;
+              value: number;
+            };
             if (!layoutShiftEntry.hadRecentInput) {
               clsValue += layoutShiftEntry.value;
             }
@@ -200,7 +218,10 @@ export const measureCumulativeLayoutShift = (): Promise<number | null> => {
         const handleVisibilityChange = () => {
           if (document.visibilityState === 'hidden') {
             observer.disconnect();
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            document.removeEventListener(
+              'visibilitychange',
+              handleVisibilityChange,
+            );
             resolve(clsValue);
           }
         };
@@ -210,7 +231,10 @@ export const measureCumulativeLayoutShift = (): Promise<number | null> => {
         // 超时处理
         setTimeout(() => {
           observer.disconnect();
-          document.removeEventListener('visibilitychange', handleVisibilityChange);
+          document.removeEventListener(
+            'visibilitychange',
+            handleVisibilityChange,
+          );
           resolve(clsValue);
         }, 10000);
       } else {
@@ -234,7 +258,10 @@ export const measureFirstInputDelay = (): Promise<number | null> => {
           const entries = list.getEntries();
           const firstEntry = entries[0];
           if (firstEntry) {
-            const firstInputEntry = firstEntry as unknown as { processingStart: number; startTime: number };
+            const firstInputEntry = firstEntry as unknown as {
+              processingStart: number;
+              startTime: number;
+            };
             const fid = firstInputEntry.processingStart - firstEntry.startTime;
             resolve(fid);
           } else {
@@ -263,14 +290,18 @@ export const measureFirstInputDelay = (): Promise<number | null> => {
 /**
  * 综合性能测量函数
  */
-export const measureComprehensivePerformance = async (): Promise<Partial<PerformanceMetrics>> => {
+export const measureComprehensivePerformance = async (): Promise<
+  Partial<PerformanceMetrics>
+> => {
   const metrics: Partial<PerformanceMetrics> = {};
 
   try {
     // 测量基本指标
     if (typeof window !== 'undefined' && window.performance) {
       // 加载时间
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        'navigation',
+      )[0] as PerformanceNavigationTiming;
       if (navigation) {
         metrics.loadTime = navigation.loadEventEnd - navigation.startTime;
       }
@@ -289,7 +320,9 @@ export const measureComprehensivePerformance = async (): Promise<Partial<Perform
 
     return metrics;
   } catch (error) {
-    logger.warn('Failed to measure comprehensive performance', { error: error as Error });
+    logger.warn('Failed to measure comprehensive performance', {
+      error: error as Error,
+    });
     return {};
   }
 };

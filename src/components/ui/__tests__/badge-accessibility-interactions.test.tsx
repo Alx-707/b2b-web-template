@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Badge } from '../badge';
 
@@ -13,7 +13,12 @@ describe('Badge - Accessibility & Interactions', () => {
       render(<Badge>Focus Test</Badge>);
 
       const badge = screen.getByText('Focus Test');
-      expect(badge).toHaveClass('focus:outline-none', 'focus:ring-2', 'focus:ring-ring', 'focus:ring-offset-2');
+      expect(badge).toHaveClass(
+        'focus:outline-none',
+        'focus:ring-2',
+        'focus:ring-ring',
+        'focus:ring-offset-2',
+      );
     });
 
     it('supports screen reader text', () => {
@@ -21,7 +26,7 @@ describe('Badge - Accessibility & Interactions', () => {
         <Badge aria-label='Status: Active'>
           <span aria-hidden='true'>✓</span>
           Active
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByLabelText('Status: Active');
@@ -47,7 +52,7 @@ describe('Badge - Accessibility & Interactions', () => {
         <div>
           <Badge aria-describedby='badge-description'>Status</Badge>
           <div id='badge-description'>This badge shows the current status</div>
-        </div>
+        </div>,
       );
 
       const badge = screen.getByText('Status');
@@ -59,20 +64,26 @@ describe('Badge - Accessibility & Interactions', () => {
 
       const badge = screen.getByText('Focusable Badge');
       expect(badge).toHaveAttribute('tabIndex', '0');
-      
+
       badge.focus();
       expect(badge).toHaveFocus();
     });
 
     it('supports high contrast mode', () => {
-      render(<Badge className='forced-colors:border-[ButtonText]'>High Contrast</Badge>);
+      render(
+        <Badge className='forced-colors:border-[ButtonText]'>
+          High Contrast
+        </Badge>,
+      );
 
       const badge = screen.getByText('High Contrast');
       expect(badge).toHaveClass('forced-colors:border-[ButtonText]');
     });
 
     it('supports reduced motion preferences', () => {
-      render(<Badge className='motion-reduce:transition-none'>Motion Reduced</Badge>);
+      render(
+        <Badge className='motion-reduce:transition-none'>Motion Reduced</Badge>,
+      );
 
       const badge = screen.getByText('Motion Reduced');
       expect(badge).toHaveClass('motion-reduce:transition-none');
@@ -89,21 +100,31 @@ describe('Badge - Accessibility & Interactions', () => {
       render(
         <div>
           <h2>User Profile</h2>
-          <Badge role='status' aria-label='User status: Online'>
+          <Badge
+            role='status'
+            aria-label='User status: Online'
+          >
             Online
           </Badge>
-        </div>
+        </div>,
       );
 
       const heading = screen.getByRole('heading', { level: 2 });
       const status = screen.getByRole('status');
-      
+
       expect(heading).toBeInTheDocument();
       expect(status).toHaveAttribute('aria-label', 'User status: Online');
     });
 
     it('supports internationalization', () => {
-      render(<Badge lang='es' dir='ltr'>Estado: Activo</Badge>);
+      render(
+        <Badge
+          lang='es'
+          dir='ltr'
+        >
+          Estado: Activo
+        </Badge>,
+      );
 
       const badge = screen.getByText('Estado: Activo');
       expect(badge).toHaveAttribute('lang', 'es');
@@ -111,7 +132,14 @@ describe('Badge - Accessibility & Interactions', () => {
     });
 
     it('supports right-to-left text direction', () => {
-      render(<Badge dir='rtl' lang='ar'>نشط</Badge>);
+      render(
+        <Badge
+          dir='rtl'
+          lang='ar'
+        >
+          نشط
+        </Badge>,
+      );
 
       const badge = screen.getByText('نشط');
       expect(badge).toHaveAttribute('dir', 'rtl');
@@ -145,7 +173,10 @@ describe('Badge - Accessibility & Interactions', () => {
       render(<Badge variant='outline'>Hover Outline</Badge>);
 
       const badge = screen.getByText('Hover Outline');
-      expect(badge).toHaveClass('hover:bg-accent', 'hover:text-accent-foreground');
+      expect(badge).toHaveClass(
+        'hover:bg-accent',
+        'hover:text-accent-foreground',
+      );
     });
 
     it('handles mouse events correctly', () => {
@@ -162,7 +193,7 @@ describe('Badge - Accessibility & Interactions', () => {
           onMouseUp={handleMouseUp}
         >
           Interactive Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Interactive Badge');
@@ -191,7 +222,9 @@ describe('Badge - Accessibility & Interactions', () => {
 
     it('handles double click events', () => {
       const handleDoubleClick = vi.fn();
-      render(<Badge onDoubleClick={handleDoubleClick}>Double Click Badge</Badge>);
+      render(
+        <Badge onDoubleClick={handleDoubleClick}>Double Click Badge</Badge>,
+      );
 
       const badge = screen.getByText('Double Click Badge');
       fireEvent.doubleClick(badge);
@@ -211,7 +244,7 @@ describe('Badge - Accessibility & Interactions', () => {
           onKeyPress={handleKeyPress}
         >
           Keyboard Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Keyboard Badge');
@@ -237,7 +270,7 @@ describe('Badge - Accessibility & Interactions', () => {
           onBlur={handleBlur}
         >
           Focus Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Focus Badge');
@@ -263,7 +296,7 @@ describe('Badge - Accessibility & Interactions', () => {
           onPointerLeave={handlePointerLeave}
         >
           Pointer Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Pointer Badge');
@@ -293,7 +326,7 @@ describe('Badge - Accessibility & Interactions', () => {
           onTouchMove={handleTouchMove}
         >
           Touch Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Touch Badge');
@@ -311,14 +344,21 @@ describe('Badge - Accessibility & Interactions', () => {
 
   describe('Responsive Behavior', () => {
     it('maintains consistent sizing across variants', () => {
-      const variants = ['default', 'secondary', 'destructive', 'outline'] as const;
-      
-      variants.forEach(variant => {
-        const { unmount } = render(<Badge variant={variant}>{variant} Badge</Badge>);
-        
+      const variants = [
+        'default',
+        'secondary',
+        'destructive',
+        'outline',
+      ] as const;
+
+      variants.forEach((variant) => {
+        const { unmount } = render(
+          <Badge variant={variant}>{variant} Badge</Badge>,
+        );
+
         const badge = screen.getByText(`${variant} Badge`);
         expect(badge).toHaveClass('px-2.5', 'py-0.5', 'text-xs');
-        
+
         unmount();
       });
     });
@@ -326,33 +366,53 @@ describe('Badge - Accessibility & Interactions', () => {
     it('adapts to container width', () => {
       render(
         <div style={{ width: '100px' }}>
-          <Badge className='max-w-full truncate'>Very Long Badge Text That Should Truncate</Badge>
-        </div>
+          <Badge className='max-w-full truncate'>
+            Very Long Badge Text That Should Truncate
+          </Badge>
+        </div>,
       );
 
-      const badge = screen.getByText('Very Long Badge Text That Should Truncate');
+      const badge = screen.getByText(
+        'Very Long Badge Text That Should Truncate',
+      );
       expect(badge).toHaveClass('max-w-full', 'truncate');
     });
 
     it('supports responsive text sizing', () => {
-      render(<Badge className='text-xs sm:text-sm md:text-base'>Responsive Text</Badge>);
+      render(
+        <Badge className='text-xs sm:text-sm md:text-base'>
+          Responsive Text
+        </Badge>,
+      );
 
       const badge = screen.getByText('Responsive Text');
       expect(badge).toHaveClass('text-xs', 'sm:text-sm', 'md:text-base');
     });
 
     it('supports responsive padding', () => {
-      render(<Badge className='px-2 py-1 sm:px-3 sm:py-1.5'>Responsive Padding</Badge>);
+      render(
+        <Badge className='px-2 py-1 sm:px-3 sm:py-1.5'>
+          Responsive Padding
+        </Badge>,
+      );
 
       const badge = screen.getByText('Responsive Padding');
       expect(badge).toHaveClass('px-2', 'py-1', 'sm:px-3', 'sm:py-1.5');
     });
 
     it('maintains aspect ratio on different screen sizes', () => {
-      render(<Badge className='aspect-square w-8 h-8 p-0 justify-center'>42</Badge>);
+      render(
+        <Badge className='aspect-square h-8 w-8 justify-center p-0'>42</Badge>,
+      );
 
       const badge = screen.getByText('42');
-      expect(badge).toHaveClass('aspect-square', 'w-8', 'h-8', 'p-0', 'justify-center');
+      expect(badge).toHaveClass(
+        'aspect-square',
+        'w-8',
+        'h-8',
+        'p-0',
+        'justify-center',
+      );
     });
   });
 
@@ -411,7 +471,7 @@ describe('Badge - Accessibility & Interactions', () => {
     });
 
     it('handles multiple spaces in content', () => {
-      render(<Badge>Multiple     Spaces</Badge>);
+      render(<Badge>Multiple Spaces</Badge>);
 
       const badge = screen.getByText('Multiple Spaces');
       expect(badge).toBeInTheDocument();
@@ -433,7 +493,7 @@ describe('Badge - Accessibility & Interactions', () => {
               <span>Nested Fragment</span>
             </>
           </>
-        </Badge>
+        </Badge>,
       );
 
       expect(screen.getByText('Fragment 1')).toBeInTheDocument();
@@ -442,11 +502,7 @@ describe('Badge - Accessibility & Interactions', () => {
 
     it('handles conditional rendering', () => {
       const showContent = true;
-      render(
-        <Badge>
-          {showContent ? 'Visible' : 'Hidden'}
-        </Badge>
-      );
+      render(<Badge>{showContent ? 'Visible' : 'Hidden'}</Badge>);
 
       expect(screen.getByText('Visible')).toBeInTheDocument();
       expect(screen.queryByText('Hidden')).not.toBeInTheDocument();
@@ -454,30 +510,30 @@ describe('Badge - Accessibility & Interactions', () => {
 
     it('handles dynamic content updates', () => {
       const { rerender } = render(<Badge>Initial</Badge>);
-      
+
       expect(screen.getByText('Initial')).toBeInTheDocument();
-      
+
       rerender(<Badge>Updated</Badge>);
-      
+
       expect(screen.getByText('Updated')).toBeInTheDocument();
       expect(screen.queryByText('Initial')).not.toBeInTheDocument();
     });
 
     it('handles rapid re-renders without issues', () => {
       const { rerender } = render(<Badge>Content 0</Badge>);
-      
+
       for (let i = 1; i <= 100; i++) {
         rerender(<Badge>Content {i}</Badge>);
       }
-      
+
       expect(screen.getByText('Content 100')).toBeInTheDocument();
     });
 
     it('handles unmounting gracefully', () => {
       const { unmount } = render(<Badge>Unmount Test</Badge>);
-      
+
       expect(screen.getByText('Unmount Test')).toBeInTheDocument();
-      
+
       expect(() => unmount()).not.toThrow();
     });
   });

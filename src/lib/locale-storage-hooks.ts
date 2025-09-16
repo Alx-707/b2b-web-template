@@ -1,9 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useState } from 'react';
 import type { Locale } from '@/types/i18n';
-import type { UserLocalePreference, LocaleDetectionHistory } from './locale-storage-manager';
+import { logger } from '@/lib/logger';
+import type {
+  LocaleDetectionHistory,
+  UserLocalePreference,
+} from './locale-storage-manager';
 import { LocaleStorageManager } from './locale-storage-manager';
 import { STORAGE_KEYS } from './locale-storage-types';
 
@@ -51,7 +54,9 @@ export function useLocaleStorage() {
  * React Hook: Reactive locale preference state
  */
 export function useLocalePreference() {
-  const [preference, setPreference] = useState<UserLocalePreference | null>(null);
+  const [preference, setPreference] = useState<UserLocalePreference | null>(
+    null,
+  );
   const [override, setOverride] = useState<Locale | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -74,10 +79,13 @@ export function useLocalePreference() {
     loadPreferences();
   }, []);
 
-  const updatePreference = useCallback((newPreference: UserLocalePreference) => {
-    LocaleStorageManager.saveUserPreference(newPreference);
-    setPreference(newPreference);
-  }, []);
+  const updatePreference = useCallback(
+    (newPreference: UserLocalePreference) => {
+      LocaleStorageManager.saveUserPreference(newPreference);
+      setPreference(newPreference);
+    },
+    [],
+  );
 
   const updateOverride = useCallback((locale: Locale) => {
     LocaleStorageManager.setUserOverride(locale);
@@ -126,18 +134,21 @@ export function useDetectionHistory() {
     loadHistory();
   }, []);
 
-  const addDetection = useCallback((detection: {
-    locale: Locale;
-    source: string;
-    timestamp: number;
-    confidence: number;
-  }) => {
-    LocaleStorageManager.addDetectionRecord(detection);
+  const addDetection = useCallback(
+    (detection: {
+      locale: Locale;
+      source: string;
+      timestamp: number;
+      confidence: number;
+    }) => {
+      LocaleStorageManager.addDetectionRecord(detection);
 
-    // 重新加载历史记录
-    const updatedHistory = LocaleStorageManager.getDetectionHistory();
-    setHistory(updatedHistory);
-  }, []);
+      // 重新加载历史记录
+      const updatedHistory = LocaleStorageManager.getDetectionHistory();
+      setHistory(updatedHistory);
+    },
+    [],
+  );
 
   const getRecentDetections = useCallback((limit: number = 5) => {
     return LocaleStorageManager.getRecentDetections(limit);
@@ -165,7 +176,9 @@ export function useDetectionHistory() {
  * React Hook: Storage statistics
  */
 export function useStorageStats() {
-  const [stats, setStats] = useState<ReturnType<typeof LocaleStorageManager.getStorageStats> | null>(null);
+  const [stats, setStats] = useState<ReturnType<
+    typeof LocaleStorageManager.getStorageStats
+  > | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshStats = useCallback(() => {
@@ -199,9 +212,12 @@ export function useStorageDataManager() {
     return LocaleStorageManager.exportData();
   }, []);
 
-  const importData = useCallback((data: Parameters<typeof LocaleStorageManager.importData>[0]) => {
-    LocaleStorageManager.importData(data);
-  }, []);
+  const importData = useCallback(
+    (data: Parameters<typeof LocaleStorageManager.importData>[0]) => {
+      LocaleStorageManager.importData(data);
+    },
+    [],
+  );
 
   const clearAllData = useCallback(() => {
     LocaleStorageManager.clearAll();
@@ -256,11 +272,13 @@ export function useStorageAvailability() {
  * React Hook: 自动清理过期数据
  * React Hook: Auto cleanup expired data
  */
-export function useAutoCleanup(options: {
-  enabled?: boolean;
-  intervalMs?: number;
-  maxAgeMs?: number;
-} = {}) {
+export function useAutoCleanup(
+  options: {
+    enabled?: boolean;
+    intervalMs?: number;
+    maxAgeMs?: number;
+  } = {},
+) {
   const {
     enabled = true,
     intervalMs = 60 * 60 * 1000, // 1 hour

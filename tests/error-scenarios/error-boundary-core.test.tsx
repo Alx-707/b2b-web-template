@@ -4,11 +4,11 @@
  * 核心错误边界组件测试，专注于基本错误捕获和恢复功能
  */
 
-import { ErrorBoundary } from '@/components/error-boundary';
-import type { MockButtonProps } from '@/types/test-types';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { MockButtonProps } from '@/types/test-types';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 // Mock next-intl
 const mockUseTranslations = vi.fn();
@@ -18,7 +18,13 @@ vi.mock('next-intl', () => ({
 
 // Mock UI components
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, variant, className, ...props }: MockButtonProps) => (
+  Button: ({
+    children,
+    onClick,
+    variant,
+    className,
+    ...props
+  }: MockButtonProps) => (
     <button
       data-testid='error-boundary-button'
       onClick={onClick}
@@ -76,7 +82,10 @@ interface ThrowErrorComponentProps {
   errorMessage?: string;
 }
 
-function ThrowErrorComponent({ shouldThrow = false, errorMessage = 'Test error' }: ThrowErrorComponentProps) {
+function ThrowErrorComponent({
+  shouldThrow = false,
+  errorMessage = 'Test error',
+}: ThrowErrorComponentProps) {
   if (shouldThrow) {
     throw new Error(errorMessage);
   }
@@ -98,7 +107,7 @@ describe('ErrorBoundary Core Error Handling Tests', () => {
         errorMessage: 'Something went wrong. Please try refreshing the page.',
       };
       // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
+      return translations[key] || key; // key 来自测试数据，安全
     });
   });
 
@@ -122,7 +131,11 @@ describe('ErrorBoundary Core Error Handling Tests', () => {
       });
 
       expect(screen.getByText('Error')).toBeInTheDocument();
-      expect(screen.getByText('Something went wrong. Please try refreshing the page.')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Something went wrong. Please try refreshing the page.',
+        ),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('error-boundary-button')).toBeInTheDocument();
     });
 
@@ -260,7 +273,7 @@ describe('ErrorBoundary Core Error Handling Tests', () => {
       });
 
       const retryButton = screen.getByTestId('error-boundary-button');
-      
+
       // Focus the button using keyboard
       retryButton.focus();
       expect(retryButton).toHaveFocus();
@@ -281,7 +294,9 @@ describe('ErrorBoundary Core Error Handling Tests', () => {
       );
 
       // Should not crash and render nothing
-      expect(screen.queryByTestId('error-boundary-card')).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('error-boundary-card'),
+      ).not.toBeInTheDocument();
     });
 
     it('should handle errors with missing error messages', async () => {

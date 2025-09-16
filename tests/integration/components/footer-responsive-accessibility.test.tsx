@@ -8,10 +8,10 @@
  * - Error recovery and graceful degradation
  */
 
-import { Footer } from '@/components/layout/footer';
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { Footer } from '@/components/layout/footer';
 
 // Mock next-intl hooks
 const mockUseTranslations = vi.fn();
@@ -24,7 +24,17 @@ vi.mock('next-intl', () => ({
 
 // Mock Next.js Link component
 vi.mock('next/link', () => ({
-  default: ({ children, href, className, ...props }: { children: React.ReactNode; href: string; className?: string; [key: string]: unknown }) => (
+  default: ({
+    children,
+    href,
+    className,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    className?: string;
+    [key: string]: unknown;
+  }) => (
     <a
       data-testid={`footer-link-${href.replace(/[^a-zA-Z0-9]/g, '-')}`}
       href={href}
@@ -129,7 +139,13 @@ vi.mock('@/components/ui/social-icons', () => ({
       🔗
     </span>
   ),
-  SocialIconLink: ({ href, icon, _label, ariaLabel, ...props }: React.ComponentProps<'a'> & {
+  SocialIconLink: ({
+    href,
+    icon,
+    _label,
+    ariaLabel,
+    ...props
+  }: React.ComponentProps<'a'> & {
     href: string;
     icon: string;
     label: string;

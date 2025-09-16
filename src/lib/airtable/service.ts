@@ -5,14 +5,11 @@
 import Airtable from 'airtable';
 import { env } from '@/../env.mjs';
 import { logger } from '../logger';
-import {
-  airtableRecordSchema,
-  validationHelpers,
-} from '../validations';
+import { airtableRecordSchema, validationHelpers } from '../validations';
 import type {
+  AirtableQueryOptions,
   AirtableRecord,
   ContactFormData,
-  AirtableQueryOptions,
   ContactStatus,
 } from './types';
 

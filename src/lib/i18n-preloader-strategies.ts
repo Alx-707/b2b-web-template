@@ -25,9 +25,7 @@ export {
 } from './i18n-preloader-strategies/advanced-strategies';
 
 // 重新导出策略配置
-export {
-  strategyConfigs,
-} from './i18n-preloader-strategies/configs';
+export { strategyConfigs } from './i18n-preloader-strategies/configs';
 
 // 重新导出策略集合和工厂函数
 export {
@@ -37,6 +35,4 @@ export {
 } from './i18n-preloader-strategies/factory';
 
 // 重新导出工具函数
-export {
-  StrategyUtils,
-} from './i18n-preloader-strategies/utils';
+export { StrategyUtils } from './i18n-preloader-strategies/utils';

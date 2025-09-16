@@ -1,7 +1,7 @@
 'use client';
 
-import { REACT_SCAN_CONFIG } from '@/constants/react-scan';
 import React, { useEffect } from 'react';
+import { REACT_SCAN_CONFIG } from '@/constants/react-scan';
 
 /**
  * React Scan Provider

@@ -8,12 +8,11 @@
 'use client';
 
 import type { Locale } from '@/types/i18n';
-;
 import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
 import type {
-  UserLocalePreference,
   StorageOperationResult,
+  UserLocalePreference,
   ValidationResult,
 } from './locale-storage-types';
 import { isUserLocalePreference } from './locale-storage-types';
@@ -46,9 +45,11 @@ export function validatePreferenceData(preference: unknown): ValidationResult {
   }
 
   // 验证置信度
-  if (typeof preference.confidence !== 'number' ||
-      preference.confidence < 0 ||
-      preference.confidence > 1) {
+  if (
+    typeof preference.confidence !== 'number' ||
+    preference.confidence < 0 ||
+    preference.confidence > 1
+  ) {
     errors.push('Invalid confidence value (must be between 0 and 1)');
   }
 
@@ -73,7 +74,9 @@ export function validatePreferenceData(preference: unknown): ValidationResult {
  * 创建默认偏好
  * Create default preference
  */
-export function createDefaultPreference(locale: Locale = 'en'): UserLocalePreference {
+export function createDefaultPreference(
+  locale: Locale = 'en',
+): UserLocalePreference {
   return {
     locale,
     source: 'default',
@@ -87,7 +90,9 @@ export function createDefaultPreference(locale: Locale = 'en'): UserLocalePrefer
  * 规范化偏好数据
  * Normalize preference data
  */
-export function normalizePreference(preference: UserLocalePreference): UserLocalePreference {
+export function normalizePreference(
+  preference: UserLocalePreference,
+): UserLocalePreference {
   return {
     locale: preference.locale,
     source: preference.source,
@@ -103,7 +108,9 @@ export function normalizePreference(preference: UserLocalePreference): UserLocal
  * 保存用户语言偏好
  * Save user locale preference
  */
-export function saveUserPreference(preference: UserLocalePreference): StorageOperationResult<UserLocalePreference> {
+export function saveUserPreference(
+  preference: UserLocalePreference,
+): StorageOperationResult<UserLocalePreference> {
   const startTime = Date.now();
 
   try {
@@ -155,7 +162,8 @@ export function getUserPreference(): StorageOperationResult<UserLocalePreference
 
   try {
     // 首先尝试从 localStorage 获取
-    const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
+    const localPreference =
+      LocalStorageManager.get<UserLocalePreference>('locale_preference');
 
     if (localPreference && validatePreferenceData(localPreference).isValid) {
       return {
@@ -216,7 +224,9 @@ export function getUserPreference(): StorageOperationResult<UserLocalePreference
  * 更新偏好置信度
  * Update preference confidence
  */
-export function updatePreferenceConfidence(confidence: number): StorageOperationResult<UserLocalePreference> {
+export function updatePreferenceConfidence(
+  confidence: number,
+): StorageOperationResult<UserLocalePreference> {
   const currentResult = getUserPreference();
 
   if (!currentResult.success || !currentResult.data) {
@@ -241,10 +251,14 @@ export function updatePreferenceConfidence(confidence: number): StorageOperation
  * Check if preference exists
  */
 export function hasUserPreference(): boolean {
-  const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
+  const localPreference =
+    LocalStorageManager.get<UserLocalePreference>('locale_preference');
   const cookieLocale = CookieManager.get('locale_preference');
 
-  return (localPreference && validatePreferenceData(localPreference).isValid) || !!cookieLocale;
+  return (
+    (localPreference && validatePreferenceData(localPreference).isValid) ||
+    !!cookieLocale
+  );
 }
 
 /**
@@ -256,13 +270,16 @@ export function getPreferenceSourcePriority(): Array<{
   available: boolean;
   priority: number;
 }> {
-  const localPreference = LocalStorageManager.get<UserLocalePreference>('locale_preference');
+  const localPreference =
+    LocalStorageManager.get<UserLocalePreference>('locale_preference');
   const cookieLocale = CookieManager.get('locale_preference');
 
   return [
     {
       source: 'localStorage',
-      available: !!(localPreference && validatePreferenceData(localPreference).isValid),
+      available: !!(
+        localPreference && validatePreferenceData(localPreference).isValid
+      ),
       priority: 1,
     },
     {
@@ -284,7 +301,7 @@ export function getPreferenceSourcePriority(): Array<{
  */
 export function comparePreferences(
   pref1: UserLocalePreference,
-  pref2: UserLocalePreference
+  pref2: UserLocalePreference,
 ): {
   isEqual: boolean;
   differences: string[];

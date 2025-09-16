@@ -1,3 +1,85 @@
+// 向后兼容的重新导出
+import type { Locale } from '@/types/i18n';
+import type {
+  BaseValidators,
+  BrowserType,
+  CompressionAlgorithm,
+  DeviceType,
+  EncryptionAlgorithm,
+  EnvironmentType,
+  ErrorType,
+  HealthStatus,
+  LocaleSource,
+  MigrationStatus,
+  OSType,
+  PriorityLevel,
+  STORAGE_CONSTANTS,
+  STORAGE_KEYS,
+  StorageEventType,
+  StorageType,
+  SyncStatus,
+  TimestampUtils,
+  VersionInfo,
+} from './locale-storage-types-base';
+import type {
+  CONFIG_MIGRATIONS,
+  CONFIG_PRESETS,
+  CONFIG_VALIDATION_RULES,
+  ConfigMigration,
+  ConfigValidationRules,
+  DEFAULT_STORAGE_CONFIG,
+  EnvironmentConfig,
+  StorageConfig,
+} from './locale-storage-types-config';
+import type {
+  AuditLogEntry,
+  ConfigSnapshot,
+  DataExport,
+  DataImportResult,
+  DeviceInfo,
+  ErrorInfo,
+  GeolocationInfo,
+  LocaleDetectionHistory,
+  LocaleDetectionRecord,
+  NetworkInfo,
+  PerformanceMetrics,
+  SessionInfo,
+  StorageBackupData,
+  StorageCompressionConfig,
+  StorageEncryptionConfig,
+  StorageEvent,
+  StorageEventListener,
+  StorageHealthCheck,
+  StorageMigrationConfig,
+  StorageOperationResult,
+  StorageStats,
+  StorageSyncConfig,
+  UserLocalePreference,
+  ValidationResult,
+} from './locale-storage-types-data';
+import {
+  compareObjects,
+  createStorageKey,
+  debounce,
+  deepClone,
+  estimateStorageSize,
+  formatByteSize,
+  formatDuration,
+  generateChecksum,
+  generateUniqueId,
+  isLocaleDetectionHistory,
+  isStorageConfig,
+  isUserLocalePreference,
+  mergeObjects,
+  parseStorageKey,
+  retry,
+  safeJsonParse,
+  safeJsonStringify,
+  throttle,
+  validateDetectionHistory,
+  validatePreference,
+} from './locale-storage-types-utils';
+
 /**
  * 语言存储系统基础类型定义 - 主入口
  * Locale Storage System Base Type Definitions - Main Entry Point
@@ -10,91 +92,6 @@ export * from './locale-storage-types-base';
 export * from './locale-storage-types-data';
 export * from './locale-storage-types-config';
 export * from './locale-storage-types-utils';
-
-// 向后兼容的重新导出
-import type { Locale } from '@/types/i18n';
-import type {
-  STORAGE_KEYS,
-  LocaleSource,
-  StorageEventType,
-  STORAGE_CONSTANTS,
-  StorageType,
-  CompressionAlgorithm,
-  EncryptionAlgorithm,
-  SyncStatus,
-  MigrationStatus,
-  HealthStatus,
-  ErrorType,
-  PriorityLevel,
-  EnvironmentType,
-  BrowserType,
-  DeviceType,
-  OSType,
-  VersionInfo,
-  TimestampUtils,
-  BaseValidators,
-} from './locale-storage-types-base';
-
-import type {
-  UserLocalePreference,
-  LocaleDetectionRecord,
-  LocaleDetectionHistory,
-  StorageStats,
-  StorageOperationResult,
-  StorageEvent,
-  StorageEventListener,
-  StorageHealthCheck,
-  ValidationResult,
-  StorageBackupData,
-  StorageMigrationConfig,
-  StorageCompressionConfig,
-  StorageEncryptionConfig,
-  StorageSyncConfig,
-  DeviceInfo,
-  NetworkInfo,
-  GeolocationInfo,
-  SessionInfo,
-  PerformanceMetrics,
-  ErrorInfo,
-  AuditLogEntry,
-  ConfigSnapshot,
-  DataExport,
-  DataImportResult,
-} from './locale-storage-types-data';
-
-import type {
-  StorageConfig,
-  DEFAULT_STORAGE_CONFIG,
-  EnvironmentConfig,
-  CONFIG_PRESETS,
-  ConfigValidationRules,
-  CONFIG_VALIDATION_RULES,
-  ConfigMigration,
-  CONFIG_MIGRATIONS,
-} from './locale-storage-types-config';
-
-import {
-  isUserLocalePreference,
-  isLocaleDetectionHistory,
-  isStorageConfig,
-  validatePreference,
-  validateDetectionHistory,
-  createStorageKey,
-  parseStorageKey,
-  estimateStorageSize,
-  generateChecksum,
-  deepClone,
-  mergeObjects,
-  compareObjects,
-  formatByteSize,
-  formatDuration,
-  generateUniqueId,
-  throttle,
-  debounce,
-  retry,
-  safeJsonParse,
-  safeJsonStringify,
-} from './locale-storage-types-utils';
 
 // ==================== 向后兼容的类型别名 ====================
 

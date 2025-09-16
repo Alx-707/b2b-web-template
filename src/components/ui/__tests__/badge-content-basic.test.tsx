@@ -50,7 +50,7 @@ describe('Badge Content - Basic Tests', () => {
       render(
         <Badge>
           <span>JSX Content</span>
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('JSX Content');
@@ -62,7 +62,7 @@ describe('Badge Content - Basic Tests', () => {
         <Badge>
           <span>First</span>
           <span>Second</span>
-        </Badge>
+        </Badge>,
       );
 
       expect(screen.getByText('First')).toBeInTheDocument();
@@ -72,11 +72,19 @@ describe('Badge Content - Basic Tests', () => {
     it('renders with icons', () => {
       render(
         <Badge>
-          <svg data-testid='icon' width='12' height='12'>
-            <circle cx='6' cy='6' r='6' />
+          <svg
+            data-testid='icon'
+            width='12'
+            height='12'
+          >
+            <circle
+              cx='6'
+              cy='6'
+              r='6'
+            />
           </svg>
           With Icon
-        </Badge>
+        </Badge>,
       );
 
       expect(screen.getByTestId('icon')).toBeInTheDocument();
@@ -84,7 +92,8 @@ describe('Badge Content - Basic Tests', () => {
     });
 
     it('renders long text content', () => {
-      const longText = 'This is a very long badge text that might wrap or be truncated';
+      const longText =
+        'This is a very long badge text that might wrap or be truncated';
       render(<Badge>{longText}</Badge>);
 
       const badge = screen.getByText(longText);
@@ -98,7 +107,7 @@ describe('Badge Content - Basic Tests', () => {
             <span>Nested</span>
             <strong>Components</strong>
           </div>
-        </Badge>
+        </Badge>,
       );
 
       expect(screen.getByText('Nested')).toBeInTheDocument();
@@ -106,7 +115,7 @@ describe('Badge Content - Basic Tests', () => {
     });
 
     it('handles whitespace correctly', () => {
-      render(<Badge>  Whitespace  Test  </Badge>);
+      render(<Badge> Whitespace Test </Badge>);
 
       const badge = screen.getByText('Whitespace Test');
       expect(badge).toHaveTextContent('  Whitespace  Test  ');
@@ -120,7 +129,7 @@ describe('Badge Content - Basic Tests', () => {
         <Badge>
           Base Content
           {showExtra && <span> Extra</span>}
-        </Badge>
+        </Badge>,
       );
 
       expect(screen.getByText('Base Content')).toBeInTheDocument();
@@ -134,10 +143,10 @@ describe('Badge Content - Basic Tests', () => {
           {items.map((item, index) => (
             <span key={index}>{item}</span>
           ))}
-        </Badge>
+        </Badge>,
       );
 
-      items.forEach(item => {
+      items.forEach((item) => {
         expect(screen.getByText(item)).toBeInTheDocument();
       });
     });
@@ -146,7 +155,7 @@ describe('Badge Content - Basic Tests', () => {
       render(
         <Badge>
           Text {42} <span>JSX</span> {true}
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText(/Text 42/);
@@ -161,7 +170,7 @@ describe('Badge Content - Basic Tests', () => {
             <span>Fragment</span>
             <span>Content</span>
           </>
-        </Badge>
+        </Badge>,
       );
 
       expect(screen.getByText('Fragment')).toBeInTheDocument();
@@ -170,11 +179,7 @@ describe('Badge Content - Basic Tests', () => {
 
     it('renders with conditional operators', () => {
       const isActive = true;
-      render(
-        <Badge>
-          Status: {isActive ? 'Active' : 'Inactive'}
-        </Badge>
-      );
+      render(<Badge>Status: {isActive ? 'Active' : 'Inactive'}</Badge>);
 
       const badge = screen.getByText('Status: Active');
       expect(badge).toBeInTheDocument();
@@ -214,11 +219,7 @@ describe('Badge Content - Basic Tests', () => {
 
   describe('格式化内容', () => {
     it('renders content with line breaks', () => {
-      render(
-        <Badge>
-          Line 1{'\n'}Line 2
-        </Badge>
-      );
+      render(<Badge>Line 1{'\n'}Line 2</Badge>);
 
       const badge = screen.getByText(/Line 1.*Line 2/);
       expect(badge).toBeInTheDocument();

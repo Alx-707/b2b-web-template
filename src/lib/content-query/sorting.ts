@@ -20,9 +20,7 @@ function getFieldValue(post: BlogPost, field: string): string {
     case 'title':
       return post.metadata.title || '';
     default:
-      throw new Error(
-        `Unexpected sort field: ${field}`,
-      ) as ContentError;
+      throw new Error(`Unexpected sort field: ${field}`) as ContentError;
   }
 }
 

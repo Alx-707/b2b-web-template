@@ -11,33 +11,50 @@
 
 // 常量和工具函数
 export {
-    DISPLAY_THRESHOLDS, HistoryItem, METRIC_CONFIGS, MetricCard,
-    ScoreCard,
-    ThresholdDisplay, UI_CONSTANTS, getBadgeVariant, getScoreLabel, getScoreStatus, getStatusIcon,
-    getStatusLabel, type SimpleWebVitals
+  DISPLAY_THRESHOLDS,
+  HistoryItem,
+  METRIC_CONFIGS,
+  MetricCard,
+  ScoreCard,
+  ThresholdDisplay,
+  UI_CONSTANTS,
+  getBadgeVariant,
+  getScoreLabel,
+  getScoreStatus,
+  getStatusIcon,
+  getStatusLabel,
+  type SimpleWebVitals,
 } from './diagnostics-constants';
 
 // 控制面板组件
 export {
-    ControlPanel,
-    ExtendedControlPanel, QuickActions, SimpleControlPanel,
-    StatusIndicator
+  ControlPanel,
+  ExtendedControlPanel,
+  QuickActions,
+  SimpleControlPanel,
+  StatusIndicator,
 } from './diagnostics-control-panel';
 
 // 当前指标组件
 export {
-    CurrentMetrics, MetricsComparison,
-    MetricsSummary, SimpleMetrics
+  CurrentMetrics,
+  MetricsComparison,
+  MetricsSummary,
+  SimpleMetrics,
 } from './diagnostics-current-metrics';
 
 // 历史数据组件
 export {
-    HistoricalData, HistoricalDataFilter, HistoricalStats, HistoricalTrend, SimpleHistoricalData
+  HistoricalData,
+  HistoricalDataFilter,
+  HistoricalStats,
+  HistoricalTrend,
+  SimpleHistoricalData,
 } from './diagnostics-historical-data';
 
 // 阈值参考组件
 export {
-    DetailedThresholdReference,
-    SimpleThresholdReference, ThresholdReference
+  DetailedThresholdReference,
+  SimpleThresholdReference,
+  ThresholdReference,
 } from './diagnostics-threshold-reference';
-

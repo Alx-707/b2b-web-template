@@ -8,15 +8,15 @@
 'use client';
 
 import type { Locale } from '@/types/i18n';
-;
 import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
 import type {
-  UserLocalePreference,
   LocaleDetectionHistory,
   StorageOperationResult,
+  UserLocalePreference,
   ValidationResult,
 } from './locale-storage-types';
+import { STORAGE_KEYS } from './locale-storage-types';
 
 /**
  * 存储验证数据结构
@@ -28,7 +28,6 @@ interface StorageValidationData {
   localDataValid: boolean;
   cookieDataValid: boolean;
 }
-import { STORAGE_KEYS } from './locale-storage-types';
 
 /**
  * 语言存储验证管理器
@@ -45,7 +44,7 @@ export class LocaleValidationManager {
     try {
       // 验证用户偏好数据
       const preference = LocalStorageManager.get<UserLocalePreference>(
-        STORAGE_KEYS.LOCALE_PREFERENCE
+        STORAGE_KEYS.LOCALE_PREFERENCE,
       );
       if (preference && !this.validatePreferenceData(preference)) {
         issues.push('用户偏好数据格式无效');
@@ -53,7 +52,7 @@ export class LocaleValidationManager {
 
       // 验证检测历史数据
       const history = LocalStorageManager.get<LocaleDetectionHistory>(
-        STORAGE_KEYS.LOCALE_DETECTION_HISTORY
+        STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
       );
       if (history && !this.validateHistoryData(history)) {
         issues.push('检测历史数据格式无效');
@@ -94,7 +93,7 @@ export class LocaleValidationManager {
     if (!preference || typeof preference !== 'object') return false;
 
     const requiredFields = ['locale', 'source', 'timestamp', 'confidence'];
-    const hasAllFields = requiredFields.every(field => field in preference);
+    const hasAllFields = requiredFields.every((field) => field in preference);
 
     if (!hasAllFields) return false;
 
@@ -106,7 +105,8 @@ export class LocaleValidationManager {
 
     // 验证值的合理性
     if (preference.confidence < 0 || preference.confidence > 1) return false;
-    if (preference.timestamp > Date.now() || preference.timestamp < 0) return false;
+    if (preference.timestamp > Date.now() || preference.timestamp < 0)
+      return false;
 
     return true;
   }
@@ -120,12 +120,14 @@ export class LocaleValidationManager {
     if (!Array.isArray(history.detections)) return false;
     if (typeof history.lastUpdated !== 'number') return false;
 
-    return history.detections.every(detection =>
-      typeof detection.locale === 'string' &&
-      typeof detection.source === 'string' &&
-      typeof detection.timestamp === 'number' &&
-      typeof detection.confidence === 'number' &&
-      detection.confidence >= 0 && detection.confidence <= 1
+    return history.detections.every(
+      (detection) =>
+        typeof detection.locale === 'string' &&
+        typeof detection.source === 'string' &&
+        typeof detection.timestamp === 'number' &&
+        typeof detection.confidence === 'number' &&
+        detection.confidence >= 0 &&
+        detection.confidence <= 1,
     );
   }
 
@@ -138,7 +140,7 @@ export class LocaleValidationManager {
 
     // 检查关键数据的同步状态
     const localPreference = LocalStorageManager.get<UserLocalePreference>(
-      STORAGE_KEYS.LOCALE_PREFERENCE
+      STORAGE_KEYS.LOCALE_PREFERENCE,
     );
     const cookiePreference = CookieManager.get(STORAGE_KEYS.LOCALE_PREFERENCE);
 
@@ -147,7 +149,7 @@ export class LocaleValidationManager {
     }
 
     const localOverride = LocalStorageManager.get<Locale>(
-      STORAGE_KEYS.USER_LOCALE_OVERRIDE
+      STORAGE_KEYS.USER_LOCALE_OVERRIDE,
     );
     const cookieOverride = CookieManager.get(STORAGE_KEYS.USER_LOCALE_OVERRIDE);
 
@@ -162,7 +164,9 @@ export class LocaleValidationManager {
    * 验证特定存储键的数据
    * Validate data for specific storage key
    */
-  static validateSpecificData(key: keyof typeof STORAGE_KEYS): ValidationResult<StorageValidationData> {
+  static validateSpecificData(
+    key: keyof typeof STORAGE_KEYS,
+  ): ValidationResult<StorageValidationData> {
     try {
       const storageKey = STORAGE_KEYS[key];
       const localData = LocalStorageManager.get(storageKey);
@@ -183,14 +187,18 @@ export class LocaleValidationManager {
       // 验证localStorage数据
       if (localData !== null) {
         if (key === 'LOCALE_PREFERENCE') {
-          const isValid = this.validatePreferenceData(localData as UserLocalePreference);
+          const isValid = this.validatePreferenceData(
+            localData as UserLocalePreference,
+          );
           result.data!.localDataValid = isValid;
           if (!isValid) {
             result.isValid = false;
             result.errors.push('localStorage中的偏好数据格式无效');
           }
         } else if (key === 'LOCALE_DETECTION_HISTORY') {
-          const isValid = this.validateHistoryData(localData as LocaleDetectionHistory);
+          const isValid = this.validateHistoryData(
+            localData as LocaleDetectionHistory,
+          );
           result.data!.localDataValid = isValid;
           if (!isValid) {
             result.isValid = false;
@@ -229,7 +237,9 @@ export class LocaleValidationManager {
     } catch (error) {
       return {
         isValid: false,
-        errors: [`验证失败: ${error instanceof Error ? error.message : '未知错误'}`],
+        errors: [
+          `验证失败: ${error instanceof Error ? error.message : '未知错误'}`,
+        ],
         warnings: [],
         data: {
           hasLocalData: false,
@@ -249,7 +259,9 @@ export class LocaleValidationManager {
     const results: Record<string, ValidationResult> = {};
 
     Object.keys(STORAGE_KEYS).forEach((key) => {
-      results[key] = this.validateSpecificData(key as keyof typeof STORAGE_KEYS);
+      results[key] = this.validateSpecificData(
+        key as keyof typeof STORAGE_KEYS,
+      );
     });
 
     return results;
@@ -266,19 +278,27 @@ export class LocaleValidationManager {
 
       // 检查偏好数据一致性
       const localPreference = LocalStorageManager.get<UserLocalePreference>(
-        STORAGE_KEYS.LOCALE_PREFERENCE
+        STORAGE_KEYS.LOCALE_PREFERENCE,
       );
-      const cookiePreferenceStr = CookieManager.get(STORAGE_KEYS.LOCALE_PREFERENCE);
+      const cookiePreferenceStr = CookieManager.get(
+        STORAGE_KEYS.LOCALE_PREFERENCE,
+      );
 
       if (localPreference && cookiePreferenceStr) {
         try {
-          const cookiePreference = JSON.parse(cookiePreferenceStr) as UserLocalePreference;
+          const cookiePreference = JSON.parse(
+            cookiePreferenceStr,
+          ) as UserLocalePreference;
 
           if (localPreference.locale !== cookiePreference.locale) {
             issues.push('localStorage和Cookie中的语言偏好不一致');
           }
 
-          if (Math.abs(localPreference.timestamp - cookiePreference.timestamp) > 60000) { // 1分钟差异
+          if (
+            Math.abs(localPreference.timestamp - cookiePreference.timestamp) >
+            60000
+          ) {
+            // 1分钟差异
             warnings.push('localStorage和Cookie中的偏好时间戳差异较大');
           }
         } catch {
@@ -288,9 +308,11 @@ export class LocaleValidationManager {
 
       // 检查覆盖设置一致性
       const localOverride = LocalStorageManager.get<Locale>(
-        STORAGE_KEYS.USER_LOCALE_OVERRIDE
+        STORAGE_KEYS.USER_LOCALE_OVERRIDE,
       );
-      const cookieOverride = CookieManager.get(STORAGE_KEYS.USER_LOCALE_OVERRIDE);
+      const cookieOverride = CookieManager.get(
+        STORAGE_KEYS.USER_LOCALE_OVERRIDE,
+      );
 
       if (localOverride && cookieOverride && localOverride !== cookieOverride) {
         issues.push('localStorage和Cookie中的语言覆盖设置不一致');
@@ -368,21 +390,28 @@ export class LocaleValidationManager {
 
       // 修复偏好数据同步
       const localPreference = LocalStorageManager.get<UserLocalePreference>(
-        STORAGE_KEYS.LOCALE_PREFERENCE
+        STORAGE_KEYS.LOCALE_PREFERENCE,
       );
-      const cookiePreference = CookieManager.get(STORAGE_KEYS.LOCALE_PREFERENCE);
+      const cookiePreference = CookieManager.get(
+        STORAGE_KEYS.LOCALE_PREFERENCE,
+      );
 
       if (localPreference && !cookiePreference) {
-        CookieManager.set(STORAGE_KEYS.LOCALE_PREFERENCE, JSON.stringify(localPreference));
+        CookieManager.set(
+          STORAGE_KEYS.LOCALE_PREFERENCE,
+          JSON.stringify(localPreference),
+        );
         fixedIssues += 1;
         actions.push('已同步偏好数据到Cookie');
       }
 
       // 修复覆盖设置同步
       const localOverride = LocalStorageManager.get<Locale>(
-        STORAGE_KEYS.USER_LOCALE_OVERRIDE
+        STORAGE_KEYS.USER_LOCALE_OVERRIDE,
       );
-      const cookieOverride = CookieManager.get(STORAGE_KEYS.USER_LOCALE_OVERRIDE);
+      const cookieOverride = CookieManager.get(
+        STORAGE_KEYS.USER_LOCALE_OVERRIDE,
+      );
 
       if (localOverride && !cookieOverride) {
         CookieManager.set(STORAGE_KEYS.USER_LOCALE_OVERRIDE, localOverride);

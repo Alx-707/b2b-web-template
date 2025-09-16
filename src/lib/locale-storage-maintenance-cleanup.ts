@@ -8,13 +8,12 @@
 'use client';
 
 import { logger } from '@/lib/logger';
-
 import { CookieManager } from './locale-storage-cookie';
 import { LocalStorageManager } from './locale-storage-local';
 import type {
-  UserLocalePreference,
   LocaleDetectionHistory,
   StorageOperationResult,
+  UserLocalePreference,
 } from './locale-storage-types';
 import { STORAGE_KEYS } from './locale-storage-types';
 
@@ -57,11 +56,11 @@ export class LocaleCleanupManager {
    * Clean up expired detection records
    */
   static cleanupExpiredDetections(
-    maxAgeMs: number = 30 * 24 * 60 * 60 * 1000
+    maxAgeMs: number = 30 * 24 * 60 * 60 * 1000,
   ): StorageOperationResult {
     try {
       const historyData = LocalStorageManager.get<LocaleDetectionHistory>(
-        STORAGE_KEYS.LOCALE_DETECTION_HISTORY
+        STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
       );
 
       if (!historyData || !Array.isArray(historyData.detections)) {
@@ -76,7 +75,7 @@ export class LocaleCleanupManager {
 
       // 过滤掉过期的检测记录
       const validDetections = historyData.detections.filter(
-        (detection) => now - detection.timestamp <= maxAgeMs
+        (detection) => now - detection.timestamp <= maxAgeMs,
       );
 
       const cleanedCount = originalCount - validDetections.length;
@@ -89,7 +88,10 @@ export class LocaleCleanupManager {
           totalDetections: validDetections.length,
         };
 
-        LocalStorageManager.set(STORAGE_KEYS.LOCALE_DETECTION_HISTORY, updatedHistory);
+        LocalStorageManager.set(
+          STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
+          updatedHistory,
+        );
 
         return {
           success: true,
@@ -116,7 +118,9 @@ export class LocaleCleanupManager {
    * 清理特定类型的存储数据
    * Clean up specific type of storage data
    */
-  static clearSpecificData(dataType: keyof typeof STORAGE_KEYS): StorageOperationResult {
+  static clearSpecificData(
+    dataType: keyof typeof STORAGE_KEYS,
+  ): StorageOperationResult {
     try {
       const key = STORAGE_KEYS[dataType];
 
@@ -149,7 +153,7 @@ export class LocaleCleanupManager {
 
       // 检查并清理localStorage中的偏好数据
       const localPreference = LocalStorageManager.get<UserLocalePreference>(
-        STORAGE_KEYS.LOCALE_PREFERENCE
+        STORAGE_KEYS.LOCALE_PREFERENCE,
       );
 
       if (localPreference && !this.isValidPreferenceData(localPreference)) {
@@ -159,7 +163,9 @@ export class LocaleCleanupManager {
       }
 
       // 检查并清理Cookie中的偏好数据
-      const cookiePreference = CookieManager.get(STORAGE_KEYS.LOCALE_PREFERENCE);
+      const cookiePreference = CookieManager.get(
+        STORAGE_KEYS.LOCALE_PREFERENCE,
+      );
       if (cookiePreference) {
         try {
           const parsed = JSON.parse(cookiePreference) as UserLocalePreference;
@@ -196,7 +202,7 @@ export class LocaleCleanupManager {
   static cleanupDuplicateDetections(): StorageOperationResult {
     try {
       const historyData = LocalStorageManager.get<LocaleDetectionHistory>(
-        STORAGE_KEYS.LOCALE_DETECTION_HISTORY
+        STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
       );
 
       if (!historyData || !Array.isArray(historyData.detections)) {
@@ -227,7 +233,10 @@ export class LocaleCleanupManager {
           totalDetections: uniqueDetections.length,
         };
 
-        LocalStorageManager.set(STORAGE_KEYS.LOCALE_DETECTION_HISTORY, updatedHistory);
+        LocalStorageManager.set(
+          STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
+          updatedHistory,
+        );
 
         return {
           success: true,
@@ -254,11 +263,13 @@ export class LocaleCleanupManager {
    * 验证偏好数据是否有效
    * Validate if preference data is valid
    */
-  private static isValidPreferenceData(preference: UserLocalePreference): boolean {
+  private static isValidPreferenceData(
+    preference: UserLocalePreference,
+  ): boolean {
     if (!preference || typeof preference !== 'object') return false;
 
     const requiredFields = ['locale', 'source', 'timestamp', 'confidence'];
-    const hasAllFields = requiredFields.every(field => field in preference);
+    const hasAllFields = requiredFields.every((field) => field in preference);
 
     if (!hasAllFields) return false;
 
@@ -270,7 +281,8 @@ export class LocaleCleanupManager {
 
     // 验证值的合理性
     if (preference.confidence < 0 || preference.confidence > 1) return false;
-    if (preference.timestamp > Date.now() || preference.timestamp < 0) return false;
+    if (preference.timestamp > Date.now() || preference.timestamp < 0)
+      return false;
 
     return true;
   }
@@ -299,13 +311,13 @@ export class LocaleCleanupManager {
 
       // 统计过期检测记录
       const historyData = LocalStorageManager.get<LocaleDetectionHistory>(
-        STORAGE_KEYS.LOCALE_DETECTION_HISTORY
+        STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
       );
       if (historyData?.detections) {
         const now = Date.now();
         const maxAge = 30 * 24 * 60 * 60 * 1000; // 30天
         expiredDetections = historyData.detections.filter(
-          (detection) => now - detection.timestamp > maxAge
+          (detection) => now - detection.timestamp > maxAge,
         ).length;
 
         // 统计重复检测记录
@@ -322,13 +334,15 @@ export class LocaleCleanupManager {
 
       // 统计无效偏好数据
       const localPreference = LocalStorageManager.get<UserLocalePreference>(
-        STORAGE_KEYS.LOCALE_PREFERENCE
+        STORAGE_KEYS.LOCALE_PREFERENCE,
       );
       if (localPreference && !this.isValidPreferenceData(localPreference)) {
         invalidPreferences += 1;
       }
 
-      const cookiePreference = CookieManager.get(STORAGE_KEYS.LOCALE_PREFERENCE);
+      const cookiePreference = CookieManager.get(
+        STORAGE_KEYS.LOCALE_PREFERENCE,
+      );
       if (cookiePreference) {
         try {
           const parsed = JSON.parse(cookiePreference) as UserLocalePreference;

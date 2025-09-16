@@ -1,3 +1,8 @@
+// 导入核心功能
+import { PerformanceMonitoringCore } from './performance-monitoring-core';
+import type { PerformanceConfig } from './performance-monitoring-types';
+import { generateEnvironmentConfig } from './performance-monitoring-types';
+
 /**
  * 性能监控协调器 - 主入口文件
  * Performance Monitoring Coordinator - Main Entry Point
@@ -11,14 +16,69 @@
  */
 
 // 重新导出所有模块的类型和功能
-export { PerformanceMetricSource, PerformanceMetricType, PerformanceMetrics, ReactScanConfig, WebEvalAgentConfig, BundleAnalyzerConfig, SizeLimitConfig, WebVitalsConfig, PerformanceConfig, Environment, getCurrentEnvironment, isTestEnvironment, isDevelopmentEnvironment, isProductionEnvironment, generateEnvironmentConfig, validateConfig } from './performance-monitoring-types';export { PerformanceConfigManager, createConfigManager, getDefaultConfig, validatePerformanceConfig, PerformanceMetricsManager, createMetricsManager, PerformanceReport, PerformanceReportGenerator, createReportGenerator, ToolConflictResult, PerformanceToolConflictChecker, createConflictChecker, quickConflictCheck, PerformanceMonitoringCore, PerformanceCoordinator } from
-'./performance-monitoring-core';export { ReactScanIntegration, useReactScanIntegration, validateReactScanConfig, ReactScanAnalyzer, ReactScanUtils, WebEvalAgentIntegration, useWebEvalAgentIntegration, validateWebEvalAgentConfig, WebEvalAgentAnalyzer, BundleAnalyzerIntegration, useBundleAnalyzerIntegration, validateBundleAnalyzerConfig, BundleAnalyzerAnalyzer, BundleAnalyzerUtils, WebVitalsIntegration, useWebVitalsIntegration, EnvironmentCompatibilityResult, checkEnvironmentCompatibility, performHealthCheck, validateWebVitalsConfig, WebVitalsAnalyzer, ReactScan, WebEvalAgent, BundleAnalyzer, WebVitals, EnvironmentCheck } from
-'./performance-monitoring-integrations';
-
-// 导入核心功能
-import { PerformanceMonitoringCore } from './performance-monitoring-core';
-import type { PerformanceConfig } from './performance-monitoring-types';
-import { generateEnvironmentConfig } from './performance-monitoring-types';
+export {
+  PerformanceMetricSource,
+  PerformanceMetricType,
+  PerformanceMetrics,
+  ReactScanConfig,
+  WebEvalAgentConfig,
+  BundleAnalyzerConfig,
+  SizeLimitConfig,
+  WebVitalsConfig,
+  PerformanceConfig,
+  Environment,
+  getCurrentEnvironment,
+  isTestEnvironment,
+  isDevelopmentEnvironment,
+  isProductionEnvironment,
+  generateEnvironmentConfig,
+  validateConfig,
+} from './performance-monitoring-types';
+export {
+  PerformanceConfigManager,
+  createConfigManager,
+  getDefaultConfig,
+  validatePerformanceConfig,
+  PerformanceMetricsManager,
+  createMetricsManager,
+  PerformanceReport,
+  PerformanceReportGenerator,
+  createReportGenerator,
+  ToolConflictResult,
+  PerformanceToolConflictChecker,
+  createConflictChecker,
+  quickConflictCheck,
+  PerformanceMonitoringCore,
+  PerformanceCoordinator,
+} from './performance-monitoring-core';
+export {
+  ReactScanIntegration,
+  useReactScanIntegration,
+  validateReactScanConfig,
+  ReactScanAnalyzer,
+  ReactScanUtils,
+  WebEvalAgentIntegration,
+  useWebEvalAgentIntegration,
+  validateWebEvalAgentConfig,
+  WebEvalAgentAnalyzer,
+  BundleAnalyzerIntegration,
+  useBundleAnalyzerIntegration,
+  validateBundleAnalyzerConfig,
+  BundleAnalyzerAnalyzer,
+  BundleAnalyzerUtils,
+  WebVitalsIntegration,
+  useWebVitalsIntegration,
+  EnvironmentCompatibilityResult,
+  checkEnvironmentCompatibility,
+  performHealthCheck,
+  validateWebVitalsConfig,
+  WebVitalsAnalyzer,
+  ReactScan,
+  WebEvalAgent,
+  BundleAnalyzer,
+  WebVitals,
+  EnvironmentCheck,
+} from './performance-monitoring-integrations';
 
 /**
  * 性能监控协调器 - 向后兼容的主类
@@ -45,8 +105,8 @@ export const performanceCoordinator = new PerformanceMonitoringCoordinator();
  * Create performance monitoring coordinator instance
  */
 export function createPerformanceCoordinator(
-customConfig?: Partial<PerformanceConfig>)
-: PerformanceMonitoringCoordinator {
+  customConfig?: Partial<PerformanceConfig>,
+): PerformanceMonitoringCoordinator {
   return new PerformanceMonitoringCoordinator(customConfig);
 }
 
@@ -77,11 +137,11 @@ export function useReactScanIntegration() {
           data: {
             componentName,
             renderCount,
-            timestamp: Date.now()
-          }
+            timestamp: Date.now(),
+          },
         });
       }
-    }
+    },
   };
 }
 
@@ -95,10 +155,10 @@ export function useWebEvalAgentIntegration() {
   return {
     enabled: config.webEvalAgent.enabled,
     recordUserInteraction: (
-    action: string,
-    timing: number,
-    success: boolean) =>
-    {
+      action: string,
+      timing: number,
+      success: boolean,
+    ) => {
       if (config.webEvalAgent.enabled) {
         performanceCoordinator.recordMetric({
           source: 'web-eval-agent',
@@ -107,17 +167,17 @@ export function useWebEvalAgentIntegration() {
             action,
             timing,
             success,
-            timestamp: Date.now()
-          }
+            timestamp: Date.now(),
+          },
         });
       }
     },
     recordNetworkRequest: (
-    url: string,
-    method: string,
-    status: number,
-    timing: number) =>
-    {
+      url: string,
+      method: string,
+      status: number,
+      timing: number,
+    ) => {
       if (config.webEvalAgent.enabled && config.webEvalAgent.captureNetwork) {
         performanceCoordinator.recordMetric({
           source: 'web-eval-agent',
@@ -127,11 +187,11 @@ export function useWebEvalAgentIntegration() {
             method,
             status,
             timing,
-            timestamp: Date.now()
-          }
+            timestamp: Date.now(),
+          },
         });
       }
-    }
+    },
   };
 }
 
@@ -159,7 +219,7 @@ export function checkEnvironmentCompatibility(): {
   if (process.env.NODE_ENV === 'development') {
     if (process.env.NEXT_PUBLIC_DISABLE_REACT_SCAN === 'true') {
       recommendations.push(
-        '开发环境中 React Scan 被禁用，考虑启用以获得性能监控'
+        '开发环境中 React Scan 被禁用，考虑启用以获得性能监控',
       );
     }
   }
@@ -167,7 +227,7 @@ export function checkEnvironmentCompatibility(): {
   return {
     isCompatible: issues.length === 0,
     issues,
-    recommendations
+    recommendations,
   };
 }
 

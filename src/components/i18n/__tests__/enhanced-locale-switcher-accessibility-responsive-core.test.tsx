@@ -17,7 +17,7 @@ vi.mock('next-intl', () => ({
       chinese: '中文',
     };
     // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
+    return translations[key] || key; // key 来自测试数据，安全
   },
 }));
 
@@ -34,17 +34,17 @@ vi.mock('next/navigation', () => ({
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
   Languages: () => (
-    <svg data-testid="languages-icon">
+    <svg data-testid='languages-icon'>
       <title>Languages</title>
     </svg>
   ),
   ChevronDown: () => (
-    <svg data-testid="chevron-down-icon">
+    <svg data-testid='chevron-down-icon'>
       <title>Chevron Down</title>
     </svg>
   ),
   Globe: () => (
-    <svg data-testid="globe-icon">
+    <svg data-testid='globe-icon'>
       <title>Globe</title>
     </svg>
   ),
@@ -164,7 +164,9 @@ describe('Enhanced Locale Switcher - Core Accessibility & Responsive Tests', () 
     });
 
     it('adapts to different screen sizes', () => {
-      render(<EnhancedLocaleSwitcher className='text-sm md:text-base lg:text-lg' />);
+      render(
+        <EnhancedLocaleSwitcher className='text-sm md:text-base lg:text-lg' />,
+      );
 
       const component = screen.getByRole('button').closest('div');
       expect(component).toHaveClass('text-sm', 'md:text-base', 'lg:text-lg');
@@ -221,7 +223,9 @@ describe('Enhanced Locale Switcher - Core Accessibility & Responsive Tests', () 
 
     it('has correct display names for debugging', () => {
       // This would be tested in a development environment
-      expect(EnhancedLocaleSwitcher.displayName || EnhancedLocaleSwitcher.name).toBeTruthy();
+      expect(
+        EnhancedLocaleSwitcher.displayName || EnhancedLocaleSwitcher.name,
+      ).toBeTruthy();
     });
   });
 });

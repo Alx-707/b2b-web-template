@@ -1,3 +1,7 @@
+// 延迟初始化的单例实例
+import type { SendMessageRequest } from '@/types/whatsapp';
+import { WhatsAppService } from './whatsapp-core';
+
 /**
  * WhatsApp Business API 服务 - 统一导出入口
  * 提供完整的WhatsApp消息发送和管理功能
@@ -16,10 +20,6 @@ export type {
   SendMessageRequest,
   WhatsAppServiceResponse,
 } from '@/types/whatsapp';
-
-// 延迟初始化的单例实例
-import { WhatsAppService } from './whatsapp-core';
-import type { SendMessageRequest } from '@/types/whatsapp';
 
 let whatsappServiceInstance: WhatsAppService | null = null;
 

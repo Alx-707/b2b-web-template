@@ -56,8 +56,12 @@ export class WhatsAppService {
       );
       return response;
     } catch (_error) {
-    // 忽略错误变量
-      logger.error('Failed to send WhatsApp message', {}, _error instanceof Error ? _error : new Error(String(_error)));
+      // 忽略错误变量
+      logger.error(
+        'Failed to send WhatsApp message',
+        {},
+        _error instanceof Error ? _error : new Error(String(_error)),
+      );
       throw _error;
     }
   }
@@ -84,13 +88,19 @@ export class WhatsAppService {
         ...(components && { components }),
       };
       const response = await this.client.messages.template(
-        templateObject as unknown as Parameters<typeof this.client.messages.template>[0],
+        templateObject as unknown as Parameters<
+          typeof this.client.messages.template
+        >[0],
         recipient,
       );
       return response;
     } catch (_error) {
-    // 忽略错误变量
-      logger.error('Failed to send WhatsApp template message', {}, _error instanceof Error ? _error : new Error(String(_error)));
+      // 忽略错误变量
+      logger.error(
+        'Failed to send WhatsApp template message',
+        {},
+        _error instanceof Error ? _error : new Error(String(_error)),
+      );
       throw _error;
     }
   }
@@ -132,8 +142,12 @@ export class WhatsAppService {
 
       return { success: true };
     } catch (_error) {
-    // 忽略错误变量
-      logger.error('Failed to handle incoming WhatsApp message', {}, _error instanceof Error ? _error : new Error(String(_error)));
+      // 忽略错误变量
+      logger.error(
+        'Failed to handle incoming WhatsApp message',
+        {},
+        _error instanceof Error ? _error : new Error(String(_error)),
+      );
       throw _error;
     }
   }

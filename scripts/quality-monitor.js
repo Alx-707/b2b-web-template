@@ -60,7 +60,6 @@ class QualityMonitor {
 
       const lintResults = JSON.parse(lintOutput);
       return this.analyzeLintResults(lintResults);
-
     } catch (error) {
       // ESLint有错误时也会抛出异常，但我们仍需要解析结果
       if (error.stdout) {
@@ -106,7 +105,7 @@ class QualityMonitor {
     };
 
     // 分析每个文件的结果
-    lintResults.forEach(fileResult => {
+    lintResults.forEach((fileResult) => {
       const fileMetric = {
         filePath: fileResult.filePath,
         errorCount: fileResult.errorCount,
@@ -118,7 +117,7 @@ class QualityMonitor {
       metrics.totalWarnings += fileResult.warningCount;
 
       // 统计规则违规情况
-      fileResult.messages.forEach(message => {
+      fileResult.messages.forEach((message) => {
         const ruleId = message.ruleId || 'unknown';
         if (!metrics.ruleViolations[ruleId]) {
           metrics.ruleViolations[ruleId] = {
@@ -151,12 +150,16 @@ class QualityMonitor {
     const warningPenalty = metrics.totalWarnings * 0.1;
 
     // 特定规则额外扣分
-    const anyTypePenalty = (metrics.ruleViolations['@typescript-eslint/no-explicit-any']?.count || 0) * 2;
-    const securityPenalty = Object.keys(metrics.ruleViolations)
-      .filter(rule => rule.startsWith('security/'))
-      .reduce((sum, rule) => sum + metrics.ruleViolations[rule].count, 0) * 1;
+    const anyTypePenalty =
+      (metrics.ruleViolations['@typescript-eslint/no-explicit-any']?.count ||
+        0) * 2;
+    const securityPenalty =
+      Object.keys(metrics.ruleViolations)
+        .filter((rule) => rule.startsWith('security/'))
+        .reduce((sum, rule) => sum + metrics.ruleViolations[rule].count, 0) * 1;
 
-    const totalPenalty = errorPenalty + warningPenalty + anyTypePenalty + securityPenalty;
+    const totalPenalty =
+      errorPenalty + warningPenalty + anyTypePenalty + securityPenalty;
 
     return Math.max(0, Math.round(baseScore - totalPenalty));
   }
@@ -165,7 +168,10 @@ class QualityMonitor {
    * 生成质量报告
    */
   generateQualityReport(metrics) {
-    const reportPath = path.join(this.reportDir, `quality-report-${Date.now()}.json`);
+    const reportPath = path.join(
+      this.reportDir,
+      `quality-report-${Date.now()}.json`,
+    );
 
     // 保存详细报告
     fs.writeFileSync(reportPath, JSON.stringify(metrics, null, 2));
@@ -178,13 +184,20 @@ class QualityMonitor {
       totalWarnings: metrics.totalWarnings,
       totalFiles: metrics.totalFiles,
       topViolations: Object.entries(metrics.ruleViolations)
-        .sort(([,a], [,b]) => b.count - a.count)
+        .sort(([, a], [, b]) => b.count - a.count)
         .slice(0, 10)
-        .map(([rule, data]) => ({ rule, count: data.count, severity: data.severity })),
+        .map(([rule, data]) => ({
+          rule,
+          count: data.count,
+          severity: data.severity,
+        })),
       thresholdStatus: this.checkThresholds(metrics),
     };
 
-    const summaryPath = path.join(this.reportDir, 'latest-quality-summary.json');
+    const summaryPath = path.join(
+      this.reportDir,
+      'latest-quality-summary.json',
+    );
     fs.writeFileSync(summaryPath, JSON.stringify(summary, null, 2));
 
     return { reportPath, summaryPath, summary };
@@ -222,7 +235,8 @@ class QualityMonitor {
     }
 
     // 检查any类型使用
-    const anyTypeCount = metrics.ruleViolations['@typescript-eslint/no-explicit-any']?.count || 0;
+    const anyTypeCount =
+      metrics.ruleViolations['@typescript-eslint/no-explicit-any']?.count || 0;
     if (anyTypeCount > QUALITY_THRESHOLDS.maxAnyTypeUsage) {
       status.passed = false;
       status.violations.push({
@@ -250,7 +264,9 @@ class QualityMonitor {
     console.log('\n🔝 主要问题类型:');
     summary.topViolations.slice(0, 5).forEach((violation, index) => {
       const icon = violation.severity === 'error' ? '❌' : '⚠️';
-      console.log(`  ${index + 1}. ${icon} ${violation.rule}: ${violation.count} 个`);
+      console.log(
+        `  ${index + 1}. ${icon} ${violation.rule}: ${violation.count} 个`,
+      );
     });
 
     console.log('\n🚪 质量门禁状态:');
@@ -258,7 +274,7 @@ class QualityMonitor {
       console.log('✅ 通过 - 所有质量指标符合企业级标准');
     } else {
       console.log('❌ 未通过 - 发现以下问题:');
-      summary.thresholdStatus.violations.forEach(violation => {
+      summary.thresholdStatus.violations.forEach((violation) => {
         console.log(`  • ${violation.message}`);
       });
     }
@@ -287,7 +303,6 @@ class QualityMonitor {
       }
 
       console.log('\n🎉 代码质量监控完成！');
-
     } catch (error) {
       console.error('❌ 质量监控执行失败:', error.message);
       process.exit(1);

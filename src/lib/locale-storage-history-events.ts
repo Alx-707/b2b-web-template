@@ -7,11 +7,11 @@
 
 'use client';
 
+import { logger } from '@/lib/logger';
 import type {
   StorageEvent,
   StorageEventListener,
 } from './locale-storage-types';
-import { logger } from '@/lib/logger';
 
 // ==================== 事件管理器 ====================
 
@@ -20,7 +20,8 @@ import { logger } from '@/lib/logger';
  * History event manager
  */
 export class HistoryEventManager {
-  private static eventListeners: Map<string, StorageEventListener[]> = new Map();
+  private static eventListeners: Map<string, StorageEventListener[]> =
+    new Map();
   private static eventHistory: StorageEvent[] = [];
   private static readonly MAX_EVENT_HISTORY = 100;
 
@@ -28,7 +29,10 @@ export class HistoryEventManager {
    * 添加事件监听器
    * Add event listener
    */
-  static addEventListener(eventType: string, listener: StorageEventListener): void {
+  static addEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     if (!this.eventListeners.has(eventType)) {
       this.eventListeners.set(eventType, []);
     }
@@ -39,7 +43,10 @@ export class HistoryEventManager {
    * 移除事件监听器
    * Remove event listener
    */
-  static removeEventListener(eventType: string, listener: StorageEventListener): void {
+  static removeEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     const listeners = this.eventListeners.get(eventType);
     if (listeners) {
       const index = listeners.indexOf(listener);
@@ -72,11 +79,13 @@ export class HistoryEventManager {
     // 发送给特定类型的监听器
     const listeners = this.eventListeners.get(event.type);
     if (listeners) {
-      listeners.forEach(listener => {
+      listeners.forEach((listener) => {
         try {
           listener(event);
         } catch (error) {
-          logger.error(`Error in history event listener for ${event.type}`, { error: error as Error });
+          logger.error(`Error in history event listener for ${event.type}`, {
+            error: error as Error,
+          });
         }
       });
     }
@@ -84,11 +93,13 @@ export class HistoryEventManager {
     // 发送给通用监听器
     const allListeners = this.eventListeners.get('*');
     if (allListeners) {
-      allListeners.forEach(listener => {
+      allListeners.forEach((listener) => {
         try {
           listener(event);
         } catch (error) {
-          logger.error('Error in universal history event listener', { error: error as Error });
+          logger.error('Error in universal history event listener', {
+            error: error as Error,
+          });
         }
       });
     }
@@ -158,7 +169,7 @@ export class HistoryEventManager {
 export function createRecordAddedEvent(
   locale: string,
   source: string,
-  confidence: number
+  confidence: number,
 ): StorageEvent {
   return {
     type: 'preference_saved',
@@ -179,7 +190,7 @@ export function createRecordAddedEvent(
  */
 export function createCleanupEvent(
   cleanupType: 'expired' | 'duplicates' | 'size_limit' | 'all',
-  removedCount: number
+  removedCount: number,
 ): StorageEvent {
   return {
     type: 'cache_cleared',
@@ -199,7 +210,7 @@ export function createCleanupEvent(
  */
 export function createExportEvent(
   format: 'json' | 'backup',
-  recordCount: number
+  recordCount: number,
 ): StorageEvent {
   return {
     type: 'backup_created',
@@ -220,7 +231,7 @@ export function createExportEvent(
 export function createImportEvent(
   format: 'json' | 'backup',
   recordCount: number,
-  success: boolean
+  success: boolean,
 ): StorageEvent {
   return {
     type: 'backup_restored',
@@ -241,7 +252,7 @@ export function createImportEvent(
  */
 export function createErrorEvent(
   operation: string,
-  error: string
+  error: string,
 ): StorageEvent {
   return {
     type: 'history_error',
@@ -261,7 +272,9 @@ export function createErrorEvent(
  * 创建调试事件监听器
  * Create debug event listener
  */
-export function createDebugListener(prefix: string = '[History]'): StorageEventListener {
+export function createDebugListener(
+  prefix: string = '[History]',
+): StorageEventListener {
   return (event: StorageEvent) => {
     logger.info(`${prefix} Event`, {
       type: event.type,
@@ -311,11 +324,14 @@ export function createStatsListener(): {
  * Create error listener
  */
 export function createErrorListener(
-  onError: (error: string, operation: string, event: StorageEvent) => void
+  onError: (error: string, operation: string, event: StorageEvent) => void,
 ): StorageEventListener {
   return (event: StorageEvent) => {
     if (event.type === 'history_error' && event.data) {
-      const { operation, error } = event.data as { operation: string; error: string };
+      const { operation, error } = event.data as {
+        operation: string;
+        error: string;
+      };
       onError(error, operation, event);
     }
   };
@@ -327,7 +343,9 @@ export function createErrorListener(
  * 控制台日志监听器
  * Console log listener
  */
-export const consoleLogListener: StorageEventListener = (event: StorageEvent) => {
+export const consoleLogListener: StorageEventListener = (
+  event: StorageEvent,
+) => {
   const timestamp = new Date(event.timestamp).toLocaleTimeString();
 
   switch (event.type as string) {
@@ -347,7 +365,10 @@ export const consoleLogListener: StorageEventListener = (event: StorageEvent) =>
       logger.error('历史记录错误', { timestamp, data: event.data as unknown });
       break;
     default:
-      logger.info(`历史记录事件 (${event.type})`, { timestamp, data: event.data });
+      logger.info(`历史记录事件 (${event.type})`, {
+        timestamp,
+        data: event.data,
+      });
   }
 };
 
@@ -355,10 +376,15 @@ export const consoleLogListener: StorageEventListener = (event: StorageEvent) =>
  * 性能监控监听器
  * Performance monitoring listener
  */
-export const performanceListener: StorageEventListener = (event: StorageEvent) => {
+export const performanceListener: StorageEventListener = (
+  event: StorageEvent,
+) => {
   // 记录性能相关的事件
   if ((event.type as string) === 'history_cleanup' && event.data) {
-    const { cleanupType, removedCount } = event.data as { cleanupType: string; removedCount: number };
+    const { cleanupType, removedCount } = event.data as {
+      cleanupType: string;
+      removedCount: number;
+    };
 
     if (removedCount > 100) {
       logger.warn('大量历史记录清理', { cleanupType, removedCount });
@@ -376,10 +402,12 @@ export const performanceListener: StorageEventListener = (event: StorageEvent) =
  * 批量添加事件监听器
  * Batch add event listeners
  */
-export function addMultipleListeners(listeners: Array<{
-  eventType: string;
-  listener: StorageEventListener;
-}>): void {
+export function addMultipleListeners(
+  listeners: Array<{
+    eventType: string;
+    listener: StorageEventListener;
+  }>,
+): void {
   listeners.forEach(({ eventType, listener }) => {
     HistoryEventManager.addEventListener(eventType, listener);
   });
@@ -389,11 +417,13 @@ export function addMultipleListeners(listeners: Array<{
  * 设置默认事件监听器
  * Setup default event listeners
  */
-export function setupDefaultListeners(options: {
-  enableConsoleLog?: boolean;
-  enablePerformanceMonitoring?: boolean;
-  enableDebug?: boolean;
-} = {}): void {
+export function setupDefaultListeners(
+  options: {
+    enableConsoleLog?: boolean;
+    enablePerformanceMonitoring?: boolean;
+    enableDebug?: boolean;
+  } = {},
+): void {
   const {
     enableConsoleLog = true,
     enablePerformanceMonitoring = true,
@@ -409,7 +439,10 @@ export function setupDefaultListeners(options: {
   }
 
   if (enableDebug) {
-    HistoryEventManager.addEventListener('*', createDebugListener('[HistoryDebug]'));
+    HistoryEventManager.addEventListener(
+      '*',
+      createDebugListener('[HistoryDebug]'),
+    );
   }
 }
 

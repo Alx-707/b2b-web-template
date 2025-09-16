@@ -12,8 +12,8 @@
  * - Card layout variations
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
   Card,
@@ -43,13 +43,15 @@ describe('Card Structure and Components Tests', () => {
           <CardFooter>
             <button>Footer Action</button>
           </CardFooter>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Card Title')).toBeInTheDocument();
       expect(screen.getByText('Card Description')).toBeInTheDocument();
       expect(screen.getByText('Action')).toBeInTheDocument();
-      expect(screen.getByText('This is the main content of the card.')).toBeInTheDocument();
+      expect(
+        screen.getByText('This is the main content of the card.'),
+      ).toBeInTheDocument();
       expect(screen.getByText('Footer Action')).toBeInTheDocument();
     });
 
@@ -58,15 +60,13 @@ describe('Card Structure and Components Tests', () => {
         <Card data-testid='card'>
           <CardHeader data-testid='header'>
             <CardTitle data-testid='title'>Title</CardTitle>
-            <CardDescription data-testid='description'>Description</CardDescription>
+            <CardDescription data-testid='description'>
+              Description
+            </CardDescription>
           </CardHeader>
-          <CardContent data-testid='content'>
-            Content
-          </CardContent>
-          <CardFooter data-testid='footer'>
-            Footer
-          </CardFooter>
-        </Card>
+          <CardContent data-testid='content'>Content</CardContent>
+          <CardFooter data-testid='footer'>Footer</CardFooter>
+        </Card>,
       );
 
       const card = screen.getByTestId('card');
@@ -86,10 +86,8 @@ describe('Card Structure and Components Tests', () => {
     it('renders minimal card with just content', () => {
       render(
         <Card>
-          <CardContent>
-            Simple content
-          </CardContent>
-        </Card>
+          <CardContent>Simple content</CardContent>
+        </Card>,
       );
 
       expect(screen.getByText('Simple content')).toBeInTheDocument();
@@ -101,10 +99,8 @@ describe('Card Structure and Components Tests', () => {
           <CardHeader>
             <CardTitle>Header Only</CardTitle>
           </CardHeader>
-          <CardContent>
-            Content without footer
-          </CardContent>
-        </Card>
+          <CardContent>Content without footer</CardContent>
+        </Card>,
       );
 
       expect(screen.getByText('Header Only')).toBeInTheDocument();
@@ -138,7 +134,7 @@ describe('Card Structure and Components Tests', () => {
             <button>Primary</button>
             <button>Secondary</button>
           </CardFooter>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Complex Card')).toBeInTheDocument();
@@ -165,7 +161,7 @@ describe('Card Structure and Components Tests', () => {
             </CardHeader>
             <CardContent>Content 2</CardContent>
           </Card>
-        </div>
+        </div>,
       );
 
       expect(screen.getByTestId('card-1')).toBeInTheDocument();
@@ -187,10 +183,8 @@ describe('Card Structure and Components Tests', () => {
               </div>
             </CardAction>
           </CardHeader>
-          <CardContent>
-            Card with multiple header actions
-          </CardContent>
-        </Card>
+          <CardContent>Card with multiple header actions</CardContent>
+        </Card>,
       );
 
       expect(screen.getByText('Action Card')).toBeInTheDocument();
@@ -206,10 +200,13 @@ describe('Card Structure and Components Tests', () => {
             <CardTitle>Image Card</CardTitle>
           </CardHeader>
           <CardContent>
-            <img src='/test-image.jpg' alt='Test image' />
+            <img
+              src='/test-image.jpg'
+              alt='Test image'
+            />
             <p>Card with image content</p>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Image Card')).toBeInTheDocument();
@@ -226,7 +223,7 @@ describe('Card Structure and Components Tests', () => {
           </CardHeader>
           <CardContent></CardContent>
           <CardFooter></CardFooter>
-        </Card>
+        </Card>,
       );
 
       // Should render without errors even with empty content
@@ -240,9 +237,7 @@ describe('Card Structure and Components Tests', () => {
           <CardHeader>
             <CardTitle>Conditional Card</CardTitle>
           </CardHeader>
-          <CardContent>
-            Content is always shown
-          </CardContent>
+          <CardContent>Content is always shown</CardContent>
           {showFooter && (
             <CardFooter>
               <button>Conditional Footer</button>
@@ -265,12 +260,16 @@ describe('Card Structure and Components Tests', () => {
     it('maintains component order regardless of rendering order', () => {
       render(
         <Card data-testid='ordered-card'>
-          <CardFooter data-testid='footer-first'>Footer rendered first</CardFooter>
+          <CardFooter data-testid='footer-first'>
+            Footer rendered first
+          </CardFooter>
           <CardHeader data-testid='header-middle'>
             <CardTitle>Header rendered middle</CardTitle>
           </CardHeader>
-          <CardContent data-testid='content-last'>Content rendered last</CardContent>
-        </Card>
+          <CardContent data-testid='content-last'>
+            Content rendered last
+          </CardContent>
+        </Card>,
       );
 
       const card = screen.getByTestId('ordered-card');
@@ -294,12 +293,10 @@ describe('Card Structure and Components Tests', () => {
               <CardHeader>
                 <CardTitle>Inner Card</CardTitle>
               </CardHeader>
-              <CardContent>
-                Nested card content
-              </CardContent>
+              <CardContent>Nested card content</CardContent>
             </Card>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       const outerCard = screen.getByTestId('outer-card');
@@ -317,37 +314,48 @@ describe('Card Structure and Components Tests', () => {
           <CardHeader>
             <CardTitle>{title}</CardTitle>
           </CardHeader>
-          <CardContent>
-            Dynamic content for {title}
-          </CardContent>
+          <CardContent>Dynamic content for {title}</CardContent>
         </Card>
       );
 
       const { rerender } = render(<DynamicCard title='Initial Title' />);
 
       expect(screen.getByText('Initial Title')).toBeInTheDocument();
-      expect(screen.getByText('Dynamic content for Initial Title')).toBeInTheDocument();
+      expect(
+        screen.getByText('Dynamic content for Initial Title'),
+      ).toBeInTheDocument();
 
       rerender(<DynamicCard title='Updated Title' />);
 
       expect(screen.getByText('Updated Title')).toBeInTheDocument();
-      expect(screen.getByText('Dynamic content for Updated Title')).toBeInTheDocument();
+      expect(
+        screen.getByText('Dynamic content for Updated Title'),
+      ).toBeInTheDocument();
       expect(screen.queryByText('Initial Title')).not.toBeInTheDocument();
     });
 
     it('supports cards with different layouts', () => {
       render(
         <div>
-          <Card data-testid='horizontal-card' className='horizontal'>
+          <Card
+            data-testid='horizontal-card'
+            className='horizontal'
+          >
             <CardContent>Horizontal layout</CardContent>
           </Card>
-          <Card data-testid='vertical-card' className='vertical'>
+          <Card
+            data-testid='vertical-card'
+            className='vertical'
+          >
             <CardContent>Vertical layout</CardContent>
           </Card>
-          <Card data-testid='grid-card' className='grid'>
+          <Card
+            data-testid='grid-card'
+            className='grid'
+          >
             <CardContent>Grid layout</CardContent>
           </Card>
-        </div>
+        </div>,
       );
 
       expect(screen.getByTestId('horizontal-card')).toHaveClass('horizontal');

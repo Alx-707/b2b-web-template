@@ -5,16 +5,16 @@
 
 'use client';
 
+import {
+  getDetectionHistory,
+  HistoryCacheManager,
+  validateHistoryData,
+} from '../locale-storage-history-core';
 import { LocalStorageManager } from '../locale-storage-local';
 import type {
   LocaleDetectionHistory,
   StorageOperationResult,
 } from '../locale-storage-types';
-import {
-  getDetectionHistory,
-  validateHistoryData,
-  HistoryCacheManager
-} from '../locale-storage-history-core';
 
 /**
  * 导出历史记录
@@ -48,7 +48,8 @@ export function exportHistoryAsJson(): StorageOperationResult<string> {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to serialize history',
+      error:
+        error instanceof Error ? error.message : 'Failed to serialize history',
       source: 'localStorage',
       timestamp: Date.now(),
     };
@@ -59,7 +60,9 @@ export function exportHistoryAsJson(): StorageOperationResult<string> {
  * 导入历史记录
  * Import history
  */
-export function importHistory(history: LocaleDetectionHistory): StorageOperationResult<LocaleDetectionHistory> {
+export function importHistory(
+  history: LocaleDetectionHistory,
+): StorageOperationResult<LocaleDetectionHistory> {
   const startTime = Date.now();
 
   try {
@@ -107,7 +110,9 @@ export function importHistory(history: LocaleDetectionHistory): StorageOperation
  * 从JSON字符串导入历史记录
  * Import history from JSON string
  */
-export function importHistoryFromJson(jsonString: string): StorageOperationResult<LocaleDetectionHistory> {
+export function importHistoryFromJson(
+  jsonString: string,
+): StorageOperationResult<LocaleDetectionHistory> {
   try {
     const history = JSON.parse(jsonString) as LocaleDetectionHistory;
     return importHistory(history);

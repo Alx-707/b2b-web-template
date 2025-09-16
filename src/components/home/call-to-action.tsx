@@ -1,10 +1,10 @@
 'use client';
 
+import { ArrowRight, ExternalLink, Github, Star } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
-import { ArrowRight, ExternalLink, Github, Star } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { ActionCards } from './cta/action-cards';
 import { CommunitySection } from './cta/community-section';
 import { getCallToActionData } from './cta/data';
@@ -17,8 +17,6 @@ const UI_CONSTANTS = {
   /** 交叉观察器阈值 */
   INTERSECTION_THRESHOLD: 0.2,
 } as const;
-
-
 
 export function CallToAction() {
   const t = useTranslations('home.cta');

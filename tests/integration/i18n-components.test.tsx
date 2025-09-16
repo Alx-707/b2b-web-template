@@ -1,6 +1,6 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 /**
@@ -75,9 +75,13 @@ const {
 vi.mock('next-intl', () => ({
   useLocale: mockUseLocale,
   useTranslations: mockUseTranslations,
-  NextIntlClientProvider: ({ children, locale }: { children: React.ReactNode; locale: string }) => (
-    <div data-testid={`intl-provider-${locale}`}>{children}</div>
-  ),
+  NextIntlClientProvider: ({
+    children,
+    locale,
+  }: {
+    children: React.ReactNode;
+    locale: string;
+  }) => <div data-testid={`intl-provider-${locale}`}>{children}</div>,
 }));
 
 // Mock next-intl/navigation
@@ -204,14 +208,20 @@ describe('i18n 组件集成测试', () => {
       };
     });
 
-    mockLink.mockImplementation(({ children, href, ...props }: React.ComponentProps<'a'> & { href: string }) => (
-      <a
-        href={href}
-        {...props}
-      >
-        {children}
-      </a>
-    ));
+    mockLink.mockImplementation(
+      ({
+        children,
+        href,
+        ...props
+      }: React.ComponentProps<'a'> & { href: string }) => (
+        <a
+          href={href}
+          {...props}
+        >
+          {children}
+        </a>
+      ),
+    );
   });
 
   describe('基础翻译功能', () => {

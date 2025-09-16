@@ -4,11 +4,10 @@
  */
 
 import { BaseValidators } from '../locale-storage-types-base';
-
 import type {
-  UserLocalePreference,
   LocaleDetectionHistory,
-  StorageConfig,
+  StorageSyncConfig,
+  UserLocalePreference,
 } from '../locale-storage-types-data';
 
 /**
@@ -20,7 +19,9 @@ import type {
  * 检查是否为用户语言偏好
  * Check if value is user locale preference
  */
-export function isUserLocalePreference(value: unknown): value is UserLocalePreference {
+export function isUserLocalePreference(
+  value: unknown,
+): value is UserLocalePreference {
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -30,7 +31,9 @@ export function isUserLocalePreference(value: unknown): value is UserLocalePrefe
     'confidence' in value &&
     BaseValidators.isValidLocale((value as UserLocalePreference).locale) &&
     BaseValidators.isValidSource((value as UserLocalePreference).source) &&
-    BaseValidators.isValidTimestamp((value as UserLocalePreference).timestamp) &&
+    BaseValidators.isValidTimestamp(
+      (value as UserLocalePreference).timestamp,
+    ) &&
     BaseValidators.isValidConfidence((value as UserLocalePreference).confidence)
   );
 }
@@ -39,7 +42,9 @@ export function isUserLocalePreference(value: unknown): value is UserLocalePrefe
  * 检查是否为语言检测历史
  * Check if value is locale detection history
  */
-export function isLocaleDetectionHistory(value: unknown): value is LocaleDetectionHistory {
+export function isLocaleDetectionHistory(
+  value: unknown,
+): value is LocaleDetectionHistory {
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -56,13 +61,15 @@ export function isLocaleDetectionHistory(value: unknown): value is LocaleDetecti
  * 检查是否为存储配置
  * Check if value is storage configuration
  */
-export function isStorageConfig(value: unknown): value is StorageConfig {
+export function isStorageSyncConfig(
+  value: unknown,
+): value is StorageSyncConfig {
   return (
     typeof value === 'object' &&
     value !== null &&
-    'enableCookies' in value &&
-    'enableLocalStorage' in value &&
-    typeof (value as StorageConfig).enableCookies === 'boolean' &&
-    typeof (value as StorageConfig).enableLocalStorage === 'boolean'
+    'interval' in value &&
+    'retryAttempts' in value &&
+    typeof (value as StorageSyncConfig).interval === 'number' &&
+    typeof (value as StorageSyncConfig).retryAttempts === 'number'
   );
 }

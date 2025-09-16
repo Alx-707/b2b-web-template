@@ -5,10 +5,8 @@
  * 注意：基础功能测试请参考 route-core.test.ts
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { NextRequest } from 'next/server';
-;
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from '@/app/api/monitoring/dashboard/__tests__/route';
 
 // Mock logger

@@ -8,8 +8,11 @@
  * - 默认值处理
  */
 
-import type { AirtableServicePrivate, DynamicImportModule } from '@/types/test-types';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type {
+  AirtableServicePrivate,
+  DynamicImportModule,
+} from '@/types/test-types';
 
 // Mock Airtable
 const mockCreate = vi.fn();
@@ -64,7 +67,7 @@ describe('Airtable Service - Configuration Tests', () => {
     mockConfigure.mockClear();
 
     // Dynamically import the module to ensure fresh instance
-    const module = await import('../airtable') as DynamicImportModule;
+    const module = (await import('../airtable')) as DynamicImportModule;
     AirtableServiceClass = module.AirtableService;
   });
 

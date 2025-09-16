@@ -10,10 +10,7 @@ export type {
   WCAGLevel,
 } from './accessibility-types';
 
-export {
-  THEME_ANNOUNCEMENTS,
-  KEYBOARD_KEYS,
-} from './accessibility-types';
+export { THEME_ANNOUNCEMENTS, KEYBOARD_KEYS } from './accessibility-types';
 
 // 导出管理器类
 export { AccessibilityManager } from './accessibility-manager';
@@ -28,5 +25,3 @@ export {
   announceThemeChange,
   announceSwitching,
 } from './accessibility-hooks';
-
-

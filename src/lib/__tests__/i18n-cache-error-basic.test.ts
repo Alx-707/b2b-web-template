@@ -164,14 +164,18 @@ describe('I18nCacheManager - Basic Error Handling', () => {
       console.error = vi.fn();
 
       try {
-        const result = await cacheManager.getMessages(null as unknown as Locale);
+        const result = await cacheManager.getMessages(
+          null as unknown as Locale,
+        );
         expect(result).toBeNull();
       } catch (error) {
         expect(error).toBeDefined();
       }
 
       try {
-        const result = await cacheManager.getMessages(undefined as unknown as Locale);
+        const result = await cacheManager.getMessages(
+          undefined as unknown as Locale,
+        );
         expect(result).toBeNull();
       } catch (error) {
         expect(error).toBeDefined();
@@ -297,11 +301,11 @@ describe('I18nCacheManager - Basic Error Handling', () => {
       }
 
       const metrics = cacheManager.getMetrics();
-      
+
       // Should have some successful operations recorded
       expect(metrics.localeUsage.en).toBeGreaterThan(0);
       expect(metrics.localeUsage.zh).toBeGreaterThan(0);
-      
+
       // Should have some errors recorded
       expect(metrics.errorRate).toBeGreaterThan(0);
 

@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET, OPTIONS, POST } from '@/app/api/csp-report/__tests__/route';
 
@@ -250,13 +249,16 @@ describe('CSP Report API Route', () => {
           },
         };
 
-        const request = new NextRequest('http://localhost:3000/api/csp-report', {
-          method: 'POST',
-          body: JSON.stringify(suspiciousReport),
-          headers: {
-            'content-type': 'application/csp-report',
+        const request = new NextRequest(
+          'http://localhost:3000/api/csp-report',
+          {
+            method: 'POST',
+            body: JSON.stringify(suspiciousReport),
+            headers: {
+              'content-type': 'application/csp-report',
+            },
           },
-        });
+        );
 
         await POST(request);
 
@@ -290,8 +292,12 @@ describe('CSP Report API Route', () => {
 
       expect(response.status).toBe(200);
       expect(response.headers.get('Allow')).toBe('POST, GET, OPTIONS');
-      expect(response.headers.get('Access-Control-Allow-Methods')).toBe('POST, GET, OPTIONS');
-      expect(response.headers.get('Access-Control-Allow-Headers')).toBe('Content-Type');
+      expect(response.headers.get('Access-Control-Allow-Methods')).toBe(
+        'POST, GET, OPTIONS',
+      );
+      expect(response.headers.get('Access-Control-Allow-Headers')).toBe(
+        'Content-Type',
+      );
     });
   });
 

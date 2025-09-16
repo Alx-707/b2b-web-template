@@ -1,9 +1,8 @@
 import { NextRequest } from 'next/server';
-;
-import { handlePostRequest } from './handlers/post-handler';
-import { handleGetRequest } from './handlers/get-handler';
-import { handlePutRequest } from './handlers/put-handler';
 import { handleDeleteRequest } from './handlers/delete-handler';
+import { handleGetRequest } from './handlers/get-handler';
+import { handlePostRequest } from './handlers/post-handler';
+import { handlePutRequest } from './handlers/put-handler';
 
 /**
  * POST /api/monitoring/dashboard

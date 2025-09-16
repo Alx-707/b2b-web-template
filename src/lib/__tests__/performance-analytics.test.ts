@@ -515,7 +515,9 @@ describe('PerformanceAlertSystem', () => {
       alertSystem.configure(customConfig as DetailedWebVitals);
 
       // Should not throw and should accept configuration
-      expect(() => alertSystem.configure(customConfig as DetailedWebVitals)).not.toThrow();
+      expect(() =>
+        alertSystem.configure(customConfig as DetailedWebVitals),
+      ).not.toThrow();
     });
 
     it('should handle invalid configuration gracefully', () => {
@@ -550,7 +552,9 @@ describe('PerformanceAlertSystem', () => {
       loggerErrorSpy.mockClear();
       loggerWarnSpy.mockClear();
 
-      (alertSystem as DetailedWebVitals).checkMetrics(poorMetrics as DetailedWebVitals);
+      (alertSystem as DetailedWebVitals).checkMetrics(
+        poorMetrics as DetailedWebVitals,
+      );
 
       // 由于这些指标都超过了critical阈值，应该调用logger.error
       expect(loggerErrorSpy).toHaveBeenCalled();
@@ -568,7 +572,9 @@ describe('PerformanceAlertSystem', () => {
 
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      (alertSystem as DetailedWebVitals).checkMetrics(goodMetrics as DetailedWebVitals);
+      (alertSystem as DetailedWebVitals).checkMetrics(
+        goodMetrics as DetailedWebVitals,
+      );
 
       expect(consoleSpy).not.toHaveBeenCalled();
       consoleSpy.mockRestore();
@@ -585,7 +591,9 @@ describe('PerformanceAlertSystem', () => {
 
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      (alertSystem as DetailedWebVitals).checkMetrics(poorMetrics as DetailedWebVitals);
+      (alertSystem as DetailedWebVitals).checkMetrics(
+        poorMetrics as DetailedWebVitals,
+      );
 
       expect(consoleSpy).not.toHaveBeenCalled();
       consoleSpy.mockRestore();
@@ -603,10 +611,14 @@ describe('PerformanceAlertSystem', () => {
       const { logger } = await vi.importMock('@/lib/logger');
       const loggerSpy = vi.mocked((logger as DetailedWebVitals).error);
 
-      (alertSystem as DetailedWebVitals).sendAlert('critical', 'Test alert message', {
-        metric: 'cls',
-        value: 0.5,
-      });
+      (alertSystem as DetailedWebVitals).sendAlert(
+        'critical',
+        'Test alert message',
+        {
+          metric: 'cls',
+          value: 0.5,
+        },
+      );
 
       // 检查logger.error被调用
       expect(loggerSpy).toHaveBeenCalledWith(
@@ -630,10 +642,14 @@ describe('PerformanceAlertSystem', () => {
         },
       });
 
-      await (alertSystem as DetailedWebVitals).sendAlert('warning', 'Test webhook alert', {
-        metric: 'lcp',
-        value: 3500,
-      });
+      await (alertSystem as DetailedWebVitals).sendAlert(
+        'warning',
+        'Test webhook alert',
+        {
+          metric: 'lcp',
+          value: 3500,
+        },
+      );
 
       expect(mockFetch).toHaveBeenCalledWith(
         'https://example.com/webhook',
@@ -703,11 +719,15 @@ describe('PerformanceAlertSystem', () => {
         value: 0.2,
       });
 
-      expect((alertSystem as DetailedWebVitals).getAlertHistory()).toHaveLength(1);
+      expect((alertSystem as DetailedWebVitals).getAlertHistory()).toHaveLength(
+        1,
+      );
 
       (alertSystem as DetailedWebVitals).clearHistory();
 
-      expect((alertSystem as DetailedWebVitals).getAlertHistory()).toHaveLength(0);
+      expect((alertSystem as DetailedWebVitals).getAlertHistory()).toHaveLength(
+        0,
+      );
     });
   });
 });

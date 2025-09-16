@@ -1,7 +1,7 @@
 /**
  * WhatsApp Webhook 消息类型定义
  * WhatsApp Webhook Message Type Definitions
- * 
+ *
  * 提供各种类型的WhatsApp入站消息类型定义
  */
 
@@ -259,7 +259,7 @@ export interface IncomingTemplateReply extends WhatsAppMessage {
  * 入站WhatsApp消息联合类型
  * Union type for incoming WhatsApp messages
  */
-export type IncomingWhatsAppMessage = 
+export type IncomingWhatsAppMessage =
   | IncomingTextMessage
   | IncomingImageMessage
   | IncomingDocumentMessage
@@ -293,7 +293,7 @@ export const INCOMING_MESSAGE_TYPES = [
   'order',
   'system',
   'button',
-  'template_reply'
+  'template_reply',
 ] as const;
 
 export const MEDIA_MESSAGE_TYPES = [
@@ -301,105 +301,153 @@ export const MEDIA_MESSAGE_TYPES = [
   'document',
   'audio',
   'video',
-  'sticker'
+  'sticker',
 ] as const;
 
 export const INTERACTIVE_MESSAGE_TYPES = [
   'interactive',
   'button',
-  'template_reply'
+  'template_reply',
 ] as const;
 
 /**
  * 消息类型
  * Message types
  */
-export type IncomingMessageType = typeof INCOMING_MESSAGE_TYPES[number];
-export type MediaMessageType = typeof MEDIA_MESSAGE_TYPES[number];
-export type InteractiveMessageType = typeof INTERACTIVE_MESSAGE_TYPES[number];
+export type IncomingMessageType = (typeof INCOMING_MESSAGE_TYPES)[number];
+export type MediaMessageType = (typeof MEDIA_MESSAGE_TYPES)[number];
+export type InteractiveMessageType = (typeof INTERACTIVE_MESSAGE_TYPES)[number];
 
 /**
  * 类型守卫函数
  * Type guard functions
  */
-export function isTextMessage(message: IncomingWhatsAppMessage): message is IncomingTextMessage {
+export function isTextMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingTextMessage {
   return message.type === 'text';
 }
 
-export function isImageMessage(message: IncomingWhatsAppMessage): message is IncomingImageMessage {
+export function isImageMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingImageMessage {
   return message.type === 'image';
 }
 
-export function isDocumentMessage(message: IncomingWhatsAppMessage): message is IncomingDocumentMessage {
+export function isDocumentMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingDocumentMessage {
   return message.type === 'document';
 }
 
-export function isAudioMessage(message: IncomingWhatsAppMessage): message is IncomingAudioMessage {
+export function isAudioMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingAudioMessage {
   return message.type === 'audio';
 }
 
-export function isVideoMessage(message: IncomingWhatsAppMessage): message is IncomingVideoMessage {
+export function isVideoMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingVideoMessage {
   return message.type === 'video';
 }
 
-export function isLocationMessage(message: IncomingWhatsAppMessage): message is IncomingLocationMessage {
+export function isLocationMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingLocationMessage {
   return message.type === 'location';
 }
 
-export function isContactsMessage(message: IncomingWhatsAppMessage): message is IncomingContactsMessage {
+export function isContactsMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingContactsMessage {
   return message.type === 'contacts';
 }
 
-export function isInteractiveMessage(message: IncomingWhatsAppMessage): message is IncomingInteractiveMessage {
+export function isInteractiveMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingInteractiveMessage {
   return message.type === 'interactive';
 }
 
-export function isReactionMessage(message: IncomingWhatsAppMessage): message is IncomingReactionMessage {
+export function isReactionMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingReactionMessage {
   return message.type === 'reaction';
 }
 
-export function isStickerMessage(message: IncomingWhatsAppMessage): message is IncomingStickerMessage {
+export function isStickerMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingStickerMessage {
   return message.type === 'sticker';
 }
 
-export function isOrderMessage(message: IncomingWhatsAppMessage): message is IncomingOrderMessage {
+export function isOrderMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingOrderMessage {
   return message.type === 'order';
 }
 
-export function isSystemMessage(message: IncomingWhatsAppMessage): message is IncomingSystemMessage {
+export function isSystemMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingSystemMessage {
   return message.type === 'system';
 }
 
-export function isButtonMessage(message: IncomingWhatsAppMessage): message is IncomingButtonMessage {
+export function isButtonMessage(
+  message: IncomingWhatsAppMessage,
+): message is IncomingButtonMessage {
   return message.type === 'button';
 }
 
-export function isTemplateReply(message: IncomingWhatsAppMessage): message is IncomingTemplateReply {
+export function isTemplateReply(
+  message: IncomingWhatsAppMessage,
+): message is IncomingTemplateReply {
   return message.type === 'template_reply';
 }
 
-export function isMediaMessage(message: IncomingWhatsAppMessage): message is IncomingImageMessage | IncomingDocumentMessage | IncomingAudioMessage | IncomingVideoMessage | IncomingStickerMessage {
+export function isMediaMessage(
+  message: IncomingWhatsAppMessage,
+): message is
+  | IncomingImageMessage
+  | IncomingDocumentMessage
+  | IncomingAudioMessage
+  | IncomingVideoMessage
+  | IncomingStickerMessage {
   return MEDIA_MESSAGE_TYPES.includes(message.type as MediaMessageType);
 }
 
-export function isInteractiveMessageType(message: IncomingWhatsAppMessage): message is IncomingInteractiveMessage | IncomingButtonMessage | IncomingTemplateReply {
-  return INTERACTIVE_MESSAGE_TYPES.includes(message.type as InteractiveMessageType);
+export function isInteractiveMessageType(
+  message: IncomingWhatsAppMessage,
+): message is
+  | IncomingInteractiveMessage
+  | IncomingButtonMessage
+  | IncomingTemplateReply {
+  return INTERACTIVE_MESSAGE_TYPES.includes(
+    message.type as InteractiveMessageType,
+  );
 }
 
 /**
  * 消息内容提取器
  * Message content extractors
  */
-export function getMessageText(message: IncomingWhatsAppMessage): string | null {
+export function getMessageText(
+  message: IncomingWhatsAppMessage,
+): string | null {
   switch (message.type) {
     case 'text':
       return message.text.body;
     case 'image':
     case 'document':
     case 'video':
-      return message[message.type].caption || null;
+      return message[message.type]?.caption || null;
     case 'interactive':
-      return message.interactive.button_reply?.title || message.interactive.list_reply?.title || null;
+      return (
+        message.interactive.button_reply?.title ||
+        message.interactive.list_reply?.title ||
+        null
+      );
     case 'button':
       return message.button.text;
     case 'template_reply':
@@ -411,9 +459,12 @@ export function getMessageText(message: IncomingWhatsAppMessage): string | null 
   }
 }
 
-export function getMessageMediaId(message: IncomingWhatsAppMessage): string | null {
+export function getMessageMediaId(
+  message: IncomingWhatsAppMessage,
+): string | null {
   if (isMediaMessage(message)) {
-    return message[message.type].id;
+    const mediaData = (message as any)[message.type];
+    return mediaData?.id || null;
   }
   return null;
 }

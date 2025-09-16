@@ -12,8 +12,8 @@ import { validateTranslations } from '../i18n-validation';
 import {
   mockEnTranslations,
   mockZhComplete,
-  mockZhIncomplete,
   mockZhEmpty,
+  mockZhIncomplete,
   resetMockConfig,
   setMockConfig,
 } from './mocks/translations';

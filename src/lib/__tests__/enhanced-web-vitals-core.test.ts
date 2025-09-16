@@ -175,33 +175,57 @@ describe('Enhanced Web Vitals - Core Tests', () => {
 
   describe('Performance Thresholds', () => {
     it('should have correct CLS thresholds', () => {
-      expect(PERFORMANCE_THRESHOLDS.CLS_GOOD).toBe(WEB_VITALS_CONSTANTS.CLS_GOOD_THRESHOLD);
-      expect(PERFORMANCE_THRESHOLDS.CLS_NEEDS_IMPROVEMENT).toBe(WEB_VITALS_CONSTANTS.CLS_NEEDS_IMPROVEMENT_THRESHOLD);
+      expect(PERFORMANCE_THRESHOLDS.CLS_GOOD).toBe(
+        WEB_VITALS_CONSTANTS.CLS_GOOD_THRESHOLD,
+      );
+      expect(PERFORMANCE_THRESHOLDS.CLS_NEEDS_IMPROVEMENT).toBe(
+        WEB_VITALS_CONSTANTS.CLS_NEEDS_IMPROVEMENT_THRESHOLD,
+      );
     });
 
     it('should have correct FID thresholds', () => {
-      expect(PERFORMANCE_THRESHOLDS.FID_GOOD).toBe(WEB_VITALS_CONSTANTS.FID_GOOD_THRESHOLD);
-      expect(PERFORMANCE_THRESHOLDS.FID_NEEDS_IMPROVEMENT).toBe(WEB_VITALS_CONSTANTS.FID_NEEDS_IMPROVEMENT_THRESHOLD);
+      expect(PERFORMANCE_THRESHOLDS.FID_GOOD).toBe(
+        WEB_VITALS_CONSTANTS.FID_GOOD_THRESHOLD,
+      );
+      expect(PERFORMANCE_THRESHOLDS.FID_NEEDS_IMPROVEMENT).toBe(
+        WEB_VITALS_CONSTANTS.FID_NEEDS_IMPROVEMENT_THRESHOLD,
+      );
     });
 
     it('should have correct FCP thresholds', () => {
-      expect(PERFORMANCE_THRESHOLDS.FCP_GOOD).toBe(WEB_VITALS_CONSTANTS.FCP_GOOD_THRESHOLD);
-      expect(PERFORMANCE_THRESHOLDS.TTFB_GOOD).toBe(WEB_VITALS_CONSTANTS.TTFB_GOOD_THRESHOLD);
+      expect(PERFORMANCE_THRESHOLDS.FCP_GOOD).toBe(
+        WEB_VITALS_CONSTANTS.FCP_GOOD_THRESHOLD,
+      );
+      expect(PERFORMANCE_THRESHOLDS.TTFB_GOOD).toBe(
+        WEB_VITALS_CONSTANTS.TTFB_GOOD_THRESHOLD,
+      );
     });
 
     it('should have correct LCP thresholds', () => {
-      expect(PERFORMANCE_THRESHOLDS.LCP_GOOD).toBe(WEB_VITALS_CONSTANTS.LCP_GOOD_THRESHOLD);
-      expect(PERFORMANCE_THRESHOLDS.LCP_NEEDS_IMPROVEMENT).toBe(WEB_VITALS_CONSTANTS.LCP_NEEDS_IMPROVEMENT_THRESHOLD);
+      expect(PERFORMANCE_THRESHOLDS.LCP_GOOD).toBe(
+        WEB_VITALS_CONSTANTS.LCP_GOOD_THRESHOLD,
+      );
+      expect(PERFORMANCE_THRESHOLDS.LCP_NEEDS_IMPROVEMENT).toBe(
+        WEB_VITALS_CONSTANTS.LCP_NEEDS_IMPROVEMENT_THRESHOLD,
+      );
     });
 
     it('should have correct TTFB thresholds', () => {
-      expect(PERFORMANCE_THRESHOLDS.TTFB_GOOD).toBe(WEB_VITALS_CONSTANTS.TTFB_GOOD_THRESHOLD);
-      expect(PERFORMANCE_THRESHOLDS.TTFB_NEEDS_IMPROVEMENT).toBe(WEB_VITALS_CONSTANTS.TTFB_NEEDS_IMPROVEMENT_THRESHOLD);
+      expect(PERFORMANCE_THRESHOLDS.TTFB_GOOD).toBe(
+        WEB_VITALS_CONSTANTS.TTFB_GOOD_THRESHOLD,
+      );
+      expect(PERFORMANCE_THRESHOLDS.TTFB_NEEDS_IMPROVEMENT).toBe(
+        WEB_VITALS_CONSTANTS.TTFB_NEEDS_IMPROVEMENT_THRESHOLD,
+      );
     });
 
     it('should have correct INP thresholds', () => {
-      expect(PERFORMANCE_THRESHOLDS.SLOW_RESOURCE_THRESHOLD).toBe(WEB_VITALS_CONSTANTS.SLOW_RESOURCE_THRESHOLD);
-      expect(PERFORMANCE_THRESHOLDS.MAX_SLOW_RESOURCES).toBe(WEB_VITALS_CONSTANTS.MAX_SLOW_RESOURCES);
+      expect(PERFORMANCE_THRESHOLDS.SLOW_RESOURCE_THRESHOLD).toBe(
+        WEB_VITALS_CONSTANTS.SLOW_RESOURCE_THRESHOLD,
+      );
+      expect(PERFORMANCE_THRESHOLDS.MAX_SLOW_RESOURCES).toBe(
+        WEB_VITALS_CONSTANTS.MAX_SLOW_RESOURCES,
+      );
     });
   });
 
@@ -217,7 +241,7 @@ describe('Enhanced Web Vitals - Core Tests', () => {
       }
 
       expect(mockLogger.info).toHaveBeenCalledWith(
-        expect.stringContaining('CLS: 0.05 (good)')
+        expect.stringContaining('CLS: 0.05 (good)'),
       );
     });
 
@@ -232,7 +256,7 @@ describe('Enhanced Web Vitals - Core Tests', () => {
       }
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
-        expect.stringContaining('CLS: 0.3 (poor)')
+        expect.stringContaining('CLS: 0.3 (poor)'),
       );
     });
   });

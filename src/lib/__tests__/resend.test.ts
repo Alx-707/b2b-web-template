@@ -1,5 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { ResendServicePrivate, DynamicImportModule } from '@/types/test-types';
+import type {
+  DynamicImportModule,
+  ResendServicePrivate,
+} from '@/types/test-types';
 
 // Mock dependencies
 const mockResendSend = vi.fn();

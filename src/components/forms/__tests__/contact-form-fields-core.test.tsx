@@ -2,10 +2,10 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    AdditionalFields,
-    CheckboxFields,
-    ContactFields,
-    NameFields,
+  AdditionalFields,
+  CheckboxFields,
+  ContactFields,
+  NameFields,
 } from '../contact-form-fields';
 
 // Mock react-hook-form
@@ -137,7 +137,9 @@ describe('Contact Form Fields - Core Tests', () => {
 
       render(<CheckboxFields {...propsWithErrors} />);
 
-      expect(screen.getByText('You must accept the privacy policy')).toBeInTheDocument();
+      expect(
+        screen.getByText('You must accept the privacy policy'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -180,15 +182,21 @@ describe('Contact Form Fields - Core Tests', () => {
           <ContactFields {...defaultProps} />
           <CheckboxFields {...defaultProps} />
           <AdditionalFields {...defaultProps} />
-        </div>
+        </div>,
       );
 
       // Verify register was called for all expected fields
-      expect(mockRegister).toHaveBeenCalledWith('firstName', expect.any(Object));
+      expect(mockRegister).toHaveBeenCalledWith(
+        'firstName',
+        expect.any(Object),
+      );
       expect(mockRegister).toHaveBeenCalledWith('lastName', expect.any(Object));
       expect(mockRegister).toHaveBeenCalledWith('email', expect.any(Object));
       expect(mockRegister).toHaveBeenCalledWith('phone', expect.any(Object));
-      expect(mockRegister).toHaveBeenCalledWith('privacyPolicy', expect.any(Object));
+      expect(mockRegister).toHaveBeenCalledWith(
+        'privacyPolicy',
+        expect.any(Object),
+      );
       expect(mockRegister).toHaveBeenCalledWith('message', expect.any(Object));
     });
 
@@ -204,12 +212,12 @@ describe('Contact Form Fields - Core Tests', () => {
           <ContactFields {...submittingProps} />
           <CheckboxFields {...submittingProps} />
           <AdditionalFields {...submittingProps} />
-        </div>
+        </div>,
       );
 
       // All fields should be disabled during submission
       const inputs = screen.getAllByRole('textbox');
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         expect(input).toBeDisabled();
       });
 
@@ -226,7 +234,7 @@ describe('Contact Form Fields - Core Tests', () => {
           <ContactFields {...defaultProps} />
           <CheckboxFields {...defaultProps} />
           <AdditionalFields {...defaultProps} />
-        </div>
+        </div>,
       );
 
       // Check that all form fields have accessible labels
@@ -250,7 +258,7 @@ describe('Contact Form Fields - Core Tests', () => {
         <div>
           <NameFields {...(propsWithErrors as any)} />
           <ContactFields {...(propsWithErrors as any)} />
-        </div>
+        </div>,
       );
 
       const firstNameField = screen.getByLabelText(/firstName/i);
@@ -270,7 +278,7 @@ describe('Contact Form Fields - Core Tests', () => {
           <ContactFields {...defaultProps} />
           <CheckboxFields {...defaultProps} />
           <AdditionalFields {...defaultProps} />
-        </div>
+        </div>,
       );
 
       // Verify translation function was called for field labels
@@ -279,7 +287,9 @@ describe('Contact Form Fields - Core Tests', () => {
       expect(mockT).toHaveBeenCalledWith(expect.stringContaining('email'));
       expect(mockT).toHaveBeenCalledWith(expect.stringContaining('phone'));
       expect(mockT).toHaveBeenCalledWith(expect.stringContaining('message'));
-      expect(mockT).toHaveBeenCalledWith(expect.stringContaining('privacyPolicy'));
+      expect(mockT).toHaveBeenCalledWith(
+        expect.stringContaining('privacyPolicy'),
+      );
     });
   });
 });

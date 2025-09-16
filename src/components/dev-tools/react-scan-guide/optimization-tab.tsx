@@ -1,10 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 /**
  * 组件优化部分
@@ -12,38 +7,59 @@ import {
 function ComponentOptimization() {
   return (
     <div>
-      <h4 className="mb-3 font-semibold">组件优化</h4>
-      <div className="space-y-3">
+      <h4 className='mb-3 font-semibold'>组件优化</h4>
+      <div className='space-y-3'>
         <div>
-          <Badge variant="default" className="mb-2">React.memo</Badge>
-          <p className="text-sm text-muted-foreground mb-2">
+          <Badge
+            variant='default'
+            className='mb-2'
+          >
+            React.memo
+          </Badge>
+          <p className='text-muted-foreground mb-2 text-sm'>
             防止不必要的重新渲染，特别适用于纯展示组件
           </p>
-          <div className="bg-gray-50 p-3 rounded text-sm font-mono">
-            const MyComponent = React.memo(({`{ name }`}) =&gt; {`{`}<br />
-            &nbsp;&nbsp;return &lt;div&gt;{`{name}`}&lt;/div&gt;;<br />
+          <div className='rounded bg-gray-50 p-3 font-mono text-sm'>
+            const MyComponent = React.memo(({`{ name }`}) =&gt; {`{`}
+            <br />
+            &nbsp;&nbsp;return &lt;div&gt;{`{name}`}&lt;/div&gt;;
+            <br />
             {`}`});
           </div>
         </div>
         <div>
-          <Badge variant="default" className="mb-2">useMemo</Badge>
-          <p className="text-sm text-muted-foreground mb-2">
+          <Badge
+            variant='default'
+            className='mb-2'
+          >
+            useMemo
+          </Badge>
+          <p className='text-muted-foreground mb-2 text-sm'>
             缓存计算结果，避免重复的昂贵计算
           </p>
-          <div className="bg-gray-50 p-3 rounded text-sm font-mono">
-            const expensiveValue = useMemo(() =&gt; {`{`}<br />
-            &nbsp;&nbsp;return heavyCalculation(data);<br />
+          <div className='rounded bg-gray-50 p-3 font-mono text-sm'>
+            const expensiveValue = useMemo(() =&gt; {`{`}
+            <br />
+            &nbsp;&nbsp;return heavyCalculation(data);
+            <br />
             {`}`}, [data]);
           </div>
         </div>
         <div>
-          <Badge variant="default" className="mb-2">useCallback</Badge>
-          <p className="text-sm text-muted-foreground mb-2">
+          <Badge
+            variant='default'
+            className='mb-2'
+          >
+            useCallback
+          </Badge>
+          <p className='text-muted-foreground mb-2 text-sm'>
             缓存函数引用，防止子组件不必要的重新渲染
           </p>
-          <div className="bg-gray-50 p-3 rounded text-sm font-mono">
-            const handleClick = useCallback(() =&gt; {`{`}<br />
-            &nbsp;&nbsp;setCount(c =&gt; c + 1);<br />
+          <div className='rounded bg-gray-50 p-3 font-mono text-sm'>
+            const handleClick = useCallback(() =&gt; {`{`}
+            <br />
+            &nbsp;&nbsp;setCount(c =&gt; c + 1);
+            <br />
             {`}`}, []);
           </div>
         </div>
@@ -58,23 +74,38 @@ function ComponentOptimization() {
 function StateOptimization() {
   return (
     <div>
-      <h4 className="mb-3 font-semibold">状态管理优化</h4>
-      <div className="space-y-3">
+      <h4 className='mb-3 font-semibold'>状态管理优化</h4>
+      <div className='space-y-3'>
         <div>
-          <Badge variant="secondary" className="mb-2">状态分离</Badge>
-          <p className="text-sm text-muted-foreground">
+          <Badge
+            variant='secondary'
+            className='mb-2'
+          >
+            状态分离
+          </Badge>
+          <p className='text-muted-foreground text-sm'>
             将频繁变化的状态与稳定状态分离，减少不必要的重新渲染
           </p>
         </div>
         <div>
-          <Badge variant="secondary" className="mb-2">状态下沉</Badge>
-          <p className="text-sm text-muted-foreground">
+          <Badge
+            variant='secondary'
+            className='mb-2'
+          >
+            状态下沉
+          </Badge>
+          <p className='text-muted-foreground text-sm'>
             将状态移动到最近的公共父组件，避免过度提升状态
           </p>
         </div>
         <div>
-          <Badge variant="secondary" className="mb-2">状态规范化</Badge>
-          <p className="text-sm text-muted-foreground">
+          <Badge
+            variant='secondary'
+            className='mb-2'
+          >
+            状态规范化
+          </Badge>
+          <p className='text-muted-foreground text-sm'>
             对于复杂数据结构，使用规范化的状态形式提高更新效率
           </p>
         </div>
@@ -89,23 +120,38 @@ function StateOptimization() {
 function ListOptimization() {
   return (
     <div>
-      <h4 className="mb-3 font-semibold">列表渲染优化</h4>
-      <div className="space-y-3">
+      <h4 className='mb-3 font-semibold'>列表渲染优化</h4>
+      <div className='space-y-3'>
         <div>
-          <Badge variant="outline" className="mb-2">key 属性</Badge>
-          <p className="text-sm text-muted-foreground">
+          <Badge
+            variant='outline'
+            className='mb-2'
+          >
+            key 属性
+          </Badge>
+          <p className='text-muted-foreground text-sm'>
             使用稳定且唯一的 key，帮助 React 识别列表项的变化
           </p>
         </div>
         <div>
-          <Badge variant="outline" className="mb-2">虚拟滚动</Badge>
-          <p className="text-sm text-muted-foreground">
+          <Badge
+            variant='outline'
+            className='mb-2'
+          >
+            虚拟滚动
+          </Badge>
+          <p className='text-muted-foreground text-sm'>
             对于长列表，只渲染可见区域的项目，大幅提升性能
           </p>
         </div>
         <div>
-          <Badge variant="outline" className="mb-2">分页加载</Badge>
-          <p className="text-sm text-muted-foreground">
+          <Badge
+            variant='outline'
+            className='mb-2'
+          >
+            分页加载
+          </Badge>
+          <p className='text-muted-foreground text-sm'>
             分批加载数据，避免一次性渲染大量内容
           </p>
         </div>
@@ -120,22 +166,34 @@ function ListOptimization() {
 function CodeSplitting() {
   return (
     <div>
-      <h4 className="mb-3 font-semibold">代码分割</h4>
-      <div className="space-y-3">
+      <h4 className='mb-3 font-semibold'>代码分割</h4>
+      <div className='space-y-3'>
         <div>
-          <Badge variant="destructive" className="mb-2">React.lazy</Badge>
-          <p className="text-sm text-muted-foreground mb-2">
+          <Badge
+            variant='destructive'
+            className='mb-2'
+          >
+            React.lazy
+          </Badge>
+          <p className='text-muted-foreground mb-2 text-sm'>
             懒加载组件，减少初始包大小
           </p>
-          <div className="bg-gray-50 p-3 rounded text-sm font-mono">
-            const LazyComponent = React.lazy(() =&gt;<br />
-            &nbsp;&nbsp;import(&apos;./LazyComponent&apos;)<br />
+          <div className='rounded bg-gray-50 p-3 font-mono text-sm'>
+            const LazyComponent = React.lazy(() =&gt;
+            <br />
+            &nbsp;&nbsp;import(&apos;./LazyComponent&apos;)
+            <br />
             );
           </div>
         </div>
         <div>
-          <Badge variant="destructive" className="mb-2">Suspense</Badge>
-          <p className="text-sm text-muted-foreground">
+          <Badge
+            variant='destructive'
+            className='mb-2'
+          >
+            Suspense
+          </Badge>
+          <p className='text-muted-foreground text-sm'>
             配合 lazy 使用，提供加载状态的优雅处理
           </p>
         </div>
@@ -151,13 +209,13 @@ function PerformanceMonitoring() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">📈 性能监控建议</CardTitle>
+        <CardTitle className='text-lg'>📈 性能监控建议</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className='space-y-4'>
           <div>
-            <h4 className="mb-2 font-semibold">设置性能预算</h4>
-            <ul className="text-sm space-y-1">
+            <h4 className='mb-2 font-semibold'>设置性能预算</h4>
+            <ul className='space-y-1 text-sm'>
               <li>• 单个组件渲染时间 &lt; 16ms</li>
               <li>• 页面总渲染时间 &lt; 100ms</li>
               <li>• 交互响应时间 &lt; 50ms</li>
@@ -165,8 +223,8 @@ function PerformanceMonitoring() {
             </ul>
           </div>
           <div>
-            <h4 className="mb-2 font-semibold">定期性能审查</h4>
-            <ul className="text-sm space-y-1">
+            <h4 className='mb-2 font-semibold'>定期性能审查</h4>
+            <ul className='space-y-1 text-sm'>
               <li>• 每周检查 React Scan 报告</li>
               <li>• 关注新增的性能问题</li>
               <li>• 验证优化措施的效果</li>
@@ -184,13 +242,13 @@ function PerformanceMonitoring() {
  */
 export function OptimizationTab() {
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">⚡ React 性能优化最佳实践</CardTitle>
+          <CardTitle className='text-lg'>⚡ React 性能优化最佳实践</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
+          <div className='space-y-6'>
             <ComponentOptimization />
             <StateOptimization />
             <ListOptimization />

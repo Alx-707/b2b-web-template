@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
-;
-import { POST, GET } from '@/app/api/verify-turnstile/__tests__/route';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { GET, POST } from '@/app/api/verify-turnstile/__tests__/route';
 
 // Mock fetch globally
 const mockFetch = vi.fn();
@@ -32,10 +31,10 @@ describe('Verify Turnstile API Route - Core Tests', () => {
       mockFetch.mockResolvedValue({
         ok: true,
         json: async () => ({
-          success: true,
+          'success': true,
           'error-codes': [],
-          challenge_ts: '2023-01-01T00:00:00.000Z',
-          hostname: 'localhost',
+          'challenge_ts': '2023-01-01T00:00:00.000Z',
+          'hostname': 'localhost',
         }),
       });
 
@@ -72,10 +71,10 @@ describe('Verify Turnstile API Route - Core Tests', () => {
       mockFetch.mockResolvedValue({
         ok: true,
         json: async () => ({
-          success: false,
+          'success': false,
           'error-codes': ['invalid-input-response'],
-          challenge_ts: null,
-          hostname: 'localhost',
+          'challenge_ts': null,
+          'hostname': 'localhost',
         }),
       });
 

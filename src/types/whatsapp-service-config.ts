@@ -203,7 +203,11 @@ export interface Logger {
   /** Log warning message */
   warn: (message: string, context?: Record<string, unknown>) => void;
   /** Log error message */
-  error: (message: string, error?: Error, context?: Record<string, unknown>) => void;
+  error: (
+    message: string,
+    error?: Error,
+    context?: Record<string, unknown>,
+  ) => void;
 }
 
 // ==================== Utility Types ====================
@@ -212,15 +216,15 @@ export interface Logger {
  * Message Type Enumeration
  * All supported WhatsApp message types
  */
-export type MessageType = 
-  | 'text' 
-  | 'image' 
-  | 'document' 
-  | 'audio' 
-  | 'video' 
-  | 'location' 
-  | 'contacts' 
-  | 'template' 
+export type MessageType =
+  | 'text'
+  | 'image'
+  | 'document'
+  | 'audio'
+  | 'video'
+  | 'location'
+  | 'contacts'
+  | 'template'
   | 'interactive';
 
 /**
@@ -257,7 +261,7 @@ export const DEFAULT_SERVICE_OPTIONS: Required<WhatsAppServiceOptions> = {
   logLevel: 'info',
   validateMessages: true,
   rateLimitStrategy: 'exponential',
-  rateLimitMaxAttempts: 5
+  rateLimitMaxAttempts: 5,
 };
 
 /**
@@ -269,7 +273,7 @@ export const DEFAULT_RETRY_CONFIG: RetryConfig = {
   baseDelay: 1000,
   maxDelay: 10000,
   multiplier: 2,
-  jitter: true
+  jitter: true,
 };
 
 /**
@@ -280,7 +284,7 @@ export const DEFAULT_CIRCUIT_BREAKER_CONFIG: CircuitBreakerConfig = {
   failureThreshold: 5,
   recoveryTimeout: 60000,
   monitoringPeriod: 10000,
-  expectedErrors: ['WhatsAppRateLimitError', 'WhatsAppNetworkError']
+  expectedErrors: ['WhatsAppRateLimitError', 'WhatsAppNetworkError'],
 };
 
 /**
@@ -290,7 +294,7 @@ export const DEFAULT_CIRCUIT_BREAKER_CONFIG: CircuitBreakerConfig = {
 export const DEFAULT_CACHE_CONFIG: CacheConfig = {
   ttl: 300000, // 5 minutes
   maxSize: 1000,
-  strategy: 'lru'
+  strategy: 'lru',
 };
 
 // ==================== Configuration Validation ====================
@@ -299,7 +303,9 @@ export const DEFAULT_CACHE_CONFIG: CacheConfig = {
  * Validate WhatsApp Configuration
  * Ensures all required configuration fields are present and valid
  */
-export function validateWhatsAppConfig(config: Partial<WhatsAppConfig>): config is WhatsAppConfig {
+export function validateWhatsAppConfig(
+  config: Partial<WhatsAppConfig>,
+): config is WhatsAppConfig {
   return !!(
     config.accessToken &&
     config.phoneNumberId &&
@@ -314,19 +320,21 @@ export function validateWhatsAppConfig(config: Partial<WhatsAppConfig>): config 
  * Validate Service Options
  * Ensures service options are within acceptable ranges
  */
-export function validateServiceOptions(options: WhatsAppServiceOptions): boolean {
+export function validateServiceOptions(
+  options: WhatsAppServiceOptions,
+): boolean {
   if (options.timeout && (options.timeout < 1000 || options.timeout > 300000)) {
     return false; // Timeout should be between 1s and 5min
   }
-  
+
   if (options.retries && (options.retries < 0 || options.retries > 10)) {
     return false; // Retries should be between 0 and 10
   }
-  
+
   if (options.retryDelay && options.retryDelay < 100) {
     return false; // Retry delay should be at least 100ms
   }
-  
+
   return true;
 }
 
@@ -336,16 +344,16 @@ export function validateServiceOptions(options: WhatsAppServiceOptions): boolean
  */
 export function mergeWithDefaults(
   config: WhatsAppConfig,
-  options?: WhatsAppServiceOptions
+  options?: WhatsAppServiceOptions,
 ): { config: WhatsAppConfig; options: Required<WhatsAppServiceOptions> } {
   return {
     config: {
       apiVersion: 'v18.0',
-      ...config
+      ...config,
     },
     options: {
       ...DEFAULT_SERVICE_OPTIONS,
-      ...options
-    }
+      ...options,
+    },
   };
 }

@@ -2,17 +2,17 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
 } from '../navigation-menu';
 
 // Mock Lucide React icons
@@ -88,7 +88,14 @@ describe('NavigationMenu - Interactions', () => {
       );
 
       const trigger = screen.getByTestId('nav-trigger');
-      expect(trigger).toHaveClass('group', 'inline-flex', 'h-10', 'w-max', 'items-center', 'justify-center');
+      expect(trigger).toHaveClass(
+        'group',
+        'inline-flex',
+        'h-10',
+        'w-max',
+        'items-center',
+        'justify-center',
+      );
     });
 
     it('applies custom className', () => {
@@ -96,7 +103,10 @@ describe('NavigationMenu - Interactions', () => {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger className='custom-trigger' data-testid='nav-trigger'>
+              <NavigationMenuTrigger
+                className='custom-trigger'
+                data-testid='nav-trigger'
+              >
                 Products
               </NavigationMenuTrigger>
             </NavigationMenuItem>
@@ -181,7 +191,10 @@ describe('NavigationMenu - Interactions', () => {
           <NavigationMenuList>
             <NavigationMenuItem value='item-1'>
               <NavigationMenuTrigger>Products</NavigationMenuTrigger>
-              <NavigationMenuContent className='custom-content' data-testid='nav-content'>
+              <NavigationMenuContent
+                className='custom-content'
+                data-testid='nav-content'
+              >
                 <div>Content</div>
               </NavigationMenuContent>
             </NavigationMenuItem>
@@ -200,7 +213,10 @@ describe('NavigationMenu - Interactions', () => {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink href='/products' data-testid='nav-link'>
+              <NavigationMenuLink
+                href='/products'
+                data-testid='nav-link'
+              >
                 Products
               </NavigationMenuLink>
             </NavigationMenuItem>
@@ -219,7 +235,10 @@ describe('NavigationMenu - Interactions', () => {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink href='/products' data-testid='nav-link'>
+              <NavigationMenuLink
+                href='/products'
+                data-testid='nav-link'
+              >
                 Products
               </NavigationMenuLink>
             </NavigationMenuItem>
@@ -228,7 +247,13 @@ describe('NavigationMenu - Interactions', () => {
       );
 
       const link = screen.getByTestId('nav-link');
-      expect(link).toHaveClass('block', 'select-none', 'space-y-1', 'rounded-md', 'p-3');
+      expect(link).toHaveClass(
+        'block',
+        'select-none',
+        'space-y-1',
+        'rounded-md',
+        'p-3',
+      );
     });
 
     it('applies custom className', () => {

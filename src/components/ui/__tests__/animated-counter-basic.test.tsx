@@ -45,7 +45,12 @@ describe('AnimatedCounter - Basic Rendering', () => {
     });
 
     it('renders with custom className', () => {
-      render(<AnimatedCounter to={100} className='custom-counter' />);
+      render(
+        <AnimatedCounter
+          to={100}
+          className='custom-counter'
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveClass('custom-counter');
@@ -101,14 +106,24 @@ describe('AnimatedCounter - Basic Rendering', () => {
     });
 
     it('renders with custom aria-label', () => {
-      render(<AnimatedCounter to={100} aria-label='Custom counter' />);
+      render(
+        <AnimatedCounter
+          to={100}
+          aria-label='Custom counter'
+        />,
+      );
 
       const counter = screen.getByLabelText('Custom counter');
       expect(counter).toBeInTheDocument();
     });
 
     it('supports custom data attributes', () => {
-      render(<AnimatedCounter to={100} data-testid='my-counter' />);
+      render(
+        <AnimatedCounter
+          to={100}
+          data-testid='my-counter'
+        />,
+      );
 
       const counter = screen.getByTestId('my-counter');
       expect(counter).toBeInTheDocument();
@@ -116,7 +131,12 @@ describe('AnimatedCounter - Basic Rendering', () => {
 
     it('renders with custom style', () => {
       const customStyle = { fontSize: '24px', color: 'red' };
-      render(<AnimatedCounter to={100} style={customStyle} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          style={customStyle}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveStyle('font-size: 24px');
@@ -145,7 +165,12 @@ describe('AnimatedCounter - Basic Rendering', () => {
     });
 
     it('renders with autoStart disabled', () => {
-      render(<AnimatedCounter to={100} autoStart={false} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          autoStart={false}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -153,7 +178,12 @@ describe('AnimatedCounter - Basic Rendering', () => {
     });
 
     it('renders with custom duration', () => {
-      render(<AnimatedCounter to={100} duration={2000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={2000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -161,7 +191,12 @@ describe('AnimatedCounter - Basic Rendering', () => {
 
     it('renders with custom easing', () => {
       const customEasing = (t: number) => t * t;
-      render(<AnimatedCounter to={100} easing={customEasing} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          easing={customEasing}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -169,21 +204,36 @@ describe('AnimatedCounter - Basic Rendering', () => {
 
     it('renders with custom formatter', () => {
       const formatter = (to: number) => `$${to.toFixed(2)}`;
-      render(<AnimatedCounter to={100} formatter={formatter} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          formatter={formatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('$100.00');
     });
 
     it('renders with delay', () => {
-      render(<AnimatedCounter to={100} delay={1000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          delay={1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
     });
 
     it('renders with triggerOnVisible enabled', () => {
-      render(<AnimatedCounter to={100} triggerOnVisible />);
+      render(
+        <AnimatedCounter
+          to={100}
+          triggerOnVisible
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -192,9 +242,15 @@ describe('AnimatedCounter - Basic Rendering', () => {
     it('handles multiple instances independently', () => {
       render(
         <div>
-          <AnimatedCounter to={100} data-testid='counter-1' />
-          <AnimatedCounter to={200} data-testid='counter-2' />
-        </div>
+          <AnimatedCounter
+            to={100}
+            data-testid='counter-1'
+          />
+          <AnimatedCounter
+            to={200}
+            data-testid='counter-2'
+          />
+        </div>,
       );
 
       const counter1 = screen.getByTestId('counter-1');
@@ -211,7 +267,7 @@ describe('AnimatedCounter - Basic Rendering', () => {
           id='my-counter'
           title='Counter tooltip'
           tabIndex={0}
-        />
+        />,
       );
 
       const counter = screen.getByRole('status');

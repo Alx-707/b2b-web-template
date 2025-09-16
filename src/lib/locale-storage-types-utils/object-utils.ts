@@ -17,7 +17,7 @@ export function deepClone<T>(obj: T): T {
   }
 
   if (obj instanceof Array) {
-    return obj.map(item => deepClone(item)) as unknown as T;
+    return obj.map((item) => deepClone(item)) as unknown as T;
   }
 
   if (typeof obj === 'object') {
@@ -37,14 +37,17 @@ export function deepClone<T>(obj: T): T {
  * 合并对象
  * Merge objects
  */
-export function mergeObjects<T extends Record<string, unknown>>(target: T, source: Partial<T>): T {
+export function mergeObjects<T extends Record<string, unknown>>(
+  target: T,
+  source: Partial<T>,
+): T {
   const result = { ...target };
-  
+
   for (const key in source) {
     if (source.hasOwnProperty(key)) {
       const sourceValue = source[key];
       const targetValue = result[key];
-      
+
       if (sourceValue !== undefined) {
         if (
           typeof sourceValue === 'object' &&
@@ -56,7 +59,7 @@ export function mergeObjects<T extends Record<string, unknown>>(target: T, sourc
         ) {
           result[key] = mergeObjects(
             targetValue as Record<string, unknown>,
-            sourceValue as Record<string, unknown>
+            sourceValue as Record<string, unknown>,
           ) as T[Extract<keyof T, string>];
         } else {
           result[key] = sourceValue as T[Extract<keyof T, string>];
@@ -64,7 +67,7 @@ export function mergeObjects<T extends Record<string, unknown>>(target: T, sourc
       }
     }
   }
-  
+
   return result;
 }
 
@@ -103,7 +106,7 @@ export function compareObjects(obj1: unknown, obj2: unknown): boolean {
     return false;
   }
 
-  return keys1.every(key => {
+  return keys1.every((key) => {
     const val1 = (obj1 as Record<string, unknown>)[key];
     const val2 = (obj2 as Record<string, unknown>)[key];
     return compareObjects(val1, val2);

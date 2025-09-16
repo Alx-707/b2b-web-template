@@ -1,5 +1,4 @@
 import type { Locale } from '@/types/i18n';
-;
 
 // 支持的语言列表
 export const SUPPORTED_LOCALES: Locale[] = ['en', 'zh'];

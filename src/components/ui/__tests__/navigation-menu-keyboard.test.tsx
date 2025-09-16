@@ -2,17 +2,17 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
 } from '../navigation-menu';
 
 // Mock Lucide React icons
@@ -31,16 +31,16 @@ vi.mock('lucide-react', () => ({
 // Shared test setup function
 function setupKeyboardTest() {
   const user = userEvent.setup();
-  
+
   // Mock ResizeObserver for all tests
   const mockResizeObserver = vi.fn(() => ({
     observe: vi.fn(),
     disconnect: vi.fn(),
     unobserve: vi.fn(),
   }));
-  
+
   vi.stubGlobal('ResizeObserver', mockResizeObserver);
-  
+
   return { user, mockResizeObserver };
 }
 
@@ -61,7 +61,10 @@ describe('NavigationMenu - Keyboard Navigation', () => {
               Item 1
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <NavigationMenuLink href='/item1' data-testid='link-1'>
+              <NavigationMenuLink
+                href='/item1'
+                data-testid='link-1'
+              >
                 Link 1
               </NavigationMenuLink>
             </NavigationMenuContent>
@@ -178,10 +181,16 @@ describe('NavigationMenu - Keyboard Navigation', () => {
               Products
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <NavigationMenuLink href='/product1' data-testid='link-1'>
+              <NavigationMenuLink
+                href='/product1'
+                data-testid='link-1'
+              >
                 Product 1
               </NavigationMenuLink>
-              <NavigationMenuLink href='/product2' data-testid='link-2'>
+              <NavigationMenuLink
+                href='/product2'
+                data-testid='link-2'
+              >
                 Product 2
               </NavigationMenuLink>
             </NavigationMenuContent>
@@ -191,7 +200,7 @@ describe('NavigationMenu - Keyboard Navigation', () => {
     );
 
     const trigger = screen.getByTestId('trigger');
-    
+
     // Focus trigger
     trigger.focus();
     expect(trigger).toHaveFocus();
@@ -221,7 +230,7 @@ describe('NavigationMenu - Keyboard Navigation', () => {
     );
 
     const trigger = screen.getByTestId('trigger');
-    
+
     // Focus and open menu
     trigger.focus();
     await user.keyboard('{Enter}');

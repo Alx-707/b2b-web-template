@@ -1,9 +1,26 @@
 import type { Locale } from '@/types/i18n';
-;
-import type { QualityIssue, QualityScore, TranslationManagerConfig, ValidationReport } from '@/types/translation-manager';
-import {  } from '@/types/translation-manager';
-import { PERFORMANCE_THRESHOLDS, QUALITY_WEIGHTS, VALIDATION_THRESHOLDS,  } from '@/constants/i18n-constants';
-import { calculateConfidence, checkTerminologyConsistency, extractPlaceholders, flattenTranslations, generateRecommendations, generateSuggestions, getNestedValue,  } from './translation-utils';
+import type {
+  LocaleQualityReport,
+  QualityIssue,
+  QualityScore,
+  TranslationManagerConfig,
+  ValidationReport,
+} from '@/types/translation-manager';
+import '@/types/translation-manager';
+import {
+  PERFORMANCE_THRESHOLDS,
+  QUALITY_WEIGHTS,
+  VALIDATION_THRESHOLDS,
+} from '@/constants/i18n-constants';
+import {
+  calculateConfidence,
+  checkTerminologyConsistency,
+  extractPlaceholders,
+  flattenTranslations,
+  generateRecommendations,
+  generateSuggestions,
+  getNestedValue,
+} from './translation-utils';
 
 /**
  * 翻译质量检查器
@@ -164,6 +181,15 @@ export class TranslationQualityChecker {
       issues,
       recommendations: generateRecommendations(issues),
       timestamp: new Date().toISOString(),
+      byLocale: {} as Record<Locale, LocaleQualityReport>,
+      summary: {
+        totalIssues: issues.length,
+        criticalIssues: issues.filter((issue) => issue.severity === 'critical')
+          .length,
+        warningIssues: issues.filter((issue) => issue.severity === 'warning')
+          .length,
+        infoIssues: issues.filter((issue) => issue.severity === 'info').length,
+      },
     });
   }
 

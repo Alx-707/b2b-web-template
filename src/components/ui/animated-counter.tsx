@@ -1,13 +1,13 @@
 'use client';
 
 /// <reference lib="dom" />
-import { ANIMATION_DURATIONS } from '@/constants/performance-constants';
-import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import * as React from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { AccessibilityUtils } from '@/lib/accessibility-utils';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
-import * as React from 'react';
-import { forwardRef, useEffect, useState } from 'react';
+import { ANIMATION_DURATIONS } from '@/constants/performance-constants';
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { animationUtils } from './animated-counter-helpers';
 
 /**

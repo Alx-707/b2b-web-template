@@ -15,9 +15,13 @@ async function loadTestMessages(locale: string) {
     return messages;
   } catch (_error) {
     // 忽略错误变量
-    logger.error(`Failed to load test messages for locale ${locale}`, {
-      locale,
-    }, _error instanceof Error ? _error : new Error(String(_error)));
+    logger.error(
+      `Failed to load test messages for locale ${locale}`,
+      {
+        locale,
+      },
+      _error instanceof Error ? _error : new Error(String(_error)),
+    );
     // 返回基本的翻译数据确保测试能运行
     return {
       seo: {

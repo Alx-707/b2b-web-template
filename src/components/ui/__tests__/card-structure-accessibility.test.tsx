@@ -15,26 +15,31 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '../card';
 
 describe('Card Structure & Accessibility Tests - Advanced', () => {
   describe('高级可访问性特性', () => {
     it('supports ARIA attributes', () => {
       render(
-        <Card aria-labelledby='card-title' aria-describedby='card-description'>
+        <Card
+          aria-labelledby='card-title'
+          aria-describedby='card-description'
+        >
           <CardHeader>
             <CardTitle id='card-title'>Card with ARIA</CardTitle>
-            <CardDescription id='card-description'>Description for screen readers</CardDescription>
+            <CardDescription id='card-description'>
+              Description for screen readers
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <p>Content with proper labeling</p>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
       const card = screen.getByLabelText('Card with ARIA');
@@ -50,10 +55,12 @@ describe('Card Structure & Accessibility Tests - Advanced', () => {
           <CardContent>
             <button>Focusable Button</button>
           </CardContent>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('Keyboard Navigation Card').closest('[tabindex="0"]');
+      const card = screen
+        .getByText('Keyboard Navigation Card')
+        .closest('[tabindex="0"]');
       const button = screen.getByText('Focusable Button');
 
       expect(card).toBeInTheDocument();
@@ -64,18 +71,21 @@ describe('Card Structure & Accessibility Tests - Advanced', () => {
   describe('高级国际化支持', () => {
     it('supports internationalization', () => {
       render(
-        <Card lang='es' dir='ltr'>
+        <Card
+          lang='es'
+          dir='ltr'
+        >
           <CardHeader>
             <CardTitle>Tarjeta en Español</CardTitle>
             <CardDescription>Esta es una tarjeta en español</CardDescription>
           </CardHeader>
-        </Card>
+        </Card>,
       );
 
-      const card = screen.getByText('Tarjeta en Español').closest('[lang="es"]');
+      const card = screen
+        .getByText('Tarjeta en Español')
+        .closest('[lang="es"]');
       expect(card).toHaveAttribute('dir', 'ltr');
     });
   });
-
 });
-

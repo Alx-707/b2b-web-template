@@ -4,14 +4,39 @@
  */
 
 // 导入所有请求类型
+import type {
+  AccountInfoRequest,
+  AppSettingsRequest,
+} from './account-app-requests';
+import type {
+  BatchRequest,
+  BusinessProfileUpdateRequest,
+} from './batch-business-requests';
+import type {
+  AnalyticsRequest,
+  MediaUploadRequest,
+} from './media-analytics-requests';
+import type {
+  GroupMessageRequest,
+  MessageForwardRequest,
+  MessageReactionRequest,
+} from './message-actions-requests';
 import type { SendMessageRequest } from './message-requests';
-import type { MediaUploadRequest, AnalyticsRequest } from './media-analytics-requests';
-import type { BatchRequest, BusinessProfileUpdateRequest } from './batch-business-requests';
-import type { TemplateCreateRequest, TemplateDeleteRequest, TemplateStatusUpdateRequest } from './template-requests';
-import type { PhoneNumberRegistrationRequest, PhoneNumberVerificationRequest, WebhookSubscriptionRequest, MessageMarkRequest } from './phone-webhook-requests';
-import type { UserBlockRequest, QualityRatingRequest } from './user-quality-requests';
-import type { AccountInfoRequest, AppSettingsRequest } from './account-app-requests';
-import type { MessageReactionRequest, MessageForwardRequest, GroupMessageRequest } from './message-actions-requests';
+import type {
+  MessageMarkRequest,
+  PhoneNumberRegistrationRequest,
+  PhoneNumberVerificationRequest,
+  WebhookSubscriptionRequest,
+} from './phone-webhook-requests';
+import type {
+  TemplateCreateRequest,
+  TemplateDeleteRequest,
+  TemplateStatusUpdateRequest,
+} from './template-requests';
+import type {
+  QualityRatingRequest,
+  UserBlockRequest,
+} from './user-quality-requests';
 
 /**
  * 请求选项
@@ -67,41 +92,47 @@ export type WhatsAppApiRequest =
  * 请求验证函数
  * Request validation functions
  */
-export function isSendMessageRequest(request: unknown): request is SendMessageRequest {
+export function isSendMessageRequest(
+  request: unknown,
+): request is SendMessageRequest {
   return Boolean(
     request &&
-    typeof request === 'object' &&
-    (request as Record<string, unknown>).messaging_product === 'whatsapp' &&
-    (request as Record<string, unknown>).recipient_type === 'individual' &&
-    typeof (request as Record<string, unknown>).to === 'string' &&
-    typeof (request as Record<string, unknown>).type === 'string'
+      typeof request === 'object' &&
+      (request as Record<string, unknown>).messaging_product === 'whatsapp' &&
+      (request as Record<string, unknown>).recipient_type === 'individual' &&
+      typeof (request as Record<string, unknown>).to === 'string' &&
+      typeof (request as Record<string, unknown>).type === 'string',
   );
 }
 
-export function isMediaUploadRequest(request: unknown): request is MediaUploadRequest {
+export function isMediaUploadRequest(
+  request: unknown,
+): request is MediaUploadRequest {
   return Boolean(
     request &&
-    typeof request === 'object' &&
-    (request as Record<string, unknown>).messaging_product === 'whatsapp' &&
-    (request as Record<string, unknown>).file &&
-    typeof (request as Record<string, unknown>).type === 'string'
+      typeof request === 'object' &&
+      (request as Record<string, unknown>).messaging_product === 'whatsapp' &&
+      (request as Record<string, unknown>).file &&
+      typeof (request as Record<string, unknown>).type === 'string',
   );
 }
 
-export function isAnalyticsRequest(request: unknown): request is AnalyticsRequest {
+export function isAnalyticsRequest(
+  request: unknown,
+): request is AnalyticsRequest {
   return Boolean(
     request &&
-    typeof request === 'object' &&
-    typeof (request as Record<string, unknown>).start === 'string' &&
-    typeof (request as Record<string, unknown>).end === 'string' &&
-    typeof (request as Record<string, unknown>).granularity === 'string'
+      typeof request === 'object' &&
+      typeof (request as Record<string, unknown>).start === 'string' &&
+      typeof (request as Record<string, unknown>).end === 'string' &&
+      typeof (request as Record<string, unknown>).granularity === 'string',
   );
 }
 
 export function isBatchRequest(request: unknown): request is BatchRequest {
   return Boolean(
     request &&
-    typeof request === 'object' &&
-    Array.isArray((request as Record<string, unknown>).requests)
+      typeof request === 'object' &&
+      Array.isArray((request as Record<string, unknown>).requests),
   );
 }

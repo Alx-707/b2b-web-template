@@ -72,7 +72,10 @@ export async function validateFormData(body: unknown, clientIP: string) {
   }
 
   // 验证Turnstile token
-  const turnstileValid = await verifyTurnstile(formData.turnstileToken, clientIP);
+  const turnstileValid = await verifyTurnstile(
+    formData.turnstileToken,
+    clientIP,
+  );
   if (!turnstileValid) {
     logger.warn('Turnstile verification failed', { clientIP });
     return {
@@ -151,12 +154,14 @@ export async function processFormSubmission(
   }
 
   // 提取结果数据
-  const emailMessageId = emailSuccess && emailResult.status === 'fulfilled'
-    ? emailResult.value
-    : null;
-  const airtableRecordId = airtableSuccess && airtableResult.status === 'fulfilled'
-    ? airtableResult.value?.id
-    : null;
+  const emailMessageId =
+    emailSuccess && emailResult.status === 'fulfilled'
+      ? emailResult.value
+      : null;
+  const airtableRecordId =
+    airtableSuccess && airtableResult.status === 'fulfilled'
+      ? airtableResult.value?.id
+      : null;
 
   // 至少一个服务成功就认为提交成功
   if (emailSuccess || airtableSuccess) {
@@ -181,7 +186,8 @@ export async function processFormSubmission(
   // 两个服务都失败
   logger.error('Contact form submission failed completely', {
     emailError: emailResult.status === 'rejected' ? emailResult.reason : null,
-    airtableError: airtableResult.status === 'rejected' ? airtableResult.reason : null,
+    airtableError:
+      airtableResult.status === 'rejected' ? airtableResult.reason : null,
     formData: {
       email: formData.email,
       subject: formData.subject,
@@ -246,7 +252,9 @@ export function validateAdminAccess(authHeader: string | null): boolean {
  * 清理和标准化表单数据
  * Clean and normalize form data
  */
-export function sanitizeFormData(data: ContactFormWithToken): ContactFormWithToken {
+export function sanitizeFormData(
+  data: ContactFormWithToken,
+): ContactFormWithToken {
   return {
     ...data,
     firstName: data.firstName.trim(),

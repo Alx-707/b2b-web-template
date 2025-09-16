@@ -4,9 +4,16 @@
  */
 
 import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
-import type { DetailedWebVitals, PerformanceAlertConfig, RegressionDetectionResult } from './types';
 import { AlertSystemChecker, type AlertInfo } from './alert-system-checker';
-import { AlertSystemSender, type AlertHistoryEntry } from './alert-system-sender';
+import {
+  AlertSystemSender,
+  type AlertHistoryEntry,
+} from './alert-system-sender';
+import type {
+  DetailedWebVitals,
+  PerformanceAlertConfig,
+  RegressionDetectionResult,
+} from './types';
 
 /**
  * 性能预警系统核心类

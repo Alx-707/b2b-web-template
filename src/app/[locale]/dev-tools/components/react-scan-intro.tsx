@@ -28,16 +28,10 @@ export function ReactScanIntro() {
             </li>
             <li>
               Restart the development server with{' '}
-              <code className='rounded bg-gray-200 px-1'>
-                pnpm dev:scan
-              </code>
+              <code className='rounded bg-gray-200 px-1'>pnpm dev:scan</code>
             </li>
-            <li>
-              Look for the React Scan indicators in the bottom corners
-            </li>
-            <li>
-              Use the demo components below to see React Scan in action
-            </li>
+            <li>Look for the React Scan indicators in the bottom corners</li>
+            <li>Use the demo components below to see React Scan in action</li>
           </ol>
         </div>
 
@@ -45,16 +39,16 @@ export function ReactScanIntro() {
           <h3 className='mb-2 font-medium'>Visual Indicators:</h3>
           <ul className='list-inside list-disc space-y-1 text-sm'>
             <li>
-              <span className='text-red-600'>Red highlights</span> =
-              Unnecessary re-renders (needs optimization)
+              <span className='text-red-600'>Red highlights</span> = Unnecessary
+              re-renders (needs optimization)
             </li>
             <li>
               <span className='text-green-600'>Green highlights</span> =
               Optimized renders
             </li>
             <li>
-              <span className='text-blue-600'>Blue indicator</span> = React
-              Scan is active
+              <span className='text-blue-600'>Blue indicator</span> = React Scan
+              is active
             </li>
           </ul>
         </div>

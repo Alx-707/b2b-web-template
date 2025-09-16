@@ -65,9 +65,7 @@ describe('useKeyboardNavigation Basic Tests', () => {
         focusableSelector: '.custom-focusable',
       };
 
-      const { result } = renderHook(() =>
-        useKeyboardNavigation(customConfig),
-      );
+      const { result } = renderHook(() => useKeyboardNavigation(customConfig));
 
       expect(result.current.containerRef).toBeDefined();
       expect(typeof result.current.focusNext).toBe('function');

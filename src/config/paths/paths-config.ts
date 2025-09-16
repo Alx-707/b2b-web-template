@@ -2,7 +2,7 @@
  * 核心路径配置
  */
 
-import type { PageType, LocalizedPath } from './types';
+import type { LocalizedPath, PageType } from './types';
 
 // 核心路径配置 - 使用标准路径方案
 export const PATHS_CONFIG = Object.freeze({

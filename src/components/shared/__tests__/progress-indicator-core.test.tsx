@@ -17,9 +17,9 @@ vi.mock('next-intl', () => ({
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
-  Check: () => <span data-testid="check-icon">✓</span>,
-  ChevronRight: () => <span data-testid="chevron-right-icon">→</span>,
-  Circle: () => <span data-testid="circle-icon">○</span>,
+  Check: () => <span data-testid='check-icon'>✓</span>,
+  ChevronRight: () => <span data-testid='chevron-right-icon'>→</span>,
+  Circle: () => <span data-testid='circle-icon'>○</span>,
 }));
 
 describe('ProgressIndicator - 核心功能测试', () => {
@@ -48,7 +48,7 @@ describe('ProgressIndicator - 核心功能测试', () => {
 
     it('使用自定义className渲染', () => {
       const { container } = render(
-        <ProgressIndicator className="custom-progress" />
+        <ProgressIndicator className='custom-progress' />,
       );
 
       expect(container.firstChild).toHaveClass('custom-progress');
@@ -58,7 +58,9 @@ describe('ProgressIndicator - 核心功能测试', () => {
       render(<ProgressIndicator currentStep={2} />);
 
       // 验证当前步骤的样式
-      const developmentStep = screen.getByText('开发阶段').closest('[data-step]');
+      const developmentStep = screen
+        .getByText('开发阶段')
+        .closest('[data-step]');
       expect(developmentStep).toHaveAttribute('data-current', 'true');
     });
 
@@ -75,11 +77,7 @@ describe('ProgressIndicator - 核心功能测试', () => {
 
   describe('步骤显示', () => {
     it('正确显示所有步骤', () => {
-      render(
-        <ProgressIndicator
-          currentStep={1}
-        />
-      );
+      render(<ProgressIndicator currentStep={1} />);
 
       // 验证所有步骤都显示
       expect(screen.getByText('规划阶段')).toBeInTheDocument();
@@ -89,40 +87,24 @@ describe('ProgressIndicator - 核心功能测试', () => {
     });
 
     it('正确显示步骤进度', () => {
-      render(
-        <ProgressIndicator
-          currentStep={1}
-        />
-      );
+      render(<ProgressIndicator currentStep={1} />);
 
       // 验证进度百分比
       expect(screen.getByText('33%')).toBeInTheDocument();
     });
 
     it('正确显示不同步骤的进度', () => {
-      const { rerender } = render(
-        <ProgressIndicator
-          currentStep={0}
-        />
-      );
+      const { rerender } = render(<ProgressIndicator currentStep={0} />);
 
       expect(screen.getByText('0%')).toBeInTheDocument();
 
-      rerender(
-        <ProgressIndicator
-          currentStep={2}
-        />
-      );
+      rerender(<ProgressIndicator currentStep={2} />);
 
       expect(screen.getByText('67%')).toBeInTheDocument();
     });
 
     it('正确显示完成状态', () => {
-      render(
-        <ProgressIndicator
-          currentStep={3}
-        />
-      );
+      render(<ProgressIndicator currentStep={3} />);
 
       // 验证完成状态
       expect(screen.getByText('100%')).toBeInTheDocument();
@@ -136,7 +118,9 @@ describe('ProgressIndicator - 核心功能测试', () => {
 
       // 前两个步骤应该标记为已完成
       const planningStep = screen.getByText('规划阶段').closest('[data-step]');
-      const developmentStep = screen.getByText('开发阶段').closest('[data-step]');
+      const developmentStep = screen
+        .getByText('开发阶段')
+        .closest('[data-step]');
 
       expect(planningStep).toHaveAttribute('data-completed', 'true');
       expect(developmentStep).toHaveAttribute('data-completed', 'true');
@@ -177,18 +161,16 @@ describe('ProgressIndicator - 核心功能测试', () => {
     it('支持自定义className', () => {
       const { container } = render(
         <ProgressIndicator
-          className="custom-progress"
+          className='custom-progress'
           currentStep={1}
-        />
+        />,
       );
 
       expect(container.firstChild).toHaveClass('custom-progress');
     });
 
     it('正确应用默认样式', () => {
-      const { container } = render(
-        <ProgressIndicator currentStep={1} />
-      );
+      const { container } = render(<ProgressIndicator currentStep={1} />);
 
       expect(container.firstChild).toHaveClass('mx-auto', 'w-full', 'max-w-md');
     });

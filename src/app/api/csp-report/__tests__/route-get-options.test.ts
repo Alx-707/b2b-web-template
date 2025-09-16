@@ -9,7 +9,6 @@
  */
 
 import { NextRequest } from 'next/server';
-;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET, OPTIONS, POST } from '@/app/api/csp-report/__tests__/route';
 
@@ -48,7 +47,9 @@ describe('CSP Report API Route - GET & OPTIONS Tests', () => {
     it('应该设置正确的Content-Type', async () => {
       const response = await GET();
 
-      expect(response.headers.get('content-type')).toContain('application/json');
+      expect(response.headers.get('content-type')).toContain(
+        'application/json',
+      );
     });
 
     it('应该处理多次调用', async () => {
@@ -99,8 +100,12 @@ describe('CSP Report API Route - GET & OPTIONS Tests', () => {
       const response = await OPTIONS();
 
       expect(response.status).toBe(200);
-      expect(response.headers.get('Access-Control-Allow-Methods')).toContain('POST');
-      expect(response.headers.get('Access-Control-Allow-Headers')).toContain('Content-Type');
+      expect(response.headers.get('Access-Control-Allow-Methods')).toContain(
+        'POST',
+      );
+      expect(response.headers.get('Access-Control-Allow-Headers')).toContain(
+        'Content-Type',
+      );
     });
 
     it('应该支持多种HTTP方法', async () => {

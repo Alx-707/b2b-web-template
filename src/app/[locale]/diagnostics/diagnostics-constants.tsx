@@ -1,10 +1,6 @@
 // 诊断页面常量和工具函数
 
-import {
-  AlertTriangle,
-  CheckCircle,
-  XCircle,
-} from 'lucide-react';
+import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 // 重新导出类型以便其他文件使用
@@ -104,7 +100,12 @@ interface MetricCardProps {
   description: string;
 }
 
-export function MetricCard({ label, value, status, description }: MetricCardProps) {
+export function MetricCard({
+  label,
+  value,
+  status,
+  description,
+}: MetricCardProps) {
   return (
     <div className='rounded-lg border p-4'>
       <div className='mb-2 flex items-center justify-between'>
@@ -133,9 +134,7 @@ export function ScoreCard({ score }: ScoreCardProps) {
         <h3 className='font-semibold'>综合评分</h3>
         {getStatusIcon(scoreStatus)}
       </div>
-      <div className='mb-1 text-2xl font-bold'>
-        {Math.round(score)}
-      </div>
+      <div className='mb-1 text-2xl font-bold'>{Math.round(score)}</div>
       <Badge variant={getBadgeVariant(scoreStatus)}>{scoreLabel}</Badge>
       <p className='text-muted-foreground mt-2 text-sm'>整体性能评估</p>
     </div>
@@ -150,11 +149,11 @@ interface ThresholdDisplayProps {
   unit?: string;
 }
 
-export function ThresholdDisplay({ 
-  title, 
-  goodThreshold, 
-  needsImprovementThreshold, 
-  unit = '' 
+export function ThresholdDisplay({
+  title,
+  goodThreshold,
+  needsImprovementThreshold,
+  unit = '',
 }: ThresholdDisplayProps) {
   return (
     <div>
@@ -162,17 +161,25 @@ export function ThresholdDisplay({
       <div className='space-y-2 text-sm'>
         <div className='flex justify-between'>
           <span className='text-green-600'>良好:</span>
-          <span>≤ {goodThreshold}{unit}</span>
+          <span>
+            ≤ {goodThreshold}
+            {unit}
+          </span>
         </div>
         <div className='flex justify-between'>
           <span className='text-yellow-600'>需要改进:</span>
           <span>
-            {goodThreshold}{unit} - {needsImprovementThreshold}{unit}
+            {goodThreshold}
+            {unit} - {needsImprovementThreshold}
+            {unit}
           </span>
         </div>
         <div className='flex justify-between'>
           <span className='text-red-600'>较差:</span>
-          <span>&gt; {needsImprovementThreshold}{unit}</span>
+          <span>
+            &gt; {needsImprovementThreshold}
+            {unit}
+          </span>
         </div>
       </div>
     </div>
@@ -194,11 +201,11 @@ interface HistoryItemProps {
   formatMetric: (key: string, value: number) => string;
 }
 
-export function HistoryItem({ 
-  record, 
-  index, 
-  totalCount, 
-  formatMetric 
+export function HistoryItem({
+  record,
+  index,
+  totalCount,
+  formatMetric,
 }: HistoryItemProps) {
   return (
     <div className='flex items-center justify-between rounded-lg border p-3'>
@@ -210,9 +217,7 @@ export function HistoryItem({
           <div className='font-medium'>
             {new Date(record.timestamp).toLocaleString('zh-CN')}
           </div>
-          <div className='text-muted-foreground text-sm'>
-            {record.url}
-          </div>
+          <div className='text-muted-foreground text-sm'>{record.url}</div>
         </div>
       </div>
       <div className='flex items-center space-x-4'>
@@ -235,9 +240,7 @@ export function HistoryItem({
           <div className='text-muted-foreground text-xs'>FID</div>
         </div>
         <div className='text-center'>
-          <div className='text-sm font-medium'>
-            {Math.round(record.score)}
-          </div>
+          <div className='text-sm font-medium'>{Math.round(record.score)}</div>
           <div className='text-muted-foreground text-xs'>评分</div>
         </div>
       </div>

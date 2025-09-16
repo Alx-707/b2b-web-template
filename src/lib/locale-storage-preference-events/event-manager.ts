@@ -5,18 +5,19 @@
 
 'use client';
 
+import { logger } from '@/lib/logger';
 import type {
   StorageEvent,
   StorageEventListener,
 } from '../locale-storage-types';
-import { logger } from '@/lib/logger';
 
 /**
  * 偏好事件管理器
  * Preference event manager
  */
 export class PreferenceEventManager {
-  private static eventListeners: Map<string, StorageEventListener[]> = new Map();
+  private static eventListeners: Map<string, StorageEventListener[]> =
+    new Map();
   private static eventHistory: StorageEvent[] = [];
   private static readonly MAX_EVENT_HISTORY = 100;
 
@@ -24,7 +25,10 @@ export class PreferenceEventManager {
    * 添加事件监听器
    * Add event listener
    */
-  static addEventListener(eventType: string, listener: StorageEventListener): void {
+  static addEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     if (!this.eventListeners.has(eventType)) {
       this.eventListeners.set(eventType, []);
     }
@@ -35,7 +39,10 @@ export class PreferenceEventManager {
    * 移除事件监听器
    * Remove event listener
    */
-  static removeEventListener(eventType: string, listener: StorageEventListener): void {
+  static removeEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     const listeners = this.eventListeners.get(eventType);
     if (listeners) {
       const index = listeners.indexOf(listener);
@@ -68,11 +75,13 @@ export class PreferenceEventManager {
     // 发送给特定类型的监听器
     const listeners = this.eventListeners.get(event.type);
     if (listeners) {
-      listeners.forEach(listener => {
+      listeners.forEach((listener) => {
         try {
           listener(event);
         } catch (error) {
-          logger.error(`Error in preference event listener for ${event.type}`, { error: error as Error });
+          logger.error(`Error in preference event listener for ${event.type}`, {
+            error: error as Error,
+          });
         }
       });
     }
@@ -80,11 +89,13 @@ export class PreferenceEventManager {
     // 发送给通用监听器
     const allListeners = this.eventListeners.get('*');
     if (allListeners) {
-      allListeners.forEach(listener => {
+      allListeners.forEach((listener) => {
         try {
           listener(event);
         } catch (error) {
-          logger.error('Error in universal preference event listener', { error: error as Error });
+          logger.error('Error in universal preference event listener', {
+            error: error as Error,
+          });
         }
       });
     }
@@ -96,7 +107,7 @@ export class PreferenceEventManager {
    */
   private static recordEvent(event: StorageEvent): void {
     this.eventHistory.unshift(event);
-    
+
     // 限制事件历史长度
     if (this.eventHistory.length > this.MAX_EVENT_HISTORY) {
       this.eventHistory = this.eventHistory.slice(0, this.MAX_EVENT_HISTORY);

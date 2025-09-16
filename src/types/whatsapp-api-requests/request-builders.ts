@@ -3,8 +3,8 @@
  * WhatsApp API Request Builders
  */
 
+import type { ContactData, LocationData } from '../whatsapp-base-types';
 import type { TemplateMessage } from '../whatsapp-template-types';
-import type { LocationData, ContactData } from '../whatsapp-base-types';
 import type { SendMessageRequest } from './message-requests';
 
 /**
@@ -16,7 +16,11 @@ export const RequestBuilders = {
    * 构建文本消息请求
    * Build text message request
    */
-  buildTextMessage(to: string, text: string, previewUrl?: boolean): SendMessageRequest {
+  buildTextMessage(
+    to: string,
+    text: string,
+    previewUrl?: boolean,
+  ): SendMessageRequest {
     return {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',
@@ -33,7 +37,10 @@ export const RequestBuilders = {
    * 构建模板消息请求
    * Build template message request
    */
-  buildTemplateMessage(to: string, template: TemplateMessage): SendMessageRequest {
+  buildTemplateMessage(
+    to: string,
+    template: TemplateMessage,
+  ): SendMessageRequest {
     return {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',
@@ -50,7 +57,7 @@ export const RequestBuilders = {
   buildMediaMessage(
     to: string,
     type: 'image' | 'document' | 'audio' | 'video',
-    media: { id?: string; link?: string; caption?: string; filename?: string }
+    media: { id?: string; link?: string; caption?: string; filename?: string },
   ): SendMessageRequest {
     return {
       messaging_product: 'whatsapp',
@@ -79,7 +86,10 @@ export const RequestBuilders = {
    * 构建联系人消息请求
    * Build contacts message request
    */
-  buildContactsMessage(to: string, contacts: ContactData[]): SendMessageRequest {
+  buildContactsMessage(
+    to: string,
+    contacts: ContactData[],
+  ): SendMessageRequest {
     return {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',

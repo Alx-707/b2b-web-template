@@ -8,11 +8,7 @@
  */
 
 import { TEST_CONSTANTS } from '@/constants/test-constants';
-import {
-  calculateContrast,
-  oklchToCSS,
-  type OKLCHColor,
-} from '../colors';
+import { calculateContrast, oklchToCSS, type OKLCHColor } from '../colors';
 
 describe('OKLCH Color Conversion and Calculation Tests', () => {
   describe('oklchToCSS', () => {
@@ -206,7 +202,12 @@ describe('OKLCH Color Conversion and Calculation Tests', () => {
 
     it('should handle alpha values in contrast calculation', () => {
       const opaqueColor: OKLCHColor = { l: 0.5, c: 0.1, h: 180, alpha: 1 };
-      const transparentColor: OKLCHColor = { l: 0.5, c: 0.1, h: 180, alpha: 0.5 };
+      const transparentColor: OKLCHColor = {
+        l: 0.5,
+        c: 0.1,
+        h: 180,
+        alpha: 0.5,
+      };
 
       // Alpha should not affect contrast calculation (only lightness matters primarily)
       const contrast = calculateContrast(opaqueColor, transparentColor);

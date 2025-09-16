@@ -79,9 +79,12 @@ export function useWebVitalsInitialization(
     const historicalReports = loadHistoricalData();
 
     // 检查是否需要刷新数据
-    const shouldRefresh = historicalReports.length === 0 ||
+    const shouldRefresh =
+      historicalReports.length === 0 ||
       (historicalReports.length > 0 &&
-       Date.now() - (historicalReports[historicalReports.length - 1]?.timestamp || 0) > 300000); // 5分钟
+        Date.now() -
+          (historicalReports[historicalReports.length - 1]?.timestamp || 0) >
+          300000); // 5分钟
 
     return {
       historicalReports,
@@ -95,7 +98,9 @@ export function useWebVitalsInitialization(
 /**
  * 数据验证函数
  */
-export function validateDiagnosticReport(report: unknown): report is DiagnosticReport {
+export function validateDiagnosticReport(
+  report: unknown,
+): report is DiagnosticReport {
   if (!report || typeof report !== 'object') {
     return false;
   }
@@ -121,7 +126,7 @@ export function cleanupExpiredData(
   maxAge: number = 7 * 24 * 60 * 60 * 1000, // 7天
 ): DiagnosticReport[] {
   const cutoffTime = Date.now() - maxAge;
-  return reports.filter(report => report.timestamp > cutoffTime);
+  return reports.filter((report) => report.timestamp > cutoffTime);
 }
 
 /**
@@ -135,9 +140,11 @@ export function mergeHistoricalData(
 
   // 去重（基于时间戳和URL）
   const unique = combined.filter((report, index, array) => {
-    return array.findIndex(r =>
-      r.timestamp === report.timestamp && r.pageUrl === report.pageUrl
-    ) === index;
+    return (
+      array.findIndex(
+        (r) => r.timestamp === report.timestamp && r.pageUrl === report.pageUrl,
+      ) === index
+    );
   });
 
   // 按时间戳排序

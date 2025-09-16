@@ -1,3 +1,6 @@
+// 创建默认实例
+import { ThemeAnalytics } from './theme-analytics-core';
+
 /**
  * 主题分析服务 - 统一导出入口
  * Theme analytics service - unified export entry
@@ -20,21 +23,18 @@ export type {
   ThemeAnalyticsData,
 } from './theme-analytics-types';
 
-// 创建默认实例
-import { ThemeAnalytics } from './theme-analytics-core';
 export const themeAnalytics = new ThemeAnalytics();
 
 // 导出便利函数，用于向后兼容
-export const recordThemePreference = (theme: string) => themeAnalytics.recordThemePreference(theme);
-export const recordThemeSwitch = (fromTheme: string, toTheme: string, duration?: number) => {
+export const recordThemePreference = (theme: string) =>
+  themeAnalytics.recordThemePreference(theme);
+export const recordThemeSwitch = (
+  fromTheme: string,
+  toTheme: string,
+  duration?: number,
+) => {
   const now = Date.now();
   const startTime = duration ? now - duration : now;
   themeAnalytics.recordThemeSwitch(fromTheme, toTheme, startTime, now);
 };
 export const sendThemeReport = () => themeAnalytics.sendPerformanceReport();
-
-
-
-
-
-

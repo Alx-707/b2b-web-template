@@ -83,10 +83,11 @@ describe('AccessibilityManager Global Exports', () => {
     });
 
     it('should return functions that work correctly', () => {
-      const { announceThemeChange: hookAnnounceThemeChange } = useAccessibility();
+      const { announceThemeChange: hookAnnounceThemeChange } =
+        useAccessibility();
 
       expect(typeof hookAnnounceThemeChange).toBe('function');
-      
+
       // Test that the function can be called without errors
       expect(() => {
         hookAnnounceThemeChange('light');
@@ -98,7 +99,7 @@ describe('AccessibilityManager Global Exports', () => {
 
       expect(typeof prefersReducedMotion).toBe('function');
       expect(typeof prefersHighContrast).toBe('function');
-      
+
       // Test that static methods return expected types
       expect(typeof prefersReducedMotion()).toBe('boolean');
       expect(typeof prefersHighContrast()).toBe('boolean');
@@ -113,7 +114,7 @@ describe('AccessibilityManager Global Exports', () => {
       const mockCallback = vi.fn();
 
       expect(typeof handleKeyboardNavigation).toBe('function');
-      
+
       // Test that the function can be called
       expect(() => {
         handleKeyboardNavigation(mockEvent, mockCallback);
@@ -131,7 +132,7 @@ describe('AccessibilityManager Global Exports', () => {
 
       expect(typeof manageFocus).toBe('function');
       expect(typeof removeFocusIndicator).toBe('function');
-      
+
       // Test that focus management functions work
       expect(() => {
         manageFocus(mockElement);
@@ -143,7 +144,7 @@ describe('AccessibilityManager Global Exports', () => {
       const { checkColorContrast } = useAccessibility();
 
       expect(typeof checkColorContrast).toBe('function');
-      
+
       // Test that color contrast checker returns boolean
       const result = checkColorContrast('#000000', '#ffffff');
       expect(typeof result).toBe('boolean');
@@ -153,7 +154,7 @@ describe('AccessibilityManager Global Exports', () => {
       const { getAriaAttributes } = useAccessibility();
 
       expect(typeof getAriaAttributes).toBe('function');
-      
+
       // Test that ARIA attributes generator returns object
       const result = getAriaAttributes('light', true);
       expect(typeof result).toBe('object');
@@ -167,18 +168,18 @@ describe('AccessibilityManager Global Exports', () => {
   describe('Bound convenience functions', () => {
     it('should call announceThemeChange on global instance', () => {
       const spy = vi.spyOn(accessibilityManager, 'announceThemeChange');
-      
+
       announceThemeChange('dark');
-      
+
       expect(spy).toHaveBeenCalledWith('dark');
       spy.mockRestore();
     });
 
     it('should call announceSwitching on global instance', () => {
       const spy = vi.spyOn(accessibilityManager, 'announceSwitching');
-      
+
       announceSwitching();
-      
+
       expect(spy).toHaveBeenCalled();
       spy.mockRestore();
     });

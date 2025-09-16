@@ -8,5 +8,3 @@ export { AdditionalFields } from './fields/additional-fields';
 export { CheckboxFields } from './fields/checkbox-fields';
 export { ContactFields } from './fields/contact-fields';
 export { NameFields } from './fields/name-fields';
-
-

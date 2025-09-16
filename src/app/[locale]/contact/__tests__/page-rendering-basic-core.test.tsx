@@ -11,8 +11,8 @@
  * - 基本布局验证
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import ContactPage from '@/app/[locale]/contact/__tests__/page';
 
@@ -24,8 +24,19 @@ vi.mock('next-intl/server', () => ({
 
 // Mock next/image
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string; alt: string }) => (
-    <img src={src} alt={alt} {...props} />
+  default: ({
+    src,
+    alt,
+    ...props
+  }: React.ImgHTMLAttributes<HTMLImageElement> & {
+    src: string;
+    alt: string;
+  }) => (
+    <img
+      src={src}
+      alt={alt}
+      {...props}
+    />
   ),
 }));
 
@@ -39,9 +50,7 @@ vi.mock('lucide-react', () => ({
 // Mock components
 vi.mock('@/components/layout/header', () => ({
   Header: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid='header'>
-      {children}
-    </div>
+    <div data-testid='header'>{children}</div>
   ),
 }));
 
@@ -52,12 +61,12 @@ describe('Contact Page Rendering - Core Basic Tests', () => {
   beforeEach(() => {
     mockGetTranslations.mockResolvedValue((key: string) => {
       const translations: Record<string, string> = {
-        title: 'Contact Us',
-        description: 'Get in touch with us',
-        email: 'Email',
-        phone: 'Phone',
-        address: 'Address',
-        hours: 'Business Hours',
+        'title': 'Contact Us',
+        'description': 'Get in touch with us',
+        'email': 'Email',
+        'phone': 'Phone',
+        'address': 'Address',
+        'hours': 'Business Hours',
         'hours.weekdays': 'Monday - Friday: 9:00 AM - 6:00 PM',
         'hours.weekend': 'Saturday - Sunday: Closed',
       };
@@ -108,7 +117,9 @@ describe('Contact Page Rendering - Core Basic Tests', () => {
       render(ContactPageComponent);
 
       expect(screen.getByText('Business Hours')).toBeInTheDocument();
-      expect(screen.getByText('Monday - Friday: 9:00 AM - 6:00 PM')).toBeInTheDocument();
+      expect(
+        screen.getByText('Monday - Friday: 9:00 AM - 6:00 PM'),
+      ).toBeInTheDocument();
       expect(screen.getByText('Saturday - Sunday: Closed')).toBeInTheDocument();
     });
 

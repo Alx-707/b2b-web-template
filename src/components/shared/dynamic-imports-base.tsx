@@ -5,9 +5,9 @@
  *
  * 提供加载状态组件、高阶组件包装器等基础功能
  */
-import { LoadingSpinner } from '@/components/loading-spinner';
-import { logger } from '@/lib/logger';
 import React, { Suspense } from 'react';
+import { logger } from '@/lib/logger';
+import { LoadingSpinner } from '@/components/loading-spinner';
 
 // ==================== 加载状态组件 ====================
 
@@ -171,11 +171,11 @@ class DynamicComponentErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className='rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-center'>
-            <p className='text-sm text-destructive'>
+          <div className='border-destructive/20 bg-destructive/5 rounded-lg border p-4 text-center'>
+            <p className='text-destructive text-sm'>
               组件加载失败
               {process.env.NODE_ENV === 'development' && this.state.error && (
-                <span className='block text-xs opacity-70 mt-1'>
+                <span className='mt-1 block text-xs opacity-70'>
                   {this.state.error.message}
                 </span>
               )}

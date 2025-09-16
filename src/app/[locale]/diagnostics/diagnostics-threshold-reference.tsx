@@ -7,10 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { 
-  DISPLAY_THRESHOLDS,
-  ThresholdDisplay,
-} from './diagnostics-constants';
+import { DISPLAY_THRESHOLDS, ThresholdDisplay } from './diagnostics-constants';
 
 /**
  * 阈值参考组件
@@ -26,21 +23,21 @@ export function ThresholdReference() {
       <CardContent>
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
           <ThresholdDisplay
-            title="CLS (累积布局偏移)"
+            title='CLS (累积布局偏移)'
             goodThreshold={DISPLAY_THRESHOLDS.CLS_GOOD}
             needsImprovementThreshold={DISPLAY_THRESHOLDS.CLS_NEEDS_IMPROVEMENT}
           />
           <ThresholdDisplay
-            title="LCP (最大内容绘制)"
+            title='LCP (最大内容绘制)'
             goodThreshold={DISPLAY_THRESHOLDS.LCP_GOOD}
             needsImprovementThreshold={DISPLAY_THRESHOLDS.LCP_NEEDS_IMPROVEMENT}
-            unit="s"
+            unit='s'
           />
           <ThresholdDisplay
-            title="FID (首次输入延迟)"
+            title='FID (首次输入延迟)'
             goodThreshold={DISPLAY_THRESHOLDS.FID_GOOD}
             needsImprovementThreshold={DISPLAY_THRESHOLDS.FID_NEEDS_IMPROVEMENT}
-            unit="ms"
+            unit='ms'
           />
         </div>
       </CardContent>
@@ -57,9 +54,7 @@ export function DetailedThresholdReference() {
     <Card>
       <CardHeader>
         <CardTitle>详细性能指标阈值参考</CardTitle>
-        <CardDescription>
-          完整的 Web Vitals 指标说明和阈值标准
-        </CardDescription>
+        <CardDescription>完整的 Web Vitals 指标说明和阈值标准</CardDescription>
       </CardHeader>
       <CardContent>
         <div className='space-y-8'>
@@ -82,7 +77,8 @@ export function DetailedThresholdReference() {
                   <div className='flex justify-between'>
                     <span className='text-yellow-600'>需要改进:</span>
                     <span>
-                      {DISPLAY_THRESHOLDS.CLS_GOOD} - {DISPLAY_THRESHOLDS.CLS_NEEDS_IMPROVEMENT}
+                      {DISPLAY_THRESHOLDS.CLS_GOOD} -{' '}
+                      {DISPLAY_THRESHOLDS.CLS_NEEDS_IMPROVEMENT}
                     </span>
                   </div>
                   <div className='flex justify-between'>
@@ -107,12 +103,15 @@ export function DetailedThresholdReference() {
                   <div className='flex justify-between'>
                     <span className='text-yellow-600'>需要改进:</span>
                     <span>
-                      {DISPLAY_THRESHOLDS.LCP_GOOD}s - {DISPLAY_THRESHOLDS.LCP_NEEDS_IMPROVEMENT}s
+                      {DISPLAY_THRESHOLDS.LCP_GOOD}s -{' '}
+                      {DISPLAY_THRESHOLDS.LCP_NEEDS_IMPROVEMENT}s
                     </span>
                   </div>
                   <div className='flex justify-between'>
                     <span className='text-red-600'>较差:</span>
-                    <span>&gt; {DISPLAY_THRESHOLDS.LCP_NEEDS_IMPROVEMENT}s</span>
+                    <span>
+                      &gt; {DISPLAY_THRESHOLDS.LCP_NEEDS_IMPROVEMENT}s
+                    </span>
                   </div>
                 </div>
               </div>
@@ -132,12 +131,15 @@ export function DetailedThresholdReference() {
                   <div className='flex justify-between'>
                     <span className='text-yellow-600'>需要改进:</span>
                     <span>
-                      {DISPLAY_THRESHOLDS.FID_GOOD}ms - {DISPLAY_THRESHOLDS.FID_NEEDS_IMPROVEMENT}ms
+                      {DISPLAY_THRESHOLDS.FID_GOOD}ms -{' '}
+                      {DISPLAY_THRESHOLDS.FID_NEEDS_IMPROVEMENT}ms
                     </span>
                   </div>
                   <div className='flex justify-between'>
                     <span className='text-red-600'>较差:</span>
-                    <span>&gt; {DISPLAY_THRESHOLDS.FID_NEEDS_IMPROVEMENT}ms</span>
+                    <span>
+                      &gt; {DISPLAY_THRESHOLDS.FID_NEEDS_IMPROVEMENT}ms
+                    </span>
                   </div>
                 </div>
               </div>
@@ -202,7 +204,7 @@ export function DetailedThresholdReference() {
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div className='rounded-lg border p-4'>
                 <h4 className='mb-2 font-semibold text-green-600'>CLS 优化</h4>
-                <ul className='space-y-1 text-sm text-muted-foreground'>
+                <ul className='text-muted-foreground space-y-1 text-sm'>
                   <li>• 为图片和视频设置尺寸属性</li>
                   <li>• 避免在现有内容上方插入内容</li>
                   <li>• 使用 transform 动画而非改变布局的属性</li>
@@ -212,7 +214,7 @@ export function DetailedThresholdReference() {
 
               <div className='rounded-lg border p-4'>
                 <h4 className='mb-2 font-semibold text-blue-600'>LCP 优化</h4>
-                <ul className='space-y-1 text-sm text-muted-foreground'>
+                <ul className='text-muted-foreground space-y-1 text-sm'>
                   <li>• 优化服务器响应时间</li>
                   <li>• 使用 CDN 加速资源加载</li>
                   <li>• 压缩和优化图片</li>
@@ -222,7 +224,7 @@ export function DetailedThresholdReference() {
 
               <div className='rounded-lg border p-4'>
                 <h4 className='mb-2 font-semibold text-purple-600'>FID 优化</h4>
-                <ul className='space-y-1 text-sm text-muted-foreground'>
+                <ul className='text-muted-foreground space-y-1 text-sm'>
                   <li>• 减少 JavaScript 执行时间</li>
                   <li>• 拆分长任务</li>
                   <li>• 使用 Web Workers</li>
@@ -232,7 +234,7 @@ export function DetailedThresholdReference() {
 
               <div className='rounded-lg border p-4'>
                 <h4 className='mb-2 font-semibold text-orange-600'>通用优化</h4>
-                <ul className='space-y-1 text-sm text-muted-foreground'>
+                <ul className='text-muted-foreground space-y-1 text-sm'>
                   <li>• 启用 HTTP/2 和 HTTP/3</li>
                   <li>• 使用现代图片格式 (WebP, AVIF)</li>
                   <li>• 实施资源提示 (preload, prefetch)</li>
@@ -258,15 +260,21 @@ export function SimpleThresholdReference() {
       <div className='grid grid-cols-3 gap-4 text-sm'>
         <div>
           <div className='font-medium text-green-600'>CLS</div>
-          <div className='text-muted-foreground'>≤ {DISPLAY_THRESHOLDS.CLS_GOOD}</div>
+          <div className='text-muted-foreground'>
+            ≤ {DISPLAY_THRESHOLDS.CLS_GOOD}
+          </div>
         </div>
         <div>
           <div className='font-medium text-blue-600'>LCP</div>
-          <div className='text-muted-foreground'>≤ {DISPLAY_THRESHOLDS.LCP_GOOD}s</div>
+          <div className='text-muted-foreground'>
+            ≤ {DISPLAY_THRESHOLDS.LCP_GOOD}s
+          </div>
         </div>
         <div>
           <div className='font-medium text-purple-600'>FID</div>
-          <div className='text-muted-foreground'>≤ {DISPLAY_THRESHOLDS.FID_GOOD}ms</div>
+          <div className='text-muted-foreground'>
+            ≤ {DISPLAY_THRESHOLDS.FID_GOOD}ms
+          </div>
         </div>
       </div>
     </div>

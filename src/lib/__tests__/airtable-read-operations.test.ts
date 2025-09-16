@@ -8,8 +8,11 @@
  * - 空结果处理
  */
 
-import type { AirtableServicePrivate, DynamicImportModule } from '@/types/test-types';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type {
+  AirtableServicePrivate,
+  DynamicImportModule,
+} from '@/types/test-types';
 
 // Mock Airtable
 const mockCreate = vi.fn();
@@ -64,7 +67,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     mockConfigure.mockClear();
 
     // Dynamically import the module to ensure fresh instance
-    const module = await import('../airtable') as DynamicImportModule;
+    const module = (await import('../airtable')) as DynamicImportModule;
     AirtableServiceClass = module.AirtableService;
   });
 
@@ -208,7 +211,7 @@ describe('Airtable Service - Read Operations Tests', () => {
         fields: {
           'First Name': `User${index}`,
           'Last Name': `Test${index}`,
-          Email: `user${index}@example.com`,
+          'Email': `user${index}@example.com`,
         },
         createdTime: '2023-01-01T00:00:00Z',
       }));
@@ -280,7 +283,9 @@ describe('Airtable Service - Read Operations Tests', () => {
         all: vi.fn().mockRejectedValue(rateLimitError),
       });
 
-      await expect(service.getContacts()).rejects.toThrow('Rate limit exceeded');
+      await expect(service.getContacts()).rejects.toThrow(
+        'Rate limit exceeded',
+      );
     });
 
     it('should handle malformed response data', async () => {

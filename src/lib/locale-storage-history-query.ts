@@ -8,11 +8,8 @@
 'use client';
 
 import type { Locale } from '@/types/i18n';
-;
-import type {
-  LocaleDetectionRecord,
-} from './locale-storage-types';
 import { getDetectionHistory } from './locale-storage-history-core';
+import type { LocaleDetectionRecord } from './locale-storage-types';
 
 // ==================== 基础查询功能 ====================
 
@@ -20,7 +17,9 @@ import { getDetectionHistory } from './locale-storage-history-core';
  * 获取最近的检测记录
  * Get recent detections
  */
-export function getRecentDetections(limit: number = 10): LocaleDetectionRecord[] {
+export function getRecentDetections(
+  limit: number = 10,
+): LocaleDetectionRecord[] {
   const historyResult = getDetectionHistory();
 
   if (!historyResult.success || !historyResult.data) {
@@ -41,7 +40,9 @@ export function getDetectionsBySource(source: string): LocaleDetectionRecord[] {
     return [];
   }
 
-  return historyResult.data.history.filter(record => record.source === source);
+  return historyResult.data.history.filter(
+    (record) => record.source === source,
+  );
 }
 
 /**
@@ -55,7 +56,9 @@ export function getDetectionsByLocale(locale: Locale): LocaleDetectionRecord[] {
     return [];
   }
 
-  return historyResult.data.history.filter(record => record.locale === locale);
+  return historyResult.data.history.filter(
+    (record) => record.locale === locale,
+  );
 }
 
 /**
@@ -64,7 +67,7 @@ export function getDetectionsByLocale(locale: Locale): LocaleDetectionRecord[] {
  */
 export function getDetectionsByTimeRange(
   startTime: number,
-  endTime: number
+  endTime: number,
 ): LocaleDetectionRecord[] {
   const historyResult = getDetectionHistory();
 
@@ -73,7 +76,7 @@ export function getDetectionsByTimeRange(
   }
 
   return historyResult.data.history.filter(
-    record => record.timestamp >= startTime && record.timestamp <= endTime
+    (record) => record.timestamp >= startTime && record.timestamp <= endTime,
   );
 }
 
@@ -83,7 +86,7 @@ export function getDetectionsByTimeRange(
  */
 export function getDetectionsByConfidence(
   minConfidence: number,
-  maxConfidence: number = 1.0
+  maxConfidence: number = 1.0,
 ): LocaleDetectionRecord[] {
   const historyResult = getDetectionHistory();
 
@@ -92,7 +95,8 @@ export function getDetectionsByConfidence(
   }
 
   return historyResult.data.history.filter(
-    record => record.confidence >= minConfidence && record.confidence <= maxConfidence
+    (record) =>
+      record.confidence >= minConfidence && record.confidence <= maxConfidence,
   );
 }
 
@@ -138,27 +142,35 @@ export function queryDetections(conditions: QueryConditions): {
 
   // 应用过滤条件
   if (conditions.locale) {
-    records = records.filter(record => record.locale === conditions.locale);
+    records = records.filter((record) => record.locale === conditions.locale);
   }
 
   if (conditions.source) {
-    records = records.filter(record => record.source === conditions.source);
+    records = records.filter((record) => record.source === conditions.source);
   }
 
   if (conditions.startTime !== undefined) {
-    records = records.filter(record => record.timestamp >= conditions.startTime!);
+    records = records.filter(
+      (record) => record.timestamp >= conditions.startTime!,
+    );
   }
 
   if (conditions.endTime !== undefined) {
-    records = records.filter(record => record.timestamp <= conditions.endTime!);
+    records = records.filter(
+      (record) => record.timestamp <= conditions.endTime!,
+    );
   }
 
   if (conditions.minConfidence !== undefined) {
-    records = records.filter(record => record.confidence >= conditions.minConfidence!);
+    records = records.filter(
+      (record) => record.confidence >= conditions.minConfidence!,
+    );
   }
 
   if (conditions.maxConfidence !== undefined) {
-    records = records.filter(record => record.confidence <= conditions.maxConfidence!);
+    records = records.filter(
+      (record) => record.confidence <= conditions.maxConfidence!,
+    );
   }
 
   // 排序
@@ -226,7 +238,7 @@ export function searchDetections(searchTerm: string): LocaleDetectionRecord[] {
 
   const term = searchTerm.toLowerCase();
 
-  return historyResult.data.history.filter(record => {
+  return historyResult.data.history.filter((record) => {
     // 搜索语言代码
     if (record.locale.toLowerCase().includes(term)) {
       return true;
@@ -263,7 +275,7 @@ export function getUniqueLocales(): Locale[] {
   }
 
   const locales = new Set<Locale>();
-  historyResult.data.history.forEach(record => {
+  historyResult.data.history.forEach((record) => {
     locales.add(record.locale);
   });
 
@@ -282,7 +294,7 @@ export function getUniqueSources(): string[] {
   }
 
   const sources = new Set<string>();
-  historyResult.data.history.forEach(record => {
+  historyResult.data.history.forEach((record) => {
     sources.add(record.source);
   });
 
@@ -313,13 +325,16 @@ export function getLocaleGroupStats(): Array<{
     return [];
   }
 
-  const localeStats = new Map<Locale, {
-    count: number;
-    totalConfidence: number;
-    lastDetection: number;
-  }>();
+  const localeStats = new Map<
+    Locale,
+    {
+      count: number;
+      totalConfidence: number;
+      lastDetection: number;
+    }
+  >();
 
-  records.forEach(record => {
+  records.forEach((record) => {
     const existing = localeStats.get(record.locale) || {
       count: 0,
       totalConfidence: 0,
@@ -368,13 +383,16 @@ export function getSourceGroupStats(): Array<{
     return [];
   }
 
-  const sourceStats = new Map<string, {
-    count: number;
-    totalConfidence: number;
-    lastDetection: number;
-  }>();
+  const sourceStats = new Map<
+    string,
+    {
+      count: number;
+      totalConfidence: number;
+      lastDetection: number;
+    }
+  >();
 
-  records.forEach(record => {
+  records.forEach((record) => {
     const existing = sourceStats.get(record.source) || {
       count: 0,
       totalConfidence: 0,
@@ -403,7 +421,9 @@ export function getSourceGroupStats(): Array<{
  * 获取时间分布统计
  * Get time distribution statistics
  */
-export function getTimeDistributionStats(bucketSize: number = 24 * 60 * 60 * 1000): Array<{
+export function getTimeDistributionStats(
+  bucketSize: number = 24 * 60 * 60 * 1000,
+): Array<{
   startTime: number;
   endTime: number;
   count: number;
@@ -422,19 +442,24 @@ export function getTimeDistributionStats(bucketSize: number = 24 * 60 * 60 * 100
   }
 
   // 找到时间范围
-  const timestamps = records.map(r => r.timestamp);
+  const timestamps = records.map((r) => r.timestamp);
   const minTime = Math.min(...timestamps);
   const _maxTime = Math.max(...timestamps);
   // 最大时间已计算但在此处未直接使用
 
   // 创建时间桶
-  const buckets = new Map<number, {
-    count: number;
-    totalConfidence: number;
-  }>();
+  const buckets = new Map<
+    number,
+    {
+      count: number;
+      totalConfidence: number;
+    }
+  >();
 
-  records.forEach(record => {
-    const bucketStart = Math.floor((record.timestamp - minTime) / bucketSize) * bucketSize + minTime;
+  records.forEach((record) => {
+    const bucketStart =
+      Math.floor((record.timestamp - minTime) / bucketSize) * bucketSize +
+      minTime;
     const existing = buckets.get(bucketStart) || {
       count: 0,
       totalConfidence: 0,

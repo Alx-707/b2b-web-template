@@ -4,25 +4,23 @@
  */
 
 import type { PreloaderMetrics } from '../i18n-preloader-types';
-import { PreloadStrategyManager } from './manager';
-import { strategyConfigs } from './configs';
-
+import {
+  adaptiveStrategy,
+  batchStrategy,
+  memoryAwareStrategy,
+  networkAwareStrategy,
+  timeAwareStrategy,
+} from './advanced-strategies';
 // 导入所有策略
 import {
   immediateStrategy,
-  smartStrategy,
-  progressiveStrategy,
-  priorityStrategy,
   lazyStrategy,
+  priorityStrategy,
+  progressiveStrategy,
+  smartStrategy,
 } from './basic-strategies';
-
-import {
-  batchStrategy,
-  adaptiveStrategy,
-  networkAwareStrategy,
-  timeAwareStrategy,
-  memoryAwareStrategy,
-} from './advanced-strategies';
+import { strategyConfigs } from './configs';
+import { PreloadStrategyManager } from './manager';
 
 /**
  * 预加载策略集合
@@ -47,13 +45,13 @@ export const PreloadStrategies = {
  */
 export function createStrategyManager(): PreloadStrategyManager {
   const manager = new PreloadStrategyManager();
-  
+
   // 注册所有策略
   Object.entries(PreloadStrategies).forEach(([name, strategy]) => {
     const config = strategyConfigs[name];
     manager.registerStrategy(name, strategy, config);
   });
-  
+
   return manager;
 }
 
@@ -63,7 +61,7 @@ export function createStrategyManager(): PreloadStrategyManager {
  */
 export function getRecommendedStrategy(
   metrics: PreloaderMetrics,
-  networkCondition: 'fast' | 'slow' | 'offline' = 'fast'
+  networkCondition: 'fast' | 'slow' | 'offline' = 'fast',
 ): string {
   const manager = createStrategyManager();
   return manager.selectBestStrategy(metrics, networkCondition);

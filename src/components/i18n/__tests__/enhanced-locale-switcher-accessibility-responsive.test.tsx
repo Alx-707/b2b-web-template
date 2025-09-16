@@ -2,12 +2,12 @@
  * @vitest-environment jsdom
  */
 
-import { usePathname } from '@/i18n/routing';
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useLocale, useTranslations } from 'next-intl';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { usePathname } from '@/i18n/routing';
 import { EnhancedLocaleSwitcher } from '../enhanced-locale-switcher';
 
 // Mock next-intl hooks
@@ -52,7 +52,11 @@ vi.mock('lucide-react', () => ({
       data-testid='globe-icon'
       {...props}
     >
-      <circle cx='12' cy='12' r='10' />
+      <circle
+        cx='12'
+        cy='12'
+        r='10'
+      />
     </svg>
   ),
 }));
@@ -88,13 +92,19 @@ describe('Enhanced Locale Switcher - Advanced Accessibility & Responsive Tests',
     (useTranslations as any).mockImplementation((namespace: string) => {
       if (namespace === 'LocaleSwitcher') {
         return (key: string, values?: Record<string, string>) => {
-          let translation = defaultMocks.translations[key as keyof typeof defaultMocks.translations];
+          let translation =
+            defaultMocks.translations[
+              key as keyof typeof defaultMocks.translations
+            ];
           if (typeof translation === 'object') {
             return translation;
           }
           if (values && typeof translation === 'string') {
             Object.entries(values).forEach(([placeholder, value]) => {
-              translation = (translation as string).replace(`{${placeholder}}`, value);
+              translation = (translation as string).replace(
+                `{${placeholder}}`,
+                value,
+              );
             });
           }
           return translation || key;
@@ -114,10 +124,17 @@ describe('Enhanced Locale Switcher - Advanced Accessibility & Responsive Tests',
       const button = screen.getByRole('button');
       await user.click(button);
 
-      const englishOption = screen.getByText('English').closest('[role="menuitem"]');
-      const chineseOption = screen.getByText('中文').closest('[role="menuitem"]');
+      const englishOption = screen
+        .getByText('English')
+        .closest('[role="menuitem"]');
+      const chineseOption = screen
+        .getByText('中文')
+        .closest('[role="menuitem"]');
 
-      expect(englishOption).toHaveAttribute('aria-label', 'Current language: English');
+      expect(englishOption).toHaveAttribute(
+        'aria-label',
+        'Current language: English',
+      );
       expect(chineseOption).toHaveAttribute('aria-label', 'Switch to 中文');
     });
 
@@ -153,7 +170,9 @@ describe('Enhanced Locale Switcher - Advanced Accessibility & Responsive Tests',
     });
 
     it('supports reduced motion preferences', () => {
-      render(<EnhancedLocaleSwitcher className='motion-reduce:transition-none' />);
+      render(
+        <EnhancedLocaleSwitcher className='motion-reduce:transition-none' />,
+      );
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('motion-reduce:transition-none');
@@ -197,7 +216,9 @@ describe('Enhanced Locale Switcher - Advanced Accessibility & Responsive Tests',
     });
 
     it('adapts to different screen sizes', () => {
-      render(<EnhancedLocaleSwitcher className='text-sm md:text-base lg:text-lg' />);
+      render(
+        <EnhancedLocaleSwitcher className='text-sm md:text-base lg:text-lg' />,
+      );
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('text-sm', 'md:text-base', 'lg:text-lg');
@@ -248,7 +269,9 @@ describe('Enhanced Locale Switcher - Advanced Accessibility & Responsive Tests',
     });
 
     it('handles responsive text truncation', () => {
-      render(<EnhancedLocaleSwitcher className='truncate max-w-[100px] md:max-w-none' />);
+      render(
+        <EnhancedLocaleSwitcher className='max-w-[100px] truncate md:max-w-none' />,
+      );
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('truncate', 'max-w-[100px]', 'md:max-w-none');
@@ -280,9 +303,12 @@ describe('Enhanced Locale Switcher - Advanced Accessibility & Responsive Tests',
     it('supports responsive visibility', () => {
       render(
         <div>
-          <EnhancedLocaleSwitcher className='block md:hidden' compact />
+          <EnhancedLocaleSwitcher
+            className='block md:hidden'
+            compact
+          />
           <EnhancedLocaleSwitcher className='hidden md:block' />
-        </div>
+        </div>,
       );
 
       const buttons = screen.getAllByRole('button');
@@ -329,7 +355,9 @@ describe('Enhanced Locale Switcher - Advanced Accessibility & Responsive Tests',
 
     it('has correct display names for debugging', () => {
       // This would be tested in a development environment
-      expect(EnhancedLocaleSwitcher.displayName || EnhancedLocaleSwitcher.name).toBeTruthy();
+      expect(
+        EnhancedLocaleSwitcher.displayName || EnhancedLocaleSwitcher.name,
+      ).toBeTruthy();
     });
 
     it('handles rapid interactions gracefully', async () => {
@@ -351,7 +379,7 @@ describe('Enhanced Locale Switcher - Advanced Accessibility & Responsive Tests',
       render(
         <div onClick={handleCustomEvent}>
           <EnhancedLocaleSwitcher />
-        </div>
+        </div>,
       );
 
       const button = screen.getByRole('button');

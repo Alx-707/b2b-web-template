@@ -14,11 +14,12 @@
  * - page-rendering-basic.test.tsx - 基本渲染功能测试
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import ContactPage, { generateMetadata } from '@/app/[locale]/contact/__tests__/page';
+import ContactPage, {
+  generateMetadata,
+} from '@/app/[locale]/contact/__tests__/page';
 
 // Mock next-intl
 const mockGetTranslations = vi.fn();
@@ -28,20 +29,27 @@ vi.mock('next-intl/server', () => ({
 
 // Mock ContactForm component
 vi.mock('@/components/forms/contact-form', () => ({
-  ContactForm: () => <div data-testid="contact-form">Contact Form</div>,
+  ContactForm: () => <div data-testid='contact-form'>Contact Form</div>,
 }));
 
 // Mock Card components
 vi.mock('@/components/ui/card', () => ({
-  Card: ({ children, ...props }: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => (
-    <div data-testid="card" {...props}>
+  Card: ({
+    children,
+    ...props
+  }: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => (
+    <div
+      data-testid='card'
+      {...props}
+    >
       {children}
     </div>
   ),
-  CardContent: ({ children, ...props }: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => (
-    <div {...props}>
-      {children}
-    </div>
+  CardContent: ({
+    children,
+    ...props
+  }: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => (
+    <div {...props}>{children}</div>
   ),
 }));
 

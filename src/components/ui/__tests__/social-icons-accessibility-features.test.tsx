@@ -18,12 +18,11 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import {
-    ExternalLinkIcon,
-    LinkedInIcon,
-    SocialIconLink,
-    TwitterIcon,
+  ExternalLinkIcon,
+  LinkedInIcon,
+  SocialIconLink,
+  TwitterIcon,
 } from '../social-icons';
 
 describe('Social Icons Accessibility Features - Main Tests', () => {
@@ -40,7 +39,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           <TwitterIcon data-testid='twitter' />
           <LinkedInIcon data-testid='linkedin' />
           <ExternalLinkIcon data-testid='external' />
-        </div>
+        </div>,
       );
 
       const twitter = screen.getByTestId('twitter');
@@ -69,7 +68,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
             ariaLabel='LinkedIn'
             data-testid='linkedin-link'
           />
-        </div>
+        </div>,
       );
 
       const twitterLink = screen.getByTestId('twitter-link');
@@ -90,9 +89,8 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           icon='twitter'
           label='Twitter'
           ariaLabel='Twitter'
-
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -111,7 +109,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           label='Twitter'
           ariaLabel='Twitter'
           data-testid='external-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('external-link');
@@ -128,7 +126,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           ariaLabel='Twitter'
           className='focus:ring-2 focus:ring-offset-2'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -139,7 +137,10 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
   describe('基本ARIA属性测试', () => {
     it('should support aria-label override', () => {
       render(
-        <TwitterIcon aria-label='Twitter icon' data-testid='twitter' />
+        <TwitterIcon
+          aria-label='Twitter icon'
+          data-testid='twitter'
+        />,
       );
 
       const icon = screen.getByTestId('twitter');
@@ -147,7 +148,12 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
     });
 
     it('should support aria-hidden override', () => {
-      render(<TwitterIcon aria-hidden='false' data-testid='twitter' />);
+      render(
+        <TwitterIcon
+          aria-hidden='false'
+          data-testid='twitter'
+        />,
+      );
 
       const icon = screen.getByTestId('twitter');
       expect(icon).toHaveAttribute('aria-hidden', 'false');
@@ -167,11 +173,13 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           <div id='twitter-description'>
             Follow our Twitter account for updates
           </div>
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
-      const description = screen.getByText('Follow our Twitter account for updates');
+      const description = screen.getByText(
+        'Follow our Twitter account for updates',
+      );
 
       expect(link).toHaveAttribute('aria-describedby', 'twitter-description');
       expect(description).toBeInTheDocument();
@@ -184,9 +192,8 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           icon='twitter'
           label='Twitter'
           ariaLabel='Twitter'
-
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -202,7 +209,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           ariaLabel='Twitter'
           aria-expanded='false'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -219,7 +226,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           label='Twitter'
           ariaLabel='Twitter'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -234,7 +241,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           label='Twitter'
           ariaLabel='Twitter'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -248,7 +255,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
         <TwitterIcon
           className='forced-colors:text-[ButtonText]'
           data-testid='twitter'
-        />
+        />,
       );
 
       const icon = screen.getByTestId('twitter');
@@ -264,7 +271,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           ariaLabel='Twitter'
           className='motion-reduce:transition-none'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -280,7 +287,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
           ariaLabel='Twitter'
           className='text-blue-600 hover:text-blue-800'
           data-testid='social-link'
-        />
+        />,
       );
 
       const link = screen.getByTestId('social-link');
@@ -299,7 +306,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
             ariaLabel='Síguenos en Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -308,7 +315,10 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
 
     it('should support RTL languages', () => {
       render(
-        <div dir='rtl' lang='ar'>
+        <div
+          dir='rtl'
+          lang='ar'
+        >
           <SocialIconLink
             href='https://twitter.com/example'
             icon='twitter'
@@ -316,7 +326,7 @@ describe('Social Icons Accessibility Features - Main Tests', () => {
             ariaLabel='تويتر'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const container = screen.getByTestId('social-link').closest('div');

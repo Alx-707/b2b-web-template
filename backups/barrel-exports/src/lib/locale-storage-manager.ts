@@ -8,19 +8,23 @@
 'use client';
 
 // 重新导出所有模块的类型和功能
+// 导入主要功能类
+import type { Locale } from '@/types/i18n';
+import { LocaleAnalyticsManager } from './locale-storage-analytics';
+import { LocaleHistoryManager } from './locale-storage-history';
+import { LocaleMaintenanceManager } from './locale-storage-maintenance';
+import { LocalePreferenceManager } from './locale-storage-preference';
+import type {
+  LocaleDetectionHistory,
+  MaintenanceOptions,
+  UserLocalePreference,
+} from './locale-storage-types';
+
 export * from './locale-storage-types';
 export * from './locale-storage-preference';
 export * from './locale-storage-history';
 export * from './locale-storage-analytics';
 export * from './locale-storage-maintenance';
-
-// 导入主要功能类
-import { LocalePreferenceManager } from './locale-storage-preference';
-import { LocaleHistoryManager } from './locale-storage-history';
-import { LocaleAnalyticsManager } from './locale-storage-analytics';
-import { LocaleMaintenanceManager } from './locale-storage-maintenance';
-import type { UserLocalePreference, LocaleDetectionHistory, MaintenanceOptions } from './locale-storage-types';
-import type { Locale } from '@/types/i18n';
 
 /**
  * 统一的语言存储管理器
@@ -131,7 +135,9 @@ export class LocaleStorageManager {
    * 清理过期的检测记录
    * Clean up expired detection records
    */
-  static cleanupExpiredDetections(maxAgeMs: number = 30 * 24 * 60 * 60 * 1000): void {
+  static cleanupExpiredDetections(
+    maxAgeMs: number = 30 * 24 * 60 * 60 * 1000,
+  ): void {
     return LocaleMaintenanceManager.cleanupExpiredDetections(maxAgeMs);
   }
 

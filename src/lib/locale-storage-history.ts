@@ -7,33 +7,79 @@
 
 'use client';
 
-import type { LocaleSource } from './locale-storage-types';
-
-// 重新导出所有模块的功能
-export { HistoryCacheManager, addDetectionRecord, getDetectionHistory, updateDetectionHistory, validateHistoryData, createDefaultHistory, getHistorySummary, needsCleanup } from './locale-storage-history-core';export { getRecentDetections, getDetectionsBySource, getDetectionsByLocale, getDetectionsByTimeRange, getDetectionsByConfidence, queryDetections, searchDetections, getUniqueLocales, getUniqueSources, getLocaleGroupStats, getSourceGroupStats, getTimeDistributionStats } from
-'./locale-storage-history-query';export { getDetectionStats, getDetectionTrends, generateHistoryInsights, getPerformanceMetrics } from
-'./locale-storage-history-stats';export { cleanupExpiredDetections, cleanupDuplicateDetections, limitHistorySize, clearAllHistory, exportHistory, exportHistoryAsJson, importHistory, importHistoryFromJson, createBackup, restoreFromBackup, performMaintenance, getMaintenanceRecommendations } from
-'./locale-storage-history-maintenance';export { HistoryEventManager, createRecordAddedEvent, createCleanupEvent, createExportEvent, createImportEvent, createErrorEvent, createDebugListener, createStatsListener, createErrorListener, consoleLogListener, performanceListener, addMultipleListeners, setupDefaultListeners, cleanupEventSystem, getEventSystemStatus } from
-'./locale-storage-history-events';
-
 // 导入主要功能用于向后兼容
 import type { Locale } from '@/types/i18n';
-;
-import type {
-  LocaleDetectionHistory,
-  LocaleDetectionRecord,
-  StorageOperationResult,
-  StorageEventListener } from
-'./locale-storage-types';
-
 import {
   addDetectionRecord,
   getDetectionHistory,
+  getHistorySummary,
   HistoryCacheManager,
-  getHistorySummary } from
-'./locale-storage-history-core';
-
+} from './locale-storage-history-core';
 import {
+  cleanupEventSystem,
+  createCleanupEvent,
+  createErrorEvent,
+  createExportEvent,
+  createImportEvent,
+  createRecordAddedEvent,
+  getEventSystemStatus,
+  HistoryEventManager,
+  setupDefaultListeners,
+} from './locale-storage-history-events';
+import {
+  cleanupDuplicateDetections,
+  cleanupExpiredDetections,
+  clearAllHistory,
+  createBackup,
+  exportHistory,
+  exportHistoryAsJson,
+  getMaintenanceRecommendations,
+  importHistory,
+  importHistoryFromJson,
+  limitHistorySize,
+  performMaintenance,
+  restoreFromBackup,
+} from './locale-storage-history-maintenance';
+import {
+  getDetectionsByConfidence,
+  getDetectionsByLocale,
+  getDetectionsBySource,
+  getDetectionsByTimeRange,
+  getLocaleGroupStats,
+  getRecentDetections,
+  getSourceGroupStats,
+  getUniqueLocales,
+  getUniqueSources,
+  queryDetections,
+  searchDetections,
+  type QueryConditions,
+} from './locale-storage-history-query';
+import {
+  generateHistoryInsights,
+  getDetectionStats,
+  getDetectionTrends,
+  getPerformanceMetrics,
+} from './locale-storage-history-stats';
+import type {
+  LocaleDetectionHistory,
+  LocaleDetectionRecord,
+  LocaleSource,
+  StorageEventListener,
+  StorageOperationResult,
+} from './locale-storage-types';
+
+// 重新导出所有模块的功能
+export {
+  HistoryCacheManager,
+  addDetectionRecord,
+  getDetectionHistory,
+  updateDetectionHistory,
+  validateHistoryData,
+  createDefaultHistory,
+  getHistorySummary,
+  needsCleanup,
+} from './locale-storage-history-core';
+export {
   getRecentDetections,
   getDetectionsBySource,
   getDetectionsByLocale,
@@ -45,17 +91,15 @@ import {
   getUniqueSources,
   getLocaleGroupStats,
   getSourceGroupStats,
-  type QueryConditions } from
-'./locale-storage-history-query';
-
-import {
+  getTimeDistributionStats,
+} from './locale-storage-history-query';
+export {
   getDetectionStats,
   getDetectionTrends,
   generateHistoryInsights,
-  getPerformanceMetrics } from
-'./locale-storage-history-stats';
-
-import {
+  getPerformanceMetrics,
+} from './locale-storage-history-stats';
+export {
   cleanupExpiredDetections,
   cleanupDuplicateDetections,
   limitHistorySize,
@@ -67,20 +111,25 @@ import {
   createBackup,
   restoreFromBackup,
   performMaintenance,
-  getMaintenanceRecommendations } from
-'./locale-storage-history-maintenance';
-
-import {
+  getMaintenanceRecommendations,
+} from './locale-storage-history-maintenance';
+export {
   HistoryEventManager,
   createRecordAddedEvent,
   createCleanupEvent,
   createExportEvent,
   createImportEvent,
   createErrorEvent,
+  createDebugListener,
+  createStatsListener,
+  createErrorListener,
+  consoleLogListener,
+  performanceListener,
+  addMultipleListeners,
   setupDefaultListeners,
   cleanupEventSystem,
-  getEventSystemStatus } from
-'./locale-storage-history-events';
+  getEventSystemStatus,
+} from './locale-storage-history-events';
 
 /**
  * 检测历史管理器 - 向后兼容类
@@ -92,17 +141,21 @@ export class LocaleHistoryManager {
    * Add detection record
    */
   static addDetectionRecord(
-  locale: Locale,
-  source: LocaleSource,
-  confidence: number,
-  metadata?: Record<string, unknown>)
-  : StorageOperationResult<LocaleDetectionHistory> {
+    locale: Locale,
+    source: LocaleSource,
+    confidence: number,
+    metadata?: Record<string, unknown>,
+  ): StorageOperationResult<LocaleDetectionHistory> {
     const result = addDetectionRecord(locale, source, confidence, metadata);
 
     if (result.success) {
-      HistoryEventManager.emitEvent(createRecordAddedEvent(locale, source, confidence));
+      HistoryEventManager.emitEvent(
+        createRecordAddedEvent(locale, source, confidence),
+      );
     } else {
-      HistoryEventManager.emitEvent(createErrorEvent('addDetectionRecord', result.error || 'Unknown error'));
+      HistoryEventManager.emitEvent(
+        createErrorEvent('addDetectionRecord', result.error || 'Unknown error'),
+      );
     }
 
     return result;
@@ -152,11 +205,15 @@ export class LocaleHistoryManager {
    * 清理过期的检测记录
    * Cleanup expired detection records
    */
-  static cleanupExpiredDetections(maxAgeMs: number = 30 * 24 * 60 * 60 * 1000): StorageOperationResult<number> {
+  static cleanupExpiredDetections(
+    maxAgeMs: number = 30 * 24 * 60 * 60 * 1000,
+  ): StorageOperationResult<number> {
     const result = cleanupExpiredDetections(maxAgeMs);
 
     if (result.success) {
-      HistoryEventManager.emitEvent(createCleanupEvent('expired', result.data || 0));
+      HistoryEventManager.emitEvent(
+        createCleanupEvent('expired', result.data || 0),
+      );
     }
 
     return result;
@@ -184,7 +241,9 @@ export class LocaleHistoryManager {
     const result = exportHistory();
 
     if (result.success && result.data) {
-      HistoryEventManager.emitEvent(createExportEvent('backup', result.data.history?.length || 0));
+      HistoryEventManager.emitEvent(
+        createExportEvent('backup', result.data.history?.length || 0),
+      );
     }
 
     return result;
@@ -194,11 +253,15 @@ export class LocaleHistoryManager {
    * 导入历史记录
    * Import history
    */
-  static importHistory(history: LocaleDetectionHistory): StorageOperationResult<LocaleDetectionHistory> {
+  static importHistory(
+    history: LocaleDetectionHistory,
+  ): StorageOperationResult<LocaleDetectionHistory> {
     const result = importHistory(history);
 
     if (result.success && result.data) {
-      HistoryEventManager.emitEvent(createImportEvent('backup', result.data.history?.length || 0, true));
+      HistoryEventManager.emitEvent(
+        createImportEvent('backup', result.data.history?.length || 0, true),
+      );
     } else {
       HistoryEventManager.emitEvent(createImportEvent('backup', 0, false));
     }
@@ -210,7 +273,10 @@ export class LocaleHistoryManager {
    * 添加事件监听器
    * Add event listener
    */
-  static addEventListener(eventType: string, listener: StorageEventListener): void {
+  static addEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     HistoryEventManager.addEventListener(eventType, listener);
   }
 
@@ -218,7 +284,10 @@ export class LocaleHistoryManager {
    * 移除事件监听器
    * Remove event listener
    */
-  static removeEventListener(eventType: string, listener: StorageEventListener): void {
+  static removeEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     HistoryEventManager.removeEventListener(eventType, listener);
   }
 
@@ -242,7 +311,9 @@ export class LocaleHistoryManager {
    * 获取维护建议
    * Get maintenance recommendations
    */
-  static getMaintenanceRecommendations(): ReturnType<typeof getMaintenanceRecommendations> {
+  static getMaintenanceRecommendations(): ReturnType<
+    typeof getMaintenanceRecommendations
+  > {
     return getMaintenanceRecommendations();
   }
 
@@ -250,7 +321,9 @@ export class LocaleHistoryManager {
    * 执行完整的历史维护
    * Perform complete history maintenance
    */
-  static performMaintenance(options?: Parameters<typeof performMaintenance>[0]): ReturnType<typeof performMaintenance> {
+  static performMaintenance(
+    options?: Parameters<typeof performMaintenance>[0],
+  ): ReturnType<typeof performMaintenance> {
     return performMaintenance(options || {});
   }
 
@@ -258,7 +331,9 @@ export class LocaleHistoryManager {
    * 查询检测记录
    * Query detection records
    */
-  static queryDetections(conditions: QueryConditions): ReturnType<typeof queryDetections> {
+  static queryDetections(
+    conditions: QueryConditions,
+  ): ReturnType<typeof queryDetections> {
     return queryDetections(conditions);
   }
 
@@ -274,7 +349,9 @@ export class LocaleHistoryManager {
    * 获取检测趋势
    * Get detection trends
    */
-  static getDetectionTrends(days: number = 7): ReturnType<typeof getDetectionTrends> {
+  static getDetectionTrends(
+    days: number = 7,
+  ): ReturnType<typeof getDetectionTrends> {
     return getDetectionTrends(days);
   }
 
@@ -301,6 +378,4 @@ export class LocaleHistoryManager {
  * 向后兼容的类型别名
  * Backward compatible type aliases
  */
-export type {
-  LocaleHistoryManager as HistoryManager,
-  QueryConditions };
+export type { LocaleHistoryManager as HistoryManager, QueryConditions };

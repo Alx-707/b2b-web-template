@@ -8,8 +8,11 @@
  * - 空数据处理
  */
 
-import type { AirtableServicePrivate, DynamicImportModule } from '@/types/test-types';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type {
+  AirtableServicePrivate,
+  DynamicImportModule,
+} from '@/types/test-types';
 
 // Mock Airtable
 const mockCreate = vi.fn();
@@ -64,7 +67,7 @@ describe('Airtable Service - Create Operations Tests', () => {
     mockConfigure.mockClear();
 
     // Dynamically import the module to ensure fresh instance
-    const module = await import('../airtable') as DynamicImportModule;
+    const module = (await import('../airtable')) as DynamicImportModule;
     AirtableServiceClass = module.AirtableService;
   });
 
@@ -99,9 +102,9 @@ describe('Airtable Service - Create Operations Tests', () => {
           fields: {
             'First Name': 'John',
             'Last Name': 'Doe',
-            Email: 'john.doe@example.com',
-            Company: 'Test Company',
-            Message: 'This is a test message',
+            'Email': 'john.doe@example.com',
+            'Company': 'Test Company',
+            'Message': 'This is a test message',
             'Accept Privacy': true,
           },
           createdTime: '2023-01-01T00:00:00Z',
@@ -116,11 +119,11 @@ describe('Airtable Service - Create Operations Tests', () => {
           fields: {
             'First Name': 'John',
             'Last Name': 'Doe',
-            Email: 'john.doe@example.com',
-            Company: 'Test Company',
-            Message: 'This is a test message',
+            'Email': 'john.doe@example.com',
+            'Company': 'Test Company',
+            'Message': 'This is a test message',
             'Accept Privacy': true,
-            Website: '',
+            'Website': '',
           },
         },
       ]);
@@ -156,12 +159,12 @@ describe('Airtable Service - Create Operations Tests', () => {
           fields: {
             'First Name': 'John',
             'Last Name': 'Doe',
-            Email: 'john.doe@example.com',
-            Company: 'Test Company',
-            Message: 'This is a test message',
+            'Email': 'john.doe@example.com',
+            'Company': 'Test Company',
+            'Message': 'This is a test message',
             'Accept Privacy': true,
-            Phone: '+1234567890',
-            Website: 'https://example.com',
+            'Phone': '+1234567890',
+            'Website': 'https://example.com',
           },
         },
       ]);
@@ -259,11 +262,11 @@ describe('Airtable Service - Create Operations Tests', () => {
           fields: {
             'First Name': 'José',
             'Last Name': 'García-López',
-            Email: 'josé@example.com',
-            Company: 'Test & Co.',
-            Message: 'Message with "quotes" and special chars: @#$%',
+            'Email': 'josé@example.com',
+            'Company': 'Test & Co.',
+            'Message': 'Message with "quotes" and special chars: @#$%',
             'Accept Privacy': true,
-            Website: 'https://example.com/path?param=value&other=test',
+            'Website': 'https://example.com/path?param=value&other=test',
           },
         },
       ]);
@@ -299,11 +302,11 @@ describe('Airtable Service - Create Operations Tests', () => {
           fields: {
             'First Name': 'John',
             'Last Name': 'Doe',
-            Email: 'john.doe@example.com',
-            Company: 'Test Company',
-            Message: longMessage,
+            'Email': 'john.doe@example.com',
+            'Company': 'Test Company',
+            'Message': longMessage,
             'Accept Privacy': true,
-            Website: '',
+            'Website': '',
           },
         },
       ]);

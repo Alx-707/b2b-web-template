@@ -4,10 +4,10 @@
  */
 
 import type { Messages } from '@/types/i18n';
-import type { 
-  MetricsCollector, 
+import type {
   CacheStorage,
-  PreloadConfig
+  MetricsCollector,
+  PreloadConfig,
 } from '../i18n-cache-types';
 import { TranslationPreloader } from '../i18n-preloader-core';
 
@@ -18,7 +18,7 @@ import { TranslationPreloader } from '../i18n-preloader-core';
 export function createTranslationPreloader(
   cache: CacheStorage<Messages>,
   metricsCollector: MetricsCollector,
-  config?: Partial<PreloadConfig>
+  config?: Partial<PreloadConfig>,
 ): TranslationPreloader {
   return new TranslationPreloader(cache, metricsCollector, config);
 }

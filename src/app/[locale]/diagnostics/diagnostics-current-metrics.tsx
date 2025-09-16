@@ -7,12 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { METRIC_CONFIGS, MetricCard, ScoreCard } from './diagnostics-constants';
 import { formatMetric, getMetricStatus, type SimpleWebVitals } from './utils';
-import {
-  METRIC_CONFIGS,
-  MetricCard,
-  ScoreCard,
-} from './diagnostics-constants';
 
 // 当前指标显示组件属性接口
 interface CurrentMetricsProps {
@@ -68,9 +64,12 @@ interface SimpleMetricsProps {
  * 简化指标显示组件
  * 仅显示核心 Web Vitals 指标
  */
-export function SimpleMetrics({ metrics, showScore = true }: SimpleMetricsProps) {
-  const coreMetrics = METRIC_CONFIGS.filter(({ key }) => 
-    ['cls', 'lcp', 'fid'].includes(key)
+export function SimpleMetrics({
+  metrics,
+  showScore = true,
+}: SimpleMetricsProps) {
+  const coreMetrics = METRIC_CONFIGS.filter(({ key }) =>
+    ['cls', 'lcp', 'fid'].includes(key),
   );
 
   return (
@@ -106,11 +105,14 @@ interface MetricsComparisonProps {
  * 指标对比组件
  * 显示当前指标与之前指标的对比
  */
-export function MetricsComparison({ 
-  currentMetrics, 
-  previousMetrics 
+export function MetricsComparison({
+  currentMetrics,
+  previousMetrics,
 }: MetricsComparisonProps) {
-  const getTrend = (current: number, previous: number): 'up' | 'down' | 'same' => {
+  const getTrend = (
+    current: number,
+    previous: number,
+  ): 'up' | 'down' | 'same' => {
     if (current > previous) return 'up';
     if (current < previous) return 'down';
     return 'same';
@@ -129,10 +131,12 @@ export function MetricsComparison({
 
   const getTrendColor = (trend: 'up' | 'down' | 'same', metricKey: string) => {
     // 对于某些指标，数值越低越好（如 CLS, LCP, FID）
-    const lowerIsBetter = ['cls', 'lcp', 'fid', 'fcp', 'ttfb'].includes(metricKey);
-    
+    const lowerIsBetter = ['cls', 'lcp', 'fid', 'fcp', 'ttfb'].includes(
+      metricKey,
+    );
+
     if (trend === 'same') return 'text-gray-500';
-    
+
     if (lowerIsBetter) {
       return trend === 'down' ? 'text-green-600' : 'text-red-600';
     }
@@ -143,20 +147,27 @@ export function MetricsComparison({
     <Card className='mb-6'>
       <CardHeader>
         <CardTitle>指标对比</CardTitle>
-        <CardDescription>
-          当前指标与上次检测的对比
-        </CardDescription>
+        <CardDescription>当前指标与上次检测的对比</CardDescription>
       </CardHeader>
       <CardContent>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
           {METRIC_CONFIGS.map(({ key, label, description }) => {
-            const currentValue = currentMetrics[key as keyof SimpleWebVitals] as number;
-            const previousValue = previousMetrics?.[key as keyof SimpleWebVitals] as number;
-            const trend = previousValue ? getTrend(currentValue, previousValue) : 'same';
+            const currentValue = currentMetrics[
+              key as keyof SimpleWebVitals
+            ] as number;
+            const previousValue = previousMetrics?.[
+              key as keyof SimpleWebVitals
+            ] as number;
+            const trend = previousValue
+              ? getTrend(currentValue, previousValue)
+              : 'same';
             const trendColor = getTrendColor(trend, key);
 
             return (
-              <div key={key} className='rounded-lg border p-4'>
+              <div
+                key={key}
+                className='rounded-lg border p-4'
+              >
                 <div className='mb-2 flex items-center justify-between'>
                   <h3 className='font-semibold'>{label}</h3>
                   {previousValue && (
@@ -169,11 +180,13 @@ export function MetricsComparison({
                   {formatMetric(key, currentValue)}
                 </div>
                 {previousValue && (
-                  <div className='text-sm text-muted-foreground'>
+                  <div className='text-muted-foreground text-sm'>
                     上次: {formatMetric(key, previousValue)}
                   </div>
                 )}
-                <p className='text-muted-foreground mt-2 text-sm'>{description}</p>
+                <p className='text-muted-foreground mt-2 text-sm'>
+                  {description}
+                </p>
               </div>
             );
           })}
@@ -183,11 +196,15 @@ export function MetricsComparison({
             <div className='mb-2 flex items-center justify-between'>
               <h3 className='font-semibold'>综合评分</h3>
               {previousMetrics && (
-                <span className={getTrendColor(
-                  getTrend(currentMetrics.score, previousMetrics.score),
-                  'score'
-                )}>
-                  {getTrendIcon(getTrend(currentMetrics.score, previousMetrics.score))}
+                <span
+                  className={getTrendColor(
+                    getTrend(currentMetrics.score, previousMetrics.score),
+                    'score',
+                  )}
+                >
+                  {getTrendIcon(
+                    getTrend(currentMetrics.score, previousMetrics.score),
+                  )}
                 </span>
               )}
             </div>
@@ -195,7 +212,7 @@ export function MetricsComparison({
               {Math.round(currentMetrics.score)}
             </div>
             {previousMetrics && (
-              <div className='text-sm text-muted-foreground'>
+              <div className='text-muted-foreground text-sm'>
                 上次: {Math.round(previousMetrics.score)}
               </div>
             )}
@@ -217,10 +234,15 @@ interface MetricsSummaryProps {
  * 指标摘要组件
  * 显示指标的简要摘要信息
  */
-export function MetricsSummary({ metrics, compact = false }: MetricsSummaryProps) {
+export function MetricsSummary({
+  metrics,
+  compact = false,
+}: MetricsSummaryProps) {
   const coreMetrics = ['cls', 'lcp', 'fid'];
-  const goodMetrics = coreMetrics.filter(key => 
-    getMetricStatus(key, metrics[key as keyof SimpleWebVitals] as number) === 'good'
+  const goodMetrics = coreMetrics.filter(
+    (key) =>
+      getMetricStatus(key, metrics[key as keyof SimpleWebVitals] as number) ===
+      'good',
   );
 
   if (compact) {
@@ -232,7 +254,9 @@ export function MetricsSummary({ metrics, compact = false }: MetricsSummaryProps
         </div>
         <div className='flex items-center space-x-1'>
           <span className='font-medium'>良好指标:</span>
-          <span className='font-bold'>{goodMetrics.length}/{coreMetrics.length}</span>
+          <span className='font-bold'>
+            {goodMetrics.length}/{coreMetrics.length}
+          </span>
         </div>
       </div>
     );
@@ -246,32 +270,44 @@ export function MetricsSummary({ metrics, compact = false }: MetricsSummaryProps
       <CardContent>
         <div className='grid grid-cols-2 gap-4'>
           <div className='text-center'>
-            <div className='text-3xl font-bold'>{Math.round(metrics.score)}</div>
-            <div className='text-sm text-muted-foreground'>综合评分</div>
+            <div className='text-3xl font-bold'>
+              {Math.round(metrics.score)}
+            </div>
+            <div className='text-muted-foreground text-sm'>综合评分</div>
           </div>
           <div className='text-center'>
             <div className='text-3xl font-bold'>
               {goodMetrics.length}/{coreMetrics.length}
             </div>
-            <div className='text-sm text-muted-foreground'>良好指标</div>
+            <div className='text-muted-foreground text-sm'>良好指标</div>
           </div>
         </div>
         <div className='mt-4 space-y-2'>
-          {coreMetrics.map(key => {
-            const config = METRIC_CONFIGS.find(c => c.key === key);
+          {coreMetrics.map((key) => {
+            const config = METRIC_CONFIGS.find((c) => c.key === key);
             const status = getMetricStatus(
-              key, 
-              metrics[key as keyof SimpleWebVitals] as number
+              key,
+              metrics[key as keyof SimpleWebVitals] as number,
             );
             return (
-              <div key={key} className='flex items-center justify-between text-sm'>
+              <div
+                key={key}
+                className='flex items-center justify-between text-sm'
+              >
                 <span>{config?.label}</span>
-                <span className={
-                  status === 'good' ? 'text-green-600' :
-                  status === 'needs-improvement' ? 'text-yellow-600' :
-                  'text-red-600'
-                }>
-                  {formatMetric(key, metrics[key as keyof SimpleWebVitals] as number)}
+                <span
+                  className={
+                    status === 'good'
+                      ? 'text-green-600'
+                      : status === 'needs-improvement'
+                        ? 'text-yellow-600'
+                        : 'text-red-600'
+                  }
+                >
+                  {formatMetric(
+                    key,
+                    metrics[key as keyof SimpleWebVitals] as number,
+                  )}
                 </span>
               </div>
             );

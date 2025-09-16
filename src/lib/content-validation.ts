@@ -4,8 +4,7 @@
  * This module provides validation functions for content metadata,
  * ensuring data integrity and type safety.
  */
-import type { ContentType } from '@/types/content';
-import type { ContentValidationResult } from '@/types/content';
+import type { ContentType, ContentValidationResult } from '@/types/content';
 
 // SEO validation constants
 const MAX_SEO_TITLE_LENGTH = 60;

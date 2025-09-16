@@ -3,10 +3,10 @@
  * Translation Preloader Strategy Manager
  */
 
-import type { 
+import type {
+  PreloaderMetrics,
   PreloadStrategy,
   PreloadStrategyConfig,
-  PreloaderMetrics,
 } from '../i18n-preloader-types';
 
 /**
@@ -21,7 +21,11 @@ export class PreloadStrategyManager {
    * 注册策略
    * Register strategy
    */
-  registerStrategy(name: string, strategy: PreloadStrategy, config?: PreloadStrategyConfig): void {
+  registerStrategy(
+    name: string,
+    strategy: PreloadStrategy,
+    config?: PreloadStrategyConfig,
+  ): void {
     this.strategies.set(name, strategy);
     if (config) {
       this.configs.set(name, config);
@@ -56,16 +60,19 @@ export class PreloadStrategyManager {
    * 选择最佳策略
    * Select best strategy
    */
-  selectBestStrategy(metrics: PreloaderMetrics, networkCondition: 'fast' | 'slow' | 'offline'): string {
+  selectBestStrategy(
+    metrics: PreloaderMetrics,
+    networkCondition: 'fast' | 'slow' | 'offline',
+  ): string {
     const configs = Array.from(this.configs.entries());
-    
+
     // 根据网络条件和性能指标选择策略
     for (const [name, config] of configs) {
       if (this.isStrategyApplicable(config, metrics, networkCondition)) {
         return name;
       }
     }
-    
+
     // 默认策略
     return 'progressive';
   }
@@ -77,25 +84,32 @@ export class PreloadStrategyManager {
   private isStrategyApplicable(
     config: PreloadStrategyConfig,
     metrics: PreloaderMetrics,
-    networkCondition: 'fast' | 'slow' | 'offline'
+    networkCondition: 'fast' | 'slow' | 'offline',
   ): boolean {
     const { conditions } = config;
-    
-    if (conditions.networkCondition && conditions.networkCondition !== networkCondition) {
+
+    if (
+      conditions.networkCondition &&
+      conditions.networkCondition !== networkCondition
+    ) {
       return false;
     }
-    
-    if (conditions.minCacheHitRate && metrics.cacheHitRate < conditions.minCacheHitRate) {
+
+    if (
+      conditions.minCacheHitRate &&
+      metrics.cacheHitRate < conditions.minCacheHitRate
+    ) {
       return false;
     }
-    
+
     if (conditions.maxErrorRate) {
-      const errorRate = metrics.failedPreloads / Math.max(metrics.totalPreloads, 1);
+      const errorRate =
+        metrics.failedPreloads / Math.max(metrics.totalPreloads, 1);
       if (errorRate > conditions.maxErrorRate) {
         return false;
       }
     }
-    
+
     return true;
   }
 }

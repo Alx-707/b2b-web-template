@@ -4,10 +4,9 @@
  */
 
 import type {
-  StorageType,
   EnvironmentType,
+  StorageType,
 } from '../locale-storage-types-base';
-
 import type {
   StorageCompressionConfig,
   StorageEncryptionConfig,
@@ -24,7 +23,7 @@ export interface StorageConfig {
   enableSessionStorage: boolean;
   enableIndexedDB: boolean;
   enableMemoryCache: boolean;
-  
+
   // 数据保留配置
   retention: {
     preferences: number; // 偏好数据保留时间
@@ -32,7 +31,7 @@ export interface StorageConfig {
     analytics: number; // 分析数据保留时间
     cache: number; // 缓存数据保留时间
   };
-  
+
   // 性能配置
   performance: {
     maxEntries: number; // 最大条目数
@@ -40,16 +39,16 @@ export interface StorageConfig {
     batchSize: number; // 批处理大小
     throttleDelay: number; // 节流延迟
   };
-  
+
   // 压缩配置
   compression: StorageCompressionConfig;
-  
+
   // 加密配置
   encryption: StorageEncryptionConfig;
-  
+
   // 同步配置
   sync: StorageSyncConfig;
-  
+
   // 健康检查配置
   healthCheck: {
     enabled: boolean;
@@ -57,7 +56,7 @@ export interface StorageConfig {
     timeout: number;
     retryAttempts: number;
   };
-  
+
   // 错误处理配置
   errorHandling: {
     retryAttempts: number;
@@ -65,7 +64,7 @@ export interface StorageConfig {
     fallbackStorage: StorageType[];
     logErrors: boolean;
   };
-  
+
   // 调试配置
   debug: {
     enabled: boolean;

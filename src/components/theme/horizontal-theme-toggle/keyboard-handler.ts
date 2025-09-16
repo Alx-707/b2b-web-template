@@ -5,13 +5,18 @@ import { THEME_OPTIONS } from './theme-config';
  */
 export const createKeyboardHandler = (
   theme: string | undefined,
-  handleThemeChange: (newTheme: string, buttonElement?: HTMLButtonElement) => void
+  handleThemeChange: (
+    newTheme: string,
+    buttonElement?: HTMLButtonElement,
+  ) => void,
 ) => {
   return (
     event: React.KeyboardEvent<HTMLButtonElement>,
-    _themeValue: string
+    _themeValue: string,
   ) => {
-    const currentIndex = THEME_OPTIONS.findIndex(option => option.value === theme);
+    const currentIndex = THEME_OPTIONS.findIndex(
+      (option) => option.value === theme,
+    );
     let nextIndex = currentIndex;
     const buttonElement = event.currentTarget;
 
@@ -19,7 +24,8 @@ export const createKeyboardHandler = (
       case 'ArrowLeft':
       case 'ArrowUp': {
         event.preventDefault();
-        nextIndex = currentIndex > 0 ? currentIndex - 1 : THEME_OPTIONS.length - 1;
+        nextIndex =
+          currentIndex > 0 ? currentIndex - 1 : THEME_OPTIONS.length - 1;
         const prevOption = THEME_OPTIONS[nextIndex];
         if (prevOption) {
           handleThemeChange(prevOption.value, buttonElement);
@@ -29,7 +35,8 @@ export const createKeyboardHandler = (
       case 'ArrowRight':
       case 'ArrowDown': {
         event.preventDefault();
-        nextIndex = currentIndex < THEME_OPTIONS.length - 1 ? currentIndex + 1 : 0;
+        nextIndex =
+          currentIndex < THEME_OPTIONS.length - 1 ? currentIndex + 1 : 0;
         const nextOption = THEME_OPTIONS[nextIndex];
         if (nextOption) {
           handleThemeChange(nextOption.value, buttonElement);

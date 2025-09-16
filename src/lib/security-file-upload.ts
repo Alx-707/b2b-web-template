@@ -90,7 +90,8 @@ export function validateFileUpload(
   const warnings: string[] = [];
 
   // Check file size
-  const maxSize = (options.maxSizeMB || FILE_UPLOAD_CONSTANTS.MAX_FILE_SIZE_MB) *
+  const maxSize =
+    (options.maxSizeMB || FILE_UPLOAD_CONSTANTS.MAX_FILE_SIZE_MB) *
     FILE_UPLOAD_CONSTANTS.BYTES_PER_MB *
     FILE_UPLOAD_CONSTANTS.KB_TO_BYTES;
 
@@ -108,7 +109,7 @@ export function validateFileUpload(
     allowedTypes = options.allowedTypes;
   } else if (options.allowedCategories) {
     allowedTypes = options.allowedCategories.flatMap(
-      category => ALLOWED_FILE_TYPES[category] || []
+      (category) => ALLOWED_FILE_TYPES[category] || [],
     );
   } else {
     // Default: allow images and documents
@@ -122,7 +123,7 @@ export function validateFileUpload(
   if (!allowedTypes.includes(file.type)) {
     return {
       valid: false,
-      error: `File type '${file.type}' is not allowed. Allowed types: ${allowedTypes.join(', ')}`
+      error: `File type '${file.type}' is not allowed. Allowed types: ${allowedTypes.join(', ')}`,
     };
   }
 
@@ -133,7 +134,7 @@ export function validateFileUpload(
     if (fileName.endsWith(ext)) {
       return {
         valid: false,
-        error: `File extension '${ext}' is not allowed for security reasons`
+        error: `File extension '${ext}' is not allowed for security reasons`,
       };
     }
   }
@@ -143,7 +144,7 @@ export function validateFileUpload(
   if (parts.length > 2) {
     for (let i = 1; i < parts.length - 1; i++) {
       const ext = `.${parts[i]}`;
-      if (DANGEROUS_EXTENSIONS.includes(ext)) {
+      if (DANGEROUS_EXTENSIONS.includes(ext as any)) {
         return {
           valid: false,
           error: `File contains dangerous extension '${ext}' in filename`,
@@ -187,34 +188,41 @@ export function validateFileUpload(
 
   return {
     valid: true,
-    ...(warnings.length > 0 && { warnings })
+    ...(warnings.length > 0 && { warnings }),
   };
 }
 
 /**
  * Validate file content based on file signature (magic numbers)
  */
-export async function validateFileSignature(file: File): Promise<FileValidationResult> {
+export async function validateFileSignature(
+  file: File,
+): Promise<FileValidationResult> {
   try {
     const buffer = await file.arrayBuffer();
     const bytes = new Uint8Array(buffer);
 
     // Check for common file signatures
     const signatures = {
-      'image/jpeg': [0xFF, 0xD8, 0xFF],
-      'image/png': [0x89, 0x50, 0x4E, 0x47],
+      'image/jpeg': [0xff, 0xd8, 0xff],
+      'image/png': [0x89, 0x50, 0x4e, 0x47],
       'image/gif': [0x47, 0x49, 0x46],
       'application/pdf': [0x25, 0x50, 0x44, 0x46],
-      'application/zip': [0x50, 0x4B, 0x03, 0x04],
+      'application/zip': [0x50, 0x4b, 0x03, 0x04],
     };
 
     // Get the declared MIME type
     const declaredType = file.type;
-    const expectedSignature = signatures[declaredType as keyof typeof signatures];
+    const expectedSignature =
+      signatures[declaredType as keyof typeof signatures];
 
     if (expectedSignature) {
-      const actualSignature = Array.from(bytes.slice(0, expectedSignature.length));
-      const matches = expectedSignature.every((byte, index) => byte === actualSignature[index]);
+      const actualSignature = Array.from(
+        bytes.slice(0, expectedSignature.length),
+      );
+      const matches = expectedSignature.every(
+        (byte, index) => byte === actualSignature[index],
+      );
 
       if (!matches) {
         return {
@@ -247,17 +255,16 @@ export function sanitizeFileName(fileName: string): string {
 /**
  * Generate safe file name with timestamp
  */
-export function generateSafeFileName(originalName: string, prefix?: string): string {
+export function generateSafeFileName(
+  originalName: string,
+  prefix?: string,
+): string {
   const timestamp = Date.now();
   const extension = originalName.split('.').pop() || '';
   const baseName = originalName.replace(/\.[^/.]+$/, ''); // Remove extension
   const sanitizedBase = sanitizeFileName(baseName);
 
-  const parts = [
-    prefix,
-    sanitizedBase,
-    timestamp,
-  ].filter(Boolean);
+  const parts = [prefix, sanitizedBase, timestamp].filter(Boolean);
 
   return `${parts.join('_')}.${extension}`;
 }
@@ -266,24 +273,30 @@ export function generateSafeFileName(originalName: string, prefix?: string): str
  * Check if file is an image
  */
 export function isImageFile(file: File): boolean {
-  return ALLOWED_FILE_TYPES.images.includes(file.type);
+  return ALLOWED_FILE_TYPES.images.includes(file.type as any);
 }
 
 /**
  * Check if file is a document
  */
 export function isDocumentFile(file: File): boolean {
-  return ALLOWED_FILE_TYPES.documents.includes(file.type);
+  return ALLOWED_FILE_TYPES.documents.includes(file.type as any);
 }
 
 /**
  * Get file category
  */
-export function getFileCategory(file: File): keyof typeof ALLOWED_FILE_TYPES | 'unknown' {
-  for (const [category, types] of Object.entries(ALLOWED_FILE_TYPES)) {
-    if (types.includes(file.type)) {
-      return category as keyof typeof ALLOWED_FILE_TYPES;
-    }
+export function getFileCategory(
+  file: File,
+): keyof typeof ALLOWED_FILE_TYPES | 'unknown' {
+  if (ALLOWED_FILE_TYPES.images.includes(file.type as any)) {
+    return 'images';
+  }
+  if (ALLOWED_FILE_TYPES.documents.includes(file.type as any)) {
+    return 'documents';
+  }
+  if (ALLOWED_FILE_TYPES.archives.includes(file.type as any)) {
+    return 'archives';
   }
   return 'unknown';
 }
@@ -314,7 +327,8 @@ export function validateMultipleFiles(
   // Check total size
   if (options.maxTotalSizeMB) {
     const totalSize = fileArray.reduce((sum, file) => sum + file.size, 0);
-    const maxTotalSize = options.maxTotalSizeMB *
+    const maxTotalSize =
+      options.maxTotalSizeMB *
       FILE_UPLOAD_CONSTANTS.BYTES_PER_MB *
       FILE_UPLOAD_CONSTANTS.KB_TO_BYTES;
 
@@ -328,11 +342,13 @@ export function validateMultipleFiles(
 
   // Validate each file
   for (let i = 0; i < fileArray.length; i++) {
-    const result = validateFileUpload(fileArray[i], options);
+    const file = fileArray[i];
+    if (!file) continue;
+    const result = validateFileUpload(file, options);
     if (!result.valid) {
       return {
         valid: false,
-        error: `File ${i + 1} (${fileArray[i].name}): ${result.error}`,
+        error: `File ${i + 1} (${fileArray[i]?.name}): ${result.error}`,
       };
     }
   }

@@ -1,12 +1,8 @@
-import { sendWhatsAppMessage } from '@/lib/whatsapp-service';
-import type {
-    SendMessageRequest,
-    TemplateComponent
-} from '@/types/whatsapp';
 import { NextRequest, NextResponse } from 'next/server';
-;
 import { z } from 'zod';
+import type { SendMessageRequest, TemplateComponent } from '@/types/whatsapp';
 import { logger } from '@/lib/logger';
+import { sendWhatsAppMessage } from '@/lib/whatsapp-service';
 
 /**
  * WhatsApp 消息发送 API 端点
@@ -23,36 +19,61 @@ const SendMessageSchema = z.object({
     body: z.string().optional(),
     templateName: z.string().optional(),
     languageCode: z.string().default('en'),
-    components: z.array(z.object({
-      type: z.enum(['header', 'body', 'footer', 'button']),
-      sub_type: z.enum(['quick_reply', 'url', 'phone_number']).optional(),
-      index: z.number().optional(),
-      parameters: z.array(z.object({
-        type: z.enum(['text', 'currency', 'date_time', 'image', 'document', 'video']),
-        text: z.string().optional(),
-        currency: z.object({
-          fallback_value: z.string(),
-          code: z.string(),
-          amount_1000: z.number(),
-        }).optional(),
-        date_time: z.object({
-          fallback_value: z.string(),
-        }).optional(),
-        image: z.object({
-          id: z.string().optional(),
-          link: z.string().url().optional(),
-        }).optional(),
-        document: z.object({
-          id: z.string().optional(),
-          link: z.string().url().optional(),
-          filename: z.string().optional(),
-        }).optional(),
-        video: z.object({
-          id: z.string().optional(),
-          link: z.string().url().optional(),
-        }).optional(),
-      })).optional(),
-    })).optional(),
+    components: z
+      .array(
+        z.object({
+          type: z.enum(['header', 'body', 'footer', 'button']),
+          sub_type: z.enum(['quick_reply', 'url', 'phone_number']).optional(),
+          index: z.number().optional(),
+          parameters: z
+            .array(
+              z.object({
+                type: z.enum([
+                  'text',
+                  'currency',
+                  'date_time',
+                  'image',
+                  'document',
+                  'video',
+                ]),
+                text: z.string().optional(),
+                currency: z
+                  .object({
+                    fallback_value: z.string(),
+                    code: z.string(),
+                    amount_1000: z.number(),
+                  })
+                  .optional(),
+                date_time: z
+                  .object({
+                    fallback_value: z.string(),
+                  })
+                  .optional(),
+                image: z
+                  .object({
+                    id: z.string().optional(),
+                    link: z.string().url().optional(),
+                  })
+                  .optional(),
+                document: z
+                  .object({
+                    id: z.string().optional(),
+                    link: z.string().url().optional(),
+                    filename: z.string().optional(),
+                  })
+                  .optional(),
+                video: z
+                  .object({
+                    id: z.string().optional(),
+                    link: z.string().url().optional(),
+                  })
+                  .optional(),
+              }),
+            )
+            .optional(),
+        }),
+      )
+      .optional(),
   }),
 });
 
@@ -174,7 +195,11 @@ export async function POST(request: NextRequest) {
     );
   } catch (_error) {
     // 忽略错误变量
-    logger.error('WhatsApp send message _error', {}, _error instanceof Error ? _error : new Error(String(_error)));
+    logger.error(
+      'WhatsApp send message _error',
+      {},
+      _error instanceof Error ? _error : new Error(String(_error)),
+    );
 
     // 根据错误类型返回不同的响应
     if (_error instanceof Error) {

@@ -1,10 +1,10 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import React, { useEffect, useState } from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
-import React, { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 /**
  * 主题选项配置
@@ -14,20 +14,20 @@ const THEME_OPTIONS = [
     value: 'system',
     icon: Monitor,
     labelKey: 'theme.system',
-    ariaLabelKey: 'theme.switchToSystem'
+    ariaLabelKey: 'theme.switchToSystem',
   },
   {
     value: 'light',
     icon: Sun,
     labelKey: 'theme.light',
-    ariaLabelKey: 'theme.switchToLight'
+    ariaLabelKey: 'theme.switchToLight',
   },
   {
     value: 'dark',
     icon: Moon,
     labelKey: 'theme.dark',
-    ariaLabelKey: 'theme.switchToDark'
-  }
+    ariaLabelKey: 'theme.switchToDark',
+  },
 ] as const;
 
 /**
@@ -35,9 +35,9 @@ const THEME_OPTIONS = [
  */
 export interface VercelThemeToggleProps {
   /** 自定义样式类名 */
-  className?: string;
+  'className'?: string;
   /** 是否显示标题 */
-  showTitle?: boolean;
+  'showTitle'?: boolean;
   /** 自定义测试ID */
   'data-testid'?: string;
 }
@@ -62,18 +62,21 @@ export function VercelThemeToggle({
   // 加载状态的骨架屏
   if (!mounted) {
     return (
-      <div className={cn('space-y-3', className)} data-testid={`${testId}-skeleton`}>
+      <div
+        className={cn('space-y-3', className)}
+        data-testid={`${testId}-skeleton`}
+      >
         {showTitle && (
-          <div className="h-5 w-16 animate-pulse bg-muted rounded" />
+          <div className='bg-muted h-5 w-16 animate-pulse rounded' />
         )}
-        <div className="flex gap-2">
+        <div className='flex gap-2'>
           {THEME_OPTIONS.map((_, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 p-2 rounded-md border animate-pulse"
+              className='flex animate-pulse items-center gap-2 rounded-md border p-2'
             >
-              <div className="h-4 w-4 bg-muted rounded" />
-              <div className="h-4 w-12 bg-muted rounded" />
+              <div className='bg-muted h-4 w-4 rounded' />
+              <div className='bg-muted h-4 w-12 rounded' />
             </div>
           ))}
         </div>
@@ -82,14 +85,21 @@ export function VercelThemeToggle({
   }
 
   return (
-    <div className={cn('space-y-3', className)} data-testid={testId}>
+    <div
+      className={cn('space-y-3', className)}
+      data-testid={testId}
+    >
       {showTitle && (
-        <h3 className="text-sm font-medium text-foreground">
+        <h3 className='text-foreground text-sm font-medium'>
           {t('theme.title')}
         </h3>
       )}
-      
-      <div className="flex gap-2" role="radiogroup" aria-label={t('theme.selectTheme')}>
+
+      <div
+        className='flex gap-2'
+        role='radiogroup'
+        aria-label={t('theme.selectTheme')}
+      >
         {THEME_OPTIONS.map((themeOption) => {
           const Icon = themeOption.icon;
           const isActive = theme === themeOption.value;
@@ -100,21 +110,21 @@ export function VercelThemeToggle({
             <button
               key={themeOption.value}
               className={cn(
-                'flex items-center gap-2 px-3 py-2 text-sm rounded-md border transition-colors',
-                'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                'flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors',
+                'hover:bg-muted focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
                 isActive
                   ? 'bg-primary text-primary-foreground border-primary'
-                  : 'bg-background text-muted-foreground border-border hover:text-foreground'
+                  : 'bg-background text-muted-foreground border-border hover:text-foreground',
               )}
               onClick={() => setTheme(themeOption.value)}
               aria-label={ariaLabel}
-              role="radio"
+              role='radio'
               aria-checked={isActive}
-              type="button"
+              type='button'
               data-testid={`${testId}-${themeOption.value}`}
             >
-              <Icon className="h-4 w-4" />
-              <span className="font-medium">{label}</span>
+              <Icon className='h-4 w-4' />
+              <span className='font-medium'>{label}</span>
             </button>
           );
         })}

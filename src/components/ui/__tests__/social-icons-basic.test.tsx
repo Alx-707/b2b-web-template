@@ -4,11 +4,7 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import {
-    ExternalLinkIcon,
-    LinkedInIcon,
-    TwitterIcon,
-} from '../social-icons';
+import { ExternalLinkIcon, LinkedInIcon, TwitterIcon } from '../social-icons';
 
 describe('Social Icons - Basic Icons', () => {
   describe('TwitterIcon', () => {
@@ -28,14 +24,24 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports custom className', () => {
-      render(<TwitterIcon className='custom-twitter' data-testid='twitter-icon' />);
+      render(
+        <TwitterIcon
+          className='custom-twitter'
+          data-testid='twitter-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('twitter-icon');
       expect(icon).toHaveClass('custom-twitter');
     });
 
     it('supports custom size', () => {
-      render(<TwitterIcon className='h-8 w-8' data-testid='twitter-icon' />);
+      render(
+        <TwitterIcon
+          className='h-8 w-8'
+          data-testid='twitter-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('twitter-icon');
       expect(icon).toHaveClass('h-8', 'w-8');
@@ -56,7 +62,12 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports custom aria attributes', () => {
-      render(<TwitterIcon aria-label='Twitter' data-testid='twitter-icon' />);
+      render(
+        <TwitterIcon
+          aria-label='Twitter'
+          data-testid='twitter-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('twitter-icon');
       expect(icon).toHaveAttribute('aria-label', 'Twitter');
@@ -71,11 +82,7 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports all HTML SVG attributes', () => {
-      render(
-        <TwitterIcon
-          data-testid='twitter-icon'
-        />
-      );
+      render(<TwitterIcon data-testid='twitter-icon' />);
 
       const icon = screen.getByTestId('twitter-icon');
       expect(icon).toBeInTheDocument();
@@ -100,14 +107,24 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports custom className', () => {
-      render(<LinkedInIcon className='custom-linkedin' data-testid='linkedin-icon' />);
+      render(
+        <LinkedInIcon
+          className='custom-linkedin'
+          data-testid='linkedin-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('linkedin-icon');
       expect(icon).toHaveClass('custom-linkedin');
     });
 
     it('supports custom size', () => {
-      render(<LinkedInIcon className='h-6 w-6' data-testid='linkedin-icon' />);
+      render(
+        <LinkedInIcon
+          className='h-6 w-6'
+          data-testid='linkedin-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('linkedin-icon');
       expect(icon).toHaveClass('h-6', 'w-6');
@@ -128,7 +145,12 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports custom aria attributes', () => {
-      render(<LinkedInIcon aria-label='LinkedIn' data-testid='linkedin-icon' />);
+      render(
+        <LinkedInIcon
+          aria-label='LinkedIn'
+          data-testid='linkedin-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('linkedin-icon');
       expect(icon).toHaveAttribute('aria-label', 'LinkedIn');
@@ -143,14 +165,24 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports different color schemes', () => {
-      render(<LinkedInIcon className='text-blue-600' data-testid='linkedin-icon' />);
+      render(
+        <LinkedInIcon
+          className='text-blue-600'
+          data-testid='linkedin-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('linkedin-icon');
       expect(icon).toHaveClass('text-blue-600');
     });
 
     it('handles responsive sizing', () => {
-      render(<LinkedInIcon className='h-4 w-4 md:h-6 md:w-6' data-testid='linkedin-icon' />);
+      render(
+        <LinkedInIcon
+          className='h-4 w-4 md:h-6 md:w-6'
+          data-testid='linkedin-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('linkedin-icon');
       expect(icon).toHaveClass('h-4', 'w-4', 'md:h-6', 'md:w-6');
@@ -174,14 +206,24 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports custom className', () => {
-      render(<ExternalLinkIcon className='custom-external' data-testid='external-icon' />);
+      render(
+        <ExternalLinkIcon
+          className='custom-external'
+          data-testid='external-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('external-icon');
       expect(icon).toHaveClass('custom-external');
     });
 
     it('supports custom size', () => {
-      render(<ExternalLinkIcon className='h-3 w-3' data-testid='external-icon' />);
+      render(
+        <ExternalLinkIcon
+          className='h-3 w-3'
+          data-testid='external-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('external-icon');
       expect(icon).toHaveClass('h-3', 'w-3');
@@ -202,7 +244,12 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports custom aria attributes', () => {
-      render(<ExternalLinkIcon aria-label='External link' data-testid='external-icon' />);
+      render(
+        <ExternalLinkIcon
+          aria-label='External link'
+          data-testid='external-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('external-icon');
       expect(icon).toHaveAttribute('aria-label', 'External link');
@@ -217,32 +264,43 @@ describe('Social Icons - Basic Icons', () => {
     });
 
     it('supports inline styling', () => {
-      render(
-        <ExternalLinkIcon
-          data-testid='external-icon'
-        />
-      );
+      render(<ExternalLinkIcon data-testid='external-icon' />);
 
       const icon = screen.getByTestId('external-icon');
       expect(icon).toBeInTheDocument();
     });
 
     it('handles hover states', () => {
-      render(<ExternalLinkIcon className='hover:opacity-80' data-testid='external-icon' />);
+      render(
+        <ExternalLinkIcon
+          className='hover:opacity-80'
+          data-testid='external-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('external-icon');
       expect(icon).toHaveClass('hover:opacity-80');
     });
 
     it('supports focus states', () => {
-      render(<ExternalLinkIcon className='focus:outline-none' data-testid='external-icon' />);
+      render(
+        <ExternalLinkIcon
+          className='focus:outline-none'
+          data-testid='external-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('external-icon');
       expect(icon).toHaveClass('focus:outline-none');
     });
 
     it('handles dark mode variants', () => {
-      render(<ExternalLinkIcon className='text-gray-600 dark:text-gray-300' data-testid='external-icon' />);
+      render(
+        <ExternalLinkIcon
+          className='text-gray-600 dark:text-gray-300'
+          data-testid='external-icon'
+        />,
+      );
 
       const icon = screen.getByTestId('external-icon');
       expect(icon).toHaveClass('text-gray-600', 'dark:text-gray-300');
@@ -256,14 +314,14 @@ describe('Social Icons - Basic Icons', () => {
           <TwitterIcon data-testid='twitter' />
           <LinkedInIcon data-testid='linkedin' />
           <ExternalLinkIcon data-testid='external' />
-        </div>
+        </div>,
       );
 
       const twitter = screen.getByTestId('twitter');
       const linkedin = screen.getByTestId('linkedin');
       const external = screen.getByTestId('external');
 
-      [twitter, linkedin, external].forEach(icon => {
+      [twitter, linkedin, external].forEach((icon) => {
         expect(icon.tagName).toBe('svg');
         expect(icon).toHaveAttribute('viewBox');
         expect(icon).toHaveAttribute('aria-hidden', 'true');
@@ -275,17 +333,26 @@ describe('Social Icons - Basic Icons', () => {
 
       render(
         <div>
-          <TwitterIcon className={customClass} data-testid='twitter' />
-          <LinkedInIcon className={customClass} data-testid='linkedin' />
-          <ExternalLinkIcon className={customClass} data-testid='external' />
-        </div>
+          <TwitterIcon
+            className={customClass}
+            data-testid='twitter'
+          />
+          <LinkedInIcon
+            className={customClass}
+            data-testid='linkedin'
+          />
+          <ExternalLinkIcon
+            className={customClass}
+            data-testid='external'
+          />
+        </div>,
       );
 
       const twitter = screen.getByTestId('twitter');
       const linkedin = screen.getByTestId('linkedin');
       const external = screen.getByTestId('external');
 
-      [twitter, linkedin, external].forEach(icon => {
+      [twitter, linkedin, external].forEach((icon) => {
         expect(icon).toHaveClass(customClass);
       });
     });
@@ -297,7 +364,7 @@ describe('Social Icons - Basic Icons', () => {
             <TwitterIcon />
             <LinkedInIcon />
             <ExternalLinkIcon />
-          </div>
+          </div>,
         );
       }).not.toThrow();
     });
@@ -308,7 +375,7 @@ describe('Social Icons - Basic Icons', () => {
           <TwitterIcon data-testid='twitter' />
           <LinkedInIcon data-testid='linkedin' />
           <ExternalLinkIcon data-testid='external' />
-        </div>
+        </div>,
       );
 
       expect(screen.getByTestId('twitter')).toBeInTheDocument();

@@ -21,12 +21,17 @@ interface MockUnderConstructionProps {
 }
 
 vi.mock('@/components/shared/under-construction', () => ({
-  UnderConstruction: ({ pageType, currentStep, expectedDate, showProgress }: MockUnderConstructionProps) => (
-    <div data-testid="under-construction">
-      <div data-testid="page-type">{pageType}</div>
-      <div data-testid="current-step">{currentStep}</div>
-      <div data-testid="expected-date">{expectedDate}</div>
-      <div data-testid="show-progress">{showProgress?.toString()}</div>
+  UnderConstruction: ({
+    pageType,
+    currentStep,
+    expectedDate,
+    showProgress,
+  }: MockUnderConstructionProps) => (
+    <div data-testid='under-construction'>
+      <div data-testid='page-type'>{pageType}</div>
+      <div data-testid='current-step'>{currentStep}</div>
+      <div data-testid='expected-date'>{expectedDate}</div>
+      <div data-testid='show-progress'>{showProgress?.toString()}</div>
     </div>
   ),
 }));
@@ -66,7 +71,9 @@ describe('BlogPage', () => {
       // 验证传递给UnderConstruction的props
       expect(screen.getByTestId('page-type')).toHaveTextContent('blog');
       expect(screen.getByTestId('current-step')).toHaveTextContent('0');
-      expect(screen.getByTestId('expected-date')).toHaveTextContent('2024年第三季度');
+      expect(screen.getByTestId('expected-date')).toHaveTextContent(
+        '2024年第三季度',
+      );
       expect(screen.getByTestId('show-progress')).toHaveTextContent('true');
     });
   });
@@ -210,7 +217,9 @@ describe('BlogPage', () => {
 
     it('应该使用正确的expectedDate', () => {
       render(<BlogPage />);
-      expect(screen.getByTestId('expected-date')).toHaveTextContent('2024年第三季度');
+      expect(screen.getByTestId('expected-date')).toHaveTextContent(
+        '2024年第三季度',
+      );
     });
 
     it('应该启用progress显示', () => {
@@ -231,7 +240,9 @@ describe('BlogPage', () => {
       render(<BlogPage />);
 
       // Blog页面预期在2024年第三季度完成
-      expect(screen.getByTestId('expected-date')).toHaveTextContent('2024年第三季度');
+      expect(screen.getByTestId('expected-date')).toHaveTextContent(
+        '2024年第三季度',
+      );
     });
   });
 

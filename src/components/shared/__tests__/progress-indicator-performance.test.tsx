@@ -6,9 +6,9 @@
  * 注意：高级功能测试请参考 progress-indicator-advanced.test.tsx
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ProgressIndicator } from '../progress-indicator';
 
@@ -20,9 +20,9 @@ vi.mock('next-intl', () => ({
 
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
-  Check: () => <span data-testid="check-icon">✓</span>,
-  ChevronRight: () => <span data-testid="chevron-right-icon">→</span>,
-  Circle: () => <span data-testid="circle-icon">○</span>,
+  Check: () => <span data-testid='check-icon'>✓</span>,
+  ChevronRight: () => <span data-testid='chevron-right-icon'>→</span>,
+  Circle: () => <span data-testid='circle-icon'>○</span>,
 }));
 
 describe('ProgressIndicator - 性能和边界情况测试', () => {
@@ -93,8 +93,6 @@ describe('ProgressIndicator - 性能和边界情况测试', () => {
     });
 
     it('处理特殊字符在步骤标签中', () => {
-
-
       render(<ProgressIndicator currentStep={1} />);
 
       // 验证默认步骤显示正常
@@ -145,20 +143,16 @@ describe('ProgressIndicator - 性能和边界情况测试', () => {
     it('支持自定义className', () => {
       const { container } = render(
         <ProgressIndicator
-          className="custom-theme"
+          className='custom-theme'
           currentStep={1}
-        />
+        />,
       );
 
       expect(container.firstChild).toHaveClass('custom-theme');
     });
 
     it('正确显示进度样式', () => {
-      render(
-        <ProgressIndicator
-          currentStep={2}
-        />
-      );
+      render(<ProgressIndicator currentStep={2} />);
 
       // 验证进度百分比显示
       expect(screen.getByText('67%')).toBeInTheDocument();
@@ -179,13 +173,11 @@ describe('ProgressIndicator - 性能和边界情况测试', () => {
 
         return (
           <form>
-            <ProgressIndicator
-              currentStep={step}
-            />
+            <ProgressIndicator currentStep={step} />
             <button
-              type="button"
+              type='button'
               onClick={() => setStep(step + 1)}
-              data-testid="next-button"
+              data-testid='next-button'
             >
               下一步
             </button>
@@ -208,13 +200,16 @@ describe('ProgressIndicator - 性能和边界情况测试', () => {
         const [globalStep, setGlobalStep] = React.useState(1);
 
         return (
-          <div data-testid="state-provider">
-            {React.cloneElement(children as React.ReactElement, {
-              currentStep: globalStep,
-            } as any)}
+          <div data-testid='state-provider'>
+            {React.cloneElement(
+              children as React.ReactElement,
+              {
+                currentStep: globalStep,
+              } as any,
+            )}
             <button
               onClick={() => setGlobalStep(3)}
-              data-testid="jump-to-step-3"
+              data-testid='jump-to-step-3'
             >
               跳转到步骤3
             </button>
@@ -225,7 +220,7 @@ describe('ProgressIndicator - 性能和边界情况测试', () => {
       render(
         <StateProvider>
           <ProgressIndicator />
-        </StateProvider>
+        </StateProvider>,
       );
 
       const jumpButton = screen.getByTestId('jump-to-step-3');
@@ -243,21 +238,21 @@ describe('ProgressIndicator - 性能和边界情况测试', () => {
         const [hasError, setHasError] = React.useState(false);
 
         if (hasError) {
-          return <div data-testid="error-fallback">出现错误</div>;
+          return <div data-testid='error-fallback'>出现错误</div>;
         }
 
         try {
           return <>{children}</>;
         } catch {
           setHasError(true);
-          return <div data-testid="error-fallback">出现错误</div>;
+          return <div data-testid='error-fallback'>出现错误</div>;
         }
       };
 
       render(
         <ErrorBoundary>
           <ProgressIndicator currentStep={1} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       // 组件应该正常渲染，不会触发错误边界

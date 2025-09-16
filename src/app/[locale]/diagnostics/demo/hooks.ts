@@ -4,8 +4,11 @@ import {
   testWebVitalsCollection,
 } from '@/scripts/test-web-vitals';
 import type { TestResults } from './utils';
-import { exportTestResults } from './utils';
-import { PERFORMANCE_CONSTANTS, simulatePerformanceIssues,  } from './utils';
+import {
+  exportTestResults,
+  PERFORMANCE_CONSTANTS,
+  simulatePerformanceIssues,
+} from './utils';
 
 // 诊断功能 Hook
 export function useDiagnostics() {

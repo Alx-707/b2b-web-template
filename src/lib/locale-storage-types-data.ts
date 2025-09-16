@@ -6,19 +6,18 @@
  */
 
 import type { Locale } from '@/types/i18n';
-;
 import type {
-  LocaleSource,
-  StorageEventType,
-  CompressionAlgorithm,
-  EncryptionAlgorithm,
-  SyncStatus,
-  HealthStatus,
-  ErrorType,
-  PriorityLevel,
   BrowserType,
+  CompressionAlgorithm,
   DeviceType,
+  EncryptionAlgorithm,
+  ErrorType,
+  HealthStatus,
+  LocaleSource,
   OSType,
+  PriorityLevel,
+  StorageEventType,
+  SyncStatus,
   VersionInfo,
 } from './locale-storage-types-base';
 
@@ -76,6 +75,7 @@ export interface StorageStats {
   accessCount: number;
   errorCount: number;
   freshness: number;
+  hasOverride: boolean;
   historyStats: {
     totalEntries: number;
     uniqueLocales: number;
@@ -119,7 +119,9 @@ export interface StorageEvent<T = unknown> {
  * 存储事件监听器
  * Storage event listener
  */
-export type StorageEventListener<T = unknown> = (event: StorageEvent<T>) => void;
+export type StorageEventListener<T = unknown> = (
+  event: StorageEvent<T>,
+) => void;
 
 /**
  * 存储健康检查
@@ -459,4 +461,25 @@ export interface DataImportResult {
   warnings: string[];
   duration: number;
   metadata?: Record<string, unknown>;
+}
+
+/**
+ * 存储维护选项
+ * Storage maintenance options
+ */
+export interface MaintenanceOptions {
+  /** 是否清理过期的检测记录 */
+  cleanupExpired?: boolean;
+  /** 过期阈值（毫秒），默认30天 */
+  maxDetectionAge?: number;
+  /** 是否验证数据完整性 */
+  validateData?: boolean;
+  /** 是否压缩存储 */
+  compactStorage?: boolean;
+  /** 是否修复同步问题 */
+  fixSyncIssues?: boolean;
+  /** 是否清理重复记录 */
+  cleanupDuplicates?: boolean;
+  /** 是否清理无效数据 */
+  cleanupInvalid?: boolean;
 }

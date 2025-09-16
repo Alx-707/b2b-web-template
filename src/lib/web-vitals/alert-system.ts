@@ -20,5 +20,3 @@ export type {
   PerformanceAlertConfig,
   RegressionDetectionResult,
 } from './types';
-
-

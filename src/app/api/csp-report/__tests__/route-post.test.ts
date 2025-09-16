@@ -9,7 +9,6 @@
  */
 
 import { NextRequest } from 'next/server';
-;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from '@/app/api/csp-report/__tests__/route';
 
@@ -63,7 +62,7 @@ describe('CSP Report API Route - 集成测试', () => {
         expect.objectContaining({
           'document-uri': 'https://example.com/page',
           'violated-directive': 'script-src',
-        })
+        }),
       );
     });
 
@@ -90,13 +89,16 @@ describe('CSP Report API Route - 集成测试', () => {
       ];
 
       for (const report of reports) {
-        const request = new NextRequest('http://localhost:3000/api/csp-report', {
-          method: 'POST',
-          body: JSON.stringify(report),
-          headers: {
-            'content-type': 'application/csp-report',
+        const request = new NextRequest(
+          'http://localhost:3000/api/csp-report',
+          {
+            method: 'POST',
+            body: JSON.stringify(report),
+            headers: {
+              'content-type': 'application/csp-report',
+            },
           },
-        });
+        );
 
         const response = await POST(request);
         expect(response.status).toBe(204);

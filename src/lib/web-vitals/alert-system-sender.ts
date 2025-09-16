@@ -4,9 +4,13 @@
  */
 
 import { ALERT_SYSTEM_CONSTANTS } from '@/constants/performance-constants';
-import { sendConsoleAlerts, sendWebhookNotification, storeAlerts } from './alert-notifications';
-import type { PerformanceAlertConfig } from './types';
+import {
+  sendConsoleAlerts,
+  sendWebhookNotification,
+  storeAlerts,
+} from './alert-notifications';
 import type { AlertInfo } from './alert-system-checker';
+import type { PerformanceAlert, PerformanceAlertConfig } from './types';
 
 /**
  * 预警历史记录接口
@@ -32,10 +36,7 @@ export class AlertSystemSender {
   /**
    * 发送预警
    */
-  sendAlerts(
-    alerts: AlertInfo[],
-    config: PerformanceAlertConfig,
-  ): void {
+  sendAlerts(alerts: AlertInfo[], config: PerformanceAlertConfig): void {
     // 添加到历史记录
     alerts.forEach((alert) => {
       const historyEntry: AlertHistoryEntry = {
@@ -117,10 +118,10 @@ export class AlertSystemSender {
    */
   private sendCallbackAlerts(
     alerts: AlertInfo[],
-    callback: (alert: Record<string, unknown>) => void,
+    callback: (alert: PerformanceAlert) => void,
   ): void {
     alerts.forEach((alert) => {
-      const performanceAlert = {
+      const performanceAlert: PerformanceAlert = {
         id: this.generateAlertId(),
         timestamp: Date.now(),
         severity: alert.severity,
@@ -189,8 +190,12 @@ export class AlertSystemSender {
     criticals: number;
     lastAlert?: AlertHistoryEntry;
   } {
-    const warnings = this.alertHistory.filter(alert => alert.severity === 'warning').length;
-    const criticals = this.alertHistory.filter(alert => alert.severity === 'critical').length;
+    const warnings = this.alertHistory.filter(
+      (alert) => alert.severity === 'warning',
+    ).length;
+    const criticals = this.alertHistory.filter(
+      (alert) => alert.severity === 'critical',
+    ).length;
     const lastAlert = this.alertHistory[this.alertHistory.length - 1];
 
     return {
@@ -210,7 +215,7 @@ export class AlertSystemSender {
     startTime?: number;
     endTime?: number;
   }): AlertHistoryEntry[] {
-    return this.alertHistory.filter(alert => {
+    return this.alertHistory.filter((alert) => {
       if (filter.severity && alert.severity !== filter.severity) return false;
       if (filter.metric && alert.metric !== filter.metric) return false;
       if (filter.startTime && alert.timestamp < filter.startTime) return false;

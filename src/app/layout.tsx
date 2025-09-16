@@ -1,6 +1,6 @@
 import '@/app/globals.css';
-import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import type { Metadata } from 'next';
 
 interface RootLayoutProps {
   children: ReactNode;

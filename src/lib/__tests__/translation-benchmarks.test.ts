@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { Locale } from '@/types/i18n';
-;
 import { TranslationBenchmarks } from '../translation-benchmarks';
 import type { QualityBenchmark } from '../translation-quality-types';
 

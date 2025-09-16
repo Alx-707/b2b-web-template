@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Label } from '../label';
 
@@ -28,10 +28,13 @@ describe('Label - Advanced Form Association Tests', () => {
           {fields.map((field) => (
             <div key={field.id}>
               <Label htmlFor={field.id}>{field.label}</Label>
-              <input id={field.id} type={field.type} />
+              <input
+                id={field.id}
+                type={field.type}
+              />
             </div>
           ))}
-        </form>
+        </form>,
       );
 
       // Test all dynamic labels are properly associated
@@ -55,21 +58,30 @@ describe('Label - Advanced Form Association Tests', () => {
             <legend>Personal Information</legend>
             <div>
               <Label htmlFor='nested-name'>Full Name</Label>
-              <input id='nested-name' type='text' />
+              <input
+                id='nested-name'
+                type='text'
+              />
             </div>
             <div>
               <Label htmlFor='nested-email'>Email Address</Label>
-              <input id='nested-email' type='email' />
+              <input
+                id='nested-email'
+                type='email'
+              />
             </div>
           </fieldset>
           <fieldset>
             <legend>Preferences</legend>
             <div>
               <Label htmlFor='nested-newsletter'>Subscribe to Newsletter</Label>
-              <input id='nested-newsletter' type='checkbox' />
+              <input
+                id='nested-newsletter'
+                type='checkbox'
+              />
             </div>
           </fieldset>
-        </form>
+        </form>,
       );
 
       // Test nested form structure maintains proper associations
@@ -102,7 +114,7 @@ describe('Label - Advanced Form Association Tests', () => {
             <option value='1'>Option 1</option>
             <option value='2'>Option 2</option>
           </select>
-        </div>
+        </div>,
       );
 
       const label = screen.getByText('Select Label');
@@ -117,7 +129,7 @@ describe('Label - Advanced Form Association Tests', () => {
         <div>
           <Label htmlFor='textarea-input'>Textarea Label</Label>
           <textarea id='textarea-input' />
-        </div>
+        </div>,
       );
 
       const label = screen.getByText('Textarea Label');
@@ -132,7 +144,7 @@ describe('Label - Advanced Form Association Tests', () => {
         <Label data-testid='nested-label'>
           Nested Input
           <input type='checkbox' />
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('nested-label');
@@ -146,12 +158,18 @@ describe('Label - Advanced Form Association Tests', () => {
       render(
         <div>
           <form id='test-form'>
-            <input id='form-input' type='text' />
+            <input
+              id='form-input'
+              type='text'
+            />
           </form>
-          <Label htmlFor='form-input' form='test-form'>
+          <Label
+            htmlFor='form-input'
+            form='test-form'
+          >
             Form Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByText('Form Label');
@@ -163,8 +181,11 @@ describe('Label - Advanced Form Association Tests', () => {
         <div>
           <Label htmlFor='multi-input'>First Label</Label>
           <Label htmlFor='multi-input'>Second Label</Label>
-          <input id='multi-input' type='text' />
-        </div>
+          <input
+            id='multi-input'
+            type='text'
+          />
+        </div>,
       );
 
       const firstLabel = screen.getByText('First Label');
@@ -180,7 +201,13 @@ describe('Label - Advanced Form Association Tests', () => {
 
     it('works with custom input components', async () => {
       const CustomInput = React.forwardRef<HTMLInputElement, { id: string }>(
-        ({ id }, ref) => <input ref={ref} id={id} type='text' />
+        ({ id }, ref) => (
+          <input
+            ref={ref}
+            id={id}
+            type='text'
+          />
+        ),
       );
       CustomInput.displayName = 'CustomInput';
 
@@ -188,7 +215,7 @@ describe('Label - Advanced Form Association Tests', () => {
         <div>
           <Label htmlFor='custom-input'>Custom Input Label</Label>
           <CustomInput id='custom-input' />
-        </div>
+        </div>,
       );
 
       const label = screen.getByText('Custom Input Label');
@@ -205,14 +232,22 @@ describe('Label - Advanced Form Association Tests', () => {
             <legend>User Information</legend>
             <div>
               <Label htmlFor='user-name'>Name</Label>
-              <input id='user-name' type='text' required />
+              <input
+                id='user-name'
+                type='text'
+                required
+              />
             </div>
             <div>
               <Label htmlFor='user-email'>Email</Label>
-              <input id='user-email' type='email' required />
+              <input
+                id='user-email'
+                type='email'
+                required
+              />
             </div>
           </fieldset>
-        </form>
+        </form>,
       );
 
       const nameLabel = screen.getByText('Name');
@@ -231,8 +266,12 @@ describe('Label - Advanced Form Association Tests', () => {
       render(
         <div>
           <Label htmlFor='disabled-input'>Disabled Input</Label>
-          <input id='disabled-input' type='text' disabled />
-        </div>
+          <input
+            id='disabled-input'
+            type='text'
+            disabled
+          />
+        </div>,
       );
 
       const label = screen.getByText('Disabled Input');
@@ -248,11 +287,18 @@ describe('Label - Advanced Form Association Tests', () => {
     it('handles form validation states', () => {
       render(
         <div>
-          <Label htmlFor='validation-input' aria-invalid='true'>
+          <Label
+            htmlFor='validation-input'
+            aria-invalid='true'
+          >
             Invalid Input
           </Label>
-          <input id='validation-input' type='text' aria-invalid='true' />
-        </div>
+          <input
+            id='validation-input'
+            type='text'
+            aria-invalid='true'
+          />
+        </div>,
       );
 
       const label = screen.getByText('Invalid Input');
@@ -268,8 +314,12 @@ describe('Label - Advanced Form Association Tests', () => {
           <Label htmlFor='required-input'>
             Required Field <span aria-label='required'>*</span>
           </Label>
-          <input id='required-input' type='text' required />
-        </div>
+          <input
+            id='required-input'
+            type='text'
+            required
+          />
+        </div>,
       );
 
       const label = screen.getByText(/Required Field/);
@@ -280,17 +330,26 @@ describe('Label - Advanced Form Association Tests', () => {
 
     it('works with input groups', async () => {
       render(
-        <div role='group' aria-labelledby='group-label'>
+        <div
+          role='group'
+          aria-labelledby='group-label'
+        >
           <Label id='group-label'>Contact Information</Label>
           <div>
             <Label htmlFor='phone'>Phone</Label>
-            <input id='phone' type='tel' />
+            <input
+              id='phone'
+              type='tel'
+            />
           </div>
           <div>
             <Label htmlFor='fax'>Fax</Label>
-            <input id='fax' type='tel' />
+            <input
+              id='fax'
+              type='tel'
+            />
           </div>
-        </div>
+        </div>,
       );
 
       const groupLabel = screen.getByText('Contact Information');
@@ -307,7 +366,10 @@ describe('Label - Advanced Form Association Tests', () => {
       const DynamicForm = ({ inputId }: { inputId: string }) => (
         <div>
           <Label htmlFor={inputId}>Dynamic Label</Label>
-          <input id={inputId} type='text' />
+          <input
+            id={inputId}
+            type='text'
+          />
         </div>
       );
 

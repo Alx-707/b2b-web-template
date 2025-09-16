@@ -4,20 +4,17 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-;
 import { logger } from '@/lib/logger';
 import {
   checkRateLimit,
   getClientIP,
 } from '@/app/api/contact/contact-api-utils';
 import {
-  validateFormData,
-  processFormSubmission,
   getContactFormStats,
+  processFormSubmission,
   validateAdminAccess,
+  validateFormData,
 } from '@/app/api/contact/contact-api-validation';
-
-
 
 /**
  * POST /api/contact

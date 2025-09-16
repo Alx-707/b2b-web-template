@@ -1,6 +1,6 @@
-import { render } from '@/test/utils';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { render } from '@/test/utils';
 
 // Mock a simple accessible component
 const AccessibleButton = ({

@@ -22,9 +22,12 @@ describe('Label Responsive Behavior - Main Tests', () => {
   describe('核心响应式功能验证', () => {
     it('maintains consistent styling across screen sizes', () => {
       render(
-        <Label className='text-sm md:text-base lg:text-lg' data-testid='responsive-label'>
+        <Label
+          className='text-sm md:text-base lg:text-lg'
+          data-testid='responsive-label'
+        >
           Responsive Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-label');
@@ -33,9 +36,12 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive spacing', () => {
       render(
-        <Label className='p-2 md:p-4 lg:p-6' data-testid='spacing-label'>
+        <Label
+          className='p-2 md:p-4 lg:p-6'
+          data-testid='spacing-label'
+        >
           Spacing Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('spacing-label');
@@ -45,10 +51,13 @@ describe('Label Responsive Behavior - Main Tests', () => {
     it('adapts to container constraints', () => {
       render(
         <div style={{ width: '200px' }}>
-          <Label className='w-full truncate' data-testid='constrained-label'>
+          <Label
+            className='w-full truncate'
+            data-testid='constrained-label'
+          >
             Very long label text that should be truncated
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('constrained-label');
@@ -58,11 +67,11 @@ describe('Label Responsive Behavior - Main Tests', () => {
     it('handles mobile touch targets', () => {
       render(
         <Label
-          className='min-h-[44px] min-w-[44px] flex items-center'
+          className='flex min-h-[44px] min-w-[44px] items-center'
           data-testid='touch-target'
         >
           Touch Target
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('touch-target');
@@ -71,9 +80,12 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('supports dark mode variants', () => {
       render(
-        <Label className='text-gray-900 dark:text-gray-100' data-testid='dark-mode'>
+        <Label
+          className='text-gray-900 dark:text-gray-100'
+          data-testid='dark-mode'
+        >
           Dark Mode Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('dark-mode');
@@ -84,9 +96,12 @@ describe('Label Responsive Behavior - Main Tests', () => {
   describe('基本响应式测试', () => {
     it('handles responsive margins', () => {
       render(
-        <Label className='m-1 sm:m-2 md:m-3 lg:m-4 xl:m-5' data-testid='responsive-margins'>
+        <Label
+          className='m-1 sm:m-2 md:m-3 lg:m-4 xl:m-5'
+          data-testid='responsive-margins'
+        >
           Responsive Margins
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-margins');
@@ -95,53 +110,88 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive padding', () => {
       render(
-        <Label className='px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-3' data-testid='responsive-padding'>
+        <Label
+          className='px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-3'
+          data-testid='responsive-padding'
+        >
           Responsive Padding
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-padding');
-      expect(label).toHaveClass('px-2', 'py-1', 'sm:px-3', 'sm:py-2', 'md:px-4', 'md:py-3');
+      expect(label).toHaveClass(
+        'px-2',
+        'py-1',
+        'sm:px-3',
+        'sm:py-2',
+        'md:px-4',
+        'md:py-3',
+      );
     });
 
     it('handles responsive font weights', () => {
       render(
-        <Label className='font-normal md:font-medium lg:font-semibold' data-testid='responsive-weight'>
+        <Label
+          className='font-normal md:font-medium lg:font-semibold'
+          data-testid='responsive-weight'
+        >
           Responsive Weight
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-weight');
-      expect(label).toHaveClass('font-normal', 'md:font-medium', 'lg:font-semibold');
+      expect(label).toHaveClass(
+        'font-normal',
+        'md:font-medium',
+        'lg:font-semibold',
+      );
     });
 
     it('handles responsive colors', () => {
       render(
-        <Label className='text-gray-600 md:text-gray-700 lg:text-gray-800' data-testid='responsive-colors'>
+        <Label
+          className='text-gray-600 md:text-gray-700 lg:text-gray-800'
+          data-testid='responsive-colors'
+        >
           Responsive Colors
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-colors');
-      expect(label).toHaveClass('text-gray-600', 'md:text-gray-700', 'lg:text-gray-800');
+      expect(label).toHaveClass(
+        'text-gray-600',
+        'md:text-gray-700',
+        'lg:text-gray-800',
+      );
     });
 
     it('handles responsive borders', () => {
       render(
-        <Label className='border border-gray-200 md:border-gray-300 lg:border-gray-400' data-testid='responsive-borders'>
+        <Label
+          className='border border-gray-200 md:border-gray-300 lg:border-gray-400'
+          data-testid='responsive-borders'
+        >
           Responsive Borders
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-borders');
-      expect(label).toHaveClass('border', 'border-gray-200', 'md:border-gray-300', 'lg:border-gray-400');
+      expect(label).toHaveClass(
+        'border',
+        'border-gray-200',
+        'md:border-gray-300',
+        'lg:border-gray-400',
+      );
     });
 
     it('handles responsive shadows', () => {
       render(
-        <Label className='shadow-sm md:shadow-md lg:shadow-lg' data-testid='responsive-shadows'>
+        <Label
+          className='shadow-sm md:shadow-md lg:shadow-lg'
+          data-testid='responsive-shadows'
+        >
           Responsive Shadows
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-shadows');
@@ -150,9 +200,12 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive rounded corners', () => {
       render(
-        <Label className='rounded-sm md:rounded-md lg:rounded-lg' data-testid='responsive-rounded'>
+        <Label
+          className='rounded-sm md:rounded-md lg:rounded-lg'
+          data-testid='responsive-rounded'
+        >
           Responsive Rounded
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-rounded');
@@ -161,9 +214,12 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive display properties', () => {
       render(
-        <Label className='block md:inline-block lg:flex' data-testid='responsive-display'>
+        <Label
+          className='block md:inline-block lg:flex'
+          data-testid='responsive-display'
+        >
           Responsive Display
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-display');
@@ -172,9 +228,12 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive positioning', () => {
       render(
-        <Label className='relative md:absolute lg:fixed' data-testid='responsive-position'>
+        <Label
+          className='relative md:absolute lg:fixed'
+          data-testid='responsive-position'
+        >
           Responsive Position
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-position');
@@ -183,33 +242,56 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive width and height', () => {
       render(
-        <Label className='w-full md:w-1/2 lg:w-1/3 h-auto md:h-12 lg:h-16' data-testid='responsive-dimensions'>
+        <Label
+          className='h-auto w-full md:h-12 md:w-1/2 lg:h-16 lg:w-1/3'
+          data-testid='responsive-dimensions'
+        >
           Responsive Dimensions
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-dimensions');
-      expect(label).toHaveClass('w-full', 'md:w-1/2', 'lg:w-1/3', 'h-auto', 'md:h-12', 'lg:h-16');
+      expect(label).toHaveClass(
+        'w-full',
+        'md:w-1/2',
+        'lg:w-1/3',
+        'h-auto',
+        'md:h-12',
+        'lg:h-16',
+      );
     });
   });
 
   describe('错误处理验证', () => {
     it('handles responsive flexbox properties', () => {
       render(
-        <Label className='flex-col md:flex-row lg:flex-col justify-start md:justify-center lg:justify-end' data-testid='responsive-flex'>
+        <Label
+          className='flex-col justify-start md:flex-row md:justify-center lg:flex-col lg:justify-end'
+          data-testid='responsive-flex'
+        >
           Responsive Flex
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-flex');
-      expect(label).toHaveClass('flex-col', 'md:flex-row', 'lg:flex-col', 'justify-start', 'md:justify-center', 'lg:justify-end');
+      expect(label).toHaveClass(
+        'flex-col',
+        'md:flex-row',
+        'lg:flex-col',
+        'justify-start',
+        'md:justify-center',
+        'lg:justify-end',
+      );
     });
 
     it('handles responsive grid properties', () => {
       render(
-        <Label className='col-span-1 md:col-span-2 lg:col-span-3' data-testid='responsive-grid'>
+        <Label
+          className='col-span-1 md:col-span-2 lg:col-span-3'
+          data-testid='responsive-grid'
+        >
           Responsive Grid
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-grid');
@@ -218,20 +300,30 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive opacity', () => {
       render(
-        <Label className='opacity-50 md:opacity-75 lg:opacity-100' data-testid='responsive-opacity'>
+        <Label
+          className='opacity-50 md:opacity-75 lg:opacity-100'
+          data-testid='responsive-opacity'
+        >
           Responsive Opacity
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-opacity');
-      expect(label).toHaveClass('opacity-50', 'md:opacity-75', 'lg:opacity-100');
+      expect(label).toHaveClass(
+        'opacity-50',
+        'md:opacity-75',
+        'lg:opacity-100',
+      );
     });
 
     it('handles responsive transforms', () => {
       render(
-        <Label className='scale-90 md:scale-95 lg:scale-100' data-testid='responsive-transform'>
+        <Label
+          className='scale-90 md:scale-95 lg:scale-100'
+          data-testid='responsive-transform'
+        >
           Responsive Transform
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-transform');
@@ -240,9 +332,12 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive z-index', () => {
       render(
-        <Label className='z-10 md:z-20 lg:z-30' data-testid='responsive-z-index'>
+        <Label
+          className='z-10 md:z-20 lg:z-30'
+          data-testid='responsive-z-index'
+        >
           Responsive Z-Index
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-z-index');
@@ -251,53 +346,83 @@ describe('Label Responsive Behavior - Main Tests', () => {
 
     it('handles responsive overflow', () => {
       render(
-        <Label className='overflow-hidden md:overflow-visible lg:overflow-auto' data-testid='responsive-overflow'>
+        <Label
+          className='overflow-hidden md:overflow-visible lg:overflow-auto'
+          data-testid='responsive-overflow'
+        >
           Responsive Overflow
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-overflow');
-      expect(label).toHaveClass('overflow-hidden', 'md:overflow-visible', 'lg:overflow-auto');
+      expect(label).toHaveClass(
+        'overflow-hidden',
+        'md:overflow-visible',
+        'lg:overflow-auto',
+      );
     });
 
     it('handles responsive cursor', () => {
       render(
-        <Label className='cursor-default md:cursor-pointer lg:cursor-help' data-testid='responsive-cursor'>
+        <Label
+          className='cursor-default md:cursor-pointer lg:cursor-help'
+          data-testid='responsive-cursor'
+        >
           Responsive Cursor
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-cursor');
-      expect(label).toHaveClass('cursor-default', 'md:cursor-pointer', 'lg:cursor-help');
+      expect(label).toHaveClass(
+        'cursor-default',
+        'md:cursor-pointer',
+        'lg:cursor-help',
+      );
     });
 
     it('handles responsive user select', () => {
       render(
-        <Label className='select-none md:select-text lg:select-all' data-testid='responsive-select'>
+        <Label
+          className='select-none md:select-text lg:select-all'
+          data-testid='responsive-select'
+        >
           Responsive Select
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-select');
-      expect(label).toHaveClass('select-none', 'md:select-text', 'lg:select-all');
+      expect(label).toHaveClass(
+        'select-none',
+        'md:select-text',
+        'lg:select-all',
+      );
     });
 
     it('handles responsive pointer events', () => {
       render(
-        <Label className='pointer-events-none md:pointer-events-auto' data-testid='responsive-pointer'>
+        <Label
+          className='pointer-events-none md:pointer-events-auto'
+          data-testid='responsive-pointer'
+        >
           Responsive Pointer Events
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-pointer');
-      expect(label).toHaveClass('pointer-events-none', 'md:pointer-events-auto');
+      expect(label).toHaveClass(
+        'pointer-events-none',
+        'md:pointer-events-auto',
+      );
     });
 
     it('handles responsive visibility', () => {
       render(
-        <Label className='visible md:invisible lg:visible' data-testid='responsive-visibility'>
+        <Label
+          className='visible md:invisible lg:visible'
+          data-testid='responsive-visibility'
+        >
           Responsive Visibility
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-visibility');

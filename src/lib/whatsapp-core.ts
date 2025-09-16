@@ -7,16 +7,16 @@ import type {
   SendMessageRequest,
   WhatsAppServiceResponse,
 } from '@/types/whatsapp';
-import { WhatsAppMessageService } from './whatsapp-messages';
 import { WhatsAppMediaService } from './whatsapp-media';
+import { WhatsAppMessageService } from './whatsapp-messages';
 import { WhatsAppUtils } from './whatsapp-utils';
 
 /**
  * WhatsApp 核心服务类
  */
 export class WhatsAppService {
-  private messageService: WhatsAppMessageService;
-  private mediaService: WhatsAppMediaService;
+  private messageService!: WhatsAppMessageService;
+  private mediaService!: WhatsAppMediaService;
   private readonly accessToken: string;
   private readonly phoneNumberId: string;
 
@@ -38,12 +38,20 @@ export class WhatsAppService {
       throw new Error('WhatsApp access token and phone number ID are required');
     }
 
-    this.messageService = new WhatsAppMessageService(this.accessToken, this.phoneNumberId);
-    this.mediaService = new WhatsAppMediaService(this.accessToken, this.phoneNumberId);
+    this.messageService = new WhatsAppMessageService(
+      this.accessToken,
+      this.phoneNumberId,
+    );
+    this.mediaService = new WhatsAppMediaService(
+      this.accessToken,
+      this.phoneNumberId,
+    );
   }
 
   // 消息发送方法代理
-  async sendMessage(message: SendMessageRequest): Promise<WhatsAppServiceResponse> {
+  async sendMessage(
+    message: SendMessageRequest,
+  ): Promise<WhatsAppServiceResponse> {
     return this.messageService.sendMessage(message);
   }
 
@@ -69,7 +77,12 @@ export class WhatsAppService {
     languageCode: string,
     parameters?: string[],
   ): Promise<WhatsAppServiceResponse> {
-    return this.messageService.sendTemplateMessage(to, templateName, languageCode, parameters);
+    return this.messageService.sendTemplateMessage(
+      to,
+      templateName,
+      languageCode,
+      parameters,
+    );
   }
 
   async sendButtonMessage(
@@ -79,7 +92,13 @@ export class WhatsAppService {
     headerText?: string,
     footerText?: string,
   ): Promise<WhatsAppServiceResponse> {
-    return this.messageService.sendButtonMessage(to, bodyText, buttons, headerText, footerText);
+    return this.messageService.sendButtonMessage(
+      to,
+      bodyText,
+      buttons,
+      headerText,
+      footerText,
+    );
   }
 
   async sendListMessage(
@@ -92,7 +111,13 @@ export class WhatsAppService {
     }>,
     options?: { headerText?: string; footerText?: string },
   ): Promise<WhatsAppServiceResponse> {
-    return this.messageService.sendListMessage(to, bodyText, buttonText, sections, options);
+    return this.messageService.sendListMessage(
+      to,
+      bodyText,
+      buttonText,
+      sections,
+      options,
+    );
   }
 
   // 媒体处理方法代理

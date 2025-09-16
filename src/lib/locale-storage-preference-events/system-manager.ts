@@ -5,8 +5,11 @@
 
 'use client';
 
+import {
+  consoleLogListener,
+  historyRecordingListener,
+} from './event-listeners';
 import { PreferenceEventManager } from './event-manager';
-import { consoleLogListener, historyRecordingListener } from './event-listeners';
 
 /**
  * 事件管理工具函数
@@ -17,21 +20,23 @@ import { consoleLogListener, historyRecordingListener } from './event-listeners'
  * 设置默认事件监听器
  * Setup default event listeners
  */
-export function setupDefaultListeners(options: {
-  enableConsoleLog?: boolean;
-  enableHistoryRecording?: boolean;
-} = {}): void {
-  const {
-    enableConsoleLog = true,
-    enableHistoryRecording = true,
-  } = options;
+export function setupDefaultListeners(
+  options: {
+    enableConsoleLog?: boolean;
+    enableHistoryRecording?: boolean;
+  } = {},
+): void {
+  const { enableConsoleLog = true, enableHistoryRecording = true } = options;
 
   if (enableConsoleLog) {
     PreferenceEventManager.addEventListener('*', consoleLogListener);
   }
 
   if (enableHistoryRecording) {
-    PreferenceEventManager.addEventListener('preference_saved', historyRecordingListener);
+    PreferenceEventManager.addEventListener(
+      'preference_saved',
+      historyRecordingListener,
+    );
   }
 }
 
@@ -56,11 +61,12 @@ export function getEventSystemStatus(): {
 } {
   const listenerStats = PreferenceEventManager.getListenerStats();
   const eventHistory = PreferenceEventManager.getEventHistory(1);
-  
+
   return {
     isActive: listenerStats.totalListeners > 0,
     listenerStats,
     eventHistoryCount: PreferenceEventManager.getEventHistory().length,
-    lastEventTime: eventHistory.length > 0 ? eventHistory[0].timestamp : null,
+    lastEventTime:
+      eventHistory.length > 0 ? eventHistory[0]?.timestamp || null : null,
   };
 }

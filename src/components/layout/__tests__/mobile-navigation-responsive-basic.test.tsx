@@ -12,10 +12,10 @@
  * - 断点功能
  */
 
+import { usePathname } from 'next/navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MobileNavigation } from '../mobile-navigation';
 
@@ -43,18 +43,20 @@ describe('Mobile Navigation Responsive - Basic Tests', () => {
     vi.clearAllMocks();
 
     // Setup default mocks
-    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue((key: string) => {
-      const translations: Record<string, string> = {
-        'navigation.home': 'Home',
-        'navigation.about': 'About',
-        'navigation.services': 'Services',
-        'navigation.contact': 'Contact',
-        'navigation.menu': 'Menu',
-        'navigation.close': 'Close',
-      };
-      // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
-    });
+    (useTranslations as ReturnType<typeof vi.fn>).mockReturnValue(
+      (key: string) => {
+        const translations: Record<string, string> = {
+          'navigation.home': 'Home',
+          'navigation.about': 'About',
+          'navigation.services': 'Services',
+          'navigation.contact': 'Contact',
+          'navigation.menu': 'Menu',
+          'navigation.close': 'Close',
+        };
+        // eslint-disable-next-line security/detect-object-injection
+        return translations[key] || key; // key 来自测试数据，安全
+      },
+    );
 
     (usePathname as ReturnType<typeof vi.fn>).mockReturnValue('/');
   });
@@ -134,8 +136,6 @@ describe('Mobile Navigation Responsive - Basic Tests', () => {
       const nav = screen.getByRole('navigation');
       expect(nav).toBeInTheDocument();
     });
-
-
   });
 
   describe('动画和过渡效果', () => {
@@ -165,8 +165,6 @@ describe('Mobile Navigation Responsive - Basic Tests', () => {
       const trigger = screen.getByRole('button');
       expect(trigger).toHaveClass('motion-reduce:transition-none');
     });
-
-
   });
 
   describe('路由变化行为', () => {
@@ -203,8 +201,6 @@ describe('Mobile Navigation Responsive - Basic Tests', () => {
       const aboutLink = screen.getByRole('link', { name: 'About' });
       expect(aboutLink).toHaveAttribute('aria-current', 'page');
     });
-
-
 
     it('handles route changes during open state', async () => {
       const { rerender } = render(<MobileNavigation />);

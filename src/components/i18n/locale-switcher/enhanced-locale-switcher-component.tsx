@@ -1,25 +1,23 @@
+import { useMemo } from 'react';
+import { Languages } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import type { Locale } from '@/types/i18n';
+import { useClientLocaleDetection } from '@/lib/locale-detection';
+import { useLocaleStorage } from '@/lib/locale-storage';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { usePathname } from '@/i18n/routing';
-import { useClientLocaleDetection } from '@/lib/locale-detection';
-import { useLocaleStorage } from '@/lib/locale-storage';
-import type { Locale } from '@/types/i18n';
-import { Languages } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import { useMemo } from 'react';
 import type { EnhancedLocaleSwitcherProps } from './config';
 import { LANGUAGE_CONFIG, SOURCE_ICONS } from './config';
 import { LanguageItem } from './language-item';
 import { useLanguageSwitch } from './use-language-switch';
-;
-;
 
 export const EnhancedLocaleSwitcherComponent = ({
   showDetectionInfo = false,
@@ -46,9 +44,9 @@ export const EnhancedLocaleSwitcherComponent = ({
     if (!detection) return null;
 
     return {
-      source: stats.hasOverride ? 'user' : detection.source,
+      source: stats.data?.hasOverride ? 'user' : detection.source,
       confidence: detection.confidence,
-      isUserOverride: stats.hasOverride,
+      isUserOverride: stats.data?.hasOverride || false,
     };
   }, [showDetectionInfo, getStats, _detectClientLocale]);
 

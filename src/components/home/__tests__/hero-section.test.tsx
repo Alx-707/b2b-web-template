@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 // 导入被测试的组件
 import { HeroSection } from '../hero-section';
@@ -46,7 +46,7 @@ vi.mock('lucide-react', () => ({
 
 // Mock UI components
 vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, className, ...props }: React.ComponentProps<"div">) => (
+  Badge: ({ children, className, ...props }: React.ComponentProps<'div'>) => (
     <span
       data-testid='badge'
       className={className}
@@ -58,7 +58,12 @@ vi.mock('@/components/ui/badge', () => ({
 }));
 
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, className, onClick, ...props }: React.ComponentProps<"button">) => (
+  Button: ({
+    children,
+    className,
+    onClick,
+    ...props
+  }: React.ComponentProps<'button'>) => (
     <button
       data-testid='button'
       className={className}
@@ -87,7 +92,7 @@ describe('HeroSection', () => {
       'stats.languages': '2 Languages',
     };
     // eslint-disable-next-line security/detect-object-injection
-  return translations[key] || key; // key 来自测试数据，安全
+    return translations[key] || key; // key 来自测试数据，安全
   });
 
   beforeEach(() => {

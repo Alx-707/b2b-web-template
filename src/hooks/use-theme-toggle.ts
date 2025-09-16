@@ -2,8 +2,8 @@
 
 import React, { useCallback, useState } from 'react';
 import { useAccessibility } from '@/lib/accessibility';
-import { useEnhancedTheme } from './use-enhanced-theme';
 import { supportsViewTransitions } from './theme-transition-utils';
+import { useEnhancedTheme } from './use-enhanced-theme';
 
 /**
  * 检查组件是否已挂载的hook

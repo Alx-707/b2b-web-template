@@ -12,9 +12,9 @@
  * - Form library integration patterns
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Label } from '../label';
 
@@ -33,9 +33,10 @@ describe('Label Validation Scenarios Tests', () => {
           email: '',
         });
 
-        const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-          setValues(prev => ({ ...prev, [field]: e.target.value }));
-        };
+        const handleChange =
+          (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValues((prev) => ({ ...prev, [field]: e.target.value }));
+          };
 
         return (
           <form>
@@ -80,9 +81,12 @@ describe('Label Validation Scenarios Tests', () => {
 
         const validate = (field: string, value: string) => {
           if (!value) {
-            setErrors(prev => ({ ...prev, [field]: 'This field is required' }));
+            setErrors((prev) => ({
+              ...prev,
+              [field]: 'This field is required',
+            }));
           } else {
-            setErrors(prev => {
+            setErrors((prev) => {
               const { [field]: _, ...newErrors } = prev;
               return newErrors;
             });
@@ -137,35 +141,39 @@ describe('Label Validation Scenarios Tests', () => {
           return errors;
         };
 
-        const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const handlePasswordChange = (
+          e: React.ChangeEvent<HTMLInputElement>,
+        ) => {
           const password = e.target.value;
-          setValues(prev => ({ ...prev, password }));
-          
+          setValues((prev) => ({ ...prev, password }));
+
           const validationErrors = validatePassword(password);
           if (validationErrors.length > 0) {
-            setErrors(prev => ({
+            setErrors((prev) => ({
               ...prev,
-              password: `Password must contain ${validationErrors.join(', ')}`
+              password: `Password must contain ${validationErrors.join(', ')}`,
             }));
           } else {
-            setErrors(prev => {
+            setErrors((prev) => {
               const { password: _, ...newErrors } = prev;
               return newErrors;
             });
           }
         };
 
-        const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const handleConfirmPasswordChange = (
+          e: React.ChangeEvent<HTMLInputElement>,
+        ) => {
           const confirmPassword = e.target.value;
-          setValues(prev => ({ ...prev, confirmPassword }));
-          
+          setValues((prev) => ({ ...prev, confirmPassword }));
+
           if (confirmPassword !== values.password) {
-            setErrors(prev => ({
+            setErrors((prev) => ({
               ...prev,
-              confirmPassword: 'Passwords do not match'
+              confirmPassword: 'Passwords do not match',
             }));
           } else {
-            setErrors(prev => {
+            setErrors((prev) => {
               const { confirmPassword: _, ...newErrors } = prev;
               return newErrors;
             });
@@ -226,7 +234,9 @@ describe('Label Validation Scenarios Tests', () => {
       // Test strong password
       await user.clear(passwordInput);
       await user.type(passwordInput, 'StrongPass123');
-      expect(screen.queryByText(/Password must contain/)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/Password must contain/),
+      ).not.toBeInTheDocument();
 
       // Test password mismatch
       await user.type(confirmInput, 'DifferentPass123');
@@ -235,7 +245,9 @@ describe('Label Validation Scenarios Tests', () => {
       // Test password match
       await user.clear(confirmInput);
       await user.type(confirmInput, 'StrongPass123');
-      expect(screen.queryByText('Passwords do not match')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Passwords do not match'),
+      ).not.toBeInTheDocument();
     });
 
     it('handles async validation', async () => {
@@ -246,17 +258,17 @@ describe('Label Validation Scenarios Tests', () => {
 
         const validateEmail = async (emailValue: string) => {
           if (!emailValue) return;
-          
+
           setIsValidating(true);
           _setError('');
-          
+
           // Simulate async validation
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
+          await new Promise((resolve) => setTimeout(resolve, 500));
+
           if (emailValue === 'taken@example.com') {
             _setError('This email is already taken');
           }
-          
+
           setIsValidating(false);
         };
 
@@ -294,13 +306,15 @@ describe('Label Validation Scenarios Tests', () => {
 
       // Test taken email
       await user.type(emailInput, 'taken@example.com');
-      
+
       // Wait for validation
       expect(screen.getByText(/Checking/)).toBeInTheDocument();
-      
+
       // Wait for validation to complete
       await screen.findByText('This email is already taken');
-      expect(screen.getByText('This email is already taken')).toBeInTheDocument();
+      expect(
+        screen.getByText('This email is already taken'),
+      ).toBeInTheDocument();
     });
 
     it('handles conditional validation', async () => {
@@ -365,23 +379,27 @@ describe('Label Validation Scenarios Tests', () => {
 
       // Select business type
       await user.selectOptions(userTypeSelect, 'business');
-      
+
       // Company name field should appear
       expect(screen.getByLabelText('Company Name *')).toBeInTheDocument();
-      
+
       // Should show validation error
-      expect(screen.getByText('Company name is required for business accounts')).toBeInTheDocument();
+      expect(
+        screen.getByText('Company name is required for business accounts'),
+      ).toBeInTheDocument();
 
       // Fill company name
       const companyInput = screen.getByLabelText('Company Name *');
       await user.type(companyInput, 'Test Company');
-      
+
       // Error should disappear
-      expect(screen.queryByText('Company name is required for business accounts')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Company name is required for business accounts'),
+      ).not.toBeInTheDocument();
 
       // Switch to personal
       await user.selectOptions(userTypeSelect, 'personal');
-      
+
       // Company name field should disappear
       expect(screen.queryByLabelText('Company Name *')).not.toBeInTheDocument();
     });

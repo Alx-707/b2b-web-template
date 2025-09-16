@@ -13,9 +13,9 @@
  * - label-edge-cases.test.tsx - Edge cases tests
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Label } from '../label';
 
@@ -30,9 +30,12 @@ describe('Label Events & States Tests - Index', () => {
     it('handles click events', async () => {
       const handleClick = vi.fn();
       render(
-        <Label onClick={handleClick} data-testid='clickable-label'>
+        <Label
+          onClick={handleClick}
+          data-testid='clickable-label'
+        >
           Clickable Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('clickable-label');
@@ -44,9 +47,12 @@ describe('Label Events & States Tests - Index', () => {
     it('handles double click events', async () => {
       const handleDoubleClick = vi.fn();
       render(
-        <Label onDoubleClick={handleDoubleClick} data-testid='double-click-label'>
+        <Label
+          onDoubleClick={handleDoubleClick}
+          data-testid='double-click-label'
+        >
           Double Click Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('double-click-label');
@@ -66,7 +72,7 @@ describe('Label Events & States Tests - Index', () => {
           data-testid='mouse-events-label'
         >
           Mouse Events Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('mouse-events-label');
@@ -90,7 +96,7 @@ describe('Label Events & States Tests - Index', () => {
           data-testid='focus-label'
         >
           Focus Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('focus-label');
@@ -108,11 +114,18 @@ describe('Label Events & States Tests - Index', () => {
 
       render(
         <div>
-          <Label htmlFor='event-input' onClick={handleLabelClick}>
+          <Label
+            htmlFor='event-input'
+            onClick={handleLabelClick}
+          >
             Event Label
           </Label>
-          <input id='event-input' type='text' onFocus={handleInputFocus} />
-        </div>
+          <input
+            id='event-input'
+            type='text'
+            onFocus={handleInputFocus}
+          />
+        </div>,
       );
 
       const label = screen.getByText('Event Label');
@@ -130,10 +143,13 @@ describe('Label Events & States Tests - Index', () => {
 
       render(
         <div onClick={parentClick}>
-          <Label onClick={labelClick} data-testid='stop-propagation'>
+          <Label
+            onClick={labelClick}
+            data-testid='stop-propagation'
+          >
             Stop Propagation
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('stop-propagation');
@@ -154,7 +170,7 @@ describe('Label Events & States Tests - Index', () => {
           }}
         >
           Custom Event
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('custom-event');
@@ -166,24 +182,29 @@ describe('Label Events & States Tests - Index', () => {
 
   describe('Basic State Management', () => {
     it('handles disabled state correctly', () => {
-      render(
-        <Label data-testid='disabled-label'>
-          Disabled Label
-        </Label>
-      );
+      render(<Label data-testid='disabled-label'>Disabled Label</Label>);
 
       const label = screen.getByTestId('disabled-label');
-      expect(label).toHaveClass('peer-disabled:cursor-not-allowed', 'peer-disabled:opacity-70');
+      expect(label).toHaveClass(
+        'peer-disabled:cursor-not-allowed',
+        'peer-disabled:opacity-70',
+      );
     });
 
     it('disables associated input when label is disabled', async () => {
       render(
         <div>
-          <Label htmlFor='disabled-input' data-testid='disabled-label'>
+          <Label
+            htmlFor='disabled-input'
+            data-testid='disabled-label'
+          >
             Disabled Input Label
           </Label>
-          <input id='disabled-input' type='text' />
-        </div>
+          <input
+            id='disabled-input'
+            type='text'
+          />
+        </div>,
       );
 
       const label = screen.getByTestId('disabled-label');
@@ -199,7 +220,7 @@ describe('Label Events & States Tests - Index', () => {
     it('handles conditional disabled state', () => {
       const ConditionalLabel = ({ isDisabled }: { isDisabled: boolean }) => (
         <Label
-          className={isDisabled ? 'opacity-50 cursor-not-allowed' : ''}
+          className={isDisabled ? 'cursor-not-allowed opacity-50' : ''}
           data-testid='conditional-disabled'
         >
           Conditional Label
@@ -220,12 +241,18 @@ describe('Label Events & States Tests - Index', () => {
       render(
         <form>
           <fieldset disabled>
-            <Label htmlFor='form-input' data-testid='form-label'>
+            <Label
+              htmlFor='form-input'
+              data-testid='form-label'
+            >
               Form Label
             </Label>
-            <input id='form-input' type='text' />
+            <input
+              id='form-input'
+              type='text'
+            />
           </fieldset>
-        </form>
+        </form>,
       );
 
       const label = screen.getByTestId('form-label');
@@ -239,9 +266,12 @@ describe('Label Events & States Tests - Index', () => {
   describe('Basic Responsive Behavior', () => {
     it('maintains consistent styling across screen sizes', () => {
       render(
-        <Label className='text-sm md:text-base lg:text-lg' data-testid='responsive-label'>
+        <Label
+          className='text-sm md:text-base lg:text-lg'
+          data-testid='responsive-label'
+        >
           Responsive Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('responsive-label');
@@ -250,9 +280,12 @@ describe('Label Events & States Tests - Index', () => {
 
     it('handles responsive spacing', () => {
       render(
-        <Label className='p-2 md:p-4 lg:p-6' data-testid='spacing-label'>
+        <Label
+          className='p-2 md:p-4 lg:p-6'
+          data-testid='spacing-label'
+        >
           Spacing Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('spacing-label');
@@ -262,11 +295,11 @@ describe('Label Events & States Tests - Index', () => {
     it('handles mobile touch targets', () => {
       render(
         <Label
-          className='min-h-[44px] min-w-[44px] flex items-center'
+          className='flex min-h-[44px] min-w-[44px] items-center'
           data-testid='touch-target'
         >
           Touch
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('touch-target');
@@ -275,9 +308,12 @@ describe('Label Events & States Tests - Index', () => {
 
     it('supports dark mode variants', () => {
       render(
-        <Label className='text-gray-900 dark:text-gray-100' data-testid='dark-mode'>
+        <Label
+          className='text-gray-900 dark:text-gray-100'
+          data-testid='dark-mode'
+        >
           Dark Mode Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('dark-mode');
@@ -287,10 +323,13 @@ describe('Label Events & States Tests - Index', () => {
     it('adapts to container constraints', () => {
       render(
         <div style={{ width: '200px' }}>
-          <Label className='w-full truncate' data-testid='constrained-label'>
+          <Label
+            className='w-full truncate'
+            data-testid='constrained-label'
+          >
             Very long label text that should be truncated
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('constrained-label');
@@ -329,7 +368,7 @@ describe('Label Events & States Tests - Index', () => {
 
         return (
           <Label
-            onClick={() => setCount(c => c + 1)}
+            onClick={() => setCount((c) => c + 1)}
             data-testid='state-changing'
           >
             Count: {count}
@@ -358,7 +397,7 @@ describe('Label Events & States Tests - Index', () => {
           data-testid='null-props'
         >
           Null Props
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('null-props');

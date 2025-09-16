@@ -4,20 +4,20 @@
  * 主缓存管理器，整合 LRU 缓存、预加载器和性能指标收集器
  */
 
-import type { Locale, Messages, I18nMetrics } from '@/types/i18n';
+import type { I18nMetrics, Locale, Messages } from '@/types/i18n';
+import { logger } from '@/lib/logger';
+import { CACHE_DURATIONS, CACHE_LIMITS } from '@/constants/i18n-constants';
 import type {
   CacheConfig,
-  CacheStats,
-  CacheManager,
-  CacheHealthCheck,
   CacheDebugInfo,
-  PreloadConfig
+  CacheHealthCheck,
+  CacheManager,
+  CacheStats,
+  PreloadConfig,
 } from './i18n-cache-types';
-import { CACHE_DURATIONS, CACHE_LIMITS } from '@/constants/i18n-constants';
-import { I18nMetricsCollector } from './i18n-metrics-collector';
 import { LRUCache } from './i18n-lru-cache';
+import { I18nMetricsCollector } from './i18n-metrics-collector';
 import { TranslationPreloader } from './i18n-preloader';
-import { logger } from '@/lib/logger';
 
 // 主缓存管理器实现
 export class I18nCacheManager implements CacheManager {
@@ -28,7 +28,10 @@ export class I18nCacheManager implements CacheManager {
   private healthCheckInterval?: NodeJS.Timeout;
   private cleanupInterval?: NodeJS.Timeout;
 
-  constructor(config?: Partial<CacheConfig>, preloadConfig?: Partial<PreloadConfig>) {
+  constructor(
+    config?: Partial<CacheConfig>,
+    preloadConfig?: Partial<PreloadConfig>,
+  ) {
     // 默认配置
     const defaultConfig: CacheConfig = {
       maxSize: CACHE_LIMITS.MAX_CACHE_ENTRIES,
@@ -43,7 +46,7 @@ export class I18nCacheManager implements CacheManager {
     this.preloader = new TranslationPreloader(
       this.cache,
       this.metricsCollector,
-      preloadConfig
+      preloadConfig,
     );
 
     this.setupPeriodicTasks();
@@ -205,7 +208,10 @@ export class I18nCacheManager implements CacheManager {
         const messages = await this.getMessages(locale);
         results.set(locale, messages);
       } catch (error) {
-        logger.error('Failed to load messages for locale', { locale, error: error as Error });
+        logger.error('Failed to load messages for locale', {
+          locale,
+          error: error as Error,
+        });
       }
     });
 
@@ -235,7 +241,10 @@ export class I18nCacheManager implements CacheManager {
   }
 
   // 添加事件监听器
-  addEventListener(eventType: string, listener: (event: Record<string, unknown>) => void): void {
+  addEventListener(
+    eventType: string,
+    listener: (event: Record<string, unknown>) => void,
+  ): void {
     // 创建适配器函数来转换事件类型
     const adaptedListener = (cacheEvent: any) => {
       listener(cacheEvent as Record<string, unknown>);
@@ -244,7 +253,10 @@ export class I18nCacheManager implements CacheManager {
   }
 
   // 移除事件监听器
-  removeEventListener(eventType: string, listener: (event: Record<string, unknown>) => void): void {
+  removeEventListener(
+    eventType: string,
+    listener: (event: Record<string, unknown>) => void,
+  ): void {
     // 创建适配器函数来转换事件类型
     const adaptedListener = (cacheEvent: any) => {
       listener(cacheEvent as Record<string, unknown>);
@@ -265,17 +277,23 @@ export class I18nCacheManager implements CacheManager {
   // 设置定期任务
   private setupPeriodicTasks(): void {
     // 定期健康检查
-    this.healthCheckInterval = setInterval(async () => {
-      const health = await this.performHealthCheck();
-      if (!health.isHealthy) {
-        console.warn('Cache health check failed:', health.issues);
-      }
-    }, 5 * 60 * 1000); // 每5分钟检查一次
+    this.healthCheckInterval = setInterval(
+      async () => {
+        const health = await this.performHealthCheck();
+        if (!health.isHealthy) {
+          console.warn('Cache health check failed:', health.issues);
+        }
+      },
+      5 * 60 * 1000,
+    ); // 每5分钟检查一次
 
     // 定期清理过期项
-    this.cleanupInterval = setInterval(() => {
-      this.cache.cleanup();
-    }, 10 * 60 * 1000); // 每10分钟清理一次
+    this.cleanupInterval = setInterval(
+      () => {
+        this.cache.cleanup();
+      },
+      10 * 60 * 1000,
+    ); // 每10分钟清理一次
   }
 
   // 清理资源
@@ -312,7 +330,7 @@ export class I18nCacheManager implements CacheManager {
   // 获取所有缓存的语言
   getCachedLocales(): Locale[] {
     const keys = Array.from(this.cache.keys());
-    return [...new Set(keys.map(key => key.split(':')[0] as Locale))];
+    return [...new Set(keys.map((key) => key.split(':')[0] as Locale))];
   }
 
   // 获取缓存大小（字节）
@@ -348,12 +366,10 @@ if (typeof window !== 'undefined') {
 // 创建缓存管理器的工厂函数
 export function createI18nCacheManager(
   config?: Partial<CacheConfig>,
-  preloadConfig?: Partial<PreloadConfig>
+  preloadConfig?: Partial<PreloadConfig>,
 ): I18nCacheManager {
   return new I18nCacheManager(config, preloadConfig);
 }
 
 // 导出类型别名
-export type {
-  I18nCacheManager as CacheManager,
-};
+export type { I18nCacheManager as CacheManager };

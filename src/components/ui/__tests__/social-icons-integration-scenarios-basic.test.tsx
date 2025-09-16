@@ -16,11 +16,11 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
-    GitHubIcon,
-    LinkedInIcon,
-    SocialIconLink,
-    SocialIconMapper,
-    TwitterIcon,
+  GitHubIcon,
+  LinkedInIcon,
+  SocialIconLink,
+  SocialIconMapper,
+  TwitterIcon,
 } from '../social-icons';
 
 describe('Social Icons Integration Scenarios - Advanced Tests', () => {
@@ -46,7 +46,7 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
               />
             </li>
           </ul>
-        </nav>
+        </nav>,
       );
 
       const twitterLink = screen.getByTestId('nav-twitter');
@@ -76,7 +76,7 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
               />
             </div>
           </section>
-        </footer>
+        </footer>,
       );
 
       const twitterLink = screen.getByTestId('footer-twitter');
@@ -91,17 +91,17 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
 
       render(
         <div>
-          {platforms.map(platform => (
+          {platforms.map((platform) => (
             <SocialIconMapper
               key={platform}
               platform={platform}
               data-testid={`dynamic-${platform}`}
             />
           ))}
-        </div>
+        </div>,
       );
 
-      platforms.forEach(platform => {
+      platforms.forEach((platform) => {
         const icon = screen.getByTestId(`dynamic-${platform}`);
         expect(icon).toBeInTheDocument();
       });
@@ -109,7 +109,7 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
 
     it('handles responsive layouts', () => {
       render(
-        <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4'>
+        <div className='flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4'>
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
@@ -124,7 +124,7 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
             className='w-full sm:w-auto'
             data-testid='responsive-linkedin'
           />
-        </div>
+        </div>,
       );
 
       const twitterLink = screen.getByTestId('responsive-twitter');
@@ -144,14 +144,14 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
             className='text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400'
             data-testid='themed-twitter'
           />
-        </div>
+        </div>,
       );
 
       const twitterLink = screen.getByTestId('themed-twitter');
       expect(twitterLink).toHaveClass(
         'text-gray-600',
         'hover:text-blue-500',
-        'dark:hover:text-blue-400'
+        'dark:hover:text-blue-400',
       );
     });
 
@@ -162,14 +162,22 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
             <legend>Social Media Profiles</legend>
             <div>
               <label htmlFor='twitter-input'>Twitter URL</label>
-              <input id='twitter-input' type='url' data-testid='twitter-input' />
+              <input
+                id='twitter-input'
+                type='url'
+                data-testid='twitter-input'
+              />
             </div>
             <div>
               <label htmlFor='linkedin-input'>LinkedIn URL</label>
-              <input id='linkedin-input' type='url' data-testid='linkedin-input' />
+              <input
+                id='linkedin-input'
+                type='url'
+                data-testid='linkedin-input'
+              />
             </div>
           </fieldset>
-        </form>
+        </form>,
       );
 
       const twitterInput = screen.getByTestId('twitter-input');
@@ -187,7 +195,7 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
             <SocialIconMapper platform='' />
             <SocialIconMapper platform='' />
             <SocialIconMapper platform='' />
-          </div>
+          </div>,
         );
       }).not.toThrow();
     });
@@ -201,7 +209,7 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
           <GitHubIcon />
           <SocialIconMapper platform='twitter' />
           <SocialIconMapper platform='linkedin' />
-        </div>
+        </div>,
       );
 
       expect(container.innerHTML).toBeTruthy();
@@ -222,6 +230,5 @@ describe('Social Icons Integration Scenarios - Advanced Tests', () => {
       // All icons should be present
       expect(screen.getAllByTestId(/^icon-/)).toHaveLength(50);
     });
-
   });
 });

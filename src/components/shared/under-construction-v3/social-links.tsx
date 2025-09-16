@@ -1,5 +1,5 @@
-import { Github, Twitter } from 'lucide-react';
 import React from 'react';
+import { Github, Twitter } from 'lucide-react';
 
 interface SocialLink {
   icon: React.ComponentType<{ className?: string }>;
@@ -14,17 +14,17 @@ export function SocialLinks() {
   ];
 
   return (
-    <div className="flex justify-center space-x-6">
+    <div className='flex justify-center space-x-6'>
       {socialLinks.map((link) => {
         const IconComponent = link.icon;
         return (
           <a
             key={link.label}
             href={link.href}
-            className="text-muted-foreground transition-colors hover:text-foreground"
+            className='text-muted-foreground hover:text-foreground transition-colors'
             aria-label={link.label}
           >
-            <IconComponent className="h-6 w-6" />
+            <IconComponent className='h-6 w-6' />
           </a>
         );
       })}

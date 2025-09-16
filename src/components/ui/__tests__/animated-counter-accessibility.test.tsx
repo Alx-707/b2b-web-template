@@ -42,12 +42,15 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
           to={100}
           aria-label='Progress counter'
           aria-describedby='counter-description'
-        />
+        />,
       );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveAttribute('aria-label', 'Progress counter');
-      expect(counter).toHaveAttribute('aria-describedby', 'counter-description');
+      expect(counter).toHaveAttribute(
+        'aria-describedby',
+        'counter-description',
+      );
     });
 
     it('has correct default role', () => {
@@ -58,28 +61,48 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
     });
 
     it('supports custom role', () => {
-      render(<AnimatedCounter to={100} role='progressbar' />);
+      render(
+        <AnimatedCounter
+          to={100}
+          role='progressbar'
+        />,
+      );
 
       const counter = screen.getByRole('progressbar');
       expect(counter).toBeInTheDocument();
     });
 
     it('supports aria-live for screen readers', () => {
-      render(<AnimatedCounter to={100} aria-live='polite' />);
+      render(
+        <AnimatedCounter
+          to={100}
+          aria-live='polite'
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveAttribute('aria-live', 'polite');
     });
 
     it('supports aria-atomic for complete announcements', () => {
-      render(<AnimatedCounter to={100} aria-atomic='true' />);
+      render(
+        <AnimatedCounter
+          to={100}
+          aria-atomic='true'
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveAttribute('aria-atomic', 'true');
     });
 
     it('supports tabIndex for keyboard navigation', () => {
-      render(<AnimatedCounter to={100} tabIndex={0} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          tabIndex={0}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveAttribute('tabIndex', '0');
@@ -93,7 +116,7 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={50}
-        />
+        />,
       );
 
       const counter = screen.getByRole('progressbar');
@@ -106,7 +129,7 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
       // Mock reduced motion preference
       Object.defineProperty(window, 'matchMedia', {
         writable: true,
-        value: vi.fn().mockImplementation(query => ({
+        value: vi.fn().mockImplementation((query) => ({
           matches: query === '(prefers-reduced-motion: reduce)',
           media: query,
           onchange: null,
@@ -118,7 +141,12 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
         })),
       });
 
-      render(<AnimatedCounter to={100} duration={1000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -126,14 +154,24 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
 
     it('provides meaningful text content for screen readers', () => {
       const formatter = (to: number) => `${to} points earned`;
-      render(<AnimatedCounter to={100} formatter={formatter} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          formatter={formatter}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('100 points earned');
     });
 
     it('supports high contrast mode', () => {
-      render(<AnimatedCounter to={100} className='high-contrast' />);
+      render(
+        <AnimatedCounter
+          to={100}
+          className='high-contrast'
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveClass('high-contrast');
@@ -142,35 +180,60 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
 
   describe('Edge Cases', () => {
     it('handles zero duration', () => {
-      render(<AnimatedCounter to={100} duration={0} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={0}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('100');
     });
 
     it('handles negative duration', () => {
-      render(<AnimatedCounter to={100} duration={-1000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={-1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toHaveTextContent('100');
     });
 
     it('handles very large duration', () => {
-      render(<AnimatedCounter to={100} duration={Number.MAX_SAFE_INTEGER} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={Number.MAX_SAFE_INTEGER}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
     });
 
     it('handles Infinity duration', () => {
-      render(<AnimatedCounter to={100} duration={Infinity} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={Infinity}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
     });
 
     it('handles NaN duration', () => {
-      render(<AnimatedCounter to={100} duration={NaN} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={NaN}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -216,7 +279,12 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
 
       // Rapidly change props
       for (let i = 0; i < 100; i++) {
-        rerender(<AnimatedCounter to={i} duration={Math.random() * 1000} />);
+        rerender(
+          <AnimatedCounter
+            to={i}
+            duration={Math.random() * 1000}
+          />,
+        );
       }
 
       const counter = screen.getByRole('status');
@@ -262,14 +330,24 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
     });
 
     it('handles extreme delay values', () => {
-      render(<AnimatedCounter to={100} delay={Number.MAX_SAFE_INTEGER} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          delay={Number.MAX_SAFE_INTEGER}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
     });
 
     it('handles negative delay values', () => {
-      render(<AnimatedCounter to={100} delay={-1000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          delay={-1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
       expect(counter).toBeInTheDocument();
@@ -288,10 +366,19 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
     it('handles concurrent animations', () => {
       render(
         <div>
-          <AnimatedCounter to={100} data-testid='counter-1' />
-          <AnimatedCounter to={200} data-testid='counter-2' />
-          <AnimatedCounter to={300} data-testid='counter-3' />
-        </div>
+          <AnimatedCounter
+            to={100}
+            data-testid='counter-1'
+          />
+          <AnimatedCounter
+            to={200}
+            data-testid='counter-2'
+          />
+          <AnimatedCounter
+            to={300}
+            data-testid='counter-3'
+          />
+        </div>,
       );
 
       const counter1 = screen.getByTestId('counter-1');

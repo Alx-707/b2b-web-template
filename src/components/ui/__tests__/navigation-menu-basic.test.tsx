@@ -2,16 +2,16 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
 } from '../navigation-menu';
 
 // Mock Lucide React icons
@@ -154,13 +154,24 @@ describe('NavigationMenu - Basic Components', () => {
       );
 
       const navList = screen.getByTestId('nav-list');
-      expect(navList).toHaveClass('group', 'flex', 'flex-1', 'list-none', 'items-center', 'justify-center', 'space-x-1');
+      expect(navList).toHaveClass(
+        'group',
+        'flex',
+        'flex-1',
+        'list-none',
+        'items-center',
+        'justify-center',
+        'space-x-1',
+      );
     });
 
     it('applies custom className', () => {
       render(
         <NavigationMenu>
-          <NavigationMenuList className='custom-list' data-testid='nav-list'>
+          <NavigationMenuList
+            className='custom-list'
+            data-testid='nav-list'
+          >
             <NavigationMenuItem>
               <NavigationMenuTrigger>Item 1</NavigationMenuTrigger>
             </NavigationMenuItem>
@@ -208,7 +219,10 @@ describe('NavigationMenu - Basic Components', () => {
       render(
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem className='custom-item' data-testid='nav-item'>
+            <NavigationMenuItem
+              className='custom-item'
+              data-testid='nav-item'
+            >
               <NavigationMenuTrigger>Item 1</NavigationMenuTrigger>
             </NavigationMenuItem>
           </NavigationMenuList>

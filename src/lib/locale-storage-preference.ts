@@ -8,54 +8,94 @@
 'use client';
 
 // 重新导出所有模块的功能
-export { validatePreferenceData, createDefaultPreference, normalizePreference, saveUserPreference, getUserPreference, updatePreferenceConfidence, hasUserPreference, getPreferenceSourcePriority, comparePreferences, getPreferenceSummary, clearUserPreference } from './locale-storage-preference-core';export { setUserOverride, getUserOverride, clearUserOverride, hasUserOverride, getOverrideHistory, recordOverrideOperation, getOverrideStats, clearOverrideHistory, exportOverrideData, importOverrideData } from
-'./locale-storage-preference-override';export { PreferenceCacheManager, syncPreferenceData, checkDataConsistency, fixDataInconsistency, getStorageUsage, optimizeStoragePerformance } from
-'./locale-storage-preference-cache';export { PreferenceEventManager, createPreferenceSavedEvent, createPreferenceLoadedEvent, createOverrideSetEvent, createOverrideClearedEvent, createSyncEvent, createPreferenceErrorEvent, getPreferenceHistory, recordPreferenceHistory, clearPreferenceHistory, getPreferenceChangeStats, consoleLogListener, historyRecordingListener, setupDefaultListeners, cleanupEventSystem, getEventSystemStatus } from
-'./locale-storage-preference-events';
-
 // 导入主要功能用于向后兼容
 import type { Locale } from '@/types/i18n';
-;
-import type {
-  UserLocalePreference,
-  StorageOperationResult,
-  StorageEventListener } from
-'./locale-storage-types';
-
 import {
+  checkDataConsistency,
+  fixDataInconsistency,
+  getStorageUsage,
+  optimizeStoragePerformance,
+  PreferenceCacheManager,
+  syncPreferenceData,
+} from './locale-storage-preference-cache';
+import {
+  clearUserPreference,
+  comparePreferences,
+  createDefaultPreference,
+  getPreferenceSummary,
+  getUserPreference,
+  hasUserPreference,
+  normalizePreference,
+  saveUserPreference,
+  updatePreferenceConfidence,
+  validatePreferenceData,
+} from './locale-storage-preference-core';
+import {
+  cleanupEventSystem,
+  clearPreferenceHistory,
+  createOverrideClearedEvent,
+  createOverrideSetEvent,
+  createPreferenceErrorEvent,
+  createPreferenceLoadedEvent,
+  createPreferenceSavedEvent,
+  createSyncEvent,
+  getEventSystemStatus,
+  getPreferenceChangeStats,
+  getPreferenceHistory,
+  PreferenceEventManager,
+  recordPreferenceHistory,
+  setupDefaultListeners,
+} from './locale-storage-preference-events';
+import {
+  clearUserOverride,
+  exportOverrideData,
+  getOverrideHistory,
+  getOverrideStats,
+  getUserOverride,
+  hasUserOverride,
+  importOverrideData,
+  setUserOverride,
+} from './locale-storage-preference-override';
+import type {
+  StorageEventListener,
+  StorageOperationResult,
+  UserLocalePreference,
+} from './locale-storage-types';
+
+export {
+  validatePreferenceData,
+  createDefaultPreference,
+  normalizePreference,
   saveUserPreference,
   getUserPreference,
   updatePreferenceConfidence,
   hasUserPreference,
+  getPreferenceSourcePriority,
+  comparePreferences,
   getPreferenceSummary,
   clearUserPreference,
-  validatePreferenceData,
-  createDefaultPreference,
-  normalizePreference,
-  comparePreferences } from
-'./locale-storage-preference-core';
-
-import {
+} from './locale-storage-preference-core';
+export {
   setUserOverride,
   getUserOverride,
   clearUserOverride,
   hasUserOverride,
   getOverrideHistory,
+  recordOverrideOperation,
   getOverrideStats,
+  clearOverrideHistory,
   exportOverrideData,
-  importOverrideData } from
-'./locale-storage-preference-override';
-
-import {
+  importOverrideData,
+} from './locale-storage-preference-override';
+export {
   PreferenceCacheManager,
   syncPreferenceData,
   checkDataConsistency,
   fixDataInconsistency,
   getStorageUsage,
-  optimizeStoragePerformance } from
-'./locale-storage-preference-cache';
-
-import {
+  optimizeStoragePerformance,
+} from './locale-storage-preference-cache';
+export {
   PreferenceEventManager,
   createPreferenceSavedEvent,
   createPreferenceLoadedEvent,
@@ -67,10 +107,12 @@ import {
   recordPreferenceHistory,
   clearPreferenceHistory,
   getPreferenceChangeStats,
+  consoleLogListener,
+  historyRecordingListener,
   setupDefaultListeners,
   cleanupEventSystem,
-  getEventSystemStatus } from
-'./locale-storage-preference-events';
+  getEventSystemStatus,
+} from './locale-storage-preference-events';
 
 /**
  * 用户偏好管理器 - 向后兼容类
@@ -81,14 +123,23 @@ export class LocalePreferenceManager {
    * 保存用户语言偏好
    * Save user locale preference
    */
-  static saveUserPreference(preference: UserLocalePreference): StorageOperationResult<UserLocalePreference> {
+  static saveUserPreference(
+    preference: UserLocalePreference,
+  ): StorageOperationResult<UserLocalePreference> {
     const result = saveUserPreference(preference);
 
     if (result.success && result.data) {
-      PreferenceEventManager.emitEvent(createPreferenceSavedEvent(result.data, result.source || 'unknown'));
+      PreferenceEventManager.emitEvent(
+        createPreferenceSavedEvent(result.data, result.source || 'unknown'),
+      );
       recordPreferenceHistory(result.data);
     } else {
-      PreferenceEventManager.emitEvent(createPreferenceErrorEvent('saveUserPreference', result.error || 'Unknown error'));
+      PreferenceEventManager.emitEvent(
+        createPreferenceErrorEvent(
+          'saveUserPreference',
+          result.error || 'Unknown error',
+        ),
+      );
     }
 
     return result;
@@ -102,9 +153,16 @@ export class LocalePreferenceManager {
     const result = getUserPreference();
 
     if (result.success && result.data) {
-      PreferenceEventManager.emitEvent(createPreferenceLoadedEvent(result.data, result.source || 'unknown'));
+      PreferenceEventManager.emitEvent(
+        createPreferenceLoadedEvent(result.data, result.source || 'unknown'),
+      );
     } else {
-      PreferenceEventManager.emitEvent(createPreferenceErrorEvent('getUserPreference', result.error || 'Unknown error'));
+      PreferenceEventManager.emitEvent(
+        createPreferenceErrorEvent(
+          'getUserPreference',
+          result.error || 'Unknown error',
+        ),
+      );
     }
 
     return result;
@@ -114,13 +172,23 @@ export class LocalePreferenceManager {
    * 设置用户手动选择的语言
    * Set user manually selected locale
    */
-  static setUserOverride(locale: Locale, metadata?: Record<string, unknown>): StorageOperationResult<UserLocalePreference> {
+  static setUserOverride(
+    locale: Locale,
+    metadata?: Record<string, unknown>,
+  ): StorageOperationResult<UserLocalePreference> {
     const result = setUserOverride(locale, metadata);
 
     if (result.success) {
-      PreferenceEventManager.emitEvent(createOverrideSetEvent(locale, metadata));
+      PreferenceEventManager.emitEvent(
+        createOverrideSetEvent(locale, metadata),
+      );
     } else {
-      PreferenceEventManager.emitEvent(createPreferenceErrorEvent('setUserOverride', result.error || 'Unknown error'));
+      PreferenceEventManager.emitEvent(
+        createPreferenceErrorEvent(
+          'setUserOverride',
+          result.error || 'Unknown error',
+        ),
+      );
     }
 
     return result;
@@ -144,7 +212,12 @@ export class LocalePreferenceManager {
     if (result.success) {
       PreferenceEventManager.emitEvent(createOverrideClearedEvent());
     } else {
-      PreferenceEventManager.emitEvent(createPreferenceErrorEvent('clearUserOverride', result.error || 'Unknown error'));
+      PreferenceEventManager.emitEvent(
+        createPreferenceErrorEvent(
+          'clearUserOverride',
+          result.error || 'Unknown error',
+        ),
+      );
     }
 
     return result;
@@ -154,7 +227,9 @@ export class LocalePreferenceManager {
    * 更新偏好的置信度
    * Update preference confidence
    */
-  static updatePreferenceConfidence(confidence: number): StorageOperationResult<UserLocalePreference> {
+  static updatePreferenceConfidence(
+    confidence: number,
+  ): StorageOperationResult<UserLocalePreference> {
     return updatePreferenceConfidence(confidence);
   }
 
@@ -170,7 +245,10 @@ export class LocalePreferenceManager {
    * 添加事件监听器
    * Add event listener
    */
-  static addEventListener(eventType: string, listener: StorageEventListener): void {
+  static addEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     PreferenceEventManager.addEventListener(eventType, listener);
   }
 
@@ -178,7 +256,10 @@ export class LocalePreferenceManager {
    * 移除事件监听器
    * Remove event listener
    */
-  static removeEventListener(eventType: string, listener: StorageEventListener): void {
+  static removeEventListener(
+    eventType: string,
+    listener: StorageEventListener,
+  ): void {
     PreferenceEventManager.removeEventListener(eventType, listener);
   }
 
@@ -222,7 +303,9 @@ export class LocalePreferenceManager {
     const result = syncPreferenceData();
 
     if (result.success && result.data) {
-      PreferenceEventManager.emitEvent(createSyncEvent(result.data.synced, result.data));
+      PreferenceEventManager.emitEvent(
+        createSyncEvent(result.data.synced, result.data),
+      );
     }
 
     return result;
@@ -256,7 +339,9 @@ export class LocalePreferenceManager {
    * 优化存储性能
    * Optimize storage performance
    */
-  static optimizeStoragePerformance(): ReturnType<typeof optimizeStoragePerformance> {
+  static optimizeStoragePerformance(): ReturnType<
+    typeof optimizeStoragePerformance
+  > {
     return optimizeStoragePerformance();
   }
 
@@ -272,7 +357,9 @@ export class LocalePreferenceManager {
    * 获取偏好变化统计
    * Get preference change statistics
    */
-  static getPreferenceChangeStats(): ReturnType<typeof getPreferenceChangeStats> {
+  static getPreferenceChangeStats(): ReturnType<
+    typeof getPreferenceChangeStats
+  > {
     return getPreferenceChangeStats();
   }
 
@@ -292,5 +379,4 @@ export class LocalePreferenceManager {
  * 向后兼容的类型别名
  * Backward compatible type aliases
  */
-export type {
-  LocalePreferenceManager as PreferenceManager };
+export type { LocalePreferenceManager as PreferenceManager };

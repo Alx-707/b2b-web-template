@@ -3,8 +3,8 @@
  * WhatsApp API Message Request Types
  */
 
+import type { ContactData, LocationData } from '../whatsapp-base-types';
 import type { TemplateMessage } from '../whatsapp-template-types';
-import type { LocationData, ContactData } from '../whatsapp-base-types';
 
 /**
  * 发送消息请求
@@ -14,7 +14,16 @@ export interface SendMessageRequest {
   messaging_product: 'whatsapp';
   recipient_type: 'individual';
   to: string;
-  type: 'text' | 'template' | 'image' | 'document' | 'audio' | 'video' | 'location' | 'contacts' | 'interactive';
+  type:
+    | 'text'
+    | 'template'
+    | 'image'
+    | 'document'
+    | 'audio'
+    | 'video'
+    | 'location'
+    | 'contacts'
+    | 'interactive';
   text?: {
     preview_url?: boolean;
     body: string;

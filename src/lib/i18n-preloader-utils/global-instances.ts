@@ -4,16 +4,10 @@
  */
 
 import type { Locale, Messages } from '@/types/i18n';
-import type { 
-  MetricsCollector, 
-  CacheStorage
-} from '../i18n-cache-types';
-import type {
-  IPreloader,
-  PreloaderConfig
-} from '../i18n-preloader-types';
-import { PreloaderManager } from './preloader-manager';
+import type { CacheStorage, MetricsCollector } from '../i18n-cache-types';
+import type { IPreloader, PreloaderConfig } from '../i18n-preloader-types';
 import { PreloaderFactory } from './preloader-factory';
+import { PreloaderManager } from './preloader-manager';
 
 /**
  * 全局预加载器管理器实例
@@ -35,9 +29,13 @@ export function setupPreloader(
   name: string,
   cache: CacheStorage<Messages>,
   metricsCollector: MetricsCollector,
-  config?: Partial<PreloaderConfig>
+  config?: Partial<PreloaderConfig>,
 ): IPreloader {
-  const preloader = globalPreloaderFactory.createPreloader(cache, metricsCollector, config);
+  const preloader = globalPreloaderFactory.createPreloader(
+    cache,
+    metricsCollector,
+    config,
+  );
   globalPreloaderManager.register(name, preloader);
   return preloader;
 }
@@ -54,7 +52,9 @@ export function getDefaultPreloader(): IPreloader | undefined {
  * 便捷函数：预加载语言
  * Convenience function: preload locale
  */
-export async function preloadLocale(locale: Locale): Promise<Messages | undefined> {
+export async function preloadLocale(
+  locale: Locale,
+): Promise<Messages | undefined> {
   const preloader = getDefaultPreloader();
   if (preloader) {
     return await preloader.preloadLocale(locale);

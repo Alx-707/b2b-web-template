@@ -37,7 +37,10 @@ export class AccessibilityTester {
           testName,
           passed: false,
           details: '未找到可聚焦的导航元素',
-          suggestions: ['确保导航元素具有正确的tabindex属性', '检查元素是否被正确渲染']
+          suggestions: [
+            '确保导航元素具有正确的tabindex属性',
+            '检查元素是否被正确渲染',
+          ],
         };
       }
 
@@ -49,7 +52,7 @@ export class AccessibilityTester {
         return {
           testName,
           passed: false,
-          details: '未找到可聚焦的导航元素'
+          details: '未找到可聚焦的导航元素',
         };
       }
 
@@ -61,33 +64,40 @@ export class AccessibilityTester {
         const tabEvent = new KeyboardEvent('keydown', {
           key: 'Tab',
           bubbles: true,
-          cancelable: true
+          cancelable: true,
         });
         document.dispatchEvent(tabEvent);
 
         // 等待焦点变化
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 50));
       }
 
-      const isValidTabOrder = this.validateTabOrder(tabOrder, focusableElements);
+      const isValidTabOrder = this.validateTabOrder(
+        tabOrder,
+        focusableElements,
+      );
 
       return {
         testName,
         passed: isValidTabOrder,
         details: `测试了${focusableElements.length}个可聚焦元素，Tab键导航${isValidTabOrder ? '正常' : '异常'}`,
-        ...(isValidTabOrder ? {} : { suggestions: [
-          '检查tabindex属性设置',
-          '确保元素按逻辑顺序排列',
-          '验证隐藏元素不在Tab序列中'
-        ] })
+        ...(isValidTabOrder
+          ? {}
+          : {
+              suggestions: [
+                '检查tabindex属性设置',
+                '确保元素按逻辑顺序排列',
+                '验证隐藏元素不在Tab序列中',
+              ],
+            }),
       };
     } catch (_error) {
-    // 忽略错误变量
+      // 忽略错误变量
       return {
         testName,
         passed: false,
         details: `测试过程中发生错误: ${_error}`,
-        suggestions: ['检查DOM结构', '确保测试环境正确']
+        suggestions: ['检查DOM结构', '确保测试环境正确'],
       };
     }
   }
@@ -99,7 +109,9 @@ export class AccessibilityTester {
     const testName = 'Enter/Space键激活测试';
 
     try {
-      const triggers = document.querySelectorAll('[data-slot="navigation-menu-trigger"]');
+      const triggers = document.querySelectorAll(
+        '[data-slot="navigation-menu-trigger"]',
+      );
       const links = document.querySelectorAll('a[href]');
 
       let activationTests = 0;
@@ -111,7 +123,10 @@ export class AccessibilityTester {
         element.focus();
 
         // 测试Enter键
-        const enterResult = await this.testElementKeyActivation(element, 'Enter');
+        const enterResult = await this.testElementKeyActivation(
+          element,
+          'Enter',
+        );
         activationTests += 1;
         if (enterResult) passedTests += 1;
 
@@ -122,34 +137,43 @@ export class AccessibilityTester {
       }
 
       // 测试导航链接
-      for (const link of Array.from(links).slice(0, 3)) { // 限制测试数量
+      for (const link of Array.from(links).slice(0, 3)) {
+        // 限制测试数量
         const element = link as HTMLElement;
         element.focus();
 
-        const enterResult = await this.testElementKeyActivation(element, 'Enter');
+        const enterResult = await this.testElementKeyActivation(
+          element,
+          'Enter',
+        );
         activationTests += 1;
         if (enterResult) passedTests += 1;
       }
 
-      const successRate = activationTests > 0 ? passedTests / activationTests : 0;
+      const successRate =
+        activationTests > 0 ? passedTests / activationTests : 0;
 
       return {
         testName,
         passed: successRate >= 0.8, // 80%通过率
         details: `测试了${activationTests}个激活操作，成功率: ${(successRate * 100).toFixed(1)}%`,
-        ...(successRate < 0.8 ? { suggestions: [
-          '确保所有交互元素支持Enter键激活',
-          '验证Space键在按钮元素上的激活功能',
-          '检查键盘事件处理器的实现'
-        ] } : {})
+        ...(successRate < 0.8
+          ? {
+              suggestions: [
+                '确保所有交互元素支持Enter键激活',
+                '验证Space键在按钮元素上的激活功能',
+                '检查键盘事件处理器的实现',
+              ],
+            }
+          : {}),
       };
     } catch (_error) {
-    // 忽略错误变量
+      // 忽略错误变量
       return {
         testName,
         passed: false,
         details: `测试过程中发生错误: ${_error}`,
-        suggestions: ['检查事件处理器', '验证元素可访问性']
+        suggestions: ['检查事件处理器', '验证元素可访问性'],
       };
     }
   }
@@ -161,7 +185,9 @@ export class AccessibilityTester {
     const testName = 'Escape键关闭测试';
 
     try {
-      const triggers = document.querySelectorAll('[data-slot="navigation-menu-trigger"]');
+      const triggers = document.querySelectorAll(
+        '[data-slot="navigation-menu-trigger"]',
+      );
       let escapeTests = 0;
       let passedTests = 0;
 
@@ -171,26 +197,28 @@ export class AccessibilityTester {
         // 先打开菜单
         element.focus();
         element.click();
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
         // 检查菜单是否打开
-        const isOpen = element.getAttribute('data-state') === 'open' ||
-                      element.getAttribute('aria-expanded') === 'true';
+        const isOpen =
+          element.getAttribute('data-state') === 'open' ||
+          element.getAttribute('aria-expanded') === 'true';
 
         if (isOpen) {
           // 测试Escape键关闭
           const escapeEvent = new KeyboardEvent('keydown', {
             key: 'Escape',
             bubbles: true,
-            cancelable: true
+            cancelable: true,
           });
           element.dispatchEvent(escapeEvent);
 
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100));
 
           // 检查菜单是否关闭
-          const isClosed = element.getAttribute('data-state') !== 'open' &&
-                          element.getAttribute('aria-expanded') !== 'true';
+          const isClosed =
+            element.getAttribute('data-state') !== 'open' &&
+            element.getAttribute('aria-expanded') !== 'true';
 
           escapeTests += 1;
           if (isClosed) passedTests += 1;
@@ -203,19 +231,23 @@ export class AccessibilityTester {
         testName,
         passed: successRate >= 0.8,
         details: `测试了${escapeTests}个Escape关闭操作，成功率: ${(successRate * 100).toFixed(1)}%`,
-        ...(successRate < 0.8 ? { suggestions: [
-          '确保Escape键事件处理器正确实现',
-          '验证菜单状态管理',
-          '检查事件冒泡和传播'
-        ] } : {})
+        ...(successRate < 0.8
+          ? {
+              suggestions: [
+                '确保Escape键事件处理器正确实现',
+                '验证菜单状态管理',
+                '检查事件冒泡和传播',
+              ],
+            }
+          : {}),
       };
     } catch (_error) {
-    // 忽略错误变量
+      // 忽略错误变量
       return {
         testName,
         passed: false,
         details: `测试过程中发生错误: ${_error}`,
-        suggestions: ['检查菜单状态管理', '验证键盘事件处理']
+        suggestions: ['检查菜单状态管理', '验证键盘事件处理'],
       };
     }
   }
@@ -233,14 +265,19 @@ export class AccessibilityTester {
       // 检查导航容器
       const navElements = document.querySelectorAll('nav');
       navElements.forEach((nav, index) => {
-        if (!nav.getAttribute('aria-label') && !nav.getAttribute('aria-labelledby')) {
+        if (
+          !nav.getAttribute('aria-label') &&
+          !nav.getAttribute('aria-labelledby')
+        ) {
           issues.push(`导航容器${index + 1}缺少aria-label或aria-labelledby`);
           suggestions.push('为导航容器添加描述性的aria-label');
         }
       });
 
       // 检查下拉菜单触发器
-      const triggers = document.querySelectorAll('[data-slot="navigation-menu-trigger"]');
+      const triggers = document.querySelectorAll(
+        '[data-slot="navigation-menu-trigger"]',
+      );
       triggers.forEach((trigger, index) => {
         if (!trigger.getAttribute('aria-expanded')) {
           issues.push(`下拉菜单触发器${index + 1}缺少aria-expanded属性`);
@@ -254,7 +291,9 @@ export class AccessibilityTester {
       });
 
       // 检查当前页面标识
-      const currentPageLinks = document.querySelectorAll('[aria-current="page"]');
+      const currentPageLinks = document.querySelectorAll(
+        '[aria-current="page"]',
+      );
       const allLinks = document.querySelectorAll('a[href]');
 
       if (currentPageLinks.length === 0 && allLinks.length > 0) {
@@ -265,18 +304,19 @@ export class AccessibilityTester {
       return {
         testName,
         passed: issues.length === 0,
-        details: issues.length === 0 ?
-          '所有ARIA属性配置正确' :
-          `发现${issues.length}个ARIA属性问题: ${issues.join('; ')}`,
-        ...(suggestions.length > 0 ? { suggestions } : {})
+        details:
+          issues.length === 0
+            ? '所有ARIA属性配置正确'
+            : `发现${issues.length}个ARIA属性问题: ${issues.join('; ')}`,
+        ...(suggestions.length > 0 ? { suggestions } : {}),
       };
     } catch (_error) {
-    // 忽略错误变量
+      // 忽略错误变量
       return {
         testName,
         passed: false,
         details: `测试过程中发生错误: ${_error}`,
-        suggestions: ['检查DOM结构', '验证ARIA属性配置']
+        suggestions: ['检查DOM结构', '验证ARIA属性配置'],
       };
     }
   }
@@ -301,7 +341,7 @@ export class AccessibilityTester {
    */
   getTestReport(): string {
     const totalTests = this.results.length;
-    const passedTests = this.results.filter(r => r.passed).length;
+    const passedTests = this.results.filter((r) => r.passed).length;
     const failedTests = totalTests - passedTests;
 
     let report = `\n=== 无障碍性测试报告 ===\n`;
@@ -333,18 +373,24 @@ export class AccessibilityTester {
       'textarea:not([disabled])',
       '[tabindex]:not([tabindex="-1"])',
       '[data-slot="navigation-menu-trigger"]',
-      '[data-slot="navigation-menu-link"]'
+      '[data-slot="navigation-menu-link"]',
     ].join(', ');
 
     return Array.from(document.querySelectorAll(selector)) as HTMLElement[];
   }
 
-  private validateTabOrder(tabOrder: HTMLElement[], focusableElements: HTMLElement[]): boolean {
+  private validateTabOrder(
+    tabOrder: HTMLElement[],
+    focusableElements: HTMLElement[],
+  ): boolean {
     // 简单验证：检查是否能遍历所有可聚焦元素
     return tabOrder.length >= focusableElements.length * 0.8; // 允许80%的覆盖率
   }
 
-  private async testElementKeyActivation(element: HTMLElement, key: string): Promise<boolean> {
+  private async testElementKeyActivation(
+    element: HTMLElement,
+    key: string,
+  ): Promise<boolean> {
     try {
       const initialState = element.getAttribute('data-state');
       const initialExpanded = element.getAttribute('aria-expanded');
@@ -352,11 +398,11 @@ export class AccessibilityTester {
       const keyEvent = new KeyboardEvent('keydown', {
         key,
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       });
 
       element.dispatchEvent(keyEvent);
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       const newState = element.getAttribute('data-state');
       const newExpanded = element.getAttribute('aria-expanded');

@@ -14,9 +14,9 @@
  * - label-event-handling-basic.test.tsx - 基本事件处理功能测试
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Label } from '../label';
 
@@ -31,9 +31,12 @@ describe('Label Event Handling - Main Tests', () => {
     it('handles click events', async () => {
       const handleClick = vi.fn();
       render(
-        <Label onClick={handleClick} data-testid='clickable-label'>
+        <Label
+          onClick={handleClick}
+          data-testid='clickable-label'
+        >
           Clickable Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('clickable-label');
@@ -45,9 +48,12 @@ describe('Label Event Handling - Main Tests', () => {
     it('handles double click events', async () => {
       const handleDoubleClick = vi.fn();
       render(
-        <Label onDoubleClick={handleDoubleClick} data-testid='double-click-label'>
+        <Label
+          onDoubleClick={handleDoubleClick}
+          data-testid='double-click-label'
+        >
           Double Click Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('double-click-label');
@@ -71,7 +77,7 @@ describe('Label Event Handling - Main Tests', () => {
           data-testid='mouse-label'
         >
           Mouse Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('mouse-label');
@@ -99,7 +105,7 @@ describe('Label Event Handling - Main Tests', () => {
           data-testid='keyboard-label'
         >
           Keyboard Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('keyboard-label');
@@ -122,7 +128,7 @@ describe('Label Event Handling - Main Tests', () => {
           data-testid='focus-label'
         >
           Focus Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('focus-label');
@@ -136,9 +142,12 @@ describe('Label Event Handling - Main Tests', () => {
     it('handles context menu events', async () => {
       const handleContextMenu = vi.fn();
       render(
-        <Label onContextMenu={handleContextMenu} data-testid='context-label'>
+        <Label
+          onContextMenu={handleContextMenu}
+          data-testid='context-label'
+        >
           Context Menu Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('context-label');
@@ -157,10 +166,13 @@ describe('Label Event Handling - Main Tests', () => {
 
       render(
         <div onClick={parentClick}>
-          <Label onClick={labelClick} data-testid='propagation-label'>
+          <Label
+            onClick={labelClick}
+            data-testid='propagation-label'
+          >
             Propagation Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('propagation-label');
@@ -176,9 +188,17 @@ describe('Label Event Handling - Main Tests', () => {
 
       render(
         <div>
-          <Label htmlFor='test-input' onClick={handleLabelClick}>Test Label</Label>
-          <input id='test-input' onFocus={handleInputFocus} />
-        </div>
+          <Label
+            htmlFor='test-input'
+            onClick={handleLabelClick}
+          >
+            Test Label
+          </Label>
+          <input
+            id='test-input'
+            onFocus={handleInputFocus}
+          />
+        </div>,
       );
 
       const label = screen.getByText('Test Label');
@@ -197,7 +217,7 @@ describe('Label Event Handling - Main Tests', () => {
           onClick={(e: any) => customHandler('click', e.currentTarget)}
         >
           Custom Event Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('custom-event');
@@ -219,7 +239,7 @@ describe('Label Event Handling - Main Tests', () => {
           }}
         >
           Multiple Handlers Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('multiple-handlers');
@@ -235,9 +255,12 @@ describe('Label Event Handling - Main Tests', () => {
       });
 
       render(
-        <Label onClick={handleClick} data-testid='prevent-default-label'>
+        <Label
+          onClick={handleClick}
+          data-testid='prevent-default-label'
+        >
           Prevent Default Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('prevent-default-label');
@@ -245,10 +268,6 @@ describe('Label Event Handling - Main Tests', () => {
 
       expect(handleClick).toHaveBeenCalled();
     });
-
-
-
-
   });
 
   describe('错误处理验证', () => {
@@ -264,14 +283,12 @@ describe('Label Event Handling - Main Tests', () => {
           data-testid='composition-label'
         >
           Composition Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('composition-label');
       expect(label).toHaveAttribute('contentEditable', 'true');
     });
-
-
 
     it('handles event bubbling correctly', async () => {
       const grandparentClick = vi.fn();
@@ -281,11 +298,14 @@ describe('Label Event Handling - Main Tests', () => {
       render(
         <div onClick={grandparentClick}>
           <div onClick={parentClick}>
-            <Label onClick={labelClick} data-testid='bubbling-label'>
+            <Label
+              onClick={labelClick}
+              data-testid='bubbling-label'
+            >
               Bubbling Label
             </Label>
           </div>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('bubbling-label');
@@ -302,10 +322,13 @@ describe('Label Event Handling - Main Tests', () => {
 
       render(
         <div onClickCapture={captureHandler}>
-          <Label onClick={bubbleHandler} data-testid='capture-label'>
+          <Label
+            onClick={bubbleHandler}
+            data-testid='capture-label'
+          >
             Capture Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('capture-label');

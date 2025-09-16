@@ -62,9 +62,7 @@ export class WebVitalsCollectorAnalyzer {
   ): void {
     if (fid > PERFORMANCE_THRESHOLDS.FID_NEEDS_IMPROVEMENT) {
       issues.push(`首次输入延迟 (FID) 过高: ${fid.toFixed(0)}ms`);
-      recommendations.push(
-        '减少 JavaScript 执行时间，考虑代码分割和懒加载',
-      );
+      recommendations.push('减少 JavaScript 执行时间，考虑代码分割和懒加载');
       recommendations.push('优化第三方脚本，延迟非关键脚本的加载');
       recommendations.push('使用 Web Workers 处理计算密集型任务');
     }
@@ -228,33 +226,42 @@ export class WebVitalsCollectorAnalyzer {
         current: currentMetrics.lcp,
         previous: previousMetrics.lcp,
         change: currentMetrics.lcp - previousMetrics.lcp,
-        changePercent: previousMetrics.lcp > 0
-          ? ((currentMetrics.lcp - previousMetrics.lcp) / previousMetrics.lcp) * 100
-          : 0,
+        changePercent:
+          previousMetrics.lcp > 0
+            ? ((currentMetrics.lcp - previousMetrics.lcp) /
+                previousMetrics.lcp) *
+              100
+            : 0,
       },
       {
         metric: 'FID',
         current: currentMetrics.fid,
         previous: previousMetrics.fid,
         change: currentMetrics.fid - previousMetrics.fid,
-        changePercent: previousMetrics.fid > 0
-          ? ((currentMetrics.fid - previousMetrics.fid) / previousMetrics.fid) * 100
-          : 0,
+        changePercent:
+          previousMetrics.fid > 0
+            ? ((currentMetrics.fid - previousMetrics.fid) /
+                previousMetrics.fid) *
+              100
+            : 0,
       },
       {
         metric: 'CLS',
         current: currentMetrics.cls,
         previous: previousMetrics.cls,
         change: currentMetrics.cls - previousMetrics.cls,
-        changePercent: previousMetrics.cls > 0
-          ? ((currentMetrics.cls - previousMetrics.cls) / previousMetrics.cls) * 100
-          : 0,
+        changePercent:
+          previousMetrics.cls > 0
+            ? ((currentMetrics.cls - previousMetrics.cls) /
+                previousMetrics.cls) *
+              100
+            : 0,
       },
     ];
 
     // 计算总体趋势
-    const improvingCount = changes.filter(c => c.change < 0).length;
-    const decliningCount = changes.filter(c => c.change > 0).length;
+    const improvingCount = changes.filter((c) => c.change < 0).length;
+    const decliningCount = changes.filter((c) => c.change > 0).length;
 
     let trend: 'improving' | 'declining' | 'stable';
     if (improvingCount > decliningCount) {

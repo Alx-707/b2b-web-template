@@ -2,23 +2,23 @@
  * 动画示例和配置
  */
 
-import { CardContent } from '@/components/ui/card';
 import React from 'react';
-import { AnimatedHeroIcon, AnimatedTitle } from './icon-title';
-import { AnimatedCard, AnimatedButton } from './card-button';
+import { CardContent } from '@/components/ui/card';
+import { AnimatedButton, AnimatedCard } from './card-button';
 import { AnimatedProgress, AnimatedSuccess } from './form-status';
+import { AnimatedHeroIcon, AnimatedTitle } from './icon-title';
 
 // 使用示例组件
 export const AnimationShowcase = () => (
-  <div className="space-y-8 p-8">
+  <div className='space-y-8 p-8'>
     <AnimatedHeroIcon />
     <AnimatedTitle>建设中页面</AnimatedTitle>
     <AnimatedCard>
-      <CardContent className="p-6">
-        <div className="space-y-4">
+      <CardContent className='p-6'>
+        <div className='space-y-4'>
           <AnimatedProgress value={75} />
           <AnimatedButton>点击按钮</AnimatedButton>
-          <AnimatedSuccess message="订阅成功！" />
+          <AnimatedSuccess message='订阅成功！' />
         </div>
       </CardContent>
     </AnimatedCard>

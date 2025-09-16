@@ -16,8 +16,8 @@
  * - Boolean attributes
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
 import React, { createRef } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Badge } from '../badge';
 
@@ -25,9 +25,12 @@ describe('Badge Custom Props - Advanced Tests', () => {
   describe('Advanced Custom Properties', () => {
     it('handles complex className combinations with variants', () => {
       render(
-        <Badge className='custom-class advanced-style' variant='destructive'>
+        <Badge
+          className='custom-class advanced-style'
+          variant='destructive'
+        >
           Advanced Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Advanced Badge');
@@ -36,16 +39,16 @@ describe('Badge Custom Props - Advanced Tests', () => {
 
     it('handles performance optimization with complex prop combinations', () => {
       const complexProps = {
-        className: 'perf-test-1 perf-test-2 perf-test-3',
+        'className': 'perf-test-1 perf-test-2 perf-test-3',
         'data-performance': 'test',
         'aria-label': 'Performance test badge',
-        style: {
+        'style': {
           backgroundColor: 'rgba(255, 0, 0, 0.1)',
           border: '1px solid red',
-          borderRadius: '8px'
+          borderRadius: '8px',
         },
-        variant: 'outline' as const,
-        onClick: () => console.log('Performance test clicked')
+        'variant': 'outline' as const,
+        'onClick': () => console.log('Performance test clicked'),
       };
 
       render(<Badge {...complexProps}>Performance Test</Badge>);
@@ -63,9 +66,12 @@ describe('Badge Custom Props - Advanced Tests', () => {
       const handleMouseLeave = vi.fn();
 
       render(
-        <Badge onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <Badge
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           Hover Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Hover Badge');
@@ -82,9 +88,13 @@ describe('Badge Custom Props - Advanced Tests', () => {
       const handleBlur = vi.fn();
 
       render(
-        <Badge onFocus={handleFocus} onBlur={handleBlur} tabIndex={0}>
+        <Badge
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          tabIndex={0}
+        >
           Focus Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Focus Badge');
@@ -119,7 +129,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
           aria-atomic='true'
         >
           ARIA Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('ARIA Badge');
@@ -136,7 +146,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
           data-priority='high'
         >
           Data Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByTestId('custom-badge');
@@ -152,7 +162,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
           contentEditable={false}
         >
           Boolean Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Boolean Badge');
@@ -180,7 +190,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
       render(
         <Badge className={isActive ? 'active' : 'inactive'}>
           Conditional Class
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Conditional Class');
@@ -218,7 +228,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
         border: '2px solid black',
         borderRadius: '8px',
         padding: '10px',
-        margin: '5px'
+        margin: '5px',
       };
 
       render(<Badge style={complexStyle}>Complex Style</Badge>);
@@ -229,9 +239,16 @@ describe('Badge Custom Props - Advanced Tests', () => {
 
     it('supports CSS custom properties', () => {
       render(
-        <Badge style={{ '--custom-color': 'purple', color: 'var(--custom-color)' } as React.CSSProperties}>
+        <Badge
+          style={
+            {
+              '--custom-color': 'purple',
+              'color': 'var(--custom-color)',
+            } as React.CSSProperties
+          }
+        >
           CSS Variables
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('CSS Variables');
@@ -245,7 +262,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
       render(
         <div onClick={parentClick}>
           <Badge onClick={badgeClick}>Event Badge</Badge>
-        </div>
+        </div>,
       );
 
       const badge = screen.getByText('Event Badge');
@@ -260,9 +277,13 @@ describe('Badge Custom Props - Advanced Tests', () => {
       const handleKeyUp = vi.fn();
 
       render(
-        <Badge onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0}>
+        <Badge
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
+          tabIndex={0}
+        >
           Keyboard Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Keyboard Badge');
@@ -282,7 +303,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
           value='badge-value'
         >
           Form Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Form Badge');
@@ -299,7 +320,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
           onDrop={vi.fn()}
         >
           Draggable Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Draggable Badge');
@@ -314,7 +335,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
           translate='yes'
         >
           i18n Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('i18n Badge');
@@ -331,7 +352,7 @@ describe('Badge Custom Props - Advanced Tests', () => {
           itemProp='name'
         >
           Microdata Badge
-        </Badge>
+        </Badge>,
       );
 
       const badge = screen.getByText('Microdata Badge');

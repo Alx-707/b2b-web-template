@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { sendThemeReport, themeAnalytics } from '@/lib/theme-analytics';
 import { logger } from '@/lib/logger';
+import { sendThemeReport, themeAnalytics } from '@/lib/theme-analytics';
 
 /**
  * 主题性能监控组件

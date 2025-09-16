@@ -107,7 +107,11 @@ describe('useKeyboardNavigation Advanced Tests', () => {
         ({ config }) => useKeyboardNavigation(config),
         {
           initialProps: {
-            config: { enabled: true, loop: false, orientation: 'horizontal' as const },
+            config: {
+              enabled: true,
+              loop: false,
+              orientation: 'horizontal' as const,
+            },
           },
         },
       );

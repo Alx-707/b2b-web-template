@@ -1,9 +1,6 @@
 // 诊断页面控制面板组件
 
-import {
-  Download,
-  RefreshCw,
-} from 'lucide-react';
+import { Download, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -147,15 +144,16 @@ export function ExtendedControlPanel({
             <div className='flex items-center justify-center py-4'>
               <div className='flex items-center space-x-2'>
                 <RefreshCw className='h-4 w-4 animate-spin' />
-                <span className='text-sm text-muted-foreground'>
+                <span className='text-muted-foreground text-sm'>
                   正在检测性能指标...
                 </span>
               </div>
             </div>
           )}
           {currentMetrics && !isLoading && (
-            <div className='text-sm text-muted-foreground'>
-              最后更新: {new Date(currentMetrics.timestamp).toLocaleString('zh-CN')}
+            <div className='text-muted-foreground text-sm'>
+              最后更新:{' '}
+              {new Date(currentMetrics.timestamp).toLocaleString('zh-CN')}
             </div>
           )}
         </CardContent>
@@ -231,9 +229,7 @@ export function StatusIndicator({
         )}
       </span>
       {errorMessage && (
-        <span className='text-red-500 text-xs'>
-          {errorMessage}
-        </span>
+        <span className='text-xs text-red-500'>{errorMessage}</span>
       )}
     </div>
   );

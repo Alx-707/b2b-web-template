@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Input } from '../input';
 
@@ -17,7 +17,12 @@ describe('Input - Props & Events', () => {
 
   describe('Custom Props', () => {
     it('applies custom className', () => {
-      render(<Input className='custom-input' data-testid='input' />);
+      render(
+        <Input
+          className='custom-input'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveClass('custom-input');
@@ -39,67 +44,119 @@ describe('Input - Props & Events', () => {
     });
 
     it('supports default value', () => {
-      render(<Input defaultValue='Default text' data-testid='input' />);
+      render(
+        <Input
+          defaultValue='Default text'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input') as HTMLInputElement;
       expect(input.value).toBe('Default text');
     });
 
     it('supports controlled value', () => {
-      const { rerender } = render(<Input value='Controlled' onChange={() => {}} data-testid='input' />);
+      const { rerender } = render(
+        <Input
+          value='Controlled'
+          onChange={() => {}}
+          data-testid='input'
+        />,
+      );
 
       let input = screen.getByTestId('input') as HTMLInputElement;
       expect(input.value).toBe('Controlled');
 
-      rerender(<Input value='Updated' onChange={() => {}} data-testid='input' />);
+      rerender(
+        <Input
+          value='Updated'
+          onChange={() => {}}
+          data-testid='input'
+        />,
+      );
       input = screen.getByTestId('input') as HTMLInputElement;
       expect(input.value).toBe('Updated');
     });
 
     it('supports disabled state', () => {
-      render(<Input disabled data-testid='input' />);
+      render(
+        <Input
+          disabled
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toBeDisabled();
     });
 
     it('supports readonly state', () => {
-      render(<Input readOnly data-testid='input' />);
+      render(
+        <Input
+          readOnly
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('readonly');
     });
 
     it('supports required attribute', () => {
-      render(<Input required data-testid='input' />);
+      render(
+        <Input
+          required
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toBeRequired();
     });
 
     it('supports name attribute', () => {
-      render(<Input name='username' data-testid='input' />);
+      render(
+        <Input
+          name='username'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('name', 'username');
     });
 
     it('supports autoComplete attribute', () => {
-      render(<Input autoComplete='email' data-testid='input' />);
+      render(
+        <Input
+          autoComplete='email'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('autocomplete', 'email');
     });
 
     it('supports autoFocus attribute', () => {
-      render(<Input autoFocus data-testid='input' />);
+      render(
+        <Input
+          autoFocus
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('autofocus');
     });
 
     it('supports tabIndex', () => {
-      render(<Input tabIndex={5} data-testid='input' />);
+      render(
+        <Input
+          tabIndex={5}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('tabIndex', '5');
@@ -107,7 +164,12 @@ describe('Input - Props & Events', () => {
 
     it('supports custom style', () => {
       const customStyle = { backgroundColor: 'red', fontSize: '18px' };
-      render(<Input style={customStyle} data-testid='input' />);
+      render(
+        <Input
+          style={customStyle}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveStyle('background-color: red');
@@ -115,7 +177,12 @@ describe('Input - Props & Events', () => {
     });
 
     it('supports data attributes', () => {
-      render(<Input data-custom='value' data-testid='input' />);
+      render(
+        <Input
+          data-custom='value'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('data-custom', 'value');
@@ -127,7 +194,7 @@ describe('Input - Props & Events', () => {
           aria-label='Custom input'
           aria-describedby='help-text'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -136,7 +203,12 @@ describe('Input - Props & Events', () => {
     });
 
     it('merges multiple classNames correctly', () => {
-      render(<Input className='class1 class2' data-testid='input' />);
+      render(
+        <Input
+          className='class1 class2'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveClass('class1', 'class2', 'flex');
@@ -148,7 +220,7 @@ describe('Input - Props & Events', () => {
           className={undefined}
           placeholder={undefined}
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -156,28 +228,51 @@ describe('Input - Props & Events', () => {
     });
 
     it('supports form attribute', () => {
-      render(<Input form='my-form' data-testid='input' />);
+      render(
+        <Input
+          form='my-form'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('form', 'my-form');
     });
 
     it('supports size attribute for file inputs', () => {
-      render(<Input type='file' size={10} data-testid='input' />);
+      render(
+        <Input
+          type='file'
+          size={10}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('size', '10');
     });
 
     it('supports multiple attribute for file inputs', () => {
-      render(<Input type='file' multiple data-testid='input' />);
+      render(
+        <Input
+          type='file'
+          multiple
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('multiple');
     });
 
     it('supports accept attribute for file inputs', () => {
-      render(<Input type='file' accept='image/*' data-testid='input' />);
+      render(
+        <Input
+          type='file'
+          accept='image/*'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('accept', 'image/*');
@@ -187,7 +282,12 @@ describe('Input - Props & Events', () => {
   describe('Event Handling', () => {
     it('handles onChange events', async () => {
       const handleChange = vi.fn();
-      render(<Input onChange={handleChange} data-testid='input' />);
+      render(
+        <Input
+          onChange={handleChange}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       await user.type(input, 'test');
@@ -198,7 +298,12 @@ describe('Input - Props & Events', () => {
 
     it('handles onFocus events', async () => {
       const handleFocus = vi.fn();
-      render(<Input onFocus={handleFocus} data-testid='input' />);
+      render(
+        <Input
+          onFocus={handleFocus}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       await user.click(input);
@@ -208,7 +313,12 @@ describe('Input - Props & Events', () => {
 
     it('handles onBlur events', async () => {
       const handleBlur = vi.fn();
-      render(<Input onBlur={handleBlur} data-testid='input' />);
+      render(
+        <Input
+          onBlur={handleBlur}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       await user.click(input);
@@ -219,7 +329,12 @@ describe('Input - Props & Events', () => {
 
     it('handles onKeyDown events', async () => {
       const handleKeyDown = vi.fn();
-      render(<Input onKeyDown={handleKeyDown} data-testid='input' />);
+      render(
+        <Input
+          onKeyDown={handleKeyDown}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       input.focus();
@@ -230,7 +345,12 @@ describe('Input - Props & Events', () => {
 
     it('handles onKeyUp events', async () => {
       const handleKeyUp = vi.fn();
-      render(<Input onKeyUp={handleKeyUp} data-testid='input' />);
+      render(
+        <Input
+          onKeyUp={handleKeyUp}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       input.focus();
@@ -241,7 +361,12 @@ describe('Input - Props & Events', () => {
 
     it('handles onKeyPress events', async () => {
       const handleKeyPress = vi.fn();
-      render(<Input onKeyPress={handleKeyPress} data-testid='input' />);
+      render(
+        <Input
+          onKeyPress={handleKeyPress}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       input.focus();
@@ -252,7 +377,12 @@ describe('Input - Props & Events', () => {
 
     it('handles _onClick events', async () => {
       const handleClick = vi.fn();
-      render(<Input onClick={handleClick} data-testid='input' />);
+      render(
+        <Input
+          onClick={handleClick}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       await user.click(input);
@@ -262,7 +392,12 @@ describe('Input - Props & Events', () => {
 
     it('handles onDoubleClick events', async () => {
       const handleDoubleClick = vi.fn();
-      render(<Input onDoubleClick={handleDoubleClick} data-testid='input' />);
+      render(
+        <Input
+          onDoubleClick={handleDoubleClick}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       await user.dblClick(input);
@@ -279,7 +414,7 @@ describe('Input - Props & Events', () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -293,7 +428,12 @@ describe('Input - Props & Events', () => {
 
     it('handles input events with correct values', async () => {
       const handleChange = vi.fn();
-      render(<Input onChange={handleChange} data-testid='input' />);
+      render(
+        <Input
+          onChange={handleChange}
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       await user.type(input, 'hello');
@@ -316,7 +456,7 @@ describe('Input - Props & Events', () => {
           onChange={handleChange}
           onClick={handleClick}
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -336,7 +476,7 @@ describe('Input - Props & Events', () => {
         <Input
           onChange={(e) => customHandler(e.target.value)}
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -358,7 +498,12 @@ describe('Input - Props & Events', () => {
           handler2(e.target.value);
         };
 
-        return <Input onChange={handleChange} data-testid='input' />;
+        return (
+          <Input
+            onChange={handleChange}
+            data-testid='input'
+          />
+        );
       };
 
       render(<MultiHandlerInput />);
@@ -376,8 +521,11 @@ describe('Input - Props & Events', () => {
 
       render(
         <div onClick={parentClick}>
-          <Input onClick={inputClick} data-testid='input' />
-        </div>
+          <Input
+            onClick={inputClick}
+            data-testid='input'
+          />
+        </div>,
       );
 
       const input = screen.getByTestId('input');
@@ -395,8 +543,11 @@ describe('Input - Props & Events', () => {
 
       render(
         <div onClick={parentClick}>
-          <Input onClick={inputClick} data-testid='input' />
-        </div>
+          <Input
+            onClick={inputClick}
+            data-testid='input'
+          />
+        </div>,
       );
 
       const input = screen.getByTestId('input');

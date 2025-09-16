@@ -62,10 +62,12 @@ module.exports = {
       name: 'no-cross-domain-direct-access',
       severity: 'error',
       comment: '禁止跨域直接访问 - 必须通过公开API',
-      from: { path: '^src/lib/(security|content|accessibility|resend|whatsapp|performance-monitoring|i18n|locale-storage|web-vitals|theme-analytics)/' },
+      from: {
+        path: '^src/lib/(security|content|accessibility|resend|whatsapp|performance-monitoring|i18n|locale-storage|web-vitals|theme-analytics)/',
+      },
       to: {
         path: '^src/lib/(?!\\1)[^/]+/',
-        pathNot: '^src/lib/(shared|utils|types|constants)/'
+        pathNot: '^src/lib/(shared|utils|types|constants)/',
       },
     },
     {
@@ -75,7 +77,7 @@ module.exports = {
       from: { path: '^src/' },
       to: {
         path: '\\.\\./',
-        pathNot: '\\.(spec|test|stories)\\.(js|ts|tsx)$'
+        pathNot: '\\.(spec|test|stories)\\.(js|ts|tsx)$',
       },
     },
     {
@@ -85,7 +87,7 @@ module.exports = {
       from: { path: '^src/lib/([^/]+)/' },
       to: {
         path: '^src/lib/(?!\\1|shared|utils|types|constants)[^/]+/',
-        pathNot: '^src/(components|hooks|app)/'
+        pathNot: '^src/(components|hooks|app)/',
       },
     },
     {
@@ -95,7 +97,7 @@ module.exports = {
       from: {},
       to: {
         path: 'index\\.(ts|js)$',
-        pathNot: '^src/(app|components)/'
+        pathNot: '^src/(app|components)/',
       },
     },
   ],

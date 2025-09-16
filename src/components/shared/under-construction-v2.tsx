@@ -27,30 +27,40 @@ export function UnderConstructionV2({
     <div
       className={cn(
         'relative min-h-screen overflow-hidden',
-        'bg-gradient-to-br from-background via-background to-muted/30',
+        'from-background via-background to-muted/30 bg-gradient-to-br',
         className,
       )}
     >
       {/* 背景装饰 */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-secondary/5 blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-3xl" />
+      <div className='pointer-events-none absolute inset-0 overflow-hidden'>
+        <div className='bg-primary/5 absolute -top-40 -right-40 h-80 w-80 rounded-full blur-3xl' />
+        <div className='bg-secondary/5 absolute -bottom-40 -left-40 h-80 w-80 rounded-full blur-3xl' />
+        <div className='bg-accent/5 absolute top-1/2 left-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl' />
       </div>
 
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16">
-        <div className="mx-auto w-full max-w-4xl space-y-12 text-center">
+      <div className='relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16'>
+        <div className='mx-auto w-full max-w-4xl space-y-12 text-center'>
           {/* 头部区域 */}
-          <div>Header Section - {pageType} - {expectedDate}</div>
+          <div>
+            Header Section - {pageType} - {expectedDate}
+          </div>
 
           {/* 进度指示器 */}
-          <div>Progress Section - {showProgress ? 'Enabled' : 'Disabled'} - Step {currentStep}</div>
+          <div>
+            Progress Section - {showProgress ? 'Enabled' : 'Disabled'} - Step{' '}
+            {currentStep}
+          </div>
 
           {/* 功能预览 */}
-          <div>Feature Preview - {showFeaturePreview ? 'Enabled' : 'Disabled'}</div>
+          <div>
+            Feature Preview - {showFeaturePreview ? 'Enabled' : 'Disabled'}
+          </div>
 
           {/* 邮件订阅 */}
-          <div>Email Subscription - {showEmailSubscription ? 'Enabled' : 'Disabled'}</div>
+          <div>
+            Email Subscription -{' '}
+            {showEmailSubscription ? 'Enabled' : 'Disabled'}
+          </div>
 
           {/* 联系方式 */}
           <div>Contact Section - {pageType}</div>

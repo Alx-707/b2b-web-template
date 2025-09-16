@@ -25,9 +25,9 @@ export interface ComponentStats {
  * React Scan 原始组件数据接口
  */
 // interface _ReactScanRawComponentData {
-  // renderCount?: number;
-  // renderTime?: number;
-  // lastRenderTime?: number;
+// renderCount?: number;
+// renderTime?: number;
+// lastRenderTime?: number;
 // }
 
 /**
@@ -64,28 +64,31 @@ export const useReactScanDataReader = () => {
   }, []);
 
   // 处理扫描数据
-  const processScanData = useCallback((data: ReactScanData | null): ComponentStats[] => {
-    if (!data || !data.components.length) return [];
+  const processScanData = useCallback(
+    (data: ReactScanData | null): ComponentStats[] => {
+      if (!data || !data.components.length) return [];
 
-    return data.components
-      .map((component) => {
-        const avgRenderTime = component.renderCount > 0
-          ? component.renderTime / component.renderCount
-          : 0;
+      return data.components
+        .map((component) => {
+          const avgRenderTime =
+            component.renderCount > 0
+              ? component.renderTime / component.renderCount
+              : 0;
 
-        const efficiency = avgRenderTime > 0
-          ? Math.max(0, 100 - avgRenderTime * 10)
-          : 100;
+          const efficiency =
+            avgRenderTime > 0 ? Math.max(0, 100 - avgRenderTime * 10) : 100;
 
-        return {
-          ...component,
-          avgRenderTime,
-          efficiency,
-          timestamp: Date.now(),
-        };
-      })
-      .sort((a, b) => b.renderTime - a.renderTime);
-  }, []);
+          return {
+            ...component,
+            avgRenderTime,
+            efficiency,
+            timestamp: Date.now(),
+          };
+        })
+        .sort((a, b) => b.renderTime - a.renderTime);
+    },
+    [],
+  );
 
   return {
     readReactScanData,

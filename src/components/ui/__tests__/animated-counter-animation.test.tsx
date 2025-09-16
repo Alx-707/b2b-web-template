@@ -32,7 +32,7 @@ const advanceTime = (ms: number) => {
   // Execute all pending animation frame callbacks
   const callbacks = [...animationFrameCallbacks];
   animationFrameCallbacks = [];
-  callbacks.forEach(callback => callback());
+  callbacks.forEach((callback) => callback());
 };
 
 describe('AnimatedCounter - Animation Behavior', () => {
@@ -48,19 +48,34 @@ describe('AnimatedCounter - Animation Behavior', () => {
 
   describe('Animation Behavior', () => {
     it('starts animation when autoStart is true', () => {
-      render(<AnimatedCounter to={100} duration={1000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       expect(mockRequestAnimationFrame).toHaveBeenCalled();
     });
 
     it('does not start animation when autoStart is false', () => {
-      render(<AnimatedCounter to={100} autoStart={false} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          autoStart={false}
+        />,
+      );
 
       expect(mockRequestAnimationFrame).not.toHaveBeenCalled();
     });
 
     it('animates from 0 to target value', () => {
-      render(<AnimatedCounter to={100} duration={1000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -79,7 +94,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('handles value changes during animation', () => {
-      const { rerender } = render(<AnimatedCounter to={100} duration={1000} />);
+      const { rerender } = render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -89,7 +109,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
       expect(firstValue).toBeGreaterThan(0);
 
       // Change target value mid-animation
-      rerender(<AnimatedCounter to={200} duration={1000} />);
+      rerender(
+        <AnimatedCounter
+          to={200}
+          duration={1000}
+        />,
+      );
 
       // Continue animation to new target
       advanceTime(1000);
@@ -97,7 +122,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('respects custom duration', () => {
-      render(<AnimatedCounter to={100} duration={2000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={2000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -113,7 +143,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('handles zero duration', () => {
-      render(<AnimatedCounter to={100} duration={0} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={0}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -123,7 +158,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('handles negative duration gracefully', () => {
-      render(<AnimatedCounter to={100} duration={-1000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={-1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -133,34 +173,64 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('cancels previous animation when value changes', () => {
-      const { rerender } = render(<AnimatedCounter to={100} duration={1000} />);
+      const { rerender } = render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       // Start first animation
       expect(mockRequestAnimationFrame).toHaveBeenCalledTimes(1);
 
       // Change value, should cancel previous and start new
-      rerender(<AnimatedCounter to={200} duration={1000} />);
+      rerender(
+        <AnimatedCounter
+          to={200}
+          duration={1000}
+        />,
+      );
 
       expect(mockCancelAnimationFrame).toHaveBeenCalled();
       expect(mockRequestAnimationFrame).toHaveBeenCalledTimes(2);
     });
 
     it('prevents multiple simultaneous animations', () => {
-      const { rerender } = render(<AnimatedCounter to={100} duration={1000} />);
+      const { rerender } = render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       // Start first animation
       expect(mockRequestAnimationFrame).toHaveBeenCalledTimes(1);
 
       // Quickly change value multiple times
-      rerender(<AnimatedCounter to={200} duration={1000} />);
-      rerender(<AnimatedCounter to={300} duration={1000} />);
+      rerender(
+        <AnimatedCounter
+          to={200}
+          duration={1000}
+        />,
+      );
+      rerender(
+        <AnimatedCounter
+          to={300}
+          duration={1000}
+        />,
+      );
 
       // Should have cancelled previous animations
       expect(mockCancelAnimationFrame).toHaveBeenCalled();
     });
 
     it('handles component unmounting during animation', () => {
-      const { unmount } = render(<AnimatedCounter to={100} duration={1000} />);
+      const { unmount } = render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       // Start animation
       advanceTime(250);
@@ -173,7 +243,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('animates backwards when new value is smaller', () => {
-      const { rerender } = render(<AnimatedCounter to={100} duration={1000} />);
+      const { rerender } = render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -182,7 +257,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
       expect(counter).toHaveTextContent('100');
 
       // Animate to smaller value
-      rerender(<AnimatedCounter to={50} duration={1000} />);
+      rerender(
+        <AnimatedCounter
+          to={50}
+          duration={1000}
+        />,
+      );
 
       // Should animate backwards
       advanceTime(500);
@@ -195,13 +275,23 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('handles rapid value changes', () => {
-      const { rerender } = render(<AnimatedCounter to={100} duration={1000} />);
+      const { rerender } = render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
       // Rapidly change values
       for (let i = 0; i < 10; i++) {
-        rerender(<AnimatedCounter to={100 + i * 10} duration={1000} />);
+        rerender(
+          <AnimatedCounter
+            to={100 + i * 10}
+            duration={1000}
+          />,
+        );
         advanceTime(50);
       }
 
@@ -211,7 +301,13 @@ describe('AnimatedCounter - Animation Behavior', () => {
 
     it('maintains smooth animation with custom easing', () => {
       const customEasing = (t: number) => t * t; // Quadratic easing
-      render(<AnimatedCounter to={100} duration={1000} easing={customEasing} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          easing={customEasing}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -226,7 +322,13 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('handles animation with delay', () => {
-      render(<AnimatedCounter to={100} duration={1000} delay={500} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1000}
+          delay={500}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -250,7 +352,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('handles very short durations', () => {
-      render(<AnimatedCounter to={100} duration={1} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={1}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 
@@ -259,7 +366,12 @@ describe('AnimatedCounter - Animation Behavior', () => {
     });
 
     it('handles very long durations', () => {
-      render(<AnimatedCounter to={100} duration={10000} />);
+      render(
+        <AnimatedCounter
+          to={100}
+          duration={10000}
+        />,
+      );
 
       const counter = screen.getByRole('status');
 

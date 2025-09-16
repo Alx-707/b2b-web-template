@@ -9,16 +9,43 @@
 'use client';
 
 // 重新导出所有模块的组件和功能
-export { CardSkeletonFallback, ComponentLoadingFallback, createDynamicConfig, DEV_TOOLS_CONFIG, isClient, isDevelopment, isProduction, MinimalLoadingFallback, PERFORMANCE_CONFIG, SHOWCASE_CONFIG, SkeletonLoadingFallback, UI_COMPONENT_CONFIG, withConditionalDynamic, withDelayedDynamic, withDynamicSuspense, withErrorBoundary } from './dynamic-imports-base';
-export type { DynamicImportConfig } from './dynamic-imports-base';
-export { CoreDynamicComponents } from './dynamic-imports-core';
 // export * from './dynamic-imports-devtools'; // 暂时禁用，组件不存在
 // export * from './dynamic-imports-i18n'; // 暂时禁用，组件不存在
 // export * from './dynamic-imports-performance'; // 暂时禁用，组件不存在
 // export * from './dynamic-imports-showcase'; // 暂时禁用，组件不存在
 
 // 导入主要组件集合
+
+// 以下组件暂时禁用，因为相关文件不存在
+// 性能监控组件的向后兼容导出
+// export const DynamicWebVitalsIndicator = PerformanceDynamicComponents.WebVitalsIndicator;
+// export const DynamicThemePerformanceMonitor = PerformanceDynamicComponents.ThemePerformanceMonitor;
+
+// 开发工具组件的向后兼容导出
+import dynamic from 'next/dynamic';
 import { CoreDynamicComponents } from './dynamic-imports-core';
+
+export {
+  CardSkeletonFallback,
+  ComponentLoadingFallback,
+  createDynamicConfig,
+  DEV_TOOLS_CONFIG,
+  isClient,
+  isDevelopment,
+  isProduction,
+  MinimalLoadingFallback,
+  PERFORMANCE_CONFIG,
+  SHOWCASE_CONFIG,
+  SkeletonLoadingFallback,
+  UI_COMPONENT_CONFIG,
+  withConditionalDynamic,
+  withDelayedDynamic,
+  withDynamicSuspense,
+  withErrorBoundary,
+} from './dynamic-imports-base';
+export type { DynamicImportConfig } from './dynamic-imports-base';
+export { CoreDynamicComponents } from './dynamic-imports-core';
+
 // import { DevToolsDynamicComponents, DevelopmentOnlyComponents } from './dynamic-imports-devtools'; // 暂时禁用
 // import { I18nDynamicComponents } from './dynamic-imports-i18n'; // 暂时禁用
 // import { DevelopmentPerformanceComponents, PerformanceDynamicComponents } from './dynamic-imports-performance'; // 暂时禁用
@@ -33,19 +60,12 @@ import { CoreDynamicComponents } from './dynamic-imports-core';
 export const DynamicProgressIndicator = CoreDynamicComponents.ProgressIndicator;
 export const DynamicAnimatedIcon = CoreDynamicComponents.AnimatedIcon;
 
-// 以下组件暂时禁用，因为相关文件不存在
-// 性能监控组件的向后兼容导出
-// export const DynamicWebVitalsIndicator = PerformanceDynamicComponents.WebVitalsIndicator;
-// export const DynamicThemePerformanceMonitor = PerformanceDynamicComponents.ThemePerformanceMonitor;
-
-// 开发工具组件的向后兼容导出
-import dynamic from 'next/dynamic';
-
 // 临时直接导出开发工具组件，直到devtools模块修复
 export const DynamicReactScanDemo = dynamic(
-  () => import('../dev-tools/react-scan-demo').then((mod) => ({
-    default: mod.ReactScanDemo,
-  })),
+  () =>
+    import('../dev-tools/react-scan-demo').then((mod) => ({
+      default: mod.ReactScanDemo,
+    })),
   {
     loading: () => <div>Loading...</div>,
     ssr: false,
@@ -53,9 +73,10 @@ export const DynamicReactScanDemo = dynamic(
 );
 
 export const DynamicReactScanStressTest = dynamic(
-  () => import('../dev-tools/react-scan-demo').then((mod) => ({
-    default: mod.ReactScanStressTest,
-  })),
+  () =>
+    import('../dev-tools/react-scan-demo').then((mod) => ({
+      default: mod.ReactScanStressTest,
+    })),
   {
     loading: () => <div>Loading...</div>,
     ssr: false,
@@ -85,7 +106,7 @@ export const DynamicDropdownMenu = CoreDynamicComponents.DropdownMenu;
  */
 export const AllDynamicComponents = {
   // 核心组件
-  ...CoreDynamicComponents
+  ...CoreDynamicComponents,
 
   // 以下组件暂时禁用，因为相关文件不存在
   // 性能监控组件
@@ -109,9 +130,6 @@ export const AllDynamicComponents = {
  * Development-only components collection
  */
 export const DevelopmentComponents = {
-
-
-
   // 暂时禁用，因为相关文件不存在
   // ...DevelopmentPerformanceComponents,
   // ...DevelopmentOnlyComponents,

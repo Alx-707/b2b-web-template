@@ -6,10 +6,8 @@
  * 注意：高级功能测试请参考 route-post-advanced.test.ts
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { NextRequest } from 'next/server';
-;
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from '@/app/api/csp-report/__tests__/route';
 
 describe('CSP Report API Route - 安全性测试', () => {
@@ -68,7 +66,8 @@ describe('CSP Report API Route - 安全性测试', () => {
       const specialCharsReport = {
         'csp-report': {
           ...validCSPReport['csp-report'],
-          'blocked-uri': 'https://example.com/script.js?param=<script>alert("xss")</script>',
+          'blocked-uri':
+            'https://example.com/script.js?param=<script>alert("xss")</script>',
           'script-sample': '"><script>alert("xss")</script>',
         },
       };

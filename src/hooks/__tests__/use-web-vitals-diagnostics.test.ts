@@ -140,8 +140,12 @@ describe('useWebVitalsDiagnostics', () => {
     (
       enhancedWebVitalsCollector.generateDiagnosticReport as unknown
     ).mockReturnValue(mockGenerateReportResult);
-    (enhancedWebVitalsCollector.getDetailedMetrics as unknown).mockReturnValue({});
-    (enhancedWebVitalsCollector.cleanup as unknown).mockImplementation(() => {});
+    (enhancedWebVitalsCollector.getDetailedMetrics as unknown).mockReturnValue(
+      {},
+    );
+    (enhancedWebVitalsCollector.cleanup as unknown).mockImplementation(
+      () => {},
+    );
 
     // 4. 设置浏览器API Mock的默认行为
     mockLocalStorage.getItem.mockReturnValue(null);
@@ -162,8 +166,12 @@ describe('useWebVitalsDiagnostics', () => {
     (
       enhancedWebVitalsCollector.generateDiagnosticReport as unknown
     ).mockReturnValue(mockGenerateReportResult);
-    (enhancedWebVitalsCollector.getDetailedMetrics as unknown).mockReturnValue({});
-    (enhancedWebVitalsCollector.cleanup as unknown).mockImplementation(() => {});
+    (enhancedWebVitalsCollector.getDetailedMetrics as unknown).mockReturnValue(
+      {},
+    );
+    (enhancedWebVitalsCollector.cleanup as unknown).mockImplementation(
+      () => {},
+    );
 
     // 重置浏览器API Mock
     mockLocalStorage.getItem.mockReturnValue(null);

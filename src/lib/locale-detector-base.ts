@@ -5,14 +5,13 @@
  */
 
 import type { Locale } from '@/types/i18n';
-;
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './locale-constants';
 import {
-  LANGUAGE_CODE_TO_LOCALE_MAP,
   COUNTRY_CODE_TO_LOCALE_MAP,
-  TIMEZONE_TO_LOCALE_MAP,
   DETECTION_TIMEOUTS,
   GEO_API_CONFIG,
+  LANGUAGE_CODE_TO_LOCALE_MAP,
+  TIMEZONE_TO_LOCALE_MAP,
 } from './locale-detector-constants';
 
 /**
@@ -25,12 +24,16 @@ export class BaseLocaleDetector {
    * Safely get locale from language mapping
    * 使用白名单验证，避免 Object Injection Sink
    */
-  protected getLocaleFromLanguageCode(normalizedLang: string): Locale | undefined {
+  protected getLocaleFromLanguageCode(
+    normalizedLang: string,
+  ): Locale | undefined {
     if (!normalizedLang || typeof normalizedLang !== 'string') {
       return undefined;
     }
 
-    const locale = LANGUAGE_CODE_TO_LOCALE_MAP.get(normalizedLang.toLowerCase());
+    const locale = LANGUAGE_CODE_TO_LOCALE_MAP.get(
+      normalizedLang.toLowerCase(),
+    );
     return locale && SUPPORTED_LOCALES.includes(locale) ? locale : undefined;
   }
 
@@ -39,7 +42,9 @@ export class BaseLocaleDetector {
    * Safely get locale from geo mapping
    * 使用白名单验证，避免 Object Injection Sink
    */
-  protected getLocaleFromCountryCode(countryCode: string | undefined): Locale | undefined {
+  protected getLocaleFromCountryCode(
+    countryCode: string | undefined,
+  ): Locale | undefined {
     if (!countryCode || typeof countryCode !== 'string') {
       return undefined;
     }
@@ -52,7 +57,9 @@ export class BaseLocaleDetector {
    * 安全地从时区映射中获取语言
    * Safely get locale from timezone mapping
    */
-  protected getLocaleFromTimeZone(timeZone: string | undefined): Locale | undefined {
+  protected getLocaleFromTimeZone(
+    timeZone: string | undefined,
+  ): Locale | undefined {
     if (!timeZone || typeof timeZone !== 'string') {
       return undefined;
     }
@@ -120,7 +127,7 @@ export class BaseLocaleDetector {
             try {
               const countryCode = await this.getCountryFromCoordinates(
                 position.coords.latitude,
-                position.coords.longitude
+                position.coords.longitude,
               );
 
               const detectedLocale = this.getLocaleFromCountryCode(countryCode);
@@ -143,7 +150,7 @@ export class BaseLocaleDetector {
             timeout: DETECTION_TIMEOUTS.GEOLOCATION,
             enableHighAccuracy: false,
             maximumAge: 10 * 60 * 1000, // 10分钟缓存
-          }
+          },
         );
       });
     } catch (error) {
@@ -198,9 +205,15 @@ export class BaseLocaleDetector {
    * 根据坐标获取国家代码
    * Get country code from coordinates
    */
-  private async getCountryFromCoordinates(lat: number, lng: number): Promise<string | undefined> {
+  private async getCountryFromCoordinates(
+    lat: number,
+    lng: number,
+  ): Promise<string | undefined> {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), DETECTION_TIMEOUTS.NETWORK_REQUEST);
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      DETECTION_TIMEOUTS.NETWORK_REQUEST,
+    );
 
     try {
       // 在实际应用中，这里应该调用真实的地理位置API
@@ -210,9 +223,9 @@ export class BaseLocaleDetector {
         {
           signal: controller.signal,
           headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -237,7 +250,10 @@ export class BaseLocaleDetector {
    */
   private async getCountryFromIP(): Promise<string | undefined> {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), DETECTION_TIMEOUTS.NETWORK_REQUEST);
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      DETECTION_TIMEOUTS.NETWORK_REQUEST,
+    );
 
     try {
       // 尝试多个IP地理位置API
@@ -246,7 +262,7 @@ export class BaseLocaleDetector {
           const response = await fetch(endpoint, {
             signal: controller.signal,
             headers: {
-              'Accept': 'application/json',
+              Accept: 'application/json',
             },
           });
 
@@ -255,7 +271,8 @@ export class BaseLocaleDetector {
           }
 
           const data = await response.json();
-          const countryCode = data.country || data.country_code || data.countryCode;
+          const countryCode =
+            data.country || data.country_code || data.countryCode;
 
           if (countryCode) {
             return countryCode;
@@ -282,7 +299,9 @@ export class BaseLocaleDetector {
    * Validate if detected locale is supported
    */
   protected validateLocale(locale: Locale | undefined): Locale {
-    return locale && SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+    return locale && SUPPORTED_LOCALES.includes(locale)
+      ? locale
+      : DEFAULT_LOCALE;
   }
 
   /**
@@ -295,7 +314,9 @@ export class BaseLocaleDetector {
         return [];
       }
 
-      return navigator.languages ? Array.from(navigator.languages) : [navigator.language];
+      return navigator.languages
+        ? Array.from(navigator.languages)
+        : [navigator.language];
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.warn('Failed to get browser languages:', error);

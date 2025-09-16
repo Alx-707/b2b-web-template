@@ -9,20 +9,29 @@ console.log('🚀 开始修复未使用的导入声明...');
 // 获取所有TS6196错误（未使用的导入）
 function getUnusedImportErrors() {
   try {
-    const output = execSync('pnpm type-check 2>&1 | grep "TS6196"', { encoding: 'utf8' });
-    return output.trim().split('\n').filter(line => line.trim()).map(line => {
-      const match = line.match(/^([^(]+)\((\d+),(\d+)\): error TS6196: '([^']+)' is declared but never used\./);
-      if (match) {
-        return {
-          file: match[1],
-          line: parseInt(match[2]),
-          column: parseInt(match[3]),
-          variable: match[4],
-          fullLine: line
-        };
-      }
-      return null;
-    }).filter(Boolean);
+    const output = execSync('pnpm type-check 2>&1 | grep "TS6196"', {
+      encoding: 'utf8',
+    });
+    return output
+      .trim()
+      .split('\n')
+      .filter((line) => line.trim())
+      .map((line) => {
+        const match = line.match(
+          /^([^(]+)\((\d+),(\d+)\): error TS6196: '([^']+)' is declared but never used\./,
+        );
+        if (match) {
+          return {
+            file: match[1],
+            line: parseInt(match[2]),
+            column: parseInt(match[3]),
+            variable: match[4],
+            fullLine: line,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
   } catch (error) {
     console.log('没有找到未使用的导入错误');
     return [];
@@ -41,7 +50,7 @@ function fixUnusedImportsInFile(filePath, errors) {
 
   // 按变量名分组处理
   const variablesByLine = {};
-  errors.forEach(error => {
+  errors.forEach((error) => {
     if (!variablesByLine[error.line]) {
       variablesByLine[error.line] = [];
     }
@@ -65,8 +74,11 @@ function fixUnusedImportsInFile(filePath, errors) {
           // 检查是否是花括号导入 import { ... } from '...'
           const braceMatch = newLine.match(/import\s*\{\s*([^}]+)\s*\}\s*from/);
           if (braceMatch) {
-            const imports = braceMatch[1].split(',').map(imp => imp.trim()).filter(imp => imp);
-            const filteredImports = imports.filter(imp => imp !== variable);
+            const imports = braceMatch[1]
+              .split(',')
+              .map((imp) => imp.trim())
+              .filter((imp) => imp);
+            const filteredImports = imports.filter((imp) => imp !== variable);
 
             if (filteredImports.length === 0) {
               // 如果没有剩余导入，删除整行
@@ -74,7 +86,10 @@ function fixUnusedImportsInFile(filePath, errors) {
               console.log(`  ✅ 删除空导入行: ${variable}`);
             } else if (filteredImports.length < imports.length) {
               // 移除特定的导入
-              newLine = newLine.replace(/\{[^}]+\}/, `{ ${filteredImports.join(', ')} }`);
+              newLine = newLine.replace(
+                /\{[^}]+\}/,
+                `{ ${filteredImports.join(', ')} }`,
+              );
               console.log(`  ✅ 从导入中移除: ${variable}`);
             }
           }
@@ -126,7 +141,7 @@ function main() {
 
   // 按文件分组
   const errorsByFile = {};
-  errors.forEach(error => {
+  errors.forEach((error) => {
     if (!errorsByFile[error.file]) {
       errorsByFile[error.file] = [];
     }
@@ -151,15 +166,23 @@ function main() {
   // 验证修复效果
   console.log('\n🔍 验证修复效果...');
   try {
-    const errorCount = execSync('pnpm type-check 2>&1 | grep -c "error TS"', { encoding: 'utf8' }).trim();
-    const unusedImportErrors = execSync('pnpm type-check 2>&1 | grep "TS6196" | wc -l', { encoding: 'utf8' }).trim();
+    const errorCount = execSync('pnpm type-check 2>&1 | grep -c "error TS"', {
+      encoding: 'utf8',
+    }).trim();
+    const unusedImportErrors = execSync(
+      'pnpm type-check 2>&1 | grep "TS6196" | wc -l',
+      { encoding: 'utf8' },
+    ).trim();
 
     console.log(`总错误数: ${errorCount}`);
     console.log(`剩余未使用导入错误: ${unusedImportErrors}`);
 
     if (parseInt(unusedImportErrors) > 0) {
       console.log('\n剩余错误示例:');
-      const examples = execSync('pnpm type-check 2>&1 | grep "TS6196" | head -5', { encoding: 'utf8' });
+      const examples = execSync(
+        'pnpm type-check 2>&1 | grep "TS6196" | head -5',
+        { encoding: 'utf8' },
+      );
       console.log(examples);
     }
   } catch (error) {

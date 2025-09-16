@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
   Card,
@@ -42,11 +42,24 @@ describe('Card - Basic Components', () => {
       render(<Card>Card Content</Card>);
 
       const card = screen.getByText('Card Content');
-      expect(card).toHaveClass('rounded-lg', 'border', 'bg-card', 'text-card-foreground', 'shadow-sm');
+      expect(card).toHaveClass(
+        'rounded-lg',
+        'border',
+        'bg-card',
+        'text-card-foreground',
+        'shadow-sm',
+      );
     });
 
     it('supports additional props', () => {
-      render(<Card data-testid='card' role='region'>Card Content</Card>);
+      render(
+        <Card
+          data-testid='card'
+          role='region'
+        >
+          Card Content
+        </Card>,
+      );
 
       const card = screen.getByTestId('card');
       expect(card).toHaveAttribute('role', 'region');
@@ -71,7 +84,7 @@ describe('Card - Basic Components', () => {
         <Card>
           <div>Nested Content</div>
           <span>Another Element</span>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText('Nested Content')).toBeInTheDocument();
@@ -109,7 +122,14 @@ describe('Card - Basic Components', () => {
     });
 
     it('supports additional props', () => {
-      render(<CardHeader data-testid='header' role='banner'>Header Content</CardHeader>);
+      render(
+        <CardHeader
+          data-testid='header'
+          role='banner'
+        >
+          Header Content
+        </CardHeader>,
+      );
 
       const header = screen.getByTestId('header');
       expect(header).toHaveAttribute('role', 'banner');
@@ -156,7 +176,12 @@ describe('Card - Basic Components', () => {
       render(<CardTitle>Title Content</CardTitle>);
 
       const title = screen.getByText('Title Content');
-      expect(title).toHaveClass('text-2xl', 'font-semibold', 'leading-none', 'tracking-tight');
+      expect(title).toHaveClass(
+        'text-2xl',
+        'font-semibold',
+        'leading-none',
+        'tracking-tight',
+      );
     });
 
     it('renders as h3 element by default', () => {
@@ -167,7 +192,14 @@ describe('Card - Basic Components', () => {
     });
 
     it('supports additional props', () => {
-      render(<CardTitle data-testid='title' id='card-title'>Title Content</CardTitle>);
+      render(
+        <CardTitle
+          data-testid='title'
+          id='card-title'
+        >
+          Title Content
+        </CardTitle>,
+      );
 
       const title = screen.getByTestId('title');
       expect(title).toHaveAttribute('id', 'card-title');
@@ -190,7 +222,11 @@ describe('Card - Basic Components', () => {
     });
 
     it('applies custom className', () => {
-      render(<CardDescription className='custom-description'>Description Content</CardDescription>);
+      render(
+        <CardDescription className='custom-description'>
+          Description Content
+        </CardDescription>,
+      );
 
       const description = screen.getByText('Description Content');
       expect(description).toHaveClass('custom-description');
@@ -218,7 +254,14 @@ describe('Card - Basic Components', () => {
     });
 
     it('supports additional props', () => {
-      render(<CardDescription data-testid='description' id='card-desc'>Description Content</CardDescription>);
+      render(
+        <CardDescription
+          data-testid='description'
+          id='card-desc'
+        >
+          Description Content
+        </CardDescription>,
+      );
 
       const description = screen.getByTestId('description');
       expect(description).toHaveAttribute('id', 'card-desc');
@@ -232,7 +275,8 @@ describe('Card - Basic Components', () => {
     });
 
     it('supports long text content', () => {
-      const longText = 'This is a very long description that might wrap to multiple lines and should be handled properly by the component.';
+      const longText =
+        'This is a very long description that might wrap to multiple lines and should be handled properly by the component.';
       render(<CardDescription>{longText}</CardDescription>);
 
       const description = screen.getByText(longText);
@@ -277,7 +321,14 @@ describe('Card - Basic Components', () => {
     });
 
     it('supports additional props', () => {
-      render(<CardAction data-testid='action' role='group'>Action Content</CardAction>);
+      render(
+        <CardAction
+          data-testid='action'
+          role='group'
+        >
+          Action Content
+        </CardAction>,
+      );
 
       const action = screen.getByTestId('action');
       expect(action).toHaveAttribute('role', 'group');
@@ -295,7 +346,7 @@ describe('Card - Basic Components', () => {
         <CardAction>
           <button>Edit</button>
           <button>Delete</button>
-        </CardAction>
+        </CardAction>,
       );
 
       expect(screen.getByText('Edit')).toBeInTheDocument();
@@ -312,7 +363,9 @@ describe('Card - Basic Components', () => {
     });
 
     it('applies custom className', () => {
-      render(<CardContent className='custom-content'>Content Text</CardContent>);
+      render(
+        <CardContent className='custom-content'>Content Text</CardContent>,
+      );
 
       const content = screen.getByText('Content Text');
       expect(content).toHaveClass('custom-content');
@@ -340,7 +393,14 @@ describe('Card - Basic Components', () => {
     });
 
     it('supports additional props', () => {
-      render(<CardContent data-testid='content' role='main'>Content Text</CardContent>);
+      render(
+        <CardContent
+          data-testid='content'
+          role='main'
+        >
+          Content Text
+        </CardContent>,
+      );
 
       const content = screen.getByTestId('content');
       expect(content).toHaveAttribute('role', 'main');
@@ -364,7 +424,7 @@ describe('Card - Basic Components', () => {
               <li>List item 2</li>
             </ul>
           </div>
-        </CardContent>
+        </CardContent>,
       );
 
       expect(screen.getByText('Nested Title')).toBeInTheDocument();
@@ -411,7 +471,14 @@ describe('Card - Basic Components', () => {
     });
 
     it('supports additional props', () => {
-      render(<CardFooter data-testid='footer' role='contentinfo'>Footer Content</CardFooter>);
+      render(
+        <CardFooter
+          data-testid='footer'
+          role='contentinfo'
+        >
+          Footer Content
+        </CardFooter>,
+      );
 
       const footer = screen.getByTestId('footer');
       expect(footer).toHaveAttribute('role', 'contentinfo');
@@ -429,7 +496,7 @@ describe('Card - Basic Components', () => {
         <CardFooter>
           <button>Cancel</button>
           <button>Save</button>
-        </CardFooter>
+        </CardFooter>,
       );
 
       expect(screen.getByText('Cancel')).toBeInTheDocument();

@@ -135,7 +135,9 @@ describe('I18nCacheManager - Advanced Functionality', () => {
       const duration = endTime - _startTime;
 
       // Preloading should be reasonably fast
-      expect(duration).toBeLessThan(WEB_VITALS_CONSTANTS.PERFORMANCE_THRESHOLDS.LCP);
+      expect(duration).toBeLessThan(
+        WEB_VITALS_CONSTANTS.PERFORMANCE_THRESHOLDS.LCP,
+      );
 
       const stats = cacheManager.getCacheStats();
       expect(stats.size).toBe(2);
@@ -214,7 +216,7 @@ describe('I18nCacheManager - Advanced Functionality', () => {
 
     it('should load from localStorage when persistence is enabled', () => {
       const cachedData = JSON.stringify({
-        'en': mockEnMessages,
+        en: mockEnMessages,
         timestamp: Date.now(),
       });
 
@@ -239,7 +241,7 @@ describe('I18nCacheManager - Advanced Functionality', () => {
 
     it('should respect cache expiration in localStorage', () => {
       const expiredData = JSON.stringify({
-        'en': mockEnMessages,
+        en: mockEnMessages,
         timestamp: Date.now() - 400000, // Expired (older than 5 minutes)
       });
 
@@ -302,13 +304,13 @@ describe('I18nCacheManager - Advanced Functionality', () => {
   describe('performance optimization', () => {
     it('should handle concurrent requests efficiently', async () => {
       const promises = Array.from({ length: 10 }, () =>
-        cacheManager.getMessages('en')
+        cacheManager.getMessages('en'),
       );
 
       const results = await Promise.all(promises);
 
       // All results should be the same object (cached)
-      expect(results.every(result => result === results[0])).toBe(true);
+      expect(results.every((result) => result === results[0])).toBe(true);
 
       // Should only have one cache entry
       const stats = cacheManager.getCacheStats();
@@ -365,7 +367,7 @@ describe('I18nCacheManager - Advanced Functionality', () => {
       expect(warmupTime).toBeLessThan(100);
 
       // Allow some time for async warmup to complete
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       const stats = cacheManager.getCacheStats();
       // Warmup may or may not complete immediately, but should not error

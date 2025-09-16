@@ -12,10 +12,12 @@
  * - 元数据生成
  */
 
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import ContactPage, { generateMetadata } from '@/app/[locale]/contact/__tests__/page';
+import ContactPage, {
+  generateMetadata,
+} from '@/app/[locale]/contact/__tests__/page';
 
 // Mock next-intl
 const mockGetTranslations = vi.fn();
@@ -25,8 +27,19 @@ vi.mock('next-intl/server', () => ({
 
 // Mock next/image
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { src: string; alt: string }) => (
-    <img src={src} alt={alt} {...props} />
+  default: ({
+    src,
+    alt,
+    ...props
+  }: React.ImgHTMLAttributes<HTMLImageElement> & {
+    src: string;
+    alt: string;
+  }) => (
+    <img
+      src={src}
+      alt={alt}
+      {...props}
+    />
   ),
 }));
 
@@ -40,9 +53,7 @@ vi.mock('lucide-react', () => ({
 // Mock components
 vi.mock('@/components/layout/header', () => ({
   Header: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid='header'>
-      {children}
-    </div>
+    <div data-testid='header'>{children}</div>
   ),
 }));
 
@@ -264,9 +275,7 @@ describe('Contact Page I18n - Basic Tests', () => {
       });
       render(ContactPageComponent);
 
-      expect(
-        screen.getByText(longTranslations.title),
-      ).toBeInTheDocument();
+      expect(screen.getByText(longTranslations.title)).toBeInTheDocument();
       expect(
         screen.getByText(longTranslations.description),
       ).toBeInTheDocument();

@@ -1,3 +1,103 @@
+// 向后兼容的重新导出
+import type {
+  ANALYTICS_GRANULARITIES,
+  ANALYTICS_METRIC_TYPES,
+  AnalyticsGranularity,
+  AnalyticsMetricType,
+  API_ENDPOINTS,
+  API_VERSIONS,
+  ApiConfig,
+  ApiEndpoint,
+  ApiVersion,
+  ClientConfig,
+  ConfigUtils,
+  DEFAULT_API_CONFIG,
+  DEFAULT_REQUEST_OPTIONS,
+  DEFAULT_WEBHOOK_CONFIG,
+  EnvironmentConfig,
+  ERROR_CODE_MESSAGES,
+  ErrorCode,
+  ExtendedApiConfig,
+  HTTP_METHODS,
+  HttpMethod,
+  MEDIA_TYPES,
+  MediaType,
+  MESSAGE_TYPES,
+  MessageType,
+  QUALITY_RATINGS,
+  QualityRating,
+  RETRYABLE_ERROR_CODES,
+  TEMPLATE_CATEGORIES,
+  TEMPLATE_STATUSES,
+  TemplateCategory,
+  TemplateStatusType,
+  THROUGHPUT_LEVELS,
+  ThroughputLevel,
+  WebhookConfig,
+} from './whatsapp-api-config';
+import type {
+  AuthenticationError,
+  BusinessLogicError,
+  ErrorCategory,
+  ErrorContext,
+  ErrorDetails,
+  ErrorHandlingConfig,
+  ErrorHandlingStrategy,
+  ErrorReport,
+  ErrorSeverity,
+  ErrorStatistics,
+  ErrorUtils,
+  NetworkError,
+  RateLimitError,
+  ServerError,
+  ValidationError,
+  WhatsAppError,
+} from './whatsapp-api-errors';
+import type {
+  AnalyticsRequest,
+  ApiRequest,
+  ApiRequestOptions,
+  BatchRequest,
+  MediaUploadRequest,
+  RequestBuilders,
+  SendMessageRequest,
+} from './whatsapp-api-requests';
+import type {
+  AccountInfoResponse,
+  AnalyticsDataPoint,
+  AnalyticsResponse,
+  ApiResponse,
+  AppSettingsResponse,
+  BatchResponse,
+  BusinessProfile,
+  BusinessProfileResponse,
+  MediaRetrieveResponse,
+  MediaUploadResponse,
+  MessageStatusResponse,
+  PaginatedResponse,
+  PaginationCursors,
+  PaginationInfo,
+  PhoneNumbersResponse,
+  QualityRatingResponse,
+  RateLimitInfo,
+  ResponseUtils,
+  SendMessageResponse,
+  TemplatesResponse,
+  TemplateStatus,
+  UserBlockStatusResponse,
+  WebhookVerificationResponse,
+  WhatsAppApiError,
+  WhatsAppApiErrorResponse,
+  WhatsAppApiResponse,
+  WhatsAppApiResponseType,
+  WhatsAppServiceResponse,
+} from './whatsapp-api-responses';
+import type {
+  ContactData,
+  LocationData,
+  WhatsAppContact,
+} from './whatsapp-base-types';
+
 /**
  * WhatsApp API 类型定义 - 主入口
  * WhatsApp API Type Definitions - Main Entry Point
@@ -6,48 +106,46 @@
  */
 
 // 重新导出所有模块的功能 - 类型导出
-export type { SendMessageRequest, MediaUploadRequest, AnalyticsRequest, BatchRequest, BusinessProfileUpdateRequest, TemplateCreateRequest, TemplateDeleteRequest, TemplateStatusUpdateRequest, PhoneNumberRegistrationRequest, PhoneNumberVerificationRequest, WebhookSubscriptionRequest, MessageMarkRequest, UserBlockRequest, QualityRatingRequest, AccountInfoRequest, AppSettingsRequest, MessageReactionRequest, MessageForwardRequest, GroupMessageRequest, ApiRequestOptions, ApiRequest, WhatsAppApiRequest } from './whatsapp-api-requests';
-
-// 函数导出
-export { isSendMessageRequest, isMediaUploadRequest, isAnalyticsRequest, isBatchRequest } from './whatsapp-api-requests';
-
-export type { SendMessageResponse, WhatsAppApiResponse, WhatsAppServiceResponse, MediaUploadResponse, MediaRetrieveResponse, PhoneNumberInfo, PhoneNumbersResponse, BusinessProfile, BusinessProfileResponse, TemplateStatus, TemplatesResponse, AnalyticsDataPoint, AnalyticsResponse, BatchResponse, RateLimitInfo, AccountInfoResponse, AppSettingsResponse, QualityRatingResponse, MessageStatusResponse, UserBlockStatusResponse, WebhookVerificationResponse, PaginationCursors, PaginationInfo, PaginatedResponse, WhatsAppApiResponseType } from './whatsapp-api-responses';
-
-export { isSendMessageResponse, isMediaUploadResponse, isSuccessResponse, isErrorResponse } from './whatsapp-api-responses';
-
-export type { ApiConfig, ExtendedApiConfig, EnvironmentConfig, WebhookConfig, ClientConfig, ApiEndpoint, HttpMethod, ApiVersion, MessageType, MediaType, TemplateStatusType, QualityRating, ThroughputLevel, AnalyticsGranularity, AnalyticsMetricType, ErrorCode } from './whatsapp-api-config';
-
-export { validateApiConfig, validateWebhookConfig } from './whatsapp-api-config';
-
-export type { WhatsAppApiErrorResponse, WhatsAppApiError, NetworkError, ValidationError, AuthenticationError, RateLimitError, BusinessLogicError, ServerError, WhatsAppError, ErrorSeverity, ErrorCategory, ErrorContext, ErrorDetails, ErrorHandlingStrategy, ErrorStatistics, ErrorReport, ErrorHandlingConfig } from './whatsapp-api-errors';
-
-export { isWhatsAppApiError as isApiError, isNetworkError, isValidationError, isAuthenticationError, isRateLimitError, isBusinessLogicError, isServerError } from './whatsapp-api-errors';
-
-// 向后兼容的重新导出
-import type { WhatsAppContact, LocationData, ContactData } from './whatsapp-base-types';
-
-import type {
+export type {
   SendMessageRequest,
   MediaUploadRequest,
   AnalyticsRequest,
   BatchRequest,
-
-
-
-
+  BusinessProfileUpdateRequest,
+  TemplateCreateRequest,
+  TemplateDeleteRequest,
+  TemplateStatusUpdateRequest,
+  PhoneNumberRegistrationRequest,
+  PhoneNumberVerificationRequest,
+  WebhookSubscriptionRequest,
+  MessageMarkRequest,
+  UserBlockRequest,
+  QualityRatingRequest,
+  AccountInfoRequest,
+  AppSettingsRequest,
+  MessageReactionRequest,
+  MessageForwardRequest,
+  GroupMessageRequest,
   ApiRequestOptions,
   ApiRequest,
+  WhatsAppApiRequest,
+} from './whatsapp-api-requests';
 
-  RequestBuilders } from
-'./whatsapp-api-requests';
+// 函数导出
+export {
+  isSendMessageRequest,
+  isMediaUploadRequest,
+  isAnalyticsRequest,
+  isBatchRequest,
+} from './whatsapp-api-requests';
 
-import type {
+export type {
   SendMessageResponse,
   WhatsAppApiResponse,
   WhatsAppServiceResponse,
   MediaUploadResponse,
   MediaRetrieveResponse,
-
+  PhoneNumberInfo,
   PhoneNumbersResponse,
   BusinessProfile,
   BusinessProfileResponse,
@@ -66,14 +164,17 @@ import type {
   PaginationCursors,
   PaginationInfo,
   PaginatedResponse,
-  ApiResponse,
-  WhatsAppApiErrorResponse,
-  WhatsAppApiError,
   WhatsAppApiResponseType,
-  ResponseUtils } from
-'./whatsapp-api-responses';
+} from './whatsapp-api-responses';
 
-import type {
+export {
+  isSendMessageResponse,
+  isMediaUploadResponse,
+  isSuccessResponse,
+  isErrorResponse,
+} from './whatsapp-api-responses';
+
+export type {
   ApiConfig,
   ExtendedApiConfig,
   EnvironmentConfig,
@@ -84,40 +185,29 @@ import type {
   ApiVersion,
   MessageType,
   MediaType,
-  TemplateCategory,
   TemplateStatusType,
   QualityRating,
   ThroughputLevel,
   AnalyticsGranularity,
   AnalyticsMetricType,
   ErrorCode,
-  API_ENDPOINTS,
-  HTTP_METHODS,
-  API_VERSIONS,
-  MESSAGE_TYPES,
-  MEDIA_TYPES,
-  TEMPLATE_CATEGORIES,
-  TEMPLATE_STATUSES,
-  QUALITY_RATINGS,
-  THROUGHPUT_LEVELS,
-  ANALYTICS_GRANULARITIES,
-  ANALYTICS_METRIC_TYPES,
-  DEFAULT_API_CONFIG,
-  DEFAULT_WEBHOOK_CONFIG,
-  DEFAULT_REQUEST_OPTIONS,
-  ERROR_CODE_MESSAGES,
-  RETRYABLE_ERROR_CODES,
-  ConfigUtils } from
-'./whatsapp-api-config';
+} from './whatsapp-api-config';
 
-import type {
-  WhatsAppError,
+export {
+  validateApiConfig,
+  validateWebhookConfig,
+} from './whatsapp-api-config';
+
+export type {
+  WhatsAppApiErrorResponse,
+  WhatsAppApiError,
   NetworkError,
   ValidationError,
   AuthenticationError,
   RateLimitError,
   BusinessLogicError,
   ServerError,
+  WhatsAppError,
   ErrorSeverity,
   ErrorCategory,
   ErrorContext,
@@ -126,8 +216,17 @@ import type {
   ErrorStatistics,
   ErrorReport,
   ErrorHandlingConfig,
-  ErrorUtils } from
-'./whatsapp-api-errors';
+} from './whatsapp-api-errors';
+
+export {
+  isWhatsAppApiError as isApiError,
+  isNetworkError,
+  isValidationError,
+  isAuthenticationError,
+  isRateLimitError,
+  isBusinessLogicError,
+  isServerError,
+} from './whatsapp-api-errors';
 
 // ==================== 向后兼容的类型别名 ====================
 
@@ -186,8 +285,8 @@ export type {
   // 分页类型
   PaginatedResponse as PagedResponse,
   PaginationInfo as PageInfo,
-  PaginationCursors as PageCursors };
-
+  PaginationCursors as PageCursors,
+};
 
 /**
  * 向后兼容的导出别名
@@ -220,4 +319,5 @@ export {
   type ConfigUtils,
   type ResponseUtils,
   type ErrorUtils,
-  type RequestBuilders };
+  type RequestBuilders,
+};

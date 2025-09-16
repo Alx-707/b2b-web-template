@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import type { Locale } from '@/types/i18n';
-;
 import { VALIDATION_THRESHOLDS } from '@/constants/i18n-constants';
 import { TranslationValidators } from '../translation-validators';
 
@@ -217,7 +216,8 @@ describe('TranslationValidators', () => {
       expect(terminologyIssue).toBeDefined();
       expect(terminologyIssue?.message).toContain('Missing key terms');
       expect(
-        (terminologyIssue as { penalty?: number })?.penalty || (result as { penalty?: number }).penalty,
+        (terminologyIssue as { penalty?: number })?.penalty ||
+          (result as { penalty?: number }).penalty,
       ).toBeGreaterThan(0);
     });
 

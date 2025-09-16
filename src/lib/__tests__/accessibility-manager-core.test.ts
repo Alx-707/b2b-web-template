@@ -107,9 +107,18 @@ describe('AccessibilityManager Core Tests', () => {
       new AccessibilityManager();
 
       expect(mockDocument.createElement).toHaveBeenCalledWith('div');
-      expect(mockElement.setAttribute).toHaveBeenCalledWith('id', 'accessibility-live-region');
-      expect(mockElement.setAttribute).toHaveBeenCalledWith('aria-live', 'polite');
-      expect(mockElement.setAttribute).toHaveBeenCalledWith('aria-atomic', 'true');
+      expect(mockElement.setAttribute).toHaveBeenCalledWith(
+        'id',
+        'accessibility-live-region',
+      );
+      expect(mockElement.setAttribute).toHaveBeenCalledWith(
+        'aria-live',
+        'polite',
+      );
+      expect(mockElement.setAttribute).toHaveBeenCalledWith(
+        'aria-atomic',
+        'true',
+      );
       expect(mockDocument.body.appendChild).toHaveBeenCalledWith(mockElement);
     });
 

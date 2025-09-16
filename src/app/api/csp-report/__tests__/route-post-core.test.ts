@@ -5,10 +5,8 @@
  * 注意：高级功能测试请参考 route-post.test.ts
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { NextRequest } from 'next/server';
-;
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from '@/app/api/csp-report/__tests__/route';
 
 describe('CSP Report API Route - 核心功能测试', () => {
@@ -59,7 +57,7 @@ describe('CSP Report API Route - 核心功能测试', () => {
           'document-uri': 'https://example.com/page',
           'violated-directive': 'script-src',
           'blocked-uri': 'https://malicious.com/script.js',
-        })
+        }),
       );
     });
 
@@ -90,7 +88,7 @@ describe('CSP Report API Route - 核心功能测试', () => {
         expect.objectContaining({
           'violated-directive': 'img-src',
           'blocked-uri': 'https://untrusted.com/image.jpg',
-        })
+        }),
       );
     });
 
@@ -120,7 +118,7 @@ describe('CSP Report API Route - 核心功能测试', () => {
         expect.objectContaining({
           'violated-directive': 'style-src',
           'blocked-uri': 'https://malicious.com/style.css',
-        })
+        }),
       );
     });
   });

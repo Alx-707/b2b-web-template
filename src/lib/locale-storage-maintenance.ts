@@ -8,23 +8,22 @@
 'use client';
 
 // 重新导出所有模块的功能
-export { LocaleCleanupManager } from './locale-storage-maintenance-cleanup';export { LocaleValidationManager } from
-'./locale-storage-maintenance-validation';export { LocaleMaintenanceOperationsManager } from
-'./locale-storage-maintenance-operations';export { LocaleImportExportManager } from
-'./locale-storage-maintenance-import-export';
-
 // 导入各个功能模块
 import { LocaleCleanupManager } from './locale-storage-maintenance-cleanup';
-import { LocaleValidationManager } from './locale-storage-maintenance-validation';
-import { LocaleMaintenanceOperationsManager } from './locale-storage-maintenance-operations';
 import { LocaleImportExportManager } from './locale-storage-maintenance-import-export';
-
+import { LocaleMaintenanceOperationsManager } from './locale-storage-maintenance-operations';
+import { LocaleValidationManager } from './locale-storage-maintenance-validation';
 import type {
-  StorageOperationResult,
-  MaintenanceOptions,
   ExportData,
-  ImportData } from
-'./locale-storage-types';
+  ImportData,
+  MaintenanceOptions,
+  StorageOperationResult,
+} from './locale-storage-types';
+
+export { LocaleCleanupManager } from './locale-storage-maintenance-cleanup';
+export { LocaleValidationManager } from './locale-storage-maintenance-validation';
+export { LocaleMaintenanceOperationsManager } from './locale-storage-maintenance-operations';
+export { LocaleImportExportManager } from './locale-storage-maintenance-import-export';
 
 /**
  * 语言存储维护管理器 - 统一接口
@@ -53,7 +52,9 @@ export class LocaleMaintenanceManager {
    * 清理特定类型的存储数据
    * Clean up specific type of storage data
    */
-  static clearSpecificData(dataType: Parameters<typeof LocaleCleanupManager.clearSpecificData>[0]): StorageOperationResult {
+  static clearSpecificData(
+    dataType: Parameters<typeof LocaleCleanupManager.clearSpecificData>[0],
+  ): StorageOperationResult {
     return LocaleCleanupManager.clearSpecificData(dataType);
   }
 
@@ -77,7 +78,9 @@ export class LocaleMaintenanceManager {
    * 获取清理统计信息
    * Get cleanup statistics
    */
-  static getCleanupStats(): ReturnType<typeof LocaleCleanupManager.getCleanupStats> {
+  static getCleanupStats(): ReturnType<
+    typeof LocaleCleanupManager.getCleanupStats
+  > {
     return LocaleCleanupManager.getCleanupStats();
   }
 
@@ -95,7 +98,11 @@ export class LocaleMaintenanceManager {
    * 验证用户偏好数据
    * Validate user preference data
    */
-  static validatePreferenceData(preference: Parameters<typeof LocaleValidationManager.validatePreferenceData>[0]): boolean {
+  static validatePreferenceData(
+    preference: Parameters<
+      typeof LocaleValidationManager.validatePreferenceData
+    >[0],
+  ): boolean {
     return LocaleValidationManager.validatePreferenceData(preference);
   }
 
@@ -103,7 +110,9 @@ export class LocaleMaintenanceManager {
    * 验证检测历史数据
    * Validate detection history data
    */
-  static validateHistoryData(history: Parameters<typeof LocaleValidationManager.validateHistoryData>[0]): boolean {
+  static validateHistoryData(
+    history: Parameters<typeof LocaleValidationManager.validateHistoryData>[0],
+  ): boolean {
     return LocaleValidationManager.validateHistoryData(history);
   }
 
@@ -119,7 +128,9 @@ export class LocaleMaintenanceManager {
    * 验证特定存储键的数据
    * Validate data for specific storage key
    */
-  static validateSpecificData(key: Parameters<typeof LocaleValidationManager.validateSpecificData>[0]): ReturnType<typeof LocaleValidationManager.validateSpecificData> {
+  static validateSpecificData(
+    key: Parameters<typeof LocaleValidationManager.validateSpecificData>[0],
+  ): ReturnType<typeof LocaleValidationManager.validateSpecificData> {
     return LocaleValidationManager.validateSpecificData(key);
   }
 
@@ -127,7 +138,9 @@ export class LocaleMaintenanceManager {
    * 验证所有存储数据
    * Validate all storage data
    */
-  static validateAllData(): ReturnType<typeof LocaleValidationManager.validateAllData> {
+  static validateAllData(): ReturnType<
+    typeof LocaleValidationManager.validateAllData
+  > {
     return LocaleValidationManager.validateAllData();
   }
 
@@ -143,7 +156,9 @@ export class LocaleMaintenanceManager {
    * 获取验证摘要
    * Get validation summary
    */
-  static getValidationSummary(): ReturnType<typeof LocaleValidationManager.getValidationSummary> {
+  static getValidationSummary(): ReturnType<
+    typeof LocaleValidationManager.getValidationSummary
+  > {
     return LocaleValidationManager.getValidationSummary();
   }
 
@@ -161,7 +176,9 @@ export class LocaleMaintenanceManager {
    * 执行存储维护
    * Perform storage maintenance
    */
-  static performMaintenance(options: MaintenanceOptions = {}): StorageOperationResult {
+  static performMaintenance(
+    options: MaintenanceOptions = {},
+  ): StorageOperationResult {
     return LocaleMaintenanceOperationsManager.performMaintenance(options);
   }
 
@@ -201,7 +218,9 @@ export class LocaleMaintenanceManager {
    * 获取维护建议
    * Get maintenance recommendations
    */
-  static getMaintenanceRecommendations(): ReturnType<typeof LocaleMaintenanceOperationsManager.getMaintenanceRecommendations> {
+  static getMaintenanceRecommendations(): ReturnType<
+    typeof LocaleMaintenanceOperationsManager.getMaintenanceRecommendations
+  > {
     return LocaleMaintenanceOperationsManager.getMaintenanceRecommendations();
   }
 
@@ -259,7 +278,9 @@ export class LocaleMaintenanceManager {
    * 列出所有备份
    * List all backups
    */
-  static listBackups(): ReturnType<typeof LocaleImportExportManager.listBackups> {
+  static listBackups(): ReturnType<
+    typeof LocaleImportExportManager.listBackups
+  > {
     return LocaleImportExportManager.listBackups();
   }
 
@@ -283,8 +304,9 @@ export class LocaleMaintenanceManager {
    * 获取导出统计信息
    * Get export statistics
    */
-  static getExportStats(): ReturnType<typeof LocaleImportExportManager.getExportStats> {
+  static getExportStats(): ReturnType<
+    typeof LocaleImportExportManager.getExportStats
+  > {
     return LocaleImportExportManager.getExportStats();
   }
-
 }

@@ -14,9 +14,9 @@
  * - label-state-management-core.test.tsx - 核心状态管理测试
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Label } from '../label';
 
@@ -29,24 +29,30 @@ describe('Label State Management - Main Tests', () => {
 
   describe('核心状态管理验证', () => {
     it('handles disabled state correctly', () => {
-      render(
-        <Label data-testid='disabled-label'>
-          Disabled Label
-        </Label>
-      );
+      render(<Label data-testid='disabled-label'>Disabled Label</Label>);
 
       const label = screen.getByTestId('disabled-label');
-      expect(label).toHaveClass('peer-disabled:cursor-not-allowed', 'peer-disabled:opacity-70');
+      expect(label).toHaveClass(
+        'peer-disabled:cursor-not-allowed',
+        'peer-disabled:opacity-70',
+      );
     });
 
     it('disables associated input when label is disabled', async () => {
       render(
         <div>
-          <Label htmlFor='disabled-input' data-testid='disabled-label'>
+          <Label
+            htmlFor='disabled-input'
+            data-testid='disabled-label'
+          >
             Disabled Input Label
           </Label>
-          <input id='disabled-input' type='text' disabled />
-        </div>
+          <input
+            id='disabled-input'
+            type='text'
+            disabled
+          />
+        </div>,
       );
 
       const label = screen.getByTestId('disabled-label');
@@ -59,9 +65,12 @@ describe('Label State Management - Main Tests', () => {
 
     it('applies custom disabled styling', () => {
       render(
-        <Label className='disabled:opacity-50' data-testid='custom-disabled'>
+        <Label
+          className='disabled:opacity-50'
+          data-testid='custom-disabled'
+        >
           Custom Disabled
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('custom-disabled');
@@ -72,12 +81,18 @@ describe('Label State Management - Main Tests', () => {
       render(
         <form>
           <fieldset disabled>
-            <Label htmlFor='form-input' data-testid='form-label'>
+            <Label
+              htmlFor='form-input'
+              data-testid='form-label'
+            >
               Form Label
             </Label>
-            <input id='form-input' type='text' />
+            <input
+              id='form-input'
+              type='text'
+            />
           </fieldset>
-        </form>
+        </form>,
       );
 
       const label = screen.getByTestId('form-label');
@@ -90,7 +105,7 @@ describe('Label State Management - Main Tests', () => {
     it('handles conditional disabled state', () => {
       const ConditionalLabel = ({ isDisabled }: { isDisabled: boolean }) => (
         <Label
-          className={isDisabled ? 'opacity-50 cursor-not-allowed' : ''}
+          className={isDisabled ? 'cursor-not-allowed opacity-50' : ''}
           data-testid='conditional-disabled'
         >
           Conditional Label
@@ -108,9 +123,12 @@ describe('Label State Management - Main Tests', () => {
 
     it('handles active state styling', async () => {
       render(
-        <Label className='active:scale-95' data-testid='active-label'>
+        <Label
+          className='active:scale-95'
+          data-testid='active-label'
+        >
           Active Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('active-label');
@@ -119,9 +137,12 @@ describe('Label State Management - Main Tests', () => {
 
     it('handles hover state styling', async () => {
       render(
-        <Label className='hover:bg-gray-100' data-testid='hover-label'>
+        <Label
+          className='hover:bg-gray-100'
+          data-testid='hover-label'
+        >
           Hover Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('hover-label');
@@ -130,9 +151,13 @@ describe('Label State Management - Main Tests', () => {
 
     it('handles focus state styling', async () => {
       render(
-        <Label className='focus:ring-2' tabIndex={0} data-testid='focus-label'>
+        <Label
+          className='focus:ring-2'
+          tabIndex={0}
+          data-testid='focus-label'
+        >
           Focus Label
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('focus-label');
@@ -141,9 +166,12 @@ describe('Label State Management - Main Tests', () => {
 
     it('handles visited state for links', () => {
       render(
-        <Label className='visited:text-purple-600' data-testid='visited-label'>
+        <Label
+          className='visited:text-purple-600'
+          data-testid='visited-label'
+        >
           <a href='#'>Visited Link Label</a>
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('visited-label');
@@ -153,11 +181,18 @@ describe('Label State Management - Main Tests', () => {
     it('handles checked state for form controls', () => {
       render(
         <div>
-          <input type='checkbox' id='checkbox-input' />
-          <Label htmlFor='checkbox-input' className='peer-checked:font-bold' data-testid='checked-label'>
+          <input
+            type='checkbox'
+            id='checkbox-input'
+          />
+          <Label
+            htmlFor='checkbox-input'
+            className='peer-checked:font-bold'
+            data-testid='checked-label'
+          >
             Checkbox Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('checked-label');
@@ -167,11 +202,19 @@ describe('Label State Management - Main Tests', () => {
     it('handles invalid state styling', () => {
       render(
         <div>
-          <input type='email' id='email-input' required />
-          <Label htmlFor='email-input' className='peer-invalid:text-red-500' data-testid='invalid-label'>
+          <input
+            type='email'
+            id='email-input'
+            required
+          />
+          <Label
+            htmlFor='email-input'
+            className='peer-invalid:text-red-500'
+            data-testid='invalid-label'
+          >
             Email Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('invalid-label');
@@ -181,11 +224,19 @@ describe('Label State Management - Main Tests', () => {
     it('handles required state styling', () => {
       render(
         <div>
-          <input type='text' id='required-input' required />
-          <Label htmlFor='required-input' className='peer-required:after:content-["*"]' data-testid='required-label'>
+          <input
+            type='text'
+            id='required-input'
+            required
+          />
+          <Label
+            htmlFor='required-input'
+            className='peer-required:after:content-["*"]'
+            data-testid='required-label'
+          >
             Required Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('required-label');
@@ -195,11 +246,19 @@ describe('Label State Management - Main Tests', () => {
     it('handles readonly state styling', () => {
       render(
         <div>
-          <input type='text' id='readonly-input' readOnly />
-          <Label htmlFor='readonly-input' className='peer-read-only:opacity-75' data-testid='readonly-label'>
+          <input
+            type='text'
+            id='readonly-input'
+            readOnly
+          />
+          <Label
+            htmlFor='readonly-input'
+            className='peer-read-only:opacity-75'
+            data-testid='readonly-label'
+          >
             Readonly Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('readonly-label');
@@ -209,11 +268,19 @@ describe('Label State Management - Main Tests', () => {
     it('handles placeholder-shown state', () => {
       render(
         <div>
-          <input type='text' id='placeholder-input' placeholder='Enter text' />
-          <Label htmlFor='placeholder-input' className='peer-placeholder-shown:text-gray-400' data-testid='placeholder-label'>
+          <input
+            type='text'
+            id='placeholder-input'
+            placeholder='Enter text'
+          />
+          <Label
+            htmlFor='placeholder-input'
+            className='peer-placeholder-shown:text-gray-400'
+            data-testid='placeholder-label'
+          >
             Placeholder Label
           </Label>
-        </div>
+        </div>,
       );
 
       const label = screen.getByTestId('placeholder-label');
@@ -249,9 +316,12 @@ describe('Label State Management - Main Tests', () => {
 
     it('handles loading state', () => {
       render(
-        <Label className='animate-pulse' data-testid='loading-label'>
+        <Label
+          className='animate-pulse'
+          data-testid='loading-label'
+        >
           Loading...
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('loading-label');
@@ -260,9 +330,12 @@ describe('Label State Management - Main Tests', () => {
 
     it('handles error state', () => {
       render(
-        <Label className='text-red-500 border-red-500' data-testid='error-label'>
+        <Label
+          className='border-red-500 text-red-500'
+          data-testid='error-label'
+        >
           Error State
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('error-label');
@@ -271,9 +344,12 @@ describe('Label State Management - Main Tests', () => {
 
     it('handles success state', () => {
       render(
-        <Label className='text-green-500 border-green-500' data-testid='success-label'>
+        <Label
+          className='border-green-500 text-green-500'
+          data-testid='success-label'
+        >
           Success State
-        </Label>
+        </Label>,
       );
 
       const label = screen.getByTestId('success-label');
@@ -284,20 +360,19 @@ describe('Label State Management - Main Tests', () => {
   describe('错误处理验证', () => {
     it('handles missing state gracefully', () => {
       expect(() => {
-        render(
-          <Label data-testid='no-state-label'>
-            Label without state
-          </Label>
-        );
+        render(<Label data-testid='no-state-label'>Label without state</Label>);
       }).not.toThrow();
     });
 
     it('handles invalid state gracefully', () => {
       expect(() => {
         render(
-          <Label className='invalid-state-class' data-testid='invalid-state-label'>
+          <Label
+            className='invalid-state-class'
+            data-testid='invalid-state-label'
+          >
             Label with invalid state
-          </Label>
+          </Label>,
         );
       }).not.toThrow();
     });
@@ -305,9 +380,12 @@ describe('Label State Management - Main Tests', () => {
     it('handles conflicting states gracefully', () => {
       expect(() => {
         render(
-          <Label className='disabled:opacity-50 enabled:opacity-100' data-testid='conflicting-state-label'>
+          <Label
+            className='enabled:opacity-100 disabled:opacity-50'
+            data-testid='conflicting-state-label'
+          >
             Label with conflicting states
-          </Label>
+          </Label>,
         );
       }).not.toThrow();
     });

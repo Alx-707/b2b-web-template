@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-;
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET, POST } from '@/app/api/verify-turnstile/__tests__/route';
 
@@ -19,27 +18,30 @@ describe('Verify Turnstile API Route', () => {
   });
 
   describe('POST /api/verify-turnstile', () => {
-
     it('应该成功验证有效的Turnstile token', async () => {
       // Mock successful Cloudflare response
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({
-          success: true,
-          challenge_ts: '2024-01-01T00:00:00.000Z',
-          hostname: 'localhost',
-          action: 'submit',
-        }),
+        json: () =>
+          Promise.resolve({
+            success: true,
+            challenge_ts: '2024-01-01T00:00:00.000Z',
+            hostname: 'localhost',
+            action: 'submit',
+          }),
       });
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify(validRequestBody),
-        headers: {
-          'content-type': 'application/json',
-          'x-forwarded-for': '127.0.0.1',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify(validRequestBody),
+          headers: {
+            'content-type': 'application/json',
+            'x-forwarded-for': '127.0.0.1',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -62,19 +64,23 @@ describe('Verify Turnstile API Route', () => {
       // Mock failed Cloudflare response
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({
-          success: false,
-          'error-codes': ['invalid-input-response'],
-        }),
+        json: () =>
+          Promise.resolve({
+            'success': false,
+            'error-codes': ['invalid-input-response'],
+          }),
       });
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify(validRequestBody),
-        headers: {
-          'content-type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify(validRequestBody),
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -86,13 +92,16 @@ describe('Verify Turnstile API Route', () => {
     });
 
     it('应该处理缺少token的请求', async () => {
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify({}),
-        headers: {
-          'content-type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify({}),
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -103,13 +112,16 @@ describe('Verify Turnstile API Route', () => {
     });
 
     it('应该处理空token的请求', async () => {
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify({ token: '' }),
-        headers: {
-          'content-type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify({ token: '' }),
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -120,13 +132,16 @@ describe('Verify Turnstile API Route', () => {
     });
 
     it('应该处理无效的JSON请求体', async () => {
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: 'invalid-json',
-        headers: {
-          'content-type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: 'invalid-json',
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -140,13 +155,16 @@ describe('Verify Turnstile API Route', () => {
       // Mock network error
       mockFetch.mockRejectedValue(new Error('Network error'));
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify(validRequestBody),
-        headers: {
-          'content-type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify(validRequestBody),
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -164,13 +182,16 @@ describe('Verify Turnstile API Route', () => {
         statusText: 'Internal Server Error',
       });
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify(validRequestBody),
-        headers: {
-          'content-type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify(validRequestBody),
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -186,15 +207,18 @@ describe('Verify Turnstile API Route', () => {
         json: () => Promise.resolve({ success: true }),
       });
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify({ token: 'test-token' }),
-        headers: {
-          'content-type': 'application/json',
-          'x-forwarded-for': '192.168.1.1, 10.0.0.1',
-          'x-real-ip': '192.168.1.1',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify({ token: 'test-token' }),
+          headers: {
+            'content-type': 'application/json',
+            'x-forwarded-for': '192.168.1.1, 10.0.0.1',
+            'x-real-ip': '192.168.1.1',
+          },
         },
-      });
+      );
 
       await POST(request);
 
@@ -215,14 +239,17 @@ describe('Verify Turnstile API Route', () => {
         remoteip: '203.0.113.1',
       };
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify(requestWithRemoteIp),
-        headers: {
-          'content-type': 'application/json',
-          'x-forwarded-for': '192.168.1.1',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify(requestWithRemoteIp),
+          headers: {
+            'content-type': 'application/json',
+            'x-forwarded-for': '192.168.1.1',
+          },
         },
-      });
+      );
 
       await POST(request);
 
@@ -252,13 +279,16 @@ describe('Verify Turnstile API Route', () => {
       // Mock missing secret key
       vi.stubEnv('TURNSTILE_SECRET_KEY', '');
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify(validRequestBody),
-        headers: {
-          'content-type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify(validRequestBody),
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -275,21 +305,25 @@ describe('Verify Turnstile API Route', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({
-          success: true,
-          hostname: 'localhost',
-          challenge_ts: '2024-01-01T00:00:00.000Z',
-        }),
+        json: () =>
+          Promise.resolve({
+            success: true,
+            hostname: 'localhost',
+            challenge_ts: '2024-01-01T00:00:00.000Z',
+          }),
       });
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify(validRequestBody),
-        headers: {
-          'content-type': 'application/json',
-          'x-forwarded-for': '127.0.0.1',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify(validRequestBody),
+          headers: {
+            'content-type': 'application/json',
+            'x-forwarded-for': '127.0.0.1',
+          },
         },
-      });
+      );
 
       await POST(request);
 
@@ -310,20 +344,24 @@ describe('Verify Turnstile API Route', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({
-          success: false,
-          'error-codes': ['timeout-or-duplicate'],
-        }),
+        json: () =>
+          Promise.resolve({
+            'success': false,
+            'error-codes': ['timeout-or-duplicate'],
+          }),
       });
 
-      const request = new NextRequest('http://localhost:3000/api/verify-turnstile', {
-        method: 'POST',
-        body: JSON.stringify(validRequestBody),
-        headers: {
-          'content-type': 'application/json',
-          'x-forwarded-for': '127.0.0.1',
+      const request = new NextRequest(
+        'http://localhost:3000/api/verify-turnstile',
+        {
+          method: 'POST',
+          body: JSON.stringify(validRequestBody),
+          headers: {
+            'content-type': 'application/json',
+            'x-forwarded-for': '127.0.0.1',
+          },
         },
-      });
+      );
 
       await POST(request);
 

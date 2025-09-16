@@ -50,15 +50,15 @@ export function generateUUID(): string {
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
     const array = new Uint8Array(16);
     crypto.getRandomValues(array);
-    
+
     // Set version (4) and variant bits
-    array[6] = (array[6] & 0x0f) | 0x40;
-    array[8] = (array[8] & 0x3f) | 0x80;
-    
+    array[6] = (array[6]! & 0x0f) | 0x40;
+    array[8] = (array[8]! & 0x3f) | 0x80;
+
     const hex = Array.from(array, (byte) =>
-      byte.toString(16).padStart(2, '0')
+      byte.toString(16).padStart(2, '0'),
     ).join('');
-    
+
     return [
       hex.substring(0, 8),
       hex.substring(8, 12),
@@ -70,8 +70,8 @@ export function generateUUID(): string {
 
   // Fallback UUID generation
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
@@ -111,13 +111,13 @@ export function generateNonce(): string {
 export function generateOTP(length: number = 6): string {
   const digits = '0123456789';
   let result = '';
-  
+
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
     const array = new Uint8Array(length);
     crypto.getRandomValues(array);
-    
+
     for (let i = 0; i < length; i++) {
-      result += digits[array[i] % digits.length];
+      result += digits[array[i]! % digits.length];
     }
   } else {
     // Fallback
@@ -125,7 +125,7 @@ export function generateOTP(length: number = 6): string {
       result += digits[Math.floor(Math.random() * digits.length)];
     }
   }
-  
+
   return result;
 }
 
@@ -135,13 +135,13 @@ export function generateOTP(length: number = 6): string {
 export function generateVerificationCode(length: number = 8): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
-  
+
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
     const array = new Uint8Array(length);
     crypto.getRandomValues(array);
-    
+
     for (let i = 0; i < length; i++) {
-      result += chars[array[i] % chars.length];
+      result += chars[array[i]! % chars.length];
     }
   } else {
     // Fallback
@@ -149,7 +149,7 @@ export function generateVerificationCode(length: number = 8): string {
       result += chars[Math.floor(Math.random() * chars.length)];
     }
   }
-  
+
   return result;
 }
 
@@ -179,7 +179,8 @@ export function isValidToken(token: string, expectedLength?: number): boolean {
  * Validate UUID format
  */
 export function isValidUUID(uuid: string): boolean {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(uuid);
 }
 
@@ -207,7 +208,7 @@ export function createTokenWithExpiry(
 ): TokenWithExpiry {
   return {
     token: generateSecureToken(tokenLength),
-    expiresAt: Date.now() + (expiryMinutes * 60 * 1000),
+    expiresAt: Date.now() + expiryMinutes * 60 * 1000,
   };
 }
 

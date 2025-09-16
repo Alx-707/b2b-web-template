@@ -5,7 +5,12 @@
  * 提供WhatsApp Business API webhook的基础类型定义
  */
 
-import type { WhatsAppContact, WhatsAppMessage, WhatsAppError, MessageStatus } from './whatsapp-base-types';
+import type {
+  MessageStatus,
+  WhatsAppContact,
+  WhatsAppError,
+  WhatsAppMessage,
+} from './whatsapp-base-types';
 
 /**
  * Webhook入口类型
@@ -298,24 +303,20 @@ export const WEBHOOK_FIELDS = [
   'message_deliveries',
   'message_reads',
   'message_reactions',
-  'message_echoes'
+  'message_echoes',
 ] as const;
 
-export const WEBHOOK_OBJECT_TYPES = [
-  'whatsapp_business_account'
-] as const;
+export const WEBHOOK_OBJECT_TYPES = ['whatsapp_business_account'] as const;
 
-export const WEBHOOK_CHANGE_FIELDS = [
-  'messages'
-] as const;
+export const WEBHOOK_CHANGE_FIELDS = ['messages'] as const;
 
 /**
  * Webhook字段类型
  * Webhook field types
  */
-export type WebhookField = typeof WEBHOOK_FIELDS[number];
-export type WebhookObjectType = typeof WEBHOOK_OBJECT_TYPES[number];
-export type WebhookChangeField = typeof WEBHOOK_CHANGE_FIELDS[number];
+export type WebhookField = (typeof WEBHOOK_FIELDS)[number];
+export type WebhookObjectType = (typeof WEBHOOK_OBJECT_TYPES)[number];
+export type WebhookChangeField = (typeof WEBHOOK_CHANGE_FIELDS)[number];
 
 /**
  * 类型守卫函数
@@ -324,49 +325,53 @@ export type WebhookChangeField = typeof WEBHOOK_CHANGE_FIELDS[number];
 export function isWebhookPayload(obj: unknown): obj is WebhookPayload {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    (obj as Record<string, unknown>).object === 'whatsapp_business_account' &&
-    Array.isArray((obj as Record<string, unknown>).entry)
+      typeof obj === 'object' &&
+      (obj as Record<string, unknown>).object === 'whatsapp_business_account' &&
+      Array.isArray((obj as Record<string, unknown>).entry),
   );
 }
 
 export function isWebhookEntry(obj: unknown): obj is WebhookEntry {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    typeof (obj as Record<string, unknown>).id === 'string' &&
-    Array.isArray((obj as Record<string, unknown>).changes)
+      typeof obj === 'object' &&
+      typeof (obj as Record<string, unknown>).id === 'string' &&
+      Array.isArray((obj as Record<string, unknown>).changes),
   );
 }
 
-export function isMessageStatusUpdate(obj: unknown): obj is MessageStatusUpdate {
+export function isMessageStatusUpdate(
+  obj: unknown,
+): obj is MessageStatusUpdate {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    typeof (obj as Record<string, unknown>).id === 'string' &&
-    typeof (obj as Record<string, unknown>).status === 'string' &&
-    typeof (obj as Record<string, unknown>).timestamp === 'string' &&
-    typeof (obj as Record<string, unknown>).recipient_id === 'string'
+      typeof obj === 'object' &&
+      typeof (obj as Record<string, unknown>).id === 'string' &&
+      typeof (obj as Record<string, unknown>).status === 'string' &&
+      typeof (obj as Record<string, unknown>).timestamp === 'string' &&
+      typeof (obj as Record<string, unknown>).recipient_id === 'string',
   );
 }
 
 export function isWebhookError(obj: unknown): obj is WebhookError {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    typeof (obj as Record<string, unknown>).code === 'number' &&
-    typeof (obj as Record<string, unknown>).title === 'string' &&
-    typeof (obj as Record<string, unknown>).message === 'string'
+      typeof obj === 'object' &&
+      typeof (obj as Record<string, unknown>).code === 'number' &&
+      typeof (obj as Record<string, unknown>).title === 'string' &&
+      typeof (obj as Record<string, unknown>).message === 'string',
   );
 }
 
-export function isWebhookVerificationRequest(query: unknown): query is WebhookVerificationRequest {
+export function isWebhookVerificationRequest(
+  query: unknown,
+): query is WebhookVerificationRequest {
   return Boolean(
     query &&
-    typeof query === 'object' &&
-    'hub.mode' in query &&
-    'hub.challenge' in query &&
-    'hub.verify_token' in query &&
-    (query as Record<string, unknown>)['hub.mode'] === 'subscribe'
+      typeof query === 'object' &&
+      'hub.mode' in query &&
+      'hub.challenge' in query &&
+      'hub.verify_token' in query &&
+      (query as Record<string, unknown>)['hub.mode'] === 'subscribe',
   );
 }

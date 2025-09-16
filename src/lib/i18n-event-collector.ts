@@ -3,12 +3,12 @@
  * 负责收集、记录和发送监控事件
  */
 
-import { MONITORING_CONFIG } from '@/constants/i18n-constants';
 import { logger } from '@/lib/logger';
+import { MONITORING_CONFIG } from '@/constants/i18n-constants';
 import type {
-  MonitoringEvent,
-  MonitoringConfig,
   ErrorLevel,
+  MonitoringConfig,
+  MonitoringEvent,
 } from './i18n-monitoring-types';
 
 // 事件收集器
@@ -81,11 +81,14 @@ export class EventCollector {
     switch (level) {
       case 'error':
       case 'critical':
-        return (msg: string, ctx?: Record<string, unknown>) => logger.error(msg, ctx);
+        return (msg: string, ctx?: Record<string, unknown>) =>
+          logger.error(msg, ctx);
       case 'warning':
-        return (msg: string, ctx?: Record<string, unknown>) => logger.warn(msg, ctx);
+        return (msg: string, ctx?: Record<string, unknown>) =>
+          logger.warn(msg, ctx);
       default:
-        return (msg: string, ctx?: Record<string, unknown>) => logger.info(msg, ctx);
+        return (msg: string, ctx?: Record<string, unknown>) =>
+          logger.info(msg, ctx);
     }
   }
 
@@ -101,7 +104,9 @@ export class EventCollector {
         body: JSON.stringify(event),
       });
     } catch (error) {
-      logger.error('Failed to send monitoring event', { error: error as Error });
+      logger.error('Failed to send monitoring event', {
+        error: error as Error,
+      });
     }
   }
 
@@ -121,7 +126,9 @@ export class EventCollector {
           body: JSON.stringify({ events: eventsToSend }),
         });
       } catch (error) {
-        logger.error('Failed to flush monitoring events', { error: error as Error });
+        logger.error('Failed to flush monitoring events', {
+          error: error as Error,
+        });
         // Re-add events if sending failed
         this.events.unshift(...eventsToSend);
       }

@@ -3,10 +3,7 @@
  * Preloader Manager
  */
 
-import type {
-  IPreloader,
-  PreloadState
-} from '../i18n-preloader-types';
+import type { IPreloader, PreloadState } from '../i18n-preloader-types';
 
 /**
  * 预加载器管理器
@@ -61,7 +58,8 @@ export class PreloaderManager {
       preloader.cleanup();
       this.preloaders.delete(name);
       if (this.defaultPreloader === preloader) {
-        this.defaultPreloader = this.preloaders.values().next().value || undefined;
+        this.defaultPreloader =
+          this.preloaders.values().next().value || undefined;
       }
       return true;
     }
@@ -73,7 +71,7 @@ export class PreloaderManager {
    * Cleanup all preloaders
    */
   cleanup(): void {
-    this.preloaders.forEach(preloader => {
+    this.preloaders.forEach((preloader) => {
       preloader.cleanup();
     });
     this.preloaders.clear();
@@ -97,7 +95,7 @@ export class PreloaderManager {
    * Stop all preloading
    */
   stopAll(): void {
-    this.preloaders.forEach(preloader => {
+    this.preloaders.forEach((preloader) => {
       preloader.stopPreloading();
     });
   }

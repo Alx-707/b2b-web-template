@@ -185,7 +185,10 @@ describe('TranslationManager', () => {
     });
 
     it('should fallback to default locale when translation missing', () => {
-      const translation = manager.getTranslation('common.hello', 'fr' as unknown);
+      const translation = manager.getTranslation(
+        'common.hello',
+        'fr' as unknown,
+      );
       expect(translation).toBe('Hello');
     });
 

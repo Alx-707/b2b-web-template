@@ -16,19 +16,19 @@ export function TechnicalComparison() {
   }, [setMounted, setSupportsViewTransitions]);
 
   return (
-    <div className="bg-muted/50 p-6 rounded-lg space-y-4">
-      <h4 className="font-semibold mb-3">✨ 动画技术对比</h4>
+    <div className='bg-muted/50 space-y-4 rounded-lg p-6'>
+      <h4 className='mb-3 font-semibold'>✨ 动画技术对比</h4>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
         {/* Circle Blur 动画特性 */}
-        <div className="space-y-3">
-          <h5 className="font-medium text-blue-600 dark:text-blue-400 flex items-center gap-2">
+        <div className='space-y-3'>
+          <h5 className='flex items-center gap-2 font-medium text-blue-600 dark:text-blue-400'>
             🌀 Circle Blur 动画
-            <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+            <span className='rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'>
               现代浏览器
             </span>
           </h5>
-          <ul className="text-sm space-y-1 text-muted-foreground">
+          <ul className='text-muted-foreground space-y-1 text-sm'>
             <li>• 基于 View Transition API 实现</li>
             <li>• 圆形展开动画：clip-path: circle()</li>
             <li>• 模糊过渡效果：filter: blur(8px → 0px)</li>
@@ -39,14 +39,14 @@ export function TechnicalComparison() {
         </div>
 
         {/* Framer Motion 动画特性 */}
-        <div className="space-y-3">
-          <h5 className="font-medium text-purple-600 dark:text-purple-400 flex items-center gap-2">
+        <div className='space-y-3'>
+          <h5 className='flex items-center gap-2 font-medium text-purple-600 dark:text-purple-400'>
             🎯 Framer Motion 动画
-            <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
+            <span className='rounded-full bg-purple-100 px-2 py-1 text-xs text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'>
               兼容性好
             </span>
           </h5>
-          <ul className="text-sm space-y-1 text-muted-foreground">
+          <ul className='text-muted-foreground space-y-1 text-sm'>
             <li>• 基于 Framer Motion 库实现</li>
             <li>• 背景滑动动画：layoutId 共享元素</li>
             <li>• Spring 动画参数：duration: 0.5s, bounce: 0.2</li>
@@ -58,9 +58,9 @@ export function TechnicalComparison() {
       </div>
 
       {/* 通用特性 */}
-      <div className="border-_t pt-4">
-        <h5 className="font-medium mb-2">🛡️ 通用特性</h5>
-        <ul className="text-sm space-y-1 text-muted-foreground grid grid-cols-1 md:grid-cols-2 gap-x-6">
+      <div className='border-_t pt-4'>
+        <h5 className='mb-2 font-medium'>🛡️ 通用特性</h5>
+        <ul className='text-muted-foreground grid grid-cols-1 space-y-1 gap-x-6 text-sm md:grid-cols-2'>
           <li>• 支持 prefers-reduced-motion 检测</li>
           <li>• 完整的无障碍性支持和键盘导航</li>
           <li>• TypeScript 类型安全</li>
@@ -71,28 +71,42 @@ export function TechnicalComparison() {
       </div>
 
       {/* 浏览器支持说明 */}
-      <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-4 rounded-lg">
-        <div className="flex items-center justify-between mb-3">
-          <h5 className="font-medium text-amber-800 dark:text-amber-200">
+      <div className='rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950/20'>
+        <div className='mb-3 flex items-center justify-between'>
+          <h5 className='font-medium text-amber-800 dark:text-amber-200'>
             🌐 浏览器支持说明
           </h5>
           {mounted && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-amber-700 dark:text-amber-300">当前浏览器：</span>
-              <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                supportsViewTransitions
-                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                  : 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300'
-              }`}>
-                {supportsViewTransitions ? '✅ 支持 Circle Blur' : '⚠️ 仅支持 Framer Motion'}
+            <div className='flex items-center gap-2'>
+              <span className='text-xs text-amber-700 dark:text-amber-300'>
+                当前浏览器：
+              </span>
+              <span
+                className={`rounded-full px-2 py-1 text-xs font-medium ${
+                  supportsViewTransitions
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                    : 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300'
+                }`}
+              >
+                {supportsViewTransitions
+                  ? '✅ 支持 Circle Blur'
+                  : '⚠️ 仅支持 Framer Motion'}
               </span>
             </div>
           )}
         </div>
-        <div className="text-sm text-amber-700 dark:text-amber-300 space-y-1">
-          <p><strong>Circle Blur 动画：</strong>需要支持 View Transition API（Chrome 111+, Edge 111+）</p>
-          <p><strong>Framer Motion 动画：</strong>支持所有现代浏览器（Chrome, Firefox, Safari, Edge）</p>
-          <p><strong>自动降级：</strong>不支持的浏览器会自动使用普通主题切换</p>
+        <div className='space-y-1 text-sm text-amber-700 dark:text-amber-300'>
+          <p>
+            <strong>Circle Blur 动画：</strong>需要支持 View Transition
+            API（Chrome 111+, Edge 111+）
+          </p>
+          <p>
+            <strong>Framer Motion 动画：</strong>支持所有现代浏览器（Chrome,
+            Firefox, Safari, Edge）
+          </p>
+          <p>
+            <strong>自动降级：</strong>不支持的浏览器会自动使用普通主题切换
+          </p>
         </div>
       </div>
     </div>

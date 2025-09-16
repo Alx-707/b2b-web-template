@@ -10,10 +10,7 @@
 
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-
-import {
-    SocialIconLink,
-} from '../social-icons';
+import { SocialIconLink } from '../social-icons';
 
 describe('Social Icons Accessibility - Internationalization Tests', () => {
   beforeEach(() => {
@@ -30,7 +27,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='Síguenos en Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -46,7 +43,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='Suivez-nous sur Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -62,7 +59,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='Folgen Sie uns auf Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -78,7 +75,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='Twitterでフォロー'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -94,7 +91,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='在Twitter上关注我们'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -110,7 +107,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='트위터에서 팔로우하기'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -126,7 +123,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='Siga-nos no Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -142,7 +139,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='Seguici su Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -158,11 +155,14 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='Подписывайтесь на нас в Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
-      expect(link).toHaveAttribute('aria-label', 'Подписывайтесь на нас в Twitter');
+      expect(link).toHaveAttribute(
+        'aria-label',
+        'Подписывайтесь на нас в Twitter',
+      );
     });
 
     it('supports Dutch language labels', () => {
@@ -174,7 +174,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='Volg ons op Twitter'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const link = screen.getByTestId('social-link');
@@ -185,14 +185,17 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
   describe('右到左语言', () => {
     it('handles right-to-left languages', () => {
       render(
-        <div dir='rtl' lang='ar'>
+        <div
+          dir='rtl'
+          lang='ar'
+        >
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
             aria-label='تويتر'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const container = screen.getByTestId('social-link').closest('div');
@@ -205,14 +208,17 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
 
     it('supports Hebrew RTL layout', () => {
       render(
-        <div dir='rtl' lang='he'>
+        <div
+          dir='rtl'
+          lang='he'
+        >
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
             aria-label='עקבו אחרינו בטוויטר'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const container = screen.getByTestId('social-link').closest('div');
@@ -225,14 +231,17 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
 
     it('supports Persian RTL layout', () => {
       render(
-        <div dir='rtl' lang='fa'>
+        <div
+          dir='rtl'
+          lang='fa'
+        >
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
             aria-label='ما را در توییتر دنبال کنید'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const container = screen.getByTestId('social-link').closest('div');
@@ -245,14 +254,17 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
 
     it('supports Urdu RTL layout', () => {
       render(
-        <div dir='rtl' lang='ur'>
+        <div
+          dir='rtl'
+          lang='ur'
+        >
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
             aria-label='ٹویٹر پر ہمیں فالو کریں'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const container = screen.getByTestId('social-link').closest('div');
@@ -284,14 +296,17 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
               data-testid='linkedin-fr'
             />
           </div>
-        </div>
+        </div>,
       );
 
       const linkedinEs = screen.getByTestId('linkedin-es');
       const linkedinFr = screen.getByTestId('linkedin-fr');
 
       expect(linkedinEs).toHaveAttribute('aria-label', 'Conéctate en LinkedIn');
-      expect(linkedinFr).toHaveAttribute('aria-label', 'Connectez-vous sur LinkedIn');
+      expect(linkedinFr).toHaveAttribute(
+        'aria-label',
+        'Connectez-vous sur LinkedIn',
+      );
     });
 
     it('supports multiple social platforms in different languages', () => {
@@ -309,7 +324,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
             aria-label='LinkedIn verbinden'
             data-testid='linkedin-de'
           />
-        </div>
+        </div>,
       );
 
       const twitterDe = screen.getByTestId('twitter-de');
@@ -323,14 +338,18 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
   describe('文化适应性', () => {
     it('adapts to cultural reading patterns', () => {
       render(
-        <div dir='rtl' lang='ar' className='text-right'>
+        <div
+          dir='rtl'
+          lang='ar'
+          className='text-right'
+        >
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
             aria-label='تابعونا على تويتر'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const container = screen.getByTestId('social-link').closest('div');
@@ -339,14 +358,17 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
 
     it('supports locale-specific formatting', () => {
       render(
-        <div lang='ja' className='font-japanese'>
+        <div
+          lang='ja'
+          className='font-japanese'
+        >
           <SocialIconLink
             href='https://twitter.com/example'
             platform='twitter'
             aria-label='Twitterをフォロー'
             data-testid='social-link'
           />
-        </div>
+        </div>,
       );
 
       const container = screen.getByTestId('social-link').closest('div');
@@ -372,7 +394,7 @@ describe('Social Icons Accessibility - Internationalization Tests', () => {
               data-testid='twitter-zh'
             />
           </div>
-        </div>
+        </div>,
       );
 
       const twitterEn = screen.getByTestId('twitter-en');

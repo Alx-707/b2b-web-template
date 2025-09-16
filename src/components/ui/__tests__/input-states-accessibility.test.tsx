@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Input } from '../input';
 
@@ -38,22 +38,40 @@ describe('Input - States & Accessibility', () => {
     });
 
     it('applies disabled styles', () => {
-      render(<Input disabled data-testid='input' />);
+      render(
+        <Input
+          disabled
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
-      expect(input).toHaveClass('disabled:cursor-not-allowed', 'disabled:opacity-50');
+      expect(input).toHaveClass(
+        'disabled:cursor-not-allowed',
+        'disabled:opacity-50',
+      );
       expect(input).toBeDisabled();
     });
 
     it('applies readonly styles', () => {
-      render(<Input readOnly data-testid='input' />);
+      render(
+        <Input
+          readOnly
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('readonly');
     });
 
     it('handles validation states with aria-invalid', () => {
-      render(<Input aria-invalid='true' data-testid='input' />);
+      render(
+        <Input
+          aria-invalid='true'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('aria-invalid', 'true');
@@ -65,7 +83,7 @@ describe('Input - States & Accessibility', () => {
           className='border-red-500 focus:border-red-600'
           aria-invalid='true'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -73,7 +91,12 @@ describe('Input - States & Accessibility', () => {
     });
 
     it('handles required field styling', () => {
-      render(<Input required data-testid='input' />);
+      render(
+        <Input
+          required
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toBeRequired();
@@ -87,7 +110,13 @@ describe('Input - States & Accessibility', () => {
     });
 
     it('handles loading state', () => {
-      render(<Input disabled className='opacity-50' data-testid='input' />);
+      render(
+        <Input
+          disabled
+          className='opacity-50'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveClass('opacity-50');
@@ -100,7 +129,7 @@ describe('Input - States & Accessibility', () => {
           aria-invalid='true'
           className='border-destructive focus:border-destructive'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -113,7 +142,7 @@ describe('Input - States & Accessibility', () => {
         <Input
           className='border-green-500 focus:border-green-600'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -155,7 +184,12 @@ describe('Input - States & Accessibility', () => {
 
   describe('Accessibility', () => {
     it('supports aria-label', () => {
-      render(<Input aria-label='Username input' data-testid='input' />);
+      render(
+        <Input
+          aria-label='Username input'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('aria-label', 'Username input');
@@ -165,8 +199,11 @@ describe('Input - States & Accessibility', () => {
       render(
         <div>
           <label id='username-label'>Username</label>
-          <Input aria-labelledby='username-label' data-testid='input' />
-        </div>
+          <Input
+            aria-labelledby='username-label'
+            data-testid='input'
+          />
+        </div>,
       );
 
       const input = screen.getByTestId('input');
@@ -176,9 +213,12 @@ describe('Input - States & Accessibility', () => {
     it('supports aria-describedby', () => {
       render(
         <div>
-          <Input aria-describedby='help-text' data-testid='input' />
+          <Input
+            aria-describedby='help-text'
+            data-testid='input'
+          />
           <div id='help-text'>Enter your username</div>
-        </div>
+        </div>,
       );
 
       const input = screen.getByTestId('input');
@@ -186,35 +226,61 @@ describe('Input - States & Accessibility', () => {
     });
 
     it('supports aria-required', () => {
-      render(<Input aria-required='true' data-testid='input' />);
+      render(
+        <Input
+          aria-required='true'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('aria-required', 'true');
     });
 
     it('supports aria-invalid', () => {
-      render(<Input aria-invalid='true' data-testid='input' />);
+      render(
+        <Input
+          aria-invalid='true'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('aria-invalid', 'true');
     });
 
     it('supports aria-expanded for combobox inputs', () => {
-      render(<Input role='combobox' aria-expanded='false' data-testid='input' />);
+      render(
+        <Input
+          role='combobox'
+          aria-expanded='false'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('aria-expanded', 'false');
     });
 
     it('supports aria-autocomplete', () => {
-      render(<Input aria-autocomplete='list' data-testid='input' />);
+      render(
+        <Input
+          aria-autocomplete='list'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('aria-autocomplete', 'list');
     });
 
     it('supports role attribute', () => {
-      render(<Input role='searchbox' data-testid='input' />);
+      render(
+        <Input
+          role='searchbox'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('role', 'searchbox');
@@ -225,7 +291,7 @@ describe('Input - States & Accessibility', () => {
         <div>
           <Input data-testid='input1' />
           <Input data-testid='input2' />
-        </div>
+        </div>,
       );
 
       const input1 = screen.getByTestId('input1');
@@ -244,7 +310,7 @@ describe('Input - States & Accessibility', () => {
           aria-live='polite'
           aria-atomic='true'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -256,8 +322,11 @@ describe('Input - States & Accessibility', () => {
       render(
         <div>
           <label htmlFor='labeled-input'>Username</label>
-          <Input id='labeled-input' data-testid='input' />
-        </div>
+          <Input
+            id='labeled-input'
+            data-testid='input'
+          />
+        </div>,
       );
 
       const label = screen.getByText('Username');
@@ -272,7 +341,7 @@ describe('Input - States & Accessibility', () => {
         <Input
           className='forced-colors:border-[ButtonText]'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -284,7 +353,7 @@ describe('Input - States & Accessibility', () => {
         <Input
           className='motion-reduce:transition-none'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -292,7 +361,12 @@ describe('Input - States & Accessibility', () => {
     });
 
     it('provides proper touch targets', () => {
-      render(<Input className='min-h-[44px]' data-testid='input' />);
+      render(
+        <Input
+          className='min-h-[44px]'
+          data-testid='input'
+        />,
+      );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveClass('min-h-[44px]');
@@ -312,12 +386,15 @@ describe('Input - States & Accessibility', () => {
           />
           <div id='password-help'>Must be at least 8 characters</div>
           <div id='password-error'>Password is too short</div>
-        </div>
+        </div>,
       );
 
       const input = screen.getByTestId('input');
       expect(input).toHaveAttribute('aria-labelledby', 'complex-label');
-      expect(input).toHaveAttribute('aria-describedby', 'password-help password-error');
+      expect(input).toHaveAttribute(
+        'aria-describedby',
+        'password-help password-error',
+      );
       expect(input).toHaveAttribute('aria-required', 'true');
       expect(input).toHaveAttribute('aria-invalid', 'true');
     });
@@ -328,7 +405,7 @@ describe('Input - States & Accessibility', () => {
           lang='en'
           dir='ltr'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -351,7 +428,7 @@ describe('Input - States & Accessibility', () => {
           >
             This field is required
           </div>
-        </div>
+        </div>,
       );
 
       const input = screen.getByTestId('input');
@@ -367,7 +444,7 @@ describe('Input - States & Accessibility', () => {
           type='email'
           autoComplete='email'
           data-testid='input'
-        />
+        />,
       );
 
       const input = screen.getByTestId('input');
@@ -384,7 +461,7 @@ describe('Input - States & Accessibility', () => {
             data-testid='input'
           />
           <button type='submit'>Submit</button>
-        </form>
+        </form>,
       );
 
       const input = screen.getByTestId('input');

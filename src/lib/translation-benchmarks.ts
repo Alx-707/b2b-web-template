@@ -3,7 +3,10 @@
  */
 import type { Locale } from '@/types/i18n';
 import type { QualityScore } from '@/types/translation-manager';
-import type { QualityBenchmark, QualityComparison } from './translation-quality-types';
+import type {
+  QualityBenchmark,
+  QualityComparison,
+} from './translation-quality-types';
 
 export class TranslationBenchmarks {
   private benchmarks: Map<Locale, QualityBenchmark> = new Map();
@@ -18,7 +21,10 @@ export class TranslationBenchmarks {
   /**
    * 与质量基准对比
    */
-  compareWithBenchmark(currentScore: QualityScore, locale: Locale): QualityComparison {
+  compareWithBenchmark(
+    currentScore: QualityScore,
+    locale: Locale,
+  ): QualityComparison {
     const benchmark = this.benchmarks.get(locale);
 
     if (!benchmark) {
@@ -120,13 +126,19 @@ export class TranslationBenchmarks {
       );
     }
 
-    if (current.consistency && current.consistency < benchmark.categories.consistency) {
+    if (
+      current.consistency &&
+      current.consistency < benchmark.categories.consistency
+    ) {
       recommendations.push(
         'Consistency score below benchmark. Ensure terminology consistency.',
       );
     }
 
-    if (current.terminology && current.terminology < benchmark.categories.terminology) {
+    if (
+      current.terminology &&
+      current.terminology < benchmark.categories.terminology
+    ) {
       recommendations.push(
         'Terminology score below benchmark. Review domain-specific terms.',
       );

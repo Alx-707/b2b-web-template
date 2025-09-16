@@ -202,7 +202,8 @@ describe('i18n Enhanced Request Configuration', () => {
     it('应该在错误时创建增强的回退响应', async () => {
       mockGetCachedMessages.mockRejectedValue(new Error('Load error'));
 
-      global.performance.now = vi.fn()
+      global.performance.now = vi
+        .fn()
         .mockReturnValueOnce(100) // start time
         .mockReturnValueOnce(200); // fallback time
 
@@ -242,14 +243,17 @@ describe('i18n Enhanced Request Configuration', () => {
 
   describe('增强性能监控', () => {
     it('应该记录详细的加载时间', async () => {
-      global.performance.now = vi.fn()
+      global.performance.now = vi
+        .fn()
         .mockReturnValueOnce(100) // start time
         .mockReturnValueOnce(250); // end time
 
       mockGetRequestConfig.mockImplementation(async (configFn) => {
         const result = await configFn({ requestLocale: Promise.resolve('en') });
 
-        expect(mockI18nPerformanceMonitor.recordLoadTime).toHaveBeenCalledWith(150);
+        expect(mockI18nPerformanceMonitor.recordLoadTime).toHaveBeenCalledWith(
+          150,
+        );
         expect(result.metadata.loadTime).toBe(150);
 
         return result;
@@ -281,7 +285,9 @@ describe('i18n Enhanced Request Configuration', () => {
   describe('locale验证和回退', () => {
     it('应该处理无效的locale并回退到默认值', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
-        const result = await configFn({ requestLocale: Promise.resolve('invalid') });
+        const result = await configFn({
+          requestLocale: Promise.resolve('invalid'),
+        });
 
         expect(result.locale).toBe('en');
 
@@ -305,7 +311,9 @@ describe('i18n Enhanced Request Configuration', () => {
 
     it('应该处理undefined locale', async () => {
       mockGetRequestConfig.mockImplementation(async (configFn) => {
-        const result = await configFn({ requestLocale: Promise.resolve(undefined) });
+        const result = await configFn({
+          requestLocale: Promise.resolve(undefined),
+        });
 
         expect(result.locale).toBe('en');
 
@@ -332,10 +340,14 @@ describe('i18n Enhanced Request Configuration', () => {
     it('应该为不同locale设置正确的时区', async () => {
       // 测试英文
       mockGetRequestConfig.mockImplementation(async (configFn) => {
-        const enResult = await configFn({ requestLocale: Promise.resolve('en') });
+        const enResult = await configFn({
+          requestLocale: Promise.resolve('en'),
+        });
         expect(enResult.timeZone).toBe('UTC');
 
-        const zhResult = await configFn({ requestLocale: Promise.resolve('zh') });
+        const zhResult = await configFn({
+          requestLocale: Promise.resolve('zh'),
+        });
         expect(zhResult.timeZone).toBe('Asia/Shanghai');
 
         return enResult;

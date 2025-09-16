@@ -15,7 +15,22 @@ export interface WhatsAppMessage {
   id: string;
   from: string;
   timestamp: string;
-  type: 'text' | 'image' | 'document' | 'audio' | 'video' | 'location' | 'contacts' | 'template';
+  type:
+    | 'text'
+    | 'image'
+    | 'document'
+    | 'audio'
+    | 'video'
+    | 'location'
+    | 'contacts'
+    | 'template'
+    | 'interactive'
+    | 'reaction'
+    | 'sticker'
+    | 'order'
+    | 'system'
+    | 'button'
+    | 'template_reply';
   text?: {
     body: string;
   };
@@ -49,7 +64,7 @@ export interface WhatsAppMessage {
     name?: string;
     address?: string;
   };
-  contacts?: WhatsAppContact[];
+  contacts?: WhatsAppContact[] | any[];
 }
 
 // Media Types
@@ -163,31 +178,57 @@ export type MessageType = WhatsAppMessage['type'];
 export type MediaType = 'image' | 'document' | 'audio' | 'video';
 
 // Type Guards
-export function isTextMessage(message: WhatsAppMessage): message is WhatsAppMessage & { text: NonNullable<WhatsAppMessage['text']> } {
+export function isTextMessage(
+  message: WhatsAppMessage,
+): message is WhatsAppMessage & { text: NonNullable<WhatsAppMessage['text']> } {
   return message.type === 'text' && !!message.text;
 }
 
-export function isImageMessage(message: WhatsAppMessage): message is WhatsAppMessage & { image: NonNullable<WhatsAppMessage['image']> } {
+export function isImageMessage(
+  message: WhatsAppMessage,
+): message is WhatsAppMessage & {
+  image: NonNullable<WhatsAppMessage['image']>;
+} {
   return message.type === 'image' && !!message.image;
 }
 
-export function isDocumentMessage(message: WhatsAppMessage): message is WhatsAppMessage & { document: NonNullable<WhatsAppMessage['document']> } {
+export function isDocumentMessage(
+  message: WhatsAppMessage,
+): message is WhatsAppMessage & {
+  document: NonNullable<WhatsAppMessage['document']>;
+} {
   return message.type === 'document' && !!message.document;
 }
 
-export function isAudioMessage(message: WhatsAppMessage): message is WhatsAppMessage & { audio: NonNullable<WhatsAppMessage['audio']> } {
+export function isAudioMessage(
+  message: WhatsAppMessage,
+): message is WhatsAppMessage & {
+  audio: NonNullable<WhatsAppMessage['audio']>;
+} {
   return message.type === 'audio' && !!message.audio;
 }
 
-export function isVideoMessage(message: WhatsAppMessage): message is WhatsAppMessage & { video: NonNullable<WhatsAppMessage['video']> } {
+export function isVideoMessage(
+  message: WhatsAppMessage,
+): message is WhatsAppMessage & {
+  video: NonNullable<WhatsAppMessage['video']>;
+} {
   return message.type === 'video' && !!message.video;
 }
 
-export function isLocationMessage(message: WhatsAppMessage): message is WhatsAppMessage & { location: NonNullable<WhatsAppMessage['location']> } {
+export function isLocationMessage(
+  message: WhatsAppMessage,
+): message is WhatsAppMessage & {
+  location: NonNullable<WhatsAppMessage['location']>;
+} {
   return message.type === 'location' && !!message.location;
 }
 
-export function isContactsMessage(message: WhatsAppMessage): message is WhatsAppMessage & { contacts: NonNullable<WhatsAppMessage['contacts']> } {
+export function isContactsMessage(
+  message: WhatsAppMessage,
+): message is WhatsAppMessage & {
+  contacts: NonNullable<WhatsAppMessage['contacts']>;
+} {
   return message.type === 'contacts' && !!message.contacts;
 }
 
@@ -200,21 +241,28 @@ export const WHATSAPP_MESSAGE_TYPES = [
   'video',
   'location',
   'contacts',
-  'template'
+  'template',
+  'interactive',
+  'reaction',
+  'sticker',
+  'order',
+  'system',
+  'button',
+  'template_reply',
 ] as const;
 
 export const WHATSAPP_MESSAGE_STATUSES = [
   'sent',
   'delivered',
   'read',
-  'failed'
+  'failed',
 ] as const;
 
 export const SUPPORTED_MEDIA_TYPES = [
   'image',
   'document',
   'audio',
-  'video'
+  'video',
 ] as const;
 
 // Validation Helpers
@@ -236,7 +284,9 @@ export interface MessageValidationResult {
   errors: string[];
 }
 
-export function validateWhatsAppMessage(message: Partial<WhatsAppMessage>): MessageValidationResult {
+export function validateWhatsAppMessage(
+  message: Partial<WhatsAppMessage>,
+): MessageValidationResult {
   const errors: string[] = [];
 
   if (!message.id) {
@@ -261,14 +311,17 @@ export function validateWhatsAppMessage(message: Partial<WhatsAppMessage>): Mess
   }
 
   if (message.type === 'location' && message.location) {
-    if (typeof message.location.latitude !== 'number' || typeof message.location.longitude !== 'number') {
+    if (
+      typeof message.location.latitude !== 'number' ||
+      typeof message.location.longitude !== 'number'
+    ) {
       errors.push('Location message must have valid latitude and longitude');
     }
   }
 
   return {
     isValid: errors.length === 0,
-    errors
+    errors,
   };
 }
 
@@ -279,5 +332,5 @@ export type {
   WhatsAppError as Error,
   MessageStatusUpdate as StatusUpdate,
   LocationData as Location,
-  ContactData as ContactInfo
+  ContactData as ContactInfo,
 };

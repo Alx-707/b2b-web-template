@@ -6,7 +6,6 @@
  */
 
 import type { Locale } from '@/types/i18n';
-;
 
 /**
  * 存储键名常量
@@ -24,13 +23,20 @@ export const STORAGE_KEYS = {
 /**
  * 存储键名类型
  */
-export type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS];
+export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
 
 /**
  * 语言来源类型
  * Locale source types
  */
-export type LocaleSource = 'user' | 'geo' | 'browser' | 'default' | 'auto' | 'fallback';
+export type LocaleSource =
+  | 'user'
+  | 'geo'
+  | 'browser'
+  | 'default'
+  | 'auto'
+  | 'fallback'
+  | 'user_override';
 
 /**
  * 存储事件类型
@@ -115,7 +121,7 @@ export const STORAGE_TYPES = {
   MEMORY: 'memory',
 } as const;
 
-export type StorageType = typeof STORAGE_TYPES[keyof typeof STORAGE_TYPES];
+export type StorageType = (typeof STORAGE_TYPES)[keyof typeof STORAGE_TYPES];
 
 /**
  * 压缩算法类型
@@ -128,7 +134,8 @@ export const COMPRESSION_ALGORITHMS = {
   BROTLI: 'brotli',
 } as const;
 
-export type CompressionAlgorithm = typeof COMPRESSION_ALGORITHMS[keyof typeof COMPRESSION_ALGORITHMS];
+export type CompressionAlgorithm =
+  (typeof COMPRESSION_ALGORITHMS)[keyof typeof COMPRESSION_ALGORITHMS];
 
 /**
  * 加密算法类型
@@ -140,7 +147,8 @@ export const ENCRYPTION_ALGORITHMS = {
   CHACHA20_POLY1305: 'chacha20-poly1305',
 } as const;
 
-export type EncryptionAlgorithm = typeof ENCRYPTION_ALGORITHMS[keyof typeof ENCRYPTION_ALGORITHMS];
+export type EncryptionAlgorithm =
+  (typeof ENCRYPTION_ALGORITHMS)[keyof typeof ENCRYPTION_ALGORITHMS];
 
 /**
  * 同步状态类型
@@ -154,7 +162,7 @@ export const SYNC_STATUS = {
   CONFLICT: 'conflict',
 } as const;
 
-export type SyncStatus = typeof SYNC_STATUS[keyof typeof SYNC_STATUS];
+export type SyncStatus = (typeof SYNC_STATUS)[keyof typeof SYNC_STATUS];
 
 /**
  * 迁移状态类型
@@ -168,7 +176,8 @@ export const MIGRATION_STATUS = {
   ROLLED_BACK: 'rolled_back',
 } as const;
 
-export type MigrationStatus = typeof MIGRATION_STATUS[keyof typeof MIGRATION_STATUS];
+export type MigrationStatus =
+  (typeof MIGRATION_STATUS)[keyof typeof MIGRATION_STATUS];
 
 /**
  * 健康状态类型
@@ -181,7 +190,7 @@ export const HEALTH_STATUS = {
   CRITICAL: 'critical',
 } as const;
 
-export type HealthStatus = typeof HEALTH_STATUS[keyof typeof HEALTH_STATUS];
+export type HealthStatus = (typeof HEALTH_STATUS)[keyof typeof HEALTH_STATUS];
 
 /**
  * 错误类型
@@ -201,7 +210,7 @@ export const ERROR_TYPES = {
   UNKNOWN_ERROR: 'unknown_error',
 } as const;
 
-export type ErrorType = typeof ERROR_TYPES[keyof typeof ERROR_TYPES];
+export type ErrorType = (typeof ERROR_TYPES)[keyof typeof ERROR_TYPES];
 
 /**
  * 优先级类型
@@ -214,7 +223,8 @@ export const PRIORITY_LEVELS = {
   CRITICAL: 'critical',
 } as const;
 
-export type PriorityLevel = typeof PRIORITY_LEVELS[keyof typeof PRIORITY_LEVELS];
+export type PriorityLevel =
+  (typeof PRIORITY_LEVELS)[keyof typeof PRIORITY_LEVELS];
 
 /**
  * 环境类型
@@ -227,7 +237,8 @@ export const ENVIRONMENT_TYPES = {
   TEST: 'test',
 } as const;
 
-export type EnvironmentType = typeof ENVIRONMENT_TYPES[keyof typeof ENVIRONMENT_TYPES];
+export type EnvironmentType =
+  (typeof ENVIRONMENT_TYPES)[keyof typeof ENVIRONMENT_TYPES];
 
 /**
  * 浏览器类型
@@ -243,7 +254,7 @@ export const BROWSER_TYPES = {
   UNKNOWN: 'unknown',
 } as const;
 
-export type BrowserType = typeof BROWSER_TYPES[keyof typeof BROWSER_TYPES];
+export type BrowserType = (typeof BROWSER_TYPES)[keyof typeof BROWSER_TYPES];
 
 /**
  * 设备类型
@@ -256,7 +267,7 @@ export const DEVICE_TYPES = {
   UNKNOWN: 'unknown',
 } as const;
 
-export type DeviceType = typeof DEVICE_TYPES[keyof typeof DEVICE_TYPES];
+export type DeviceType = (typeof DEVICE_TYPES)[keyof typeof DEVICE_TYPES];
 
 /**
  * 操作系统类型
@@ -271,7 +282,7 @@ export const OS_TYPES = {
   UNKNOWN: 'unknown',
 } as const;
 
-export type OSType = typeof OS_TYPES[keyof typeof OS_TYPES];
+export type OSType = (typeof OS_TYPES)[keyof typeof OS_TYPES];
 
 /**
  * 版本信息接口
@@ -357,7 +368,9 @@ export const BaseValidators = {
    * Validate source type
    */
   isValidSource(source: string): source is LocaleSource {
-    return ['user', 'geo', 'browser', 'default', 'auto', 'fallback'].includes(source);
+    return ['user', 'geo', 'browser', 'default', 'auto', 'fallback'].includes(
+      source,
+    );
   },
 
   /**
@@ -365,9 +378,11 @@ export const BaseValidators = {
    * Validate confidence
    */
   isValidConfidence(confidence: number): boolean {
-    return typeof confidence === 'number' &&
-           confidence >= STORAGE_CONSTANTS.MIN_CONFIDENCE &&
-           confidence <= STORAGE_CONSTANTS.MAX_CONFIDENCE;
+    return (
+      typeof confidence === 'number' &&
+      confidence >= STORAGE_CONSTANTS.MIN_CONFIDENCE &&
+      confidence <= STORAGE_CONSTANTS.MAX_CONFIDENCE
+    );
   },
 
   /**
@@ -375,9 +390,9 @@ export const BaseValidators = {
    * Validate timestamp
    */
   isValidTimestamp(timestamp: number): boolean {
-    return typeof timestamp === 'number' &&
-           timestamp > 0 &&
-           timestamp <= Date.now();
+    return (
+      typeof timestamp === 'number' && timestamp > 0 && timestamp <= Date.now()
+    );
   },
 
   /**
@@ -385,8 +400,6 @@ export const BaseValidators = {
    * Validate storage key
    */
   isValidStorageKey(key: string): boolean {
-    return typeof key === 'string' &&
-           key.length > 0 &&
-           key.length <= 255;
+    return typeof key === 'string' && key.length > 0 && key.length <= 255;
   },
 } as const;

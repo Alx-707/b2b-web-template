@@ -13,10 +13,14 @@ export async function register() {
   } catch (error) {
     // 记录错误但不阻止应用启动
     // 使用结构化日志记录错误信息
-    logger.error('Failed to register instrumentation', {
-      runtime: process.env['NEXT_RUNTIME'],
-      nodeEnv: process.env.NODE_ENV,
-    }, error instanceof Error ? error : new Error(String(error)));
+    logger.error(
+      'Failed to register instrumentation',
+      {
+        runtime: process.env['NEXT_RUNTIME'],
+        nodeEnv: process.env.NODE_ENV,
+      },
+      error instanceof Error ? error : new Error(String(error)),
+    );
   }
 }
 

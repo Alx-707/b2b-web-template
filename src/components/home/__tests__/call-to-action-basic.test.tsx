@@ -29,25 +29,60 @@ vi.mock('@/hooks/use-intersection-observer', () => ({
 // Mock Lucide React图标
 vi.mock('lucide-react', () => ({
   ArrowRight: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='arrow-right-icon'>→</span>
+    <span
+      className={className}
+      data-testid='arrow-right-icon'
+    >
+      →
+    </span>
   ),
   BookOpen: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='book-open-icon'>📖</span>
+    <span
+      className={className}
+      data-testid='book-open-icon'
+    >
+      📖
+    </span>
   ),
   Download: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='download-icon'>⬇️</span>
+    <span
+      className={className}
+      data-testid='download-icon'
+    >
+      ⬇️
+    </span>
   ),
   ExternalLink: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='external-link-icon'>🔗</span>
+    <span
+      className={className}
+      data-testid='external-link-icon'
+    >
+      🔗
+    </span>
   ),
   Github: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='github-icon'>🐙</span>
+    <span
+      className={className}
+      data-testid='github-icon'
+    >
+      🐙
+    </span>
   ),
   MessageCircle: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='message-circle-icon'>💬</span>
+    <span
+      className={className}
+      data-testid='message-circle-icon'
+    >
+      💬
+    </span>
   ),
   Star: ({ className }: { className?: string }) => (
-    <span className={className} data-testid='star-icon'>⭐</span>
+    <span
+      className={className}
+      data-testid='star-icon'
+    >
+      ⭐
+    </span>
   ),
 }));
 
@@ -56,7 +91,8 @@ describe('CallToAction Component - Basic Tests', () => {
   const defaultTranslations = {
     'badge': 'Open Source',
     'title': 'Ready to Get Started?',
-    'subtitle': 'Join thousands of developers building amazing projects with our tools.',
+    'subtitle':
+      'Join thousands of developers building amazing projects with our tools.',
     'github.primary.text': 'View on GitHub',
     'github.primary.description': 'Explore the source code',
     'github.secondary.text': 'Star on GitHub',
@@ -75,7 +111,10 @@ describe('CallToAction Component - Basic Tests', () => {
     vi.clearAllMocks();
 
     // 设置默认的翻译Mock
-    const mockT = vi.fn((key: string) => defaultTranslations[key as keyof typeof defaultTranslations] || key);
+    const mockT = vi.fn(
+      (key: string) =>
+        defaultTranslations[key as keyof typeof defaultTranslations] || key,
+    );
     mockUseTranslations.mockReturnValue(mockT);
 
     // 设置默认的Intersection Observer Mock
@@ -91,7 +130,11 @@ describe('CallToAction Component - Basic Tests', () => {
 
       // 验证主要元素存在
       expect(screen.getByText('Ready to Get Started?')).toBeInTheDocument();
-      expect(screen.getByText('Join thousands of developers building amazing projects with our tools.')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Join thousands of developers building amazing projects with our tools.',
+        ),
+      ).toBeInTheDocument();
       expect(screen.getByText('Open Source')).toBeInTheDocument();
     });
 
@@ -99,15 +142,25 @@ describe('CallToAction Component - Basic Tests', () => {
       render(<CallToAction />);
 
       // 验证主要GitHub按钮
-      expect(screen.getByRole('link', { name: /view on github/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /star on github/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /view on github/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /star on github/i }),
+      ).toBeInTheDocument();
 
       // 验证文档和社区链接
-      expect(screen.getByRole('link', { name: /documentation/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /join community/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /documentation/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /join community/i }),
+      ).toBeInTheDocument();
 
       // 验证GitHub相关链接
-      expect(screen.getByRole('link', { name: /discussions/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /discussions/i }),
+      ).toBeInTheDocument();
       expect(screen.getByRole('link', { name: /issues/i })).toBeInTheDocument();
     });
 
@@ -132,7 +185,7 @@ describe('CallToAction Component - Basic Tests', () => {
       const githubLink = screen.getByRole('link', { name: /view on github/i });
       expect(githubLink).toHaveAttribute(
         'href',
-        'https://github.com/tucsenberg/tucsenberg-web-frontier'
+        'https://github.com/tucsenberg/tucsenberg-web-frontier',
       );
       expect(githubLink).toHaveAttribute('target', '_blank');
       expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
@@ -144,7 +197,7 @@ describe('CallToAction Component - Basic Tests', () => {
       const starLink = screen.getByRole('link', { name: /star on github/i });
       expect(starLink).toHaveAttribute(
         'href',
-        'https://github.com/tucsenberg/tucsenberg-web-frontier'
+        'https://github.com/tucsenberg/tucsenberg-web-frontier',
       );
       expect(starLink).toHaveAttribute('target', '_blank');
       expect(starLink).toHaveAttribute('rel', 'noopener noreferrer');
@@ -160,17 +213,21 @@ describe('CallToAction Component - Basic Tests', () => {
     it('社区链接应该有正确的地址', () => {
       render(<CallToAction />);
 
-      const communityLink = screen.getByRole('link', { name: /join community/i });
+      const communityLink = screen.getByRole('link', {
+        name: /join community/i,
+      });
       expect(communityLink).toHaveAttribute('href', '/community');
     });
 
     it('Discussions链接应该有正确的地址', () => {
       render(<CallToAction />);
 
-      const discussionsLink = screen.getByRole('link', { name: /discussions/i });
+      const discussionsLink = screen.getByRole('link', {
+        name: /discussions/i,
+      });
       expect(discussionsLink).toHaveAttribute(
         'href',
-        'https://github.com/tucsenberg/tucsenberg-web-frontier/discussions'
+        'https://github.com/tucsenberg/tucsenberg-web-frontier/discussions',
       );
       expect(discussionsLink).toHaveAttribute('target', '_blank');
     });
@@ -181,7 +238,7 @@ describe('CallToAction Component - Basic Tests', () => {
       const issuesLink = screen.getByRole('link', { name: /issues/i });
       expect(issuesLink).toHaveAttribute(
         'href',
-        'https://github.com/tucsenberg/tucsenberg-web-frontier/issues'
+        'https://github.com/tucsenberg/tucsenberg-web-frontier/issues',
       );
       expect(issuesLink).toHaveAttribute('target', '_blank');
     });
@@ -193,7 +250,7 @@ describe('CallToAction Component - Basic Tests', () => {
 
       // 主要按钮图标 - 使用getAllBy因为有多个相同图标
       expect(screen.getAllByTestId('github-icon')).toHaveLength(2);
-      
+
       // 其他图标
       expect(screen.getByTestId('book-open-icon')).toBeInTheDocument();
       expect(screen.getByTestId('message-circle-icon')).toBeInTheDocument();
@@ -209,12 +266,12 @@ describe('CallToAction Component - Basic Tests', () => {
 
       // 验证每个图标都有正确的测试ID
       const githubIcons = screen.getAllByTestId('github-icon');
-      githubIcons.forEach(icon => {
+      githubIcons.forEach((icon) => {
         expect(icon).toBeInTheDocument();
       });
 
       const arrowIcons = screen.getAllByTestId('arrow-right-icon');
-      arrowIcons.forEach(icon => {
+      arrowIcons.forEach((icon) => {
         expect(icon).toBeInTheDocument();
       });
     });
@@ -228,7 +285,10 @@ describe('CallToAction Component - Basic Tests', () => {
     });
 
     it('应该调用所有必要的翻译键', () => {
-      const mockT = vi.fn((key: string) => defaultTranslations[key as keyof typeof defaultTranslations] || key);
+      const mockT = vi.fn(
+        (key: string) =>
+          defaultTranslations[key as keyof typeof defaultTranslations] || key,
+      );
       mockUseTranslations.mockReturnValue(mockT);
 
       render(<CallToAction />);
@@ -262,7 +322,9 @@ describe('CallToAction Component - Basic Tests', () => {
     it('应该处理空翻译值', () => {
       const mockT = vi.fn((key: string) => {
         if (key === 'badge') return '';
-        return defaultTranslations[key as keyof typeof defaultTranslations] || key;
+        return (
+          defaultTranslations[key as keyof typeof defaultTranslations] || key
+        );
       });
       mockUseTranslations.mockReturnValue(mockT);
 

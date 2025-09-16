@@ -1,14 +1,14 @@
 'use client';
 
 /* eslint-disable no-case-declarations */
-import { MINUTE_MS } from '@/constants/units';
+import { useEffect } from 'react';
+import { useLocale } from 'next-intl';
 import {
-    I18nPerformanceMonitor,
-    preloadTranslations,
+  I18nPerformanceMonitor,
+  preloadTranslations,
 } from '@/lib/i18n-performance';
 import { logger } from '@/lib/logger';
-import { useLocale } from 'next-intl';
-import { useEffect } from 'react';
+import { MINUTE_MS } from '@/constants/units';
 
 interface TranslationPreloaderProps {
   /**
@@ -133,7 +133,9 @@ export function CriticalTranslationPreloader() {
         // 记录缓存命中
         I18nPerformanceMonitor.recordCacheHit();
       } catch (error) {
-        logger.error('Critical translation preload failed', { error: error as Error });
+        logger.error('Critical translation preload failed', {
+          error: error as Error,
+        });
         I18nPerformanceMonitor.recordError();
       }
     };
@@ -167,7 +169,9 @@ async function performSmartPreload(currentLocale: string) {
     try {
       await preloadTranslations([currentLocale]);
     } catch (error) {
-      logger.warn(`Failed to preload namespace ${namespace}`, { error: error as Error });
+      logger.warn(`Failed to preload namespace ${namespace}`, {
+        error: error as Error,
+      });
     }
   }
 }
@@ -226,14 +230,11 @@ function getPredictedNamespaces(path: string): string[] {
 export function PerformanceMonitoringPreloader() {
   useEffect(() => {
     // 定期清理过期缓存
-    const cleanupInterval = setInterval(
-      () => {
-        // 这里可以添加缓存清理逻辑
+    const cleanupInterval = setInterval(() => {
+      // 这里可以添加缓存清理逻辑
 
-        logger.debug('Translation cache cleanup performed');
-      },
-      5 * MINUTE_MS,
-    ); // 每5分钟清理一次
+      logger.debug('Translation cache cleanup performed');
+    }, 5 * MINUTE_MS); // 每5分钟清理一次
 
     // 定期报告性能指标
     const reportingInterval = setInterval(() => {

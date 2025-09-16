@@ -36,7 +36,11 @@ export class WhatsAppMediaService {
       const data = await response.json();
       return data.url || null;
     } catch (error) {
-      logger.error('Error getting media URL', {}, error instanceof Error ? error : new Error(String(error)));
+      logger.error(
+        'Error getting media URL',
+        {},
+        error instanceof Error ? error : new Error(String(error)),
+      );
       return null;
     }
   }
@@ -64,7 +68,11 @@ export class WhatsAppMediaService {
       const arrayBuffer = await response.arrayBuffer();
       return Buffer.from(arrayBuffer);
     } catch (error) {
-      logger.error('Error downloading media', {}, error instanceof Error ? error : new Error(String(error)));
+      logger.error(
+        'Error downloading media',
+        {},
+        error instanceof Error ? error : new Error(String(error)),
+      );
       return null;
     }
   }
@@ -110,7 +118,11 @@ export class WhatsAppMediaService {
       const data = await response.json();
       return data.id || null;
     } catch (error) {
-      logger.error('Error uploading media', {}, error instanceof Error ? error : new Error(String(error)));
+      logger.error(
+        'Error uploading media',
+        {},
+        error instanceof Error ? error : new Error(String(error)),
+      );
       return null;
     }
   }
@@ -129,7 +141,11 @@ export class WhatsAppMediaService {
 
       return response.ok;
     } catch (error) {
-      logger.error('Error deleting media', {}, error instanceof Error ? error : new Error(String(error)));
+      logger.error(
+        'Error deleting media',
+        {},
+        error instanceof Error ? error : new Error(String(error)),
+      );
       return false;
     }
   }
@@ -158,7 +174,11 @@ export class WhatsAppMediaService {
       const data = await response.json();
       return data;
     } catch (error) {
-      logger.error('Error getting media info', {}, error instanceof Error ? error : new Error(String(error)));
+      logger.error(
+        'Error getting media info',
+        {},
+        error instanceof Error ? error : new Error(String(error)),
+      );
       return null;
     }
   }

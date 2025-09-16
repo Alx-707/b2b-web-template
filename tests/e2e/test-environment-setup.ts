@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+
 // import { FullConfig } from '@playwright/test'; // TODO: Use when needed
 
 /**
