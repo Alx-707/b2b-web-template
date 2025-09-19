@@ -8,7 +8,10 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { AirtableBaseLike, AirtableServicePrivate } from '@/types/test-types';
+import type {
+  AirtableBaseLike,
+  AirtableServicePrivate,
+} from '@/types/test-types';
 import type { AirtableService as AirtableServiceType } from '../airtable/service';
 import {
   configureServiceForTesting,
@@ -138,7 +141,9 @@ describe('Airtable Tests - Index', () => {
         service,
         createMockBase(
           () =>
-            ({ create: mockCreate }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ create: mockCreate }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -203,7 +208,9 @@ describe('Airtable Tests - Index', () => {
         service,
         createMockBase(
           () =>
-            ({ select: mockSelect }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ select: mockSelect }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -258,7 +265,9 @@ describe('Airtable Tests - Index', () => {
         service,
         createMockBase(
           () =>
-            ({ update: mockUpdate }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ update: mockUpdate }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -312,7 +321,9 @@ describe('Airtable Tests - Index', () => {
         service,
         createMockBase(
           () =>
-            ({ destroy: mockDestroy }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ destroy: mockDestroy }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 

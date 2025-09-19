@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { PerformanceAlertConfig } from '@/lib/web-vitals/types';
 import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
 import type { DetailedWebVitals, PerformanceBaseline } from '@/types';
-import type { PerformanceAlertConfig } from '@/lib/web-vitals/types';
 import {
   PerformanceAlertSystem,
   PerformanceBaselineManager,
@@ -440,7 +440,8 @@ describe('PerformanceBaselineManager', () => {
       expect(() => {
         baselineManager.saveBaseline(
           createDetailedMetrics({
-            resourceTiming: undefined as unknown as DetailedWebVitals['resourceTiming'],
+            resourceTiming:
+              undefined as unknown as DetailedWebVitals['resourceTiming'],
           }),
         );
       }).not.toThrow();

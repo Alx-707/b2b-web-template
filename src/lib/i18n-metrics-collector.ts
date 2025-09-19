@@ -291,9 +291,7 @@ export class I18nMetricsCollector implements MetricsCollector {
   // 更新缓存命中率
   private updateCacheHitRate(): void {
     this.metrics.cacheHitRate =
-      this.totalRequests > ZERO
-        ? this.cacheHits / this.totalRequests
-        : ZERO;
+      this.totalRequests > ZERO ? this.cacheHits / this.totalRequests : ZERO;
   }
 
   // 更新错误率
@@ -350,10 +348,8 @@ export class I18nMetricsCollector implements MetricsCollector {
 
   // 计算性能等级
   private calculatePerformanceGrade(): 'A' | 'B' | 'C' | 'D' | 'F' {
-    const hitRatePercent =
-      this.metrics.cacheHitRate * PERCENTAGE_FULL;
-    const errorRatePercent =
-      this.metrics.errorRate * PERCENTAGE_FULL;
+    const hitRatePercent = this.metrics.cacheHitRate * PERCENTAGE_FULL;
+    const errorRatePercent = this.metrics.errorRate * PERCENTAGE_FULL;
     const avgLoadTime = this.metrics.loadTime;
 
     // 基于多个指标计算综合评分

@@ -19,7 +19,7 @@ export { ErrorLevel, MonitoringEventType } from '@/lib/i18n-monitoring-types';
 
 // 导出核心类
 export { EventCollector } from '@/lib/i18n-event-collector';
-export { PerformanceMonitor } from '@/lib/i18n-performance-monitor';
+export { I18nPerformanceMonitor as PerformanceMonitor } from '@/lib/i18n-performance';
 export { I18nMonitor } from '@/lib/i18n-monitor-core';
 
 export const i18nMonitor = new I18nMonitor();

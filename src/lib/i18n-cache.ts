@@ -55,14 +55,8 @@ export {
 // LRU 缓存实现
 export { LRUCache, createLRUCache, type Cache } from '@/lib/i18n-lru-cache';
 
-// 翻译预加载器
-export {
-  TranslationPreloader,
-  createTranslationPreloader,
-  PreloadStrategies,
-  type Preloader as PreloaderImpl,
-  type PreloadState,
-} from '@/lib/i18n-preloader';
+// 翻译预加载器 (已简化，移除复杂预加载功能)
+// 预加载功能已集成到缓存管理器中，无需单独导出
 
 // 主缓存管理器
 export {

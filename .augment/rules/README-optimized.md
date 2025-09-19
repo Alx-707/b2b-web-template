@@ -1,5 +1,5 @@
 ---
-type: 'always_apply'
+type: "always_apply"
 ---
 
 # Augment Rules Configuration for tucsenberg-web-frontier

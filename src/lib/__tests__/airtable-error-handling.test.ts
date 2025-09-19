@@ -3,8 +3,8 @@ import type {
   AirtableBaseLike,
   AirtableServicePrivate,
 } from '@/types/test-types';
-import type { ContactStatus } from '../airtable/types';
 import type { AirtableService as AirtableServiceType } from '../airtable/service';
+import type { ContactStatus } from '../airtable/types';
 import {
   configureServiceForTesting,
   createMockBase,
@@ -101,7 +101,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ create: mockCreate }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ create: mockCreate }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -121,7 +123,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ create: mockCreate }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ create: mockCreate }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -146,7 +150,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ create: mockCreate }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ create: mockCreate }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -168,7 +174,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ select: mockSelect }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ select: mockSelect }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -191,7 +199,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ select: mockSelect }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ select: mockSelect }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -214,7 +224,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ select: mockSelect }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ select: mockSelect }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -260,7 +272,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ update: mockUpdate }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ update: mockUpdate }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -280,7 +294,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ update: mockUpdate }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ update: mockUpdate }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -300,7 +316,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ update: mockUpdate }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ update: mockUpdate }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -337,7 +355,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ destroy: mockDestroy }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ destroy: mockDestroy }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 
@@ -357,7 +377,9 @@ describe('Airtable Error Handling Tests', () => {
         service,
         createMockBase(
           () =>
-            ({ destroy: mockDestroy }) as unknown as ReturnType<AirtableBaseLike['table']>,
+            ({ destroy: mockDestroy }) as unknown as ReturnType<
+              AirtableBaseLike['table']
+            >,
         ),
       );
 

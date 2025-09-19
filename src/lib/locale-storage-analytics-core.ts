@@ -266,9 +266,7 @@ function checkAvailabilityIssues(availability: {
   return [delta, list];
 }
 
-function checkFreshnessIssue(
-  stats: StorageStats,
-): [
+function checkFreshnessIssue(stats: StorageStats): [
   number,
   Array<{
     type: ErrorType;
@@ -293,9 +291,7 @@ function checkFreshnessIssue(
   return [ZERO, []];
 }
 
-function checkSizeIssue(
-  stats: StorageStats,
-): [
+function checkSizeIssue(stats: StorageStats): [
   number,
   Array<{
     type: ErrorType;
@@ -321,9 +317,7 @@ function checkSizeIssue(
   return [ZERO, []];
 }
 
-function checkHistoryIssue(
-  stats: StorageStats,
-): [
+function checkHistoryIssue(stats: StorageStats): [
   number,
   Array<{
     type: ErrorType;

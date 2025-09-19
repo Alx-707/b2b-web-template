@@ -30,7 +30,7 @@ interface SemanticAnalysis {
  */
 function generateMeaningfulConstantName(
   numStr: string,
-  analysis: { category: string; constantName: string; description: string }
+  analysis: { category: string; constantName: string; description: string },
 ): string {
   const num = parseFloat(numStr);
   const { category } = analysis;

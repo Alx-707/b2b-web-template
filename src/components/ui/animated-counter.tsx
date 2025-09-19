@@ -239,7 +239,7 @@ export const AnimatedCounter = forwardRef<
       delay = ZERO,
       autoStart = false,
       className,
-      role: roleProp,
+      'role': roleProp,
       'aria-live': ariaLiveProp,
       'aria-atomic': ariaAtomicProp,
       ...props
@@ -277,7 +277,8 @@ export const AnimatedCounter = forwardRef<
 
     const role = roleProp ?? 'status';
     const ariaLive = ariaLiveProp ?? (role === 'status' ? 'polite' : undefined);
-    const ariaAtomic = ariaAtomicProp ?? (role === 'status' ? 'true' : undefined);
+    const ariaAtomic =
+      ariaAtomicProp ?? (role === 'status' ? 'true' : undefined);
 
     return (
       <span

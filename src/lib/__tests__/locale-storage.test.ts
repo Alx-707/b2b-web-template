@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Locale } from '@/types/i18n';
 import { LocaleStorageManager } from '@/lib/locale-storage';
+import type { LocaleDetectionRecord } from '@/lib/locale-storage-types-data';
 import { WEB_VITALS_CONSTANTS } from '@/constants/test-constants';
 import type {
   LocaleDetectionHistory,
   UserLocalePreference,
 } from '../locale-storage';
-import type { LocaleDetectionRecord } from '@/lib/locale-storage-types-data';
 
 // Mock constants
 vi.mock('@/constants/i18n-constants', () => ({
@@ -261,7 +261,9 @@ describe('LocaleStorageManager', () => {
 
   describe('getDetectionHistory', () => {
     it('should return detection history from localStorage', () => {
-      const detectionRecords: LocaleDetectionRecord[] = [createDetectionRecord()];
+      const detectionRecords: LocaleDetectionRecord[] = [
+        createDetectionRecord(),
+      ];
 
       const history: LocaleDetectionHistory = {
         detections: detectionRecords,

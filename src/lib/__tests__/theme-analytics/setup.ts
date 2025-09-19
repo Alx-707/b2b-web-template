@@ -15,8 +15,8 @@ import {
 } from '../../../constants/app-constants';
 import {
   ThemeAnalytics,
-  type ThemeAnalyticsConfig,
   themeAnalytics,
+  type ThemeAnalyticsConfig,
 } from '../../theme-analytics';
 
 type MutableGlobal = typeof globalThis & {

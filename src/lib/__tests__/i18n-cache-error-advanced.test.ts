@@ -198,9 +198,13 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
       // Rapid fire operations
       for (let i = 0; i < 20; i++) {
         operations.push(cacheManager.getMessages('en'));
-        operations.push(Promise.resolve().then(() => cacheManager.clearCache()));
+        operations.push(
+          Promise.resolve().then(() => cacheManager.clearCache()),
+        );
         operations.push(cacheManager.getMessages('zh'));
-        operations.push(Promise.resolve().then(() => cacheManager.resetMetrics()));
+        operations.push(
+          Promise.resolve().then(() => cacheManager.resetMetrics()),
+        );
       }
 
       // Should not throw errors

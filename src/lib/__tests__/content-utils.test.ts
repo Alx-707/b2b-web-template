@@ -62,17 +62,15 @@ describe('Content Utils', () => {
       });
 
       it('should throw error for null file path', () => {
-        expect(() => validateFilePath(null as unknown as string, baseDir)).toThrow(
-          ContentError,
-        );
+        expect(() =>
+          validateFilePath(null as unknown as string, baseDir),
+        ).toThrow(ContentError);
       });
 
       it('should throw error for undefined file path', () => {
         expect(() =>
           validateFilePath(undefined as unknown as string, baseDir),
-        ).toThrow(
-          ContentError,
-        );
+        ).toThrow(ContentError);
       });
 
       it('should throw error for non-string file path', () => {
@@ -82,12 +80,12 @@ describe('Content Utils', () => {
             baseDir,
           ),
         ).toThrow(ContentError);
-        expect(() => validateFilePath({} as unknown as string, baseDir)).toThrow(
-          ContentError,
-        );
-        expect(() => validateFilePath([] as unknown as string, baseDir)).toThrow(
-          ContentError,
-        );
+        expect(() =>
+          validateFilePath({} as unknown as string, baseDir),
+        ).toThrow(ContentError);
+        expect(() =>
+          validateFilePath([] as unknown as string, baseDir),
+        ).toThrow(ContentError);
       });
     });
 

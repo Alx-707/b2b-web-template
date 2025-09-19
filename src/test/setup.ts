@@ -139,7 +139,8 @@ class MockResizeObserver {
   disconnect = vi.fn();
 }
 
-globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+globalThis.ResizeObserver =
+  MockResizeObserver as unknown as typeof ResizeObserver;
 
 // Mock IntersectionObserver for React components that use it
 class MockIntersectionObserver {

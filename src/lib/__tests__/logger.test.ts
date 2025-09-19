@@ -32,10 +32,9 @@ describe('logger', () => {
     logger.warn('warn message');
     logger.error('error message');
 
-    expect(consoleSpies.debug).toHaveBeenCalledWith(
-      'debug message',
-      { feature: 'debug' },
-    );
+    expect(consoleSpies.debug).toHaveBeenCalledWith('debug message', {
+      feature: 'debug',
+    });
     expect(consoleSpies.info).toHaveBeenCalledWith('info message');
     expect(consoleSpies.log).toHaveBeenCalledWith('log message');
     expect(consoleSpies.warn).toHaveBeenCalledWith('warn message');
