@@ -222,7 +222,7 @@ describe('i18n-monitoring', () => {
       expect(async () => {
         try {
           await fetch('/api/test');
-        } catch (_error) {
+        } catch {
           // Expected to catch error
           // 忽略错误变量
         }

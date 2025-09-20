@@ -404,6 +404,80 @@ export class LocaleMaintenanceOperationsManager {
   }
 
   /**
+   * 收集清理相关的维护建议
+   */
+  private static collectCleanupRecommendations(
+    add: (msg: string, level: 'low' | 'medium' | 'high') => void,
+  ): void {
+    const cleanup = LocaleCleanupManager.getCleanupStats();
+    if (cleanup.expiredDetections > PERCENTAGE_HALF)
+      add(`清理 ${cleanup.expiredDetections} 条过期检测记录`, 'medium');
+    if (cleanup.duplicateDetections > COUNT_TEN)
+      add(`清理 ${cleanup.duplicateDetections} 条重复检测记录`, 'medium');
+    if (cleanup.invalidPreferences > ZERO)
+      add(`修复 ${cleanup.invalidPreferences} 项无效偏好数据`, 'high');
+  }
+
+  /**
+   * 收集验证相关的维护建议
+   */
+  private static collectValidationRecommendations(
+    add: (msg: string, level: 'low' | 'medium' | 'high') => void,
+  ): void {
+    const summary = LocaleValidationManager.getValidationSummary();
+    if (summary.invalidKeys > ZERO)
+      add(`修复 ${summary.invalidKeys} 项无效数据`, 'high');
+    if (summary.syncIssues > ZERO)
+      add(`修复 ${summary.syncIssues} 个同步问题`, 'medium');
+  }
+
+  /**
+   * 收集历史数据相关的维护建议
+   */
+  private static collectHistoryRecommendations(
+    add: (msg: string, level: 'low' | 'medium' | 'high') => void,
+    levelsEncountered: Set<'low' | 'medium' | 'high'>,
+  ): void {
+    const history = LocalStorageManager.get<LocaleDetectionHistory>(
+      STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
+    );
+    if (history?.detections && history.detections.length > HTTP_OK) {
+      const historyLevel: 'medium' | 'high' = levelsEncountered.has('high')
+        ? 'high'
+        : 'medium';
+      add('优化检测历史数据（记录过多）', historyLevel);
+    }
+  }
+
+  /**
+   * 计算维护优先级
+   */
+  private static calculatePriority(
+    levelsEncountered: Set<'low' | 'medium' | 'high'>,
+  ): 'low' | 'medium' | 'high' {
+    if (levelsEncountered.has('high')) return 'high';
+    if (levelsEncountered.has('medium')) return 'medium';
+    return 'low';
+  }
+
+  /**
+   * 估算维护时间
+   */
+  private static estimateMaintenanceTime(
+    priority: 'low' | 'medium' | 'high',
+    recommendationCount: number,
+  ): string {
+    switch (priority) {
+      case 'high':
+        return '2-5分钟';
+      case 'medium':
+      case 'low':
+      default:
+        return recommendationCount > COUNT_TRIPLE ? '1-2分钟' : '< 1分钟';
+    }
+  }
+
+  /**
    * 获取维护建议
    * Get maintenance recommendations
    */
@@ -412,64 +486,28 @@ export class LocaleMaintenanceOperationsManager {
     priority: 'low' | 'medium' | 'high';
     estimatedTime: string;
   } {
-    const recommendations: string[] = [];
-    const levelsEncountered = new Set<'low' | 'medium' | 'high'>();
-
-    const add = (msg: string, level: 'low' | 'medium' | 'high') => {
-      recommendations.push(msg);
-      levelsEncountered.add(level);
-    };
-
     try {
-      const cleanup = LocaleCleanupManager.getCleanupStats();
-      if (cleanup.expiredDetections > PERCENTAGE_HALF)
-        add(`清理 ${cleanup.expiredDetections} 条过期检测记录`, 'medium');
-      if (cleanup.duplicateDetections > COUNT_TEN)
-        add(`清理 ${cleanup.duplicateDetections} 条重复检测记录`, 'medium');
-      if (cleanup.invalidPreferences > ZERO)
-        add(`修复 ${cleanup.invalidPreferences} 项无效偏好数据`, 'high');
+      const recommendations: string[] = [];
+      const levelsEncountered = new Set<'low' | 'medium' | 'high'>();
 
-      const summary = LocaleValidationManager.getValidationSummary();
-      if (summary.invalidKeys > ZERO)
-        add(`修复 ${summary.invalidKeys} 项无效数据`, 'high');
-      if (summary.syncIssues > ZERO)
-        add(`修复 ${summary.syncIssues} 个同步问题`, 'medium');
+      const add = (msg: string, level: 'low' | 'medium' | 'high') => {
+        recommendations.push(msg);
+        levelsEncountered.add(level);
+      };
 
-      const history = LocalStorageManager.get<LocaleDetectionHistory>(
-        STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
-      );
-      if (history?.detections && history.detections.length > HTTP_OK) {
-        const historyLevel: 'medium' | 'high' = levelsEncountered.has('high')
-          ? 'high'
-          : 'medium';
-        add('优化检测历史数据（记录过多）', historyLevel);
-      }
+      this.collectCleanupRecommendations(add);
+      this.collectValidationRecommendations(add);
+      this.collectHistoryRecommendations(add, levelsEncountered);
 
       if (recommendations.length === ZERO) {
         add('存储状态良好，无需特殊维护', 'low');
       }
 
-      const priority: 'low' | 'medium' | 'high' = levelsEncountered.has('high')
-        ? 'high'
-        : levelsEncountered.has('medium')
-          ? 'medium'
-          : 'low';
-
-      let estimatedTime: string;
-      switch (priority) {
-        case 'high':
-          estimatedTime = '2-5分钟';
-          break;
-        case 'medium':
-          estimatedTime =
-            recommendations.length > COUNT_TRIPLE ? '1-2分钟' : '< 1分钟';
-          break;
-        case 'low':
-        default:
-          estimatedTime =
-            recommendations.length > COUNT_TRIPLE ? '1-2分钟' : '< 1分钟';
-          break;
-      }
+      const priority = this.calculatePriority(levelsEncountered);
+      const estimatedTime = this.estimateMaintenanceTime(
+        priority,
+        recommendations.length,
+      );
 
       return { recommendations, priority, estimatedTime };
     } catch {

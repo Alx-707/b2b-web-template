@@ -1,5 +1,5 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 // 导入要测试的组件
 import { TechStackSection } from '@/components/home/tech-stack-section';
@@ -86,12 +86,12 @@ vi.mock('@/components/ui/badge', () => ({
 vi.mock('@/components/ui/button', () => ({
   Button: ({
     children,
-    asChild,
-    variant,
-    size,
+    asChild: _asChild,
+    variant: _variant,
+    size: _size,
     className,
     onClick,
-    disabled,
+    disabled: _disabled,
     ...props
   }: {
     children?: React.ReactNode;

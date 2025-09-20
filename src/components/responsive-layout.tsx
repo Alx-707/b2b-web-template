@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useEffect, useState, type ReactNode } from 'react';
 
 // 自定义hook处理hydration
 function useMounted() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-you-might-not-need-an-effect/no-initialize-state
+    // eslint-disable-next-line react-you-might-not-need-an-effect/no-initialize-state -- hydration模式需要在客户端渲染时设置mounted状态
     setMounted(true);
   }, []);
 

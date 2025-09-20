@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { COUNT_PAIR, ONE, ZERO } from '@/constants';
 import { COUNT_4, MAGIC_16 } from '@/constants/count';
 import { MAGIC_0_5 } from '@/constants/decimal';
+import * as React from 'react';
 
 /**
  * Animation constants to avoid magic numbers
@@ -76,8 +76,8 @@ export function formatNumber(
   const [integerPart = '', fractionalPart] = formattedValue.split('.');
 
   // Add thousand separators - static pattern validated for numeric grouping
-  // eslint-disable-next-line security/detect-unsafe-regex
   const formattedInteger = integerPart.replace(
+    // eslint-disable-next-line security/detect-unsafe-regex -- 标准千位分隔符正则表达式，固定模式，无ReDoS风险
     /\B(?=(\d{3})+(?!\d))/g,
     separator,
   );

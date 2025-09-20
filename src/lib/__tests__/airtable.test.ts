@@ -30,15 +30,15 @@ const mockTable = vi.fn().mockReturnValue({
   destroy: mockDestroy,
 });
 
-const tableFactory: AirtableBaseLike['table'] = (name) => {
-  void name;
+const tableFactory: AirtableBaseLike['table'] = (_name) => {
+  // Parameter renamed with underscore to indicate it's intentionally unused
   return mockTable() as ReturnType<AirtableBaseLike['table']>;
 };
 
 const mockBase = vi.fn(() => createMockBase(tableFactory));
 const mockConfigure = vi.fn();
 
-const setServiceReady = (service: unknown) =>
+const _setServiceReady = (service: unknown) =>
   configureServiceForTesting(service, createMockBase(tableFactory));
 
 vi.mock('airtable', () => ({

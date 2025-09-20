@@ -90,7 +90,8 @@ function fixImportTypeInFile(filePath) {
     {
       pattern:
         /import type \{([^}]*),\s*STORAGE_KEYS,([^}]*)\} from '([^']+)';/g,
-      replacement: (match, before, after, from) => {
+      replacement: (match, ...args) => {
+        const [before, after, from] = args;
         const beforeClean = before.trim() ? `${before.trim()},` : '';
         const afterClean = after.trim() ? `,${after.trim()}` : '';
         return `import type {${beforeClean}${afterClean}} from '${from}';\nimport { STORAGE_KEYS } from '${from}';`;
@@ -120,7 +121,8 @@ function fixImportTypeInFile(filePath) {
     {
       pattern:
         /import type \{([^}]*),\s*(QUALITY_BENCHMARKS|TRANSLATION_LIMITS|VALIDATION_RULES|STORAGE_CONSTANTS),([^}]*)\} from '([^']+)';/g,
-      replacement: (match, before, constant, after, from) => {
+      replacement: (match, ...args) => {
+        const [before, constant, after, from] = args;
         const beforeClean = before.trim() ? `${before.trim()},` : '';
         const afterClean = after.trim() ? `,${after.trim()}` : '';
         return `import type {${beforeClean}${afterClean}} from '${from}';\nimport { ${constant} } from '${from}';`;
@@ -137,7 +139,8 @@ function fixImportTypeInFile(filePath) {
     {
       pattern:
         /import type \{([^}]*),\s*(STORAGE_CONSTANTS|QUALITY_BENCHMARKS|TRANSLATION_LIMITS|VALIDATION_RULES)\s*\} from '([^']+)';/g,
-      replacement: (match, before, constant, from) => {
+      replacement: (match, ...args) => {
+        const [before, constant, from] = args;
         const beforeClean = before.trim() ? before.trim() : '';
         if (beforeClean) {
           return `import type {${beforeClean}} from '${from}';\nimport { ${constant} } from '${from}';`;

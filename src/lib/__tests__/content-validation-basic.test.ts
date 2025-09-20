@@ -10,10 +10,11 @@
 import { describe, expect, it } from 'vitest';
 import type { _ContentType } from '@/types/content';
 import { validateContentMetadata } from '@/lib/content-validation';
-import {
-  TEST_CONTENT_LIMITS,
-  TEST_COUNT_CONSTANTS,
-} from '@/constants/test-constants';
+// 注释未使用的导入，保留以备将来使用
+// import {
+//   TEST_CONTENT_LIMITS,
+//   TEST_COUNT_CONSTANTS,
+// } from '@/constants/test-constants';
 
 describe('Content Validation - Basic Tests', () => {
   describe('validateContentMetadata - Basic Validation', () => {

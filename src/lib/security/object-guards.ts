@@ -4,8 +4,7 @@
  * 提供类型安全的对象属性访问方法
  */
 
-/* eslint-disable security/detect-object-injection */
-// 此文件是安全守卫工具，内部使用受控的动态属性访问是安全的
+/* eslint-disable security/detect-object-injection -- 此文件是安全守卫工具，内部使用受控的动态属性访问是安全的，所有访问都经过hasOwn检查 */
 
 /**
  * 安全检查对象是否拥有指定属性

@@ -473,7 +473,9 @@ export const TEST_CONSTANTS = {
 } as const;
 
 // 兼容旧版测试用到的下划线命名
+// eslint-disable-next-line no-underscore-dangle
 export const _TEST_CONSTANTS = TEST_CONSTANTS;
+// eslint-disable-next-line no-underscore-dangle
 export const _WEB_VITALS_CONSTANTS = WEB_VITALS_CONSTANTS;
 
 // ==================== 单独导出常用常量 ====================

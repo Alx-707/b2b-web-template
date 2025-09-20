@@ -302,7 +302,6 @@ export class I18nMetricsCollector implements MetricsCollector {
 
   // 更新语言使用情况
   private updateLocaleUsage(): void {
-    const total = this.getTotalLocaleUsage();
     const enCount = this.localeUsageCount.en;
     const zhCount = this.localeUsageCount.zh;
     this.metrics.localeUsage = {

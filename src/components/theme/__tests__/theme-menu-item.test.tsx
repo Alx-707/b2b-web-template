@@ -1,8 +1,8 @@
-import React from 'react';
+import { ThemeMenuItem } from '@/components/theme/theme-menu-item';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Monitor, Moon, Sun } from 'lucide-react';
+import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { ThemeMenuItem } from '@/components/theme/theme-menu-item';
 
 // Mock DropdownMenuItem
 vi.mock('@/components/ui/dropdown-menu', () => ({
@@ -409,7 +409,7 @@ describe('ThemeMenuItem', () => {
 
   describe('Edge Cases', () => {
     it('handles undefined currentTheme gracefully', () => {
-      const { currentTheme, ...propsWithoutCurrentTheme } = defaultProps;
+      const { currentTheme: _currentTheme, ...propsWithoutCurrentTheme } = defaultProps;
       render(<ThemeMenuItem {...propsWithoutCurrentTheme} />);
 
       expect(screen.queryByLabelText('当前选中')).not.toBeInTheDocument();

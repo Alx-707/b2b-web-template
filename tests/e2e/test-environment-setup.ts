@@ -78,7 +78,7 @@ export async function checkForInterferingElements(page: Page) {
       if (count > 0) {
         foundElements.push(selector);
       }
-    } catch (error) {
+    } catch {
       // 忽略查找错误
     }
   }
@@ -111,7 +111,7 @@ export async function removeInterferingElements(page: Page) {
         const elements = document.querySelectorAll(sel);
         elements.forEach((el) => el.remove());
       }, selector);
-    } catch (error) {
+    } catch {
       // 忽略移除错误
     }
   }
@@ -189,7 +189,7 @@ export async function safeClick(
       }, selector);
       console.log(`✅ JavaScript click succeeded: ${selector}`);
       return true;
-    } catch (jsError) {
+    } catch {
       console.error(`❌ Both click methods failed for ${selector}`);
       return false;
     }

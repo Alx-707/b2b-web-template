@@ -1,8 +1,8 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
 import { ResponsiveShowcase } from '@/components/home/showcase/responsive-showcase';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { describe, expect, it, vi } from 'vitest';
 
 // Mock翻译函数
 const mockT = vi.fn((key: string) => {
@@ -16,7 +16,6 @@ const mockT = vi.fn((key: string) => {
     'responsive.desktop.title': 'Desktop',
     'responsive.desktop.description': 'Optimized for desktop devices',
   };
-  // eslint-disable-next-line security/detect-object-injection
   return translations[key] || key; // key 来自测试数据，安全
 });
 

@@ -1,9 +1,9 @@
 // @ts-nocheck - 开发工具豁免：仅开发环境使用，不影响生产代码质量
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { useCallback, useMemo, useState } from 'react';
 
 /**
  * React Scan 分析器高级功能组件
@@ -116,7 +116,7 @@ export function ReactScanAnalyzerAdvanced() {
     score -= lowImpactIssues * 5;
 
     return Math.max(0, score);
-  }, [performanceInsights]);
+  }, [performanceInsights, componentStats.length]);
 
   // 获取性能分数颜色
   const getScoreColor = (score: number) => {

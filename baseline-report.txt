@@ -1,0 +1,305 @@
+
+> tucsenberg-web-frontier@0.1.0 eslint:disable:check /Users/Data/Warehouse/Focus/tucsenberg-web-frontier
+> node scripts/check-eslint-disable-usage.js
+
+🔍 检查 ESLint 禁用注释使用情况...
+
+📋 发现 58 个文件使用了 ESLint 禁用注释:
+
+✅ src/types/whatsapp-webhook-types.ts
+   📝 禁用注释数量: 1
+
+✅ src/types/whatsapp-api-types.ts
+   📝 禁用注释数量: 1
+
+✅ src/types/test-types.ts
+   📝 禁用注释数量: 2
+   ⚠️  缺少文档说明的禁用注释: 2
+
+✅ src/types/whatsapp-api-config/types.ts
+   📝 禁用注释数量: 1
+
+❌ src/app/[locale]/contact/__tests__/page-rendering-basic-core.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第73行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/app/error-test/page.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第162行: // eslint-disable-next-line security/detect-object-injection
+      第174行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/test/setup.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第13行: // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      第15行: // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+
+❌ src/config/paths/utils.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第5行: /* eslint-disable security/detect-object-injection */
+
+❌ src/constants/test-constants.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第476行: // eslint-disable-next-line no-underscore-dangle
+      第478行: // eslint-disable-next-line no-underscore-dangle
+
+❌ src/components/ui/animated-counter-helpers.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第80行: // eslint-disable-next-line security/detect-unsafe-regex
+
+❌ src/components/ui/carousel.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第105行: // eslint-disable-next-line react-you-might-not-need-an-effect/no-pass-data-to-parent
+
+❌ src/components/home/__tests__/project-overview.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第181行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/home/__tests__/hero-section.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第94行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/home/showcase/__tests__/form-showcase.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第16行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/home/showcase/__tests__/interactive-showcase.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第16行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/home/showcase/__tests__/responsive-showcase.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第19行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/home/showcase/__tests__/badge-showcase.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第18行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/home/showcase/__tests__/button-showcase.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第18行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/forms/__tests__/contact-form-validation.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第63行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/forms/__tests__/contact-form-submission.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第66行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/layout/__tests__/mobile-navigation-responsive.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第58行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/layout/__tests__/mobile-navigation-responsive-basic.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第56行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/layout/__tests__/mobile-navigation-items-accessibility-core.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第47行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/layout/__tests__/mobile-navigation-basic-core.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第52行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/layout/__tests__/mobile-navigation-responsive-edge-cases.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第61行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/layout/__tests__/mobile-navigation-items-accessibility.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第46行: // eslint-disable-next-line security/detect-object-injection
+      第198行: // eslint-disable-next-line security/detect-object-injection
+      第363行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/layout/__tests__/mobile-navigation-basic.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第56行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/shared/__tests__/progress-indicator.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第45行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/components/responsive-layout.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第11行: // eslint-disable-next-line react-you-might-not-need-an-effect/no-initialize-state
+
+❌ src/components/i18n/translation-preloader.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第3行: /* eslint-disable no-case-declarations */
+
+❌ src/components/i18n/__tests__/enhanced-locale-switcher-accessibility-responsive-core.test.tsx
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第19行: // eslint-disable-next-line security/detect-object-injection
+
+✅ src/components/dev-tools/react-scan-provider.tsx
+   📝 禁用注释数量: 2
+   ⚠️  缺少文档说明的禁用注释: 2
+
+✅ src/components/dev-tools/react-scan-guide-simple.tsx
+   📝 禁用注释数量: 1
+   ⚠️  缺少文档说明的禁用注释: 1
+
+✅ src/components/dev-tools/dev-tools-controller.tsx
+   📝 禁用注释数量: 1
+   ⚠️  缺少文档说明的禁用注释: 1
+
+✅ src/components/dev-tools/react-scan-guide/basics-tab.tsx
+   📝 禁用注释数量: 1
+   ⚠️  缺少文档说明的禁用注释: 1
+
+❌ src/hooks/use-intersection-observer.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第181行: // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
+
+❌ src/hooks/use-theme-toggle.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第18行: // eslint-disable-next-line no-empty-function
+
+❌ src/hooks/use-enhanced-translations.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第3行: /* eslint-disable max-lines-per-function, security/detect-object-injection, no-shadow */
+
+❌ src/hooks/use-keyboard-navigation.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第32行: // eslint-disable-next-line no-empty-function
+
+❌ src/lib/web-vitals/observers.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第82行: // eslint-disable-next-line no-unreachable-loop
+
+❌ src/lib/performance-monitoring-core-config.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第349行: // eslint-disable-next-line security/detect-object-injection
+      第352行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/lib/security/object-guards.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第7行: /* eslint-disable security/detect-object-injection */
+
+❌ src/lib/content-parser.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第33行: // eslint-disable-next-line security/detect-non-literal-fs-filename
+      第41行: // eslint-disable-next-line security/detect-non-literal-fs-filename
+      第91行: // eslint-disable-next-line security/detect-non-literal-fs-filename
+      第99行: // eslint-disable-next-line security/detect-non-literal-fs-filename
+
+❌ src/lib/dev-tools-positioning.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第133行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/lib/security-rate-limit.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第212行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/lib/logger.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第1行: /* eslint-disable no-console */
+
+❌ src/lib/__tests__/airtable-error-handling.test.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第27行: // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
+❌ src/lib/__tests__/airtable.test.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第35行: // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
+❌ src/lib/__tests__/airtable-configuration.test.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第37行: // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
+❌ src/lib/__tests__/airtable-create-operations.test.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第37行: // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
+❌ src/lib/__tests__/airtable-advanced.test.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第26行: // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
+❌ src/lib/__tests__/airtable-read-operations.test.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第37行: // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
+❌ src/lib/__tests__/airtable-operations.test.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第40行: // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
+❌ src/lib/colors/utils.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第66行: // eslint-disable-next-line security/detect-object-injection
+
+❌ src/lib/performance-monitoring-core-conflicts.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第301行: // eslint-disable-next-line no-underscore-dangle
+
+❌ src/lib/seo-metadata.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第1行: /* eslint-disable security/detect-object-injection */
+
+❌ src/lib/content-utils.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第103行: // eslint-disable-next-line security/detect-non-literal-fs-filename
+      第105行: // eslint-disable-next-line security/detect-non-literal-fs-filename
+
+❌ src/services/url-generator.ts
+   🚫 此文件不允许使用 ESLint 禁用注释
+   📝 发现的禁用注释:
+      第6行: /* eslint-disable security/detect-object-injection */
+
+📊 检查结果总结:
+   ✅ 符合准则的文件: 8
+   ❌ 违规文件: 50
+   📋 总文件数: 58
+
+🚨 发现违规使用！请参考 docs/development/eslint-disable-guidelines.md
+   建议：优先修复 ESLint 错误而非禁用规则
+ ELIFECYCLE  Command failed with exit code 1.

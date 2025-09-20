@@ -93,10 +93,13 @@ class MissingConstantsCollector {
     if (name === 'MAGIC_999') return '999';
     if (name === 'MINUTE_MS') return '60000';
 
-    // 从名称中提取数字
-    const numberMatch = name.match(/MAGIC_(\d+(?:_\d+)*)/);
-    if (numberMatch) {
-      return numberMatch[1].replace(/_/g, '.');
+    // 从名称中提取数字 - 使用更安全的字符串处理方法
+    if (name.startsWith('MAGIC_')) {
+      const numberPart = name.slice(6); // Remove 'MAGIC_' prefix
+      // Only process if it contains only digits and underscores
+      if (/^[\d_]+$/.test(numberPart) && numberPart.length <= 20) {
+        return numberPart.replace(/_/g, '.');
+      }
     }
 
     return '1'; // 默认值

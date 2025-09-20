@@ -120,7 +120,11 @@ export function recordThemeTransition(record: ThemeTransitionRecord): void {
     record;
 
   try {
-    recordThemeSwitch(fromTheme, toTheme, endTime - startTime);
+    recordThemeSwitch({
+      fromTheme,
+      toTheme,
+      duration: endTime - startTime,
+    });
 
     // 记录性能指标
     if (typeof window !== 'undefined' && window.performance) {

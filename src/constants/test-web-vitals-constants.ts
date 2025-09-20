@@ -1,8 +1,9 @@
-import {
-  HOURS_PER_DAY,
-  MINUTES_PER_HOUR,
-  SECONDS_PER_MINUTE,
-} from '@/constants';
+// 注意：这些导入的常量在当前文件中未使用，但保留以备将来使用
+// import {
+//   HOURS_PER_DAY,
+//   MINUTES_PER_HOUR,
+//   SECONDS_PER_MINUTE,
+// } from '@/constants';
 
 /**
  * Web Vitals 测试常量定义

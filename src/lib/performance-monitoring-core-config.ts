@@ -248,32 +248,73 @@ export class PerformanceConfigManager {
   }
 
   /**
-   * 更新特定模块的配置
-   * Update specific module configuration
+   * 合并配置值的辅助函数
    */
-  updateModuleConfig<T extends keyof PerformanceConfig>(
-    module: T,
+  private mergeConfigValue<T extends keyof PerformanceConfig>(
+    current: PerformanceConfig[T],
     config: Partial<PerformanceConfig[T]>,
-  ): void {
-    const current = this.getModuleConfig(module);
+  ): PerformanceConfig[T] | undefined {
     const isMergeableObject = (
       value: unknown,
     ): value is Record<string, unknown> =>
       typeof value === 'object' && value !== null && !Array.isArray(value);
 
-    let nextValue: PerformanceConfig[T] | undefined;
-
     if (isMergeableObject(current) && isMergeableObject(config)) {
-      nextValue = {
+      return {
         ...(current as Record<string, unknown>),
         ...(config as Record<string, unknown>),
       } as PerformanceConfig[T];
-    } else if (config !== undefined) {
-      nextValue = config as PerformanceConfig[T];
-    } else {
-      nextValue = current;
     }
+    if (config !== undefined) {
+      return config as PerformanceConfig[T];
+    }
+    return current;
+  }
 
+  /**
+   * 应用配置到特定模块
+   */
+  private applyModuleConfig<T extends keyof PerformanceConfig>(
+    module: T,
+    nextValue: PerformanceConfig[T] | undefined,
+  ): void {
+    if (this.isRequiredModule(module)) {
+      this.applyRequiredModuleConfig(module, nextValue);
+    } else if (this.isOptionalModule(module)) {
+      this.applyOptionalModuleConfig(module, nextValue);
+    } else if (module === 'debug') {
+      this.applyDebugConfig(nextValue);
+    }
+  }
+
+  /**
+   * 检查是否为必需模块
+   */
+  private isRequiredModule(module: string): boolean {
+    return [
+      'reactScan',
+      'webEvalAgent',
+      'bundleAnalyzer',
+      'sizeLimit',
+    ].includes(module);
+  }
+
+  /**
+   * 检查是否为可选模块
+   */
+  private isOptionalModule(module: string): boolean {
+    return ['webVitals', 'component', 'network', 'bundle', 'global'].includes(
+      module,
+    );
+  }
+
+  /**
+   * 应用必需模块配置
+   */
+  private applyRequiredModuleConfig<T extends keyof PerformanceConfig>(
+    module: T,
+    nextValue: PerformanceConfig[T] | undefined,
+  ): void {
     switch (module) {
       case 'reactScan':
         this.config.reactScan = (nextValue ??
@@ -291,69 +332,69 @@ export class PerformanceConfigManager {
         this.config.sizeLimit = (nextValue ??
           this.config.sizeLimit) as PerformanceConfig['sizeLimit'];
         break;
-      case 'webVitals':
-        if (nextValue !== undefined) {
-          this.config.webVitals = nextValue as NonNullable<
-            PerformanceConfig['webVitals']
-          >;
-        } else {
-          delete this.config.webVitals;
-        }
-        break;
-      case 'component':
-        if (nextValue !== undefined) {
-          this.config.component = nextValue as NonNullable<
-            PerformanceConfig['component']
-          >;
-        } else {
-          delete this.config.component;
-        }
-        break;
-      case 'network':
-        if (nextValue !== undefined) {
-          this.config.network = nextValue as NonNullable<
-            PerformanceConfig['network']
-          >;
-        } else {
-          delete this.config.network;
-        }
-        break;
-      case 'bundle':
-        if (nextValue !== undefined) {
-          this.config.bundle = nextValue as NonNullable<
-            PerformanceConfig['bundle']
-          >;
-        } else {
-          delete this.config.bundle;
-        }
-        break;
-      case 'debug':
-        if (typeof nextValue === 'boolean') {
-          this.config.debug = nextValue;
-        } else if (nextValue === undefined) {
-          delete this.config.debug;
-        }
-        break;
-      case 'global':
-        if (nextValue !== undefined) {
-          this.config.global = nextValue as NonNullable<
-            PerformanceConfig['global']
-          >;
-        } else {
-          delete this.config.global;
-        }
-        break;
       default:
+        // 不支持的模块类型，忽略
         break;
     }
+  }
 
-    // 验证更新后的配置
+  /**
+   * 应用可选模块配置
+   */
+  private applyOptionalModuleConfig<T extends keyof PerformanceConfig>(
+    module: T,
+    nextValue: PerformanceConfig[T] | undefined,
+  ): void {
+    if (nextValue !== undefined) {
+      // eslint-disable-next-line security/detect-object-injection -- module参数有类型约束T extends keyof PerformanceConfig，安全的属性访问
+      (this.config as unknown as Record<string, unknown>)[module] = nextValue;
+    } else {
+      // eslint-disable-next-line security/detect-object-injection -- module参数有类型约束T extends keyof PerformanceConfig，安全的属性删除
+      delete (this.config as unknown as Record<string, unknown>)[module];
+    }
+  }
+
+  /**
+   * 应用调试配置
+   */
+  private applyDebugConfig(nextValue: unknown): void {
+    if (typeof nextValue === 'boolean') {
+      this.config.debug = nextValue;
+    } else if (nextValue === undefined) {
+      delete this.config.debug;
+    }
+  }
+
+  /**
+   * 验证配置更新
+   */
+  private validateConfigUpdate<T extends keyof PerformanceConfig>(
+    module: T,
+  ): void {
     const validation = validateConfig(this.config);
     if (!validation.isValid) {
       logger.warn(`Updated ${module} config validation failed`, {
         errors: validation.errors,
       });
     }
+  }
+
+  /**
+   * 更新特定模块的配置
+   * Update specific module configuration
+   */
+  updateModuleConfig<T extends keyof PerformanceConfig>(
+    module: T,
+    config: Partial<PerformanceConfig[T]>,
+  ): void {
+    const current = this.getModuleConfig(module);
+    if (current !== undefined) {
+      const nextValue = this.mergeConfigValue(current, config);
+      this.applyModuleConfig(module, nextValue);
+    } else {
+      this.applyModuleConfig(module, config as PerformanceConfig[T]);
+    }
+    this.validateConfigUpdate(module);
   }
 
   /**

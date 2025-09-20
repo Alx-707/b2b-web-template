@@ -32,7 +32,7 @@ export interface WebVitalsDiagnosticsState {
  */
 export interface DiagnosticsReturnParams {
   state: WebVitalsDiagnosticsState;
-  refreshDiagnostics: () => Promise<void>;
+  refreshDiagnostics: () => void;
   getPerformanceTrends: () => PerformanceTrend[] | null;
   getPageComparison: () => PagePerformanceGroup[];
   exportReport: (_format?: 'json' | 'csv') => void;
@@ -47,7 +47,7 @@ export interface UseWebVitalsDiagnosticsReturn {
   historicalReports: DiagnosticReport[];
   isLoading: boolean;
   error: string | null;
-  refreshDiagnostics: () => Promise<void>;
+  refreshDiagnostics: () => void;
   getPerformanceTrends: () => PerformanceTrend[] | null;
   getPageComparison: () => PagePerformanceGroup[];
   exportReport: (_format?: 'json' | 'csv') => void;
@@ -88,7 +88,7 @@ export interface WebVitalsDataManagement {
  * 诊断刷新功能接口
  */
 export interface WebVitalsRefresh {
-  refreshDiagnostics: () => Promise<void>;
+  refreshDiagnostics: () => void;
 }
 
 /**
@@ -105,7 +105,7 @@ export interface WebVitalsInitializationData {
  * 测试环境诊断返回值接口
  */
 export interface TestWebVitalsDiagnosticsReturn {
-  refreshDiagnostics: () => Promise<void>;
+  refreshDiagnostics: () => void;
   getPerformanceTrends: () => PerformanceTrend[] | null;
   getPageComparison: () => PageComparison[];
   exportReport: (_format?: 'json' | 'csv') => void;

@@ -12,11 +12,11 @@ describe('logger', () => {
     vi.unstubAllEnvs();
     vi.stubEnv('NODE_ENV', 'test');
     consoleSpies = {
-      debug: vi.spyOn(console, 'debug').mockImplementation(() => void 0),
-      info: vi.spyOn(console, 'info').mockImplementation(() => void 0),
-      log: vi.spyOn(console, 'log').mockImplementation(() => void 0),
-      warn: vi.spyOn(console, 'warn').mockImplementation(() => void 0),
-      error: vi.spyOn(console, 'error').mockImplementation(() => void 0),
+      debug: vi.spyOn(console, 'debug').mockImplementation(() => undefined),
+      info: vi.spyOn(console, 'info').mockImplementation(() => undefined),
+      log: vi.spyOn(console, 'log').mockImplementation(() => undefined),
+      warn: vi.spyOn(console, 'warn').mockImplementation(() => undefined),
+      error: vi.spyOn(console, 'error').mockImplementation(() => undefined),
     };
   });
 

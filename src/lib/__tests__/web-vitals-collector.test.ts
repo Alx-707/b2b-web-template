@@ -29,7 +29,7 @@ const mockTakeRecords = vi.fn<() => PerformanceEntry[]>(() => []);
 const mockPerformanceObserver = vi.fn<
   (callback: PerformanceObserverCallback) => PerformanceObserver
 >(
-  (callback) =>
+  (_callback) =>
     ({
       observe: mockObserve,
       disconnect: mockDisconnect,

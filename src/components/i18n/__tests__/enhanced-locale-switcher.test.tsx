@@ -1,10 +1,10 @@
-import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  EnhancedLocaleSwitcher,
-  LocaleSwitcherWithInfo,
-  SimpleLocaleSwitcher,
+    EnhancedLocaleSwitcher,
+    LocaleSwitcherWithInfo,
+    SimpleLocaleSwitcher,
 } from '../enhanced-locale-switcher';
 
 // Mock next-intl
@@ -55,7 +55,7 @@ vi.mock('@/components/ui/button', () => ({
     variant,
     size,
     disabled,
-    asChild,
+    asChild: _asChild,
     ...props
   }: {
     children?: React.ReactNode;

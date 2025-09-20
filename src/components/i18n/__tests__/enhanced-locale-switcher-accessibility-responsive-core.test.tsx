@@ -1,7 +1,7 @@
+import { EnhancedLocaleSwitcher } from '@/components/i18n/enhanced-locale-switcher';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { EnhancedLocaleSwitcher } from '@/components/i18n/enhanced-locale-switcher';
 
 // Mock next-intl
 vi.mock('next-intl', () => ({
@@ -16,7 +16,6 @@ vi.mock('next-intl', () => ({
       english: 'English',
       chinese: '中文',
     };
-    // eslint-disable-next-line security/detect-object-injection
     return translations[key] || key; // key 来自测试数据，安全
   },
 }));

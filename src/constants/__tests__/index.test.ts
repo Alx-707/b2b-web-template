@@ -93,7 +93,7 @@ describe('Constants Index Module', () => {
         try {
           const module = await import(modulePath);
           expect(module).toBeDefined();
-        } catch (error) {
+        } catch {
           // 如果模块不存在，这是预期的，不应该导致测试失败
           console.warn(`Module ${modulePath} not found, skipping test`);
         }
@@ -109,7 +109,7 @@ describe('Constants Index Module', () => {
         // 验证至少有一些导出
         const exports = Object.keys(constantsModule);
         expect(exports.length).toBeGreaterThan(0);
-      } catch (error) {
+      } catch {
         // 如果某些常量模块不存在，这是可以接受的
         console.warn('Some constants modules may not exist yet');
       }

@@ -209,6 +209,7 @@ export function rateLimitWithTier(
     ? tierName
     : 'normal';
 
+  // eslint-disable-next-line security/detect-object-injection -- tierKey已通过isDefaultTierKey类型检查，确保为DefaultTierKey类型，安全的对象访问
   const tier = defaultTiers[tierKey];
 
   return rateLimit(identifier, tier.maxRequests, tier.windowMs);

@@ -9,11 +9,11 @@
  * - Responsive behavior
  */
 
-import React from 'react';
+import { Footer } from '@/components/layout/footer';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { Footer } from '@/components/layout/footer';
 
 // Mock next-intl hooks
 const mockUseTranslations = vi.fn();
@@ -141,7 +141,7 @@ vi.mock('@/components/ui/social-icons', () => ({
   SocialIconLink: ({
     href,
     icon,
-    label,
+    label: _label,
     ariaLabel,
     ...props
   }: React.ComponentProps<'a'> & {

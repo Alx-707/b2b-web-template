@@ -195,16 +195,18 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
     it('should handle rapid cache operations', async () => {
       const operations: Array<Promise<unknown>> = [];
 
+      // Extract functions to avoid loop function declarations
+      const clearCacheOperation = () =>
+        Promise.resolve().then(() => cacheManager.clearCache());
+      const resetMetricsOperation = () =>
+        Promise.resolve().then(() => cacheManager.resetMetrics());
+
       // Rapid fire operations
       for (let i = 0; i < 20; i++) {
         operations.push(cacheManager.getMessages('en'));
-        operations.push(
-          Promise.resolve().then(() => cacheManager.clearCache()),
-        );
+        operations.push(clearCacheOperation());
         operations.push(cacheManager.getMessages('zh'));
-        operations.push(
-          Promise.resolve().then(() => cacheManager.resetMetrics()),
-        );
+        operations.push(resetMetricsOperation());
       }
 
       // Should not throw errors
@@ -216,16 +218,18 @@ describe('I18nCacheManager - Advanced Error Handling', () => {
     it('should maintain consistency under stress', async () => {
       const stressOperations: Array<Promise<unknown>> = [];
 
+      // Extract functions to avoid loop function declarations
+      const clearCacheOperation = () =>
+        Promise.resolve().then(() => cacheManager.clearCache());
+      const resetMetricsOperation = () =>
+        Promise.resolve().then(() => cacheManager.resetMetrics());
+
       // Mix of different operations
       for (let i = 0; i < 100; i++) {
         if (i % 10 === 0) {
-          stressOperations.push(
-            Promise.resolve().then(() => cacheManager.clearCache()),
-          );
+          stressOperations.push(clearCacheOperation());
         } else if (i % 7 === 0) {
-          stressOperations.push(
-            Promise.resolve().then(() => cacheManager.resetMetrics()),
-          );
+          stressOperations.push(resetMetricsOperation());
         } else {
           stressOperations.push(
             cacheManager.getMessages(i % 2 === 0 ? 'en' : 'zh'),

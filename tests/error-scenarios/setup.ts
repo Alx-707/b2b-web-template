@@ -324,7 +324,7 @@ export class ErrorRecoveryTester {
     try {
       const result = primaryOperation();
       return { result, usedFallback: false };
-    } catch (error) {
+    } catch {
       const result = fallbackOperation();
       return { result, usedFallback: true };
     }

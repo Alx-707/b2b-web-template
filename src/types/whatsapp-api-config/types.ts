@@ -1,3 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/**
+ * WhatsApp API 配置类型定义文件
+ *
+ * 说明：此文件包含完整的 WhatsApp API 配置类型定义，包括魔法数字常量。
+ * 某些类型可能暂时未使用，但保留以备将来功能扩展时使用。
+ *
+ * ESLint禁用原因：API类型定义的完整性比当前使用状态更重要
+ * 审查周期：每季度审查一次，评估是否有类型可以移除或需要新增
+ */
 import {
   MAGIC_131,
   MAGIC_132,

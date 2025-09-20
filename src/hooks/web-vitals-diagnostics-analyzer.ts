@@ -108,88 +108,132 @@ export const identifyPerformanceIssues = (
 };
 
 /**
- * 比较页面性能
+ * 计算两个数值的比较指标
  */
-export const comparePagePerformance = (
+function computeMetricComparison(a?: number, b?: number) {
+  const current = typeof a === 'number' ? a : undefined;
+  const compared = typeof b === 'number' ? b : undefined;
+  const hasBoth = typeof a === 'number' && typeof b === 'number';
+  const difference = hasBoth ? a - b : 0;
+  const percentageChange = hasBoth ? calculatePercentageChange(a, b) : 0;
+  return { current, compared, difference, percentageChange } as const;
+}
+
+/**
+ * 分类性能指标的改善情况（值越小越好）
+ */
+function classifyMetricChange(
+  a?: number,
+  b?: number,
+): 'better' | 'worse' | 'same' | undefined {
+  if (typeof a !== 'number' || typeof b !== 'number') return undefined;
+  if (a < b) return 'better';
+  if (a > b) return 'worse';
+  return 'same';
+}
+
+/**
+ * 构建指标比较数据
+ */
+function buildMetricsComparison(
   currentReport: DiagnosticReport,
   comparedReport: DiagnosticReport,
-): PageComparison => {
-  // helper: compute comparison metrics for two numbers
-  const compute = (a?: number, b?: number) => {
-    const current = typeof a === 'number' ? a : undefined;
-    const compared = typeof b === 'number' ? b : undefined;
-    const hasBoth = typeof a === 'number' && typeof b === 'number';
-    const difference = hasBoth ? a - b : 0;
-    const percentageChange = hasBoth ? calculatePercentageChange(a, b) : 0;
-    return { current, compared, difference, percentageChange } as const;
-  };
-
-  // helper: classify relation for "lower is better" metrics
-  const classify = (
-    a?: number,
-    b?: number,
-  ): 'better' | 'worse' | 'same' | undefined => {
-    if (typeof a !== 'number' || typeof b !== 'number') return undefined;
-    if (a < b) return 'better';
-    if (a > b) return 'worse';
-    return 'same';
-  };
-
-  // Build metrics without dynamic object indexing to satisfy security rules
-  const lcpCmp = compute(currentReport.vitals.lcp, comparedReport.vitals.lcp);
-  const fidCmp = compute(currentReport.vitals.fid, comparedReport.vitals.fid);
-  const clsCmp = compute(currentReport.vitals.cls, comparedReport.vitals.cls);
-  const fcpCmp = compute(currentReport.vitals.fcp, comparedReport.vitals.fcp);
-  const ttfbCmp = compute(
+): PageComparison['metrics'] {
+  const lcpCmp = computeMetricComparison(
+    currentReport.vitals.lcp,
+    comparedReport.vitals.lcp,
+  );
+  const fidCmp = computeMetricComparison(
+    currentReport.vitals.fid,
+    comparedReport.vitals.fid,
+  );
+  const clsCmp = computeMetricComparison(
+    currentReport.vitals.cls,
+    comparedReport.vitals.cls,
+  );
+  const fcpCmp = computeMetricComparison(
+    currentReport.vitals.fcp,
+    comparedReport.vitals.fcp,
+  );
+  const ttfbCmp = computeMetricComparison(
     currentReport.vitals.ttfb,
     comparedReport.vitals.ttfb,
   );
 
-  const metricsComparison: PageComparison['metrics'] = {
-    // Only core metrics are populated; other keys (if any) remain undefined via type widening
+  return {
     lcp: lcpCmp,
     fid: fidCmp,
     cls: clsCmp,
     fcp: fcpCmp,
     ttfb: ttfbCmp,
   } as PageComparison['metrics'];
+}
 
+/**
+ * 分析指标改善和恶化情况
+ */
+function analyzeMetricChanges(
+  currentReport: DiagnosticReport,
+  comparedReport: DiagnosticReport,
+): { betterMetrics: string[]; worseMetrics: string[] } {
   const betterMetrics: string[] = [];
   const worseMetrics: string[] = [];
 
-  // 对于性能指标，值越小越好 — evaluate per metric via helper to reduce complexity
-  const classifications: Array<{
-    key: 'lcp' | 'fid' | 'cls' | 'fcp' | 'ttfb';
-    kind?: 'better' | 'worse' | 'same';
-  }> = [];
-  const lcpKind = classify(currentReport.vitals.lcp, comparedReport.vitals.lcp);
-  classifications.push(
-    lcpKind ? { key: 'lcp', kind: lcpKind } : { key: 'lcp' },
-  );
-  const fidKind = classify(currentReport.vitals.fid, comparedReport.vitals.fid);
-  classifications.push(
-    fidKind ? { key: 'fid', kind: fidKind } : { key: 'fid' },
-  );
-  const clsKind = classify(currentReport.vitals.cls, comparedReport.vitals.cls);
-  classifications.push(
-    clsKind ? { key: 'cls', kind: clsKind } : { key: 'cls' },
-  );
-  const fcpKind = classify(currentReport.vitals.fcp, comparedReport.vitals.fcp);
-  classifications.push(
-    fcpKind ? { key: 'fcp', kind: fcpKind } : { key: 'fcp' },
-  );
-  const ttfbKind = classify(
-    currentReport.vitals.ttfb,
-    comparedReport.vitals.ttfb,
-  );
-  classifications.push(
-    ttfbKind ? { key: 'ttfb', kind: ttfbKind } : { key: 'ttfb' },
-  );
+  const metrics = [
+    {
+      key: 'lcp',
+      current: currentReport.vitals.lcp,
+      compared: comparedReport.vitals.lcp,
+    },
+    {
+      key: 'fid',
+      current: currentReport.vitals.fid,
+      compared: comparedReport.vitals.fid,
+    },
+    {
+      key: 'cls',
+      current: currentReport.vitals.cls,
+      compared: comparedReport.vitals.cls,
+    },
+    {
+      key: 'fcp',
+      current: currentReport.vitals.fcp,
+      compared: comparedReport.vitals.fcp,
+    },
+    {
+      key: 'ttfb',
+      current: currentReport.vitals.ttfb,
+      compared: comparedReport.vitals.ttfb,
+    },
+  ];
 
-  for (const item of classifications) {
-    if (item.kind === 'better') betterMetrics.push(item.key);
-    if (item.kind === 'worse') worseMetrics.push(item.key);
+  for (const metric of metrics) {
+    const classification = classifyMetricChange(
+      metric.current,
+      metric.compared,
+    );
+    if (classification === 'better') betterMetrics.push(metric.key);
+    if (classification === 'worse') worseMetrics.push(metric.key);
   }
+
+  return { betterMetrics, worseMetrics };
+}
+
+/**
+ * 比较页面性能
+ */
+export const comparePagePerformance = (
+  currentReport: DiagnosticReport,
+  comparedReport: DiagnosticReport,
+): PageComparison => {
+  const metricsComparison = buildMetricsComparison(
+    currentReport,
+    comparedReport,
+  );
+  const { betterMetrics, worseMetrics } = analyzeMetricChanges(
+    currentReport,
+    comparedReport,
+  );
 
   return {
     currentPage: currentReport.pageUrl,

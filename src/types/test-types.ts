@@ -273,7 +273,8 @@ export interface DynamicImportModule {
  * Jest Mock函数类型
  * 用于类型化Jest模拟函数
  */
-export type MockFunction<T extends (..._args: any[]) => unknown> = T & {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type MockFunction<T extends (..._args: any[]) => any> = T & {
   mock: {
     calls: unknown[][];
     results: Array<{ type: 'return' | 'throw'; value: unknown }>;
@@ -504,7 +505,8 @@ export interface MockGeolocation {
  * 支持更复杂的模拟场景
  */
 export type ExtendedMockFunction<
-  T extends (..._args: any[]) => unknown = (..._args: any[]) => unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  T extends (..._args: any[]) => any = (..._args: any[]) => any,
 > = MockFunction<T> & {
   mockReturnValueOnce: (_value: ReturnType<T>) => ExtendedMockFunction<T>;
   mockResolvedValueOnce: (

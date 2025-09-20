@@ -81,7 +81,7 @@ export function useWebVitalsDataPersistence(): WebVitalsDataPersistence {
  */
 export function useWebVitalsInitialization(
   loadHistoricalData: () => DiagnosticReport[],
-  _refreshDiagnostics: () => Promise<void>,
+  _refreshDiagnostics: () => void,
 ): WebVitalsInitializationData {
   // 返回初始化数据，让调用者决定如何使用
   const initialData = useMemo(() => {

@@ -410,6 +410,76 @@ export function isWhatsAppAuthError(
 // ==================== Error Utilities ====================
 
 /**
+ * 处理认证错误
+ */
+function handleAuthError(status: number): WhatsAppError | null {
+  if (status === HTTP_UNAUTHORIZED) {
+    return WhatsAppAuthError.invalidToken();
+  }
+  return null;
+}
+
+/**
+ * 处理速率限制错误
+ */
+function handleRateLimitError(
+  status: number,
+  data?: Record<string, unknown>,
+): WhatsAppError | null {
+  if (status !== MAGIC_429) return null;
+
+  const errorData = data as Record<string, unknown>;
+  const retryAfter =
+    errorData?.error && typeof errorData.error === 'object'
+      ? (errorData.error as Record<string, unknown>).retry_after
+      : undefined;
+
+  const opts: { retryAfter?: number; limit?: number; remaining?: number } = {};
+  if (typeof retryAfter === 'number') {
+    opts.retryAfter = retryAfter;
+  }
+
+  return new WhatsAppRateLimitError('Rate limit exceeded', opts);
+}
+
+/**
+ * 处理API错误
+ */
+function handleApiError(
+  status: number,
+  data?: Record<string, unknown>,
+  traceId?: string,
+): WhatsAppError | null {
+  if (!data?.error) return null;
+
+  const errorMessage =
+    typeof data.error === 'object' &&
+    data.error !== null &&
+    'message' in data.error
+      ? (data.error as Record<string, unknown>).message || 'API Error'
+      : 'API Error';
+
+  const opts: { apiError?: WhatsAppApiError['apiError']; traceId?: string } =
+    {};
+  opts.apiError = data.error as WhatsAppApiError['apiError'];
+  if (typeof traceId === 'string') opts.traceId = traceId;
+
+  return new WhatsAppApiError(errorMessage as string, status, opts);
+}
+
+/**
+ * 创建通用HTTP错误
+ */
+function createGenericHttpError(
+  status: number,
+  traceId?: string,
+): WhatsAppError {
+  const base: { type: string; traceId?: string } = { type: 'HttpError' };
+  if (typeof traceId === 'string') base.traceId = traceId;
+  return new WhatsAppError(`HTTP ${status} Error`, status, base);
+}
+
+/**
  * Create error from API response
  */
 export function createErrorFromApiResponse(
@@ -418,43 +488,18 @@ export function createErrorFromApiResponse(
 ): WhatsAppError {
   const { status, data } = response;
 
-  if (status === HTTP_UNAUTHORIZED) {
-    return WhatsAppAuthError.invalidToken();
-  }
+  // 尝试各种错误类型处理
+  const authError = handleAuthError(status);
+  if (authError) return authError;
 
-  if (status === MAGIC_429) {
-    const retryAfter =
-      (data as Record<string, unknown>)?.error &&
-      typeof (data as Record<string, unknown>).error === 'object'
-        ? ((data as Record<string, unknown>).error as Record<string, unknown>)
-            .retry_after
-        : undefined;
-    const retryAfterNumber =
-      typeof retryAfter === 'number' ? retryAfter : undefined;
-    const opts: { retryAfter?: number; limit?: number; remaining?: number } =
-      {};
-    if (typeof retryAfterNumber === 'number')
-      opts.retryAfter = retryAfterNumber;
-    return new WhatsAppRateLimitError('Rate limit exceeded', opts);
-  }
+  const rateLimitError = handleRateLimitError(status, data);
+  if (rateLimitError) return rateLimitError;
 
-  if (data?.error) {
-    const errorMessage =
-      typeof data.error === 'object' &&
-      data.error !== null &&
-      'message' in data.error
-        ? (data.error as Record<string, unknown>).message || 'API Error'
-        : 'API Error';
-    const opts: { apiError?: WhatsAppApiError['apiError']; traceId?: string } =
-      {};
-    opts.apiError = data.error as WhatsAppApiError['apiError'];
-    if (typeof traceId === 'string') opts.traceId = traceId;
-    return new WhatsAppApiError(errorMessage as string, status, opts);
-  }
+  const apiError = handleApiError(status, data, traceId);
+  if (apiError) return apiError;
 
-  const base: { type: string; traceId?: string } = { type: 'HttpError' };
-  if (typeof traceId === 'string') base.traceId = traceId;
-  return new WhatsAppError(`HTTP ${status} Error`, status, base);
+  // 默认返回通用HTTP错误
+  return createGenericHttpError(status, traceId);
 }
 
 /**

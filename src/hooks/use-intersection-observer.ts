@@ -178,7 +178,7 @@ export function useIntersectionObserver<T extends HTMLElement = HTMLElement>(
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
+    // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler -- Intersection Observer需要在元素变化时设置观察器
     if (!element) return undefined;
 
     const fallbackToVisible = () =>

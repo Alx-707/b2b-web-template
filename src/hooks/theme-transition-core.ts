@@ -62,6 +62,87 @@ function performViewTransition(args: {
     });
 }
 
+/**
+ * 初始化主题切换的性能监控
+ */
+function initializeThemeTransitionMetrics(
+  newTheme: string,
+  currentTheme: string,
+): void {
+  themeAnalytics.recordThemePreference(newTheme);
+  if (typeof window !== 'undefined' && window.performance) {
+    performance.mark(`theme-transition-${currentTheme}-start`);
+  }
+}
+
+/**
+ * 执行主题切换的核心逻辑
+ */
+function executeTransitionLogic(args: {
+  originalSetTheme: (_theme: string) => void;
+  newTheme: string;
+  currentTheme: string;
+  startTime: number;
+  animationSetup?: (_transition: ViewTransition) => void;
+}): void {
+  const {
+    originalSetTheme,
+    newTheme,
+    currentTheme,
+    startTime,
+    animationSetup,
+  } = args;
+
+  if (!supportsViewTransitions()) {
+    logger.debug('View Transitions API not supported, using fallback');
+    fallbackThemeChange({
+      originalSetTheme,
+      newTheme,
+      currentTheme,
+      startTime,
+    });
+    return;
+  }
+
+  try {
+    const baseArgs = { originalSetTheme, newTheme, currentTheme, startTime };
+    if (animationSetup) {
+      performViewTransition({ ...baseArgs, animationSetup });
+    } else {
+      performViewTransition(baseArgs);
+    }
+  } catch (transitionError) {
+    logger.error('Failed to start view transition', {
+      error: transitionError,
+      newTheme,
+    });
+    fallbackThemeChange({
+      originalSetTheme,
+      newTheme,
+      currentTheme,
+      startTime,
+      error: transitionError as Error,
+    });
+  }
+}
+
+/**
+ * 安全地设置主题作为最终降级方案
+ */
+function safeSetTheme(
+  originalSetTheme: (_theme: string) => void,
+  newTheme: string,
+): void {
+  try {
+    originalSetTheme(newTheme);
+  } catch (setThemeError) {
+    logger.error('Failed to set theme as fallback', {
+      error: setThemeError,
+      newTheme,
+    });
+  }
+}
+
 export function executeThemeTransition(args: {
   originalSetTheme: (_theme: string) => void;
   newTheme: string;
@@ -77,69 +158,17 @@ export function executeThemeTransition(args: {
   const startTime = performance.now();
 
   try {
-    // 记录主题偏好
-    themeAnalytics.recordThemePreference(newTheme);
-
-    // 标记性能开始点
-    if (typeof window !== 'undefined' && window.performance) {
-      performance.mark(`theme-transition-${currentTheme}-start`);
-    }
-
-    // 检查是否支持 View Transitions API
-    if (!supportsViewTransitions()) {
-      logger.debug('View Transitions API not supported, using fallback');
-      fallbackThemeChange({
-        originalSetTheme,
-        newTheme,
-        currentTheme,
-        startTime,
-      });
-      return;
-    }
-
-    // 使用 View Transitions API
-    try {
-      const baseArgs = { originalSetTheme, newTheme, currentTheme, startTime };
-      if (animationSetup) {
-        performViewTransition({ ...baseArgs, animationSetup });
-      } else {
-        performViewTransition(baseArgs);
-      }
-    } catch (transitionError) {
-      logger.error('Failed to start view transition', {
-        error: transitionError,
-        newTheme,
-      });
-
-      // 降级到普通切换
-      fallbackThemeChange({
-        originalSetTheme,
-        newTheme,
-        currentTheme,
-        startTime,
-        error: transitionError as Error,
-      });
-    }
-  } catch (error) {
-    logger.error('Theme transition failed', { error, newTheme });
-
-    // 确保主题仍然被设置，即使出现错误
-    try {
-      originalSetTheme(newTheme);
-    } catch (setThemeError) {
-      logger.error('Failed to set theme as fallback', {
-        error: setThemeError,
-        newTheme,
-      });
-    }
-
-    fallbackThemeChange({
+    initializeThemeTransitionMetrics(newTheme, currentTheme);
+    executeTransitionLogic({
       originalSetTheme,
       newTheme,
       currentTheme,
       startTime,
-      error: error as Error,
+      ...(animationSetup && { animationSetup }),
     });
+  } catch (error) {
+    logger.error('Theme transition failed', { error, newTheme });
+    safeSetTheme(originalSetTheme, newTheme);
   }
 }
 

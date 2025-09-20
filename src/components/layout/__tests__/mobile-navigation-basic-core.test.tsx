@@ -14,12 +14,12 @@
  * - 事件处理
  */
 
-import { usePathname } from 'next/navigation';
+import { MobileNavigation } from '@/components/layout/mobile-navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { MobileNavigation } from '@/components/layout/mobile-navigation';
 
 // Mock next-intl
 vi.mock('next-intl', () => ({
@@ -49,7 +49,6 @@ describe('Mobile Navigation - Basic Core Tests', () => {
           'navigation.services': 'Services',
           'navigation.contact': 'Contact',
         };
-        // eslint-disable-next-line security/detect-object-injection
         return translations[key] || key; // key 来自测试数据，安全
       },
     );

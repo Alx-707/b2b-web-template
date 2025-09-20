@@ -1,17 +1,17 @@
 // @ts-nocheck - 开发工具豁免：仅开发环境使用，不影响生产代码质量
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { REACT_SCAN_CONFIG } from '@/constants/react-scan';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 // React Scan 类型定义
 interface _ReactScanStats {
@@ -94,7 +94,7 @@ export function OptimizedComponent({ count }: { count: number }) {
       result += Math.random();
     }
     return result;
-  }, [count]); // 只在 count 变化时重新计算
+  }, []); // 计算结果不依赖于任何props，只计算一次
 
   // 使用 useMemo 缓存对象
   const optimizedObject = useMemo(

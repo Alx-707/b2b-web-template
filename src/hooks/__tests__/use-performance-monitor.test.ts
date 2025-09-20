@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { BYTES_PER_KB } from '@/constants';
+// import { BYTES_PER_KB } from '@/constants'; // 未使用，注释掉
 import { TEST_BASE_NUMBERS } from '@/constants/test-constants';
 import { usePerformanceMonitor } from '@/hooks/use-performance-monitor';
 

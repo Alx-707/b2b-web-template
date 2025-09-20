@@ -1,5 +1,4 @@
-import { act, renderHook } from '@testing-library/react';
-import type { RenderHookResult } from '@testing-library/react';
+import { act, renderHook, type RenderHookResult } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DetailedWebVitals } from '@/lib/web-vitals/types';
 // 4. 导入测试常量和被测试的模块
@@ -280,14 +279,13 @@ describe('useWebVitalsDiagnostics', () => {
       expect(result.current).toBeTruthy();
       expect(typeof result.current.refreshDiagnostics).toBe('function');
 
-      await act(async () => {
+      act(() => {
         // 先推进计时器处理初始化延迟
         vi.runAllTimers();
-        // 然后调用refreshDiagnostics
-        const promise = result.current.refreshDiagnostics();
-        // 再次推进计时器处理异步延迟
+        // 然后调用refreshDiagnostics（现在是同步的）
+        result.current.refreshDiagnostics();
+        // 再次推进计时器处理状态更新
         vi.runAllTimers();
-        await promise;
       });
 
       // 验证Mock被调用
@@ -656,15 +654,13 @@ describe('useWebVitalsDiagnostics', () => {
       // 验证Hook正确初始化
       validateHookResult(result);
 
-      await act(async () => {
-        const promises = [
-          result.current.refreshDiagnostics(),
-          result.current.refreshDiagnostics(),
-          result.current.refreshDiagnostics(),
-        ];
+      act(() => {
+        // 调用多次refreshDiagnostics（现在是同步的）
+        result.current.refreshDiagnostics();
+        result.current.refreshDiagnostics();
+        result.current.refreshDiagnostics();
 
         vi.runAllTimers();
-        await Promise.all(promises);
       });
 
       // Should handle concurrent calls gracefully

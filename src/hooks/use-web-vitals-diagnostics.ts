@@ -71,7 +71,7 @@ const useWebVitalsRefresh = (
     };
   }, []);
 
-  const refreshDiagnostics = useCallback(async (): Promise<void> => {
+  const refreshDiagnostics = useCallback((): void => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
@@ -153,7 +153,7 @@ export function useWebVitalsDiagnostics(): UseWebVitalsDiagnosticsReturn {
   // 初始化数据
   const { initialData } = useWebVitalsInitialization(
     loadHistoricalData,
-    async (): Promise<void> => {
+    (): void => {
       /* no-op */
     },
   );

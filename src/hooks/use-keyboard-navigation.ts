@@ -29,7 +29,7 @@ const defaultOptions: Required<KeyboardNavigationOptions> = {
   orientation: 'both',
   selector:
     '[tabindex]:not([tabindex="-1"]), button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [contenteditable="true"]',
-  // eslint-disable-next-line no-empty-function
+  // eslint-disable-next-line no-empty-function -- 默认的空回调函数，用户可选择性覆盖
   onNavigate: () => {},
 };
 

@@ -1,21 +1,21 @@
 'use client';
 
-/* eslint-disable no-case-declarations */
-import { useEffect } from 'react';
-import { useLocale } from 'next-intl';
+/* eslint-disable no-case-declarations -- switch语句中需要声明函数变量，用于事件处理器 */
 import {
-  I18nPerformanceMonitor,
-  preloadTranslations,
-} from '@/lib/i18n-performance';
-import { logger } from '@/lib/logger';
-import {
-  ANGLE_90_DEG,
-  COUNT_FIVE,
-  HTTP_OK,
-  MINUTE_MS,
-  PERCENTAGE_FULL,
+    ANGLE_90_DEG,
+    COUNT_FIVE,
+    HTTP_OK,
+    MINUTE_MS,
+    PERCENTAGE_FULL,
 } from '@/constants';
 import { MAGIC_2000 } from '@/constants/count';
+import {
+    I18nPerformanceMonitor,
+    preloadTranslations,
+} from '@/lib/i18n-performance';
+import { logger } from '@/lib/logger';
+import { useLocale } from 'next-intl';
+import { useEffect } from 'react';
 
 interface SchedulerPostTaskOptions {
   priority?: 'user-blocking' | 'user-visible' | 'background';

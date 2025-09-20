@@ -21,8 +21,8 @@ const mockTable = vi.fn().mockReturnValue({
   destroy: mockDestroy,
 });
 
-const tableFactory: AirtableBaseLike['table'] = (name) => {
-  void name;
+const tableFactory: AirtableBaseLike['table'] = (_name) => {
+  // Parameter renamed with underscore to indicate it's intentionally unused
   return mockTable() as ReturnType<AirtableBaseLike['table']>;
 };
 

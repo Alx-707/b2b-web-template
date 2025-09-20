@@ -12,11 +12,11 @@
  * - 样式应用
  */
 
-import React from 'react';
+import { ThemeMenuItem } from '@/components/theme/theme-menu-item';
 import { render, screen } from '@testing-library/react';
 import { Moon, Sun } from 'lucide-react';
+import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ThemeMenuItem } from '@/components/theme/theme-menu-item';
 
 // Mock the DropdownMenuItem component
 vi.mock('@/components/ui/dropdown-menu', () => ({
@@ -301,7 +301,7 @@ describe('Theme Menu Item - Rendering Tests', () => {
 
   describe('边界情况', () => {
     it('handles undefined currentTheme gracefully', () => {
-      const { currentTheme: currentTheme, ...propsWithoutCurrentTheme } =
+      const { currentTheme: _currentTheme, ...propsWithoutCurrentTheme } =
         defaultProps;
       render(<ThemeMenuItem {...propsWithoutCurrentTheme} />);
 

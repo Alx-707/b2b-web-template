@@ -1,5 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 // 导入被测试的组件
 import { HeroSection } from '@/components/home/hero-section';
@@ -91,7 +91,6 @@ describe('HeroSection', () => {
       'stats.performance': 'A+ Performance',
       'stats.languages': '2 Languages',
     };
-    // eslint-disable-next-line security/detect-object-injection
     return translations[key] || key; // key 来自测试数据，安全
   });
 

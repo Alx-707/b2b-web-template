@@ -1,6 +1,6 @@
 'use client';
 
-/* eslint-disable max-lines-per-function, security/detect-object-injection, no-shadow */
+
 import { useCallback, useMemo } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { I18nPerformanceMonitor } from '@/lib/i18n-performance';
@@ -13,6 +13,7 @@ interface UseEnhancedTranslationsOptions {
   preload?: string[];
 }
 
+// eslint-disable-next-line max-lines-per-function -- 复杂的翻译Hook，包含多个翻译功能和性能监控
 export function useEnhancedTranslations(
   options: UseEnhancedTranslationsOptions = {},
 ) {
@@ -48,11 +49,14 @@ export function useEnhancedTranslations(
     const normalized: Record<string, StrictICUValue> = {};
     for (const [k, v] of Object.entries(values)) {
       if (typeof v === 'string' || typeof v === 'number') {
+        // eslint-disable-next-line security/detect-object-injection -- k来自Object.entries，安全的对象键
         normalized[k] = v;
       } else if (v instanceof Date) {
+        // eslint-disable-next-line security/detect-object-injection -- k来自Object.entries，安全的对象键
         normalized[k] = v;
       } else if (typeof v === 'boolean') {
         // 严格类型下不接受 boolean，统一转为字符串
+        // eslint-disable-next-line security/detect-object-injection -- k来自Object.entries，安全的对象键
         normalized[k] = v ? 'true' : 'false';
       } else {
         // 其余类型（对象/数组/undefined/null）跳过，避免传入 undefined
@@ -99,6 +103,7 @@ export function useEnhancedTranslations(
     (keys: string[], values?: InputValues) => {
       return keys.reduce(
         (acc, key) => {
+          // eslint-disable-next-line security/detect-object-injection -- key来自函数参数keys数组，用于翻译键，安全的对象访问
           acc[key] = enhancedT(key, values);
           return acc;
         },
@@ -154,9 +159,9 @@ export function useEnhancedTranslations(
 
   // 格式化数字
   const formatNumber = useCallback(
-    (value: number, options?: Intl.NumberFormatOptions) => {
+    (value: number, formatOptions?: Intl.NumberFormatOptions) => {
       try {
-        return new Intl.NumberFormat(locale, options).format(value);
+        return new Intl.NumberFormat(locale, formatOptions).format(value);
       } catch {
         return value.toString();
       }
@@ -166,9 +171,9 @@ export function useEnhancedTranslations(
 
   // 格式化日期
   const formatDate = useCallback(
-    (date: Date, options?: Intl.DateTimeFormatOptions) => {
+    (date: Date, formatOptions?: Intl.DateTimeFormatOptions) => {
       try {
-        return new Intl.DateTimeFormat(locale, options).format(date);
+        return new Intl.DateTimeFormat(locale, formatOptions).format(date);
       } catch {
         return date.toISOString();
       }

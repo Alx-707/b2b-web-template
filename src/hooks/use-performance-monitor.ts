@@ -139,9 +139,10 @@ export function usePerformanceMonitor(
 
   // 组件卸载时清理
   useEffect(() => {
+    const intervalRef = monitoringIntervalRef;
     return () => {
-      if (monitoringIntervalRef.current) {
-        clearInterval(monitoringIntervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
       }
     };
   }, []);

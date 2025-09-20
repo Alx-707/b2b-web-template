@@ -298,6 +298,7 @@ export class PerformanceToolConflictChecker {
     if ((window as { webVitals?: unknown }).webVitals) count += ONE;
 
     // 检查其他可能的监控工具
+    // eslint-disable-next-line no-underscore-dangle
     const performanceObservers = (
       window as typeof window & {
         __PERFORMANCE_OBSERVERS__?: unknown;

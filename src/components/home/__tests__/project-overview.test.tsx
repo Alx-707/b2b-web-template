@@ -1,5 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // Import the component after mocks
 import { ProjectOverview } from '@/components/home/project-overview';
@@ -178,7 +178,6 @@ describe('ProjectOverview', () => {
       'cta.getStarted': 'Get Started',
       'cta.viewSource': 'View Source Code',
     };
-    // eslint-disable-next-line security/detect-object-injection
     return translations[key] || key; // key 来自测试数据，安全
   });
 

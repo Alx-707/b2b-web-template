@@ -747,7 +747,7 @@ describe('PerformanceAlertSystem', () => {
       const loggerModule = await import('@/lib/logger');
       const loggerSpy = vi
         .spyOn(loggerModule.logger, 'error')
-        .mockImplementation(() => void 0);
+        .mockImplementation(() => undefined);
 
       await alertSystem.sendAlert({
         severity: 'critical',
@@ -838,7 +838,7 @@ describe('PerformanceAlertSystem', () => {
     it('should limit alert history size', async () => {
       // Send many alerts
       for (let i = 0; i < WEB_VITALS_CONSTANTS.TEST_ALERT_HISTORY_LIMIT; i++) {
-        // eslint-disable-next-line no-await-in-loop -- 顺序发送以模拟真实流程
+         
         await alertSystem.sendAlert({
           severity: 'warning',
           message: `Alert ${i}`,

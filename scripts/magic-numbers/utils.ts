@@ -663,19 +663,25 @@ export function mergeAndAliasImports(
 
   // 处理每个模块的导入
   moduleGroups.forEach((constants, module) => {
-    processModuleImports(sourceFile, module, constants, log);
+    processModuleImports({
+      sourceFile,
+      module,
+      newConstants: constants,
+      log,
+    });
   });
 }
 
 /**
  * 处理单个模块的导入
  */
-function processModuleImports(
-  sourceFile: SourceFile,
-  module: string,
-  newConstants: string[],
-  log: { imports: { added: string[]; aliased: Record<string, string> } },
-): void {
+function processModuleImports(params: {
+  sourceFile: SourceFile;
+  module: string;
+  newConstants: string[];
+  log: { imports: { added: string[]; aliased: Record<string, string> } };
+}): void {
+  const { sourceFile, module, newConstants, log } = params;
   // 获取现有的导入声明
   const existingImports = sourceFile
     .getImportDeclarations()

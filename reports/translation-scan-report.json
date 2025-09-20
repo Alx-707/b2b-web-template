@@ -1,23 +1,13 @@
 {
-  "timestamp": "2025-09-03T10:42:00.494Z",
+  "timestamp": "2025-09-19T14:02:45.199Z",
   "summary": {
-    "totalFiles": 315,
-    "scannedFiles": 315,
+    "totalFiles": 779,
+    "scannedFiles": 779,
     "errorCount": 0,
     "warningCount": 0,
-    "totalKeys": 367,
-    "uniqueKeys": 198,
+    "totalKeys": 472,
+    "uniqueKeys": 182,
     "missingKeys": [
-      "organization.name",
-      "organization.description",
-      "organization.phone",
-      "organization.social.twitter",
-      "organization.social.linkedin",
-      "organization.social.github",
-      "website.name",
-      "website.description",
-      "article.defaultAuthor",
-      "title",
       "description",
       "siteName",
       "hello",
@@ -29,7 +19,9 @@
       "toggle",
       "english",
       "chinese",
-      "tryAgain",
+      "error",
+      "theme.title",
+      "theme.toggleLabel",
       "comingSoon",
       "progress.title",
       "expectedCompletion",
@@ -88,22 +80,6 @@
       "tabs.components",
       "tabs.themes",
       "tabs.responsive",
-      "buttons.getStarted",
-      "buttons.learnMore",
-      "community.title",
-      "community.description",
-      "community.discussions",
-      "community.issues",
-      "actions.github.title",
-      "actions.github.description",
-      "actions.download.title",
-      "actions.download.description",
-      "actions.docs.title",
-      "actions.docs.description",
-      "stats.technologies",
-      "stats.typescript",
-      "stats.performance",
-      "stats.languages",
       "badge",
       "primary.github",
       "primary.demo",
@@ -156,6 +132,27 @@
       "components.badges.success",
       "components.badges.warning",
       "components.badges.info",
+      "actions.github.title",
+      "actions.github.description",
+      "actions.download.title",
+      "actions.download.description",
+      "actions.docs.title",
+      "actions.docs.description",
+      "stats.technologies",
+      "stats.typescript",
+      "stats.performance",
+      "stats.languages",
+      "community.title",
+      "community.description",
+      "community.discussions",
+      "community.issues",
+      "buttons.getStarted",
+      "buttons.learnMore",
+      "submitSuccess",
+      "submitError",
+      "submitting",
+      "submit",
+      "rateLimitMessage",
       "firstName",
       "firstNamePlaceholder",
       "lastName",
@@ -164,43 +161,19 @@
       "emailPlaceholder",
       "company",
       "companyPlaceholder",
+      "acceptPrivacy",
+      "marketingConsent",
       "phone",
       "phonePlaceholder",
       "subject",
       "subjectPlaceholder",
       "message",
       "messagePlaceholder",
-      "acceptPrivacy",
-      "marketingConsent",
-      "submitSuccess",
-      "submitError",
-      "submitting",
-      "submit",
-      "rateLimitMessage",
-      "welcome",
-      "modernApp",
-      "getStarted",
-      "features",
-      "modernStack",
-      "modernStackDesc",
-      "internationalization",
-      "internationalizationDesc",
-      "testingReady",
-      "testingReadyDesc",
       "instructions.title",
       "instructions.step1",
       "instructions.step2",
       "instructions.step3",
-      "instructions.step4",
-      "refreshing",
-      "refresh",
-      "export",
-      "status.good",
-      "status.needsImprovement",
-      "status.poor",
-      "status.excellent",
-      "currentMetrics.title",
-      "currentMetrics.description"
+      "instructions.step4"
     ],
     "unusedKeys": [
       "common.loading",
@@ -218,6 +191,21 @@
       "common.previous",
       "common.close",
       "common.open",
+      "common.toast.form.contact.success",
+      "common.toast.form.contact.successDescription",
+      "common.toast.form.contact.error",
+      "common.toast.form.contact.errorDescription",
+      "common.toast.form.contact.loading",
+      "common.toast.form.newsletter.success",
+      "common.toast.form.newsletter.successDescription",
+      "common.toast.form.newsletter.error",
+      "common.toast.form.newsletter.errorDescription",
+      "common.toast.form.newsletter.loading",
+      "common.toast.form.feedback.success",
+      "common.toast.form.feedback.successDescription",
+      "common.toast.form.feedback.error",
+      "common.toast.form.feedback.errorDescription",
+      "common.toast.form.feedback.loading",
       "errorBoundary.title",
       "errorBoundary.description",
       "errorBoundary.tryAgain",
@@ -226,12 +214,33 @@
       "navigation.contact",
       "navigation.services",
       "navigation.products",
+      "navigation.solutions",
+      "navigation.resources",
+      "navigation.enterprise",
+      "navigation.docs",
+      "navigation.pricing",
       "navigation.blog",
       "navigation.diagnostics",
       "navigation.login",
       "navigation.logout",
       "navigation.profile",
       "navigation.settings",
+      "navigation.frameworks",
+      "navigation.infrastructure",
+      "navigation.security",
+      "navigation.aiApps",
+      "navigation.webApps",
+      "navigation.ecommerce",
+      "navigation.guides",
+      "navigation.frameworksDescription",
+      "navigation.infrastructureDescription",
+      "navigation.securityDescription",
+      "navigation.aiAppsDescription",
+      "navigation.webAppsDescription",
+      "navigation.ecommerceDescription",
+      "navigation.docsDescription",
+      "navigation.guidesDescription",
+      "navigation.blogDescription",
       "diagnostics.title",
       "diagnostics.description",
       "diagnostics.controlPanel.title",
@@ -241,6 +250,27 @@
       "diagnostics.controlPanel.export",
       "diagnostics.currentMetrics.title",
       "diagnostics.currentMetrics.description",
+      "diagnostics.historicalData.title",
+      "diagnostics.historicalData.description",
+      "diagnostics.thresholdReference.title",
+      "diagnostics.thresholdReference.description",
+      "diagnostics.thresholdReference.cls.title",
+      "diagnostics.thresholdReference.cls.good",
+      "diagnostics.thresholdReference.cls.needsImprovement",
+      "diagnostics.thresholdReference.cls.poor",
+      "diagnostics.thresholdReference.lcp.title",
+      "diagnostics.thresholdReference.lcp.good",
+      "diagnostics.thresholdReference.lcp.needsImprovement",
+      "diagnostics.thresholdReference.lcp.poor",
+      "diagnostics.thresholdReference.fid.title",
+      "diagnostics.thresholdReference.fid.good",
+      "diagnostics.thresholdReference.fid.needsImprovement",
+      "diagnostics.thresholdReference.fid.poor",
+      "diagnostics.metrics.cls",
+      "diagnostics.metrics.lcp",
+      "diagnostics.metrics.fid",
+      "diagnostics.metrics.fcp",
+      "diagnostics.metrics.ttfb",
       "diagnostics.status.good",
       "diagnostics.status.needsImprovement",
       "diagnostics.status.poor",
@@ -249,6 +279,10 @@
       "theme.light",
       "theme.dark",
       "theme.system",
+      "theme.selectDisplayTheme",
+      "theme.switchToLight",
+      "theme.switchToDark",
+      "theme.switchToSystem",
       "language.toggle",
       "language.selectLanguage",
       "language.english",
@@ -294,6 +328,23 @@
       "home.techStack.title",
       "home.techStack.subtitle",
       "home.techStack.learnMore",
+      "home.techStack.categories.core",
+      "home.techStack.categories.frontend",
+      "home.techStack.categories.backend",
+      "home.techStack.categories.database",
+      "home.techStack.categories.deployment",
+      "home.techStack.categories.testing",
+      "home.techStack.categories.tools",
+      "home.techStack.technologies.nextjs",
+      "home.techStack.technologies.react",
+      "home.techStack.technologies.typescript",
+      "home.techStack.technologies.tailwindcss",
+      "home.techStack.technologies.nodejs",
+      "home.techStack.technologies.vitest",
+      "home.techStack.technologies.playwright",
+      "home.techStack.technologies.vercel",
+      "home.techStack.technologies.eslint",
+      "home.techStack.technologies.prettier",
       "home.techStack.stats.totalTech",
       "home.techStack.stats.categories",
       "home.techStack.stats.modern",
@@ -360,8 +411,10 @@
       "home.overview.features.security.description",
       "home.overview.features.i18n.title",
       "home.overview.features.i18n.description",
+      "home.overview.features.i18n.languageUnit",
       "home.overview.features.themes.title",
       "home.overview.features.themes.description",
+      "home.overview.features.themes.multiTheme",
       "home.overview.features.typescript.title",
       "home.overview.features.typescript.description",
       "home.overview.features.deployment.title",
@@ -545,6 +598,20 @@
       "underConstruction.progress.launch",
       "underConstruction.animation.loading",
       "underConstruction.animation.construction",
+      "underConstruction.status.inProgress",
+      "underConstruction.features.performance",
+      "underConstruction.features.performanceDesc",
+      "underConstruction.features.collaboration",
+      "underConstruction.features.collaborationDesc",
+      "underConstruction.features.quality",
+      "underConstruction.features.qualityDesc",
+      "underConstruction.social.followUs",
+      "underConstruction.subscription.title",
+      "underConstruction.subscription.description",
+      "underConstruction.subscription.placeholder",
+      "underConstruction.subscription.submit",
+      "underConstruction.subscription.submitting",
+      "underConstruction.subscription.success",
       "ReactScanDemo.title",
       "ReactScanDemo.description",
       "ReactScanDemo.instructions.title",
@@ -635,17 +702,14 @@
     "cta.github",
     "cta.title",
     "cta.viewSource",
-    "currentMetrics.description",
-    "currentMetrics.title",
     "description",
     "email",
     "emailPlaceholder",
     "english",
+    "error",
     "expectedCompletion",
-    "export",
     "fallback.key",
     "fallbackWarning",
-    "features",
     "features.deployment.description",
     "features.deployment.title",
     "features.i18n.description",
@@ -661,7 +725,6 @@
     "firstName",
     "firstNamePlaceholder",
     "footer.sections.social.title",
-    "getStarted",
     "greeting",
     "hello",
     "highlights.accessible",
@@ -677,8 +740,6 @@
     "instructions.step3",
     "instructions.step4",
     "instructions.title",
-    "internationalization",
-    "internationalizationDesc",
     "lastName",
     "lastNamePlaceholder",
     "learnMore",
@@ -687,9 +748,6 @@
     "message",
     "messagePlaceholder",
     "missing.key",
-    "modernApp",
-    "modernStack",
-    "modernStackDesc",
     "nearCompletion",
     "organization.description",
     "organization.name",
@@ -703,8 +761,6 @@
     "primary.github",
     "progress.title",
     "rateLimitMessage",
-    "refresh",
-    "refreshing",
     "responsive.description",
     "responsive.desktop.description",
     "responsive.desktop.title",
@@ -726,10 +782,6 @@
     "stats.totalTech",
     "stats.typescript",
     "status",
-    "status.excellent",
-    "status.good",
-    "status.needsImprovement",
-    "status.poor",
     "stayTuned",
     "subject",
     "subjectPlaceholder",
@@ -742,8 +794,9 @@
     "tabs.responsive",
     "tabs.themes",
     "test.key",
-    "testingReady",
-    "testingReadyDesc",
+    "theme.selectTheme",
+    "theme.title",
+    "theme.toggleLabel",
     "themes.colors.title",
     "themes.description",
     "themes.language",
@@ -760,11 +813,9 @@
     "today",
     "toggle",
     "tomorrow",
-    "tryAgain",
     "version",
     "website.description",
     "website.name",
-    "welcome",
     "yesterday"
   ],
   "keyUsages": {
@@ -849,32 +900,27 @@
     "title": [
       {
         "file": "src/lib/seo-metadata.ts",
-        "line": 43,
-        "column": 6
-      },
-      {
-        "file": "src/components/error-boundary.tsx",
-        "line": 96,
-        "column": 13
+        "line": 38,
+        "column": 20
       },
       {
         "file": "src/components/home/tech-stack-section.tsx",
-        "line": 236,
+        "line": 249,
         "column": 19
       },
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 235,
+        "line": 236,
         "column": 15
       },
       {
         "file": "src/components/home/component-showcase.tsx",
-        "line": 50,
+        "line": 52,
         "column": 15
       },
       {
         "file": "src/components/home/call-to-action.tsx",
-        "line": 251,
+        "line": 53,
         "column": 15
       },
       {
@@ -889,50 +935,35 @@
       },
       {
         "file": "src/app/[locale]/products/page.tsx",
-        "line": 21,
-        "column": 11
-      },
-      {
-        "file": "src/app/[locale]/diagnostics/page-components.tsx",
-        "line": 20,
-        "column": 9
-      },
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 79,
-        "column": 24
-      },
-      {
-        "file": "src/app/[locale]/contact/page.tsx",
         "line": 22,
         "column": 11
       },
       {
         "file": "src/app/[locale]/contact/page.tsx",
-        "line": 60,
+        "line": 23,
+        "column": 11
+      },
+      {
+        "file": "src/app/[locale]/contact/page.tsx",
+        "line": 61,
         "column": 17
       },
       {
         "file": "src/app/[locale]/blog/page.tsx",
-        "line": 21,
+        "line": 22,
         "column": 11
       },
       {
         "file": "src/app/[locale]/about/page.tsx",
-        "line": 21,
+        "line": 22,
         "column": 11
       }
     ],
     "description": [
       {
         "file": "src/lib/seo-metadata.ts",
-        "line": 46,
-        "column": 6
-      },
-      {
-        "file": "src/components/error-boundary.tsx",
-        "line": 99,
-        "column": 13
+        "line": 41,
+        "column": 4
       },
       {
         "file": "src/app/[locale]/react-scan-demo/page.tsx",
@@ -946,99 +977,89 @@
       },
       {
         "file": "src/app/[locale]/products/page.tsx",
-        "line": 22,
-        "column": 17
-      },
-      {
-        "file": "src/app/[locale]/diagnostics/page-components.tsx",
-        "line": 23,
-        "column": 9
-      },
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 80,
-        "column": 30
-      },
-      {
-        "file": "src/app/[locale]/contact/page.tsx",
         "line": 23,
         "column": 17
       },
       {
         "file": "src/app/[locale]/contact/page.tsx",
-        "line": 61,
+        "line": 24,
+        "column": 17
+      },
+      {
+        "file": "src/app/[locale]/contact/page.tsx",
+        "line": 62,
         "column": 23
       },
       {
         "file": "src/app/[locale]/blog/page.tsx",
-        "line": 22,
+        "line": 23,
         "column": 17
       },
       {
         "file": "src/app/[locale]/about/page.tsx",
-        "line": 22,
+        "line": 23,
         "column": 17
       }
     ],
     "siteName": [
       {
         "file": "src/lib/seo-metadata.ts",
-        "line": 49,
-        "column": 15
+        "line": 44,
+        "column": 19
       },
       {
         "file": "src/components/layout/logo.tsx",
-        "line": 70,
+        "line": 72,
         "column": 18
       }
     ],
     "hello": [
       {
         "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 104,
+        "line": 108,
         "column": 26
       }
     ],
     "greeting": [
       {
         "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 113,
+        "line": 117,
         "column": 26
       }
     ],
     "missing.key": [
       {
         "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 134,
+        "line": 138,
         "column": 26
       },
       {
         "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 143,
+        "line": 147,
         "column": 26
       },
       {
         "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 432,
+        "line": 440,
         "column": 6
       }
     ],
     "fallback.key": [
       {
         "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 152,
+        "line": 156,
         "column": 26
       }
     ],
     "test.key": [
       {
         "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 404,
+        "line": 412,
         "column": 6
       },
       {
         "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 419,
+        "line": 427,
         "column": 6
       }
     ],
@@ -1052,100 +1073,121 @@
     "toggle": [
       {
         "file": "src/components/language-toggle.tsx",
-        "line": 72,
+        "line": 117,
         "column": 37
       },
       {
         "file": "src/components/layout/language-switcher.tsx",
-        "line": 164,
+        "line": 179,
         "column": 58
       },
       {
         "file": "src/components/layout/language-switcher.tsx",
-        "line": 166,
+        "line": 181,
         "column": 39
       },
       {
-        "file": "src/components/i18n/enhanced-locale-switcher.tsx",
-        "line": 282,
-        "column": 37
+        "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
+        "line": 147,
+        "column": 35
       }
     ],
     "english": [
       {
         "file": "src/components/language-toggle.tsx",
-        "line": 95,
+        "line": 140,
         "column": 19
       }
     ],
     "chinese": [
       {
         "file": "src/components/language-toggle.tsx",
-        "line": 123,
+        "line": 168,
         "column": 19
       }
     ],
-    "tryAgain": [
+    "error": [
       {
         "file": "src/components/error-boundary.tsx",
-        "line": 119,
+        "line": 103,
         "column": 13
+      }
+    ],
+    "theme.title": [
+      {
+        "file": "src/components/theme/vercel-theme-toggle-simple.tsx",
+        "line": 90,
+        "column": 11
+      }
+    ],
+    "theme.selectTheme": [
+      {
+        "file": "src/components/theme/vercel-theme-toggle-simple.tsx",
+        "line": 97,
+        "column": 20
+      }
+    ],
+    "theme.toggleLabel": [
+      {
+        "file": "src/components/theme/horizontal-theme-toggle-simple.tsx",
+        "line": 143,
+        "column": 18
       }
     ],
     "comingSoon": [
       {
         "file": "src/components/shared/under-construction.tsx",
-        "line": 62,
+        "line": 63,
         "column": 13
       }
     ],
     "progress.title": [
       {
         "file": "src/components/shared/under-construction.tsx",
-        "line": 71,
+        "line": 72,
         "column": 15
       }
     ],
     "expectedCompletion": [
       {
         "file": "src/components/shared/under-construction.tsx",
-        "line": 80,
+        "line": 81,
         "column": 13
       }
     ],
     "backToHome": [
       {
         "file": "src/components/shared/under-construction.tsx",
-        "line": 91,
+        "line": 92,
         "column": 28
       }
     ],
     "contactUs": [
       {
         "file": "src/components/shared/under-construction.tsx",
-        "line": 100,
+        "line": 101,
         "column": 35
       }
     ],
     "stayTuned": [
       {
         "file": "src/components/shared/under-construction.tsx",
-        "line": 106,
+        "line": 107,
         "column": 56
       }
     ],
     "status": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
-        "line": 127,
-        "column": 44
+        "line": 134,
+        "column": 46
       }
     ],
     "nearCompletion": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
-        "line": 127,
-        "column": 58
+        "line": 134,
+        "column": 60
       }
     ],
     "accessibility.closeMenu": [
@@ -1189,520 +1231,403 @@
     "selectLanguage": [
       {
         "file": "src/components/layout/language-switcher.tsx",
-        "line": 173,
+        "line": 188,
         "column": 22
       },
       {
-        "file": "src/components/i18n/enhanced-locale-switcher.tsx",
-        "line": 292,
+        "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
+        "line": 206,
         "column": 17
       }
     ],
     "footer.sections.social.title": [
       {
         "file": "src/components/layout/footer.tsx",
-        "line": 93,
+        "line": 95,
         "column": 9
       }
     ],
     "fallbackWarning": [
       {
         "file": "src/components/i18n/translation-fallback.tsx",
-        "line": 155,
+        "line": 168,
         "column": 51
       }
     ],
     "today": [
       {
         "file": "src/components/i18n/format-helpers.tsx",
-        "line": 34,
+        "line": 61,
         "column": 22
       }
     ],
     "yesterday": [
       {
         "file": "src/components/i18n/format-helpers.tsx",
-        "line": 36,
+        "line": 63,
         "column": 22
       }
     ],
     "tomorrow": [
       {
         "file": "src/components/i18n/format-helpers.tsx",
-        "line": 38,
+        "line": 65,
         "column": 22
       }
     ],
     "stats.totalTech": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
-        "line": 42,
+        "line": 43,
         "column": 13
       }
     ],
     "stats.categories": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
-        "line": 50,
+        "line": 51,
         "column": 13
       }
     ],
     "stats.modern": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
-        "line": 56,
+        "line": 57,
         "column": 13
       }
     ],
     "stats.quality": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
-        "line": 62,
+        "line": 63,
         "column": 13
       }
     ],
     "learnMore": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
-        "line": 180,
+        "line": 181,
         "column": 27
-      },
-      {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 25,
-        "column": 15
       }
     ],
     "subtitle": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
-        "line": 237,
+        "line": 250,
         "column": 22
       },
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 238,
+        "line": 239,
         "column": 15
       },
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 216,
+        "line": 217,
         "column": 13
       },
       {
         "file": "src/components/home/component-showcase.tsx",
-        "line": 53,
+        "line": 55,
         "column": 15
       },
       {
         "file": "src/components/home/call-to-action.tsx",
-        "line": 255,
+        "line": 57,
         "column": 15
       }
     ],
     "features.performance.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 31,
+        "line": 32,
         "column": 13
       }
     ],
     "features.performance.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 32,
+        "line": 33,
         "column": 19
       }
     ],
     "features.security.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 37,
+        "line": 38,
         "column": 13
       }
     ],
     "features.security.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 38,
+        "line": 39,
         "column": 19
       }
     ],
     "features.i18n.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 43,
+        "line": 44,
         "column": 13
       }
     ],
     "features.i18n.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 44,
+        "line": 45,
         "column": 19
       }
     ],
     "features.themes.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 49,
+        "line": 50,
         "column": 13
       }
     ],
     "features.themes.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 50,
+        "line": 51,
         "column": 19
       }
     ],
     "features.typescript.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 55,
+        "line": 56,
         "column": 13
       }
     ],
     "features.typescript.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 56,
+        "line": 57,
         "column": 19
       }
     ],
     "features.deployment.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 61,
+        "line": 62,
         "column": 13
       }
     ],
     "features.deployment.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 62,
+        "line": 63,
         "column": 19
       }
     ],
     "highlights.modern": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 93,
+        "line": 94,
         "column": 4
       }
     ],
     "highlights.scalable": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 94,
+        "line": 95,
         "column": 4
       }
     ],
     "highlights.accessible": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 95,
+        "line": 96,
         "column": 4
       }
     ],
     "highlights.performant": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 96,
+        "line": 97,
         "column": 4
       }
     ],
     "highlights.secure": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 97,
+        "line": 98,
         "column": 4
       }
     ],
     "highlights.maintainable": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 98,
+        "line": 99,
         "column": 4
       }
     ],
     "highlights.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 105,
+        "line": 106,
         "column": 43
       }
     ],
     "highlights.subtitle": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 107,
+        "line": 108,
         "column": 13
       }
     ],
     "architecture.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 132,
+        "line": 133,
         "column": 9
       }
     ],
     "architecture.frontend.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 139,
+        "line": 140,
         "column": 15
       }
     ],
     "architecture.frontend.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 144,
+        "line": 145,
         "column": 15
       }
     ],
     "architecture.ui.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 164,
+        "line": 165,
         "column": 15
       }
     ],
     "architecture.ui.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 169,
+        "line": 170,
         "column": 15
       }
     ],
     "architecture.tooling.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 189,
+        "line": 190,
         "column": 15
       }
     ],
     "architecture.tooling.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 194,
+        "line": 195,
         "column": 15
       }
     ],
     "cta.title": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 251,
+        "line": 252,
         "column": 49
       }
     ],
     "cta.description": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 253,
+        "line": 254,
         "column": 19
       }
     ],
     "cta.getStarted": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 262,
+        "line": 263,
         "column": 21
       }
     ],
     "cta.viewSource": [
       {
         "file": "src/components/home/project-overview.tsx",
-        "line": 276,
+        "line": 277,
         "column": 23
       }
     ],
     "cta.demo": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 116,
+        "line": 117,
         "column": 11
       }
     ],
     "cta.github": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 134,
+        "line": 135,
         "column": 11
       }
     ],
     "version": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 204,
+        "line": 205,
         "column": 21
       }
     ],
     "title.line1": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 210,
+        "line": 211,
         "column": 19
       }
     ],
     "title.line2": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 211,
+        "line": 212,
         "column": 19
       }
     ],
     "tabs.components": [
       {
         "file": "src/components/home/component-showcase.tsx",
-        "line": 63,
+        "line": 65,
         "column": 17
       }
     ],
     "tabs.themes": [
       {
         "file": "src/components/home/component-showcase.tsx",
-        "line": 65,
+        "line": 67,
         "column": 43
       }
     ],
     "tabs.responsive": [
       {
         "file": "src/components/home/component-showcase.tsx",
-        "line": 67,
+        "line": 69,
         "column": 17
-      }
-    ],
-    "buttons.getStarted": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 84,
-        "column": 22
-      }
-    ],
-    "buttons.learnMore": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 85,
-        "column": 22
-      }
-    ],
-    "community.title": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 130,
-        "column": 13
-      }
-    ],
-    "community.description": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 133,
-        "column": 13
-      }
-    ],
-    "community.discussions": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 148,
-        "column": 17
-      }
-    ],
-    "community.issues": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 162,
-        "column": 17
-      }
-    ],
-    "actions.github.title": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 178,
-        "column": 13
-      }
-    ],
-    "actions.github.description": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 179,
-        "column": 19
-      }
-    ],
-    "actions.download.title": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 186,
-        "column": 13
-      }
-    ],
-    "actions.download.description": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 187,
-        "column": 19
-      }
-    ],
-    "actions.docs.title": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 194,
-        "column": 13
-      }
-    ],
-    "actions.docs.description": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 195,
-        "column": 19
-      }
-    ],
-    "stats.technologies": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 204,
-        "column": 13
-      }
-    ],
-    "stats.typescript": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 208,
-        "column": 13
-      }
-    ],
-    "stats.performance": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 212,
-        "column": 13
-      }
-    ],
-    "stats.languages": [
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 216,
-        "column": 13
       }
     ],
     "badge": [
       {
         "file": "src/components/home/call-to-action.tsx",
-        "line": 246,
+        "line": 48,
         "column": 17
       }
     ],
     "primary.github": [
       {
         "file": "src/components/home/call-to-action.tsx",
-        "line": 272,
+        "line": 74,
         "column": 19
       }
     ],
     "primary.demo": [
       {
         "file": "src/components/home/call-to-action.tsx",
-        "line": 287,
+        "line": 89,
         "column": 19
       }
     ],
@@ -2049,226 +1974,268 @@
         "column": 42
       }
     ],
-    "firstName": [
+    "actions.github.title": [
       {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 32,
-        "column": 11
-      }
-    ],
-    "firstNamePlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 36,
-        "column": 23
-      }
-    ],
-    "lastName": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 59,
-        "column": 11
-      }
-    ],
-    "lastNamePlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 63,
-        "column": 23
-      }
-    ],
-    "email": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 107,
-        "column": 11
-      }
-    ],
-    "emailPlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 112,
-        "column": 23
-      }
-    ],
-    "company": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 129,
-        "column": 34
-      }
-    ],
-    "companyPlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 132,
-        "column": 23
-      }
-    ],
-    "phone": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 173,
-        "column": 34
-      }
-    ],
-    "phonePlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 177,
-        "column": 25
-      }
-    ],
-    "subject": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 200,
+        "file": "src/components/home/cta/data.ts",
+        "line": 8,
         "column": 13
       }
     ],
-    "subjectPlaceholder": [
+    "actions.github.description": [
       {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 204,
-        "column": 25
+        "file": "src/components/home/cta/data.ts",
+        "line": 9,
+        "column": 19
       }
     ],
-    "message": [
+    "actions.download.title": [
       {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 228,
-        "column": 11
-      }
-    ],
-    "messagePlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 232,
-        "column": 23
-      }
-    ],
-    "acceptPrivacy": [
-      {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 289,
+        "file": "src/components/home/cta/data.ts",
+        "line": 16,
         "column": 13
       }
     ],
-    "marketingConsent": [
+    "actions.download.description": [
       {
-        "file": "src/components/forms/contact-form-fields.tsx",
-        "line": 316,
+        "file": "src/components/home/cta/data.ts",
+        "line": 17,
+        "column": 19
+      }
+    ],
+    "actions.docs.title": [
+      {
+        "file": "src/components/home/cta/data.ts",
+        "line": 24,
         "column": 13
+      }
+    ],
+    "actions.docs.description": [
+      {
+        "file": "src/components/home/cta/data.ts",
+        "line": 25,
+        "column": 19
+      }
+    ],
+    "stats.technologies": [
+      {
+        "file": "src/components/home/cta/data.ts",
+        "line": 34,
+        "column": 13
+      }
+    ],
+    "stats.typescript": [
+      {
+        "file": "src/components/home/cta/data.ts",
+        "line": 38,
+        "column": 13
+      }
+    ],
+    "stats.performance": [
+      {
+        "file": "src/components/home/cta/data.ts",
+        "line": 42,
+        "column": 13
+      }
+    ],
+    "stats.languages": [
+      {
+        "file": "src/components/home/cta/data.ts",
+        "line": 46,
+        "column": 13
+      }
+    ],
+    "community.title": [
+      {
+        "file": "src/components/home/cta/community-section.tsx",
+        "line": 22,
+        "column": 13
+      }
+    ],
+    "community.description": [
+      {
+        "file": "src/components/home/cta/community-section.tsx",
+        "line": 25,
+        "column": 13
+      }
+    ],
+    "community.discussions": [
+      {
+        "file": "src/components/home/cta/community-section.tsx",
+        "line": 40,
+        "column": 17
+      }
+    ],
+    "community.issues": [
+      {
+        "file": "src/components/home/cta/community-section.tsx",
+        "line": 54,
+        "column": 17
+      }
+    ],
+    "buttons.getStarted": [
+      {
+        "file": "src/components/home/cta/action-cards.tsx",
+        "line": 66,
+        "column": 22
+      }
+    ],
+    "buttons.learnMore": [
+      {
+        "file": "src/components/home/cta/action-cards.tsx",
+        "line": 67,
+        "column": 22
       }
     ],
     "submitSuccess": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 44,
+        "line": 41,
         "column": 15
       }
     ],
     "submitError": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 48,
-        "column": 31
+        "line": 45,
+        "column": 15
       }
     ],
     "submitting": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 52,
+        "line": 49,
         "column": 15
       },
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 317,
+        "line": 278,
         "column": 26
       }
     ],
     "submit": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 317,
+        "line": 278,
         "column": 44
       }
     ],
     "rateLimitMessage": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 322,
+        "line": 283,
         "column": 13
       }
     ],
-    "welcome": [
+    "firstName": [
       {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 16,
-        "column": 51
+        "file": "src/components/forms/fields/name-fields.tsx",
+        "line": 30,
+        "column": 11
       }
     ],
-    "modernApp": [
+    "firstNamePlaceholder": [
       {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 18,
-        "column": 13
-      }
-    ],
-    "getStarted": [
-      {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 22,
-        "column": 15
-      }
-    ],
-    "features": [
-      {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 31,
-        "column": 67
-      }
-    ],
-    "modernStack": [
-      {
-        "file": "src/app/[locale]/page.tsx",
+        "file": "src/components/forms/fields/name-fields.tsx",
         "line": 34,
-        "column": 56
+        "column": 23
       }
     ],
-    "modernStackDesc": [
+    "lastName": [
       {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 36,
-        "column": 17
+        "file": "src/components/forms/fields/name-fields.tsx",
+        "line": 57,
+        "column": 11
       }
     ],
-    "internationalization": [
+    "lastNamePlaceholder": [
       {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 40,
-        "column": 56
+        "file": "src/components/forms/fields/name-fields.tsx",
+        "line": 61,
+        "column": 23
       }
     ],
-    "internationalizationDesc": [
+    "email": [
       {
-        "file": "src/app/[locale]/page.tsx",
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 30,
+        "column": 11
+      }
+    ],
+    "emailPlaceholder": [
+      {
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 35,
+        "column": 23
+      }
+    ],
+    "company": [
+      {
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 52,
+        "column": 34
+      }
+    ],
+    "companyPlaceholder": [
+      {
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 55,
+        "column": 23
+      }
+    ],
+    "acceptPrivacy": [
+      {
+        "file": "src/components/forms/fields/checkbox-fields.tsx",
         "line": 42,
-        "column": 17
+        "column": 13
       }
     ],
-    "testingReady": [
+    "marketingConsent": [
       {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 46,
-        "column": 56
+        "file": "src/components/forms/fields/checkbox-fields.tsx",
+        "line": 69,
+        "column": 13
       }
     ],
-    "testingReadyDesc": [
+    "phone": [
       {
-        "file": "src/app/[locale]/page.tsx",
-        "line": 48,
-        "column": 17
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 28,
+        "column": 34
+      }
+    ],
+    "phonePlaceholder": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 32,
+        "column": 25
+      }
+    ],
+    "subject": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 55,
+        "column": 13
+      }
+    ],
+    "subjectPlaceholder": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 59,
+        "column": 25
+      }
+    ],
+    "message": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 83,
+        "column": 11
+      }
+    ],
+    "messagePlaceholder": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 87,
+        "column": 23
       }
     ],
     "instructions.title": [
@@ -2305,93 +2272,10 @@
         "line": 41,
         "column": 19
       }
-    ],
-    "refreshing": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 92,
-        "column": 27
-      }
-    ],
-    "refresh": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 92,
-        "column": 45
-      }
-    ],
-    "export": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 101,
-        "column": 15
-      }
-    ],
-    "status.good": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 119,
-        "column": 13
-      },
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 189,
-        "column": 10
-      }
-    ],
-    "status.needsImprovement": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 121,
-        "column": 13
-      },
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 190,
-        "column": 10
-      }
-    ],
-    "status.poor": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 123,
-        "column": 13
-      }
-    ],
-    "status.excellent": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 187,
-        "column": 8
-      }
-    ],
-    "currentMetrics.title": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 195,
-        "column": 20
-      }
-    ],
-    "currentMetrics.description": [
-      {
-        "file": "src/app/[locale]/diagnostics/components.tsx",
-        "line": 197,
-        "column": 11
-      }
     ]
   },
   "analysis": {
     "missingKeys": [
-      "organization.name",
-      "organization.description",
-      "organization.phone",
-      "organization.social.twitter",
-      "organization.social.linkedin",
-      "organization.social.github",
-      "website.name",
-      "website.description",
-      "article.defaultAuthor",
-      "title",
       "description",
       "siteName",
       "hello",
@@ -2403,7 +2287,9 @@
       "toggle",
       "english",
       "chinese",
-      "tryAgain",
+      "error",
+      "theme.title",
+      "theme.toggleLabel",
       "comingSoon",
       "progress.title",
       "expectedCompletion",
@@ -2462,22 +2348,6 @@
       "tabs.components",
       "tabs.themes",
       "tabs.responsive",
-      "buttons.getStarted",
-      "buttons.learnMore",
-      "community.title",
-      "community.description",
-      "community.discussions",
-      "community.issues",
-      "actions.github.title",
-      "actions.github.description",
-      "actions.download.title",
-      "actions.download.description",
-      "actions.docs.title",
-      "actions.docs.description",
-      "stats.technologies",
-      "stats.typescript",
-      "stats.performance",
-      "stats.languages",
       "badge",
       "primary.github",
       "primary.demo",
@@ -2530,6 +2400,27 @@
       "components.badges.success",
       "components.badges.warning",
       "components.badges.info",
+      "actions.github.title",
+      "actions.github.description",
+      "actions.download.title",
+      "actions.download.description",
+      "actions.docs.title",
+      "actions.docs.description",
+      "stats.technologies",
+      "stats.typescript",
+      "stats.performance",
+      "stats.languages",
+      "community.title",
+      "community.description",
+      "community.discussions",
+      "community.issues",
+      "buttons.getStarted",
+      "buttons.learnMore",
+      "submitSuccess",
+      "submitError",
+      "submitting",
+      "submit",
+      "rateLimitMessage",
       "firstName",
       "firstNamePlaceholder",
       "lastName",
@@ -2538,43 +2429,19 @@
       "emailPlaceholder",
       "company",
       "companyPlaceholder",
+      "acceptPrivacy",
+      "marketingConsent",
       "phone",
       "phonePlaceholder",
       "subject",
       "subjectPlaceholder",
       "message",
       "messagePlaceholder",
-      "acceptPrivacy",
-      "marketingConsent",
-      "submitSuccess",
-      "submitError",
-      "submitting",
-      "submit",
-      "rateLimitMessage",
-      "welcome",
-      "modernApp",
-      "getStarted",
-      "features",
-      "modernStack",
-      "modernStackDesc",
-      "internationalization",
-      "internationalizationDesc",
-      "testingReady",
-      "testingReadyDesc",
       "instructions.title",
       "instructions.step1",
       "instructions.step2",
       "instructions.step3",
-      "instructions.step4",
-      "refreshing",
-      "refresh",
-      "export",
-      "status.good",
-      "status.needsImprovement",
-      "status.poor",
-      "status.excellent",
-      "currentMetrics.title",
-      "currentMetrics.description"
+      "instructions.step4"
     ],
     "unusedKeys": [
       "common.loading",
@@ -2592,6 +2459,21 @@
       "common.previous",
       "common.close",
       "common.open",
+      "common.toast.form.contact.success",
+      "common.toast.form.contact.successDescription",
+      "common.toast.form.contact.error",
+      "common.toast.form.contact.errorDescription",
+      "common.toast.form.contact.loading",
+      "common.toast.form.newsletter.success",
+      "common.toast.form.newsletter.successDescription",
+      "common.toast.form.newsletter.error",
+      "common.toast.form.newsletter.errorDescription",
+      "common.toast.form.newsletter.loading",
+      "common.toast.form.feedback.success",
+      "common.toast.form.feedback.successDescription",
+      "common.toast.form.feedback.error",
+      "common.toast.form.feedback.errorDescription",
+      "common.toast.form.feedback.loading",
       "errorBoundary.title",
       "errorBoundary.description",
       "errorBoundary.tryAgain",
@@ -2600,12 +2482,33 @@
       "navigation.contact",
       "navigation.services",
       "navigation.products",
+      "navigation.solutions",
+      "navigation.resources",
+      "navigation.enterprise",
+      "navigation.docs",
+      "navigation.pricing",
       "navigation.blog",
       "navigation.diagnostics",
       "navigation.login",
       "navigation.logout",
       "navigation.profile",
       "navigation.settings",
+      "navigation.frameworks",
+      "navigation.infrastructure",
+      "navigation.security",
+      "navigation.aiApps",
+      "navigation.webApps",
+      "navigation.ecommerce",
+      "navigation.guides",
+      "navigation.frameworksDescription",
+      "navigation.infrastructureDescription",
+      "navigation.securityDescription",
+      "navigation.aiAppsDescription",
+      "navigation.webAppsDescription",
+      "navigation.ecommerceDescription",
+      "navigation.docsDescription",
+      "navigation.guidesDescription",
+      "navigation.blogDescription",
       "diagnostics.title",
       "diagnostics.description",
       "diagnostics.controlPanel.title",
@@ -2615,6 +2518,27 @@
       "diagnostics.controlPanel.export",
       "diagnostics.currentMetrics.title",
       "diagnostics.currentMetrics.description",
+      "diagnostics.historicalData.title",
+      "diagnostics.historicalData.description",
+      "diagnostics.thresholdReference.title",
+      "diagnostics.thresholdReference.description",
+      "diagnostics.thresholdReference.cls.title",
+      "diagnostics.thresholdReference.cls.good",
+      "diagnostics.thresholdReference.cls.needsImprovement",
+      "diagnostics.thresholdReference.cls.poor",
+      "diagnostics.thresholdReference.lcp.title",
+      "diagnostics.thresholdReference.lcp.good",
+      "diagnostics.thresholdReference.lcp.needsImprovement",
+      "diagnostics.thresholdReference.lcp.poor",
+      "diagnostics.thresholdReference.fid.title",
+      "diagnostics.thresholdReference.fid.good",
+      "diagnostics.thresholdReference.fid.needsImprovement",
+      "diagnostics.thresholdReference.fid.poor",
+      "diagnostics.metrics.cls",
+      "diagnostics.metrics.lcp",
+      "diagnostics.metrics.fid",
+      "diagnostics.metrics.fcp",
+      "diagnostics.metrics.ttfb",
       "diagnostics.status.good",
       "diagnostics.status.needsImprovement",
       "diagnostics.status.poor",
@@ -2623,6 +2547,10 @@
       "theme.light",
       "theme.dark",
       "theme.system",
+      "theme.selectDisplayTheme",
+      "theme.switchToLight",
+      "theme.switchToDark",
+      "theme.switchToSystem",
       "language.toggle",
       "language.selectLanguage",
       "language.english",
@@ -2668,6 +2596,23 @@
       "home.techStack.title",
       "home.techStack.subtitle",
       "home.techStack.learnMore",
+      "home.techStack.categories.core",
+      "home.techStack.categories.frontend",
+      "home.techStack.categories.backend",
+      "home.techStack.categories.database",
+      "home.techStack.categories.deployment",
+      "home.techStack.categories.testing",
+      "home.techStack.categories.tools",
+      "home.techStack.technologies.nextjs",
+      "home.techStack.technologies.react",
+      "home.techStack.technologies.typescript",
+      "home.techStack.technologies.tailwindcss",
+      "home.techStack.technologies.nodejs",
+      "home.techStack.technologies.vitest",
+      "home.techStack.technologies.playwright",
+      "home.techStack.technologies.vercel",
+      "home.techStack.technologies.eslint",
+      "home.techStack.technologies.prettier",
       "home.techStack.stats.totalTech",
       "home.techStack.stats.categories",
       "home.techStack.stats.modern",
@@ -2734,8 +2679,10 @@
       "home.overview.features.security.description",
       "home.overview.features.i18n.title",
       "home.overview.features.i18n.description",
+      "home.overview.features.i18n.languageUnit",
       "home.overview.features.themes.title",
       "home.overview.features.themes.description",
+      "home.overview.features.themes.multiTheme",
       "home.overview.features.typescript.title",
       "home.overview.features.typescript.description",
       "home.overview.features.deployment.title",
@@ -2919,6 +2866,20 @@
       "underConstruction.progress.launch",
       "underConstruction.animation.loading",
       "underConstruction.animation.construction",
+      "underConstruction.status.inProgress",
+      "underConstruction.features.performance",
+      "underConstruction.features.performanceDesc",
+      "underConstruction.features.collaboration",
+      "underConstruction.features.collaborationDesc",
+      "underConstruction.features.quality",
+      "underConstruction.features.qualityDesc",
+      "underConstruction.social.followUs",
+      "underConstruction.subscription.title",
+      "underConstruction.subscription.description",
+      "underConstruction.subscription.placeholder",
+      "underConstruction.subscription.submit",
+      "underConstruction.subscription.submitting",
+      "underConstruction.subscription.success",
       "ReactScanDemo.title",
       "ReactScanDemo.description",
       "ReactScanDemo.instructions.title",

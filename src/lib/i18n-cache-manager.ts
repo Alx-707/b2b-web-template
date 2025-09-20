@@ -94,7 +94,7 @@ export class I18nCacheManager implements CacheManager {
     for (const locale of locales) {
       try {
         await getCachedMessages(locale);
-      } catch (_error) {
+      } catch {
         this.metricsCollector.recordError();
       }
     }

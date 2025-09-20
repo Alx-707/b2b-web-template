@@ -1,7 +1,7 @@
-import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
 import { ThemeToggleButton } from '@/components/theme/theme-toggle-button';
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { describe, expect, it, vi } from 'vitest';
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
@@ -288,7 +288,7 @@ describe('ThemeToggleButton', () => {
 
   describe('Edge Cases', () => {
     it('handles missing onClick handler gracefully', () => {
-      const { onClick, ...propsWithoutClick } = defaultProps;
+      const { onClick: _onClick, ...propsWithoutClick } = defaultProps;
       render(<ThemeToggleButton {...propsWithoutClick} />);
 
       const button = screen.getByRole('button');

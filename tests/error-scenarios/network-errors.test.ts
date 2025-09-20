@@ -107,11 +107,11 @@ class TestAPIClient {
     try {
       const data = (await this.get(primaryEndpoint)) as T;
       return { data, source: 'primary' };
-    } catch (primaryError) {
+    } catch {
       try {
         const data = (await this.get(fallbackEndpoint)) as T;
         return { data, source: 'fallback' };
-      } catch (fallbackError) {
+      } catch {
         return { data: defaultValue, source: 'default' };
       }
     }
@@ -236,7 +236,7 @@ describe('Network Error Handling Tests', () => {
         try {
           await apiClient.get('/test');
           results.push('success');
-        } catch (error) {
+        } catch {
           results.push('failure');
         }
       }
@@ -345,9 +345,9 @@ describe('Network Error Handling Tests', () => {
   describe('Fallback and Degradation Strategies', () => {
     it('should use fallback endpoint when primary fails', async () => {
       // Primary endpoint fails
-      let callCount = 0;
+      let _callCount = 0;
       global.fetch = vi.fn().mockImplementation((url) => {
-        callCount++;
+        _callCount++;
         if (url.includes('/primary')) {
           return Promise.reject(new Error('Primary endpoint failed'));
         }

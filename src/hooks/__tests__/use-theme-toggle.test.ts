@@ -12,7 +12,7 @@ const {
   mockUseAccessibility,
   mockUseSyncExternalStore,
   mockStartViewTransition,
-  mockViewTransition,
+  mockViewTransition: _mockViewTransition,
   createMockTypeSet,
 } = vi.hoisted(() => {
   const createMockTypeSet = (): ViewTransitionTypeSet =>

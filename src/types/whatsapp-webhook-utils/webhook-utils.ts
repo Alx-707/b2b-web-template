@@ -232,7 +232,7 @@ export class WebhookUtils {
         Buffer.from(expectedSignature, 'hex'),
         Buffer.from(receivedSignature, 'hex'),
       );
-    } catch (error) {
+    } catch {
       return false;
     }
   }

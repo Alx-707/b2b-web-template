@@ -30,7 +30,7 @@ export function parseContentFile<T extends ContentMetadata = ContentMetadata>(
     // Validate file path for security
     const validatedPath = validateFilePath(filePath, CONTENT_DIR);
 
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- validatedPath已通过validateFilePath安全验证，防止路径遍历攻击
     if (!fs.existsSync(validatedPath)) {
       throw new ContentError(
         `Content file not found: ${filePath}`,
@@ -38,7 +38,7 @@ export function parseContentFile<T extends ContentMetadata = ContentMetadata>(
       );
     }
 
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- validatedPath已通过validateFilePath安全验证，防止路径遍历攻击
     const fileContent = fs.readFileSync(validatedPath, 'utf-8');
 
     // Check file size limits
@@ -88,7 +88,7 @@ export function getContentFiles(contentDir: string, locale?: Locale): string[] {
   // Validate the base content directory
   const validatedContentDir = validateFilePath(contentDir, CONTENT_DIR);
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- validatedContentDir已通过validateFilePath安全验证，防止路径遍历攻击
   if (!fs.existsSync(validatedContentDir)) {
     logger.warn('Content directory does not exist', {
       dir: validatedContentDir,
@@ -96,7 +96,7 @@ export function getContentFiles(contentDir: string, locale?: Locale): string[] {
     return [];
   }
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- validatedContentDir已通过validateFilePath安全验证，防止路径遍历攻击
   const files = fs.readdirSync(validatedContentDir);
   return files
     .filter((file) => {

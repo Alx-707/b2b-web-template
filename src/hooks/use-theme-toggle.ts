@@ -15,7 +15,7 @@ function useMounted() {
   return React.useSyncExternalStore(
     () => {
       // subscribe - 返回空的清理函数，因为mounted状态不会改变
-      // eslint-disable-next-line no-empty-function
+      // eslint-disable-next-line no-empty-function -- useSyncExternalStore需要返回清理函数，mounted状态无需清理
       return () => {};
     },
     () => true, // getSnapshot - 客户端总是返回true

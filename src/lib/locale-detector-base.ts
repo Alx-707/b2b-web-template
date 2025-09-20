@@ -77,6 +77,26 @@ export class BaseLocaleDetector {
    * 从浏览器检测语言
    * Detect locale from browser
    */
+  /**
+   * 尝试从语言代码检测区域设置
+   */
+  private tryDetectFromLanguage(lang: string): Locale | null {
+    const normalizedLang = lang.toLowerCase();
+    const detectedLocale = this.getLocaleFromLanguageCode(normalizedLang);
+
+    if (detectedLocale) {
+      return detectedLocale;
+    }
+
+    // 尝试提取主要语言代码 (例如: 'zh-CN' -> 'zh')
+    const [primaryLang] = normalizedLang.split('-');
+    if (typeof primaryLang === 'string' && primaryLang.length > 0) {
+      return this.getLocaleFromLanguageCode(primaryLang) || null;
+    }
+
+    return null;
+  }
+
   detectFromBrowser(): Locale {
     try {
       if (typeof navigator === 'undefined') {
@@ -86,21 +106,9 @@ export class BaseLocaleDetector {
       const languages = navigator.languages || [navigator.language];
 
       for (const lang of languages) {
-        const normalizedLang = lang.toLowerCase();
-        const detectedLocale = this.getLocaleFromLanguageCode(normalizedLang);
-
+        const detectedLocale = this.tryDetectFromLanguage(lang);
         if (detectedLocale) {
           return detectedLocale;
-        }
-
-        // 尝试提取主要语言代码 (例如: 'zh-CN' -> 'zh')
-        const [primaryLang] = normalizedLang.split('-');
-        if (typeof primaryLang === 'string' && primaryLang.length > 0) {
-          const primaryLocale = this.getLocaleFromLanguageCode(primaryLang);
-
-          if (primaryLocale) {
-            return primaryLocale;
-          }
         }
       }
 

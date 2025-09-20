@@ -160,7 +160,7 @@ test.describe('Web Eval Agent Integration', () => {
           timing: Date.now() - startTime,
         });
       }
-    } catch (error) {
+    } catch {
       interactions.push({
         action: 'navigation_click',
         element: 'nav_link',
@@ -190,7 +190,7 @@ test.describe('Web Eval Agent Integration', () => {
           timing: Date.now() - themeToggleStart,
         });
       }
-    } catch (error) {
+    } catch {
       interactions.push({
         action: 'theme_toggle',
         element: 'theme_button',

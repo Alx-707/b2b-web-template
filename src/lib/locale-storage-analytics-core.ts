@@ -62,8 +62,29 @@ interface DetectionHistoryPartial {
 
 export function calculateStorageStats(): StorageStats {
   const now = Date.now();
+  const storageData = getStorageData();
+  const sizeStats = calculateSizeStats(storageData);
+  const historyStats = calculateHistoryStats(storageData.detectionHistory);
+  const activityStats = calculateActivityStats(storageData, now);
 
-  // 获取所有存储的数据
+  return {
+    totalEntries: calculateTotalEntries(storageData),
+    totalSize: sizeStats.totalSize,
+    lastAccessed: activityStats.lastActivity,
+    lastModified: activityStats.lastActivity,
+    accessCount: ZERO, // 需要从其他地方获取
+    errorCount: ZERO, // 需要从其他地方获取
+    freshness: activityStats.freshness,
+    hasOverride:
+      storageData.userPreference?.source === 'user_override' || false,
+    historyStats,
+  };
+}
+
+/**
+ * 获取存储数据
+ */
+function getStorageData() {
   const userPreference = LocalStorageManager.get(
     'user-locale-preference',
   ) as UserPreferencePartial | null;
@@ -72,13 +93,25 @@ export function calculateStorageStats(): StorageStats {
   ) || { history: [], lastUpdated: ZERO }) as DetectionHistoryPartial;
   const fallbackLocale = LocalStorageManager.get('fallback-locale');
 
-  // 计算存储大小
-  const userPreferenceSize = estimateStorageSize(userPreference);
-  const historySize = estimateStorageSize(detectionHistory);
-  const fallbackSize = estimateStorageSize(fallbackLocale);
+  return { userPreference, detectionHistory, fallbackLocale };
+}
+
+/**
+ * 计算大小统计
+ */
+function calculateSizeStats(storageData: ReturnType<typeof getStorageData>) {
+  const userPreferenceSize = estimateStorageSize(storageData.userPreference);
+  const historySize = estimateStorageSize(storageData.detectionHistory);
+  const fallbackSize = estimateStorageSize(storageData.fallbackLocale);
   const totalSize = userPreferenceSize + historySize + fallbackSize;
 
-  // 计算历史记录统计
+  return { totalSize };
+}
+
+/**
+ * 计算历史统计
+ */
+function calculateHistoryStats(detectionHistory: DetectionHistoryPartial) {
   const historyCount = Array.isArray(detectionHistory?.history)
     ? detectionHistory.history.length
     : ZERO;
@@ -90,20 +123,30 @@ export function calculateStorageStats(): StorageStats {
       ).size
     : ZERO;
 
-  // 计算最近活动
-  const fallbackLastUpdated =
-    typeof fallbackLocale === 'object' &&
-    fallbackLocale !== null &&
-    'lastUpdated' in (fallbackLocale as Record<string, unknown>)
-      ? Number((fallbackLocale as { lastUpdated?: number }).lastUpdated ?? ZERO)
-      : ZERO;
+  return {
+    totalEntries: historyCount,
+    uniqueLocales,
+    oldestEntry: detectionHistory?.history?.at(-ONE)?.timestamp || ZERO,
+    newestEntry: detectionHistory?.history?.at(ZERO)?.timestamp || ZERO,
+  };
+}
+
+/**
+ * 计算活动统计
+ */
+function calculateActivityStats(
+  storageData: ReturnType<typeof getStorageData>,
+  now: number,
+) {
+  const fallbackLastUpdated = getFallbackLastUpdated(
+    storageData.fallbackLocale,
+  );
   const lastActivity = Math.max(
-    userPreference?.lastUpdated ?? ZERO,
-    detectionHistory?.lastUpdated ?? ZERO,
+    storageData.userPreference?.lastUpdated ?? ZERO,
+    storageData.detectionHistory?.lastUpdated ?? ZERO,
     fallbackLastUpdated,
   );
 
-  // 计算数据新鲜度 (0-1, 1表示最新)
   const maxAge =
     DAYS_PER_WEEK *
     HOURS_PER_DAY *
@@ -113,25 +156,31 @@ export function calculateStorageStats(): StorageStats {
   const dataAge = now - lastActivity;
   const freshness = Math.max(ZERO, ONE - dataAge / maxAge);
 
-  return {
-    totalEntries:
-      (userPreference ? ONE : ZERO) +
-      (detectionHistory ? ONE : ZERO) +
-      (fallbackLocale ? ONE : ZERO),
-    totalSize,
-    lastAccessed: lastActivity,
-    lastModified: lastActivity,
-    accessCount: ZERO, // 需要从其他地方获取
-    errorCount: ZERO, // 需要从其他地方获取
-    freshness,
-    hasOverride: userPreference?.source === 'user_override' || false,
-    historyStats: {
-      totalEntries: historyCount,
-      uniqueLocales,
-      oldestEntry: detectionHistory?.history?.at(-ONE)?.timestamp || ZERO,
-      newestEntry: detectionHistory?.history?.at(ZERO)?.timestamp || ZERO,
-    },
-  };
+  return { lastActivity, freshness };
+}
+
+/**
+ * 获取fallback最后更新时间
+ */
+function getFallbackLastUpdated(fallbackLocale: unknown): number {
+  return typeof fallbackLocale === 'object' &&
+    fallbackLocale !== null &&
+    'lastUpdated' in (fallbackLocale as Record<string, unknown>)
+    ? Number((fallbackLocale as { lastUpdated?: number }).lastUpdated ?? ZERO)
+    : ZERO;
+}
+
+/**
+ * 计算总条目数
+ */
+function calculateTotalEntries(
+  storageData: ReturnType<typeof getStorageData>,
+): number {
+  return (
+    (storageData.userPreference ? ONE : ZERO) +
+    (storageData.detectionHistory ? ONE : ZERO) +
+    (storageData.fallbackLocale ? ONE : ZERO)
+  );
 }
 
 /**
