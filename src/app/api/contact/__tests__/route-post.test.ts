@@ -77,17 +77,45 @@ vi.mock('@/lib/validation-helpers', () => mockValidationHelpers);
 vi.mock('zod', () => ({
   z: {
     object: vi.fn().mockReturnValue(mockExtendedSchema),
-    string: vi.fn().mockReturnValue({
-      min: vi.fn().mockReturnThis(),
-      max: vi.fn().mockReturnThis(),
-      email: vi.fn().mockReturnThis(),
-      optional: vi.fn().mockReturnThis(),
+    string: vi.fn(() => {
+      const mockString = {
+        min: vi.fn(() => mockString),
+        max: vi.fn(() => mockString),
+        email: vi.fn(() => mockString),
+        regex: vi.fn(() => mockString),
+        optional: vi.fn(() => mockString),
+        refine: vi.fn(() => mockString),
+        transform: vi.fn(() => mockString),
+        default: vi.fn(() => mockString),
+      };
+      return mockString;
     }),
-    boolean: vi.fn().mockReturnValue({
-      optional: vi.fn().mockReturnThis(),
+    boolean: vi.fn(() => {
+      const mockBoolean = {
+        optional: vi.fn(() => mockBoolean),
+        refine: vi.fn(() => mockBoolean),
+        default: vi.fn(() => mockBoolean),
+      };
+      return mockBoolean;
     }),
     date: vi.fn().mockReturnValue({
       optional: vi.fn().mockReturnThis(),
+    }),
+    unknown: vi.fn(() => {
+      const mockUnknown = {
+        optional: vi.fn(() => mockUnknown),
+        refine: vi.fn(() => mockUnknown),
+        default: vi.fn(() => mockUnknown),
+      };
+      return mockUnknown;
+    }),
+    enum: vi.fn(() => {
+      const mockEnum = {
+        optional: vi.fn(() => mockEnum),
+        default: vi.fn(() => mockEnum),
+        refine: vi.fn(() => mockEnum),
+      };
+      return mockEnum;
     }),
   },
 }));

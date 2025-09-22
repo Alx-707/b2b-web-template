@@ -47,6 +47,21 @@ vi.mock('lucide-react', () => ({
       <title>Globe</title>
     </svg>
   ),
+  Monitor: () => (
+    <svg data-testid='monitor-icon'>
+      <title>Monitor</title>
+    </svg>
+  ),
+  MapPin: () => (
+    <svg data-testid='mappin-icon'>
+      <title>Map Pin</title>
+    </svg>
+  ),
+  Check: () => (
+    <svg data-testid='check-icon'>
+      <title>Check</title>
+    </svg>
+  ),
 }));
 
 describe('Enhanced Locale Switcher - Core Accessibility & Responsive Tests', () => {

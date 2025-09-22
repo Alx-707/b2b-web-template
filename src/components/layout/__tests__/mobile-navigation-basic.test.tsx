@@ -29,6 +29,7 @@ vi.mock('next-intl', () => ({
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
   usePathname: vi.fn(),
+  redirect: vi.fn(),
 }));
 
 // Mock Lucide React icons

@@ -954,84 +954,99 @@ vi.mock('lucide-react', () => ({
 }));
 
 // Mock Zod validation library
-const createMockZodString = () => ({
-  min: vi.fn().mockReturnThis(),
-  max: vi.fn().mockReturnThis(),
-  email: vi.fn().mockReturnThis(),
-  url: vi.fn().mockReturnThis(),
-  regex: vi.fn().mockReturnThis(),
-  optional: vi.fn().mockReturnThis(),
-  nullable: vi.fn().mockReturnThis(),
-  default: vi.fn().mockReturnThis(),
-  transform: vi.fn().mockReturnThis(),
-  refine: vi.fn().mockReturnThis(),
-  parse: vi.fn((value) => value),
-  safeParse: vi.fn((value) => ({ success: true, data: value })),
-});
+const createMockZodString = () => {
+  const mockString = {
+    min: vi.fn(() => mockString),
+    max: vi.fn(() => mockString),
+    email: vi.fn(() => mockString),
+    url: vi.fn(() => mockString),
+    regex: vi.fn(() => mockString),
+    optional: vi.fn(() => mockString),
+    nullable: vi.fn(() => mockString),
+    default: vi.fn(() => mockString),
+    transform: vi.fn(() => mockString),
+    refine: vi.fn(() => mockString),
+    parse: vi.fn((value) => value),
+    safeParse: vi.fn((value) => ({ success: true, data: value })),
+  };
+  return mockString;
+};
 
-const createMockZodNumber = () => ({
-  min: vi.fn().mockReturnThis(),
-  max: vi.fn().mockReturnThis(),
-  int: vi.fn().mockReturnThis(),
-  positive: vi.fn().mockReturnThis(),
-  negative: vi.fn().mockReturnThis(),
-  nonnegative: vi.fn().mockReturnThis(),
-  nonpositive: vi.fn().mockReturnThis(),
-  finite: vi.fn().mockReturnThis(),
-  optional: vi.fn().mockReturnThis(),
-  nullable: vi.fn().mockReturnThis(),
-  default: vi.fn().mockReturnThis(),
-  transform: vi.fn().mockReturnThis(),
-  refine: vi.fn().mockReturnThis(),
-  parse: vi.fn((value) => value),
-  safeParse: vi.fn((value) => ({ success: true, data: value })),
-});
+const createMockZodNumber = () => {
+  const mockNumber = {
+    min: vi.fn(() => mockNumber),
+    max: vi.fn(() => mockNumber),
+    int: vi.fn(() => mockNumber),
+    positive: vi.fn(() => mockNumber),
+    negative: vi.fn(() => mockNumber),
+    nonnegative: vi.fn(() => mockNumber),
+    nonpositive: vi.fn(() => mockNumber),
+    finite: vi.fn(() => mockNumber),
+    optional: vi.fn(() => mockNumber),
+    nullable: vi.fn(() => mockNumber),
+    default: vi.fn(() => mockNumber),
+    transform: vi.fn(() => mockNumber),
+    refine: vi.fn(() => mockNumber),
+    parse: vi.fn((value) => value),
+    safeParse: vi.fn((value) => ({ success: true, data: value })),
+  };
+  return mockNumber;
+};
 
-const createMockZodBoolean = () => ({
-  optional: vi.fn().mockReturnThis(),
-  nullable: vi.fn().mockReturnThis(),
-  default: vi.fn().mockReturnThis(),
-  transform: vi.fn().mockReturnThis(),
-  refine: vi.fn().mockReturnThis(),
-  parse: vi.fn((value) => value),
-  safeParse: vi.fn((value) => ({ success: true, data: value })),
-});
+const createMockZodBoolean = () => {
+  const mockBoolean = {
+    optional: vi.fn(() => mockBoolean),
+    nullable: vi.fn(() => mockBoolean),
+    default: vi.fn(() => mockBoolean),
+    transform: vi.fn(() => mockBoolean),
+    refine: vi.fn(() => mockBoolean),
+    parse: vi.fn((value) => value),
+    safeParse: vi.fn((value) => ({ success: true, data: value })),
+  };
+  return mockBoolean;
+};
 
-const createMockZodArray = () => ({
-  min: vi.fn().mockReturnThis(),
-  max: vi.fn().mockReturnThis(),
-  length: vi.fn().mockReturnThis(),
-  nonempty: vi.fn().mockReturnThis(),
-  optional: vi.fn().mockReturnThis(),
-  nullable: vi.fn().mockReturnThis(),
-  default: vi.fn().mockReturnThis(),
-  transform: vi.fn().mockReturnThis(),
-  refine: vi.fn().mockReturnThis(),
-  parse: vi.fn((value) => value),
-  safeParse: vi.fn((value) => ({ success: true, data: value })),
-});
+const createMockZodArray = () => {
+  const mockArray = {
+    min: vi.fn(() => mockArray),
+    max: vi.fn(() => mockArray),
+    length: vi.fn(() => mockArray),
+    nonempty: vi.fn(() => mockArray),
+    optional: vi.fn(() => mockArray),
+    nullable: vi.fn(() => mockArray),
+    default: vi.fn(() => mockArray),
+    transform: vi.fn(() => mockArray),
+    refine: vi.fn(() => mockArray),
+    parse: vi.fn((value) => value),
+    safeParse: vi.fn((value) => ({ success: true, data: value })),
+  };
+  return mockArray;
+};
 
-const createMockZodObject = () => ({
-  shape: {},
-  extend: vi.fn().mockReturnThis(),
-  merge: vi.fn().mockReturnThis(),
-  pick: vi.fn().mockReturnThis(),
-  omit: vi.fn().mockReturnThis(),
-  partial: vi.fn().mockReturnThis(),
-  deepPartial: vi.fn().mockReturnThis(),
-  required: vi.fn().mockReturnThis(),
-  passthrough: vi.fn().mockReturnThis(),
-  strict: vi.fn().mockReturnThis(),
-  strip: vi.fn().mockReturnThis(),
-  catchall: vi.fn().mockReturnThis(),
-  optional: vi.fn().mockReturnThis(),
-  nullable: vi.fn().mockReturnThis(),
-  default: vi.fn().mockReturnThis(),
-  transform: vi.fn().mockReturnThis(),
-  refine: vi.fn().mockReturnThis(),
-  parse: vi.fn((value) => value),
-  safeParse: vi.fn((value) => ({ success: true, data: value })),
-});
+const createMockZodObject = () => {
+  const mockObject = {
+    shape: {},
+    extend: vi.fn(() => mockObject),
+    merge: vi.fn(() => mockObject),
+    pick: vi.fn(() => mockObject),
+    omit: vi.fn(() => mockObject),
+    partial: vi.fn(() => mockObject),
+    deepPartial: vi.fn(() => mockObject),
+    required: vi.fn(() => mockObject),
+    passthrough: vi.fn(() => mockObject),
+    strict: vi.fn(() => mockObject),
+    strip: vi.fn(() => mockObject),
+    catchall: vi.fn(() => mockObject),
+    optional: vi.fn(() => mockObject),
+    nullable: vi.fn(() => mockObject),
+    default: vi.fn(() => mockObject),
+    transform: vi.fn(() => mockObject),
+    refine: vi.fn(() => mockObject),
+    parse: vi.fn((value) => value),
+    safeParse: vi.fn((value) => ({ success: true, data: value })),
+  };
+  return mockObject;
+};
 
 vi.mock('zod', () => ({
   z: {

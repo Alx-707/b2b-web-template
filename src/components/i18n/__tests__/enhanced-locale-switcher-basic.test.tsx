@@ -15,15 +15,15 @@
  * - enhanced-locale-switcher-modes.test.tsx - 模式和生命周期测试
  */
 
+import React from 'react';
+import { usePathname } from 'next/navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useLocale, useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-    EnhancedLocaleSwitcher,
-    SimpleLocaleSwitcher,
+  EnhancedLocaleSwitcher,
+  SimpleLocaleSwitcher,
 } from '../enhanced-locale-switcher';
 
 // Mock next-intl hooks
@@ -89,6 +89,34 @@ vi.mock('lucide-react', () => ({
         rx='2'
         ry='2'
       />
+    </svg>
+  ),
+  MapPin: ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      className={className}
+      data-testid='mappin-icon'
+      {...props}
+    >
+      <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z' />
+      <circle
+        cx='12'
+        cy='10'
+        r='3'
+      />
+    </svg>
+  ),
+  Languages: ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      className={className}
+      data-testid='languages-icon'
+      {...props}
+    >
+      <path d='M5 8l6 6' />
+      <path d='M4 14l6-6 2-3' />
+      <path d='M2 5h12' />
+      <path d='M7 2h1' />
+      <path d='M22 22l-5-10-5 10' />
+      <path d='M14 18h6' />
     </svg>
   ),
 }));
