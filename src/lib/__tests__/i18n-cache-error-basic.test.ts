@@ -27,6 +27,12 @@ vi.mock('@/constants/i18n-constants', () => ({
   CACHE_LIMITS: {
     MAX_CACHE_ENTRIES: 100,
   },
+  PERFORMANCE_THRESHOLDS: {
+    EXCELLENT: 6,
+    GOOD: 4,
+    FAIR: 2,
+    POOR: 1,
+  },
 }));
 
 describe('I18nCacheManager - Basic Error Handling', () => {

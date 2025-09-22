@@ -11,15 +11,16 @@ import type {
 // Mock constants
 vi.mock('@/constants/i18n-constants', () => ({
   CACHE_DURATIONS: {
-    COOKIE_MAX_AGE:
-      WEB_VITALS_CONSTANTS.DAYS_PER_MONTH *
-      WEB_VITALS_CONSTANTS.HOURS_PER_DAY *
-      WEB_VITALS_CONSTANTS.MINUTES_PER_HOUR *
-      WEB_VITALS_CONSTANTS.SECONDS_PER_MINUTE *
-      WEB_VITALS_CONSTANTS.MILLISECONDS_PER_SECOND, // 30 days
+    COOKIE_MAX_AGE: 2592000000, // 30 days in milliseconds
   },
   CACHE_LIMITS: {
     MAX_DETECTION_HISTORY: 50,
+  },
+  PERFORMANCE_THRESHOLDS: {
+    EXCELLENT: 6,
+    GOOD: 4,
+    FAIR: 2,
+    POOR: 1,
   },
 }));
 

@@ -15,15 +15,15 @@
  * - enhanced-locale-switcher-modes.test.tsx - 模式和生命周期测试
  */
 
-import React from 'react';
-import { usePathname } from 'next/navigation';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useLocale, useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
+import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  EnhancedLocaleSwitcher,
-  SimpleLocaleSwitcher,
+    EnhancedLocaleSwitcher,
+    SimpleLocaleSwitcher,
 } from '../enhanced-locale-switcher';
 
 // Mock next-intl hooks
@@ -72,6 +72,22 @@ vi.mock('lucide-react', () => ({
         cx='12'
         cy='12'
         r='10'
+      />
+    </svg>
+  ),
+  Monitor: ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      className={className}
+      data-testid='monitor-icon'
+      {...props}
+    >
+      <rect
+        x='2'
+        y='3'
+        width='20'
+        height='14'
+        rx='2'
+        ry='2'
       />
     </svg>
   ),

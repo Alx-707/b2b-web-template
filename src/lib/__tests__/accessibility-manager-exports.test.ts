@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   AccessibilityManager,
   accessibilityManager,
@@ -36,6 +36,11 @@ vi.mock('@/constants', () => ({
 vi.mock('@/constants/app-constants', () => ({
   OPACITY_CONSTANTS: {
     MEDIUM_OPACITY: 0.5,
+  },
+  PERCENTAGE_CONSTANTS: {
+    FULL: 100,
+    HALF: 50,
+    QUARTER: 25,
   },
 }));
 
