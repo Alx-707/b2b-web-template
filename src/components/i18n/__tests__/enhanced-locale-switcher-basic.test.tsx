@@ -45,6 +45,33 @@ vi.mock('next/navigation', () => ({
   permanentRedirect: vi.fn(),
 }));
 
+// Mock locale detection and storage hooks
+vi.mock('@/lib/locale-detection', () => ({
+  useClientLocaleDetection: vi.fn(() => ({
+    detectedLocale: 'en',
+    detectionSource: 'browser',
+    confidence: 0.9,
+  })),
+}));
+
+vi.mock('@/lib/locale-storage', () => ({
+  useLocaleStorage: vi.fn(() => ({
+    storedLocale: 'en',
+    setStoredLocale: vi.fn(),
+  })),
+}));
+
+vi.mock('@/components/i18n/locale-switcher/use-language-switch', () => ({
+  useLanguageSwitch: vi.fn(() => ({
+    switchLanguage: vi.fn(),
+    isLoading: false,
+  })),
+}));
+
+vi.mock('@/i18n/routing', () => ({
+  usePathname: vi.fn(() => '/'),
+}));
+
 // Mock Lucide React icons
 vi.mock('lucide-react', () => ({
   Check: ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
@@ -171,6 +198,12 @@ describe('Enhanced Locale Switcher - Main Integration Tests', () => {
             return (value as string) || key;
           };
         }
+        if (namespace === 'language') {
+          return (key: string) => {
+            if (key === 'toggle') return 'Toggle language';
+            return key;
+          };
+        }
         return (key: string) => key;
       },
     );
@@ -179,12 +212,14 @@ describe('Enhanced Locale Switcher - Main Integration Tests', () => {
   describe('核心组件导出验证', () => {
     it('should export EnhancedLocaleSwitcher component', () => {
       expect(EnhancedLocaleSwitcher).toBeDefined();
-      expect(typeof EnhancedLocaleSwitcher).toBe('function');
+      // React.memo components can be objects or functions
+      expect(['function', 'object']).toContain(typeof EnhancedLocaleSwitcher);
     });
 
     it('should export SimpleLocaleSwitcher component', () => {
       expect(SimpleLocaleSwitcher).toBeDefined();
-      expect(typeof SimpleLocaleSwitcher).toBe('function');
+      // React.memo components can be objects or functions
+      expect(['function', 'object']).toContain(typeof SimpleLocaleSwitcher);
     });
   });
 
@@ -194,13 +229,15 @@ describe('Enhanced Locale Switcher - Main Integration Tests', () => {
 
       const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
-      expect(button).toHaveAttribute('aria-label', 'Toggle language');
 
-      // Should show globe icon
-      const globeIcon = screen.getByTestId('globe-icon');
-      expect(globeIcon).toBeInTheDocument();
+      // Should have sr-only text for accessibility
+      expect(screen.getByText('Toggle language')).toBeInTheDocument();
 
-      // Should show current language
+      // Should show Languages icon from lucide-react
+      const languagesIcon = screen.getByTestId('languages-icon');
+      expect(languagesIcon).toBeInTheDocument();
+
+      // Should show current language (native name)
       expect(screen.getByText('English')).toBeInTheDocument();
     });
 
@@ -209,10 +246,13 @@ describe('Enhanced Locale Switcher - Main Integration Tests', () => {
 
       const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
-      expect(button).toHaveAttribute('aria-label', 'Toggle language');
 
-      // Should show current language
-      expect(screen.getByText('English')).toBeInTheDocument();
+      // Should have sr-only text for accessibility
+      expect(screen.getByText('Toggle language')).toBeInTheDocument();
+
+      // Should show current language (flag and code in compact mode)
+      expect(screen.getByText('🇺🇸')).toBeInTheDocument(); // flag
+      expect(screen.getByText('EN')).toBeInTheDocument(); // code
     });
 
     it('handles dropdown interaction correctly', async () => {
