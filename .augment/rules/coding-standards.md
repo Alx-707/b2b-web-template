@@ -6,7 +6,7 @@ description: "Core TypeScript/React development standards and patterns"
 # TypeScript/React Development Standards
 
 ## Core Principles
-- **Tech Stack**: TypeScript 5.9.2, Next.js 15.5.3 App Router, React 19 Server Components, shadcn/ui, Radix UI, Tailwind CSS 4.1.11, next-intl 4.3.4, MDX, Resend, Zod, next-themes, Lucide React
+- **Tech Stack**: TypeScript 5.9.2, Next.js 15.5.4 App Router, React 19 Server Components, shadcn/ui, Radix UI, Tailwind CSS 4.1.11, next-intl 4.3.4, MDX, Resend, Zod, next-themes, Lucide React
 - TypeScript strict mode, functional components, Next.js 15 App Router, React 19 features
 - Server components default, client components only when necessary
 - React 19 Hooks: useActionState, useFormStatus, useOptimistic, use
