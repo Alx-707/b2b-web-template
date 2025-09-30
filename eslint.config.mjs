@@ -59,6 +59,16 @@ export default [
     },
   },
 
+  // Theme switcher exception for SSR hydration pattern
+  {
+    name: 'theme-switcher-ssr-exception',
+    files: ['**/theme-switcher.tsx', '**/horizontal-theme-toggle-simple.tsx'],
+    rules: {
+      // next-themes 推荐的 SSR 水合模式需要在 useEffect 中初始化 mounted 状态
+      'react-you-might-not-need-an-effect/no-initialize-state': 'off',
+    },
+  },
+
   // React 19 Hook Standards configuration
   {
     name: 'react-19-hook-standards-config',

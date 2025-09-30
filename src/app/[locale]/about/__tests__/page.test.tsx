@@ -17,18 +17,18 @@ vi.mock('@/components/shared/under-construction', () => ({
   UnderConstruction: ({
     pageType,
     currentStep,
-    expectedDate,
+    expectedDateKey,
     showProgress,
   }: {
     pageType: string;
     currentStep: number;
-    expectedDate: string;
+    expectedDateKey: string;
     showProgress: boolean;
   }) => (
     <div data-testid='under-construction'>
       <div data-testid='page-type'>{pageType}</div>
       <div data-testid='current-step'>{currentStep}</div>
-      <div data-testid='expected-date'>{expectedDate}</div>
+      <div data-testid='expected-date-key'>{expectedDateKey}</div>
       <div data-testid='show-progress'>{showProgress.toString()}</div>
     </div>
   ),
@@ -69,8 +69,8 @@ describe('AboutPage', () => {
       // 验证传递给UnderConstruction的props
       expect(screen.getByTestId('page-type')).toHaveTextContent('about');
       expect(screen.getByTestId('current-step')).toHaveTextContent('2');
-      expect(screen.getByTestId('expected-date')).toHaveTextContent(
-        '2024年第二季度',
+      expect(screen.getByTestId('expected-date-key')).toHaveTextContent(
+        'dates.q2_2024',
       );
       expect(screen.getByTestId('show-progress')).toHaveTextContent('true');
     });
@@ -215,8 +215,8 @@ describe('AboutPage', () => {
 
     it('应该使用正确的expectedDate', () => {
       render(<AboutPage />);
-      expect(screen.getByTestId('expected-date')).toHaveTextContent(
-        '2024年第二季度',
+      expect(screen.getByTestId('expected-date-key')).toHaveTextContent(
+        'dates.q2_2024',
       );
     });
 

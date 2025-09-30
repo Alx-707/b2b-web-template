@@ -54,6 +54,14 @@ vi.mock('@/hooks/use-enhanced-theme', () => ({
 
 vi.mock('@/lib/accessibility', () => ({
   useAccessibility: mockUseAccessibility,
+  accessibilityManager: {
+    announceThemeChange: vi.fn(),
+    announceSwitching: vi.fn(),
+    setLanguage: vi.fn(),
+    cleanup: vi.fn(),
+  },
+  announceThemeChange: vi.fn(),
+  announceSwitching: vi.fn(),
 }));
 
 // Mock React.useSyncExternalStore

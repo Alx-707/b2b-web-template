@@ -24,7 +24,7 @@ export class AccessibilityManager {
   constructor(config?: Partial<ScreenReaderConfig>) {
     this.config = {
       enabled: true,
-      language: 'zh',
+      language: 'en',
       announceDelay: PERCENTAGE_CONSTANTS.FULL, // 100ms
       ...config,
     };
@@ -66,7 +66,7 @@ export class AccessibilityManager {
     const announcements = THEME_ANNOUNCEMENTS[this.config.language];
     const message =
       announcements[theme as keyof typeof announcements] ||
-      `已切换到${theme}模式`;
+      `Switched to ${theme} mode`;
 
     // 延迟播报以确保屏幕阅读器能够捕获
     setTimeout(() => {

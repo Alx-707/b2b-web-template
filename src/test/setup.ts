@@ -1151,7 +1151,6 @@ const mockTranslations: Record<string, string> = {
   'navigation.services': 'Services',
   'navigation.products': 'Products',
   'navigation.blog': 'Blog',
-  'navigation.diagnostics': 'Diagnostics',
   'navigation.contact': 'Contact',
 };
 
@@ -1179,6 +1178,23 @@ vi.mock('next-intl/server', () => ({
     number: vi.fn(),
     relativeTime: vi.fn(),
   })),
+}));
+
+// Mock @/i18n/routing - 提供完整的路由Mock配置
+vi.mock('@/i18n/routing', () => ({
+  Link: ({ children, href, ...props }: any) =>
+    React.createElement('a', { href, ...props }, children),
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+  })),
+  usePathname: vi.fn(() => '/'),
+  redirect: vi.fn(),
+  permanentRedirect: vi.fn(),
 }));
 
 // Mock next-themes

@@ -83,17 +83,17 @@ function StatusMessage({ status, message, t }: StatusMessageProps) {
     success: {
       className:
         'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-200',
-      defaultMessage: t('form.success'),
+      defaultMessage: t('formTemplate.form.success'),
     },
     error: {
       className:
         'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-200',
-      defaultMessage: t('form.error'),
+      defaultMessage: t('formTemplate.form.error'),
     },
     submitting: {
       className:
         'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-200',
-      defaultMessage: t('form.submitting'),
+      defaultMessage: t('formTemplate.form.submitting'),
     },
     idle: undefined,
   };
@@ -154,7 +154,7 @@ function FormFieldRenderer({ field, errors, t }: FormFieldRendererProps) {
               : 'border-input focus:border-primary focus:ring-primary'
           }`}
         >
-          <option value=''>{t('form.selectOption')}</option>
+          <option value=''>{t('formTemplate.form.selectOption')}</option>
           {field.options?.map((option) => (
             <option
               key={option.value}
@@ -208,7 +208,9 @@ function SubmitButton({
       disabled={isPending}
       className='w-full'
     >
-      {isPending ? t('form.submitting') : text || t('form.submit')}
+      {isPending
+        ? t('formTemplate.form.submitting')
+        : text || t('formTemplate.form.submit')}
     </Button>
   );
 }
@@ -242,20 +244,20 @@ export function React19FormTemplate({
           onSuccess?.(result);
           return {
             status: 'success' as FormSubmissionStatus,
-            message: 'Success',
+            message: t('formTemplate.form.success'),
           };
         }
 
-        onError?.(result.error || 'Unknown error');
+        onError?.(result.error || t('formTemplate.form.error'));
         return {
           status: 'error' as FormSubmissionStatus,
-          message: result.error || 'Unknown error',
+          message: result.error || t('formTemplate.form.error'),
           errors: result.error ? { general: [result.error] } : undefined,
         };
       } catch (error) {
         logger.error('Form submission error:', error);
         const errorMessage =
-          error instanceof Error ? error.message : 'Unknown error';
+          error instanceof Error ? error.message : t('formTemplate.form.error');
         onError?.(errorMessage);
         return {
           status: 'error' as FormSubmissionStatus,
@@ -277,7 +279,7 @@ export function React19FormTemplate({
       // 乐观更新：立即显示提交状态
       setOptimisticState({
         status: 'submitting',
-        message: t('form.submitting'),
+        message: t('formTemplate.form.submitting'),
       });
     }
 
@@ -332,29 +334,37 @@ export function React19FormTemplate({
 
 /**
  * 表单模板使用示例
+ * 注意：实际使用时应从翻译文件中获取 label 和 placeholder
+ * 示例：
+ * const t = useTranslations('formTemplate.example.fields');
+ * const fields = [
+ *   { name: 'name', type: 'text', label: t('name.label'), placeholder: t('name.placeholder'), required: true },
+ *   { name: 'email', type: 'email', label: t('email.label'), placeholder: t('email.placeholder'), required: true },
+ *   { name: 'message', type: 'textarea', label: t('message.label'), placeholder: t('message.placeholder'), required: true },
+ * ];
  */
 export const FORM_TEMPLATE_EXAMPLE = {
   fields: [
     {
       name: 'name',
       type: 'text' as const,
-      label: 'Name',
+      label: 'formTemplate.example.fields.name.label',
       required: true,
-      placeholder: 'Enter your name',
+      placeholder: 'formTemplate.example.fields.name.placeholder',
     },
     {
       name: 'email',
       type: 'email' as const,
-      label: 'Email',
+      label: 'formTemplate.example.fields.email.label',
       required: true,
-      placeholder: 'Enter your email',
+      placeholder: 'formTemplate.example.fields.email.placeholder',
     },
     {
       name: 'message',
       type: 'textarea' as const,
-      label: 'Message',
+      label: 'formTemplate.example.fields.message.label',
       required: true,
-      placeholder: 'Enter your message',
+      placeholder: 'formTemplate.example.fields.message.placeholder',
     },
   ],
 };

@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDevToolsLayout } from '@/lib/dev-tools-positioning';
 import {
   webVitalsMonitor,
   type WebVitalsMetrics,
@@ -9,6 +10,107 @@ import {
   MONITORING_INTERVALS,
   WEB_VITALS_THRESHOLDS,
 } from '@/constants/performance-constants';
+
+// 拖动相关常量
+const DRAG_CONSTANTS = {
+  COMPONENT_WIDTH: 200,
+  COMPONENT_HEIGHT: 300,
+  AUTO_RETURN_DELAY: 8000,
+  RETURN_ANIMATION_DURATION: 300,
+} as const;
+
+// 拖动功能自定义 Hook
+function useDraggable() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [isReturning, setIsReturning] = useState(false);
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const returnTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const animationTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      // 只在标题栏区域允许拖动
+      if ((e.target as HTMLElement).closest('.drag-handle')) {
+        setIsDragging(true);
+        dragStartRef.current = {
+          x: e.clientX - position.x,
+          y: e.clientY - position.y,
+        };
+      }
+    },
+    [position.x, position.y],
+  );
+
+  // 拖动时监听全局鼠标事件
+  useEffect(() => {
+    // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler -- 拖动功能需要监听全局鼠标事件
+    if (!isDragging) return undefined;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const newX = e.clientX - dragStartRef.current.x;
+      const newY = e.clientY - dragStartRef.current.y;
+
+      // 边界限制：确保不超出视口
+      const maxX = window.innerWidth - DRAG_CONSTANTS.COMPONENT_WIDTH;
+      const maxY = window.innerHeight - DRAG_CONSTANTS.COMPONENT_HEIGHT;
+      const boundedX = Math.max(0, Math.min(newX, maxX));
+      const boundedY = Math.max(0, Math.min(newY, maxY));
+
+      setPosition({ x: boundedX, y: boundedY });
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+
+      // 清除之前的定时器
+      if (returnTimerRef.current) {
+        clearTimeout(returnTimerRef.current);
+      }
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+      }
+
+      // 8 秒后自动归位
+      returnTimerRef.current = setTimeout(() => {
+        setIsReturning(true);
+        setPosition({ x: 0, y: 0 });
+
+        // 归位动画完成后重置状态
+        animationTimerRef.current = setTimeout(() => {
+          setIsReturning(false);
+        }, DRAG_CONSTANTS.RETURN_ANIMATION_DURATION);
+      }, DRAG_CONSTANTS.AUTO_RETURN_DELAY);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
+
+  // 清理定时器
+  useEffect(() => {
+    return () => {
+      if (returnTimerRef.current) {
+        clearTimeout(returnTimerRef.current);
+      }
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+      }
+    };
+  }, []);
+
+  return {
+    position,
+    isDragging,
+    isReturning,
+    handleMouseDown,
+  };
+}
 
 // 工具函数：获取指标颜色
 const getMetricColor = (value: number, good: number, poor: number): string => {
@@ -99,10 +201,21 @@ function useWebVitalsMonitoring() {
  *
  * 基于现有性能监控组件模式，在开发环境显示性能指标，
  * 生产环境静默收集数据并定期发送报告。
+ * 支持拖动功能，拖动后 8 秒自动归位到原始位置。
  */
 export function WebVitalsIndicator() {
-  const getClasses = () => '';
+  const { registerTool, unregisterTool, getClasses } = useDevToolsLayout();
   const { metrics, isVisible } = useWebVitalsMonitoring();
+  const { position, isDragging, isReturning, handleMouseDown } = useDraggable();
+
+  // 注册工具到布局管理器
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      registerTool('webVitalsIndicator');
+      return () => unregisterTool('webVitalsIndicator');
+    }
+    return undefined;
+  }, [registerTool, unregisterTool]);
 
   // 生产环境不渲染任何UI
   if (!isVisible || !metrics) {
@@ -111,9 +224,18 @@ export function WebVitalsIndicator() {
 
   return (
     <div
-      className={`${getClasses()} rounded-lg bg-black/80 p-3 text-xs text-white shadow-lg backdrop-blur-sm`}
+      className={`${getClasses('webVitalsIndicator')} rounded-lg bg-black/80 p-3 text-xs text-white shadow-lg backdrop-blur-sm ${
+        isDragging ? 'cursor-grabbing' : ''
+      } ${isReturning ? 'transition-transform duration-300 ease-out' : ''}`}
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        pointerEvents: isDragging ? 'none' : 'auto',
+      }}
+      onMouseDown={handleMouseDown}
     >
-      <div className='mb-2 font-semibold'>🚀 Web Vitals</div>
+      <div className='drag-handle mb-2 cursor-grab font-semibold'>
+        🚀 Web Vitals
+      </div>
       <div className='space-y-1'>
         <MetricRow
           label='CLS'

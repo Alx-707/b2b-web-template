@@ -3,9 +3,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Header } from '@/components/layout/header';
 
 // Mock child components
-vi.mock('@/components/layout/language-switcher', () => ({
-  LanguageSwitcher: () => (
-    <div data-testid='language-switcher'>Language Switcher</div>
+vi.mock('@/components/language-toggle', () => ({
+  LanguageToggle: () => (
+    <div data-testid='language-toggle'>Language Toggle</div>
   ),
 }));
 
@@ -25,14 +25,6 @@ vi.mock('@/components/layout/mobile-navigation', () => ({
   ),
 }));
 
-vi.mock('@/components/theme-toggle', () => ({
-  ThemeToggle: () => <div data-testid='theme-toggle'>Theme Toggle</div>,
-}));
-
-vi.mock('@/components/ui/separator', () => ({
-  Separator: () => <div data-testid='separator'>Separator</div>,
-}));
-
 describe('Header Integration Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -46,8 +38,7 @@ describe('Header Integration Tests', () => {
       expect(screen.getByTestId('logo')).toBeInTheDocument();
       expect(screen.getByTestId('main-navigation')).toBeInTheDocument();
       expect(screen.getByTestId('mobile-navigation')).toBeInTheDocument();
-      expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
-      expect(screen.getByTestId('theme-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('language-toggle')).toBeInTheDocument();
     });
 
     it('should have correct default structure and classes', () => {
@@ -164,8 +155,7 @@ describe('Header Integration Tests', () => {
 
       // Child components should handle their own keyboard navigation
       expect(screen.getByTestId('main-navigation')).toBeInTheDocument();
-      expect(screen.getByTestId('theme-toggle')).toBeInTheDocument();
-      expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
+      expect(screen.getByTestId('language-toggle')).toBeInTheDocument();
     });
   });
 
@@ -183,14 +173,12 @@ describe('Header Integration Tests', () => {
       const logo = screen.getByTestId('logo');
       const mainNav = screen.getByTestId('main-navigation');
       const mobileNav = screen.getByTestId('mobile-navigation');
-      const langSwitcher = screen.getByTestId('language-switcher');
-      const themeToggle = screen.getByTestId('theme-toggle');
+      const langToggle = screen.getByTestId('language-toggle');
 
       expect(container).toContainElement(logo);
       expect(container).toContainElement(mainNav);
       expect(container).toContainElement(mobileNav);
-      expect(container).toContainElement(langSwitcher);
-      expect(container).toContainElement(themeToggle);
+      expect(container).toContainElement(langToggle);
     });
 
     it('should handle component updates correctly', () => {

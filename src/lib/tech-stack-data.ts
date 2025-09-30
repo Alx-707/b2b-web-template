@@ -1,4 +1,5 @@
 export interface TechStackItem {
+  id: string;
   name: string;
   version: string;
   category: string;
@@ -8,204 +9,199 @@ export interface TechStackItem {
 }
 
 export const techStackData: TechStackItem[] = [
-  // 核心框架
   {
+    id: 'nextjs',
     name: 'Next.js',
     version: '15.1.6',
     category: 'core',
-    description: 'React 全栈框架，支持 SSR/SSG',
+    description: '',
     url: 'https://nextjs.org',
   },
   {
+    id: 'react',
     name: 'React',
     version: '19.0.0',
     category: 'core',
-    description: '现代化用户界面库',
+    description: '',
     url: 'https://react.dev',
   },
   {
+    id: 'typescript',
     name: 'TypeScript',
     version: '5.8.2',
     category: 'core',
-    description: '类型安全的 JavaScript 超集',
+    description: '',
     url: 'https://typescriptlang.org',
   },
-
-  // UI 系统
   {
+    id: 'tailwindcss',
     name: 'Tailwind CSS',
     version: '4.0.0',
     category: 'ui',
-    description: '实用优先的 CSS 框架',
+    description: '',
     url: 'https://tailwindcss.com',
   },
   {
+    id: 'shadcn-ui',
     name: 'shadcn/ui',
     version: 'latest',
     category: 'ui',
-    description: '可复制粘贴的组件库',
+    description: '',
     url: 'https://ui.shadcn.com',
   },
   {
+    id: 'radix-ui',
     name: 'Radix UI',
     version: 'latest',
     category: 'ui',
-    description: '无样式、可访问的组件原语',
+    description: '',
     url: 'https://radix-ui.com',
   },
-
-  // 国际化
   {
+    id: 'next-intl',
     name: 'next-intl',
     version: '3.29.1',
     category: 'i18n',
-    description: 'Next.js 国际化解决方案',
+    description: '',
     url: 'https://next-intl.dev',
   },
-
-  // 工具链
   {
+    id: 'eslint',
     name: 'ESLint',
     version: '9.18.0',
     category: 'tools',
-    description: 'JavaScript/TypeScript 代码检查工具',
+    description: '',
     url: 'https://eslint.org',
   },
   {
+    id: 'prettier',
     name: 'Prettier',
     version: '3.4.2',
     category: 'tools',
-    description: '代码格式化工具',
+    description: '',
     url: 'https://prettier.io',
   },
   {
+    id: 'husky',
     name: 'Husky',
     version: '9.1.7',
     category: 'tools',
-    description: 'Git hooks 管理工具',
+    description: '',
     url: 'https://typicode.github.io/husky',
   },
-
-  // 测试
   {
+    id: 'jest',
     name: 'Jest',
     version: '29.7.0',
     category: 'testing',
-    description: 'JavaScript 测试框架',
+    description: '',
     url: 'https://jestjs.io',
   },
   {
+    id: 'testing-library',
     name: 'Testing Library',
     version: '16.1.0',
     category: 'testing',
-    description: 'React 组件测试工具',
+    description: '',
     url: 'https://testing-library.com',
   },
-
-  // 开发工具
   {
+    id: 'pnpm',
     name: 'pnpm',
     version: '10.13.1',
     category: 'dev',
-    description: '快速、节省磁盘空间的包管理器',
+    description: '',
     url: 'https://pnpm.io',
   },
   {
+    id: 'turbo',
     name: 'Turbo',
     version: '2.3.3',
     category: 'dev',
-    description: '高性能构建系统',
+    description: '',
     url: 'https://turbo.build',
   },
-
-  // 性能监控
   {
+    id: 'lighthouse',
     name: 'Lighthouse',
     version: 'latest',
     category: 'performance',
-    description: 'Web 性能审计工具',
+    description: '',
     url: 'https://developers.google.com/web/tools/lighthouse',
   },
-
-  // 安全
   {
+    id: 'semgrep',
     name: 'Semgrep',
     version: 'latest',
     category: 'security',
-    description: '静态代码安全分析工具',
+    description: '',
     url: 'https://semgrep.dev',
   },
-
-  // 动画
   {
+    id: 'embla-carousel',
     name: 'Embla Carousel',
     version: '8.6.0',
     category: 'animation',
-    description: '轻量级轮播组件库',
+    description: '',
     url: 'https://embla-carousel.com',
   },
-
-  // 部署
   {
+    id: 'vercel',
     name: 'Vercel',
     version: 'latest',
     category: 'deployment',
-    description: 'Next.js 应用部署平台',
+    description: '',
     url: 'https://vercel.com',
   },
-
-  // 代码质量
   {
+    id: 'sonarqube',
     name: 'SonarQube',
     version: 'latest',
     category: 'quality',
-    description: '代码质量和安全分析平台',
+    description: '',
     url: 'https://sonarqube.org',
   },
-
-  // 文档
   {
+    id: 'storybook',
     name: 'Storybook',
     version: '8.4.7',
     category: 'docs',
-    description: '组件开发和文档工具',
+    description: '',
     url: 'https://storybook.js.org',
   },
-
-  // 数据获取
   {
+    id: 'swr',
     name: 'SWR',
     version: '2.3.0',
     category: 'data',
-    description: '数据获取和缓存库',
+    description: '',
     url: 'https://swr.vercel.app',
   },
-
-  // 状态管理
   {
+    id: 'zustand',
     name: 'Zustand',
     version: '5.0.2',
     category: 'state',
-    description: '轻量级状态管理库',
+    description: '',
     url: 'https://zustand.docs.pmnd.rs',
   },
 ];
 
 export const techStackCategories = Object.freeze({
-  core: '核心框架',
-  ui: 'UI 系统',
-  i18n: '国际化',
-  tools: '工具链',
-  testing: '测试',
-  dev: '开发工具',
-  performance: '性能监控',
-  security: '安全',
-  animation: '动画',
-  deployment: '部署',
-  quality: '代码质量',
-  docs: '文档',
-  data: '数据获取',
-  state: '状态管理',
+  core: 'core',
+  ui: 'ui',
+  i18n: 'i18n',
+  tools: 'tools',
+  testing: 'testing',
+  dev: 'dev',
+  performance: 'performance',
+  security: 'security',
+  animation: 'animation',
+  deployment: 'deployment',
+  quality: 'quality',
+  docs: 'docs',
+  data: 'data',
+  state: 'state',
 } as const);
 
 export type TechStackCategory = keyof typeof techStackCategories;

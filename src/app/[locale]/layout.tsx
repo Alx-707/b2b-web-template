@@ -6,7 +6,7 @@ import { Suspense, type ReactNode } from 'react';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import NextTopLoader from 'nextjs-toploader';
 import { generateJSONLD } from '@/lib/structured-data';
 import { ErrorBoundary } from '@/components/error-boundary';
@@ -18,11 +18,7 @@ import { WebVitalsIndicator } from '@/components/performance/web-vitals-indicato
 import { ThemeProvider } from '@/components/theme-provider';
 import { ThemePerformanceMonitor } from '@/components/theme/theme-performance-monitor';
 import { Toaster } from '@/components/ui/toaster';
-import {
-  ANIMATION_DURATION_NORMAL,
-  COUNT_1600,
-  COUNT_TRIPLE,
-} from '@/constants';
+import { COUNT_1600 } from '@/constants';
 import { routing } from '@/i18n/routing';
 
 // 重新导出元数据生成函数
@@ -43,6 +39,10 @@ export default async function LocaleLayout({
   if (!routing.locales.includes(locale as 'en' | 'zh')) {
     notFound();
   }
+
+  // Set request locale for the current subtree so that navigation wrappers
+  // (Link/usePathname/useRouter from next-intl) can correctly infer the locale
+  setRequestLocale(locale);
 
   const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -78,22 +78,26 @@ export default async function LocaleLayout({
           __html: generateJSONLD(websiteData),
         }}
       />
-      <NextIntlClientProvider messages={messages}>
+      <NextIntlClientProvider
+        locale={locale as 'en' | 'zh'}
+        messages={messages}
+      >
         <EnterpriseAnalytics>
           <ThemeProvider
             attribute='class'
             defaultTheme='system'
             enableSystem
           >
-            {/* 页面导航进度条 - 全局生效 */}
+            {/* 页面导航进度条 - 全局生效，修复颜色配置 */}
             <NextTopLoader
-              color='hsl(var(--primary))'
-              height={COUNT_TRIPLE}
+              color='var(--primary)'
+              height={4}
               showSpinner={false}
               easing='ease-in-out'
-              speed={ANIMATION_DURATION_NORMAL}
-              shadow='0 0 10px hsl(var(--primary)),0 0 5px hsl(var(--primary))'
+              speed={200}
+              shadow='0 0 15px var(--primary),0 0 8px var(--primary)'
               zIndex={COUNT_1600}
+              {...(nonce && { nonce })}
             />
 
             {isDevelopment && (

@@ -58,7 +58,6 @@
     "docs": "文档",
     "pricing": "定价",
     "blog": "博客",
-    "diagnostics": "性能诊断",
     "login": "登录",
     "logout": "退出",
     "profile": "个人资料",
@@ -80,62 +79,9 @@
     "guidesDescription": "分步教程",
     "blogDescription": "最新更新和见解"
   },
-  "diagnostics": {
-    "title": "Web Vitals 性能诊断",
-    "description": "深入分析网站性能指标，识别关键问题，获取专业的优化建议。实时监控 CLS、LCP、FID 等核心 Web Vitals 指标。",
-    "controlPanel": {
-      "title": "性能诊断控制台",
-      "description": "实时监控和分析网站性能指标",
-      "refresh": "重新检测",
-      "refreshing": "检测中...",
-      "export": "导出数据"
-    },
-    "currentMetrics": {
-      "title": "当前页面性能指标",
-      "description": "基于 Core Web Vitals 标准的实时性能评估"
-    },
-    "historicalData": {
-      "title": "历史性能数据",
-      "description": "最近 {count} 次性能检测记录"
-    },
-    "thresholdReference": {
-      "title": "性能指标阈值参考",
-      "description": "基于 Google Core Web Vitals 标准",
-      "cls": {
-        "title": "CLS (累积布局偏移)",
-        "good": "良好",
-        "needsImprovement": "需要改进",
-        "poor": "较差"
-      },
-      "lcp": {
-        "title": "LCP (最大内容绘制)",
-        "good": "良好",
-        "needsImprovement": "需要改进",
-        "poor": "较差"
-      },
-      "fid": {
-        "title": "FID (首次输入延迟)",
-        "good": "良好",
-        "needsImprovement": "需要改进",
-        "poor": "较差"
-      }
-    },
-    "metrics": {
-      "cls": "累积布局偏移",
-      "lcp": "最大内容绘制",
-      "fid": "首次输入延迟",
-      "fcp": "首次内容绘制",
-      "ttfb": "首字节时间"
-    },
-    "status": {
-      "good": "良好",
-      "needsImprovement": "需要改进",
-      "poor": "较差",
-      "excellent": "优秀"
-    }
-  },
   "theme": {
     "toggle": "切换主题",
+    "toggleLabel": "主题切换",
     "light": "明亮模式",
     "dark": "暗黑模式",
     "system": "系统模式",
@@ -157,7 +103,24 @@
     "detectionInfo": "检测信息",
     "source": "来源",
     "confidence": "置信度",
-    "userPreference": "用户偏好已保存"
+    "userPreference": "用户偏好已保存",
+    "detector": {
+      "title": "检测信息",
+      "source": "来源",
+      "confidence": "置信度",
+      "userSaved": "✓ 用户偏好已保存",
+      "sources": {
+        "browser": "浏览器",
+        "cookie": "Cookie",
+        "url": "URL",
+        "header": "请求头",
+        "default": "默认",
+        "user": "用户",
+        "stored": "已存储",
+        "geo": "地理位置",
+        "timezone": "时区"
+      }
+    }
   },
   "home": {
     "title": "Tucsenberg Web Frontier",
@@ -199,25 +162,44 @@
       "subtitle": "采用前沿技术构建，确保企业级性能和可扩展性。",
       "learnMore": "了解更多",
       "categories": {
-        "core": "核心技术",
-        "frontend": "前端框架",
-        "backend": "后端技术",
-        "database": "数据存储",
-        "deployment": "部署运维",
-        "testing": "测试工具",
-        "tools": "开发工具"
+        "core": "核心框架",
+        "ui": "UI 系统",
+        "i18n": "国际化",
+        "tools": "工具链",
+        "testing": "测试",
+        "dev": "开发工具",
+        "performance": "性能监控",
+        "security": "安全",
+        "animation": "动画",
+        "deployment": "部署",
+        "quality": "代码质量",
+        "docs": "文档",
+        "data": "数据获取",
+        "state": "状态管理"
       },
       "technologies": {
-        "nextjs": "React 全栈框架",
-        "react": "用户界面库",
-        "typescript": "类型安全的JavaScript",
-        "tailwindcss": "实用优先的CSS框架",
-        "nodejs": "JavaScript运行时",
-        "vitest": "快速的单元测试框架",
-        "playwright": "端到端测试框架",
-        "vercel": "前端部署平台",
-        "eslint": "代码质量检查",
-        "prettier": "代码格式化工具"
+        "nextjs": "React 全栈框架，支持 SSR/SSG",
+        "react": "现代化用户界面库",
+        "typescript": "类型安全的 JavaScript 超集",
+        "tailwindcss": "实用优先的 CSS 框架",
+        "shadcn-ui": "可复制粘贴的组件库",
+        "radix-ui": "无样式、可访问的组件原语",
+        "next-intl": "Next.js 国际化解决方案",
+        "eslint": "JavaScript/TypeScript 代码检查工具",
+        "prettier": "代码格式化工具",
+        "husky": "Git hooks 管理工具",
+        "jest": "JavaScript 测试框架",
+        "testing-library": "React 组件测试工具",
+        "pnpm": "快速、节省磁盘空间的包管理器",
+        "turbo": "高性能构建系统",
+        "lighthouse": "Web 性能审计工具",
+        "semgrep": "静态代码安全分析工具",
+        "embla-carousel": "轻量级轮播组件库",
+        "vercel": "Next.js 应用部署平台",
+        "sonarqube": "代码质量和安全分析平台",
+        "storybook": "组件开发和文档工具",
+        "swr": "数据获取和缓存库",
+        "zustand": "轻量级状态管理库"
       },
       "stats": {
         "totalTech": "技术总数",
@@ -449,6 +431,32 @@
     "deployNow": "立即部署",
     "readDocs": "阅读文档"
   },
+
+  "formTemplate": {
+    "form": {
+      "success": "成功",
+      "error": "未知错误",
+      "submitting": "提交中...",
+      "submit": "提交",
+      "selectOption": "选择一个选项"
+    },
+    "example": {
+      "fields": {
+        "name": {
+          "label": "姓名",
+          "placeholder": "请输入您的姓名"
+        },
+        "email": {
+          "label": "邮箱",
+          "placeholder": "请输入您的邮箱"
+        },
+        "message": {
+          "label": "留言",
+          "placeholder": "请输入您的留言"
+        }
+      }
+    }
+  },
   "contact": {
     "form": {
       "title": "联系我们",
@@ -617,8 +625,15 @@
     "backToHome": "返回首页",
     "comingSoon": "即将推出",
     "expectedCompletion": "预计完成时间：{date}",
+    "dates": {
+      "q2_2024": "2024年第二季度",
+      "q3_2024": "2024年第三季度"
+    },
     "stayTuned": "敬请期待更新",
     "contactUs": "联系我们获取更多信息",
+    "progress": {
+      "title": "开发进度"
+    },
     "pages": {
       "products": {
         "title": "产品展示 - 建设中",
@@ -647,6 +662,9 @@
     },
     "status": {
       "inProgress": "进行中"
+    },
+    "progress": {
+      "title": "开发进度"
     },
     "features": {
       "performance": "高性能",

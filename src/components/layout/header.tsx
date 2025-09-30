@@ -7,12 +7,10 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { LanguageSwitcher } from '@/components/layout/language-switcher';
+import { LanguageToggle } from '@/components/language-toggle';
 import { Logo } from '@/components/layout/logo';
 import { MainNavigation } from '@/components/layout/main-navigation';
 import { MobileNavigation } from '@/components/layout/mobile-navigation';
-import { ThemeToggle } from '@/components/theme-toggle';
-import { Separator } from '@/components/ui/separator';
 
 /**
  * Header Component
@@ -60,12 +58,7 @@ export function Header({
 
           {/* Right section: Utility Controls */}
           <div className='flex items-center gap-2'>
-            <LanguageSwitcher />
-            <Separator
-              orientation='vertical'
-              className='h-6'
-            />
-            <ThemeToggle />
+            <LanguageToggle />
           </div>
         </div>
       </div>

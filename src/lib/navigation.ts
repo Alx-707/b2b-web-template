@@ -47,11 +47,6 @@ export const mainNavigation: NavigationItem[] = [
     href: '/blog',
     translationKey: 'navigation.blog',
   },
-  {
-    key: 'diagnostics',
-    href: '/diagnostics',
-    translationKey: 'navigation.diagnostics',
-  },
   // Note: contact page is accessible via direct URL but not shown in navigation
 ];
 

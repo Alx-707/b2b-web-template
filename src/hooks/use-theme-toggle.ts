@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import { useAccessibility } from '@/lib/accessibility';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useLocale } from 'next-intl';
+import { accessibilityManager, useAccessibility } from '@/lib/accessibility';
 import { PERCENTAGE_HALF } from '@/constants';
 import { supportsViewTransitions } from '@/hooks/theme-transition-utils';
 import { useEnhancedTheme } from '@/hooks/use-enhanced-theme';
@@ -73,6 +74,7 @@ export function useThemeToggle() {
   const { theme, setCircularTheme } = useEnhancedTheme();
   const [isOpen, setIsOpenState] = useState(false);
   const mounted = useMounted();
+  const locale = useLocale();
 
   const setIsOpen = setIsOpenState;
   const {
@@ -83,6 +85,12 @@ export function useThemeToggle() {
     handleKeyboardNavigation,
     getAriaAttributes,
   } = useAccessibility();
+
+  // 绑定 locale 到无障碍管理器
+  useEffect(() => {
+    const language = locale === 'zh' ? 'zh' : 'en';
+    accessibilityManager.setLanguage(language);
+  }, [locale]);
 
   // 处理主题切换
   const handleThemeChange = useCallback(

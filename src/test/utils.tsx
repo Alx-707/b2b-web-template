@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
 import { vi } from 'vitest';
 
 // import { ThemeProvider } from 'next-themes';
@@ -299,6 +300,77 @@ export const generateTestData = {
     'nav.about': 'About',
     ...overrides,
   }),
+};
+
+// 国际化渲染工具 - 用于解决P1任务中的NextIntlClientProvider上下文缺失问题
+export const renderWithIntl = (
+  ui: React.ReactElement,
+  locale: string = 'en',
+  customMessages?: Record<string, unknown>,
+) => {
+  // 默认翻译消息，基于项目的messages/en.json结构
+  const defaultMessages = {
+    common: {
+      loading: 'Loading...',
+      error: 'An error occurred',
+      success: 'Success',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      save: 'Save',
+      edit: 'Edit',
+      delete: 'Delete',
+      search: 'Search',
+      filter: 'Filter',
+      sort: 'Sort',
+      next: 'Next',
+      previous: 'Previous',
+      close: 'Close',
+      open: 'Open',
+    },
+    navigation: {
+      home: 'Home',
+      about: 'About',
+      contact: 'Contact',
+      services: 'Services',
+      products: 'Products',
+      solutions: 'Solutions',
+      resources: 'Resources',
+      enterprise: 'Enterprise',
+      docs: 'Docs',
+      pricing: 'Pricing',
+      blog: 'Blog',
+      menu: 'Menu',
+      close: 'Close',
+    },
+    accessibility: {
+      skipToContent: 'Skip to main content',
+      openMenu: 'Open navigation menu',
+      closeMenu: 'Close navigation menu',
+      loading: 'Content is loading',
+      error: 'An error has occurred',
+      languageSelector: 'Select language',
+      themeSelector: 'Select theme',
+    },
+    errorBoundary: {
+      title: 'An error occurred',
+      description: 'Something went wrong. Please try refreshing the page.',
+      tryAgain: 'Try Again',
+    },
+  };
+
+  // 合并自定义消息
+  const messages = customMessages
+    ? { ...defaultMessages, ...customMessages }
+    : defaultMessages;
+
+  return render(
+    <NextIntlClientProvider
+      locale={locale}
+      messages={messages}
+    >
+      {ui}
+    </NextIntlClientProvider>,
+  );
 };
 
 // 重新导出render函数

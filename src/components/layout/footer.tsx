@@ -17,6 +17,7 @@ import {
   type FooterSection,
 } from '@/lib/footer-config';
 import { ExternalLinkIcon, SocialIconLink } from '@/components/ui/social-icons';
+import { ThemeSwitcher } from '@/components/ui/theme-switcher';
 import { ZERO } from '@/constants';
 import { COUNT_14 } from '@/constants/count';
 
@@ -162,11 +163,16 @@ export const Footer: FC = () => {
           </div>
         </div>
 
-        {/* Copyright */}
+        {/* Copyright and Theme Toggle */}
         <div className='mt-12 border-t border-gray-200 pt-8 dark:border-gray-800'>
-          <p className='text-center text-sm text-gray-500 dark:text-gray-400'>
-            {getCopyrightText(locale)}
-          </p>
+          <div className='flex flex-col items-center justify-between gap-4 sm:flex-row'>
+            <p className='text-sm text-gray-500 dark:text-gray-400'>
+              {getCopyrightText(locale)}
+            </p>
+            <div className='flex items-center'>
+              <ThemeSwitcher data-testid='footer-theme-toggle' />
+            </div>
+          </div>
         </div>
       </div>
     </footer>

@@ -148,9 +148,10 @@ describe('i18n Routing Configuration', () => {
 
   describe('配置验证', () => {
     it('应该导出路径配置验证函数', async () => {
-      const routingModule = await import('../routing');
-      expect(routingModule.validatePathsConfig).toBeDefined();
-      expect(typeof routingModule.validatePathsConfig).toBe('function');
+      // 直接从 @/config/paths 导入，因为 routing.ts 重新导出了它
+      const pathsModule = await import('@/config/paths');
+      expect(pathsModule.validatePathsConfig).toBeDefined();
+      expect(typeof pathsModule.validatePathsConfig).toBe('function');
     });
   });
 

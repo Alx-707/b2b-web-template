@@ -135,10 +135,6 @@ export function createPageSEOConfig(
       type: 'website' as const,
       keywords: ['Products', 'Solutions', 'Enterprise', 'B2B'],
     },
-    diagnostics: {
-      type: 'website' as const,
-      keywords: ['Diagnostics', 'Tools', 'Development', 'Debug'],
-    },
     services: {
       type: 'website' as const,
       keywords: ['Services', 'Solutions', 'Enterprise', 'B2B'],

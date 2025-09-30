@@ -8,7 +8,7 @@ import {
   useState,
   useTransition,
 } from 'react';
-import { Check, Languages, Loader2 } from 'lucide-react';
+import { Check, Globe, Loader2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
@@ -109,9 +109,9 @@ export const LanguageToggle = memo(() => {
           {isPending ? (
             <Loader2 className='h-[1.2rem] w-[1.2rem] animate-spin' />
           ) : (
-            <Languages
+            <Globe
               className='h-[1.2rem] w-[1.2rem]'
-              data-testid='languages-icon'
+              data-testid='globe-icon'
             />
           )}
           <span className='sr-only'>{t('toggle')}</span>

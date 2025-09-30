@@ -261,7 +261,6 @@ export const COMMON_WHITELISTS = {
     'contact',
     'blog',
     'products',
-    'diagnostics',
     'services',
     'pricing',
     'support',

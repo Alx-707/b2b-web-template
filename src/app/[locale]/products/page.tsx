@@ -31,7 +31,7 @@ export default function ProductsPage() {
     <UnderConstruction
       pageType='products'
       currentStep={ONE}
-      expectedDate='2024年第二季度'
+      expectedDateKey='dates.q2_2024'
       showProgress={true}
     />
   );

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
@@ -41,7 +42,7 @@ export interface HorizontalThemeToggleProps {
   /** 是否显示文字标签 */
   'showLabels'?: boolean;
   /** 组件尺寸 */
-  'size'?: 'sm' | 'default' | 'lg';
+  'size'?: 'xs' | 'sm' | 'default' | 'lg';
   /** 自定义样式类名 */
   'className'?: string;
   /** 是否禁用动画效果 */
@@ -55,8 +56,14 @@ export interface HorizontalThemeToggleProps {
 /**
  * 获取尺寸相关的样式类
  */
-const getSizeClasses = (size: 'sm' | 'default' | 'lg') => {
+const getSizeClasses = (size: 'xs' | 'sm' | 'default' | 'lg') => {
   switch (size) {
+    case 'xs':
+      return {
+        container: 'p-0.5',
+        button: 'px-1 py-0.5 text-xs gap-0',
+        icon: 'h-3 w-3',
+      };
     case 'sm':
       return {
         container: 'p-0.5',
@@ -92,44 +99,12 @@ export function HorizontalThemeToggle({
   const { theme, resolvedTheme, setTheme } = useTheme();
   const t = useTranslations();
 
+  const [mounted] = useState(true);
   const sizeClasses = getSizeClasses(size);
-  const isReady = typeof resolvedTheme !== 'undefined';
   const activeTheme = resolvedTheme ?? theme;
 
-  // 加载状态的骨架屏
-  if (!isReady) {
-    return (
-      <div
-        className={cn(
-          'bg-background inline-flex items-center rounded-lg border',
-          sizeClasses.container,
-          className,
-        )}
-        data-testid={testId}
-      >
-        {THEME_OPTIONS.map((option) => (
-          <div
-            key={option.value}
-            className={cn(
-              'flex items-center justify-center rounded-md transition-colors',
-              sizeClasses.button,
-              'bg-muted animate-pulse',
-            )}
-          >
-            <div
-              className={cn(
-                'rounded',
-                sizeClasses.icon,
-                'bg-muted-foreground/20',
-              )}
-            />
-            {showLabels && (
-              <div className='bg-muted-foreground/20 h-4 w-12 rounded' />
-            )}
-          </div>
-        ))}
-      </div>
-    );
+  if (!mounted) {
+    return null;
   }
 
   return (

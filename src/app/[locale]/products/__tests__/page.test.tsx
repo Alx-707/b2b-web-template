@@ -16,7 +16,7 @@ vi.mock('next-intl/server', () => ({
 interface MockUnderConstructionProps {
   pageType: 'products' | 'blog' | 'about' | 'contact';
   currentStep?: number;
-  expectedDate?: string;
+  expectedDateKey?: string;
   showProgress?: boolean;
 }
 
@@ -24,13 +24,13 @@ vi.mock('@/components/shared/under-construction', () => ({
   UnderConstruction: ({
     pageType,
     currentStep,
-    expectedDate,
+    expectedDateKey,
     showProgress,
   }: MockUnderConstructionProps) => (
     <div data-testid='under-construction'>
       <div data-testid='page-type'>{pageType}</div>
       <div data-testid='current-step'>{currentStep}</div>
-      <div data-testid='expected-date'>{expectedDate}</div>
+      <div data-testid='expected-date-key'>{expectedDateKey}</div>
       <div data-testid='show-progress'>{showProgress?.toString()}</div>
     </div>
   ),
@@ -71,8 +71,8 @@ describe('ProductsPage', () => {
       // 验证传递给UnderConstruction的props
       expect(screen.getByTestId('page-type')).toHaveTextContent('products');
       expect(screen.getByTestId('current-step')).toHaveTextContent('1');
-      expect(screen.getByTestId('expected-date')).toHaveTextContent(
-        '2024年第二季度',
+      expect(screen.getByTestId('expected-date-key')).toHaveTextContent(
+        'dates.q2_2024',
       );
       expect(screen.getByTestId('show-progress')).toHaveTextContent('true');
     });
@@ -217,8 +217,8 @@ describe('ProductsPage', () => {
 
     it('应该使用正确的expectedDate', () => {
       render(<ProductsPage />);
-      expect(screen.getByTestId('expected-date')).toHaveTextContent(
-        '2024年第二季度',
+      expect(screen.getByTestId('expected-date-key')).toHaveTextContent(
+        'dates.q2_2024',
       );
     });
 
@@ -240,8 +240,8 @@ describe('ProductsPage', () => {
       render(<ProductsPage />);
 
       // Products页面预期在2024年第二季度完成
-      expect(screen.getByTestId('expected-date')).toHaveTextContent(
-        '2024年第二季度',
+      expect(screen.getByTestId('expected-date-key')).toHaveTextContent(
+        'dates.q2_2024',
       );
     });
   });

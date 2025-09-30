@@ -31,7 +31,7 @@ export default function BlogPage() {
     <UnderConstruction
       pageType='blog'
       currentStep={ZERO}
-      expectedDate='2024年第三季度'
+      expectedDateKey='dates.q3_2024'
       showProgress={true}
     />
   );

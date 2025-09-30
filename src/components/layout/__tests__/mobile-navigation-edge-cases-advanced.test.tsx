@@ -7,14 +7,17 @@
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { useTranslations } from 'next-intl';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MobileNavigation } from '@/components/layout/mobile-navigation';
+import { renderWithIntl } from '@/test/utils';
 
 // Mock next-intl
 vi.mock('next-intl', () => ({
   useTranslations: vi.fn(),
+  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
 }));
 
 // Mock next/navigation
@@ -53,7 +56,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
 
   describe('性能边界情况', () => {
     it('处理高频更新', async () => {
-      const { rerender } = render(<MobileNavigation />);
+      const { rerender } = renderWithIntl(<MobileNavigation />);
 
       // 高频重新渲染
       for (let i = 0; i < 100; i++) {
@@ -74,7 +77,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       );
 
       expect(() => {
-        render(
+        renderWithIntl(
           <LargeWrapper>
             <MobileNavigation />
           </LargeWrapper>,
@@ -86,7 +89,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       // 通过创建多个组件模拟内存压力
       const components = [];
       for (let i = 0; i < 10; i++) {
-        const { unmount } = render(<MobileNavigation key={i} />);
+        const { unmount } = renderWithIntl(<MobileNavigation key={i} />);
         components.push(unmount);
       }
 
@@ -113,7 +116,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       );
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
     });
   });
@@ -131,7 +134,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       })) as unknown as typeof Promise.resolve;
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
 
       // 恢复
@@ -143,7 +146,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       window.removeEventListener =
         undefined as unknown as typeof window.removeEventListener;
 
-      const { unmount } = render(<MobileNavigation />);
+      const { unmount } = renderWithIntl(<MobileNavigation />);
 
       expect(() => unmount()).not.toThrow();
 
@@ -157,7 +160,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       Element.prototype.setAttribute = vi.fn();
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
 
       // 恢复
@@ -177,7 +180,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       );
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
 
       // 解析翻译
@@ -185,7 +188,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
     });
 
     it('处理加载期间的组件更新', () => {
-      const { rerender } = render(<MobileNavigation />);
+      const { rerender } = renderWithIntl(<MobileNavigation />);
 
       // 在组件"加载"时更新属性
       rerender(<MobileNavigation className='loading' />);
@@ -206,7 +209,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       );
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
     });
 
@@ -221,7 +224,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       );
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
     });
 
@@ -237,7 +240,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       );
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
     });
   });
@@ -254,13 +257,13 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       );
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
     });
 
     it('处理恶意的className注入', () => {
       expect(() => {
-        render(<MobileNavigation className="'; alert('xss'); '" />);
+        renderWithIntl(<MobileNavigation className="'; alert('xss'); '" />);
       }).not.toThrow();
     });
 
@@ -271,7 +274,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       };
 
       expect(() => {
-        render(
+        renderWithIntl(
           <MobileNavigation
             {...(maliciousProps as unknown as React.ComponentProps<
               typeof MobileNavigation
@@ -291,7 +294,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       });
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
     });
 
@@ -306,7 +309,7 @@ describe('Mobile Navigation - 高级边界情况测试', () => {
       });
 
       expect(() => {
-        render(<MobileNavigation />);
+        renderWithIntl(<MobileNavigation />);
       }).not.toThrow();
     });
   });

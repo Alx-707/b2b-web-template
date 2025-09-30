@@ -1,10 +1,13 @@
 /**
  * 无障碍性测试页面
  * 用于测试导航组件的键盘导航和无障碍性功能
+ *
+ * 注意：生产环境不可访问（返回 404）
  */
 'use client';
 
 import { useState } from 'react';
+import { notFound } from 'next/navigation';
 import { runAccessibilityTests } from '@/lib/accessibility-tester';
 import { AutomatedTestSection } from '@/app/[locale]/accessibility-test/components/automated-test-section';
 import { KeyboardShortcutsGuide } from '@/app/[locale]/accessibility-test/components/keyboard-shortcuts-guide';
@@ -13,6 +16,11 @@ import { ScreenReaderGuide } from '@/app/[locale]/accessibility-test/components/
 import { TestTargetSection } from '@/app/[locale]/accessibility-test/components/test-target-section';
 
 export default function AccessibilityTestPage() {
+  // 生产环境直接返回 404
+  if (process.env.NODE_ENV === 'production') {
+    notFound();
+  }
+
   // const _t = useTranslations(); // TODO: Add translations for accessibility test page
   const [testResults, setTestResults] = useState<string>('');
   const [isRunning, setIsRunning] = useState(false);

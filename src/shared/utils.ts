@@ -4,7 +4,13 @@
  */
 
 import { ZERO } from '@/constants';
-import { EMAIL_VALIDATION } from '@/constants/react-scan';
+
+// Email validation constants
+const EMAIL_VALIDATION = {
+  LOCAL_PART_MAX_LENGTH: 64,
+  DOMAIN_PART_MAX_LENGTH: 255,
+  EMAIL_PARTS_COUNT: 2,
+} as const;
 
 /**
  * 格式化日期为ISO字符串格式 (YYYY-MM-DD)

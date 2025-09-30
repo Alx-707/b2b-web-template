@@ -50,7 +50,7 @@ describe('navigation', () => {
 
   describe('mainNavigation', () => {
     it('should have all required navigation items', () => {
-      const expectedKeys = ['home', 'about', 'products', 'blog', 'diagnostics'];
+      const expectedKeys = ['home', 'about', 'products', 'blog'];
       const actualKeys = mainNavigation.map((item) => item.key);
 
       expectedKeys.forEach((key) => {

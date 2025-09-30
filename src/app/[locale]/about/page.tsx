@@ -31,7 +31,7 @@ export default function AboutPage() {
     <UnderConstruction
       pageType='about'
       currentStep={COUNT_PAIR}
-      expectedDate='2024年第二季度'
+      expectedDateKey='dates.q2_2024'
       showProgress={true}
     />
   );

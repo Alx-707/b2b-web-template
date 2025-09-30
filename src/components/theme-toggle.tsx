@@ -1,6 +1,7 @@
 'use client';
 
 import { Monitor, Moon, Sun } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { ThemeMenuItem } from '@/components/theme/theme-menu-item';
 import { ThemeToggleButton } from '@/components/theme/theme-toggle-button';
 import {
@@ -11,6 +12,7 @@ import {
 import { useThemeToggle } from '@/hooks/use-theme-toggle';
 
 export function ThemeToggle() {
+  const t = useTranslations('theme');
   const {
     theme,
     isOpen,
@@ -44,13 +46,13 @@ export function ThemeToggle() {
         align='end'
         className={` ${prefersHighContrast ? 'border-foreground border-2' : ''} ${prefersReducedMotion ? '' : 'animate-in fade-in-0 zoom-in-95'} `}
         role='menu'
-        aria-label='主题选择菜单'
+        aria-label={t('selectTheme')}
       >
         <ThemeMenuItem
           theme='light'
           currentTheme={theme || 'system'}
-          label='明亮模式 Light'
-          ariaLabel='切换到明亮模式'
+          label={t('light')}
+          ariaLabel={t('switchToLight')}
           icon={Sun}
           supportsViewTransitions={supportsViewTransitions}
           prefersReducedMotion={prefersReducedMotion}
@@ -60,8 +62,8 @@ export function ThemeToggle() {
         <ThemeMenuItem
           theme='dark'
           currentTheme={theme || 'system'}
-          label='暗黑模式 Dark'
-          ariaLabel='切换到暗黑模式'
+          label={t('dark')}
+          ariaLabel={t('switchToDark')}
           icon={Moon}
           supportsViewTransitions={supportsViewTransitions}
           prefersReducedMotion={prefersReducedMotion}
@@ -71,8 +73,8 @@ export function ThemeToggle() {
         <ThemeMenuItem
           theme='system'
           currentTheme={theme || 'system'}
-          label='系统模式 System'
-          ariaLabel='切换到系统模式'
+          label={t('system')}
+          ariaLabel={t('switchToSystem')}
           icon={Monitor}
           supportsViewTransitions={supportsViewTransitions}
           prefersReducedMotion={prefersReducedMotion}

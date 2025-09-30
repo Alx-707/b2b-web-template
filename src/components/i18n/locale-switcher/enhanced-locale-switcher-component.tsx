@@ -63,6 +63,7 @@ function DetectionInfoSection({
   confidence: number;
   isUserOverride: boolean;
 }) {
+  const t = useTranslations('language.detector');
   if (!visible) return null;
   const SourceIcon = resolveSourceIcon(source);
   const confidenceColor =
@@ -75,13 +76,15 @@ function DetectionInfoSection({
     <>
       <DropdownMenuSeparator />
       <DropdownMenuLabel className='text-muted-foreground text-xs'>
-        Detection Info
+        {t('title')}
       </DropdownMenuLabel>
       <div className='px-2 py-1 text-xs'>
         <div className='mb-1 flex items-center justify-between'>
           <div className='flex items-center space-x-1'>
             <SourceIcon className='h-3 w-3' />
-            <span>Source: {source}</span>
+            <span>
+              {t('source')}: {t(`sources.${source}`)}
+            </span>
           </div>
           <Badge
             variant='outline'
@@ -97,7 +100,7 @@ function DetectionInfoSection({
           </Badge>
         </div>
         {isUserOverride && (
-          <div className='text-xs text-blue-600'>✓ User preference saved</div>
+          <div className='text-xs text-blue-600'>{t('userSaved')}</div>
         )}
       </div>
     </>

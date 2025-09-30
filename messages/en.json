@@ -58,7 +58,6 @@
     "docs": "Docs",
     "pricing": "Pricing",
     "blog": "Blog",
-    "diagnostics": "Performance Diagnostics",
     "login": "Login",
     "logout": "Logout",
     "profile": "Profile",
@@ -80,62 +79,9 @@
     "guidesDescription": "Step-by-step tutorials",
     "blogDescription": "Latest updates and insights"
   },
-  "diagnostics": {
-    "title": "Web Vitals Performance Diagnostics",
-    "description": "In-depth analysis of website performance metrics, identify key issues, and get professional optimization recommendations. Real-time monitoring of core Web Vitals metrics such as CLS, LCP, FID.",
-    "controlPanel": {
-      "title": "Performance Diagnostics Console",
-      "description": "Real-time monitoring and analysis of website performance metrics",
-      "refresh": "Refresh",
-      "refreshing": "Detecting...",
-      "export": "Export Data"
-    },
-    "currentMetrics": {
-      "title": "Current Page Performance Metrics",
-      "description": "Real-time performance assessment based on Core Web Vitals standards"
-    },
-    "historicalData": {
-      "title": "Historical Performance Data",
-      "description": "Recent {count} performance test records"
-    },
-    "thresholdReference": {
-      "title": "Performance Metrics Threshold Reference",
-      "description": "Based on Google Core Web Vitals standards",
-      "cls": {
-        "title": "CLS (Cumulative Layout Shift)",
-        "good": "Good",
-        "needsImprovement": "Needs Improvement",
-        "poor": "Poor"
-      },
-      "lcp": {
-        "title": "LCP (Largest Contentful Paint)",
-        "good": "Good",
-        "needsImprovement": "Needs Improvement",
-        "poor": "Poor"
-      },
-      "fid": {
-        "title": "FID (First Input Delay)",
-        "good": "Good",
-        "needsImprovement": "Needs Improvement",
-        "poor": "Poor"
-      }
-    },
-    "metrics": {
-      "cls": "Cumulative Layout Shift",
-      "lcp": "Largest Contentful Paint",
-      "fid": "First Input Delay",
-      "fcp": "First Contentful Paint",
-      "ttfb": "Time to First Byte"
-    },
-    "status": {
-      "good": "Good",
-      "needsImprovement": "Needs Improvement",
-      "poor": "Poor",
-      "excellent": "Excellent"
-    }
-  },
   "theme": {
     "toggle": "Toggle theme",
+    "toggleLabel": "Theme toggle",
     "light": "Light",
     "dark": "Dark",
     "system": "System",
@@ -157,7 +103,24 @@
     "detectionInfo": "Detection Info",
     "source": "Source",
     "confidence": "Confidence",
-    "userPreference": "User preference saved"
+    "userPreference": "User preference saved",
+    "detector": {
+      "title": "Detection Info",
+      "source": "Source",
+      "confidence": "Confidence",
+      "userSaved": "✓ User preference saved",
+      "sources": {
+        "browser": "Browser",
+        "cookie": "Cookie",
+        "url": "URL",
+        "header": "Header",
+        "default": "Default",
+        "user": "User",
+        "stored": "Stored",
+        "geo": "Geo",
+        "timezone": "Timezone"
+      }
+    }
   },
   "home": {
     "title": "Tucsenberg Web Frontier",
@@ -199,25 +162,44 @@
       "subtitle": "Built with cutting-edge technologies for enterprise-grade performance and scalability.",
       "learnMore": "Learn More",
       "categories": {
-        "core": "Core Technologies",
-        "frontend": "Frontend Frameworks",
-        "backend": "Backend Technologies",
-        "database": "Data Storage",
-        "deployment": "Deployment & DevOps",
-        "testing": "Testing Tools",
-        "tools": "Development Tools"
+        "core": "Core Frameworks",
+        "ui": "UI System",
+        "i18n": "Internationalization",
+        "tools": "Tooling",
+        "testing": "Testing",
+        "dev": "Dev Tools",
+        "performance": "Performance Monitoring",
+        "security": "Security",
+        "animation": "Animation",
+        "deployment": "Deployment",
+        "quality": "Code Quality",
+        "docs": "Documentation",
+        "data": "Data Fetching",
+        "state": "State Management"
       },
       "technologies": {
-        "nextjs": "React full-stack framework",
-        "react": "User interface library",
-        "typescript": "Type-safe JavaScript",
+        "nextjs": "React full-stack framework with SSR/SSG",
+        "react": "Modern user interface library",
+        "typescript": "Type-safe JavaScript superset",
         "tailwindcss": "Utility-first CSS framework",
-        "nodejs": "JavaScript runtime",
-        "vitest": "Fast unit testing framework",
-        "playwright": "End-to-end testing framework",
-        "vercel": "Frontend deployment platform",
-        "eslint": "Code quality checker",
-        "prettier": "Code formatting tool"
+        "shadcn-ui": "Copy-paste component library",
+        "radix-ui": "Unstyled, accessible component primitives",
+        "next-intl": "Next.js internationalization solution",
+        "eslint": "JavaScript/TypeScript code linter",
+        "prettier": "Code formatting tool",
+        "husky": "Git hooks management tool",
+        "jest": "JavaScript testing framework",
+        "testing-library": "React component testing tool",
+        "pnpm": "Fast, disk space efficient package manager",
+        "turbo": "High-performance build system",
+        "lighthouse": "Web performance audit tool",
+        "semgrep": "Static code security analysis tool",
+        "embla-carousel": "Lightweight carousel component library",
+        "vercel": "Next.js application deployment platform",
+        "sonarqube": "Code quality and security analysis platform",
+        "storybook": "Component development and documentation tool",
+        "swr": "Data fetching and caching library",
+        "zustand": "Lightweight state management library"
       },
       "stats": {
         "totalTech": "Total Technologies",
@@ -449,6 +431,31 @@
     "deployNow": "Deploy now",
     "readDocs": "Read our docs"
   },
+  "formTemplate": {
+    "form": {
+      "success": "Success",
+      "error": "Unknown error",
+      "submitting": "Submitting...",
+      "submit": "Submit",
+      "selectOption": "Select an option"
+    },
+    "example": {
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter your name"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email"
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Enter your message"
+        }
+      }
+    }
+  },
   "contact": {
     "form": {
       "title": "Contact Us",
@@ -617,8 +624,15 @@
     "backToHome": "Back to Home",
     "comingSoon": "Coming Soon",
     "expectedCompletion": "Expected completion: {date}",
+    "dates": {
+      "q2_2024": "Q2 2024",
+      "q3_2024": "Q3 2024"
+    },
     "stayTuned": "Stay tuned for updates",
     "contactUs": "Contact us for more information",
+    "progress": {
+      "title": "Development Progress"
+    },
     "pages": {
       "products": {
         "title": "Products - Under Construction",
@@ -647,6 +661,9 @@
     },
     "status": {
       "inProgress": "In Progress"
+    },
+    "progress": {
+      "title": "Development Progress"
     },
     "features": {
       "performance": "High Performance",

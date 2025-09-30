@@ -13,7 +13,7 @@ interface UnderConstructionProps {
   className?: string;
   showProgress?: boolean;
   currentStep?: number;
-  expectedDate?: string;
+  expectedDateKey?: string;
 }
 
 export function UnderConstruction({
@@ -21,7 +21,7 @@ export function UnderConstruction({
   className,
   showProgress = true,
   currentStep = ONE,
-  expectedDate = '2024年第二季度',
+  expectedDateKey = 'dates.q2_2024',
 }: UnderConstructionProps) {
   const t = useTranslations('underConstruction');
   const tPage = useTranslations(`underConstruction.pages.${pageType}`);
@@ -78,7 +78,7 @@ export function UnderConstruction({
         {/* 预计完成时间 */}
         <div className='bg-primary/5 border-primary/20 rounded-lg border p-4'>
           <p className='text-primary font-medium'>
-            {t('expectedCompletion', { date: expectedDate })}
+            {t('expectedCompletion', { date: t(expectedDateKey) })}
           </p>
         </div>
 

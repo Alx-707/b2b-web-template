@@ -189,15 +189,6 @@ vi.mock('lucide-react', () => ({
       ⌄
     </span>
   ),
-  Languages: ({ ...props }: React.ComponentProps<'div'>) => (
-    <span
-      data-testid='languages-icon'
-      className='h-[1.2rem] w-[1.2rem]'
-      {...props}
-    >
-      🌍
-    </span>
-  ),
   Loader2: ({ ...props }: React.ComponentProps<'div'>) => (
     <span
       data-testid='loader-icon'
@@ -243,11 +234,9 @@ describe('LanguageToggle Component', () => {
       );
       expect(button).toBeInTheDocument();
 
-      // 组件实际使用的是 Languages 图标，不是 Globe
-      const languagesIcon = document.querySelector(
-        '[data-testid="languages-icon"]',
-      );
-      expect(languagesIcon).toBeInTheDocument();
+      // 组件使用 Globe 图标
+      const globeIcon = document.querySelector('[data-testid="globe-icon"]');
+      expect(globeIcon).toBeInTheDocument();
     });
 
     it('should render dropdown menu structure', () => {

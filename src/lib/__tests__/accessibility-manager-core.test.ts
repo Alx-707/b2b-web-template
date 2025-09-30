@@ -162,7 +162,8 @@ describe('AccessibilityManager Core Tests', () => {
 
   describe('announceThemeChange', () => {
     it('should announce theme change with correct message', () => {
-      const manager = new AccessibilityManager();
+      // 使用中文语言配置
+      const manager = new AccessibilityManager({ language: 'zh' });
 
       manager.announceThemeChange('light');
 
@@ -173,7 +174,8 @@ describe('AccessibilityManager Core Tests', () => {
     });
 
     it('should clear message after delay', () => {
-      const manager = new AccessibilityManager();
+      // 使用中文语言配置
+      const manager = new AccessibilityManager({ language: 'zh' });
 
       manager.announceThemeChange('dark');
 
@@ -188,7 +190,8 @@ describe('AccessibilityManager Core Tests', () => {
 
   describe('announceSwitching', () => {
     it('should announce switching message', () => {
-      const manager = new AccessibilityManager();
+      // 使用中文语言配置
+      const manager = new AccessibilityManager({ language: 'zh' });
 
       manager.announceSwitching();
 
@@ -196,7 +199,8 @@ describe('AccessibilityManager Core Tests', () => {
     });
 
     it('should clear switching message after delay', () => {
-      const manager = new AccessibilityManager();
+      // 使用中文语言配置
+      const manager = new AccessibilityManager({ language: 'zh' });
 
       manager.announceSwitching();
       expect(mockElement.textContent).toBe('正在切换主题...');

@@ -126,13 +126,13 @@ function TechStackTabs({
         }`}
       >
         <TabsList className='mb-8 grid w-full grid-cols-3 gap-1 sm:grid-cols-5 lg:grid-cols-7'>
-          {Object.entries(techStackCategories).map(([key, label]) => (
+          {Object.entries(techStackCategories).map(([key]) => (
             <TabsTrigger
               key={key}
               value={key}
               className='text-xs sm:text-sm'
             >
-              {label}
+              {t(`categories.${key}`)}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -161,7 +161,7 @@ function TechStackTabs({
                       </Badge>
                     </div>
                     <CardDescription className='text-sm'>
-                      {tech.description}
+                      {t(`technologies.${tech.id}`)}
                     </CardDescription>
                   </CardHeader>
                   {tech.url && (

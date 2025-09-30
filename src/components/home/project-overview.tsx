@@ -43,7 +43,7 @@ function FeatureGrid({ t }: { t: (_key: string) => string }) {
       icon: Globe,
       title: t('features.i18n.title'),
       description: t('features.i18n.description'),
-      badge: `${PROJECT_STATS.performance.languages} 语言`,
+      badge: `${PROJECT_STATS.performance.languages} ${t('features.i18n.languageUnit')}`,
     },
     {
       icon: Palette,

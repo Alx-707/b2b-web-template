@@ -7,7 +7,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
@@ -26,7 +25,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 
 /**
  * Mobile Navigation Component
@@ -108,7 +107,6 @@ export function MobileNavigation({ className }: MobileNavigationProps) {
                       | '/contact'
                       | '/blog'
                       | '/products'
-                      | '/diagnostics'
                   }
                   className={cn(
                     'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200',

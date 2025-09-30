@@ -49,6 +49,14 @@ vi.mock('@/i18n/routing', () => ({
       {children}
     </a>
   ),
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+  })),
   usePathname: vi.fn(() => '/'),
 }));
 

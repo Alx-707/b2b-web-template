@@ -1,0 +1,78 @@
+{
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".next",
+  "installCommand": "pnpm install",
+  "devCommand": "pnpm dev",
+  "framework": "nextjs",
+  "regions": ["hkg1", "sin1", "sfo1"],
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        },
+        {
+          "key": "X-Powered-By",
+          "value": "Tucsenberg Web Frontier"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://tucsenberg.com"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/admin",
+      "destination": "/404",
+      "permanent": false
+    },
+    {
+      "source": "/.env",
+      "destination": "/404",
+      "permanent": false
+    },
+    {
+      "source": "/wp-admin",
+      "destination": "/404",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/robots.txt",
+      "destination": "/api/robots"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/health",
+      "schedule": "0 */6 * * *"
+    }
+  ]
+}

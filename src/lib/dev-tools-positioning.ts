@@ -5,6 +5,19 @@
  * 提供智能布局算法和可配置的定位策略
  */
 
+/**
+ * 开发工具常量
+ */
+export const DEV_TOOLS_CONSTANTS = {
+  LAYOUT: {
+    DEFAULT_OFFSET: 50,
+    DEFAULT_Z_INDEX: 1000,
+  },
+  PERFORMANCE: {
+    DELAY: 1000,
+  },
+} as const;
+
 export type DevToolPosition =
   | 'top-left'
   | 'top-right'
@@ -30,75 +43,24 @@ export interface DevToolConfig {
 
 /**
  * 开发工具定位配置
- * 按优先级和功能重要性分配位置
+ *
+ * 布局策略：简洁双角分布
+ * - 左下角：Web Vitals (主要性能监控)
+ * - 右下角：React Scan Indicator (渲染性能)
+ *
+ * 注意：仅保留实际使用的开发工具配置
  */
 export const DEV_TOOLS_CONFIG: Record<string, DevToolConfig> = {
-  // React Scan - 最重要的性能工具，右下角主要位置
-  reactScanIndicator: {
-    id: 'react-scan-indicator',
-    name: 'React Scan Indicator',
-    position: 'bottom-left',
-    size: 'small',
-    priority: 9,
-    zIndex: 1000,
-    collapsible: false,
-  },
-
-  reactScanControlPanel: {
-    id: 'react-scan-control-panel',
-    name: 'React Scan Controls',
-    position: 'bottom-right',
-    size: 'medium',
-    priority: 8,
-    zIndex: 1001,
-    collapsible: true,
-    defaultCollapsed: false,
-  },
-
-  // I18n Performance - 重要但不如 React Scan，放在右上角
-  i18nPerformanceDashboard: {
-    id: 'i18n-performance-dashboard',
-    name: 'I18n Performance',
-    position: 'top-right',
-    size: 'medium',
-    priority: 7,
-    zIndex: 999,
-    collapsible: true,
-    defaultCollapsed: false,
-  },
-
-  i18nPerformanceIndicator: {
-    id: 'i18n-performance-indicator',
-    name: 'I18n Indicator',
-    position: 'top-left',
-    size: 'small',
-    priority: 6,
-    zIndex: 998,
-    collapsible: false,
-  },
-
-  // Web Vitals - 性能监控，左下角次要位置
+  // Web Vitals - 左下角，性能监控工具
   webVitalsIndicator: {
     id: 'web-vitals-indicator',
     name: 'Web Vitals',
-    position: 'left-center',
+    position: 'bottom-left',
     size: 'medium',
-    priority: 5,
-    zIndex: 997,
+    priority: 10,
+    zIndex: 9999,
     collapsible: true,
-    defaultCollapsed: true,
-  },
-
-  // 开发性能监控 - 最低优先级，顶部中央
-  developmentPerformanceMonitor: {
-    id: 'development-performance-monitor',
-    name: 'Dev Performance',
-    position: 'top-center',
-    size: 'small',
-    priority: 4,
-    zIndex: 996,
-    collapsible: true,
-    defaultCollapsed: true,
+    defaultCollapsed: false,
   },
 };
 

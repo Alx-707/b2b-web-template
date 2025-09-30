@@ -6,7 +6,6 @@
  */
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
   isActivePath,
@@ -23,7 +22,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { ZERO } from '@/constants';
 import { COUNT_4 } from '@/constants/count';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 
 // Component implementation
 
@@ -59,13 +58,7 @@ export function MainNavigation({
             <Link
               key={item.key}
               href={
-                item.href as
-                  | '/'
-                  | '/about'
-                  | '/contact'
-                  | '/blog'
-                  | '/products'
-                  | '/diagnostics'
+                item.href as '/' | '/about' | '/contact' | '/blog' | '/products'
               }
               className={cn(
                 'rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200',
@@ -100,7 +93,6 @@ export function MainNavigation({
                       | '/contact'
                       | '/blog'
                       | '/products'
-                      | '/diagnostics'
                   }
                   className={cn(
                     navigationMenuTriggerStyle(),

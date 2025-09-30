@@ -9,7 +9,6 @@
 'use client';
 
 // 导入主要组件集合
-import dynamic from 'next/dynamic';
 import { CoreDynamicComponents } from '@/components/shared/dynamic-imports-core';
 
 export {
@@ -37,28 +36,7 @@ export { CoreDynamicComponents } from '@/components/shared/dynamic-imports-core'
 export const DynamicProgressIndicator = CoreDynamicComponents.ProgressIndicator;
 export const DynamicAnimatedIcon = CoreDynamicComponents.AnimatedIcon;
 
-// 临时直接导出开发工具组件，直到devtools模块修复
-export const DynamicReactScanDemo = dynamic(
-  () =>
-    import('@/components/dev-tools/react-scan-demo').then((mod) => ({
-      default: mod.ReactScanDemo,
-    })),
-  {
-    loading: () => <div>Loading...</div>,
-    ssr: false,
-  },
-);
-
-export const DynamicReactScanStressTest = dynamic(
-  () =>
-    import('@/components/dev-tools/react-scan-demo').then((mod) => ({
-      default: mod.ReactScanStressTest,
-    })),
-  {
-    loading: () => <div>Loading...</div>,
-    ssr: false,
-  },
-);
+// React Scan 已移除
 
 // UI组件的向后兼容导出
 export const DynamicAnimatedCounter = CoreDynamicComponents.AnimatedCounter;

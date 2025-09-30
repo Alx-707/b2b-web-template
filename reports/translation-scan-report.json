@@ -1,12 +1,12 @@
 {
-  "timestamp": "2025-09-19T14:02:45.199Z",
+  "timestamp": "2025-09-30T14:17:33.655Z",
   "summary": {
-    "totalFiles": 779,
-    "scannedFiles": 779,
+    "totalFiles": 707,
+    "scannedFiles": 707,
     "errorCount": 0,
     "warningCount": 0,
-    "totalKeys": 472,
-    "uniqueKeys": 182,
+    "totalKeys": 488,
+    "uniqueKeys": 192,
     "missingKeys": [
       "description",
       "siteName",
@@ -15,26 +15,33 @@
       "missing.key",
       "fallback.key",
       "test.key",
+      "selectTheme",
+      "light",
+      "switchToLight",
+      "dark",
+      "switchToDark",
+      "system",
+      "switchToSystem",
       "loading",
       "toggle",
       "english",
       "chinese",
       "error",
       "theme.title",
-      "theme.toggleLabel",
       "comingSoon",
-      "progress.title",
       "expectedCompletion",
       "backToHome",
       "contactUs",
       "stayTuned",
-      "status",
+      "completed",
+      "current",
+      "upcoming",
+      "ariaLabel",
       "nearCompletion",
+      "status",
       "selectLanguage",
-      "fallbackWarning",
-      "today",
-      "yesterday",
-      "tomorrow",
+      "source",
+      "userSaved",
       "stats.totalTech",
       "stats.categories",
       "stats.modern",
@@ -47,6 +54,7 @@
       "features.security.description",
       "features.i18n.title",
       "features.i18n.description",
+      "features.i18n.languageUnit",
       "features.themes.title",
       "features.themes.description",
       "features.typescript.title",
@@ -151,8 +159,6 @@
       "submitSuccess",
       "submitError",
       "submitting",
-      "submit",
-      "rateLimitMessage",
       "firstName",
       "firstNamePlaceholder",
       "lastName",
@@ -161,19 +167,16 @@
       "emailPlaceholder",
       "company",
       "companyPlaceholder",
-      "acceptPrivacy",
-      "marketingConsent",
       "phone",
       "phonePlaceholder",
       "subject",
       "subjectPlaceholder",
       "message",
       "messagePlaceholder",
-      "instructions.title",
-      "instructions.step1",
-      "instructions.step2",
-      "instructions.step3",
-      "instructions.step4"
+      "acceptPrivacy",
+      "marketingConsent",
+      "submit",
+      "rateLimitMessage"
     ],
     "unusedKeys": [
       "common.loading",
@@ -220,7 +223,6 @@
       "navigation.docs",
       "navigation.pricing",
       "navigation.blog",
-      "navigation.diagnostics",
       "navigation.login",
       "navigation.logout",
       "navigation.profile",
@@ -241,40 +243,6 @@
       "navigation.docsDescription",
       "navigation.guidesDescription",
       "navigation.blogDescription",
-      "diagnostics.title",
-      "diagnostics.description",
-      "diagnostics.controlPanel.title",
-      "diagnostics.controlPanel.description",
-      "diagnostics.controlPanel.refresh",
-      "diagnostics.controlPanel.refreshing",
-      "diagnostics.controlPanel.export",
-      "diagnostics.currentMetrics.title",
-      "diagnostics.currentMetrics.description",
-      "diagnostics.historicalData.title",
-      "diagnostics.historicalData.description",
-      "diagnostics.thresholdReference.title",
-      "diagnostics.thresholdReference.description",
-      "diagnostics.thresholdReference.cls.title",
-      "diagnostics.thresholdReference.cls.good",
-      "diagnostics.thresholdReference.cls.needsImprovement",
-      "diagnostics.thresholdReference.cls.poor",
-      "diagnostics.thresholdReference.lcp.title",
-      "diagnostics.thresholdReference.lcp.good",
-      "diagnostics.thresholdReference.lcp.needsImprovement",
-      "diagnostics.thresholdReference.lcp.poor",
-      "diagnostics.thresholdReference.fid.title",
-      "diagnostics.thresholdReference.fid.good",
-      "diagnostics.thresholdReference.fid.needsImprovement",
-      "diagnostics.thresholdReference.fid.poor",
-      "diagnostics.metrics.cls",
-      "diagnostics.metrics.lcp",
-      "diagnostics.metrics.fid",
-      "diagnostics.metrics.fcp",
-      "diagnostics.metrics.ttfb",
-      "diagnostics.status.good",
-      "diagnostics.status.needsImprovement",
-      "diagnostics.status.poor",
-      "diagnostics.status.excellent",
       "theme.toggle",
       "theme.light",
       "theme.dark",
@@ -295,6 +263,19 @@
       "language.source",
       "language.confidence",
       "language.userPreference",
+      "language.detector.title",
+      "language.detector.source",
+      "language.detector.confidence",
+      "language.detector.userSaved",
+      "language.detector.sources.browser",
+      "language.detector.sources.cookie",
+      "language.detector.sources.url",
+      "language.detector.sources.header",
+      "language.detector.sources.default",
+      "language.detector.sources.user",
+      "language.detector.sources.stored",
+      "language.detector.sources.geo",
+      "language.detector.sources.timezone",
       "home.title",
       "home.subtitle",
       "home.description",
@@ -329,22 +310,41 @@
       "home.techStack.subtitle",
       "home.techStack.learnMore",
       "home.techStack.categories.core",
-      "home.techStack.categories.frontend",
-      "home.techStack.categories.backend",
-      "home.techStack.categories.database",
-      "home.techStack.categories.deployment",
-      "home.techStack.categories.testing",
+      "home.techStack.categories.ui",
+      "home.techStack.categories.i18n",
       "home.techStack.categories.tools",
+      "home.techStack.categories.testing",
+      "home.techStack.categories.dev",
+      "home.techStack.categories.performance",
+      "home.techStack.categories.security",
+      "home.techStack.categories.animation",
+      "home.techStack.categories.deployment",
+      "home.techStack.categories.quality",
+      "home.techStack.categories.docs",
+      "home.techStack.categories.data",
+      "home.techStack.categories.state",
       "home.techStack.technologies.nextjs",
       "home.techStack.technologies.react",
       "home.techStack.technologies.typescript",
       "home.techStack.technologies.tailwindcss",
-      "home.techStack.technologies.nodejs",
-      "home.techStack.technologies.vitest",
-      "home.techStack.technologies.playwright",
-      "home.techStack.technologies.vercel",
+      "home.techStack.technologies.shadcn-ui",
+      "home.techStack.technologies.radix-ui",
+      "home.techStack.technologies.next-intl",
       "home.techStack.technologies.eslint",
       "home.techStack.technologies.prettier",
+      "home.techStack.technologies.husky",
+      "home.techStack.technologies.jest",
+      "home.techStack.technologies.testing-library",
+      "home.techStack.technologies.pnpm",
+      "home.techStack.technologies.turbo",
+      "home.techStack.technologies.lighthouse",
+      "home.techStack.technologies.semgrep",
+      "home.techStack.technologies.embla-carousel",
+      "home.techStack.technologies.vercel",
+      "home.techStack.technologies.sonarqube",
+      "home.techStack.technologies.storybook",
+      "home.techStack.technologies.swr",
+      "home.techStack.technologies.zustand",
       "home.techStack.stats.totalTech",
       "home.techStack.stats.categories",
       "home.techStack.stats.modern",
@@ -476,6 +476,12 @@
       "instructions.saveChanges",
       "actions.deployNow",
       "actions.readDocs",
+      "formTemplate.example.fields.name.label",
+      "formTemplate.example.fields.name.placeholder",
+      "formTemplate.example.fields.email.label",
+      "formTemplate.example.fields.email.placeholder",
+      "formTemplate.example.fields.message.label",
+      "formTemplate.example.fields.message.placeholder",
       "contact.form.title",
       "contact.form.description",
       "contact.form.firstName",
@@ -552,6 +558,16 @@
       "errors.generic",
       "errors.translationMissing",
       "errors.loadingFailed",
+      "progress.status",
+      "progress.nearCompletion",
+      "progress.planning",
+      "progress.development",
+      "progress.testing",
+      "progress.launch",
+      "progress.ariaLabel",
+      "progress.completed",
+      "progress.current",
+      "progress.upcoming",
       "accessibility.skipToContent",
       "accessibility.loading",
       "accessibility.error",
@@ -575,8 +591,11 @@
       "underConstruction.backToHome",
       "underConstruction.comingSoon",
       "underConstruction.expectedCompletion",
+      "underConstruction.dates.q2_2024",
+      "underConstruction.dates.q3_2024",
       "underConstruction.stayTuned",
       "underConstruction.contactUs",
+      "underConstruction.progress.title",
       "underConstruction.pages.products.title",
       "underConstruction.pages.products.description",
       "underConstruction.pages.products.features",
@@ -589,13 +608,6 @@
       "underConstruction.pages.contact.title",
       "underConstruction.pages.contact.description",
       "underConstruction.pages.contact.features",
-      "underConstruction.progress.title",
-      "underConstruction.progress.status",
-      "underConstruction.progress.nearCompletion",
-      "underConstruction.progress.planning",
-      "underConstruction.progress.development",
-      "underConstruction.progress.testing",
-      "underConstruction.progress.launch",
       "underConstruction.animation.loading",
       "underConstruction.animation.construction",
       "underConstruction.status.inProgress",
@@ -651,6 +663,7 @@
     "architecture.tooling.title",
     "architecture.ui.description",
     "architecture.ui.title",
+    "ariaLabel",
     "article.defaultAuthor",
     "backToHome",
     "badge",
@@ -664,6 +677,7 @@
     "community.title",
     "company",
     "companyPlaceholder",
+    "completed",
     "components.badges.default",
     "components.badges.description",
     "components.badges.destructive",
@@ -702,6 +716,8 @@
     "cta.github",
     "cta.title",
     "cta.viewSource",
+    "current",
+    "dark",
     "description",
     "email",
     "emailPlaceholder",
@@ -709,10 +725,10 @@
     "error",
     "expectedCompletion",
     "fallback.key",
-    "fallbackWarning",
     "features.deployment.description",
     "features.deployment.title",
     "features.i18n.description",
+    "features.i18n.languageUnit",
     "features.i18n.title",
     "features.performance.description",
     "features.performance.title",
@@ -725,6 +741,11 @@
     "firstName",
     "firstNamePlaceholder",
     "footer.sections.social.title",
+    "formTemplate.form.error",
+    "formTemplate.form.selectOption",
+    "formTemplate.form.submit",
+    "formTemplate.form.submitting",
+    "formTemplate.form.success",
     "greeting",
     "hello",
     "highlights.accessible",
@@ -735,14 +756,10 @@
     "highlights.secure",
     "highlights.subtitle",
     "highlights.title",
-    "instructions.step1",
-    "instructions.step2",
-    "instructions.step3",
-    "instructions.step4",
-    "instructions.title",
     "lastName",
     "lastNamePlaceholder",
     "learnMore",
+    "light",
     "loading",
     "marketingConsent",
     "message",
@@ -770,9 +787,11 @@
     "responsive.tablet.title",
     "responsive.title",
     "selectLanguage",
+    "selectTheme",
     "seo.description",
     "seo.siteName",
     "siteName",
+    "source",
     "stats.categories",
     "stats.languages",
     "stats.modern",
@@ -790,6 +809,10 @@
     "submitSuccess",
     "submitting",
     "subtitle",
+    "switchToDark",
+    "switchToLight",
+    "switchToSystem",
+    "system",
     "tabs.components",
     "tabs.responsive",
     "tabs.themes",
@@ -810,15 +833,79 @@
     "title",
     "title.line1",
     "title.line2",
-    "today",
     "toggle",
-    "tomorrow",
+    "upcoming",
+    "userSaved",
     "version",
     "website.description",
-    "website.name",
-    "yesterday"
+    "website.name"
   ],
   "keyUsages": {
+    "formTemplate.form.success": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 86,
+        "column": 22
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 247,
+        "column": 21
+      }
+    ],
+    "formTemplate.form.error": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 91,
+        "column": 22
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 251,
+        "column": 34
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 254,
+        "column": 35
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 260,
+        "column": 51
+      }
+    ],
+    "formTemplate.form.submitting": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 96,
+        "column": 22
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 212,
+        "column": 10
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 282,
+        "column": 17
+      }
+    ],
+    "formTemplate.form.selectOption": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 157,
+        "column": 28
+      }
+    ],
+    "formTemplate.form.submit": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 213,
+        "column": 18
+      }
+    ],
     "organization.name": [
       {
         "file": "src/lib/structured-data-generators.ts",
@@ -827,17 +914,17 @@
       },
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 108,
+        "line": 116,
         "column": 14
       },
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 150,
+        "line": 158,
         "column": 8
       },
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 158,
+        "line": 166,
         "column": 8
       }
     ],
@@ -851,49 +938,49 @@
     "organization.phone": [
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 37,
+        "line": 41,
         "column": 22
       }
     ],
     "organization.social.twitter": [
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 42,
+        "line": 46,
         "column": 6
       }
     ],
     "organization.social.linkedin": [
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 45,
+        "line": 49,
         "column": 6
       }
     ],
     "organization.social.github": [
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 48,
+        "line": 52,
         "column": 6
       }
     ],
     "website.name": [
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 68,
+        "line": 72,
         "column": 6
       }
     ],
     "website.description": [
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 71,
+        "line": 75,
         "column": 6
       }
     ],
     "article.defaultAuthor": [
       {
         "file": "src/lib/structured-data-generators.ts",
-        "line": 104,
+        "line": 112,
         "column": 8
       }
     ],
@@ -902,6 +989,11 @@
         "file": "src/lib/seo-metadata.ts",
         "line": 38,
         "column": 20
+      },
+      {
+        "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
+        "line": 79,
+        "column": 9
       },
       {
         "file": "src/components/home/tech-stack-section.tsx",
@@ -924,38 +1016,28 @@
         "column": 15
       },
       {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 14,
-        "column": 11
-      },
-      {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 30,
-        "column": 49
-      },
-      {
         "file": "src/app/[locale]/products/page.tsx",
-        "line": 22,
+        "line": 24,
         "column": 11
       },
       {
         "file": "src/app/[locale]/contact/page.tsx",
-        "line": 23,
+        "line": 25,
         "column": 11
       },
       {
         "file": "src/app/[locale]/contact/page.tsx",
-        "line": 61,
+        "line": 63,
         "column": 17
       },
       {
         "file": "src/app/[locale]/blog/page.tsx",
-        "line": 22,
+        "line": 24,
         "column": 11
       },
       {
         "file": "src/app/[locale]/about/page.tsx",
-        "line": 22,
+        "line": 24,
         "column": 11
       }
     ],
@@ -966,38 +1048,28 @@
         "column": 4
       },
       {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 15,
-        "column": 17
-      },
-      {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 31,
-        "column": 51
-      },
-      {
         "file": "src/app/[locale]/products/page.tsx",
-        "line": 23,
+        "line": 25,
         "column": 17
       },
       {
         "file": "src/app/[locale]/contact/page.tsx",
-        "line": 24,
+        "line": 26,
         "column": 17
       },
       {
         "file": "src/app/[locale]/contact/page.tsx",
-        "line": 62,
+        "line": 64,
         "column": 23
       },
       {
         "file": "src/app/[locale]/blog/page.tsx",
-        "line": 23,
+        "line": 25,
         "column": 17
       },
       {
         "file": "src/app/[locale]/about/page.tsx",
-        "line": 23,
+        "line": 25,
         "column": 17
       }
     ],
@@ -1063,6 +1135,55 @@
         "column": 6
       }
     ],
+    "selectTheme": [
+      {
+        "file": "src/components/theme-toggle.tsx",
+        "line": 49,
+        "column": 20
+      }
+    ],
+    "light": [
+      {
+        "file": "src/components/theme-toggle.tsx",
+        "line": 54,
+        "column": 17
+      }
+    ],
+    "switchToLight": [
+      {
+        "file": "src/components/theme-toggle.tsx",
+        "line": 55,
+        "column": 21
+      }
+    ],
+    "dark": [
+      {
+        "file": "src/components/theme-toggle.tsx",
+        "line": 65,
+        "column": 17
+      }
+    ],
+    "switchToDark": [
+      {
+        "file": "src/components/theme-toggle.tsx",
+        "line": 66,
+        "column": 21
+      }
+    ],
+    "system": [
+      {
+        "file": "src/components/theme-toggle.tsx",
+        "line": 76,
+        "column": 17
+      }
+    ],
+    "switchToSystem": [
+      {
+        "file": "src/components/theme-toggle.tsx",
+        "line": 77,
+        "column": 21
+      }
+    ],
     "loading": [
       {
         "file": "src/components/loading-spinner.tsx",
@@ -1088,7 +1209,7 @@
       },
       {
         "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
-        "line": 147,
+        "line": 150,
         "column": 35
       }
     ],
@@ -1125,12 +1246,17 @@
         "file": "src/components/theme/vercel-theme-toggle-simple.tsx",
         "line": 97,
         "column": 20
+      },
+      {
+        "file": "src/components/theme/floating-theme-toggle.tsx",
+        "line": 104,
+        "column": 20
       }
     ],
     "theme.toggleLabel": [
       {
         "file": "src/components/theme/horizontal-theme-toggle-simple.tsx",
-        "line": 143,
+        "line": 118,
         "column": 18
       }
     ],
@@ -1176,21 +1302,61 @@
         "column": 56
       }
     ],
-    "status": [
+    "completed": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
-        "line": 134,
-        "column": 46
+        "line": 73,
+        "column": 57
+      }
+    ],
+    "current": [
+      {
+        "file": "src/components/shared/progress-indicator.tsx",
+        "line": 73,
+        "column": 89
+      }
+    ],
+    "upcoming": [
+      {
+        "file": "src/components/shared/progress-indicator.tsx",
+        "line": 73,
+        "column": 104
+      }
+    ],
+    "ariaLabel": [
+      {
+        "file": "src/components/shared/progress-indicator.tsx",
+        "line": 147,
+        "column": 18
       }
     ],
     "nearCompletion": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
-        "line": 134,
-        "column": 60
+        "line": 178,
+        "column": 41
+      }
+    ],
+    "status": [
+      {
+        "file": "src/components/shared/progress-indicator.tsx",
+        "line": 178,
+        "column": 63
       }
     ],
     "accessibility.closeMenu": [
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 70,
+        "column": 18
+      },
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 155,
+        "column": 18
+      }
+    ],
+    "accessibility.openMenu": [
       {
         "file": "src/components/layout/mobile-navigation.tsx",
         "line": 71,
@@ -1198,33 +1364,21 @@
       },
       {
         "file": "src/components/layout/mobile-navigation.tsx",
-        "line": 157,
-        "column": 18
-      }
-    ],
-    "accessibility.openMenu": [
-      {
-        "file": "src/components/layout/mobile-navigation.tsx",
-        "line": 72,
-        "column": 18
-      },
-      {
-        "file": "src/components/layout/mobile-navigation.tsx",
-        "line": 157,
+        "line": 155,
         "column": 49
       }
     ],
     "seo.siteName": [
       {
         "file": "src/components/layout/mobile-navigation.tsx",
-        "line": 85,
+        "line": 84,
         "column": 15
       }
     ],
     "seo.description": [
       {
         "file": "src/components/layout/mobile-navigation.tsx",
-        "line": 88,
+        "line": 87,
         "column": 15
       }
     ],
@@ -1236,43 +1390,29 @@
       },
       {
         "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
-        "line": 206,
+        "line": 209,
         "column": 17
       }
     ],
     "footer.sections.social.title": [
       {
         "file": "src/components/layout/footer.tsx",
-        "line": 95,
+        "line": 96,
         "column": 9
       }
     ],
-    "fallbackWarning": [
+    "source": [
       {
-        "file": "src/components/i18n/translation-fallback.tsx",
-        "line": 168,
-        "column": 51
+        "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
+        "line": 86,
+        "column": 15
       }
     ],
-    "today": [
+    "userSaved": [
       {
-        "file": "src/components/i18n/format-helpers.tsx",
-        "line": 61,
-        "column": 22
-      }
-    ],
-    "yesterday": [
-      {
-        "file": "src/components/i18n/format-helpers.tsx",
-        "line": 63,
-        "column": 22
-      }
-    ],
-    "tomorrow": [
-      {
-        "file": "src/components/i18n/format-helpers.tsx",
-        "line": 65,
-        "column": 22
+        "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
+        "line": 103,
+        "column": 50
       }
     ],
     "stats.totalTech": [
@@ -1377,6 +1517,13 @@
         "file": "src/components/home/project-overview.tsx",
         "line": 45,
         "column": 19
+      }
+    ],
+    "features.i18n.languageUnit": [
+      {
+        "file": "src/components/home/project-overview.tsx",
+        "line": 46,
+        "column": 55
       }
     ],
     "features.themes.title": [
@@ -2089,188 +2236,223 @@
     "submitSuccess": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 41,
-        "column": 15
+        "line": 49,
+        "column": 17
       }
     ],
     "submitError": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 45,
-        "column": 15
+        "line": 53,
+        "column": 17
       }
     ],
     "submitting": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 49,
-        "column": 15
+        "line": 57,
+        "column": 38
       },
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 278,
-        "column": 26
-      }
-    ],
-    "submit": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 278,
-        "column": 44
-      }
-    ],
-    "rateLimitMessage": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 283,
-        "column": 13
+        "line": 512,
+        "column": 24
       }
     ],
     "firstName": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 217,
+        "column": 11
+      },
+      {
         "file": "src/components/forms/fields/name-fields.tsx",
-        "line": 30,
+        "line": 23,
         "column": 11
       }
     ],
     "firstNamePlaceholder": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 223,
+        "column": 23
+      },
+      {
         "file": "src/components/forms/fields/name-fields.tsx",
-        "line": 34,
+        "line": 29,
         "column": 23
       }
     ],
     "lastName": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 234,
+        "column": 11
+      },
+      {
         "file": "src/components/forms/fields/name-fields.tsx",
-        "line": 57,
+        "line": 41,
         "column": 11
       }
     ],
     "lastNamePlaceholder": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 240,
+        "column": 23
+      },
+      {
         "file": "src/components/forms/fields/name-fields.tsx",
-        "line": 61,
+        "line": 47,
         "column": 23
       }
     ],
     "email": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 263,
+        "column": 11
+      },
+      {
         "file": "src/components/forms/fields/contact-fields.tsx",
-        "line": 30,
+        "line": 23,
         "column": 11
       }
     ],
     "emailPlaceholder": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 269,
+        "column": 23
+      },
+      {
         "file": "src/components/forms/fields/contact-fields.tsx",
-        "line": 35,
+        "line": 29,
         "column": 23
       }
     ],
     "company": [
       {
-        "file": "src/components/forms/fields/contact-fields.tsx",
-        "line": 52,
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 276,
         "column": 34
+      },
+      {
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 41,
+        "column": 11
       }
     ],
     "companyPlaceholder": [
       {
-        "file": "src/components/forms/fields/contact-fields.tsx",
-        "line": 55,
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 281,
         "column": 23
-      }
-    ],
-    "acceptPrivacy": [
+      },
       {
-        "file": "src/components/forms/fields/checkbox-fields.tsx",
-        "line": 42,
-        "column": 13
-      }
-    ],
-    "marketingConsent": [
-      {
-        "file": "src/components/forms/fields/checkbox-fields.tsx",
-        "line": 69,
-        "column": 13
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 47,
+        "column": 23
       }
     ],
     "phone": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 299,
+        "column": 32
+      },
+      {
         "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 28,
+        "line": 20,
         "column": 34
       }
     ],
     "phonePlaceholder": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 304,
+        "column": 23
+      },
+      {
         "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 32,
+        "line": 25,
         "column": 25
       }
     ],
     "subject": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 310,
+        "column": 34
+      },
+      {
         "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 55,
-        "column": 13
+        "line": 32,
+        "column": 36
       }
     ],
     "subjectPlaceholder": [
       {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 315,
+        "column": 23
+      },
+      {
         "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 59,
+        "line": 37,
         "column": 25
       }
     ],
     "message": [
       {
-        "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 83,
-        "column": 11
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 336,
+        "column": 9
       }
     ],
     "messagePlaceholder": [
       {
-        "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 87,
-        "column": 23
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 341,
+        "column": 21
       }
     ],
-    "instructions.title": [
+    "acceptPrivacy": [
       {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 35,
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 372,
+        "column": 11
+      },
+      {
+        "file": "src/components/forms/fields/checkbox-fields.tsx",
+        "line": 31,
         "column": 13
       }
     ],
-    "instructions.step1": [
+    "marketingConsent": [
       {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 38,
-        "column": 19
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 387,
+        "column": 11
+      },
+      {
+        "file": "src/components/forms/fields/checkbox-fields.tsx",
+        "line": 49,
+        "column": 13
       }
     ],
-    "instructions.step2": [
+    "submit": [
       {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 39,
-        "column": 19
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 511,
+        "column": 21
       }
     ],
-    "instructions.step3": [
+    "rateLimitMessage": [
       {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 40,
-        "column": 19
-      }
-    ],
-    "instructions.step4": [
-      {
-        "file": "src/app/[locale]/react-scan-demo/page.tsx",
-        "line": 41,
-        "column": 19
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 517,
+        "column": 13
       }
     ]
   },
@@ -2283,26 +2465,33 @@
       "missing.key",
       "fallback.key",
       "test.key",
+      "selectTheme",
+      "light",
+      "switchToLight",
+      "dark",
+      "switchToDark",
+      "system",
+      "switchToSystem",
       "loading",
       "toggle",
       "english",
       "chinese",
       "error",
       "theme.title",
-      "theme.toggleLabel",
       "comingSoon",
-      "progress.title",
       "expectedCompletion",
       "backToHome",
       "contactUs",
       "stayTuned",
-      "status",
+      "completed",
+      "current",
+      "upcoming",
+      "ariaLabel",
       "nearCompletion",
+      "status",
       "selectLanguage",
-      "fallbackWarning",
-      "today",
-      "yesterday",
-      "tomorrow",
+      "source",
+      "userSaved",
       "stats.totalTech",
       "stats.categories",
       "stats.modern",
@@ -2315,6 +2504,7 @@
       "features.security.description",
       "features.i18n.title",
       "features.i18n.description",
+      "features.i18n.languageUnit",
       "features.themes.title",
       "features.themes.description",
       "features.typescript.title",
@@ -2419,8 +2609,6 @@
       "submitSuccess",
       "submitError",
       "submitting",
-      "submit",
-      "rateLimitMessage",
       "firstName",
       "firstNamePlaceholder",
       "lastName",
@@ -2429,19 +2617,16 @@
       "emailPlaceholder",
       "company",
       "companyPlaceholder",
-      "acceptPrivacy",
-      "marketingConsent",
       "phone",
       "phonePlaceholder",
       "subject",
       "subjectPlaceholder",
       "message",
       "messagePlaceholder",
-      "instructions.title",
-      "instructions.step1",
-      "instructions.step2",
-      "instructions.step3",
-      "instructions.step4"
+      "acceptPrivacy",
+      "marketingConsent",
+      "submit",
+      "rateLimitMessage"
     ],
     "unusedKeys": [
       "common.loading",
@@ -2488,7 +2673,6 @@
       "navigation.docs",
       "navigation.pricing",
       "navigation.blog",
-      "navigation.diagnostics",
       "navigation.login",
       "navigation.logout",
       "navigation.profile",
@@ -2509,40 +2693,6 @@
       "navigation.docsDescription",
       "navigation.guidesDescription",
       "navigation.blogDescription",
-      "diagnostics.title",
-      "diagnostics.description",
-      "diagnostics.controlPanel.title",
-      "diagnostics.controlPanel.description",
-      "diagnostics.controlPanel.refresh",
-      "diagnostics.controlPanel.refreshing",
-      "diagnostics.controlPanel.export",
-      "diagnostics.currentMetrics.title",
-      "diagnostics.currentMetrics.description",
-      "diagnostics.historicalData.title",
-      "diagnostics.historicalData.description",
-      "diagnostics.thresholdReference.title",
-      "diagnostics.thresholdReference.description",
-      "diagnostics.thresholdReference.cls.title",
-      "diagnostics.thresholdReference.cls.good",
-      "diagnostics.thresholdReference.cls.needsImprovement",
-      "diagnostics.thresholdReference.cls.poor",
-      "diagnostics.thresholdReference.lcp.title",
-      "diagnostics.thresholdReference.lcp.good",
-      "diagnostics.thresholdReference.lcp.needsImprovement",
-      "diagnostics.thresholdReference.lcp.poor",
-      "diagnostics.thresholdReference.fid.title",
-      "diagnostics.thresholdReference.fid.good",
-      "diagnostics.thresholdReference.fid.needsImprovement",
-      "diagnostics.thresholdReference.fid.poor",
-      "diagnostics.metrics.cls",
-      "diagnostics.metrics.lcp",
-      "diagnostics.metrics.fid",
-      "diagnostics.metrics.fcp",
-      "diagnostics.metrics.ttfb",
-      "diagnostics.status.good",
-      "diagnostics.status.needsImprovement",
-      "diagnostics.status.poor",
-      "diagnostics.status.excellent",
       "theme.toggle",
       "theme.light",
       "theme.dark",
@@ -2563,6 +2713,19 @@
       "language.source",
       "language.confidence",
       "language.userPreference",
+      "language.detector.title",
+      "language.detector.source",
+      "language.detector.confidence",
+      "language.detector.userSaved",
+      "language.detector.sources.browser",
+      "language.detector.sources.cookie",
+      "language.detector.sources.url",
+      "language.detector.sources.header",
+      "language.detector.sources.default",
+      "language.detector.sources.user",
+      "language.detector.sources.stored",
+      "language.detector.sources.geo",
+      "language.detector.sources.timezone",
       "home.title",
       "home.subtitle",
       "home.description",
@@ -2597,22 +2760,41 @@
       "home.techStack.subtitle",
       "home.techStack.learnMore",
       "home.techStack.categories.core",
-      "home.techStack.categories.frontend",
-      "home.techStack.categories.backend",
-      "home.techStack.categories.database",
-      "home.techStack.categories.deployment",
-      "home.techStack.categories.testing",
+      "home.techStack.categories.ui",
+      "home.techStack.categories.i18n",
       "home.techStack.categories.tools",
+      "home.techStack.categories.testing",
+      "home.techStack.categories.dev",
+      "home.techStack.categories.performance",
+      "home.techStack.categories.security",
+      "home.techStack.categories.animation",
+      "home.techStack.categories.deployment",
+      "home.techStack.categories.quality",
+      "home.techStack.categories.docs",
+      "home.techStack.categories.data",
+      "home.techStack.categories.state",
       "home.techStack.technologies.nextjs",
       "home.techStack.technologies.react",
       "home.techStack.technologies.typescript",
       "home.techStack.technologies.tailwindcss",
-      "home.techStack.technologies.nodejs",
-      "home.techStack.technologies.vitest",
-      "home.techStack.technologies.playwright",
-      "home.techStack.technologies.vercel",
+      "home.techStack.technologies.shadcn-ui",
+      "home.techStack.technologies.radix-ui",
+      "home.techStack.technologies.next-intl",
       "home.techStack.technologies.eslint",
       "home.techStack.technologies.prettier",
+      "home.techStack.technologies.husky",
+      "home.techStack.technologies.jest",
+      "home.techStack.technologies.testing-library",
+      "home.techStack.technologies.pnpm",
+      "home.techStack.technologies.turbo",
+      "home.techStack.technologies.lighthouse",
+      "home.techStack.technologies.semgrep",
+      "home.techStack.technologies.embla-carousel",
+      "home.techStack.technologies.vercel",
+      "home.techStack.technologies.sonarqube",
+      "home.techStack.technologies.storybook",
+      "home.techStack.technologies.swr",
+      "home.techStack.technologies.zustand",
       "home.techStack.stats.totalTech",
       "home.techStack.stats.categories",
       "home.techStack.stats.modern",
@@ -2744,6 +2926,12 @@
       "instructions.saveChanges",
       "actions.deployNow",
       "actions.readDocs",
+      "formTemplate.example.fields.name.label",
+      "formTemplate.example.fields.name.placeholder",
+      "formTemplate.example.fields.email.label",
+      "formTemplate.example.fields.email.placeholder",
+      "formTemplate.example.fields.message.label",
+      "formTemplate.example.fields.message.placeholder",
       "contact.form.title",
       "contact.form.description",
       "contact.form.firstName",
@@ -2820,6 +3008,16 @@
       "errors.generic",
       "errors.translationMissing",
       "errors.loadingFailed",
+      "progress.status",
+      "progress.nearCompletion",
+      "progress.planning",
+      "progress.development",
+      "progress.testing",
+      "progress.launch",
+      "progress.ariaLabel",
+      "progress.completed",
+      "progress.current",
+      "progress.upcoming",
       "accessibility.skipToContent",
       "accessibility.loading",
       "accessibility.error",
@@ -2843,8 +3041,11 @@
       "underConstruction.backToHome",
       "underConstruction.comingSoon",
       "underConstruction.expectedCompletion",
+      "underConstruction.dates.q2_2024",
+      "underConstruction.dates.q3_2024",
       "underConstruction.stayTuned",
       "underConstruction.contactUs",
+      "underConstruction.progress.title",
       "underConstruction.pages.products.title",
       "underConstruction.pages.products.description",
       "underConstruction.pages.products.features",
@@ -2857,13 +3058,6 @@
       "underConstruction.pages.contact.title",
       "underConstruction.pages.contact.description",
       "underConstruction.pages.contact.features",
-      "underConstruction.progress.title",
-      "underConstruction.progress.status",
-      "underConstruction.progress.nearCompletion",
-      "underConstruction.progress.planning",
-      "underConstruction.progress.development",
-      "underConstruction.progress.testing",
-      "underConstruction.progress.launch",
       "underConstruction.animation.loading",
       "underConstruction.animation.construction",
       "underConstruction.status.inProgress",

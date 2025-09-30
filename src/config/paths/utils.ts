@@ -44,7 +44,6 @@ export function getPathnames(): Record<string, string> {
     '/contact': '/contact',
     '/blog': '/blog',
     '/products': '/products',
-    '/diagnostics': '/diagnostics',
     '/services': '/services',
     '/pricing': '/pricing',
     '/support': '/support',

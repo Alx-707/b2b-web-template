@@ -591,7 +591,6 @@ describe('paths configuration', () => {
         'support',
         'privacy',
         'terms',
-        'diagnostics',
       ];
 
       // All expected types should be present

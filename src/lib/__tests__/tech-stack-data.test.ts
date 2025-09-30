@@ -43,7 +43,8 @@ describe('tech-stack-data', () => {
         expect(item.name).toBeTruthy();
         expect(item.version).toBeTruthy();
         expect(item.category).toBeTruthy();
-        expect(item.description).toBeTruthy();
+        // description 可以为空字符串（已移除硬编码中文）
+        expect(item.description).toBeDefined();
       });
     });
 
@@ -217,20 +218,21 @@ describe('tech-stack-data', () => {
     });
 
     it('should have specific category mappings', () => {
-      expect(techStackCategories.core).toBe('核心框架');
-      expect(techStackCategories.ui).toBe('UI 系统');
-      expect(techStackCategories.i18n).toBe('国际化');
-      expect(techStackCategories.tools).toBe('工具链');
-      expect(techStackCategories.testing).toBe('测试');
-      expect(techStackCategories.dev).toBe('开发工具');
-      expect(techStackCategories.performance).toBe('性能监控');
-      expect(techStackCategories.security).toBe('安全');
-      expect(techStackCategories.animation).toBe('动画');
-      expect(techStackCategories.deployment).toBe('部署');
-      expect(techStackCategories.quality).toBe('代码质量');
-      expect(techStackCategories.docs).toBe('文档');
-      expect(techStackCategories.data).toBe('数据获取');
-      expect(techStackCategories.state).toBe('状态管理');
+      // 分类映射使用英文键名（已移除硬编码中文）
+      expect(techStackCategories.core).toBe('core');
+      expect(techStackCategories.ui).toBe('ui');
+      expect(techStackCategories.i18n).toBe('i18n');
+      expect(techStackCategories.tools).toBe('tools');
+      expect(techStackCategories.testing).toBe('testing');
+      expect(techStackCategories.dev).toBe('dev');
+      expect(techStackCategories.performance).toBe('performance');
+      expect(techStackCategories.security).toBe('security');
+      expect(techStackCategories.animation).toBe('animation');
+      expect(techStackCategories.deployment).toBe('deployment');
+      expect(techStackCategories.quality).toBe('quality');
+      expect(techStackCategories.docs).toBe('docs');
+      expect(techStackCategories.data).toBe('data');
+      expect(techStackCategories.state).toBe('state');
     });
   });
 

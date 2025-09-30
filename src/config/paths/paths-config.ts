@@ -33,11 +33,6 @@ export const PATHS_CONFIG = Object.freeze({
     zh: '/products',
   }),
 
-  diagnostics: Object.freeze({
-    en: '/diagnostics',
-    zh: '/diagnostics',
-  }),
-
   services: Object.freeze({
     en: '/services',
     zh: '/services',
