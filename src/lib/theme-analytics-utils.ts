@@ -3,7 +3,7 @@
  * Theme analytics utility functions
  */
 
-import * as Sentry from '@sentry/nextjs';
+import * as Sentry from '@/lib/sentry-client';
 import type {
   ThemePerformanceMetrics,
   ThemePerformanceSummary,

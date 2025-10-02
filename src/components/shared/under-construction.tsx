@@ -1,11 +1,16 @@
 'use client';
 
+import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { AnimatedIcon } from '@/components/shared/animated-icon';
 import { ProgressIndicator } from '@/components/shared/progress-indicator';
 import { Button } from '@/components/ui/button';
 import { ONE } from '@/constants';
+import {
+  useDeferredBackground,
+  useDeferredContent,
+} from '@/hooks/use-deferred-render';
 import { Link } from '@/i18n/routing';
 
 interface UnderConstructionProps {
@@ -25,6 +30,16 @@ export function UnderConstruction({
 }: UnderConstructionProps) {
   const t = useTranslations('underConstruction');
   const tPage = useTranslations(`underConstruction.pages.${pageType}`);
+  const detailsRef = useRef<HTMLDivElement | null>(null);
+
+  // 背景装饰延后渲染，避免首屏大面积模糊造成绘制开销
+  const showBg = useDeferredBackground({ timeout: 1200 });
+
+  // 延迟/按需渲染次要内容（功能预告与进度卡片），避免与 LCP 竞争
+  const showDeferred = useDeferredContent(detailsRef, {
+    rootMargin: '200px',
+    timeout: 1200,
+  });
 
   return (
     <div
@@ -47,7 +62,7 @@ export function UnderConstruction({
         {/* 页面标题 */}
         <div className='space-y-4'>
           <h1 className='text-4xl font-bold tracking-tight md:text-5xl'>
-            <span className='from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-transparent'>
+            <span className='md:from-primary md:to-primary/60 text-foreground md:bg-gradient-to-r md:bg-clip-text md:text-transparent'>
               {tPage('title')}
             </span>
           </h1>
@@ -58,22 +73,43 @@ export function UnderConstruction({
         </div>
 
         {/* 功能预告 */}
-        <div className='bg-card rounded-lg border p-6 shadow-sm'>
-          <h3 className='text-card-foreground mb-3 text-lg font-semibold'>
-            {t('comingSoon')}
-          </h3>
-          <p className='text-muted-foreground'>{tPage('features')}</p>
+        <div ref={detailsRef}>
+          {showDeferred ? (
+            <div className='bg-card rounded-lg border p-6 shadow-sm'>
+              <h3 className='text-card-foreground mb-3 text-lg font-semibold'>
+                {t('comingSoon')}
+              </h3>
+              <p className='text-muted-foreground'>{tPage('features')}</p>
+            </div>
+          ) : (
+            <div
+              className='bg-muted/40 rounded-lg border p-6'
+              aria-hidden='true'
+            >
+              <div className='bg-muted mb-3 h-5 w-40 animate-pulse rounded' />
+              <div className='bg-muted h-4 w-full animate-pulse rounded' />
+            </div>
+          )}
         </div>
 
         {/* 进度指示器 */}
-        {showProgress && (
-          <div className='bg-card rounded-lg border p-6 shadow-sm'>
-            <h3 className='text-card-foreground mb-6 text-lg font-semibold'>
-              {t('progress.title')}
-            </h3>
-            <ProgressIndicator currentStep={currentStep} />
-          </div>
-        )}
+        {showProgress &&
+          (showDeferred ? (
+            <div className='bg-card rounded-lg border p-6 shadow-sm'>
+              <h3 className='text-card-foreground mb-6 text-lg font-semibold'>
+                {t('progress.title')}
+              </h3>
+              <ProgressIndicator currentStep={currentStep} />
+            </div>
+          ) : (
+            <div
+              className='bg-muted/40 rounded-lg border p-6'
+              aria-hidden='true'
+            >
+              <div className='bg-muted mb-6 h-5 w-32 animate-pulse rounded' />
+              <div className='bg-muted h-2 w-full animate-pulse rounded' />
+            </div>
+          ))}
 
         {/* 预计完成时间 */}
         <div className='bg-primary/5 border-primary/20 rounded-lg border p-4'>
@@ -108,10 +144,12 @@ export function UnderConstruction({
         </div>
       </div>
 
-      {/* 背景装饰 - 简化版本 */}
-      <div className='pointer-events-none fixed inset-0 -z-10 overflow-hidden'>
-        <div className='bg-primary/3 absolute top-1/4 left-1/4 h-64 w-64 rounded-full blur-3xl' />
-      </div>
+      {/* 背景装饰 - 延后呈现，降低 LCP 绘制压力 */}
+      {showBg ? (
+        <div className='pointer-events-none fixed inset-0 -z-10 overflow-hidden'>
+          <div className='bg-primary/3 absolute top-1/4 left-1/4 h-64 w-64 rounded-full blur-3xl' />
+        </div>
+      ) : null}
     </div>
   );
 }

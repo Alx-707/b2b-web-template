@@ -64,8 +64,8 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-    // 启用Next.js 15实验性testProxy用于Playwright测试环境
-    testProxy: true,
+    // 仅在 CI/测试环境启用 testProxy，生产环境禁用以避免运行时缺少 turbopack runtime 导致的 500
+    testProxy: process.env.CI === 'true',
     // PPR 需要 Next.js canary 版本，暂时禁用
     // ppr: 'incremental',
   },
@@ -113,6 +113,15 @@ const nextConfig: NextConfig = {
           priority: 15,
           enforce: true,
         },
+        // Floating UI 弹层库分离（优先级高于 Radix UI）
+        // 只包括异步导入，减少首屏加载
+        floatingui: {
+          test: /[\\/]node_modules[\\/]@floating-ui[\\/]/,
+          name: 'floating-ui',
+          chunks: 'async',
+          priority: 16,
+          enforce: true,
+        },
         // Lucide 图标库分离
         lucide: {
           test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
@@ -121,11 +130,11 @@ const nextConfig: NextConfig = {
           priority: 15,
           enforce: true,
         },
-        // Sentry 监控工具分离
+        // Sentry 监控工具分离（仅异步导入，避免打入首屏vendors）
         sentry: {
           test: /[\\/]node_modules[\\/]@sentry[\\/]/,
           name: 'sentry',
-          chunks: 'all',
+          chunks: 'async',
           priority: 15,
           enforce: true,
         },
@@ -161,9 +170,25 @@ const nextConfig: NextConfig = {
           priority: 8,
           enforce: true,
         },
+        // 分析和监控库分离
+        analytics: {
+          test: /[\\/]node_modules[\\/](@vercel\/analytics|web-vitals)[\\/]/,
+          name: 'analytics-libs',
+          chunks: 'all',
+          priority: 14,
+          enforce: true,
+        },
+        // UI通知和交互库分离
+        ui: {
+          test: /[\\/]node_modules[\\/](sonner|@marsidev\/react-turnstile)[\\/]/,
+          name: 'ui-libs',
+          chunks: 'all',
+          priority: 11,
+          enforce: true,
+        },
         // 其他第三方库
         vendor: {
-          test: /[\\/]node_modules[\\/](?!(react|react-dom|@radix-ui|lucide-react|@sentry|next-intl|@next[\\/]|next-themes|nextjs-toploader|@mdx-js|gray-matter|remark|rehype|zod|clsx|class-variance-authority|tailwind-merge|embla-carousel)[\\/])/,
+          test: /[\\/]node_modules[\\/](?!(react|react-dom|@radix-ui|lucide-react|@sentry|next-intl|@next[\\/]|next-themes|nextjs-toploader|@mdx-js|gray-matter|remark|rehype|zod|clsx|class-variance-authority|tailwind-merge|embla-carousel|@vercel\/analytics|web-vitals|sonner|@marsidev\/react-turnstile)[\\/])/,
           name: 'vendors',
           chunks: 'all',
           priority: 5,
@@ -220,7 +245,7 @@ const sentryWebpackPluginOptions = {
   automaticVercelMonitors: false,
 
   // Additional bundle size optimizations
-  hideSourceMaps: true, // Hide source maps from public access
+  hideSourceMaps: false, // Temporarily disabled for bundle analysis
 
   // Only enable in production to reduce development build time
   enabled: process.env['NODE_ENV'] === 'production',
@@ -228,5 +253,15 @@ const sentryWebpackPluginOptions = {
 
 export default withSentryConfig(
   withBundleAnalyzer(withNextIntl(withMDX(nextConfig))),
-  sentryWebpackPluginOptions,
+  {
+    // Build options for withSentryConfig (not just webpack plugin)
+    autoInstrumentAppDirectory: false, // avoid injecting client instrumentation into app router
+    disableManifestInjection: true, // save client bytes by skipping route manifest injection
+    bundleSizeOptimizations: {
+      excludeTracing: true, // 不使用性能追踪时可移除 tracing 相关代码
+      excludeDebugStatements: true,
+    },
+    // Pass through webpack plugin options
+    ...sentryWebpackPluginOptions,
+  },
 );

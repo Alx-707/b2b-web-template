@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import type { Locale } from '@/types/i18n';
 import {
   BROWSER_LOCALE_MAP,
@@ -12,9 +13,11 @@ import { MAGIC_0_7 } from '@/constants/decimal';
 
 /**
  * 客户端语言检测 Hook
+ *
+ * 使用 useCallback 稳定化返回的函数引用，避免依赖此 Hook 的组件重复渲染
  */
 export function useClientLocaleDetection() {
-  const detectClientLocale = (): LocaleDetectionResult => {
+  const detectClientLocale = useCallback((): LocaleDetectionResult => {
     // 客户端检测逻辑
     const userOverride = LocaleStorageManager.getUserOverride();
     if (userOverride && SUPPORTED_LOCALES.includes(userOverride)) {
@@ -69,7 +72,8 @@ export function useClientLocaleDetection() {
       confidence: CONFIDENCE_WEIGHTS.DEFAULT_FALLBACK,
       details: { fallbackUsed: true },
     };
-  };
+  }, []); // 空依赖数组：函数逻辑不依赖外部变量，保持引用稳定
 
-  return { detectClientLocale };
+  // 使用 useMemo 稳定化返回对象
+  return useMemo(() => ({ detectClientLocale }), [detectClientLocale]);
 }

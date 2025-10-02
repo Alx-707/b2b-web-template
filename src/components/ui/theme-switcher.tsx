@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Monitor, Moon, Sun } from 'lucide-react';
-import { motion } from 'motion/react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 
@@ -69,6 +69,14 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
     );
   }
 
+  const MotionHighlight = dynamic(
+    () =>
+      import('./theme-switcher-highlight').then(
+        (m) => m.ThemeSwitcherHighlight,
+      ),
+    { ssr: false },
+  );
+
   return (
     <div
       className={cn(
@@ -87,13 +95,7 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
             onClick={() => handleThemeClick(key as 'light' | 'dark' | 'system')}
             type='button'
           >
-            {isActive && (
-              <motion.div
-                className='bg-secondary absolute inset-0 rounded-full'
-                layoutId='activeTheme'
-                transition={{ type: 'spring', duration: 0.5 }}
-              />
-            )}
+            {isActive ? <MotionHighlight /> : null}
             <Icon
               className={cn(
                 'relative z-10 m-auto h-4 w-4',

@@ -153,3 +153,5 @@ export interface ConfigOptions {
   /** Sentry DSN */
   sentryDsn?: string;
 }
+
+// Window接口扩展已在lib.dom.d.ts中定义，无需重复声明

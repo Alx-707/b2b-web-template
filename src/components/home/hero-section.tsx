@@ -1,10 +1,15 @@
 'use client';
 
+import { useRef } from 'react';
 import { ArrowRight, ExternalLink, Github } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MAGIC_0_3 } from '@/constants/decimal';
+import {
+  useDeferredBackground,
+  useDeferredContent,
+} from '@/hooks/use-deferred-render';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 
 // Hero Badge Component
@@ -55,9 +60,7 @@ function HeroTitle({
       }`}
     >
       <span className='block'>{line1}</span>
-      <span className='from-primary to-secondary block bg-gradient-to-r bg-clip-text text-transparent'>
-        {line2}
-      </span>
+      <span className='text-foreground block'>{line2}</span>
     </h1>
   );
 }
@@ -168,6 +171,7 @@ function HeroStats({ t }: { t: (_key: string) => string }) {
 
 export function HeroSection() {
   const t = useTranslations('home.hero');
+  const deferredRef = useRef<HTMLDivElement | null>(null);
 
   // 动画Hook
   const { ref: badgeRef, isVisible: badgeVisible } =
@@ -188,14 +192,30 @@ export function HeroSection() {
       triggerOnce: true,
     });
 
+  // 延迟渲染背景大面积模糊装饰，降低首屏绘制与合成压力
+  const showBg = useDeferredBackground({ timeout: 1200 });
+
+  // 视口/空闲后再渲染技术徽章与 CTA，避免与 LCP 竞争
+  const showDeferred = useDeferredContent(deferredRef, {
+    rootMargin: '200px',
+    timeout: 1200,
+  });
+
   return (
     <section className='from-background via-background to-muted/20 relative overflow-hidden bg-gradient-to-br py-20 sm:py-32'>
-      {/* 背景装饰 */}
-      <div className='absolute inset-0 -z-10'>
-        <div className='absolute top-0 left-1/2 -translate-x-1/2 transform'>
-          <div className='from-primary/10 to-secondary/10 h-[600px] w-[600px] rounded-full bg-gradient-to-r blur-3xl' />
-        </div>
-      </div>
+      {/* 背景装饰（延后渲染） - 移动端纯色，桌面端小半径径向渐变 */}
+      {showBg ? (
+        <>
+          {/* 移动端纯色背景 */}
+          <div className='bg-background absolute inset-0 -z-10 md:hidden' />
+          {/* 桌面端小半径径向渐变 */}
+          <div className='absolute inset-0 -z-10 hidden md:block'>
+            <div className='absolute top-0 left-1/2 -translate-x-1/2 transform'>
+              <div className='h-[600px] w-[600px] bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.03)_0%,transparent_32px)]' />
+            </div>
+          </div>
+        </>
+      ) : null}
 
       <div className='container mx-auto px-4'>
         <div className='mx-auto max-w-4xl text-center'>
@@ -217,15 +237,66 @@ export function HeroSection() {
             {t('subtitle')}
           </p>
 
-          <TechStackBadges />
+          <div ref={deferredRef}>
+            {showDeferred ? (
+              <TechStackBadges />
+            ) : (
+              <div className='mb-10 flex flex-wrap justify-center gap-3'>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className='bg-muted h-7 w-28 animate-pulse rounded'
+                    aria-hidden='true'
+                  />
+                ))}
+              </div>
+            )}
+          </div>
 
-          <HeroActionButtons
-            buttonsRef={buttonsRef}
-            buttonsVisible={buttonsVisible}
-            t={t}
-          />
+          {showDeferred ? (
+            <HeroActionButtons
+              buttonsRef={buttonsRef}
+              buttonsVisible={buttonsVisible}
+              t={t}
+            />
+          ) : (
+            <div
+              ref={buttonsRef}
+              className={`flex flex-col items-center gap-4 transition-all delay-400 duration-700 ease-out sm:flex-row sm:justify-center ${
+                buttonsVisible
+                  ? 'translate-y-0 opacity-100'
+                  : 'translate-y-8 opacity-0'
+              }`}
+            >
+              <div
+                className='bg-muted h-12 w-40 animate-pulse rounded'
+                aria-hidden='true'
+              />
+              <div
+                className='bg-muted h-12 w-40 animate-pulse rounded'
+                aria-hidden='true'
+              />
+            </div>
+          )}
 
-          <HeroStats t={t} />
+          {showDeferred ? (
+            <HeroStats t={t} />
+          ) : (
+            <div
+              className='mt-16 grid grid-cols-2 gap-8 sm:grid-cols-4'
+              aria-hidden='true'
+            >
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className='text-center'
+                >
+                  <div className='bg-muted mx-auto h-8 w-16 animate-pulse rounded' />
+                  <div className='bg-muted mx-auto mt-2 h-4 w-20 animate-pulse rounded' />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>

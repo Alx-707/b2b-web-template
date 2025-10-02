@@ -156,6 +156,8 @@ export const LanguageSwitcher = memo(
             size={isCompact ? 'sm' : 'icon'}
             disabled={isPending}
             className={cn(
+              'bg-background hover:bg-accent',
+              'border-border/30 border',
               'transition-colors duration-200',
               isCompact && 'gap-1 px-2',
               className,
@@ -214,7 +216,9 @@ export const LanguageSwitcher = memo(
                   </span>
 
                   <div className='flex flex-1 flex-col'>
-                    <span className='font-medium'>{language.nativeName}</span>
+                    <span className='text-xs font-medium'>
+                      {language.nativeName}
+                    </span>
                     <span className='text-muted-foreground text-xs'>
                       {language.name}
                     </span>

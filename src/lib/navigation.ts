@@ -25,6 +25,7 @@ export interface NavigationItem {
 }
 
 // Main navigation configuration
+// 导航顺序：首页、产品、博客、关于
 export const mainNavigation: NavigationItem[] = [
   {
     key: 'home',
@@ -32,20 +33,36 @@ export const mainNavigation: NavigationItem[] = [
     translationKey: 'navigation.home',
   },
   {
-    key: 'about',
-    href: '/about',
-    translationKey: 'navigation.about',
-  },
-
-  {
     key: 'products',
     href: '/products',
     translationKey: 'navigation.products',
+    children: [
+      {
+        key: 'solutions',
+        href: '/products/solutions',
+        translationKey: 'navigation.solutions',
+      },
+      {
+        key: 'enterprise',
+        href: '/products/enterprise',
+        translationKey: 'navigation.enterprise',
+      },
+      {
+        key: 'pricing',
+        href: '/products/pricing',
+        translationKey: 'navigation.pricing',
+      },
+    ],
   },
   {
     key: 'blog',
     href: '/blog',
     translationKey: 'navigation.blog',
+  },
+  {
+    key: 'about',
+    href: '/about',
+    translationKey: 'navigation.about',
   },
   // Note: contact page is accessible via direct URL but not shown in navigation
 ];

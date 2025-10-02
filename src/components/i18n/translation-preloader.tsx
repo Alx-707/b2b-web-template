@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable no-case-declarations -- switch语句中需要声明函数变量，用于事件处理器 */
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocale } from 'next-intl';
 import {
   I18nPerformanceMonitor,
@@ -79,10 +79,16 @@ export function TranslationPreloader({
 }: TranslationPreloaderProps) {
   const currentLocale = useLocale();
 
-  useEffect(() => {
-    // 确定要预加载的语言
-    const targetLocales = locales || [currentLocale, 'en'];
+  // 稳定化 locales 数组引用，避免父组件传入内联数组导致重复执行
+  // 使用 JSON.stringify 比较数组内容而非引用
+  const localesKey = locales ? JSON.stringify(locales) : null;
+  const targetLocales = useMemo(
+    () => (locales ? [...locales] : [currentLocale, 'en']),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- localesKey 已经包含了 locales 的内容
+    [currentLocale, localesKey],
+  );
 
+  useEffect(() => {
     const preloadWithStrategy = async () => {
       const startTime = performance.now();
 
@@ -149,7 +155,7 @@ export function TranslationPreloader({
     };
 
     preloadWithStrategy();
-  }, [currentLocale, locales, strategy, enableMonitoring]);
+  }, [targetLocales, strategy, enableMonitoring]); // 使用稳定化的 targetLocales
 
   // 这个组件不渲染任何内容
   return null;

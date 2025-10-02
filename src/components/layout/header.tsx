@@ -6,11 +6,43 @@
  */
 'use client';
 
+import dynamic from 'next/dynamic';
 import { cn } from '@/lib/utils';
-import { LanguageToggle } from '@/components/language-toggle';
 import { Logo } from '@/components/layout/logo';
-import { MainNavigation } from '@/components/layout/main-navigation';
-import { MobileNavigation } from '@/components/layout/mobile-navigation';
+import { useScrollShadow } from '@/hooks/use-scroll-shadow';
+
+const MobileNavigation = dynamic(
+  () =>
+    import('@/components/layout/mobile-navigation').then(
+      (m) => m.MobileNavigation,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className='h-9 w-9 rounded-md md:hidden'
+        aria-hidden='true'
+      />
+    ),
+  },
+);
+
+const NavSwitcher = dynamic(() =>
+  import('@/components/layout/nav-switcher').then((m) => m.NavSwitcher),
+);
+
+const LanguageToggle = dynamic(
+  () => import('@/components/language-toggle').then((m) => m.LanguageToggle),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className='h-9 w-20 rounded-md'
+        aria-hidden='true'
+      />
+    ),
+  },
+);
 
 /**
  * Header Component
@@ -36,25 +68,42 @@ export function Header({
   const isMinimal = variant === 'minimal';
   const isTransparent = variant === 'transparent';
 
+  // Vercel-style scroll shadow effect
+  const scrolled = useScrollShadow();
+
+  // Check if using Vercel navigation variant
+  const isVercelNav = process.env.NEXT_PUBLIC_NAV_VARIANT !== 'legacy';
+
   return (
     <header
       className={cn(
-        'bg-background/95 supports-[backdrop-filter]:bg-background/60 w-full border-b backdrop-blur',
+        // Vercel-style: solid background, no blur effect
+        'bg-background w-full',
         isSticky && 'sticky top-0 z-50',
         isTransparent && 'border-transparent bg-transparent',
+        // Vercel-style scroll border: 隐藏 → 滚动时显示灰色细线
+        isVercelNav
+          ? scrolled
+            ? 'border-b border-gray-200 transition-all duration-200 dark:border-gray-800'
+            : 'border-b border-transparent transition-all duration-200'
+          : !isTransparent && 'border-border border-b',
         className,
       )}
     >
-      <div className='container mx-auto px-4'>
-        <div className='flex h-16 items-center justify-between'>
+      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <div className='relative flex h-16 items-center justify-between'>
           {/* Left section: Logo + Mobile Menu */}
           <div className='flex items-center gap-4'>
             <MobileNavigation />
             <Logo />
           </div>
 
-          {/* Center section: Main Navigation (Desktop) */}
-          {!isMinimal && <MainNavigation className='flex-1 justify-center' />}
+          {/* Center section: Main Navigation (Desktop) - Absolutely centered */}
+          {!isMinimal && (
+            <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+              <NavSwitcher />
+            </div>
+          )}
 
           {/* Right section: Utility Controls */}
           <div className='flex items-center gap-2'>

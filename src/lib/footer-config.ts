@@ -153,18 +153,32 @@ export const FOOTER_SECTIONS: FooterSection[] = [
 // Social media links - based on the reference design
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    key: 'twitter',
-    href: 'https://twitter.com/tucsenberg',
-    icon: 'twitter',
-    label: 'Twitter',
-    ariaLabel: 'Follow us on Twitter',
+    key: 'facebook',
+    href: 'https://www.facebook.com',
+    icon: 'facebook',
+    label: 'Facebook',
+    ariaLabel: 'Visit Facebook',
+  },
+  {
+    key: 'youtube',
+    href: 'https://www.youtube.com',
+    icon: 'youtube',
+    label: 'YouTube',
+    ariaLabel: 'Visit YouTube',
+  },
+  {
+    key: 'x',
+    href: 'https://x.com',
+    icon: 'x',
+    label: 'X',
+    ariaLabel: 'Visit X',
   },
   {
     key: 'linkedin',
-    href: 'https://linkedin.com/company/tucsenberg',
+    href: 'https://www.linkedin.com',
     icon: 'linkedin',
     label: 'LinkedIn',
-    ariaLabel: 'Connect with us on LinkedIn',
+    ariaLabel: 'Visit LinkedIn',
   },
 ];
 

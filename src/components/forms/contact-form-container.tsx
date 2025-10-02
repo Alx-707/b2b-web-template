@@ -3,13 +3,16 @@
 import {
   memo,
   useActionState,
+  useEffect,
   useOptimistic,
+  useRef,
   useState,
   useTransition,
 } from 'react';
-import { Turnstile } from '@marsidev/react-turnstile';
+import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { useFormStatus } from 'react-dom';
+import { requestIdleCallback } from '@/lib/idle-callback';
 import { logger } from '@/lib/logger';
 import { type ServerActionResult } from '@/lib/server-action-utils';
 import { type FormSubmissionStatus } from '@/lib/validations';
@@ -491,19 +494,12 @@ export function ContactFormContainer() {
           isPending={isPending}
         />
 
-        {/* Turnstile CAPTCHA */}
-        <div className='space-y-2'>
-          <Turnstile
-            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
-            onSuccess={setTurnstileToken}
-            onError={() => setTurnstileToken('')}
-            onExpire={() => setTurnstileToken('')}
-            options={{
-              theme: 'auto',
-              size: 'normal',
-            }}
-          />
-        </div>
+        {/* Turnstile CAPTCHA - 延迟/按需加载，降低首屏阻塞 */}
+        <LazyTurnstile
+          onSuccess={setTurnstileToken}
+          onError={() => setTurnstileToken('')}
+          onExpire={() => setTurnstileToken('')}
+        />
 
         {/* Submit button */}
         <SubmitButton
@@ -519,5 +515,83 @@ export function ContactFormContainer() {
         )}
       </form>
     </Card>
+  );
+}
+// 懒加载 Turnstile 组件（进入视口或空闲时）
+const DynamicTurnstile = dynamic(
+  () => import('@marsidev/react-turnstile').then((m) => m.Turnstile),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className='bg-muted h-12 w-full animate-pulse rounded-md'
+        aria-hidden='true'
+      />
+    ),
+  },
+);
+
+function LazyTurnstile({
+  onSuccess,
+  onError,
+  onExpire,
+}: {
+  onSuccess: (token: string) => void;
+  onError: () => void;
+  onExpire: () => void;
+}) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    let didSet = false;
+
+    // 优先：进入视口时加载
+    const el = containerRef.current;
+    if (typeof IntersectionObserver !== 'undefined' && el) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting && !didSet) {
+              didSet = true;
+              setShouldRender(true);
+              io.disconnect();
+              break;
+            }
+          }
+        },
+        { rootMargin: '200px' },
+      );
+      io.observe(el);
+      return () => io.disconnect();
+    }
+
+    // 退化：空闲时加载
+    const cleanup = requestIdleCallback(() => setShouldRender(true), {
+      timeout: 1500,
+    });
+    return cleanup;
+  }, []);
+
+  return (
+    <div
+      className='space-y-2'
+      ref={containerRef}
+    >
+      {shouldRender ? (
+        <DynamicTurnstile
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
+          onSuccess={onSuccess}
+          onError={onError}
+          onExpire={onExpire}
+          options={{ theme: 'auto', size: 'normal' }}
+        />
+      ) : (
+        <div
+          className='bg-muted h-12 w-full animate-pulse rounded-md'
+          aria-hidden='true'
+        />
+      )}
+    </div>
   );
 }

@@ -40,7 +40,7 @@ const FooterLinkComponent: FC<FooterLinkComponentProps> = ({
         href={link.href}
         target='_blank'
         rel='noopener noreferrer'
-        className={`inline-flex items-center gap-1 text-gray-600 transition-colors duration-200 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 ${className}`}
+        className={`text-foreground hover:text-foreground/50 focus-visible:ring-ring/50 inline-flex items-center gap-1 rounded-xl px-4 py-2.5 text-[15px] font-medium transition-colors duration-150 outline-none focus-visible:ring-[3px] dark:hover:text-white/50 ${className}`}
       >
         {linkText}
         <ExternalLinkIcon size={COUNT_14} />
@@ -51,7 +51,7 @@ const FooterLinkComponent: FC<FooterLinkComponentProps> = ({
   return (
     <Link
       href={link.href}
-      className={`text-gray-600 transition-colors duration-200 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 ${className}`}
+      className={`text-foreground hover:text-foreground/50 focus-visible:ring-ring/50 inline-flex rounded-xl px-4 py-2.5 text-[15px] font-medium transition-colors duration-150 outline-none focus-visible:ring-[3px] dark:hover:text-white/50 ${className}`}
     >
       {linkText}
     </Link>
@@ -71,7 +71,7 @@ const FooterSectionComponent: FC<FooterSectionComponentProps> = ({
 
   return (
     <div className='space-y-4'>
-      <h3 className='text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-gray-100'>
+      <h3 className='text-foreground/60 text-[14px] font-semibold'>
         {sectionTitle}
       </h3>
       <ul className='space-y-3'>
@@ -85,27 +85,25 @@ const FooterSectionComponent: FC<FooterSectionComponentProps> = ({
   );
 };
 
-// Social Section Component
+// Social Section Component (icons row, right aligned on desktop)
 const SocialSection: FC = () => {
-  const t = useTranslations();
   const { socialLinks } = FOOTER_CONFIG;
 
   return (
-    <div className='space-y-4'>
-      <h3 className='text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-gray-100'>
-        {t('footer.sections.social.title')}
-      </h3>
-      <div className='space-y-3'>
-        {socialLinks.map((social) => (
-          <SocialIconLink
-            key={social.key}
-            href={social.href}
-            icon={social.icon}
-            label={social.label}
-            ariaLabel={social.ariaLabel}
-          />
-        ))}
-      </div>
+    <div
+      aria-label='Social links'
+      className='flex items-start justify-start gap-4 md:justify-end md:pr-8 lg:pr-12'
+    >
+      {socialLinks.map((social) => (
+        <SocialIconLink
+          key={social.key}
+          href={social.href}
+          icon={social.icon}
+          label={social.label}
+          ariaLabel={social.ariaLabel}
+          iconSize={16}
+        />
+      ))}
     </div>
   );
 };
@@ -157,8 +155,8 @@ export const Footer: FC = () => {
             </div>
           ))}
 
-          {/* Social Section */}
-          <div className='md:col-span-1'>
+          {/* Social icons column (bottom-right) */}
+          <div className='flex items-end justify-end self-end md:col-span-1'>
             <SocialSection />
           </div>
         </div>
@@ -169,9 +167,8 @@ export const Footer: FC = () => {
             <p className='text-sm text-gray-500 dark:text-gray-400'>
               {getCopyrightText(locale)}
             </p>
-            <div className='flex items-center'>
-              <ThemeSwitcher data-testid='footer-theme-toggle' />
-            </div>
+            {/* Theme Switcher */}
+            <ThemeSwitcher data-testid='footer-theme-toggle' />
           </div>
         </div>
       </div>

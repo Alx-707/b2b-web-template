@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/nextjs';
 import { logger } from '@/lib/logger';
 
 export async function register() {
@@ -25,7 +24,7 @@ export async function register() {
 }
 
 // Required for Sentry 10.x - handles errors from nested React Server Components
-export function onRequestError(
+export async function onRequestError(
   error: unknown,
   request: {
     path: string;
@@ -40,6 +39,8 @@ export function onRequestError(
 ) {
   // Only capture errors in production to avoid noise in development
   if (process.env.NODE_ENV === 'production') {
+    // Dynamic import to avoid bundling Sentry in client bundle
+    const Sentry = await import('@sentry/nextjs');
     Sentry.captureRequestError(error, request, context);
   }
 }

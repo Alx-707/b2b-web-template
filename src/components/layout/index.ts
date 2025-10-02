@@ -16,11 +16,6 @@ export { Logo, LogoCompact, LogoLarge } from '@/components/layout/logo';
 
 // Navigation components
 export {
-  MainNavigation,
-  MainNavigationCompact,
-} from '@/components/layout/main-navigation';
-
-export {
   MobileMenuButton,
   MobileNavigation,
 } from '@/components/layout/mobile-navigation';

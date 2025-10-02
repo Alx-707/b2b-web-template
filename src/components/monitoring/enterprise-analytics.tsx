@@ -1,10 +1,16 @@
 'use client';
 
 import { useEffect, type ReactNode } from 'react';
-import { Analytics } from '@vercel/analytics/react';
+import dynamic from 'next/dynamic';
 import { useLocale } from 'next-intl';
 import { logger } from '@/lib/logger';
 import { ZERO } from '@/constants/magic-numbers';
+
+// 动态导入 Vercel Analytics（延迟加载，减少首屏Bundle）
+const Analytics = dynamic(
+  () => import('@vercel/analytics/react').then((mod) => mod.Analytics),
+  { ssr: false },
+);
 
 /**
  * 使用全局 logger（开发环境输出，生产环境静默）
@@ -94,6 +100,7 @@ export function EnterpriseAnalytics({
   return (
     <>
       {children}
+      {/* Vercel Analytics - 实时用户行为和性能监控 */}
       <Analytics />
     </>
   );

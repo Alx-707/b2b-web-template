@@ -17,6 +17,16 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: [
+          'var(--font-geist-sans)',
+          'var(--font-noto-sans-sc)',
+          'system-ui',
+          '-apple-system',
+          'sans-serif',
+        ],
+        mono: ['var(--font-geist-mono)', 'monospace'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

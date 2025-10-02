@@ -4,7 +4,7 @@
  * 主题分析核心类
  * Theme analytics core class
  */
-import * as Sentry from '@sentry/nextjs';
+import * as Sentry from '@/lib/sentry-client';
 import type {
   ThemeAnalyticsConfig,
   ThemePerformanceMetrics,

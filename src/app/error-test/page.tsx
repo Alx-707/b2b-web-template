@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import * as Sentry from '@sentry/nextjs';
+import * as Sentry from '@/lib/sentry-client';
 
 /**
  * Sentry错误测试页面

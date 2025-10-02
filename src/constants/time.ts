@@ -45,9 +45,13 @@ export const MILLISECONDS_PER_HOUR = 3600000 as const;
 // ============================================================================
 
 export const HALF_SECOND_MS = 500;
+export const SIX_HUNDRED_MS = 600;
+export const EIGHT_HUNDRED_MS = 800;
 export const TWO_HUNDRED_MS = 200;
 export const FOUR_HUNDRED_MS = 400;
 export const ONE_SECOND_MS = 1000;
+export const TWELVE_HUNDRED_MS = 1200;
+export const FIFTEEN_HUNDRED_MS = 1500;
 export const TWO_SECONDS_MS = MAGIC_2000;
 export const THREE_SECONDS_MS = 3000;
 export const FIVE_SECONDS_MS = 5000;
@@ -55,3 +59,14 @@ export const TEN_SECONDS_MS = 10000;
 export const THIRTY_SECONDS_MS = 30000;
 export const MINUTE_MS = 60000;
 export const FIVE_MINUTES_MS = COUNT_300000;
+
+// ============================================================================
+// 性能优化相关时间常量
+// ============================================================================
+
+/** requestIdleCallback fallback延迟（当浏览器不支持时使用setTimeout） */
+export const IDLE_CALLBACK_FALLBACK_DELAY = SIX_HUNDRED_MS;
+/** requestIdleCallback超时时间（用于确保回调最终执行） */
+export const IDLE_CALLBACK_TIMEOUT = TWELVE_HUNDRED_MS;
+/** requestIdleCallback超时时间（较长版本，用于非关键任务） */
+export const IDLE_CALLBACK_TIMEOUT_LONG = FIFTEEN_HUNDRED_MS;

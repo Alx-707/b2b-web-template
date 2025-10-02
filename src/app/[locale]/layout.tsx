@@ -7,18 +7,17 @@ import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import NextTopLoader from 'nextjs-toploader';
 import { generateJSONLD } from '@/lib/structured-data';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { TranslationPreloader } from '@/components/i18n/translation-preloader';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
+import { LazyToaster } from '@/components/lazy/lazy-toaster';
+import { LazyTopLoader } from '@/components/lazy/lazy-top-loader';
 import { EnterpriseAnalytics } from '@/components/monitoring/enterprise-analytics';
 import { WebVitalsIndicator } from '@/components/performance/web-vitals-indicator';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ThemePerformanceMonitor } from '@/components/theme/theme-performance-monitor';
-import { Toaster } from '@/components/ui/toaster';
-import { COUNT_1600 } from '@/constants';
 import { routing } from '@/i18n/routing';
 
 // 重新导出元数据生成函数
@@ -88,17 +87,8 @@ export default async function LocaleLayout({
             defaultTheme='system'
             enableSystem
           >
-            {/* 页面导航进度条 - 全局生效，修复颜色配置 */}
-            <NextTopLoader
-              color='var(--primary)'
-              height={4}
-              showSpinner={false}
-              easing='ease-in-out'
-              speed={200}
-              shadow='0 0 15px var(--primary),0 0 8px var(--primary)'
-              zIndex={COUNT_1600}
-              {...(nonce && { nonce })}
-            />
+            {/* 页面导航进度条 - P1 优化：懒加载，减少 vendors chunk */}
+            <LazyTopLoader nonce={nonce} />
 
             {isDevelopment && (
               <Suspense fallback={null}>
@@ -125,8 +115,8 @@ export default async function LocaleLayout({
             {/* 页脚 */}
             <Footer />
 
-            {/* Toast 消息容器 - 全局生效 */}
-            <Toaster />
+            {/* Toast 消息容器 - P1 优化：懒加载，减少 vendors chunk */}
+            <LazyToaster />
 
             {/* 企业级监控组件已集成到AnalyticsProvider中 */}
           </ThemeProvider>
