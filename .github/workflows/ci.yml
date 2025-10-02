@@ -23,25 +23,31 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 设置Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: 设置pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: false
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
 
       - name: 生成缓存键
         id: cache-key
         run: echo "key=deps-${{ hashFiles('**/pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
 
+      - name: 获取pnpm store目录
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
       - name: 缓存依赖
         uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ steps.cache-key.outputs.key }}
           restore-keys: deps-
 
@@ -70,21 +76,27 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 设置Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: 设置pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: false
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: 获取pnpm store目录
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 恢复依赖缓存
         uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ needs.basic-checks.outputs.cache-key }}
 
       - name: 安装依赖
@@ -109,21 +121,27 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 设置Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: 设置pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: false
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: 获取pnpm store目录
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 恢复依赖缓存
         uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ needs.basic-checks.outputs.cache-key }}
 
       - name: 安装依赖
@@ -155,21 +173,27 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 设置Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: 设置pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: false
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: 获取pnpm store目录
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 恢复依赖缓存
         uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ needs.basic-checks.outputs.cache-key }}
 
       - name: 安装依赖
@@ -198,21 +222,27 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 设置Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: 设置pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: false
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: 获取pnpm store目录
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 恢复依赖缓存
         uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ needs.basic-checks.outputs.cache-key }}
 
       - name: 安装依赖
@@ -231,21 +261,27 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 设置Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: 设置pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: false
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: 获取pnpm store目录
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 恢复依赖缓存
         uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ needs.basic-checks.outputs.cache-key }}
 
       - name: 安装依赖
