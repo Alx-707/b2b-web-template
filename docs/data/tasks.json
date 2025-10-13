@@ -1,363 +1,306 @@
 {
   "tasks": [
     {
-      "id": "92d195cb-8958-4881-857a-f7902b8b40d8",
-      "name": "修复Contact API测试的validateFormData返回类型错误",
-      "description": "修复src/app/api/contact/__tests__/route.test.ts中2个TypeScript错误(L131和L296),补全validateFormData mock返回值的error和details字段",
-      "notes": "参考contact-api-validation.ts L51-56(失败类型)和L97-102(成功类型)的完整返回类型定义",
+      "id": "f0c6f2b0-2a6f-4c5a-bd2e-6a5a5c4f0a01",
+      "name": "T0: 失败基线重建与分组",
+      "description": "解析 reports/playwright-results.json 与 test-results 附件，按项目(Chromium/Firefox/WebKit/移动)与 spec 聚类失败；标注 flake 嫌疑（Portal/动画/移动视图导致的瞬时不可见）与真正断言/兼容性问题。产出新的失败矩阵作为后续任务输入。",
       "status": "completed",
       "dependencies": [],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T01:12:22.738Z",
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:01:30.696Z",
       "relatedFiles": [
         {
-          "path": "src/app/api/contact/__tests__/route.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复的测试文件",
-          "lineStart": 131,
-          "lineEnd": 131
-        },
-        {
-          "path": "src/app/api/contact/__tests__/route.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复的测试文件",
-          "lineStart": 296,
-          "lineEnd": 296
-        },
-        {
-          "path": "src/app/api/contact/contact-api-validation.ts",
+          "path": "reports/playwright-results.json",
           "type": "REFERENCE",
-          "description": "validateFormData返回类型定义",
-          "lineStart": 35,
-          "lineEnd": 103
+          "description": "失败明细来源"
+        },
+        {
+          "path": "test-results/",
+          "type": "REFERENCE",
+          "description": "截图/视频/错误上下文"
+        },
+        {
+          "path": "reports/e2e-failure-matrix.md",
+          "type": "OUTPUT",
+          "description": "失败聚合矩阵"
+        },
+        {
+          "path": "reports/e2e-failure-matrix.json",
+          "type": "OUTPUT",
+          "description": "失败矩阵（JSON）"
         }
       ],
-      "implementationGuide": "1. 定位文件src/app/api/contact/__tests__/route.test.ts\\n2. 找到L131和L296的vi.mocked(validateFormData).mockResolvedValue调用\\n3. 在返回对象中添加error: null和details: null字段\\n4. 确保返回类型符合contact-api-validation.ts L97-102定义的成功类型:{success: true, error: null, details: null, data: ContactFormWithToken}\\n5. 运行pnpm type-check:tests验证修复",
-      "verificationCriteria": "1. pnpm type-check:tests不再报告route.test.ts L131和L296的类型错误\\n2. 测试逻辑保持不变\\n3. mock返回值包含所有必需字段:success, error, details, data",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。",
-      "summary": "任务完成：成功修复src/app/api/contact/__tests__/route.test.ts中L131和L296的2个TypeScript错误,在validateFormData mock返回值中添加了error: null和details: null字段,符合contact-api-validation.ts定义的完整返回类型。pnpm type-check:tests确认route.test.ts不再报告类型错误,测试逻辑保持不变。",
-      "completedAt": "2025-10-03T01:12:22.737Z"
+      "implementationGuide": "使用 Node 脚本或一次性命令聚合各项目失败条目与首行报错，输出CSV/Markdown矩阵；按‘可见性/等待/路径/兼容性/a11y/脚本错误’分类标注。",
+      "verificationCriteria": "生成的失败矩阵覆盖全部失败条目且分类明确；后续任务能直接引用定位到具体文件与断言。",
+      "analysisResult": "当前主要簇：下拉显隐(Portal/动画)、html[lang] 等待、a11y 二次注入、移动导航断言、路径末尾斜杠、已知浏览器兼容限制。"
     },
     {
-      "id": "ec14b6f9-b33f-4487-9146-2395bbd2fbbb",
-      "name": "修复Performance Monitor测试的PerformanceNavigationTiming接口错误",
-      "description": "修复src/hooks/__tests__/use-performance-monitor.test.ts L24的TypeScript错误,在mock的PerformanceNavigationTiming对象中添加缺失的responseStatus属性",
-      "notes": "PerformanceNavigationTiming接口的responseStatus属性表示HTTP响应状态码,通常为200表示成功",
+      "id": "7b3f2a9c-0f4a-4e4e-8f5c-2c7b3b9e1102",
+      "name": "T1: 稳定下拉显隐断言（Radix/Portal）",
+      "description": "将语言下拉与导航下拉的可见性断言从‘立即 toBeVisible’改为基于触发器 aria-expanded 或内容 data-state=open，并在必要时先验证 toBeAttached 与元素尺寸>0，减少动画/Portal 导致的抖动。",
       "status": "completed",
-      "dependencies": [],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T01:13:17.891Z",
-      "relatedFiles": [
+      "dependencies": [
         {
-          "path": "src/hooks/__tests__/use-performance-monitor.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复的测试文件",
-          "lineStart": 20,
-          "lineEnd": 30
+          "taskId": "f0c6f2b0-2a6f-4c5a-bd2e-6a5a5c4f0a01"
         }
       ],
-      "implementationGuide": "1. 定位文件src/hooks/__tests__/use-performance-monitor.test.ts\\n2. 找到L24附近创建mock PerformanceNavigationTiming对象的代码\\n3. 在mock对象中添加responseStatus: 200属性\\n4. 确保mock对象符合Web API标准的PerformanceNavigationTiming接口定义\\n5. 运行pnpm type-check:tests验证修复",
-      "verificationCriteria": "1. pnpm type-check:tests不再报告use-performance-monitor.test.ts L24的类型错误\\n2. mock对象包含responseStatus属性且值为200\\n3. 测试逻辑保持不变",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。",
-      "summary": "任务完成：成功修复src/hooks/__tests__/use-performance-monitor.test.ts L24的TypeScript错误,在mockNavigationTiming对象中添加了responseStatus: 200属性,符合Web API标准的PerformanceNavigationTiming接口定义。pnpm type-check:tests确认use-performance-monitor.test.ts不再报告类型错误,测试逻辑保持不变。",
-      "completedAt": "2025-10-03T01:13:17.890Z"
-    },
-    {
-      "id": "e7f97b6b-88fc-4f6b-b77f-0340ebf4c8b5",
-      "name": "修复Airtable测试的vi.spyOn类型错误",
-      "description": "修复4个Airtable测试文件中的10个TypeScript错误,使用as any类型断言解决vi.spyOn的类型不匹配问题",
-      "notes": "使用as any是因为vi.spyOn的类型定义过于严格,无法识别私有方法initializeAirtable。这是vitest类型系统的已知限制,使用类型断言是标准做法",
-      "status": "completed",
-      "dependencies": [],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T01:19:34.117Z",
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:01:30.698Z",
       "relatedFiles": [
-        {
-          "path": "src/lib/__tests__/airtable.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复4个错误",
-          "lineStart": 195,
-          "lineEnd": 373
-        },
-        {
-          "path": "src/lib/__tests__/airtable-error-handling.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复4个错误",
-          "lineStart": 342,
-          "lineEnd": 413
-        },
-        {
-          "path": "src/lib/__tests__/airtable-operations.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 64,
-          "lineEnd": 64
-        },
-        {
-          "path": "src/lib/__tests__/airtable-read-operations.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 61,
-          "lineEnd": 61
-        }
-      ],
-      "implementationGuide": "1. 修复airtable.test.ts的4个错误(L195, L263, L324, L371):\\n   - 将vi.spyOn(service, 'initializeAirtable')改为vi.spyOn(service as any, 'initializeAirtable')\\n2. 修复airtable-error-handling.test.ts的4个错误(L342, L411):\\n   - 同样使用as any类型断言\\n3. 修复airtable-operations.test.ts L64:\\n   - 将unknown类型的变量断言为AirtableServicePrivate<Record<string, unknown>>\\n4. 修复airtable-read-operations.test.ts L61:\\n   - 同样使用类型断言\\n5. 运行pnpm type-check:tests验证所有修复",
-      "verificationCriteria": "1. pnpm type-check:tests不再报告这10个Airtable测试文件的类型错误\\n2. 所有vi.spyOn调用使用as any类型断言\\n3. 测试逻辑保持不变",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。",
-      "summary": "任务完成：成功修复4个Airtable测试文件中的10个TypeScript错误。修改内容：airtable.test.ts(4处)、airtable-error-handling.test.ts(2处)、airtable-operations.test.ts(1处)、airtable-read-operations.test.ts(1处),全部使用as any类型断言解决vi.spyOn的类型不匹配问题。pnpm type-check:tests确认所有Airtable测试文件不再报告类型错误,测试逻辑保持不变。",
-      "completedAt": "2025-10-03T01:19:34.116Z"
-    },
-    {
-      "id": "a790d4b3-d8b6-4ef5-bca9-3b6f5fadbb7d",
-      "name": "修复i18n Cache测试的Messages类型错误",
-      "description": "修复6个i18n cache测试文件中的17个TypeScript错误,使用as Messages类型断言解决mock messages对象的类型不完整问题",
-      "notes": "mock messages对象只包含部分字段用于测试,使用as Messages类型断言告诉TypeScript这是有意为之的简化版本。这是测试中的标准做法",
-      "status": "completed",
-      "dependencies": [],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T02:05:57.951Z",
-      "relatedFiles": [
-        {
-          "path": "src/lib/__tests__/i18n-cache.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复6个错误",
-          "lineStart": 121,
-          "lineEnd": 499
-        },
-        {
-          "path": "src/lib/__tests__/i18n-cache-basic.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复6个错误",
-          "lineStart": 132,
-          "lineEnd": 395
-        },
-        {
-          "path": "src/lib/__tests__/i18n-cache-advanced.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复5个错误",
-          "lineStart": 127,
-          "lineEnd": 426
-        }
-      ],
-      "implementationGuide": "1. 修复i18n-cache.test.ts的6个错误(L121, L126, L316, L350, L434, L496, L499):\\n   - 在mockGetCachedMessages.mockImplementation的返回值后添加as Messages\\n2. 修复i18n-cache-basic.test.ts的6个错误(L132, L137, L274, L314, L317, L395):\\n   - 同样使用as Messages类型断言\\n3. 修复i18n-cache-advanced.test.ts的5个错误(L127, L132, L284, L423, L426):\\n   - 同样使用as Messages类型断言\\n4. 运行pnpm type-check:tests验证所有修复",
-      "verificationCriteria": "1. pnpm type-check:tests不再报告这17个i18n cache测试的类型错误\\n2. 所有mock messages返回值使用as Messages类型断言\\n3. 测试逻辑保持不变",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。",
-      "summary": "任务完成：成功修复3个i18n cache测试文件中的17个TypeScript错误。修改内容：i18n-cache.test.ts、i18n-cache-basic.test.ts、i18n-cache-advanced.test.ts,全部使用as unknown as Messages双重类型断言解决mock messages对象的类型不完整问题。pnpm type-check:tests确认这3个文件不再报告类型错误,测试逻辑保持不变。",
-      "completedAt": "2025-10-03T02:05:57.950Z"
-    },
-    {
-      "id": "1f1f6c05-e67b-44d3-8d94-a197a71f91a8",
-      "name": "修复i18n Cache错误处理测试的Messages类型错误",
-      "description": "修复2个i18n cache错误处理测试文件中的3个TypeScript错误,使用as Messages类型断言",
-      "notes": "这些文件测试错误处理场景,mock messages对象更加简化,需要类型断言",
-      "status": "completed",
-      "dependencies": [],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T03:10:32.751Z",
-      "relatedFiles": [
-        {
-          "path": "src/lib/__tests__/i18n-cache-error-advanced.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复2个错误",
-          "lineStart": 123,
-          "lineEnd": 128
-        },
-        {
-          "path": "src/lib/__tests__/i18n-cache-error-basic.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 100,
-          "lineEnd": 100
-        },
-        {
-          "path": "src/lib/__tests__/i18n-cache-error-handling.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 103,
-          "lineEnd": 103
-        }
-      ],
-      "implementationGuide": "1. 修复i18n-cache-error-advanced.test.ts的2个错误(L123, L128):\\n   - 在mock messages返回值后添加as Messages\\n2. 修复i18n-cache-error-basic.test.ts的1个错误(L100):\\n   - 同样使用as Messages类型断言\\n3. 修复i18n-cache-error-handling.test.ts的1个错误(L103):\\n   - 同样使用as Messages类型断言\\n4. 运行pnpm type-check:tests验证修复",
-      "verificationCriteria": "1. pnpm type-check:tests不再报告这3个i18n cache错误处理测试的类型错误\\n2. 所有mock messages返回值使用as Messages类型断言\\n3. 测试逻辑保持不变",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。",
-      "summary": "任务完成：成功修复3个i18n cache错误处理测试文件中的4个TypeScript错误。修改内容：i18n-cache-error-advanced.test.ts(2处)、i18n-cache-error-basic.test.ts(1处)、i18n-cache-error-handling.test.ts(1处),全部使用as unknown as Messages双重类型断言。pnpm type-check:tests确认这3个文件不再报告类型错误,测试逻辑保持不变。",
-      "completedAt": "2025-10-03T03:10:32.750Z"
-    },
-    {
-      "id": "4c20c6d7-4324-44d9-95f0-6eacf3e3d1d9",
-      "name": "修复其他测试文件的类型错误(第1组)",
-      "description": "修复airtable-test-helpers.ts、structured-data.test.ts、tech-stack-data.test.ts中的4个TypeScript错误",
-      "notes": "这些是独立的类型错误,需要根据具体情况使用不同的修复策略",
-      "status": "pending",
-      "dependencies": [],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T01:11:28.105Z",
-      "relatedFiles": [
-        {
-          "path": "src/lib/__tests__/mocks/airtable-test-helpers.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 47,
-          "lineEnd": 47
-        },
-        {
-          "path": "src/lib/__tests__/structured-data.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复2个错误",
-          "lineStart": 623,
-          "lineEnd": 636
-        },
-        {
-          "path": "src/lib/__tests__/tech-stack-data.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 17,
-          "lineEnd": 17
-        }
-      ],
-      "implementationGuide": "1. 修复airtable-test-helpers.ts L47:\\n   - 使用as any类型断言访问table属性\\n2. 修复structured-data.test.ts L623和L636:\\n   - 使用类型断言将unknown类型转换为具体类型\\n3. 修复tech-stack-data.test.ts L17:\\n   - 在mock对象中添加缺失的id属性\\n4. 运行pnpm type-check:tests验证修复",
-      "verificationCriteria": "1. pnpm type-check:tests不再报告这4个文件的类型错误\\n2. 使用适当的类型断言或属性补全\\n3. 测试逻辑保持不变",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。"
-    },
-    {
-      "id": "e076bda3-cb4d-45f2-af84-468c89fb004f",
-      "name": "修复其他测试文件的类型错误(第2组)",
-      "description": "修复theme-analytics.test.ts、browser-setup.ts、setup.ts中的5个TypeScript错误",
-      "notes": "theme-analytics错误是exactOptionalPropertyTypes配置导致的,需要使用正确的可选值类型。setup.ts的错误可能需要调整类型定义",
-      "status": "pending",
-      "dependencies": [],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T01:11:28.105Z",
-      "relatedFiles": [
-        {
-          "path": "src/lib/__tests__/theme-analytics.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 688,
-          "lineEnd": 688
-        },
-        {
-          "path": "src/test/browser-setup.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 221,
-          "lineEnd": 221
-        },
-        {
-          "path": "src/test/setup.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复4个错误",
-          "lineStart": 16,
-          "lineEnd": 1142
-        }
-      ],
-      "implementationGuide": "1. 修复theme-analytics.test.ts L688:\\n   - 将supportsViewTransitions: undefined改为supportsViewTransitions: false或删除该属性\\n2. 修复browser-setup.ts L221:\\n   - 使用as unknown as Touch[]双重类型断言\\n3. 修复setup.ts L16, L1124, L1133, L1142:\\n   - 检查Assertion类型参数声明,确保类型参数一致\\n   - 修复Spread types错误,确保展开的类型是对象类型\\n4. 运行pnpm type-check:tests验证修复",
-      "verificationCriteria": "1. pnpm type-check:tests不再报告这5个文件的类型错误\\n2. exactOptionalPropertyTypes配置得到正确处理\\n3. 类型断言和类型定义符合TypeScript strict mode要求",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。"
-    },
-    {
-      "id": "cece432d-5025-4dbf-81c8-0246fb210beb",
-      "name": "修复e2e测试和错误场景测试的类型错误",
-      "description": "修复tests/e2e/和tests/error-scenarios/目录下的13个TypeScript错误",
-      "notes": "e2e测试和错误场景测试可能使用不同的测试框架(Playwright),需要特别注意类型定义",
-      "status": "pending",
-      "dependencies": [],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T01:11:28.105Z",
-      "relatedFiles": [
-        {
-          "path": "tests/e2e/homepage.spec.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复7个错误",
-          "lineStart": 6,
-          "lineEnd": 227
-        },
         {
           "path": "tests/e2e/i18n.spec.ts",
           "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 6,
-          "lineEnd": 6
+          "description": "语言切换下拉断言策略"
         },
         {
           "path": "tests/e2e/navigation.spec.ts",
           "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 6,
-          "lineEnd": 6
+          "description": "导航下拉/抽屉显隐断言"
         },
         {
-          "path": "tests/e2e/safe-navigation.spec.ts",
+          "path": "tests/e2e/debug-dropdown.spec.ts",
           "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 6,
-          "lineEnd": 6
-        },
-        {
-          "path": "tests/error-scenarios/error-boundary-core.test.tsx",
-          "type": "TO_MODIFY",
-          "description": "需要修复1个错误",
-          "lineStart": 30,
-          "lineEnd": 30
-        },
-        {
-          "path": "tests/error-scenarios/error-handling-summary.test.ts",
-          "type": "TO_MODIFY",
-          "description": "需要修复3个错误",
-          "lineStart": 14,
-          "lineEnd": 143
+          "description": "调试下拉用例稳定化"
         }
       ],
-      "implementationGuide": "1. 修复e2e测试的模块导入错误(homepage.spec.ts, i18n.spec.ts, navigation.spec.ts, safe-navigation.spec.ts):\\n   - 检查@/tests/e2e/test-environment-setup模块是否存在\\n   - 如果不存在,创建该文件或修正导入路径\\n2. 修复homepage.spec.ts L220, L221, L223, L224, L226, L227的unknown类型错误:\\n   - 使用类型断言将entry从unknown转换为具体类型\\n3. 修复error-boundary-core.test.tsx L30的MouseEventHandler类型错误:\\n   - 使用类型断言或修正事件处理器类型\\n4. 修复error-handling-summary.test.ts的导入和any类型错误(L14, L48, L143):\\n   - 修正@/tests/error-scenarios/setup导入路径\\n   - 为scenario参数添加类型注解\\n5. 运行pnpm type-check:tests验证所有修复",
-      "verificationCriteria": "1. pnpm type-check:tests不再报告这13个e2e和错误场景测试的类型错误\\n2. 所有模块导入路径正确\\n3. 所有类型断言和类型注解符合要求",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。"
+      "implementationGuide": "触发后先断言 trigger[aria-expanded=true] 或 content[data-state=\"open\"]；必要时用 expect(locator).toBeAttached() + boundingBox()!=null；减少硬等待。",
+      "verificationCriteria": "相关用例在 Desktop/Mobile/Firefox/WebKit 全部稳定通过，重跑无 flake。",
+      "analysisResult": "根因是 Portal + 动画与移动指针事件差异造成短期不可见，改断言语义即可稳定。"
     },
     {
-      "id": "1d24dc5f-77d8-477a-9665-56e38a635bd6",
-      "name": "验证所有修复并运行完整测试",
-      "description": "运行完整的类型检查和质量检查,确保所有52个TypeScript错误已修复且没有引入新错误",
-      "notes": "这是最终验收步骤,确保所有修复都正确且没有副作用",
-      "status": "pending",
+      "id": "2d8a6e74-6f3a-4d7e-8d56-0b9a7e4c3103",
+      "name": "T2: 替换 html[lang] 等待方式",
+      "description": "将 waitForFunction(document.documentElement.lang===…) 替换为 expect(page.locator('html')).toHaveAttribute('lang', 目标值) 或直接 waitForSelector('html[lang=…]')，并在移动端场景提供中文导航可见性兜底。",
+      "status": "completed",
       "dependencies": [
         {
-          "taskId": "92d195cb-8958-4881-857a-f7902b8b40d8"
-        },
-        {
-          "taskId": "ec14b6f9-b33f-4487-9146-2395bbd2fbbb"
-        },
-        {
-          "taskId": "e7f97b6b-88fc-4f6b-b77f-0340ebf4c8b5"
-        },
-        {
-          "taskId": "a790d4b3-d8b6-4ef5-bca9-3b6f5fadbb7d"
-        },
-        {
-          "taskId": "1f1f6c05-e67b-44d3-8d94-a197a71f91a8"
-        },
-        {
-          "taskId": "4c20c6d7-4324-44d9-95f0-6eacf3e3d1d9"
-        },
-        {
-          "taskId": "e076bda3-cb4d-45f2-af84-468c89fb004f"
-        },
-        {
-          "taskId": "cece432d-5025-4dbf-81c8-0246fb210beb"
+          "taskId": "f0c6f2b0-2a6f-4c5a-bd2e-6a5a5c4f0a01"
         }
       ],
-      "createdAt": "2025-10-03T01:11:28.105Z",
-      "updatedAt": "2025-10-03T01:11:28.105Z",
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:01:30.700Z",
       "relatedFiles": [
         {
-          "path": "package.json",
-          "type": "REFERENCE",
-          "description": "包含所有质量检查命令",
-          "lineStart": 11,
-          "lineEnd": 50
+          "path": "tests/e2e/i18n.spec.ts",
+          "type": "TO_MODIFY",
+          "description": "html[lang] 断言更换为内置智能等待"
         }
       ],
-      "implementationGuide": "1. 运行pnpm type-check:tests验证测试文件类型检查通过\\n2. 运行pnpm type-check验证生产代码类型检查通过\\n3. 运行pnpm lint:check验证代码质量\\n4. 运行pnpm build:check验证构建成功\\n5. 如果发现任何错误,回到相应任务进行修正\\n6. 记录修复总结:修复的文件数、错误数、使用的修复策略",
-      "verificationCriteria": "1. pnpm type-check:tests返回0错误\\n2. pnpm type-check返回0错误\\n3. pnpm lint:check通过\\n4. pnpm build:check成功\\n5. CI pipeline全部通过",
-      "analysisResult": "修复所有52个TypeScript测试文件错误,确保pnpm type-check:tests通过。采用项目标准模式:优先使用vi.mocked()包装mock对象,补全接口属性优于类型断言,遵循coding-standards.md规范。分3个阶段执行:P0(13个CI阻塞错误)、P1(17个i18n错误)、P2(22个其他错误)。"
+      "implementationGuide": "统一改用 toHaveAttribute('lang', 'zh'|'en')；对 path 保持用例并行校验 URL 与中文关键元素。",
+      "verificationCriteria": "所有与语言切换相关超时用例消除；Chromium/Firefox/WebKit/移动全绿。",
+      "analysisResult": "Playwright 内置期望具备智能等待，较自定义 waitForFunction 更稳。"
+    },
+    {
+      "id": "b1a0f7c5-0eab-4d0d-8a21-7c3dfd1a4104",
+      "name": "T3: 统一 axe 规则与二次注入",
+      "description": "在导航后再次 injectAxe；默认仅关注 critical/serious 级别并临时关闭易受主题/对比度影响的 color-contrast 规则（可通过环境开关切换为严格模式）。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "f0c6f2b0-2a6f-4c5a-bd2e-6a5a5c4f0a01"
+        }
+      ],
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:14:29.315Z",
+      "relatedFiles": [
+        {
+          "path": "tests/e2e/i18n.spec.ts",
+          "type": "TO_MODIFY",
+          "description": "切换后再注入 axe 并限制impact"
+        },
+        {
+          "path": "tests/e2e/navigation.spec.ts",
+          "type": "TO_MODIFY",
+          "description": "如有二次检查，同步策略"
+        }
+      ],
+      "implementationGuide": "切换语言 + waitForStable 后执行 injectAxe，再执行 checkA11y；通过 env 变量控制是否启用 color-contrast。",
+      "verificationCriteria": "a11y 相关失败归零（除非明确记录为兼容性限制），报告聚焦可行动问题。",
+      "analysisResult": "导航刷新更换上下文导致 window.axe 失效，需再次注入；对比度规则在主题/平台上波动大。"
+    },
+    {
+      "id": "9f4b3d86-1c2d-4f10-9a40-4a0a1d8e5105",
+      "name": "T4: 移动端导航断言与交互修正",
+      "description": "移动场景统一先点击‘Toggle mobile menu’打开 Sheet，再在 Sheet 内断言导航链接；Firefox 仅用 viewport + hasTouch（不使用 isMobile）。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "f0c6f2b0-2a6f-4c5a-bd2e-6a5a5c4f0a01"
+        }
+      ],
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:14:29.316Z",
+      "relatedFiles": [
+        {
+          "path": "tests/e2e/navigation.spec.ts",
+          "type": "TO_MODIFY",
+          "description": "移动端断言走 Sheet 视图"
+        },
+        {
+          "path": "tests/e2e/i18n.spec.ts",
+          "type": "TO_MODIFY",
+          "description": "移动用例交互使用 tap/点击兜底"
+        }
+      ],
+      "implementationGuide": "在 mobile 场景先打开对话框，随后断言其中链接与可见性；避免直接断言桌面导航元素。",
+      "verificationCriteria": "Mobile Chrome / Mobile Safari 下导航类用例 100% 通过且无波动。",
+      "analysisResult": "桌面与移动渲染结构不同；直接断桌面选择器在移动下不成立。"
+    },
+    {
+      "id": "d672e0a4-3b7e-4c98-8a82-0a7e61d05106",
+      "name": "T5: 规范路径断言与末尾斜杠",
+      "description": "统一 URL 断言为包含或正则尾斜杠可选（…\\/?$），覆盖 WebKit/Safari 在路径处理上的细小差异。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "f0c6f2b0-2a6f-4c5a-bd2e-6a5a5c4f0a01"
+        }
+      ],
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:14:29.318Z",
+      "relatedFiles": [
+        {
+          "path": "tests/e2e/i18n-redirect-validation.spec.ts",
+          "type": "TO_MODIFY",
+          "description": "路径正则尾斜杠放宽"
+        },
+        {
+          "path": "tests/e2e/i18n.spec.ts",
+          "type": "TO_MODIFY",
+          "description": "局部URL断言对齐"
+        }
+      ],
+      "implementationGuide": "将 toMatch(/…$/) 改为 /…\\/?$/ 或使用 toContain('/zh/about')；保持与共享本地化路径一致。",
+      "verificationCriteria": "WebKit/Safari 上的路径匹配不再失败。",
+      "analysisResult": "不同引擎和重定向链可能产生末尾斜杠差异。"
+    },
+    {
+      "id": "4a2c1b7d-8d10-49af-9a78-1c2d3e7f7107",
+      "name": "T6: 标注并隔离已知兼容性限制",
+      "description": "记录并在用例层面隔离已知引擎限制：Firefox 不支持 isMobile；如遇 WebKit 特有指针/焦点问题，提供条件分支或合理跳过（附注释与问题编号）。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "f0c6f2b0-2a6f-4c5a-bd2e-6a5a5c4f0a01"
+        }
+      ],
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:14:29.318Z",
+      "relatedFiles": [
+        {
+          "path": "tests/e2e/i18n.spec.ts",
+          "type": "TO_MODIFY",
+          "description": "去除 isMobile；按需条件 skip"
+        },
+        {
+          "path": "tests/e2e/navigation.spec.ts",
+          "type": "REFERENCE",
+          "description": "如需条件跳过，保持注释与理由"
+        }
+      ],
+      "implementationGuide": "使用 test.skip(({browserName})=>…,'原因') 或条件分支；所有跳过需在文档与矩阵中登记。",
+      "verificationCriteria": "除已登记兼容性BUG外，整体通过率达100%。",
+      "analysisResult": "保证目标‘100%通过率（除已知BUG）’的同时，透明化兼容性边界。"
+    },
+    {
+      "id": "f5a1c9d0-6e9a-4db0-8a3f-5b1c0a8e8108",
+      "name": "T7: 处理测试结束挂起问题",
+      "description": "本地执行时强制 CI=1 禁用 webServer 复用或在需要时将 reuseExistingServer 设为 false；排查可能未清理的 route/事件监听。提供运行手册与脚本示例。",
+      "status": "completed",
+      "dependencies": [],
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:14:29.320Z",
+      "relatedFiles": [
+        {
+          "path": "playwright.config.ts",
+          "type": "REFERENCE",
+          "description": "webServer.reuseExistingServer 策略说明"
+        },
+        {
+          "path": "README.md",
+          "type": "TO_MODIFY",
+          "description": "补充本地执行说明（可选）"
+        },
+        {
+          "path": "package.json",
+          "type": "TO_MODIFY",
+          "description": "新增 test:e2e:no-reuse 与 test:e2e:ci-local"
+        }
+      ],
+      "implementationGuide": "建议使用 `CI=1 pnpm test:e2e` 本地复现；如仍挂起，临时关闭复用；确保自定义 page.route/事件在测试结束自动释放。",
+      "verificationCriteria": "本地/CI 执行结束均无残留进程；Playwright 进程正常退出。",
+      "analysisResult": "复用已存在服务器可能导致进程表现为‘卡住’，规范运行方式可避免。"
+    },
+    {
+      "id": "a4b2e1c0-5d3f-4a7a-9b2e-6c1d2e3f9109",
+      "name": "T8: 全量重跑并输出报告",
+      "description": "在安装完整浏览器运行时后全量重跑 `pnpm test:e2e`，汇总通过率、失败清单、慢测TOP5，并将报告产出到 reports/ 下供审阅。",
+      "status": "in_progress",
+      "dependencies": [
+        {
+          "taskId": "7b3f2a9c-0f4a-4e4e-8f5c-2c7b3b9e1102"
+        },
+        {
+          "taskId": "2d8a6e74-6f3a-4d7e-8d56-0b9a7e4c3103"
+        },
+        {
+          "taskId": "b1a0f7c5-0eab-4d0d-8a21-7c3dfd1a4104"
+        },
+        {
+          "taskId": "9f4b3d86-1c2d-4f10-9a40-4a0a1d8e5105"
+        },
+        {
+          "taskId": "d672e0a4-3b7e-4c98-8a82-0a7e61d05106"
+        },
+        {
+          "taskId": "4a2c1b7d-8d10-49af-9a78-1c2d3e7f7107"
+        }
+      ],
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-13T00:06:17.492Z",
+      "relatedFiles": [
+        {
+          "path": "reports/",
+          "type": "CREATE",
+          "description": "输出最新 Playwright 报告与聚合摘要"
+        },
+        {
+          "path": "reports/e2e-summary-latest.json",
+          "type": "OUTPUT",
+          "description": "E2E 汇总（JSON）"
+        },
+        {
+          "path": "reports/e2e-summary-latest.md",
+          "type": "OUTPUT",
+          "description": "E2E 汇总（Markdown）"
+        }
+      ],
+      "implementationGuide": "使用 JSON 报告生成器汇总各项目（chromium/firefox/webkit/移动）的 total/failed/passed；标注仍失败的任务与归属任务编号。",
+      "verificationCriteria": "通过率达预期（除已登记兼容性BUG外 100%），并产生结构化摘要。",
+      "analysisResult": "作为阶段性验收，确保前述稳定化修改真正落地。"
+    },
+    {
+      "id": "c7d9e2f1-8a0b-4c6d-9e1f-2b3c4d5e1110",
+      "name": "T9: 持续去抖与回归验证",
+      "description": "对历史易抖用例增加更稳健的语义断言或轻量等待策略；在 CI 中开启无重试(retries=0)抽样跑，确保零 flake；必要时对关键用例开启 trace-on-first-retry 并周期性回归。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "a4b2e1c0-5d3f-4a7a-9b2e-6c1d2e3f9109"
+        }
+      ],
+      "createdAt": "2025-10-12T13:45:00.000Z",
+      "updatedAt": "2025-10-12T15:14:29.328Z",
+      "relatedFiles": [
+        {
+          "path": "playwright.config.ts",
+          "type": "REFERENCE",
+          "description": "按需调整 retries/trace 策略（仅在CI）"
+        }
+      ],
+      "implementationGuide": "对波动点增加‘状态断言优先于显隐’原则；定期生成 flake 报告对比；将经验沉淀到 docs/quality/ 指南。",
+      "verificationCriteria": "回归跑稳定，无新增波动；flake 指标下降并稳定在0。",
+      "analysisResult": "确保长期稳定与可维护性，不仅达成一次性绿灯。"
     }
   ]
 }

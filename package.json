@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:no-turbo": "next dev",
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
@@ -48,7 +49,11 @@
     "ci:metrics": "pnpm run arch:metrics",
     "perf:check": "pnpm run size:check",
     "config:check": "node scripts/check-config-consistency.js",
-    "eslint:disable:check": "node scripts/check-eslint-disable-usage.js"
+    "eslint:disable:check": "node scripts/check-eslint-disable-usage.js",
+    "tasks:continuous": "tsx scripts/tasks/continuous-runner.ts",
+    "tasks:once": "tsx scripts/tasks/continuous-runner.ts",
+    "test:e2e:no-reuse": "CI=1 pnpm test:e2e",
+    "test:e2e:ci-local": "CI=1 pnpm test:e2e"
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^1.3.0",
@@ -132,7 +137,7 @@
     "eslint-plugin-security": "3.0.1",
     "eslint-plugin-security-node": "1.1.4",
     "glob": "^11.0.3",
-    "happy-dom": "^18.0.1",
+    "happy-dom": "^20.0.0",
     "husky": "9.1.7",
     "js-yaml": "^4.1.0",
     "jsdom": "^26.1.0",

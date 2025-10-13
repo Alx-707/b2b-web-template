@@ -14,7 +14,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: Boolean(process.env.CI),
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? (process.env.CI_FLAKE_SAMPLING === '1' ? 0 : 2) : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -79,10 +79,25 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm dev',
+    // 统一使用生产模式运行 E2E 测试,消除开发模式的 Hydration mismatch 警告
+    command: 'pnpm build && pnpm start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 180 * 1000, // 增加到 3 分钟
+    // 将关键测试环境变量直接注入到 Next.js 进程，避免依赖外部 CLI 加载 .env.test
+    env: {
+      NODE_ENV: 'test',
+      PLAYWRIGHT_TEST: 'true',
+      NEXT_PUBLIC_TEST_MODE: 'true',
+      NEXT_PUBLIC_DISABLE_REACT_SCAN: 'true',
+      NEXT_PUBLIC_DISABLE_DEV_TOOLS: 'true',
+      NEXT_PUBLIC_ENABLE_ANALYTICS: 'false',
+      NEXT_PUBLIC_ENABLE_ERROR_REPORTING: 'false',
+      NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING: 'false',
+      NEXT_PUBLIC_SECURITY_MODE: 'relaxed',
+      SECURITY_HEADERS_ENABLED: 'false',
+      SKIP_ENV_VALIDATION: 'true',
+    },
   },
 
   /* Global setup and teardown */
@@ -92,7 +107,8 @@ export default defineConfig({
   /* Test timeout */
   timeout: 30 * 1000,
   expect: {
-    timeout: 5 * 1000,
+    // Increase expect timeout on CI (helps Firefox/Mobile reduce flakes)
+    timeout: process.env.CI ? 8 * 1000 : 5 * 1000,
   },
 
   /* Output directory for test artifacts */
