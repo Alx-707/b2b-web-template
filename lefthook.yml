@@ -65,7 +65,7 @@ commit-msg:
         '提交信息不符合规范 - 请使用约定式提交格式：type(scope): description'
 
 pre-push:
-  parallel: true
+  parallel: false  # 改为串行执行，确保 build-check 先完成生成 .next/ 目录
   commands:
     # 构建成功验证
     build-check:

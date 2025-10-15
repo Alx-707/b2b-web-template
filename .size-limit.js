@@ -53,14 +53,13 @@ module.exports = [
   },
 
   // ==================== 分组 Chunks（基于 next.config.ts cacheGroups）====================
-  // Sentry Bundle 已移除：Sentry 使用动态导入，不再生成独立 chunk
-  // {
-  //   name: 'Sentry Bundle',
-  //   path: '.next/static/chunks/sentry-*.js',
-  //   limit: '270 KB',
-  //   webpack: false,
-  //   running: false,
-  // },
+  {
+    name: 'Sentry Bundle',
+    path: '.next/static/chunks/sentry*.js',
+    limit: '400 KB', // 当前 362K，+38K 缓冲
+    webpack: false,
+    running: false,
+  },
   {
     name: 'Vendors Bundle',
     path: '.next/static/chunks/vendors-*.js',
@@ -77,8 +76,15 @@ module.exports = [
   },
   {
     name: 'UI Libs Bundle',
-    path: '.next/static/chunks/ui-libs.*.js',
+    path: '.next/static/chunks/ui-libs*.js',
     limit: '50 KB', // 当前 41K，+9K 缓冲
+    webpack: false,
+    running: false,
+  },
+  {
+    name: 'Analytics Libs Bundle',
+    path: '.next/static/chunks/analytics-libs*.js',
+    limit: '15 KB', // 当前 8.8K，+6.2K 缓冲
     webpack: false,
     running: false,
   },
@@ -103,8 +109,13 @@ module.exports = [
     webpack: false,
     running: false,
   },
-  // 注意：analytics-libs 已移除，因为 @vercel/analytics 使用动态导入，
-  // 不会生成独立的 chunk，由 vendors/anonymous shared 兜底
+  {
+    name: 'Floating UI Bundle',
+    path: '.next/static/chunks/floating-ui*.js',
+    limit: '25 KB', // 当前 21.8K，+3.2K 缓冲
+    webpack: false,
+    running: false,
+  },
 
   // ==================== 兜底规则：匿名 Shared Chunks ====================
   {
