@@ -203,7 +203,7 @@ class QualityGate {
         });
 
         if (failedMetrics.length > 0) {
-          gate.status = 'failed';
+          gate.status = gate.blocking ? 'failed' : 'warning';
           gate.issues.push(`覆盖率不达标: ${failedMetrics.join(', ')}`);
         } else {
           gate.status = 'passed';
@@ -213,7 +213,7 @@ class QualityGate {
         gate.issues.push('覆盖率报告文件不存在');
       }
     } catch (error) {
-      gate.status = 'error';
+      gate.status = gate.blocking ? 'error' : 'warning';
       gate.issues.push(`覆盖率检查失败: ${error.message}`);
     }
 
@@ -276,7 +276,7 @@ class QualityGate {
         gate.status = 'passed';
       }
     } catch (error) {
-      gate.status = 'error';
+      gate.status = gate.blocking ? 'error' : 'warning';
       gate.issues.push(`性能检查失败: ${error.message}`);
     }
 

@@ -1,0 +1,27 @@
+import type { Locator, Page } from '@playwright/test';
+
+const MAIN_NAV_ROLE_OPTIONS = {
+  name: /main navigation/i,
+} as const;
+
+/**
+ * 获取主导航栏定位器，针对桌面/移动场景自动回退
+ */
+export function getNav(page: Page): Locator {
+  const nav = page.getByRole('navigation', MAIN_NAV_ROLE_OPTIONS);
+  return nav.first();
+}
+
+/**
+ * 点击主导航栏中的指定链接。
+ * @param page Playwright 页面实例
+ * @param linkName 可访问名称（会处理英文/本地化文案）
+ */
+export async function clickNavLinkByName(
+  page: Page,
+  linkName: string,
+): Promise<void> {
+  const nav = getNav(page);
+  const link = nav.getByRole('link', { name: linkName });
+  await link.click();
+}

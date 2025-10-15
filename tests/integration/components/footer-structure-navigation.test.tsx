@@ -161,6 +161,7 @@ vi.mock('@/components/ui/social-icons', () => ({
     label: string;
     ariaLabel: string;
     _label?: string;
+    iconSize?: number | string;
   }) => {
     const { className, ...rest } = props;
     return (

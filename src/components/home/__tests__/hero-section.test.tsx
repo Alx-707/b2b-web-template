@@ -76,9 +76,12 @@ vi.mock('@/components/ui/button', () => ({
     ...props
   }: React.ComponentProps<'button'> & { asChild?: boolean }) => {
     if (asChild && React.isValidElement(children)) {
+      const childElement = children as React.ReactElement<
+        Record<string, unknown>
+      >;
       const existingClass =
-        (children.props as { className?: string })?.className ?? '';
-      return React.cloneElement(children, {
+        (childElement.props as { className?: string })?.className ?? '';
+      return React.cloneElement(childElement, {
         ...props,
         onClick,
         'className': [existingClass, className].filter(Boolean).join(' '),

@@ -84,6 +84,38 @@ vi.mock('next-intl', () => ({
   useTranslations: () => mockT,
 }));
 
+const originalRequestIdleCallback = window.requestIdleCallback;
+const originalCancelIdleCallback = window.cancelIdleCallback;
+const originalIntersectionObserver = (
+  globalThis as typeof globalThis & {
+    IntersectionObserver?: typeof IntersectionObserver;
+  }
+).IntersectionObserver;
+
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | Document | null = null;
+  readonly rootMargin = '';
+  readonly thresholds = [0];
+
+  constructor(private readonly callback: IntersectionObserverCallback) {}
+
+  observe: IntersectionObserver['observe'] = vi.fn((element: Element) => {
+    this.callback(
+      [
+        {
+          isIntersecting: true,
+          target: element,
+        } as IntersectionObserverEntry,
+      ],
+      this,
+    );
+  });
+
+  unobserve: IntersectionObserver['unobserve'] = vi.fn();
+  disconnect: IntersectionObserver['disconnect'] = vi.fn();
+  takeRecords: IntersectionObserver['takeRecords'] = vi.fn(() => []);
+}
+
 // 填写有效表单的辅助函数
 const renderContactForm = async () => {
   let utils: ReturnType<typeof render> | undefined;
@@ -155,23 +187,8 @@ describe('ContactFormContainer - 提交和错误处理', () => {
       globalThis as typeof globalThis & {
         IntersectionObserver?: typeof IntersectionObserver;
       }
-    ).IntersectionObserver = vi.fn((callback: IntersectionObserverCallback) => {
-      return {
-        observe: vi.fn(() => {
-          callback(
-            [
-              {
-                isIntersecting: true,
-              } as IntersectionObserverEntry,
-            ],
-            {} as IntersectionObserver,
-          );
-        }),
-        unobserve: vi.fn(),
-        disconnect: vi.fn(),
-        takeRecords: vi.fn(() => []),
-      } satisfies IntersectionObserver;
-    });
+    ).IntersectionObserver =
+      MockIntersectionObserver as unknown as typeof IntersectionObserver;
 
     // Default useActionState mock - idle state
     mockUseActionState.mockReturnValue([
@@ -182,22 +199,27 @@ describe('ContactFormContainer - 提交和错误处理', () => {
   });
 
   afterEach(() => {
-    delete (
+    (
       window as typeof window & {
         requestIdleCallback?: typeof globalThis.requestIdleCallback;
         cancelIdleCallback?: typeof globalThis.cancelIdleCallback;
       }
-    ).requestIdleCallback;
-    delete (
+    ).requestIdleCallback = originalRequestIdleCallback;
+    (
       window as typeof window & {
         cancelIdleCallback?: typeof globalThis.cancelIdleCallback;
       }
-    ).cancelIdleCallback;
-    delete (
-      globalThis as typeof globalThis & {
-        IntersectionObserver?: typeof IntersectionObserver;
-      }
-    ).IntersectionObserver;
+    ).cancelIdleCallback = originalCancelIdleCallback;
+
+    if (originalIntersectionObserver) {
+      (
+        globalThis as typeof globalThis & {
+          IntersectionObserver?: typeof IntersectionObserver;
+        }
+      ).IntersectionObserver = originalIntersectionObserver;
+    } else {
+      Reflect.deleteProperty(globalThis, 'IntersectionObserver');
+    }
   });
 
   describe('网络错误处理', () => {

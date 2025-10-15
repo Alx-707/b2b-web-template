@@ -163,7 +163,13 @@ describe('Mobile Navigation - Advanced Integration Tests', () => {
       await user.click(trigger);
 
       const links = screen.getAllByRole('link');
-      const [homeLink, productsLink, blogLink] = links;
+      expect(links.length).toBeGreaterThanOrEqual(3);
+      const [homeLink, productsLink, blogLink] = links as HTMLAnchorElement[];
+      if (!homeLink || !productsLink || !blogLink) {
+        throw new Error(
+          'Expected navigation links to be present for keyboard test',
+        );
+      }
 
       homeLink.focus();
       expect(homeLink).toHaveFocus();

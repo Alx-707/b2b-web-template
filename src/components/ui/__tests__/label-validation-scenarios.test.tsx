@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Label } from '@/components/ui/label';
@@ -118,8 +118,12 @@ describe('Label Validation Scenarios Tests', () => {
       const nameInput = screen.getByLabelText(/Name/);
 
       // Trigger validation
-      nameInput.focus();
-      nameInput.blur();
+      await act(async () => {
+        nameInput.focus();
+      });
+      await act(async () => {
+        nameInput.blur();
+      });
 
       // Wait for validation to trigger and error to appear
       await waitFor(() => {

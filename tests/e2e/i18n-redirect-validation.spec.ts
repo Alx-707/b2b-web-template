@@ -121,10 +121,7 @@ test.describe('Next.js 15.4.7 国际化重定向验证', () => {
       // 创建多个并发请求，每个请求使用独立的 browser context 避免 cookie 共享
       // 直接访问带语言前缀的路径，测试并发场景下的路由稳定性
       for (let i = 0; i < 10; i++) {
-        const context = await browser.newContext({
-          // 每个 context 使用独立的 cookie 存储，避免并发竞态
-          storageState: undefined,
-        });
+        const context = await browser.newContext();
         contexts.push(context);
 
         const page = await context.newPage();

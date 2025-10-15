@@ -16,6 +16,7 @@ jobs:
   basic-checks:
     name: 基础检查
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     outputs:
       cache-key: ${{ steps.cache-key.outputs.key }}
 
@@ -60,6 +61,7 @@ jobs:
     name: 单元测试
     runs-on: ubuntu-latest
     needs: basic-checks
+    timeout-minutes: 18
 
     steps:
       - name: 检出代码
@@ -95,6 +97,7 @@ jobs:
     name: E2E测试
     runs-on: ubuntu-latest
     needs: basic-checks
+    timeout-minutes: 35
 
     steps:
       - name: 检出代码
@@ -137,6 +140,7 @@ jobs:
     name: 性能检查
     runs-on: ubuntu-latest
     needs: basic-checks
+    timeout-minutes: 25
 
     steps:
       - name: 检出代码
@@ -158,16 +162,15 @@ jobs:
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
-      - name: 包大小检查
-        run: pnpm size:check
-
       - name: 构建检查
         run: pnpm build:check
 
+      - name: 包大小检查
+        run: pnpm size:check
+
       - name: Lighthouse CI
-        run: |
-          pnpm build
-          pnpm exec lhci autorun --config=lighthouserc.js
+        timeout-minutes: 15
+        run: pnpm exec lhci autorun --config=lighthouserc.js
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
@@ -176,6 +179,7 @@ jobs:
     name: 安全检查
     runs-on: ubuntu-latest
     needs: basic-checks
+    timeout-minutes: 12
 
     steps:
       - name: 检出代码
@@ -205,6 +209,7 @@ jobs:
     name: 翻译质量检查
     runs-on: ubuntu-latest
     needs: basic-checks
+    timeout-minutes: 8
 
     steps:
       - name: 检出代码
@@ -243,6 +248,7 @@ jobs:
         translation-quality,
       ]
     if: always()
+    timeout-minutes: 5
 
     steps:
       - name: 检查所有作业状态

@@ -156,6 +156,7 @@ vi.mock('@/components/ui/social-icons', () => ({
     icon: string;
     label: string;
     ariaLabel: string;
+    iconSize?: number | string;
   }) => (
     <a
       data-testid={`social-link-${icon}`}
