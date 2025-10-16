@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, type Ref } from 'react';
 import { ArrowRight, ExternalLink, Github } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
@@ -169,46 +169,39 @@ function HeroStats({ t }: { t: (_key: string) => string }) {
   );
 }
 
-export function HeroSection() {
-  const t = useTranslations('home.hero');
-  const deferredRef = useRef<HTMLDivElement | null>(null);
-
-  // 动画Hook
-  const { ref: badgeRef, isVisible: badgeVisible } =
-    useIntersectionObserver<HTMLDivElement>({
-      threshold: MAGIC_0_3,
-      triggerOnce: true,
-    });
-
-  const { ref: titleRef, isVisible: titleVisible } =
-    useIntersectionObserver<HTMLHeadingElement>({
-      threshold: MAGIC_0_3,
-      triggerOnce: true,
-    });
-
-  const { ref: buttonsRef, isVisible: buttonsVisible } =
-    useIntersectionObserver<HTMLDivElement>({
-      threshold: MAGIC_0_3,
-      triggerOnce: true,
-    });
-
-  // 延迟渲染背景大面积模糊装饰，降低首屏绘制与合成压力
-  const showBg = useDeferredBackground({ timeout: 1200 });
-
-  // 视口/空闲后再渲染技术徽章与 CTA，避免与 LCP 竞争
-  const showDeferred = useDeferredContent(deferredRef, {
-    rootMargin: '200px',
-    timeout: 1200,
-  });
+function HeroSectionBody(props: {
+  t: (key: string) => string;
+  showBg: boolean;
+  badgeRef: (_node: HTMLDivElement | null) => void;
+  badgeVisible: boolean;
+  titleRef: (_node: HTMLHeadingElement | null) => void;
+  titleVisible: boolean;
+  deferredRef: Ref<HTMLDivElement>;
+  showDeferred: boolean;
+  buttonsRef: (_node: HTMLDivElement | null) => void;
+  buttonsVisible: boolean;
+}) {
+  const {
+    t,
+    showBg,
+    badgeRef,
+    badgeVisible,
+    titleRef,
+    titleVisible,
+    deferredRef,
+    showDeferred,
+    buttonsRef,
+    buttonsVisible,
+  } = props;
 
   return (
-    <section className='from-background via-background to-muted/20 relative overflow-hidden bg-gradient-to-br py-20 sm:py-32'>
-      {/* 背景装饰（延后渲染） - 移动端纯色，桌面端小半径径向渐变 */}
+    <section
+      data-testid='hero-section'
+      className='from-background via-background to-muted/20 relative overflow-hidden bg-gradient-to-br py-20 sm:py-32'
+    >
       {showBg ? (
         <>
-          {/* 移动端纯色背景 */}
           <div className='bg-background absolute inset-0 -z-10 md:hidden' />
-          {/* 桌面端小半径径向渐变 */}
           <div className='absolute inset-0 -z-10 hidden md:block'>
             <div className='absolute top-0 left-1/2 -translate-x-1/2 transform'>
               <div className='h-[600px] w-[600px] bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.03)_0%,transparent_32px)]' />
@@ -232,7 +225,6 @@ export function HeroSection() {
             line2={t('title.line2')}
           />
 
-          {/* 副标题 */}
           <p className='text-muted-foreground mx-auto mb-10 max-w-2xl text-lg sm:text-xl'>
             {t('subtitle')}
           </p>
@@ -300,5 +292,47 @@ export function HeroSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+export function HeroSection() {
+  const t = useTranslations('home.hero');
+  const deferredRef = useRef<HTMLDivElement | null>(null);
+
+  const { ref: badgeRef, isVisible: badgeVisible } =
+    useIntersectionObserver<HTMLDivElement>({
+      threshold: MAGIC_0_3,
+      triggerOnce: true,
+    });
+  const { ref: titleRef, isVisible: titleVisible } =
+    useIntersectionObserver<HTMLHeadingElement>({
+      threshold: MAGIC_0_3,
+      triggerOnce: true,
+    });
+  const { ref: buttonsRef, isVisible: buttonsVisible } =
+    useIntersectionObserver<HTMLDivElement>({
+      threshold: MAGIC_0_3,
+      triggerOnce: true,
+    });
+
+  const showBg = useDeferredBackground({ timeout: 1200 });
+  const showDeferred = useDeferredContent(deferredRef, {
+    rootMargin: '200px',
+    timeout: 1200,
+  });
+
+  return (
+    <HeroSectionBody
+      t={t}
+      showBg={showBg}
+      badgeRef={badgeRef}
+      badgeVisible={badgeVisible}
+      titleRef={titleRef}
+      titleVisible={titleVisible}
+      deferredRef={deferredRef}
+      showDeferred={showDeferred}
+      buttonsRef={buttonsRef}
+      buttonsVisible={buttonsVisible}
+    />
   );
 }

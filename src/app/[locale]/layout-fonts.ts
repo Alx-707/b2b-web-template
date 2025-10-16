@@ -1,12 +1,18 @@
-import { Geist, Geist_Mono, Noto_Sans_SC } from 'next/font/google';
+import localFont from 'next/font/local';
 
 /**
  * Geist Sans 字体配置
  * 用于主要文本内容
  */
-export const geistSans = Geist({
+export const geistSans = localFont({
   variable: '--font-geist-sans',
-  subsets: ['latin'],
+  src: [
+    {
+      path: '../../../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2',
+      weight: '100 900',
+      style: 'normal',
+    },
+  ],
   display: 'swap',
   preload: true,
 });
@@ -15,26 +21,23 @@ export const geistSans = Geist({
  * Geist Mono 字体配置
  * 用于代码和等宽文本
  */
-export const geistMono = Geist_Mono({
+export const geistMono = localFont({
   variable: '--font-geist-mono',
-  subsets: ['latin'],
+  src: [
+    {
+      path: '../../../node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2',
+      weight: '100 900',
+      style: 'normal',
+    },
+  ],
   display: 'swap',
   preload: true,
 });
 
 /**
- * Noto Sans SC 字体配置
- * 用于中文内容优化
- * P0.4 优化：添加中文字体支持，改善中文页面 LCP（目标 -200ms）
+ * 中文字体采用系统字体栈与可选子集（见 head.tsx 注入的 @font-face）。
+ * 不再依赖 Google Fonts，避免 CI/受限网络环境下载超时。
  */
-export const notoSansSC = Noto_Sans_SC({
-  variable: '--font-noto-sans-sc',
-  subsets: ['latin'], // 基础子集，避免加载完整中文字体
-  display: 'swap',
-  preload: true,
-  weight: ['400', '500', '600', '700'],
-  fallback: ['PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei'],
-});
 
 /**
  * 获取字体类名字符串
@@ -42,9 +45,7 @@ export const notoSansSC = Noto_Sans_SC({
  * P0.4 优化：支持环境变量控制中文字体启用/禁用
  */
 export function getFontClassNames(): string {
-  const enableCnFont = process.env.NEXT_PUBLIC_ENABLE_CN_FONT_SUBSET === 'true';
-
-  return enableCnFont
-    ? `${geistSans.variable} ${geistMono.variable} ${notoSansSC.variable}`
-    : `${geistSans.variable} ${geistMono.variable}`;
+  // 字体变量仅包含英文字体（Geist Sans/Mono）。中文字体通过 CSS 变量 --font-chinese-stack 控制
+  // 与 head.tsx 注入的子集样式解耦，避免构建时的外部依赖。
+  return `${geistSans.variable} ${geistMono.variable}`;
 }

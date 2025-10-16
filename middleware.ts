@@ -93,20 +93,6 @@ function detectLocaleFromHeaders(request: NextRequest) {
 // 创建基础的 next-intl 中间件
 const intlMiddleware = createMiddleware(routing);
 
-// 辅助函数：为测试环境创建响应
-function createTestResponse(): NextResponse {
-  const response = NextResponse.next();
-  const nonce = generateNonce();
-  const securityHeaders = getSecurityHeaders(nonce);
-
-  securityHeaders.forEach(({ key, value }) => {
-    response.headers.set(key, value);
-  });
-  response.headers.set('x-csp-nonce', nonce);
-
-  return response;
-}
-
 // 辅助函数：创建增强的请求对象
 function createEnhancedRequest(
   request: NextRequest,
@@ -150,11 +136,6 @@ function addSecurityHeaders(response: NextResponse, nonce: string): void {
 }
 
 export default function middleware(request: NextRequest) {
-  // 测试环境下跳过next-intl middleware（修复Playwright测试环境下的SSR失败问题）
-  if (process.env.PLAYWRIGHT_TEST === 'true') {
-    return createTestResponse();
-  }
-
   // Generate nonce for CSP
   const nonce = generateNonce();
 
