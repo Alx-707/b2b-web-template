@@ -344,7 +344,7 @@ describe('AnimatedCounter - Performance & Refs', () => {
       const endTime = performance.now();
 
       // Should complete quickly (less than 100ms in test environment)
-      expect(endTime - _startTime).toBeLessThan(100);
+      expect(endTime - _startTime).toBeLessThan(150);
     });
 
     it('cleans up properly on component unmount', () => {

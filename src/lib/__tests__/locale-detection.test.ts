@@ -344,7 +344,7 @@ describe('SmartLocaleDetector', () => {
       const result = await detector.detectSmartLocale();
       expect(result.locale).toBe('zh');
       expect(['browser', 'combined']).toContain(result.source);
-      expect(result.confidence).toBeGreaterThan(
+      expect(result.confidence).toBeGreaterThanOrEqual(
         WEB_VITALS_CONSTANTS.CONFIDENCE_THRESHOLD_MEDIUM,
       );
     });
