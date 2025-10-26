@@ -102,3 +102,4 @@ reports/*.json
 reports/*.json.gz
 reports/*.xml
 reports/*.html
+.lighthouseci/

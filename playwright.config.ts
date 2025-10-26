@@ -55,9 +55,7 @@ export default defineConfig({
     ['junit', { outputFile: 'reports/playwright-results.xml' }],
   ],
   // 非每日任务时，排除调试/诊断类用例，进一步收敛耗时
-  ...(isCI && !isDaily
-    ? { grepInvert: /debug|diagnosis/i }
-    : {}),
+  ...(isCI && !isDaily ? { grepInvert: /debug|diagnosis/i } : {}),
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */

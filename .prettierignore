@@ -16,6 +16,7 @@ build/
 reports/
 logs/
 coverage/
+.lighthouseci/
 
 # Lock files
 pnpm-lock.yaml
