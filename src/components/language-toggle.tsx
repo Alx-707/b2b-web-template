@@ -111,6 +111,7 @@ export const LanguageToggle = memo(() => {
           variant='ghost'
           disabled={isPending}
           data-testid='language-toggle-button'
+          aria-label={locale === 'en' ? 'Toggle Language' : '切换语言'}
           className={cn(
             // 胶囊形容器：更紧凑的高度32px，圆角16px（完全胶囊）
             'h-8 rounded-full px-3',

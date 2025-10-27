@@ -24,13 +24,16 @@ const themes = [
   },
 ];
 
-export type ThemeSwitcherProps = {
+export type ThemeSwitcherProps = React.HTMLAttributes<HTMLDivElement> & {
   className?: string;
 };
 
-export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
+export const ThemeSwitcher = ({ className, ...rest }: ThemeSwitcherProps) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const dataTestId = (rest as Record<string, unknown>)[
+    'data-testid'
+  ] as string | undefined;
 
   const handleThemeClick = useCallback(
     (themeKey: 'light' | 'dark' | 'system') => {
@@ -53,6 +56,8 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
           'bg-background ring-border relative isolate flex h-8 rounded-full p-1 ring-1',
           className,
         )}
+        {...rest}
+        data-testid={dataTestId ?? 'theme-toggle'}
       >
         {themes.map(({ key, icon: Icon, label }) => (
           <button
@@ -83,6 +88,8 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
         'bg-background ring-border relative isolate flex h-8 rounded-full p-1 ring-1',
         className,
       )}
+      {...rest}
+      data-testid={dataTestId ?? 'theme-toggle'}
     >
       {themes.map(({ key, icon: Icon, label }) => {
         const isActive = theme === key;
