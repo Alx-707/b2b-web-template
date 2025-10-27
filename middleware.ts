@@ -6,6 +6,9 @@ import { routing } from '@/i18n/routing';
 // 创建 next-intl 中间件
 const intlMiddleware = createMiddleware(routing);
 
+// 支持的本地化前缀
+const SUPPORTED_LOCALES = new Set(['en', 'zh']);
+
 // 辅助函数：添加安全头到响应
 function addSecurityHeaders(response: NextResponse, nonce: string): void {
   const securityHeaders = getSecurityHeaders(nonce);
@@ -15,65 +18,53 @@ function addSecurityHeaders(response: NextResponse, nonce: string): void {
   response.headers.set('x-csp-nonce', nonce);
 }
 
-export default function middleware(request: NextRequest) {
-  // Generate nonce for CSP
-  const nonce = generateNonce();
-
-  const { pathname } = request.nextUrl;
+function extractLocaleCandidate(pathname: string): string | undefined {
   const segments = pathname.split('/').filter(Boolean);
-  const localeCandidate = segments[0];
-  const supportedLocales = new Set(['en', 'zh']);
+  const candidate = segments[0];
+  return candidate && SUPPORTED_LOCALES.has(candidate) ? candidate : undefined;
+}
 
-  // 如果是显式本地化路径且缺少 NEXT_LOCALE，则直接放行并设置 Cookie
-  if (
-    localeCandidate &&
-    supportedLocales.has(localeCandidate) &&
-    !request.cookies.get('NEXT_LOCALE')
-  ) {
+function setLocaleCookie(resp: NextResponse, locale: string): void {
+  try {
+    resp.cookies.set('NEXT_LOCALE', locale, {
+      path: '/',
+      httpOnly: false,
+      sameSite: 'lax',
+    });
+    resp.headers.append(
+      'set-cookie',
+      `NEXT_LOCALE=${locale}; Path=/; SameSite=Lax`,
+    );
+  } catch {
+    // ignore cookie errors to keep middleware resilient
+  }
+}
+
+function tryHandleExplicitLocalizedRequest(
+  request: NextRequest,
+  nonce: string,
+): NextResponse | null {
+  const locale = extractLocaleCandidate(request.nextUrl.pathname);
+  if (locale && !request.cookies.get('NEXT_LOCALE')) {
     const resp = NextResponse.next();
-    try {
-      resp.cookies.set('NEXT_LOCALE', localeCandidate, {
-        path: '/',
-        httpOnly: false,
-        sameSite: 'lax',
-      });
-      resp.headers.append('set-cookie', `NEXT_LOCALE=${localeCandidate}; Path=/; SameSite=Lax`);
-    } catch {
-      // ignore
-    }
+    setLocaleCookie(resp, locale);
     addSecurityHeaders(resp, nonce);
     return resp;
   }
+  return null;
+}
 
-  // 其他情况：调用 next-intl 中间件（完全依赖其内置语言检测）
+export default function middleware(request: NextRequest) {
+  const nonce = generateNonce();
+  const early = tryHandleExplicitLocalizedRequest(request, nonce);
+  if (early) return early;
+
   const response = intlMiddleware(request);
-
-  // 如果是显式本地化路径且缺少 NEXT_LOCALE，则设置 Cookie，便于 E2E 与后续请求读取
-  try {
-    if (response && localeCandidate && supportedLocales.has(localeCandidate)) {
-      const hasLocaleCookie = request.cookies.get('NEXT_LOCALE');
-      if (!hasLocaleCookie) {
-        // 设置 Cookie（NextResponse API）
-        response.cookies.set('NEXT_LOCALE', localeCandidate, {
-          path: '/',
-          httpOnly: false,
-          sameSite: 'lax',
-        });
-
-        // 保障性：直接追加 Set-Cookie 头（某些运行时对 cookies.set 支持不一致）
-        const cookieHeader = `NEXT_LOCALE=${localeCandidate}; Path=/; SameSite=Lax`;
-        response.headers.append('set-cookie', cookieHeader);
-      }
-    }
-  } catch {
-    // no-op: 保持中间件健壮性
+  const locale = extractLocaleCandidate(request.nextUrl.pathname);
+  if (response && locale && !request.cookies.get('NEXT_LOCALE')) {
+    setLocaleCookie(response, locale);
   }
-
-  // 添加安全headers到响应
-  if (response) {
-    addSecurityHeaders(response, nonce);
-  }
-
+  if (response) addSecurityHeaders(response, nonce);
   return response;
 }
 

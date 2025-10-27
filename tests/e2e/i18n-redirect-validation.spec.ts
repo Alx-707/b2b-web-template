@@ -45,7 +45,9 @@ test.describe('Next.js 15.4.7 国际化重定向验证', () => {
       if (localeCookie?.value || docCookieVal) {
         expect(localeCookie?.value ?? docCookieVal).toBe('zh');
       } else {
-        console.warn('NEXT_LOCALE cookie not present; continuing with html[lang] validation');
+        console.warn(
+          'NEXT_LOCALE cookie not present; continuing with html[lang] validation',
+        );
       }
 
       // 验证页面语言
@@ -79,7 +81,9 @@ test.describe('Next.js 15.4.7 国际化重定向验证', () => {
       if (localeCookie?.value || docCookieVal) {
         expect(localeCookie?.value ?? docCookieVal).toBe('en');
       } else {
-        console.warn('NEXT_LOCALE cookie not present; continuing with html[lang] validation');
+        console.warn(
+          'NEXT_LOCALE cookie not present; continuing with html[lang] validation',
+        );
       }
 
       // 验证页面语言

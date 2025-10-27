@@ -42,7 +42,10 @@ describe('InteractiveShowcase', () => {
     it('应该渲染点赞功能', () => {
       render(<InteractiveShowcase {...mockProps} />);
 
-      expect(screen.getByText('Likes')).toBeInTheDocument();
+      // 使用可访问名称查询点赞按钮，避免与 sr-only 文本冲突
+      expect(
+        screen.getByRole('button', { name: /likes/i }),
+      ).toBeInTheDocument();
       expect(screen.getByText('42')).toBeInTheDocument();
     });
 
