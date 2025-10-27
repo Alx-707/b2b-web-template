@@ -33,8 +33,8 @@ jobs:
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
@@ -63,7 +63,7 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
 
     outputs:
-      preview_url: ${{ steps.vercel_deploy.outputs.preview-url }}
+      preview_url: ${{ steps.vercel_deploy.outputs.deployment-url }}
 
     steps:
       - name: 检出代码
@@ -77,8 +77,8 @@ jobs:
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
 
       - name: 安装依赖（用于预构建）
         run: pnpm install --frozen-lockfile
@@ -88,19 +88,17 @@ jobs:
 
       - name: 使用 token 触发 Vercel 部署
         id: vercel_deploy
-        uses: vercel/action@v3
+        uses: vercel/actions/deploy@v1
         with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          team-id: ${{ secrets.VERCEL_ORG_ID }}
           working-directory: .
-          vercel-args: "--prebuilt --yes"
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: 输出部署 URL
         run: |
-          echo "部署 URL: ${{ steps.vercel_deploy.outputs.preview-url }}"
-          echo "VERCEL_DEPLOYMENT_URL=${{ steps.vercel_deploy.outputs.preview-url }}" >> $GITHUB_ENV
+          echo "部署 URL: ${{ steps.vercel_deploy.outputs.deployment-url }}"
+          echo "VERCEL_DEPLOYMENT_URL=${{ steps.vercel_deploy.outputs.deployment-url }}" >> $GITHUB_ENV
 
   # 部署后验证 (仅在有部署 URL 时运行)
   post-deployment-verification:
@@ -133,40 +131,41 @@ jobs:
       - name: 验证部署健康状态
         run: |
           DEPLOYMENT_URL="${{ needs.deploy-to-vercel.outputs.preview_url }}"
-          
+
           # 检查根路径
           echo "检查根路径..."
           curl -f -s -o /dev/null -w "%{http_code}" "$DEPLOYMENT_URL" || exit 1
-          
+
           # 检查英文路由
           echo "检查英文路由..."
           curl -f -s -o /dev/null -w "%{http_code}" "$DEPLOYMENT_URL/en" || exit 1
-          
+
           # 检查中文路由
           echo "检查中文路由..."
           curl -f -s -o /dev/null -w "%{http_code}" "$DEPLOYMENT_URL/zh" || exit 1
-          
+
           echo "✅ 所有路由验证通过"
 
       - name: 验证 API 端点
         run: |
           DEPLOYMENT_URL="${{ needs.deploy-to-vercel.outputs.preview_url }}"
-          
+
           # 检查 robots.txt
           echo "检查 robots.txt..."
           curl -f -s "$DEPLOYMENT_URL/robots.txt" | grep -q "User-agent" || exit 1
-          
+
           # 检查 sitemap.xml
           echo "检查 sitemap.xml..."
           curl -f -s "$DEPLOYMENT_URL/sitemap.xml" | grep -q "urlset" || exit 1
-          
+
           echo "✅ API 端点验证通过"
 
   # 部署总结
   deployment-summary:
     name: 部署总结
     runs-on: ubuntu-latest
-    needs: [pre-deployment-checks, deploy-to-vercel, post-deployment-verification]
+    needs:
+      [pre-deployment-checks, deploy-to-vercel, post-deployment-verification]
     if: always()
     timeout-minutes: 5
 
@@ -180,7 +179,7 @@ jobs:
           echo "- **触发者**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "- **部署 URL**: ${{ needs.deploy-to-vercel.outputs.preview_url }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ needs.pre-deployment-checks.result }}" == "success" ] && \
              [ "${{ needs.deploy-to-vercel.result }}" == "success" ] && \
              [ "${{ needs.post-deployment-verification.result }}" == "success" ]; then

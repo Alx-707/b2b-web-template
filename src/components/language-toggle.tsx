@@ -1,26 +1,26 @@
 'use client';
 
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from 'react';
-import { Check, Globe, Loader2 } from 'lucide-react';
-import { useLocale } from 'next-intl';
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ANIMATION_DURATION_VERY_SLOW } from '@/constants';
 import { MAGIC_2000 } from '@/constants/count';
 import { Link, usePathname } from '@/i18n/routing';
+import { cn } from '@/lib/utils';
+import { Check, Globe, Loader2 } from 'lucide-react';
+import { useLocale } from 'next-intl';
+import {
+    memo,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+    useTransition,
+} from 'react';
 
 const TRANSITION_TIMEOUT = ANIMATION_DURATION_VERY_SLOW; // 1 second timeout for language switch
 
@@ -112,7 +112,7 @@ export const LanguageToggle = memo(() => {
           variant='ghost'
           disabled={isPending}
           data-testid='language-toggle-button'
-          aria-label={locale === 'en' ? 'Toggle Language' : '切换语言'}
+          aria-label={currentLanguageName}
           className={cn(
             // 胶囊形容器：更紧凑的高度32px，圆角16px（完全胶囊）
             'h-8 rounded-full px-3',
@@ -188,7 +188,7 @@ export const LanguageToggle = memo(() => {
               'flex w-full items-center justify-between px-3.5 py-2',
               // Vercel 风格：浅灰文字 + 椭圆灰色背景悬停
               'text-foreground/70 font-medium',
-              'hover:text-foreground hover:bg-[#F5F5F5] dark:hover:bg-white/8',
+              'hover:text-foreground hover:bg-[#F5F5F5] dark:hover:bg白/8',
               'rounded-md',
               // 过渡：120ms
               'transition-all duration-[120ms] ease-in-out',
@@ -224,7 +224,7 @@ export const LanguageToggle = memo(() => {
               'flex w-full items-center justify-between px-3.5 py-2',
               // Vercel 风格：浅灰文字 + 椭圆灰色背景悬停
               'text-foreground/70 font-medium',
-              'hover:text-foreground hover:bg-[#F5F5F5] dark:hover:bg-white/8',
+              'hover:text-foreground hover:bg-[#F5F5F5] dark:hover:bg白/8',
               'rounded-md',
               // 过渡：120ms
               'transition-all duration-[120ms] ease-in-out',
