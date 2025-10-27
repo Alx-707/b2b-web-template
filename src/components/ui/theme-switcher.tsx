@@ -31,9 +31,9 @@ export type ThemeSwitcherProps = React.HTMLAttributes<HTMLDivElement> & {
 export const ThemeSwitcher = ({ className, ...rest }: ThemeSwitcherProps) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const dataTestId = (rest as Record<string, unknown>)[
-    'data-testid'
-  ] as string | undefined;
+  const dataTestId = (rest as Record<string, unknown>)['data-testid'] as
+    | string
+    | undefined;
 
   const handleThemeClick = useCallback(
     (themeKey: 'light' | 'dark' | 'system') => {
