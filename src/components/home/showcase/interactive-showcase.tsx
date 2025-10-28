@@ -41,7 +41,9 @@ export function InteractiveShowcase({
               aria-label={t('components.interactive.likes')}
             >
               <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
-              <span className='sr-only'>{t('components.interactive.likes')}</span>
+              <span className='sr-only'>
+                {t('components.interactive.likes')}
+              </span>
             </Button>
             <span className='text-muted-foreground text-sm'>{likeCount}</span>
           </div>
