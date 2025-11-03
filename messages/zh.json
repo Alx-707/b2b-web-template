@@ -131,7 +131,19 @@
     "welcome": "欢迎来到 Tucsenberg",
     "modernApp": "基于 Next.js 15 和 React 19 构建的现代化Web应用",
     "features": {
-      "title": "特性"
+      "title": "特性",
+      "performance": {
+        "title": "高性能",
+        "description": "采用现代Web技术优化速度和效率"
+      },
+      "scalable": {
+        "title": "可扩展架构",
+        "description": "随着您的业务需求和要求而增长"
+      },
+      "secure": {
+        "title": "企业级安全",
+        "description": "行业标准的安全实践和合规性"
+      }
     },
     "modernStack": "现代化技术栈",
     "modernStackDesc": "采用最新技术构建",
@@ -392,21 +404,6 @@
         "discussions": "GitHub讨论",
         "issues": "报告问题"
       }
-    },
-    "features": {
-      "title": "特性",
-      "performance": {
-        "title": "高性能",
-        "description": "采用现代Web技术优化速度和效率"
-      },
-      "scalable": {
-        "title": "可扩展架构",
-        "description": "随着您的业务需求和要求而增长"
-      },
-      "secure": {
-        "title": "企业级安全",
-        "description": "行业标准的安全实践和合规性"
-      }
     }
   },
   "themeDemo": {
@@ -432,7 +429,6 @@
     "deployNow": "立即部署",
     "readDocs": "阅读文档"
   },
-
   "formTemplate": {
     "form": {
       "success": "成功",
@@ -462,6 +458,7 @@
     "form": {
       "title": "联系我们",
       "description": "与我们取得联系，我们很乐意听到您的声音。",
+      "optional": "选填",
       "firstName": "名字",
       "lastName": "姓氏",
       "email": "邮箱地址",
@@ -480,8 +477,53 @@
       "marketingConsent": "我希望接收营销通讯",
       "submit": "发送消息",
       "submitting": "发送中...",
+      "submitSuccess": "消息已成功发送！",
+      "submitError": "消息发送失败，请稍后再试。",
       "success": "谢谢！您的消息已成功发送。我们会尽快回复您。",
       "error": "抱歉，发送消息时出现错误。请稍后重试。",
+      "rateLimitMessage": "您刚刚提交过表单，请稍候再尝试。",
+      "errors": {
+        "generic": "请检查标记的字段后再试一次。",
+        "firstName": {
+          "required": "名字为必填项",
+          "tooShort": "名字至少需要2个字符",
+          "tooLong": "名字长度需少于50个字符",
+          "invalid": "名字仅允许字母和空格"
+        },
+        "lastName": {
+          "required": "姓氏为必填项",
+          "tooShort": "姓氏至少需要2个字符",
+          "tooLong": "姓氏长度需少于50个字符",
+          "invalid": "姓氏仅允许字母和空格"
+        },
+        "email": {
+          "required": "邮箱地址为必填项",
+          "invalid": "请输入有效的邮箱地址",
+          "tooLong": "邮箱地址长度需少于100个字符"
+        },
+        "company": {
+          "tooShort": "公司名称至少需要2个字符",
+          "tooLong": "公司名称需少于100个字符",
+          "invalid": "公司名称包含无效字符"
+        },
+        "message": {
+          "required": "消息内容为必填项",
+          "tooShort": "消息内容至少需要10个字符",
+          "tooLong": "消息内容需少于1000个字符"
+        },
+        "phone": {
+          "invalid": "请输入有效的电话号码"
+        },
+        "subject": {
+          "length": "主题长度需在5到100个字符之间"
+        },
+        "acceptPrivacy": {
+          "required": "必须同意隐私政策"
+        },
+        "website": {
+          "shouldBeEmpty": "该字段应保持为空"
+        }
+      },
       "validation": {
         "firstNameRequired": "名字为必填项",
         "firstNameTooShort": "名字至少需要2个字符",
@@ -626,6 +668,7 @@
     "backToHome": "返回首页",
     "comingSoon": "即将推出",
     "expectedCompletion": "预计完成时间：{date}",
+    "expectedLaunch": "预计上线：{date}",
     "dates": {
       "q2_2024": "2024年第二季度",
       "q3_2024": "2024年第三季度"
@@ -664,10 +707,8 @@
     "status": {
       "inProgress": "进行中"
     },
-    "progress": {
-      "title": "开发进度"
-    },
     "features": {
+      "title": "功能预览",
       "performance": "高性能",
       "performanceDesc": "优化的性能和快速加载体验",
       "collaboration": "团队协作",
@@ -685,6 +726,18 @@
       "submit": "订阅通知",
       "submitting": "提交中...",
       "success": "订阅成功！我们会及时通知您"
+    },
+    "emailSubscription": {
+      "title": "订阅最新进展",
+      "description": "订阅以获取上线时间和新功能通知。",
+      "success": "订阅成功！我们将第一时间通知您。",
+      "placeholder": "请输入邮箱地址",
+      "button": "通知我"
+    },
+    "contact": {
+      "title": "需要帮助？",
+      "description": "与我们的团队联系以获得专属支持和合作机会。",
+      "button": "联系支持团队"
     }
   },
   "ReactScanDemo": {
@@ -698,6 +751,31 @@
       "step4": "使用右下角的 React Scan 工具栏进行详细分析"
     }
   },
+  "themes": {
+    "title": "主题系统",
+    "description": "支持明暗模式切换的动态主题系统。",
+    "toggle": "主题切换",
+    "language": "语言切换",
+    "colors": {
+      "title": "色彩调色板"
+    },
+    "typography": {
+      "title": "排版",
+      "bold": "加粗文本",
+      "medium": "中等粗细文本",
+      "normal": "正常文本",
+      "muted": "辅助文本"
+    }
+  },
+  "stats": {
+    "technologies": "项技术",
+    "typescript": "TypeScript 覆盖率",
+    "performance": "性能评分",
+    "languages": "语言数量"
+  },
+  "email": "邮箱地址",
+  "emailPlaceholder": "your@email.com",
+  "phone": "电话号码",
   "structured-data": {
     "organization": {
       "name": "图森堡网络前沿",

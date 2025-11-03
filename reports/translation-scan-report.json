@@ -1,177 +1,14 @@
 {
-  "timestamp": "2025-10-30T01:39:32.914Z",
+  "timestamp": "2025-11-03T01:21:22.010Z",
   "summary": {
-    "totalFiles": 704,
-    "scannedFiles": 704,
+    "totalFiles": 713,
+    "scannedFiles": 713,
     "errorCount": 0,
     "warningCount": 0,
-    "totalKeys": 489,
-    "uniqueKeys": 180,
-    "missingKeys": [
-      "description",
-      "siteName",
-      "hello",
-      "greeting",
-      "missing.key",
-      "fallback.key",
-      "test.key",
-      "loading",
-      "error",
-      "comingSoon",
-      "expectedCompletion",
-      "backToHome",
-      "contactUs",
-      "stayTuned",
-      "completed",
-      "current",
-      "upcoming",
-      "ariaLabel",
-      "nearCompletion",
-      "status",
-      "source",
-      "userSaved",
-      "toggle",
-      "selectLanguage",
-      "stats.totalTech",
-      "stats.categories",
-      "stats.modern",
-      "stats.quality",
-      "learnMoreLabel",
-      "learnMore",
-      "subtitle",
-      "features.performance.title",
-      "features.performance.description",
-      "features.security.title",
-      "features.security.description",
-      "features.i18n.title",
-      "features.i18n.description",
-      "features.i18n.languageUnit",
-      "features.themes.title",
-      "features.themes.description",
-      "features.typescript.title",
-      "features.typescript.description",
-      "features.deployment.title",
-      "features.deployment.description",
-      "highlights.modern",
-      "highlights.scalable",
-      "highlights.accessible",
-      "highlights.performant",
-      "highlights.secure",
-      "highlights.maintainable",
-      "highlights.title",
-      "highlights.subtitle",
-      "architecture.title",
-      "architecture.frontend.title",
-      "architecture.frontend.description",
-      "architecture.ui.title",
-      "architecture.ui.description",
-      "architecture.tooling.title",
-      "architecture.tooling.description",
-      "cta.title",
-      "cta.description",
-      "cta.getStarted",
-      "cta.viewSource",
-      "cta.demo",
-      "cta.github",
-      "version",
-      "title.line1",
-      "title.line2",
-      "tabs.components",
-      "tabs.themes",
-      "tabs.responsive",
-      "badge",
-      "primary.github",
-      "primary.demo",
-      "themes.title",
-      "themes.description",
-      "themes.toggle",
-      "themes.language",
-      "themes.colors.title",
-      "themes.typography.title",
-      "themes.typography.bold",
-      "themes.typography.medium",
-      "themes.typography.normal",
-      "themes.typography.muted",
-      "responsive.title",
-      "responsive.description",
-      "responsive.mobile.title",
-      "responsive.mobile.description",
-      "responsive.tablet.title",
-      "responsive.tablet.description",
-      "responsive.desktop.title",
-      "responsive.desktop.description",
-      "components.interactive.title",
-      "components.interactive.description",
-      "components.interactive.likes",
-      "components.interactive.star",
-      "components.interactive.download",
-      "components.interactive.share",
-      "components.forms.title",
-      "components.forms.description",
-      "components.forms.name",
-      "components.forms.namePlaceholder",
-      "components.forms.email",
-      "components.forms.emailPlaceholder",
-      "components.forms.submit",
-      "components.buttons.title",
-      "components.buttons.description",
-      "components.buttons.primary",
-      "components.buttons.secondary",
-      "components.buttons.outline",
-      "components.buttons.ghost",
-      "components.buttons.small",
-      "components.buttons.default",
-      "components.buttons.large",
-      "components.badges.title",
-      "components.badges.description",
-      "components.badges.default",
-      "components.badges.secondary",
-      "components.badges.outline",
-      "components.badges.destructive",
-      "components.badges.success",
-      "components.badges.warning",
-      "components.badges.info",
-      "actions.github.title",
-      "actions.github.description",
-      "actions.download.title",
-      "actions.download.description",
-      "actions.docs.title",
-      "actions.docs.description",
-      "stats.technologies",
-      "stats.typescript",
-      "stats.performance",
-      "stats.languages",
-      "community.title",
-      "community.description",
-      "community.discussions",
-      "community.issues",
-      "buttons.getStarted",
-      "buttons.learnMore",
-      "submitSuccess",
-      "submitError",
-      "submitting",
-      "firstName",
-      "firstNamePlaceholder",
-      "lastName",
-      "lastNamePlaceholder",
-      "email",
-      "emailPlaceholder",
-      "company",
-      "companyPlaceholder",
-      "phone",
-      "phonePlaceholder",
-      "subject",
-      "subjectPlaceholder",
-      "message",
-      "messagePlaceholder",
-      "acceptPrivacy",
-      "marketingConsent",
-      "submit",
-      "rateLimitMessage"
-    ],
+    "totalKeys": 542,
+    "uniqueKeys": 207,
+    "missingKeys": [],
     "unusedKeys": [
-      "common.loading",
-      "common.error",
       "common.success",
       "common.cancel",
       "common.confirm",
@@ -244,8 +81,6 @@
       "theme.switchToLight",
       "theme.switchToDark",
       "theme.switchToSystem",
-      "language.toggle",
-      "language.selectLanguage",
       "language.english",
       "language.chinese",
       "language.switching",
@@ -256,10 +91,7 @@
       "language.source",
       "language.confidence",
       "language.userPreference",
-      "language.detector.title",
-      "language.detector.source",
       "language.detector.confidence",
-      "language.detector.userSaved",
       "language.detector.sources.browser",
       "language.detector.sources.cookie",
       "language.detector.sources.url",
@@ -289,20 +121,10 @@
       "home.internationalizationDesc",
       "home.testingReady",
       "home.testingReadyDesc",
-      "home.hero.version",
-      "home.hero.title.line1",
-      "home.hero.title.line2",
-      "home.hero.subtitle",
-      "home.hero.cta.demo",
-      "home.hero.cta.github",
       "home.hero.stats.technologies",
       "home.hero.stats.typescript",
       "home.hero.stats.performance",
       "home.hero.stats.languages",
-      "home.techStack.title",
-      "home.techStack.subtitle",
-      "home.techStack.learnMore",
-      "home.techStack.learnMoreLabel",
       "home.techStack.categories.core",
       "home.techStack.categories.ui",
       "home.techStack.categories.i18n",
@@ -339,15 +161,6 @@
       "home.techStack.technologies.storybook",
       "home.techStack.technologies.swr",
       "home.techStack.technologies.zustand",
-      "home.techStack.stats.totalTech",
-      "home.techStack.stats.categories",
-      "home.techStack.stats.modern",
-      "home.techStack.stats.quality",
-      "home.showcase.title",
-      "home.showcase.subtitle",
-      "home.showcase.tabs.components",
-      "home.showcase.tabs.themes",
-      "home.showcase.tabs.responsive",
       "home.showcase.components.buttons.title",
       "home.showcase.components.buttons.description",
       "home.showcase.components.buttons.primary",
@@ -397,46 +210,7 @@
       "home.showcase.responsive.tablet.description",
       "home.showcase.responsive.desktop.title",
       "home.showcase.responsive.desktop.description",
-      "home.overview.title",
-      "home.overview.subtitle",
-      "home.overview.features.performance.title",
-      "home.overview.features.performance.description",
-      "home.overview.features.security.title",
-      "home.overview.features.security.description",
-      "home.overview.features.i18n.title",
-      "home.overview.features.i18n.description",
-      "home.overview.features.i18n.languageUnit",
-      "home.overview.features.themes.title",
-      "home.overview.features.themes.description",
       "home.overview.features.themes.multiTheme",
-      "home.overview.features.typescript.title",
-      "home.overview.features.typescript.description",
-      "home.overview.features.deployment.title",
-      "home.overview.features.deployment.description",
-      "home.overview.highlights.title",
-      "home.overview.highlights.subtitle",
-      "home.overview.highlights.modern",
-      "home.overview.highlights.scalable",
-      "home.overview.highlights.accessible",
-      "home.overview.highlights.performant",
-      "home.overview.highlights.secure",
-      "home.overview.highlights.maintainable",
-      "home.overview.architecture.title",
-      "home.overview.architecture.frontend.title",
-      "home.overview.architecture.frontend.description",
-      "home.overview.architecture.ui.title",
-      "home.overview.architecture.ui.description",
-      "home.overview.architecture.tooling.title",
-      "home.overview.architecture.tooling.description",
-      "home.overview.cta.title",
-      "home.overview.cta.description",
-      "home.overview.cta.getStarted",
-      "home.overview.cta.viewSource",
-      "home.cta.badge",
-      "home.cta.title",
-      "home.cta.subtitle",
-      "home.cta.primary.github",
-      "home.cta.primary.demo",
       "home.cta.actions.github.title",
       "home.cta.actions.github.description",
       "home.cta.actions.download.title",
@@ -478,6 +252,7 @@
       "formTemplate.example.fields.message.placeholder",
       "contact.form.title",
       "contact.form.description",
+      "contact.form.optional",
       "contact.form.firstName",
       "contact.form.lastName",
       "contact.form.email",
@@ -494,10 +269,29 @@
       "contact.form.messagePlaceholder",
       "contact.form.acceptPrivacy",
       "contact.form.marketingConsent",
-      "contact.form.submit",
-      "contact.form.submitting",
       "contact.form.success",
-      "contact.form.error",
+      "contact.form.errors.generic",
+      "contact.form.errors.firstName.required",
+      "contact.form.errors.firstName.tooShort",
+      "contact.form.errors.firstName.tooLong",
+      "contact.form.errors.firstName.invalid",
+      "contact.form.errors.lastName.required",
+      "contact.form.errors.lastName.tooShort",
+      "contact.form.errors.lastName.tooLong",
+      "contact.form.errors.lastName.invalid",
+      "contact.form.errors.email.required",
+      "contact.form.errors.email.invalid",
+      "contact.form.errors.email.tooLong",
+      "contact.form.errors.company.tooShort",
+      "contact.form.errors.company.tooLong",
+      "contact.form.errors.company.invalid",
+      "contact.form.errors.message.required",
+      "contact.form.errors.message.tooShort",
+      "contact.form.errors.message.tooLong",
+      "contact.form.errors.phone.invalid",
+      "contact.form.errors.subject.length",
+      "contact.form.errors.acceptPrivacy.required",
+      "contact.form.errors.website.shouldBeEmpty",
       "contact.form.validation.firstNameRequired",
       "contact.form.validation.firstNameTooShort",
       "contact.form.validation.lastNameRequired",
@@ -553,22 +347,16 @@
       "errors.generic",
       "errors.translationMissing",
       "errors.loadingFailed",
-      "progress.status",
-      "progress.nearCompletion",
+      "progress.title",
       "progress.planning",
       "progress.development",
       "progress.testing",
       "progress.launch",
-      "progress.ariaLabel",
-      "progress.completed",
-      "progress.current",
-      "progress.upcoming",
       "accessibility.skipToContent",
       "accessibility.loading",
       "accessibility.error",
       "accessibility.languageSelector",
       "accessibility.themeSelector",
-      "seo.title",
       "seo.keywords",
       "seo.pages.home.title",
       "seo.pages.home.description",
@@ -583,35 +371,15 @@
       "underConstruction.title",
       "underConstruction.subtitle",
       "underConstruction.description",
-      "underConstruction.backToHome",
-      "underConstruction.comingSoon",
-      "underConstruction.expectedCompletion",
       "underConstruction.dates.q2_2024",
       "underConstruction.dates.q3_2024",
-      "underConstruction.stayTuned",
-      "underConstruction.contactUs",
-      "underConstruction.progress.title",
-      "underConstruction.pages.products.title",
-      "underConstruction.pages.products.description",
       "underConstruction.pages.products.features",
-      "underConstruction.pages.blog.title",
-      "underConstruction.pages.blog.description",
       "underConstruction.pages.blog.features",
-      "underConstruction.pages.about.title",
-      "underConstruction.pages.about.description",
       "underConstruction.pages.about.features",
-      "underConstruction.pages.contact.title",
-      "underConstruction.pages.contact.description",
       "underConstruction.pages.contact.features",
       "underConstruction.animation.loading",
       "underConstruction.animation.construction",
       "underConstruction.status.inProgress",
-      "underConstruction.features.performance",
-      "underConstruction.features.performanceDesc",
-      "underConstruction.features.collaboration",
-      "underConstruction.features.collaborationDesc",
-      "underConstruction.features.quality",
-      "underConstruction.features.qualityDesc",
       "underConstruction.social.followUs",
       "underConstruction.subscription.title",
       "underConstruction.subscription.description",
@@ -638,7 +406,8 @@
       "structured-data.article.defaultDescription",
       "structured-data.article.defaultAuthor",
       "structured-data.product.defaultName",
-      "structured-data.product.defaultDescription"
+      "structured-data.product.defaultDescription",
+      "title"
     ]
   },
   "translationKeys": [
@@ -651,27 +420,17 @@
     "actions.download.title",
     "actions.github.description",
     "actions.github.title",
-    "architecture.frontend.description",
-    "architecture.frontend.title",
-    "architecture.title",
-    "architecture.tooling.description",
-    "architecture.tooling.title",
-    "architecture.ui.description",
-    "architecture.ui.title",
-    "ariaLabel",
     "article.defaultAuthor",
-    "backToHome",
-    "badge",
     "buttons.getStarted",
     "buttons.learnMore",
-    "comingSoon",
+    "common.error",
+    "common.loading",
     "community.description",
     "community.discussions",
     "community.issues",
     "community.title",
     "company",
     "companyPlaceholder",
-    "completed",
     "components.badges.default",
     "components.badges.description",
     "components.badges.destructive",
@@ -703,33 +462,14 @@
     "components.interactive.share",
     "components.interactive.star",
     "components.interactive.title",
-    "contactUs",
-    "cta.demo",
-    "cta.description",
-    "cta.getStarted",
-    "cta.github",
-    "cta.title",
-    "cta.viewSource",
-    "current",
-    "description",
+    "contact.form.error",
+    "contact.form.rateLimitMessage",
+    "contact.form.submit",
+    "contact.form.submitError",
+    "contact.form.submitSuccess",
+    "contact.form.submitting",
     "email",
     "emailPlaceholder",
-    "error",
-    "expectedCompletion",
-    "fallback.key",
-    "features.deployment.description",
-    "features.deployment.title",
-    "features.i18n.description",
-    "features.i18n.languageUnit",
-    "features.i18n.title",
-    "features.performance.description",
-    "features.performance.title",
-    "features.security.description",
-    "features.security.title",
-    "features.themes.description",
-    "features.themes.title",
-    "features.typescript.description",
-    "features.typescript.title",
     "firstName",
     "firstNamePlaceholder",
     "formTemplate.form.error",
@@ -737,26 +477,74 @@
     "formTemplate.form.submit",
     "formTemplate.form.submitting",
     "formTemplate.form.success",
-    "greeting",
-    "hello",
-    "highlights.accessible",
-    "highlights.maintainable",
-    "highlights.modern",
-    "highlights.performant",
-    "highlights.scalable",
-    "highlights.secure",
-    "highlights.subtitle",
-    "highlights.title",
+    "home.cta.badge",
+    "home.cta.primary.demo",
+    "home.cta.primary.github",
+    "home.cta.subtitle",
+    "home.cta.title",
+    "home.hero.cta.demo",
+    "home.hero.cta.github",
+    "home.hero.subtitle",
+    "home.hero.title.line1",
+    "home.hero.title.line2",
+    "home.hero.version",
+    "home.overview.architecture.frontend.description",
+    "home.overview.architecture.frontend.title",
+    "home.overview.architecture.title",
+    "home.overview.architecture.tooling.description",
+    "home.overview.architecture.tooling.title",
+    "home.overview.architecture.ui.description",
+    "home.overview.architecture.ui.title",
+    "home.overview.cta.description",
+    "home.overview.cta.getStarted",
+    "home.overview.cta.title",
+    "home.overview.cta.viewSource",
+    "home.overview.features.deployment.description",
+    "home.overview.features.deployment.title",
+    "home.overview.features.i18n.description",
+    "home.overview.features.i18n.languageUnit",
+    "home.overview.features.i18n.title",
+    "home.overview.features.performance.description",
+    "home.overview.features.performance.title",
+    "home.overview.features.security.description",
+    "home.overview.features.security.title",
+    "home.overview.features.themes.description",
+    "home.overview.features.themes.title",
+    "home.overview.features.typescript.description",
+    "home.overview.features.typescript.title",
+    "home.overview.highlights.accessible",
+    "home.overview.highlights.maintainable",
+    "home.overview.highlights.modern",
+    "home.overview.highlights.performant",
+    "home.overview.highlights.scalable",
+    "home.overview.highlights.secure",
+    "home.overview.highlights.subtitle",
+    "home.overview.highlights.title",
+    "home.overview.subtitle",
+    "home.overview.title",
+    "home.showcase.subtitle",
+    "home.showcase.tabs.components",
+    "home.showcase.tabs.responsive",
+    "home.showcase.tabs.themes",
+    "home.showcase.title",
+    "home.techStack.learnMore",
+    "home.techStack.learnMoreLabel",
+    "home.techStack.stats.categories",
+    "home.techStack.stats.modern",
+    "home.techStack.stats.quality",
+    "home.techStack.stats.totalTech",
+    "home.techStack.subtitle",
+    "home.techStack.title",
+    "language.detector.source",
+    "language.detector.title",
+    "language.detector.userSaved",
+    "language.selectLanguage",
+    "language.toggle",
     "lastName",
     "lastNamePlaceholder",
-    "learnMore",
-    "learnMoreLabel",
-    "loading",
     "marketingConsent",
     "message",
     "messagePlaceholder",
-    "missing.key",
-    "nearCompletion",
     "organization.description",
     "organization.name",
     "organization.phone",
@@ -765,10 +553,12 @@
     "organization.social.twitter",
     "phone",
     "phonePlaceholder",
-    "primary.demo",
-    "primary.github",
-    "progress.title",
-    "rateLimitMessage",
+    "progress.ariaLabel",
+    "progress.completed",
+    "progress.current",
+    "progress.nearCompletion",
+    "progress.status",
+    "progress.upcoming",
     "responsive.description",
     "responsive.desktop.description",
     "responsive.desktop.title",
@@ -777,32 +567,15 @@
     "responsive.tablet.description",
     "responsive.tablet.title",
     "responsive.title",
-    "selectLanguage",
     "seo.description",
     "seo.siteName",
-    "siteName",
-    "source",
-    "stats.categories",
+    "seo.title",
     "stats.languages",
-    "stats.modern",
     "stats.performance",
-    "stats.quality",
     "stats.technologies",
-    "stats.totalTech",
     "stats.typescript",
-    "status",
-    "stayTuned",
     "subject",
     "subjectPlaceholder",
-    "submit",
-    "submitError",
-    "submitSuccess",
-    "submitting",
-    "subtitle",
-    "tabs.components",
-    "tabs.responsive",
-    "tabs.themes",
-    "test.key",
     "themes.colors.title",
     "themes.description",
     "themes.language",
@@ -813,13 +586,36 @@
     "themes.typography.muted",
     "themes.typography.normal",
     "themes.typography.title",
-    "title",
-    "title.line1",
-    "title.line2",
-    "toggle",
-    "upcoming",
-    "userSaved",
-    "version",
+    "underConstruction.backToHome",
+    "underConstruction.comingSoon",
+    "underConstruction.contact.button",
+    "underConstruction.contact.description",
+    "underConstruction.contact.title",
+    "underConstruction.contactUs",
+    "underConstruction.emailSubscription.button",
+    "underConstruction.emailSubscription.description",
+    "underConstruction.emailSubscription.placeholder",
+    "underConstruction.emailSubscription.success",
+    "underConstruction.emailSubscription.title",
+    "underConstruction.expectedCompletion",
+    "underConstruction.expectedLaunch",
+    "underConstruction.features.collaboration",
+    "underConstruction.features.collaborationDesc",
+    "underConstruction.features.performance",
+    "underConstruction.features.performanceDesc",
+    "underConstruction.features.quality",
+    "underConstruction.features.qualityDesc",
+    "underConstruction.features.title",
+    "underConstruction.pages.about.description",
+    "underConstruction.pages.about.title",
+    "underConstruction.pages.blog.description",
+    "underConstruction.pages.blog.title",
+    "underConstruction.pages.contact.description",
+    "underConstruction.pages.contact.title",
+    "underConstruction.pages.products.description",
+    "underConstruction.pages.products.title",
+    "underConstruction.progress.title",
+    "underConstruction.stayTuned",
     "website.description",
     "website.name"
   ],
@@ -967,100 +763,35 @@
         "column": 8
       }
     ],
-    "title": [
+    "seo.title": [
       {
         "file": "src/lib/seo-metadata.ts",
         "line": 38,
         "column": 20
-      },
-      {
-        "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
-        "line": 79,
-        "column": 9
-      },
-      {
-        "file": "src/components/home/tech-stack-section.tsx",
-        "line": 257,
-        "column": 19
-      },
-      {
-        "file": "src/components/home/project-overview.tsx",
-        "line": 236,
-        "column": 15
-      },
-      {
-        "file": "src/components/home/component-showcase.tsx",
-        "line": 52,
-        "column": 15
-      },
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 53,
-        "column": 15
-      },
-      {
-        "file": "src/app/[locale]/products/page.tsx",
-        "line": 24,
-        "column": 11
-      },
-      {
-        "file": "src/app/[locale]/contact/page.tsx",
-        "line": 25,
-        "column": 11
-      },
-      {
-        "file": "src/app/[locale]/contact/page.tsx",
-        "line": 63,
-        "column": 17
-      },
-      {
-        "file": "src/app/[locale]/blog/page.tsx",
-        "line": 24,
-        "column": 11
-      },
-      {
-        "file": "src/app/[locale]/about/page.tsx",
-        "line": 24,
-        "column": 11
       }
     ],
-    "description": [
+    "seo.description": [
       {
         "file": "src/lib/seo-metadata.ts",
         "line": 41,
         "column": 4
       },
       {
-        "file": "src/app/[locale]/products/page.tsx",
-        "line": 25,
-        "column": 17
-      },
-      {
-        "file": "src/app/[locale]/contact/page.tsx",
-        "line": 26,
-        "column": 17
-      },
-      {
-        "file": "src/app/[locale]/contact/page.tsx",
-        "line": 64,
-        "column": 23
-      },
-      {
-        "file": "src/app/[locale]/blog/page.tsx",
-        "line": 25,
-        "column": 17
-      },
-      {
-        "file": "src/app/[locale]/about/page.tsx",
-        "line": 25,
-        "column": 17
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 87,
+        "column": 15
       }
     ],
-    "siteName": [
+    "seo.siteName": [
       {
         "file": "src/lib/seo-metadata.ts",
         "line": 44,
         "column": 19
+      },
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 84,
+        "column": 15
       },
       {
         "file": "src/components/layout/logo.tsx",
@@ -1068,148 +799,220 @@
         "column": 18
       }
     ],
-    "hello": [
-      {
-        "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 108,
-        "column": 26
-      }
-    ],
-    "greeting": [
-      {
-        "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 117,
-        "column": 26
-      }
-    ],
-    "missing.key": [
-      {
-        "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 138,
-        "column": 26
-      },
-      {
-        "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 147,
-        "column": 26
-      },
-      {
-        "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 440,
-        "column": 6
-      }
-    ],
-    "fallback.key": [
-      {
-        "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 156,
-        "column": 26
-      }
-    ],
-    "test.key": [
-      {
-        "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 412,
-        "column": 6
-      },
-      {
-        "file": "src/hooks/__tests__/use-enhanced-translations.test.ts",
-        "line": 427,
-        "column": 6
-      }
-    ],
-    "loading": [
+    "common.loading": [
       {
         "file": "src/components/loading-spinner.tsx",
         "line": 45,
         "column": 14
       }
     ],
-    "error": [
+    "common.error": [
       {
         "file": "src/components/error-boundary.tsx",
         "line": 103,
         "column": 13
       }
     ],
-    "comingSoon": [
+    "underConstruction.comingSoon": [
       {
         "file": "src/components/shared/under-construction.tsx",
         "line": 80,
         "column": 17
       }
     ],
-    "progress.title": [
+    "underConstruction.progress.title": [
       {
         "file": "src/components/shared/under-construction.tsx",
         "line": 100,
         "column": 17
+      },
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 271,
+        "column": 9
       }
     ],
-    "expectedCompletion": [
+    "underConstruction.expectedCompletion": [
       {
         "file": "src/components/shared/under-construction.tsx",
         "line": 117,
         "column": 13
       }
     ],
-    "backToHome": [
+    "underConstruction.backToHome": [
       {
         "file": "src/components/shared/under-construction.tsx",
         "line": 128,
         "column": 28
+      },
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 248,
+        "column": 26
       }
     ],
-    "contactUs": [
+    "underConstruction.contactUs": [
       {
         "file": "src/components/shared/under-construction.tsx",
         "line": 137,
         "column": 35
       }
     ],
-    "stayTuned": [
+    "underConstruction.stayTuned": [
       {
         "file": "src/components/shared/under-construction.tsx",
         "line": 143,
         "column": 56
       }
     ],
-    "completed": [
+    "underConstruction.emailSubscription.title": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 76,
+        "column": 11
+      }
+    ],
+    "underConstruction.emailSubscription.description": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 79,
+        "column": 11
+      }
+    ],
+    "underConstruction.emailSubscription.success": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 87,
+        "column": 15
+      }
+    ],
+    "underConstruction.emailSubscription.placeholder": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 97,
+        "column": 27
+      }
+    ],
+    "underConstruction.emailSubscription.button": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 106,
+        "column": 15
+      }
+    ],
+    "underConstruction.features.performance": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 167,
+        "column": 13
+      }
+    ],
+    "underConstruction.features.performanceDesc": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 168,
+        "column": 19
+      }
+    ],
+    "underConstruction.features.collaboration": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 172,
+        "column": 13
+      }
+    ],
+    "underConstruction.features.collaborationDesc": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 173,
+        "column": 19
+      }
+    ],
+    "underConstruction.features.quality": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 177,
+        "column": 13
+      }
+    ],
+    "underConstruction.features.qualityDesc": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 178,
+        "column": 19
+      }
+    ],
+    "underConstruction.features.title": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 187,
+        "column": 9
+      }
+    ],
+    "underConstruction.expectedLaunch": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 242,
+        "column": 11
+      }
+    ],
+    "underConstruction.contact.title": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 290,
+        "column": 11
+      }
+    ],
+    "underConstruction.contact.description": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 292,
+        "column": 26
+      }
+    ],
+    "underConstruction.contact.button": [
+      {
+        "file": "src/components/shared/under-construction-v2-components.tsx",
+        "line": 300,
+        "column": 13
+      }
+    ],
+    "progress.completed": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
         "line": 73,
         "column": 57
       }
     ],
-    "current": [
+    "progress.current": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
         "line": 73,
         "column": 89
       }
     ],
-    "upcoming": [
+    "progress.upcoming": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
         "line": 73,
         "column": 104
       }
     ],
-    "ariaLabel": [
+    "progress.ariaLabel": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
         "line": 147,
         "column": 18
       }
     ],
-    "nearCompletion": [
+    "progress.nearCompletion": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
         "line": 178,
         "column": 41
       }
     ],
-    "status": [
+    "progress.status": [
       {
         "file": "src/components/shared/progress-indicator.tsx",
         "line": 178,
@@ -1240,412 +1043,441 @@
         "column": 49
       }
     ],
-    "seo.siteName": [
+    "language.detector.title": [
       {
-        "file": "src/components/layout/mobile-navigation.tsx",
-        "line": 84,
-        "column": 15
+        "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
+        "line": 79,
+        "column": 9
       }
     ],
-    "seo.description": [
-      {
-        "file": "src/components/layout/mobile-navigation.tsx",
-        "line": 87,
-        "column": 15
-      }
-    ],
-    "source": [
+    "language.detector.source": [
       {
         "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
         "line": 86,
         "column": 15
       }
     ],
-    "userSaved": [
+    "language.detector.userSaved": [
       {
         "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
         "line": 103,
         "column": 50
       }
     ],
-    "toggle": [
+    "language.toggle": [
       {
         "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
         "line": 150,
         "column": 35
       }
     ],
-    "selectLanguage": [
+    "language.selectLanguage": [
       {
         "file": "src/components/i18n/locale-switcher/enhanced-locale-switcher-component.tsx",
         "line": 209,
         "column": 17
       }
     ],
-    "stats.totalTech": [
+    "home.techStack.stats.totalTech": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
         "line": 48,
         "column": 13
       }
     ],
-    "stats.categories": [
+    "home.techStack.stats.categories": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
         "line": 56,
         "column": 13
       }
     ],
-    "stats.modern": [
+    "home.techStack.stats.modern": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
         "line": 62,
         "column": 13
       }
     ],
-    "stats.quality": [
+    "home.techStack.stats.quality": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
         "line": 68,
         "column": 13
       }
     ],
-    "learnMoreLabel": [
+    "home.techStack.learnMoreLabel": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
         "line": 185,
         "column": 38
       }
     ],
-    "learnMore": [
+    "home.techStack.learnMore": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
         "line": 189,
         "column": 27
       }
     ],
-    "subtitle": [
+    "home.techStack.title": [
+      {
+        "file": "src/components/home/tech-stack-section.tsx",
+        "line": 257,
+        "column": 19
+      }
+    ],
+    "home.techStack.subtitle": [
       {
         "file": "src/components/home/tech-stack-section.tsx",
         "line": 258,
         "column": 22
-      },
-      {
-        "file": "src/components/home/project-overview.tsx",
-        "line": 239,
-        "column": 15
-      },
-      {
-        "file": "src/components/home/hero-section.tsx",
-        "line": 154,
-        "column": 13
-      },
-      {
-        "file": "src/components/home/component-showcase.tsx",
-        "line": 55,
-        "column": 15
-      },
-      {
-        "file": "src/components/home/call-to-action.tsx",
-        "line": 57,
-        "column": 15
       }
     ],
-    "features.performance.title": [
+    "home.overview.features.performance.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 32,
         "column": 13
       }
     ],
-    "features.performance.description": [
+    "home.overview.features.performance.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 33,
         "column": 19
       }
     ],
-    "features.security.title": [
+    "home.overview.features.security.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 38,
         "column": 13
       }
     ],
-    "features.security.description": [
+    "home.overview.features.security.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 39,
         "column": 19
       }
     ],
-    "features.i18n.title": [
+    "home.overview.features.i18n.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 44,
         "column": 13
       }
     ],
-    "features.i18n.description": [
+    "home.overview.features.i18n.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 45,
         "column": 19
       }
     ],
-    "features.i18n.languageUnit": [
+    "home.overview.features.i18n.languageUnit": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 46,
         "column": 55
       }
     ],
-    "features.themes.title": [
+    "home.overview.features.themes.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 50,
         "column": 13
       }
     ],
-    "features.themes.description": [
+    "home.overview.features.themes.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 51,
         "column": 19
       }
     ],
-    "features.typescript.title": [
+    "home.overview.features.typescript.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 56,
         "column": 13
       }
     ],
-    "features.typescript.description": [
+    "home.overview.features.typescript.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 57,
         "column": 19
       }
     ],
-    "features.deployment.title": [
+    "home.overview.features.deployment.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 62,
         "column": 13
       }
     ],
-    "features.deployment.description": [
+    "home.overview.features.deployment.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 63,
         "column": 19
       }
     ],
-    "highlights.modern": [
+    "home.overview.highlights.modern": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 94,
         "column": 4
       }
     ],
-    "highlights.scalable": [
+    "home.overview.highlights.scalable": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 95,
         "column": 4
       }
     ],
-    "highlights.accessible": [
+    "home.overview.highlights.accessible": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 96,
         "column": 4
       }
     ],
-    "highlights.performant": [
+    "home.overview.highlights.performant": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 97,
         "column": 4
       }
     ],
-    "highlights.secure": [
+    "home.overview.highlights.secure": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 98,
         "column": 4
       }
     ],
-    "highlights.maintainable": [
+    "home.overview.highlights.maintainable": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 99,
         "column": 4
       }
     ],
-    "highlights.title": [
+    "home.overview.highlights.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 106,
         "column": 43
       }
     ],
-    "highlights.subtitle": [
+    "home.overview.highlights.subtitle": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 108,
         "column": 13
       }
     ],
-    "architecture.title": [
+    "home.overview.architecture.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 133,
         "column": 9
       }
     ],
-    "architecture.frontend.title": [
+    "home.overview.architecture.frontend.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 140,
         "column": 15
       }
     ],
-    "architecture.frontend.description": [
+    "home.overview.architecture.frontend.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 145,
         "column": 15
       }
     ],
-    "architecture.ui.title": [
+    "home.overview.architecture.ui.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 165,
         "column": 15
       }
     ],
-    "architecture.ui.description": [
+    "home.overview.architecture.ui.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 170,
         "column": 15
       }
     ],
-    "architecture.tooling.title": [
+    "home.overview.architecture.tooling.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 190,
         "column": 15
       }
     ],
-    "architecture.tooling.description": [
+    "home.overview.architecture.tooling.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 195,
         "column": 15
       }
     ],
-    "cta.title": [
+    "home.overview.title": [
+      {
+        "file": "src/components/home/project-overview.tsx",
+        "line": 236,
+        "column": 15
+      }
+    ],
+    "home.overview.subtitle": [
+      {
+        "file": "src/components/home/project-overview.tsx",
+        "line": 239,
+        "column": 15
+      }
+    ],
+    "home.overview.cta.title": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 252,
         "column": 49
       }
     ],
-    "cta.description": [
+    "home.overview.cta.description": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 254,
         "column": 19
       }
     ],
-    "cta.getStarted": [
+    "home.overview.cta.getStarted": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 263,
         "column": 21
       }
     ],
-    "cta.viewSource": [
+    "home.overview.cta.viewSource": [
       {
         "file": "src/components/home/project-overview.tsx",
         "line": 277,
         "column": 23
       }
     ],
-    "cta.demo": [
+    "home.hero.cta.demo": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 70,
+        "line": 89,
         "column": 11
       }
     ],
-    "cta.github": [
+    "home.hero.cta.github": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 88,
+        "line": 107,
         "column": 11
       }
     ],
-    "version": [
+    "home.hero.version": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 146,
+        "line": 165,
         "column": 30
       }
     ],
-    "title.line1": [
+    "home.hero.title.line1": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 149,
+        "line": 168,
         "column": 19
       }
     ],
-    "title.line2": [
+    "home.hero.title.line2": [
       {
         "file": "src/components/home/hero-section.tsx",
-        "line": 150,
+        "line": 169,
         "column": 19
       }
     ],
-    "tabs.components": [
+    "home.hero.subtitle": [
+      {
+        "file": "src/components/home/hero-section.tsx",
+        "line": 173,
+        "column": 13
+      }
+    ],
+    "home.showcase.title": [
+      {
+        "file": "src/components/home/component-showcase.tsx",
+        "line": 52,
+        "column": 15
+      }
+    ],
+    "home.showcase.subtitle": [
+      {
+        "file": "src/components/home/component-showcase.tsx",
+        "line": 55,
+        "column": 15
+      }
+    ],
+    "home.showcase.tabs.components": [
       {
         "file": "src/components/home/component-showcase.tsx",
         "line": 65,
         "column": 17
       }
     ],
-    "tabs.themes": [
+    "home.showcase.tabs.themes": [
       {
         "file": "src/components/home/component-showcase.tsx",
         "line": 67,
         "column": 43
       }
     ],
-    "tabs.responsive": [
+    "home.showcase.tabs.responsive": [
       {
         "file": "src/components/home/component-showcase.tsx",
         "line": 69,
         "column": 17
       }
     ],
-    "badge": [
+    "home.cta.badge": [
       {
         "file": "src/components/home/call-to-action.tsx",
         "line": 48,
         "column": 17
       }
     ],
-    "primary.github": [
+    "home.cta.title": [
+      {
+        "file": "src/components/home/call-to-action.tsx",
+        "line": 53,
+        "column": 15
+      }
+    ],
+    "home.cta.subtitle": [
+      {
+        "file": "src/components/home/call-to-action.tsx",
+        "line": 57,
+        "column": 15
+      }
+    ],
+    "home.cta.primary.github": [
       {
         "file": "src/components/home/call-to-action.tsx",
         "line": 74,
         "column": 19
       }
     ],
-    "primary.demo": [
+    "home.cta.primary.demo": [
       {
         "file": "src/components/home/call-to-action.tsx",
         "line": 89,
@@ -2117,38 +1949,54 @@
         "column": 22
       }
     ],
-    "submitSuccess": [
+    "contact.form.submitSuccess": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 52,
+        "line": 59,
         "column": 17
       }
     ],
-    "submitError": [
+    "contact.form.submitError": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 56,
+        "line": 63,
         "column": 17
       }
     ],
-    "submitting": [
+    "contact.form.submitting": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 60,
+        "line": 67,
         "column": 38
       },
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 508,
+        "line": 381,
         "column": 24
       }
     ],
-    "firstName": [
+    "contact.form.error": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 220,
-        "column": 11
-      },
+        "line": 250,
+        "column": 34
+      }
+    ],
+    "contact.form.submit": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 380,
+        "column": 21
+      }
+    ],
+    "contact.form.rateLimitMessage": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 386,
+        "column": 13
+      }
+    ],
+    "firstName": [
       {
         "file": "src/components/forms/fields/name-fields.tsx",
         "line": 23,
@@ -2157,22 +2005,12 @@
     ],
     "firstNamePlaceholder": [
       {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 226,
-        "column": 23
-      },
-      {
         "file": "src/components/forms/fields/name-fields.tsx",
         "line": 29,
         "column": 23
       }
     ],
     "lastName": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 237,
-        "column": 11
-      },
       {
         "file": "src/components/forms/fields/name-fields.tsx",
         "line": 41,
@@ -2181,22 +2019,26 @@
     ],
     "lastNamePlaceholder": [
       {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 243,
-        "column": 23
-      },
-      {
         "file": "src/components/forms/fields/name-fields.tsx",
         "line": 47,
         "column": 23
       }
     ],
-    "email": [
+    "message": [
       {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 266,
-        "column": 11
-      },
+        "file": "src/components/forms/fields/message-field.tsx",
+        "line": 16,
+        "column": 9
+      }
+    ],
+    "messagePlaceholder": [
+      {
+        "file": "src/components/forms/fields/message-field.tsx",
+        "line": 21,
+        "column": 21
+      }
+    ],
+    "email": [
       {
         "file": "src/components/forms/fields/contact-fields.tsx",
         "line": 23,
@@ -2205,22 +2047,12 @@
     ],
     "emailPlaceholder": [
       {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 272,
-        "column": 23
-      },
-      {
         "file": "src/components/forms/fields/contact-fields.tsx",
         "line": 29,
         "column": 23
       }
     ],
     "company": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 279,
-        "column": 34
-      },
       {
         "file": "src/components/forms/fields/contact-fields.tsx",
         "line": 41,
@@ -2229,84 +2061,12 @@
     ],
     "companyPlaceholder": [
       {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 284,
-        "column": 23
-      },
-      {
         "file": "src/components/forms/fields/contact-fields.tsx",
         "line": 47,
         "column": 23
       }
     ],
-    "phone": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 302,
-        "column": 32
-      },
-      {
-        "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 20,
-        "column": 34
-      }
-    ],
-    "phonePlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 307,
-        "column": 23
-      },
-      {
-        "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 25,
-        "column": 25
-      }
-    ],
-    "subject": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 313,
-        "column": 34
-      },
-      {
-        "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 32,
-        "column": 36
-      }
-    ],
-    "subjectPlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 318,
-        "column": 23
-      },
-      {
-        "file": "src/components/forms/fields/additional-fields.tsx",
-        "line": 37,
-        "column": 25
-      }
-    ],
-    "message": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 339,
-        "column": 9
-      }
-    ],
-    "messagePlaceholder": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 344,
-        "column": 21
-      }
-    ],
     "acceptPrivacy": [
-      {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 375,
-        "column": 11
-      },
       {
         "file": "src/components/forms/fields/checkbox-fields.tsx",
         "line": 31,
@@ -2315,197 +2075,109 @@
     ],
     "marketingConsent": [
       {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 390,
-        "column": 11
-      },
-      {
         "file": "src/components/forms/fields/checkbox-fields.tsx",
         "line": 49,
         "column": 13
       }
     ],
-    "submit": [
+    "phone": [
       {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 507,
-        "column": 21
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 20,
+        "column": 34
       }
     ],
-    "rateLimitMessage": [
+    "phonePlaceholder": [
       {
-        "file": "src/components/forms/contact-form-container.tsx",
-        "line": 513,
-        "column": 13
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 25,
+        "column": 25
+      }
+    ],
+    "subject": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 32,
+        "column": 36
+      }
+    ],
+    "subjectPlaceholder": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 37,
+        "column": 25
+      }
+    ],
+    "underConstruction.pages.products.title": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 29,
+        "column": 11
+      }
+    ],
+    "underConstruction.pages.products.description": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 30,
+        "column": 17
+      }
+    ],
+    "underConstruction.pages.contact.title": [
+      {
+        "file": "src/app/[locale]/contact/page.tsx",
+        "line": 28,
+        "column": 11
+      },
+      {
+        "file": "src/app/[locale]/contact/page.tsx",
+        "line": 66,
+        "column": 17
+      }
+    ],
+    "underConstruction.pages.contact.description": [
+      {
+        "file": "src/app/[locale]/contact/page.tsx",
+        "line": 29,
+        "column": 17
+      },
+      {
+        "file": "src/app/[locale]/contact/page.tsx",
+        "line": 67,
+        "column": 23
+      }
+    ],
+    "underConstruction.pages.blog.title": [
+      {
+        "file": "src/app/[locale]/blog/page.tsx",
+        "line": 29,
+        "column": 11
+      }
+    ],
+    "underConstruction.pages.blog.description": [
+      {
+        "file": "src/app/[locale]/blog/page.tsx",
+        "line": 30,
+        "column": 17
+      }
+    ],
+    "underConstruction.pages.about.title": [
+      {
+        "file": "src/app/[locale]/about/page.tsx",
+        "line": 29,
+        "column": 11
+      }
+    ],
+    "underConstruction.pages.about.description": [
+      {
+        "file": "src/app/[locale]/about/page.tsx",
+        "line": 30,
+        "column": 17
       }
     ]
   },
   "analysis": {
-    "missingKeys": [
-      "description",
-      "siteName",
-      "hello",
-      "greeting",
-      "missing.key",
-      "fallback.key",
-      "test.key",
-      "loading",
-      "error",
-      "comingSoon",
-      "expectedCompletion",
-      "backToHome",
-      "contactUs",
-      "stayTuned",
-      "completed",
-      "current",
-      "upcoming",
-      "ariaLabel",
-      "nearCompletion",
-      "status",
-      "source",
-      "userSaved",
-      "toggle",
-      "selectLanguage",
-      "stats.totalTech",
-      "stats.categories",
-      "stats.modern",
-      "stats.quality",
-      "learnMoreLabel",
-      "learnMore",
-      "subtitle",
-      "features.performance.title",
-      "features.performance.description",
-      "features.security.title",
-      "features.security.description",
-      "features.i18n.title",
-      "features.i18n.description",
-      "features.i18n.languageUnit",
-      "features.themes.title",
-      "features.themes.description",
-      "features.typescript.title",
-      "features.typescript.description",
-      "features.deployment.title",
-      "features.deployment.description",
-      "highlights.modern",
-      "highlights.scalable",
-      "highlights.accessible",
-      "highlights.performant",
-      "highlights.secure",
-      "highlights.maintainable",
-      "highlights.title",
-      "highlights.subtitle",
-      "architecture.title",
-      "architecture.frontend.title",
-      "architecture.frontend.description",
-      "architecture.ui.title",
-      "architecture.ui.description",
-      "architecture.tooling.title",
-      "architecture.tooling.description",
-      "cta.title",
-      "cta.description",
-      "cta.getStarted",
-      "cta.viewSource",
-      "cta.demo",
-      "cta.github",
-      "version",
-      "title.line1",
-      "title.line2",
-      "tabs.components",
-      "tabs.themes",
-      "tabs.responsive",
-      "badge",
-      "primary.github",
-      "primary.demo",
-      "themes.title",
-      "themes.description",
-      "themes.toggle",
-      "themes.language",
-      "themes.colors.title",
-      "themes.typography.title",
-      "themes.typography.bold",
-      "themes.typography.medium",
-      "themes.typography.normal",
-      "themes.typography.muted",
-      "responsive.title",
-      "responsive.description",
-      "responsive.mobile.title",
-      "responsive.mobile.description",
-      "responsive.tablet.title",
-      "responsive.tablet.description",
-      "responsive.desktop.title",
-      "responsive.desktop.description",
-      "components.interactive.title",
-      "components.interactive.description",
-      "components.interactive.likes",
-      "components.interactive.star",
-      "components.interactive.download",
-      "components.interactive.share",
-      "components.forms.title",
-      "components.forms.description",
-      "components.forms.name",
-      "components.forms.namePlaceholder",
-      "components.forms.email",
-      "components.forms.emailPlaceholder",
-      "components.forms.submit",
-      "components.buttons.title",
-      "components.buttons.description",
-      "components.buttons.primary",
-      "components.buttons.secondary",
-      "components.buttons.outline",
-      "components.buttons.ghost",
-      "components.buttons.small",
-      "components.buttons.default",
-      "components.buttons.large",
-      "components.badges.title",
-      "components.badges.description",
-      "components.badges.default",
-      "components.badges.secondary",
-      "components.badges.outline",
-      "components.badges.destructive",
-      "components.badges.success",
-      "components.badges.warning",
-      "components.badges.info",
-      "actions.github.title",
-      "actions.github.description",
-      "actions.download.title",
-      "actions.download.description",
-      "actions.docs.title",
-      "actions.docs.description",
-      "stats.technologies",
-      "stats.typescript",
-      "stats.performance",
-      "stats.languages",
-      "community.title",
-      "community.description",
-      "community.discussions",
-      "community.issues",
-      "buttons.getStarted",
-      "buttons.learnMore",
-      "submitSuccess",
-      "submitError",
-      "submitting",
-      "firstName",
-      "firstNamePlaceholder",
-      "lastName",
-      "lastNamePlaceholder",
-      "email",
-      "emailPlaceholder",
-      "company",
-      "companyPlaceholder",
-      "phone",
-      "phonePlaceholder",
-      "subject",
-      "subjectPlaceholder",
-      "message",
-      "messagePlaceholder",
-      "acceptPrivacy",
-      "marketingConsent",
-      "submit",
-      "rateLimitMessage"
-    ],
+    "missingKeys": [],
     "unusedKeys": [
-      "common.loading",
-      "common.error",
       "common.success",
       "common.cancel",
       "common.confirm",
@@ -2578,8 +2250,6 @@
       "theme.switchToLight",
       "theme.switchToDark",
       "theme.switchToSystem",
-      "language.toggle",
-      "language.selectLanguage",
       "language.english",
       "language.chinese",
       "language.switching",
@@ -2590,10 +2260,7 @@
       "language.source",
       "language.confidence",
       "language.userPreference",
-      "language.detector.title",
-      "language.detector.source",
       "language.detector.confidence",
-      "language.detector.userSaved",
       "language.detector.sources.browser",
       "language.detector.sources.cookie",
       "language.detector.sources.url",
@@ -2623,20 +2290,10 @@
       "home.internationalizationDesc",
       "home.testingReady",
       "home.testingReadyDesc",
-      "home.hero.version",
-      "home.hero.title.line1",
-      "home.hero.title.line2",
-      "home.hero.subtitle",
-      "home.hero.cta.demo",
-      "home.hero.cta.github",
       "home.hero.stats.technologies",
       "home.hero.stats.typescript",
       "home.hero.stats.performance",
       "home.hero.stats.languages",
-      "home.techStack.title",
-      "home.techStack.subtitle",
-      "home.techStack.learnMore",
-      "home.techStack.learnMoreLabel",
       "home.techStack.categories.core",
       "home.techStack.categories.ui",
       "home.techStack.categories.i18n",
@@ -2673,15 +2330,6 @@
       "home.techStack.technologies.storybook",
       "home.techStack.technologies.swr",
       "home.techStack.technologies.zustand",
-      "home.techStack.stats.totalTech",
-      "home.techStack.stats.categories",
-      "home.techStack.stats.modern",
-      "home.techStack.stats.quality",
-      "home.showcase.title",
-      "home.showcase.subtitle",
-      "home.showcase.tabs.components",
-      "home.showcase.tabs.themes",
-      "home.showcase.tabs.responsive",
       "home.showcase.components.buttons.title",
       "home.showcase.components.buttons.description",
       "home.showcase.components.buttons.primary",
@@ -2731,46 +2379,7 @@
       "home.showcase.responsive.tablet.description",
       "home.showcase.responsive.desktop.title",
       "home.showcase.responsive.desktop.description",
-      "home.overview.title",
-      "home.overview.subtitle",
-      "home.overview.features.performance.title",
-      "home.overview.features.performance.description",
-      "home.overview.features.security.title",
-      "home.overview.features.security.description",
-      "home.overview.features.i18n.title",
-      "home.overview.features.i18n.description",
-      "home.overview.features.i18n.languageUnit",
-      "home.overview.features.themes.title",
-      "home.overview.features.themes.description",
       "home.overview.features.themes.multiTheme",
-      "home.overview.features.typescript.title",
-      "home.overview.features.typescript.description",
-      "home.overview.features.deployment.title",
-      "home.overview.features.deployment.description",
-      "home.overview.highlights.title",
-      "home.overview.highlights.subtitle",
-      "home.overview.highlights.modern",
-      "home.overview.highlights.scalable",
-      "home.overview.highlights.accessible",
-      "home.overview.highlights.performant",
-      "home.overview.highlights.secure",
-      "home.overview.highlights.maintainable",
-      "home.overview.architecture.title",
-      "home.overview.architecture.frontend.title",
-      "home.overview.architecture.frontend.description",
-      "home.overview.architecture.ui.title",
-      "home.overview.architecture.ui.description",
-      "home.overview.architecture.tooling.title",
-      "home.overview.architecture.tooling.description",
-      "home.overview.cta.title",
-      "home.overview.cta.description",
-      "home.overview.cta.getStarted",
-      "home.overview.cta.viewSource",
-      "home.cta.badge",
-      "home.cta.title",
-      "home.cta.subtitle",
-      "home.cta.primary.github",
-      "home.cta.primary.demo",
       "home.cta.actions.github.title",
       "home.cta.actions.github.description",
       "home.cta.actions.download.title",
@@ -2812,6 +2421,7 @@
       "formTemplate.example.fields.message.placeholder",
       "contact.form.title",
       "contact.form.description",
+      "contact.form.optional",
       "contact.form.firstName",
       "contact.form.lastName",
       "contact.form.email",
@@ -2828,10 +2438,29 @@
       "contact.form.messagePlaceholder",
       "contact.form.acceptPrivacy",
       "contact.form.marketingConsent",
-      "contact.form.submit",
-      "contact.form.submitting",
       "contact.form.success",
-      "contact.form.error",
+      "contact.form.errors.generic",
+      "contact.form.errors.firstName.required",
+      "contact.form.errors.firstName.tooShort",
+      "contact.form.errors.firstName.tooLong",
+      "contact.form.errors.firstName.invalid",
+      "contact.form.errors.lastName.required",
+      "contact.form.errors.lastName.tooShort",
+      "contact.form.errors.lastName.tooLong",
+      "contact.form.errors.lastName.invalid",
+      "contact.form.errors.email.required",
+      "contact.form.errors.email.invalid",
+      "contact.form.errors.email.tooLong",
+      "contact.form.errors.company.tooShort",
+      "contact.form.errors.company.tooLong",
+      "contact.form.errors.company.invalid",
+      "contact.form.errors.message.required",
+      "contact.form.errors.message.tooShort",
+      "contact.form.errors.message.tooLong",
+      "contact.form.errors.phone.invalid",
+      "contact.form.errors.subject.length",
+      "contact.form.errors.acceptPrivacy.required",
+      "contact.form.errors.website.shouldBeEmpty",
       "contact.form.validation.firstNameRequired",
       "contact.form.validation.firstNameTooShort",
       "contact.form.validation.lastNameRequired",
@@ -2887,22 +2516,16 @@
       "errors.generic",
       "errors.translationMissing",
       "errors.loadingFailed",
-      "progress.status",
-      "progress.nearCompletion",
+      "progress.title",
       "progress.planning",
       "progress.development",
       "progress.testing",
       "progress.launch",
-      "progress.ariaLabel",
-      "progress.completed",
-      "progress.current",
-      "progress.upcoming",
       "accessibility.skipToContent",
       "accessibility.loading",
       "accessibility.error",
       "accessibility.languageSelector",
       "accessibility.themeSelector",
-      "seo.title",
       "seo.keywords",
       "seo.pages.home.title",
       "seo.pages.home.description",
@@ -2917,35 +2540,15 @@
       "underConstruction.title",
       "underConstruction.subtitle",
       "underConstruction.description",
-      "underConstruction.backToHome",
-      "underConstruction.comingSoon",
-      "underConstruction.expectedCompletion",
       "underConstruction.dates.q2_2024",
       "underConstruction.dates.q3_2024",
-      "underConstruction.stayTuned",
-      "underConstruction.contactUs",
-      "underConstruction.progress.title",
-      "underConstruction.pages.products.title",
-      "underConstruction.pages.products.description",
       "underConstruction.pages.products.features",
-      "underConstruction.pages.blog.title",
-      "underConstruction.pages.blog.description",
       "underConstruction.pages.blog.features",
-      "underConstruction.pages.about.title",
-      "underConstruction.pages.about.description",
       "underConstruction.pages.about.features",
-      "underConstruction.pages.contact.title",
-      "underConstruction.pages.contact.description",
       "underConstruction.pages.contact.features",
       "underConstruction.animation.loading",
       "underConstruction.animation.construction",
       "underConstruction.status.inProgress",
-      "underConstruction.features.performance",
-      "underConstruction.features.performanceDesc",
-      "underConstruction.features.collaboration",
-      "underConstruction.features.collaborationDesc",
-      "underConstruction.features.quality",
-      "underConstruction.features.qualityDesc",
       "underConstruction.social.followUs",
       "underConstruction.subscription.title",
       "underConstruction.subscription.description",
@@ -2972,7 +2575,8 @@
       "structured-data.article.defaultDescription",
       "structured-data.article.defaultAuthor",
       "structured-data.product.defaultName",
-      "structured-data.product.defaultDescription"
+      "structured-data.product.defaultDescription",
+      "title"
     ]
   },
   "errors": [],

@@ -77,58 +77,400 @@ function scanFile(filePath) {
     });
 
     const fileKeys = new Set();
+    const namespaceByBinding = new Map();
 
-    traverse(ast, {
-      // 扫描 useTranslations hook
-      CallExpression(nodePath) {
-        const { node } = nodePath;
+    function setNamespaceForBinding(binding, namespace) {
+      if (binding && namespace) {
+        namespaceByBinding.set(binding, namespace);
+      }
+    }
 
-        if (
-          node.callee.name === 'useTranslations' &&
-          node.arguments.length > 0 &&
-          node.arguments[0].type === 'StringLiteral'
-        ) {
-          const namespace = node.arguments[0].value;
-          fileKeys.add(namespace);
-          recordKeyUsage(namespace, filePath, node.loc);
+    function getNamespaceForName(path, identifierName) {
+      if (!identifierName) {
+        return undefined;
+      }
+
+      const binding = path.scope.getBinding(identifierName);
+      if (!binding) {
+        return undefined;
+      }
+
+      return namespaceByBinding.get(binding);
+    }
+
+    function recordNamespace(bindingPath, namespace) {
+      if (!namespace) {
+        return;
+      }
+
+      let targetPath = bindingPath.parentPath;
+
+      if (targetPath && targetPath.isAwaitExpression()) {
+        targetPath = targetPath.parentPath;
+      }
+
+      if (targetPath && targetPath.isVariableDeclarator()) {
+        const identifier = targetPath.node.id;
+        if (identifier && identifier.type === 'Identifier') {
+          const binding = targetPath.scope.getBinding(identifier.name);
+          setNamespaceForBinding(binding, namespace);
         }
-      },
+      } else if (
+        targetPath &&
+        targetPath.isAssignmentExpression() &&
+        targetPath.node.left.type === 'Identifier'
+      ) {
+        const binding = targetPath.scope.getBinding(targetPath.node.left.name);
+        setNamespaceForBinding(binding, namespace);
+      }
+    }
 
-      // 扫描 t() 函数调用
-      MemberExpression(nodePath) {
-        const { node } = nodePath;
+    function resolveKeyWithNamespace(nodePath, calleeNode, rawKey) {
+      if (!rawKey || typeof rawKey !== 'string') {
+        return null;
+      }
 
-        if (
-          node.property &&
-          node.property.type === 'Identifier' &&
-          node.property.name === 't' &&
-          nodePath.parent.type === 'CallExpression'
-        ) {
-          const callExpression = nodePath.parent;
-          if (
-            callExpression.arguments.length > 0 &&
-            callExpression.arguments[0].type === 'StringLiteral'
+      if (calleeNode.type === 'Identifier') {
+        const namespace = getNamespaceForName(nodePath, calleeNode.name);
+        if (namespace) {
+          if (rawKey === namespace || rawKey.startsWith(`${namespace}.`)) {
+            return rawKey;
+          }
+          return `${namespace}.${rawKey}`;
+        }
+      }
+
+      if (
+        calleeNode.type === 'MemberExpression' &&
+        calleeNode.object.type === 'Identifier'
+      ) {
+        const namespace = getNamespaceForName(nodePath, calleeNode.object.name);
+        if (namespace) {
+          if (rawKey === namespace || rawKey.startsWith(`${namespace}.`)) {
+            return rawKey;
+          }
+          return `${namespace}.${rawKey}`;
+        }
+      }
+
+      return rawKey;
+    }
+
+    function propagateAlias(variablePath) {
+      const { node } = variablePath;
+      const { id, init } = node;
+
+      if (!init || !id || id.type !== 'Identifier') {
+        return;
+      }
+
+      const targetBinding = variablePath.scope.getBinding(id.name);
+      if (!targetBinding) {
+        return;
+      }
+
+      if (init.type === 'Identifier') {
+        const namespace = getNamespaceForName(variablePath, init.name);
+        if (namespace) {
+          setNamespaceForBinding(targetBinding, namespace);
+        }
+        return;
+      }
+
+      if (
+        init.type === 'ArrowFunctionExpression' ||
+        init.type === 'FunctionExpression'
+      ) {
+        const { body: initialBody } = init;
+        let body = initialBody;
+
+        if (body.type === 'BlockStatement') {
+          const { body: statements } = body;
+          const returnStatement = statements.find(
+            (statement) =>
+              statement.type === 'ReturnStatement' && statement.argument,
+          );
+          if (!returnStatement) {
+            return;
+          }
+          body = returnStatement.argument;
+        }
+
+        if (body && body.type === 'CallExpression') {
+          if (body.callee.type === 'Identifier') {
+            const namespace = getNamespaceForName(
+              variablePath,
+              body.callee.name,
+            );
+            if (namespace) {
+              setNamespaceForBinding(targetBinding, namespace);
+            }
+          } else if (
+            body.callee.type === 'MemberExpression' &&
+            body.callee.object.type === 'Identifier'
           ) {
-            const key = callExpression.arguments[0].value;
-            fileKeys.add(key);
-            recordKeyUsage(key, filePath, callExpression.loc);
+            const namespace = getNamespaceForName(
+              variablePath,
+              body.callee.object.name,
+            );
+            if (namespace) {
+              setNamespaceForBinding(targetBinding, namespace);
+            }
           }
         }
-      },
+      }
+    }
 
-      // 扫描直接的 t() 调用
+    function getFunctionPathFromBinding(binding) {
+      if (!binding) {
+        return null;
+      }
+
+      const bindingPath = binding.path;
+      if (
+        bindingPath.isFunctionDeclaration() ||
+        bindingPath.isFunctionExpression() ||
+        bindingPath.isArrowFunctionExpression()
+      ) {
+        return bindingPath;
+      }
+
+      if (bindingPath.isVariableDeclarator()) {
+        const initPath = bindingPath.get('init');
+        if (
+          initPath &&
+          !Array.isArray(initPath) &&
+          (initPath.isFunctionExpression() ||
+            initPath.isArrowFunctionExpression())
+        ) {
+          return initPath;
+        }
+
+        if (
+          initPath &&
+          !Array.isArray(initPath) &&
+          initPath.isCallExpression() &&
+          initPath.node.arguments.length > 0
+        ) {
+          const firstArgPath = initPath.get('arguments.0');
+          if (
+            firstArgPath &&
+            !Array.isArray(firstArgPath) &&
+            (firstArgPath.isFunctionExpression() ||
+              firstArgPath.isArrowFunctionExpression())
+          ) {
+            return firstArgPath;
+          }
+        }
+      }
+
+      return null;
+    }
+
+    const deferredJsxBindings = [];
+
+    function propagateNamespaceFromJSX(attributePath) {
+      const { node } = attributePath;
+
+      if (
+        node.name.type !== 'JSXIdentifier' ||
+        node.value?.type !== 'JSXExpressionContainer' ||
+        node.value.expression.type !== 'Identifier'
+      ) {
+        return;
+      }
+
+      const propName = node.name.name;
+      const passedIdentifier = node.value.expression;
+      const namespace = getNamespaceForName(
+        attributePath,
+        passedIdentifier.name,
+      );
+
+      if (!namespace) {
+        deferredJsxBindings.push({
+          attributePath,
+          componentName:
+            attributePath.parent?.name?.type === 'JSXIdentifier'
+              ? attributePath.parent.name.name
+              : null,
+          propName,
+          identifierName: passedIdentifier.name,
+        });
+        return;
+      }
+
+      const openingElement = attributePath.parent;
+      if (
+        !openingElement ||
+        openingElement.type !== 'JSXOpeningElement' ||
+        openingElement.name.type !== 'JSXIdentifier'
+      ) {
+        return;
+      }
+
+      const componentName = openingElement.name.name;
+      const componentBinding = attributePath.scope.getBinding(componentName);
+      if (!componentBinding) {
+        return;
+      }
+
+      const functionPath = getFunctionPathFromBinding(componentBinding);
+      if (!functionPath) {
+        return;
+      }
+
+      const functionScope = functionPath.scope;
+      const paramBinding =
+        functionScope.getOwnBinding?.(propName) ??
+        functionScope.getBinding(propName);
+
+      if (paramBinding) {
+        setNamespaceForBinding(paramBinding, namespace);
+      }
+    }
+
+    function captureNamespaceBindings(nodePath) {
+      const { node } = nodePath;
+
+      if (
+        node.callee.type === 'Identifier' &&
+        node.callee.name === 'useTranslations' &&
+        node.arguments.length > 0 &&
+        node.arguments[0].type === 'StringLiteral'
+      ) {
+        recordNamespace(nodePath, node.arguments[0].value);
+        return;
+      }
+
+      if (
+        node.callee.type === 'Identifier' &&
+        (node.callee.name === 'getTranslations' ||
+          node.callee.name === 'getTranslationsCached')
+      ) {
+        const firstArg = node.arguments[0];
+        if (firstArg && firstArg.type === 'ObjectExpression') {
+          const namespaceProperty = firstArg.properties.find(
+            (property) =>
+              property.type === 'ObjectProperty' &&
+              ((property.key.type === 'Identifier' &&
+                property.key.name === 'namespace') ||
+                (property.key.type === 'StringLiteral' &&
+                  property.key.value === 'namespace')) &&
+              property.value.type === 'StringLiteral',
+          );
+
+          if (namespaceProperty) {
+            recordNamespace(nodePath, namespaceProperty.value.value);
+          }
+        } else if (firstArg && firstArg.type === 'StringLiteral') {
+          recordNamespace(nodePath, firstArg.value);
+        }
+      }
+    }
+
+    traverse(ast, {
+      CallExpression(nodePath) {
+        captureNamespaceBindings(nodePath);
+      },
+    });
+
+    traverse(ast, {
+      VariableDeclarator(variablePath) {
+        propagateAlias(variablePath);
+      },
+    });
+
+    traverse(ast, {
+      JSXAttribute(attributePath) {
+        propagateNamespaceFromJSX(attributePath);
+      },
+    });
+
+    let resolvedInIteration = true;
+    while (resolvedInIteration && deferredJsxBindings.length > 0) {
+      resolvedInIteration = false;
+
+      for (let index = deferredJsxBindings.length - 1; index >= 0; index--) {
+        const entry = deferredJsxBindings[index];
+        const { attributePath, componentName, propName, identifierName } =
+          entry;
+
+        if (
+          !attributePath ||
+          !attributePath.node ||
+          attributePath.removed ||
+          !componentName
+        ) {
+          deferredJsxBindings.splice(index, 1);
+          continue;
+        }
+
+        const namespace = getNamespaceForName(attributePath, identifierName);
+        if (!namespace) {
+          continue;
+        }
+
+        const componentBinding = attributePath.scope.getBinding(componentName);
+        if (!componentBinding) {
+          deferredJsxBindings.splice(index, 1);
+          continue;
+        }
+
+        const functionPath = getFunctionPathFromBinding(componentBinding);
+        if (!functionPath) {
+          deferredJsxBindings.splice(index, 1);
+          continue;
+        }
+
+        const functionScope = functionPath.scope;
+        const paramBinding =
+          functionScope.getOwnBinding?.(propName) ??
+          functionScope.getBinding(propName);
+
+        if (paramBinding) {
+          setNamespaceForBinding(paramBinding, namespace);
+          deferredJsxBindings.splice(index, 1);
+          resolvedInIteration = true;
+        }
+      }
+    }
+
+    traverse(ast, {
+      // 扫描翻译键使用
       CallExpression(nodePath) {
         const { node } = nodePath;
 
         if (
-          node.callee.type === 'Identifier' &&
-          node.callee.name === 't' &&
-          node.arguments.length > 0 &&
-          node.arguments[0].type === 'StringLiteral'
+          node.arguments.length === 0 ||
+          node.arguments[0].type !== 'StringLiteral'
         ) {
-          const key = node.arguments[0].value;
-          fileKeys.add(key);
-          recordKeyUsage(key, filePath, node.loc);
+          return;
+        }
+
+        const { callee, arguments: callArgs } = node;
+        const [firstArg] = callArgs;
+        const { value: argValue } = firstArg;
+        let resolvedKey = null;
+
+        if (callee.type === 'Identifier') {
+          const namespace = getNamespaceForName(nodePath, callee.name);
+          if (namespace || callee.name === 't') {
+            resolvedKey = resolveKeyWithNamespace(nodePath, callee, argValue);
+          }
+        } else if (
+          callee.type === 'MemberExpression' &&
+          callee.property.type === 'Identifier' &&
+          callee.property.name === 't' &&
+          callee.object.type === 'Identifier' &&
+          getNamespaceForName(nodePath, callee.object.name)
+        ) {
+          resolvedKey = resolveKeyWithNamespace(nodePath, callee, argValue);
+        }
+
+        if (resolvedKey) {
+          fileKeys.add(resolvedKey);
+          recordKeyUsage(resolvedKey, filePath, node.loc);
         }
       },
     });
@@ -217,12 +559,25 @@ function analyzeTranslationUsage(translations) {
     }
   }
 
+  const translationKeyArray = Array.from(allTranslationKeys);
+
   // 找出缺失的键（代码中使用但翻译文件中没有）
   const missingKeys = [];
   scanResults.translationKeys.forEach((key) => {
-    if (!allTranslationKeys.has(key)) {
-      missingKeys.push(key);
+    if (allTranslationKeys.has(key)) {
+      return;
     }
+
+    const fallbackMatches = translationKeyArray.filter(
+      (translationKey) =>
+        translationKey.endsWith(`.${key}`) || translationKey === key,
+    );
+
+    if (fallbackMatches.length === 1) {
+      return;
+    }
+
+    missingKeys.push(key);
   });
 
   // 找出未使用的键（翻译文件中有但代码中没有使用）
@@ -278,6 +633,22 @@ function generateScanReport(translations, analysis) {
     CONFIG.OUTPUT_DIR,
     'translation-scan-report.json',
   );
+
+  if (fs.existsSync(reportPath)) {
+    try {
+      const previousContent = fs.readFileSync(reportPath, 'utf8');
+      const previousReport = JSON.parse(previousContent);
+      const { timestamp: previousTimestamp, ...previousRest } = previousReport;
+      const { timestamp: _currentTimestamp, ...currentRest } = report;
+
+      if (JSON.stringify(previousRest) === JSON.stringify(currentRest)) {
+        report.timestamp = previousTimestamp;
+      }
+    } catch {
+      // Ignore parse errors and proceed with new timestamp
+    }
+  }
+
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
   console.log(`📊 扫描报告已生成: ${reportPath}`);
