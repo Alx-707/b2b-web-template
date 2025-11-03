@@ -21,10 +21,12 @@ const ensureLocaleInUrl = (input: string): string => {
   try {
     const url = new URL(input);
     const segments = url.pathname.split('/').filter(Boolean);
+    const firstSegment = segments[0];
+    const lastSegment =
+      segments.length > 0 ? segments[segments.length - 1] : undefined;
     const hasLocale =
-      segments.length > 0 &&
-      (supportedLocales.includes(segments[0]) ||
-        supportedLocales.includes(segments[segments.length - 1]));
+      (firstSegment ? supportedLocales.includes(firstSegment) : false) ||
+      (lastSegment ? supportedLocales.includes(lastSegment) : false);
 
     if (!hasLocale) {
       url.pathname = `${url.pathname.replace(/\/$/, '')}/${defaultLocale}`;
