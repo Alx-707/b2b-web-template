@@ -339,7 +339,7 @@ describe('ContactFormContainer - 提交和错误处理', () => {
         });
 
         const submitButton = screen.getByRole('button', { name: /submit/i });
-        expect(submitButton).toBeDisabled();
+        await waitFor(() => expect(submitButton).toBeDisabled());
 
         await act(async () => {
           await new Promise((resolve) => {
@@ -347,7 +347,7 @@ describe('ContactFormContainer - 提交和错误处理', () => {
           });
         });
 
-        expect(submitButton).not.toBeDisabled();
+        await waitFor(() => expect(submitButton).not.toBeDisabled());
       } finally {
         if (originalCooldown === undefined) {
           delete process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS;
