@@ -10,15 +10,14 @@
 // 重新导出所有模块的功能
 // 导入各个功能模块
 import { LocaleCleanupManager } from '@/lib/locale-storage-maintenance-cleanup';
-import { LocaleImportExportManager } from '@/lib/locale-storage-maintenance-import-export';
+import {
+  LocaleImportExportManager,
+  type ExportData,
+  type ImportData,
+} from '@/lib/locale-storage-maintenance-import-export';
 import { LocaleMaintenanceOperationsManager } from '@/lib/locale-storage-maintenance-operations';
 import { LocaleValidationManager } from '@/lib/locale-storage-maintenance-validation';
-import type {
-  ExportData,
-  ImportData,
-  MaintenanceOptions,
-  StorageOperationResult,
-} from '@/lib/locale-storage-types';
+import type { MaintenanceOptions, StorageOperationResult } from '@/lib/locale-storage-types';
 
 export { LocaleCleanupManager } from '@/lib/locale-storage-maintenance-cleanup';
 export { LocaleValidationManager } from '@/lib/locale-storage-maintenance-validation';

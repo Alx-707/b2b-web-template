@@ -72,10 +72,6 @@ export type {
   DataImportResult,
 } from '@/lib/locale-storage-types-data';
 export type { MaintenanceOptions } from '@/lib/locale-storage-types-data';
-export type {
-  ExportData,
-  ImportData,
-} from '@/lib/locale-storage-maintenance-import-export';
 // 导出配置相关
 export {
   DEFAULT_STORAGE_CONFIG,

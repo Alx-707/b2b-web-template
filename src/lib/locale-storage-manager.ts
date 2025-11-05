@@ -16,12 +16,12 @@ import { LocaleHistoryManager } from '@/lib/locale-storage-history';
 import { LocaleMaintenanceManager } from '@/lib/locale-storage-maintenance';
 import { LocalePreferenceManager } from '@/lib/locale-storage-preference';
 import type {
-  ImportData,
   LocaleDetectionHistory,
   LocaleSource,
   MaintenanceOptions,
   UserLocalePreference,
 } from '@/lib/locale-storage-types';
+import type { ImportData } from '@/lib/locale-storage-maintenance-import-export';
 import {
   ANIMATION_DURATION_VERY_SLOW,
   COUNT_FIVE,
