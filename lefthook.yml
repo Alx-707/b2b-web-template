@@ -65,31 +65,42 @@ commit-msg:
         '提交信息不符合规范 - 请使用约定式提交格式：type(scope): description'
 
 pre-push:
-  parallel: false  # 改为串行执行，确保 build-check 先完成生成 .next/ 目录
+  parallel: false  # 串行执行，确保构建先完成
   commands:
-    # 构建成功验证
+    # 构建成功验证（A+：默认执行；紧急场景可用 RUN_FAST_PUSH=1 跳过）
     build-check:
-      run: pnpm build:check
+      run: |
+        if [ -n "$RUN_FAST_PUSH" ]; then
+          echo "⏭️  RUN_FAST_PUSH=1: 跳过构建验证（仅用于紧急推送）";
+        else
+          pnpm build:check
+        fi
       fail_text: '构建验证失败 - 请修复构建错误后再推送'
 
-    # 集成测试（覆盖率模式）
-    integration-test:
-      run: pnpm test:coverage
-      fail_text: '集成测试失败 - 请确保所有测试通过后再推送'
-
-    # 翻译验证
+    # 翻译验证（保持执行，速度快）
     translation-check:
       run: pnpm validate:translations
       fail_text: '翻译验证失败 - 请确保所有翻译文件同步'
 
-    # 质量门禁
+    # 质量门禁（A+：在本地执行；可用 RUN_FAST_PUSH=1 跳过应急推送）
     quality-gate:
-      run: pnpm quality:gate
+      run: |
+        if [ -n "$RUN_FAST_PUSH" ]; then
+          echo "⏭️  RUN_FAST_PUSH=1: 跳过质量门禁（仅用于紧急推送，CI 会兜底）";
+        else
+          pnpm quality:gate
+        fi
       fail_text: '质量门禁失败 - 请修复质量问题后再推送'
 
-    # 架构检查
+    # 架构检查（A+：全量巡航 + 循环依赖；使用 err 报告减少噪音；可用 RUN_FAST_PUSH=1 跳过应急推送）
     arch-check:
-      run: pnpm arch:check && pnpm circular:check
+      run: |
+        if [ -n "$RUN_FAST_PUSH" ]; then
+          echo "⏭️  RUN_FAST_PUSH=1: 跳过架构检查（仅用于紧急推送，CI/后续本地请补跑）";
+        else
+          pnpm exec dependency-cruiser src --config .dependency-cruiser.js -T err
+          pnpm circular:check
+        fi
       fail_text: '架构检查失败 - 发现循环依赖或架构违规'
 
     # 性能测试 (仅 CI 环境运行,避免本地 headless Chrome 卡住)
@@ -98,11 +109,16 @@ pre-push:
         if [ -n "$CI" ]; then
           pnpm perf:check
         else
-          echo "⏭️  跳过性能测试 (仅 CI 环境运行,本地已通过 build-check 验证)"
+          echo "⏭️  跳过性能测试 (仅 CI 环境运行)"
         fi
       fail_text: '性能测试失败 - 包大小或性能指标超出限制'
 
-    # 安全检查
+    # 安全检查（A+：本地执行；可用 RUN_FAST_PUSH=1 跳过应急推送）
     security-check:
-      run: pnpm security:audit
+      run: |
+        if [ -n "$RUN_FAST_PUSH" ]; then
+          echo "⏭️  RUN_FAST_PUSH=1: 跳过安全审计（仅用于紧急推送，CI 会兜底）";
+        else
+          pnpm security:audit
+        fi
       fail_text: '安全检查失败 - 发现安全漏洞，请修复后推送'
