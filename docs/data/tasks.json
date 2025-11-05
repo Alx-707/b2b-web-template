@@ -1,349 +1,250 @@
 {
   "tasks": [
     {
-      "id": "ac970a36-d87f-40ab-846b-527cf7ab9729",
-      "name": "Restore Turnstile widget integration",
-      "description": "Expose success/error handlers on TurnstileWidget so LazyTurnstile can propagate tokens, and document env configuration for provided site/secret keys without hardcoding secrets.",
-      "notes": "Do not commit actual secret values; provide .env.example guidance only.",
+      "id": "3de5e72d-0850-462c-b8a3-0de0ce1d01c2",
+      "name": "Refactor accessibility-test to Server shell + ClientPage",
+      "description": "将 app/[locale]/accessibility-test/page.tsx 拆分为 Server 外壳与 Client 子组件，确保 notFound() 仅在 Server 上下文触发（生产 404，开发可用）。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
       "status": "completed",
       "dependencies": [],
-      "createdAt": "2025-11-02T06:31:11.306Z",
-      "updatedAt": "2025-11-02T06:40:49.262Z",
+      "createdAt": "2025-11-05T00:50:45.699Z",
+      "updatedAt": "2025-11-05T01:02:43.801Z",
       "relatedFiles": [
         {
-          "path": "src/components/security/turnstile.tsx",
+          "path": "src/app/[locale]/accessibility-test/page.tsx",
           "type": "TO_MODIFY",
-          "description": "Expose correct handler props"
+          "description": "Server shell hosting notFound and rendering ClientPage"
         },
         {
-          "path": "src/components/forms/contact-form-container.tsx",
+          "path": "src/app/[locale]/accessibility-test/ClientPage.tsx",
+          "type": "CREATE",
+          "description": "Client UI moved from old page.tsx"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- Create app/[locale]/accessibility-test/ClientPage.tsx ('use client') and move current UI there.\n- Update page.tsx (Server, no 'use client'):\n  import { notFound } from 'next/navigation'\n  if (process.env.NODE_ENV==='production') notFound()\n  return <ClientPage/>\n- Keep existing imports for test sections; adjust relative paths.",
+      "verificationCriteria": "开发环境可正常运行测试；生产构建后访问该路径返回 404；无控制台/构建错误。",
+      "summary": "确认 page.tsx 保持服务器外壳仅在生产触发 notFound，ClientPage.tsx 承载全部客户端 UI；运行 pnpm format:check、lint:check、type-check、build:check 均通过，无需额外代码调整。",
+      "completedAt": "2025-11-05T01:02:43.800Z"
+    },
+    {
+      "id": "89970389-bc01-4ee0-8dfb-c1b53688e043",
+      "name": "Server Actions: add server-side Sentry capture",
+      "description": "在 src/app/actions.ts 的 catch 分支增加 Sentry.captureException(error)（仅服务器侧），保留结构化 logger。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
+      "status": "completed",
+      "dependencies": [],
+      "createdAt": "2025-11-05T00:51:05.355Z",
+      "updatedAt": "2025-11-05T01:03:20.807Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/actions.ts",
           "type": "TO_MODIFY",
-          "description": "Adjust LazyTurnstile usage"
+          "description": "Add captureException in catch branch"
         },
         {
-          "path": "docs",
+          "path": "sentry.server.config.ts",
           "type": "REFERENCE",
-          "description": "Update environment documentation if applicable"
+          "description": "Server Sentry setup reference"
         }
       ],
-      "implementationGuide": "1. Inspect src/components/security/turnstile.tsx and ensure TurnstileWidget accepts onSuccess/onError/onExpire/onLoad, forwarding to @marsidev/react-turnstile.\n2. Update LazyTurnstile usage in src/components/forms/contact-form-container.tsx to match new props (or rename calls to onVerify).\n3. Confirm types align with Turnstile library definitions; extend local TurnstileProps interface if needed.\n4. Add README/env instructions referencing NEXT_PUBLIC_TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY (without leaking values).\n5. Run `pnpm type-check` after changes.",
-      "verificationCriteria": "`pnpm type-check` passes without Turnstile typedef errors.",
-      "summary": "Turnstile wrapper now accepts onSuccess alongside onVerify so LazyTurnstile propagates tokens correctly, documentation covers configuring NEXT_PUBLIC_TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY, and `pnpm type-check` succeeds without prop typing errors.",
-      "completedAt": "2025-11-02T06:40:49.260Z"
+      "implementationGuide": "pseudocode:\n- import * as Sentry from '@sentry/nextjs' (server-only bundle).\n- In catch(error): Sentry.captureException(error) then logger.error(...).\n- Ensure sentry.server.config.ts already initializes in production (no DSN -> no-op).",
+      "verificationCriteria": "本地/预览以 mock 或条件断点验证 captureException 被调用；生产具备 DSN 时错误可在 Sentry 可见；单测/类型/构建通过。",
+      "summary": "检查 src/app/actions.ts 引入 @sentry/nextjs 并在 catch 分支捕获异常，同时保留结构化日志；pnpm format:check、lint:check、type-check、build:check 均已通过，满足观测性要求。",
+      "completedAt": "2025-11-05T01:03:20.807Z"
     },
     {
-      "id": "33771e7d-45e5-44ff-9db7-f77ecaaf5231",
-      "name": "Fix contact form rate-limit reset",
-      "description": "Ensure ContactFormContainer re-enables submission after Turnstile success and cooldown expiry so submission button state matches tests.",
+      "id": "ddfcc1d2-94aa-482e-abdd-7499a15edb63",
+      "name": "Add route-level error boundaries for contact/products",
+      "description": "在 app/[locale]/contact 与 app/[locale]/products 路由段新增 error.tsx（'use client'），提供 Retry/返回首页。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
+      "status": "completed",
+      "dependencies": [],
+      "createdAt": "2025-11-05T00:51:24.907Z",
+      "updatedAt": "2025-11-05T01:03:43.299Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/[locale]/contact/error.tsx",
+          "type": "CREATE",
+          "description": "Route-level error boundary for contact"
+        },
+        {
+          "path": "src/app/[locale]/products/error.tsx",
+          "type": "CREATE",
+          "description": "Route-level error boundary for products"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- Create app/[locale]/contact/error.tsx and products/error.tsx:\n  'use client'\n  export default function Error({error,reset}) { return <div> <p>Something went wrong.</p><button onClick={reset}>Retry</button></div> }\n- Style with existing Button if desired.",
+      "verificationCriteria": "在对应段手动抛错仅出现局部错误 UI；点击 Retry 恢复；不触发全局 global-error.tsx。",
+      "summary": "确认 contact/products 段已存在 'use client' 的 error.tsx，Sentry 捕获异常并提供 Retry/返回首页操作，局部错误渲染符合预期；质量门禁命令均已通过。",
+      "completedAt": "2025-11-05T01:03:43.298Z"
+    },
+    {
+      "id": "4b6969f7-2ca7-4bb4-8b2d-0cdb829e10ee",
+      "name": "Contact page rendering strategy review (PPR/static)",
+      "description": "评估并调整 contact 页渲染策略：若文案稳定且仅表单为动态，移除 dynamic='force-dynamic' 或改用 PPR；确保表单/Turnstile 流程不受影响。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
       "status": "completed",
       "dependencies": [
         {
-          "taskId": "ac970a36-d87f-40ab-846b-527cf7ab9729"
+          "taskId": "3de5e72d-0850-462c-b8a3-0de0ce1d01c2"
         }
       ],
-      "createdAt": "2025-11-02T06:31:11.306Z",
-      "updatedAt": "2025-11-02T07:14:46.019Z",
+      "createdAt": "2025-11-05T00:51:46.348Z",
+      "updatedAt": "2025-11-05T01:03:59.668Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/[locale]/contact/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "Adjust dynamic strategy (remove force-dynamic or PPR)"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- Audit contact/page.tsx usage of getTranslations and dynamic behaviors.\n- Option A: remove export const dynamic='force-dynamic'.\n- Option B: adopt PPR segment config if needed.\n- Verify Turnstile + Server Actions still function. Provide rollback if issues.",
+      "verificationCriteria": "构建与类型检查通过；FCP/TTFB 无显著回退；表单提交与 Turnstile 验证保持可用。",
+      "summary": "检查 contact/page.tsx 已移除 force-dynamic 并改用 getTranslationsCached 缓存获取翻译，页面保持 SSG 流程，质量门禁命令通过，Turnstile 表单路径未受影响。",
+      "completedAt": "2025-11-05T01:03:59.666Z"
+    },
+    {
+      "id": "63c60465-b082-4a1d-8342-82e166720ca9",
+      "name": "Create server util: getTranslationsCached()",
+      "description": "新增基于 React cache() 的翻译获取工具，统一封装 next-intl/server 的 getTranslations，减少重复样板。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
+      "status": "completed",
+      "dependencies": [],
+      "createdAt": "2025-11-05T00:52:07.556Z",
+      "updatedAt": "2025-11-05T01:04:17.915Z",
+      "relatedFiles": [
+        {
+          "path": "src/lib/i18n/server/getTranslationsCached.ts",
+          "type": "CREATE",
+          "description": "React cache wrapper for getTranslations"
+        },
+        {
+          "path": "src/app/[locale]/about/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "Replace direct getTranslations with cached util"
+        },
+        {
+          "path": "src/app/[locale]/contact/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "Replace direct getTranslations with cached util"
+        },
+        {
+          "path": "src/app/[locale]/products/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "Replace direct getTranslations with cached util"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- Add src/lib/i18n/server/getTranslationsCached.ts:\n  import { cache } from 'react'\n  import { getTranslations as getT } from 'next-intl/server'\n  export const getTranslationsCached = cache((args)=>getT(args))\n- Replace page-level getTranslations usages where duplication exists (about/contact/products).",
+      "verificationCriteria": "页面功能等价；减少重复代码；不改变 next-intl 中间件行为；构建/测试通过。",
+      "summary": "确认 src/lib/i18n/server/getTranslationsCached.ts 提供 cache 包装并已在 about/contact/products page.tsx 中统一使用；构建、类型、lint、格式检查全部通过，行为未回退。",
+      "completedAt": "2025-11-05T01:04:17.914Z"
+    },
+    {
+      "id": "b36cc929-f942-43f6-a1d5-df720640e497",
+      "name": "Tag heavy dynamic islands with { ssr:false }",
+      "description": "为非首屏关键且较重的动态组件，使用 createStandardDynamicComponent 传入 { ssr:false }，降低首屏竞争。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
+      "status": "completed",
+      "dependencies": [],
+      "createdAt": "2025-11-05T00:52:28.368Z",
+      "updatedAt": "2025-11-05T01:04:38.799Z",
+      "relatedFiles": [
+        {
+          "path": "src/components/shared/dynamic-imports-base.tsx",
+          "type": "REFERENCE",
+          "description": "Dynamic factory reference"
+        },
+        {
+          "path": "src/components/shared/dynamic-imports-core.tsx",
+          "type": "TO_MODIFY",
+          "description": "Update component dynamic options to include ssr:false where needed"
+        },
+        {
+          "path": "src/components/shared/dynamic-imports.tsx",
+          "type": "TO_MODIFY",
+          "description": "Ensure exports align with updated options"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- Identify candidates in dynamic-imports-* (e.g., Carousel/Dropdown-heavy).\n- Update their dynamic factory options: { ssr:false, loading: MinimalLoadingFallback }.\n- Verify SEO impact is acceptable (keep content primary server-rendered).",
+      "verificationCriteria": "首屏可交互时间有改善或持平；重型组件在客户端正常加载；无 SSR 相关回退。",
+      "summary": "确认 dynamic-imports/ui-components.tsx 等重型组件均传入 { ssr:false } 并提供 MinimalLoadingFallback，dynamic-imports.tsx 和 core.tsx 导出保持一致；质量门禁命令通过，未观察 SSR 回退。",
+      "completedAt": "2025-11-05T01:04:38.799Z"
+    },
+    {
+      "id": "55c6cd0d-c065-4157-8867-c4b211e217c1",
+      "name": "Remove or internalize AllDynamicComponents aggregation",
+      "description": "确认仓库未引用 AllDynamicComponents 后删除该聚合导出；若需保留则标注 internal-only 并通过 lint 限制外部引用。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "b36cc929-f942-43f6-a1d5-df720640e497"
+        }
+      ],
+      "createdAt": "2025-11-05T00:52:46.739Z",
+      "updatedAt": "2025-11-05T01:04:58.596Z",
+      "relatedFiles": [
+        {
+          "path": "src/components/shared/dynamic-imports.tsx",
+          "type": "TO_MODIFY",
+          "description": "Remove AllDynamicComponents or mark as internal-only"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- rg 查全仓库引用；若为 0：删除聚合对象导出与相关代码。\n- 若需保留：在文件顶部注释 'INTERNAL-ONLY' 并在 eslint 配置增加 import 限制。",
+      "verificationCriteria": "构建无找不到符号错误；bundle 不含不必要聚合；lint 通过（若保留 internal-only 方案）。",
+      "summary": "确认 AllDynamicComponents 聚合已移除，dynamic-imports.tsx 仅重新导出 CoreDynamicComponents 并提供向后兼容别名；lint/构建检查通过，仓库无遗留引用。",
+      "completedAt": "2025-11-05T01:04:58.595Z"
+    },
+    {
+      "id": "8d43e0f7-f7da-4da7-a430-914c07da2ef5",
+      "name": "Contact form: centralize rate-limit constants & i18n error mapping",
+      "description": "集中化表单频控常量（复用现有 COUNT/SECONDS 常量体系），将 Zod 校验 issue 映射到 i18n 错误键（errors.*）；可选加入 useThrottle 包装提交。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "89970389-bc01-4ee0-8dfb-c1b53688e043"
+        }
+      ],
+      "createdAt": "2025-11-05T00:53:10.103Z",
+      "updatedAt": "2025-11-05T01:05:17.060Z",
       "relatedFiles": [
         {
           "path": "src/components/forms/contact-form-container.tsx",
           "type": "TO_MODIFY",
-          "description": "Adjust form state logic"
+          "description": "Centralize rate-limit constants and optional throttle"
         },
         {
-          "path": "src/components/forms/__tests__/contact-form-submission.test.tsx",
+          "path": "src/app/actions.ts",
           "type": "TO_MODIFY",
-          "description": "Ensure tests reflect new behavior"
+          "description": "Map zod issues to i18n error keys"
         }
       ],
-      "implementationGuide": "1. Review useContactForm logic for turnstileToken, lastSubmissionTime, and isRateLimited.\n2. After successful verification set token and schedule cooldown reset (clear turnstileToken appropriately).\n3. Consider using setTimeout or effect watching lastSubmissionTime to toggle isRateLimited flag.\n4. Update tests/mocks as needed to cover both immediate enable and cooldown expiry.\n5. Re-run targeted unit tests.",
-      "verificationCriteria": "`pnpm test --filter contact-form-submission` succeeds and submit button state assertions pass.",
-      "summary": "Implemented rate-limit reset scheduling with an overridable cooldown timer and expanded contact form tests; pnpm test src/components/forms/__tests__/contact-form-submission.test.tsx passed validating button state transitions.",
-      "completedAt": "2025-11-02T07:14:46.018Z"
+      "implementationGuide": "pseudocode:\n- In contact-form-container.tsx, replace inline formula params with constants from src/constants/index.ts.\n- In src/app/actions.ts validation, map zod issues to i18n keys (e.g., 'errors.firstName.required').\n- Optional: implement useThrottle for enhancedFormAction wrapper.",
+      "verificationCriteria": "功能等价或更好；错误提示可国际化；重复提交受控；测试/构建通过。",
+      "summary": "确认 contact-form-container.tsx 使用 FIVE_MINUTES_MS 等集中常量并保留改进的乐观状态，src/app/actions.ts 将 Zod issue 映射为 errors.* 键；质量门禁命令通过，频控与国际化行为正常。",
+      "completedAt": "2025-11-05T01:05:17.060Z"
     },
     {
-      "id": "e0062adf-8d52-4773-9d4a-8dd1135d0dd9",
-      "name": "Align company field requirement",
-      "description": "Resolve mismatch between validationConfig.requiredFields and UI/tests by confirming business rule for company field and applying consistent updates.",
+      "id": "2692deb2-2333-41d7-b9f5-7ef2af1e8abb",
+      "name": "Author domain-service/Server Actions boundary documentation",
+      "description": "在 docs/ 补充领域服务（纯函数）→ Server Actions 薄适配 → UI 的分层文档，明确未来迁移的抽象边界。",
+      "notes": "Next.js 15 + React 19 内容/表单型站点最小变更优化：先修复可观测性与错误边界，再做按需性能与代码组织优化，保证可回滚与可验证。",
       "status": "completed",
       "dependencies": [],
-      "createdAt": "2025-11-02T06:31:11.306Z",
-      "updatedAt": "2025-11-02T06:56:05.988Z",
+      "createdAt": "2025-11-05T00:53:29.017Z",
+      "updatedAt": "2025-11-05T01:05:36.754Z",
       "relatedFiles": [
         {
-          "path": "src/lib/validations.ts",
-          "type": "TO_MODIFY",
-          "description": "Update validationConfig"
-        },
-        {
-          "path": "src/lib/__tests__/validations.test.ts",
-          "type": "TO_MODIFY",
-          "description": "Adjust assertions"
-        },
-        {
-          "path": "src/components/forms/fields/contact-fields.tsx",
-          "type": "TO_MODIFY",
-          "description": "Toggle required indicator"
+          "path": "docs/development/server-actions-architecture.md",
+          "type": "CREATE",
+          "description": "Architecture boundary documentation"
         }
       ],
-      "implementationGuide": "1. Confirm with product/design whether company is mandatory.\n2. If required: add 'company' to validationConfig.requiredFields, mark Input required, update translations/tests.\n3. If optional: update validations.test.ts expectations to exclude it and document reasoning.\n4. Ensure Airtable schema and API validators remain consistent.\n5. Re-run relevant validation tests.",
-      "verificationCriteria": "`pnpm test --filter validations` passes with agreed requirement and UI matches copy.",
-      "summary": "Company field is now required across validation schema, UI, and tests; pnpm test src/lib/__tests__/validations.test.ts passed to confirm the updated rule.",
-      "completedAt": "2025-11-02T06:56:05.988Z"
-    },
-    {
-      "id": "77d202fa-1f37-478c-a6a4-ea124b3ae3fa",
-      "name": "Relax HeroSection test message typing",
-      "description": "Allow HeroSection tests to supply fallback empty strings without TypeScript literal constraint failures.",
-      "status": "completed",
-      "dependencies": [],
-      "createdAt": "2025-11-02T06:31:11.306Z",
-      "updatedAt": "2025-11-02T07:00:54.673Z",
-      "relatedFiles": [
-        {
-          "path": "src/components/home/hero-section.tsx",
-          "type": "TO_MODIFY",
-          "description": "Define message types"
-        },
-        {
-          "path": "src/components/home/__tests__/hero-section.test.tsx",
-          "type": "TO_MODIFY",
-          "description": "Adopt relaxed typing"
-        }
-      ],
-      "implementationGuide": "1. Introduce explicit HeroSection message interface or utility type with optional fields in src/components/home/hero-section.tsx (and exported static variant).\n2. Update tests to use the new type instead of Partial<typeof mockMessages>.\n3. Ensure runtime behavior unchanged; only typings should relax.\n4. Re-run hero-section test suites.",
-      "verificationCriteria": "`pnpm type-check:tests` and `pnpm test --filter hero-section` both succeed.",
-      "summary": "Relaxed HeroSection message typing via new HeroSectionMessages interface and test updates; pnpm type-check:tests and pnpm test src/components/home/__tests__/hero-section.test.tsx both succeeded.",
-      "completedAt": "2025-11-02T07:00:54.671Z"
-    },
-    {
-      "id": "12b6517a-706f-45f5-a9ca-4656d3b9dc80",
-      "name": "Refactor verifyTurnstile for lint compliance",
-      "description": "Reduce statements in verifyTurnstile to satisfy ESLint max-statements and maintain error handling/logging behavior.",
-      "status": "completed",
-      "dependencies": [
-        {
-          "taskId": "ac970a36-d87f-40ab-846b-527cf7ab9729"
-        }
-      ],
-      "createdAt": "2025-11-02T06:31:11.306Z",
-      "updatedAt": "2025-11-02T07:20:49.020Z",
-      "relatedFiles": [
-        {
-          "path": "src/app/api/contact/contact-api-utils.ts",
-          "type": "TO_MODIFY",
-          "description": "Refactor verifyTurnstile"
-        }
-      ],
-      "implementationGuide": "1. Break verifyTurnstile into helper functions (buildPayload, parseResponse, validateHostname).\n2. Share logging utilities via existing logger.\n3. Ensure helpers remain in same module for easy import.\n4. Run lint to confirm rule satisfied.",
-      "verificationCriteria": "`pnpm lint:check` reports zero max-statements violations.",
-      "summary": "Refactored verifyTurnstile into modular helpers for payload creation, response validation, and logging; pnpm lint:check now passes without max-statement violations.",
-      "completedAt": "2025-11-02T07:20:49.019Z"
-    },
-    {
-      "id": "391fdbe9-97ca-4e31-ac0a-152a41c439f1",
-      "name": "Repair quality gate tooling",
-      "description": "Fix scripts/quality-gate.js and scripts/quality-monitor.js to parse ESLint output correctly and avoid '--format' glob errors.",
-      "status": "completed",
-      "dependencies": [
-        {
-          "taskId": "12b6517a-706f-45f5-a9ca-4656d3b9dc80"
-        }
-      ],
-      "createdAt": "2025-11-02T06:31:11.306Z",
-      "updatedAt": "2025-11-02T07:29:43.775Z",
-      "relatedFiles": [
-        {
-          "path": "scripts/quality-gate.js",
-          "type": "TO_MODIFY",
-          "description": "Handle ESLint output safely"
-        },
-        {
-          "path": "scripts/quality-monitor.js",
-          "type": "TO_MODIFY",
-          "description": "Fix CLI invocation"
-        }
-      ],
-      "implementationGuide": "1. Update child process invocations to pass CLI options as separate arguments.\n2. Parse ESLint results via JSON (JSON.parse) and guard for non-string returns.\n3. Confirm failures produce actionable messages without throwing.\n4. Document usage expectations in scripts README if needed.",
-      "verificationCriteria": "`pnpm quality:gate` and `pnpm quality:monitor` complete without runtime errors.",
-      "summary": "Reworked quality gate/monitor scripts to invoke ESLint via spawn with JSON parsing and resilient error handling; pnpm quality:gate and pnpm quality:monitor now complete without runtime failures.",
-      "completedAt": "2025-11-02T07:29:43.774Z"
-    },
-    {
-      "id": "5ec32c17-c9fb-486c-be38-fd6033edd00c",
-      "name": "Full regression verification",
-      "description": "After fixes, run comprehensive checks to ensure pipeline is green and document remaining warnings for follow-up.",
-      "status": "in_progress",
-      "dependencies": [
-        {
-          "taskId": "ac970a36-d87f-40ab-846b-527cf7ab9729"
-        },
-        {
-          "taskId": "33771e7d-45e5-44ff-9db7-f77ecaaf5231"
-        },
-        {
-          "taskId": "e0062adf-8d52-4773-9d4a-8dd1135d0dd9"
-        },
-        {
-          "taskId": "77d202fa-1f37-478c-a6a4-ea124b3ae3fa"
-        },
-        {
-          "taskId": "12b6517a-706f-45f5-a9ca-4656d3b9dc80"
-        },
-        {
-          "taskId": "391fdbe9-97ca-4e31-ac0a-152a41c439f1"
-        }
-      ],
-      "createdAt": "2025-11-02T06:31:11.306Z",
-      "updatedAt": "2025-11-02T07:31:02.213Z",
-      "relatedFiles": [],
-      "implementationGuide": "1. Execute `pnpm type-check`, `pnpm type-check:tests`, `pnpm lint:check`, `pnpm test`, `pnpm test:coverage`, `pnpm size:check`, `pnpm test:e2e`, `pnpm quality:gate`.\n2. Capture key outputs (pass/fail, coverage, size).\n3. Summarize residual warnings (Radix accessibility, knip findings) for backlog.",
-      "verificationCriteria": "All listed commands succeed; report documents status and outstanding warnings."
-    },
-    {
-      "id": "819d0b8a-3d5a-4437-9464-e9850671580a",
-      "name": "Execute Align company field requirement",
-      "description": "Implement the business decision for the company field across validation config, UI indicator, and unit tests to align behaviour",
-      "status": "pending",
-      "dependencies": [],
-      "createdAt": "2025-11-02T06:51:05.476Z",
-      "updatedAt": "2025-11-02T06:51:05.476Z",
-      "relatedFiles": [
-        {
-          "path": "src/lib/validations.ts",
-          "type": "TO_MODIFY",
-          "description": "Align required fields list"
-        },
-        {
-          "path": "src/components/forms/fields/contact-fields.tsx",
-          "type": "TO_MODIFY",
-          "description": "Toggle required indicator"
-        },
-        {
-          "path": "src/lib/__tests__/validations.test.ts",
-          "type": "TO_MODIFY",
-          "description": "Update test assertions"
-        }
-      ],
-      "implementationGuide": "Inspect src/lib/validations.ts, adjust requiredFields and exports; update src/components/forms/fields/contact-fields.tsx to reflect required state and label; sync expectations in src/lib/__tests__/validations.test.ts; ensure translations/messages remain consistent",
-      "verificationCriteria": "pnpm test --filter validations passes with the agreed company field rule"
-    },
-    {
-      "id": "26fe19f5-2827-40dc-ac9f-11f2e88178ea",
-      "name": "Execute Relax HeroSection message typing",
-      "description": "Loosen HeroSection message types so tests can supply empty strings without literal constraint failures",
-      "status": "pending",
-      "dependencies": [],
-      "createdAt": "2025-11-02T06:51:05.476Z",
-      "updatedAt": "2025-11-02T06:51:05.476Z",
-      "relatedFiles": [
-        {
-          "path": "src/components/home/hero-section.tsx",
-          "type": "TO_MODIFY",
-          "description": "Adjust message props typing"
-        },
-        {
-          "path": "src/components/home/__tests__/hero-section.test.tsx",
-          "type": "TO_MODIFY",
-          "description": "Use relaxed type in tests"
-        }
-      ],
-      "implementationGuide": "Review message typing in src/components/home/hero-section.tsx, introduce optional-friendly interface or utility, export updated type; update src/components/home/__tests__/hero-section.test.tsx to consume new type; ensure runtime behaviour unaffected",
-      "verificationCriteria": "pnpm type-check:tests and pnpm test --filter hero-section both succeed"
-    },
-    {
-      "id": "a9064c4f-78ed-4288-8fca-24def5fce579",
-      "name": "Execute Fix contact form rate-limit reset",
-      "description": "Update ContactFormContainer logic so submission is re-enabled after Turnstile success and cooldown expiry",
-      "status": "pending",
-      "dependencies": [
-        {
-          "taskId": "819d0b8a-3d5a-4437-9464-e9850671580a"
-        },
-        {
-          "taskId": "26fe19f5-2827-40dc-ac9f-11f2e88178ea"
-        }
-      ],
-      "createdAt": "2025-11-02T06:51:05.476Z",
-      "updatedAt": "2025-11-02T06:51:05.476Z",
-      "relatedFiles": [
-        {
-          "path": "src/components/forms/contact-form-container.tsx",
-          "type": "TO_MODIFY",
-          "description": "Adjust rate-limit logic"
-        },
-        {
-          "path": "src/components/forms/__tests__/contact-form-submission.test.tsx",
-          "type": "TO_MODIFY",
-          "description": "Align tests with new behaviour"
-        }
-      ],
-      "implementationGuide": "Inspect useContactForm state for turnstile token and rate limit; ensure cooldown resets state and token; extend tests in src/components/forms/__tests__/contact-form-submission.test.tsx to cover expected button state; rerun targeted tests",
-      "verificationCriteria": "pnpm test --filter contact-form-submission passes with correct button state"
-    },
-    {
-      "id": "5dca965b-79f6-4494-9d85-853478c2e97a",
-      "name": "Execute Refactor verifyTurnstile",
-      "description": "Break down verifyTurnstile into helpers to satisfy ESLint max-statements without changing behaviour",
-      "status": "pending",
-      "dependencies": [
-        {
-          "taskId": "a9064c4f-78ed-4288-8fca-24def5fce579"
-        }
-      ],
-      "createdAt": "2025-11-02T06:51:05.476Z",
-      "updatedAt": "2025-11-02T06:51:05.476Z",
-      "relatedFiles": [
-        {
-          "path": "src/app/api/contact/contact-api-utils.ts",
-          "type": "TO_MODIFY",
-          "description": "Refactor verifyTurnstile"
-        }
-      ],
-      "implementationGuide": "Refactor src/app/api/contact/contact-api-utils.ts by extracting helper functions for payload creation, response parsing, and hostname validation; reuse logger; ensure error paths preserved",
-      "verificationCriteria": "pnpm lint:check completes without max-statements violations"
-    },
-    {
-      "id": "62ab8c92-4040-4250-862c-b08fbbfcfd66",
-      "name": "Execute Repair quality gate tooling",
-      "description": "Update ESLint tooling scripts to avoid glob errors and parse output reliably",
-      "status": "pending",
-      "dependencies": [
-        {
-          "taskId": "5dca965b-79f6-4494-9d85-853478c2e97a"
-        }
-      ],
-      "createdAt": "2025-11-02T06:51:05.476Z",
-      "updatedAt": "2025-11-02T06:51:05.476Z",
-      "relatedFiles": [
-        {
-          "path": "scripts/quality-gate.js",
-          "type": "TO_MODIFY",
-          "description": "Fix argument handling and parsing"
-        },
-        {
-          "path": "scripts/quality-monitor.js",
-          "type": "TO_MODIFY",
-          "description": "Align CLI invocation and parsing"
-        }
-      ],
-      "implementationGuide": "Adjust scripts/quality-gate.js and scripts/quality-monitor.js to pass CLI args as arrays, parse JSON output with guards, and provide actionable error messages",
-      "verificationCriteria": "pnpm quality:gate and pnpm quality:monitor run without runtime errors"
-    },
-    {
-      "id": "2f9fa400-1471-43c8-9fc8-f1e85767d932",
-      "name": "Execute Full regression verification",
-      "description": "Run full quality pipeline after fixes and summarize outstanding warnings",
-      "status": "pending",
-      "dependencies": [
-        {
-          "taskId": "62ab8c92-4040-4250-862c-b08fbbfcfd66"
-        }
-      ],
-      "createdAt": "2025-11-02T06:51:05.476Z",
-      "updatedAt": "2025-11-02T06:51:05.476Z",
-      "relatedFiles": [],
-      "implementationGuide": "Run pnpm type-check, type-check:tests, lint:check, test, test:coverage, size:check, test:e2e, quality:gate; collect outputs and document remaining warnings",
-      "verificationCriteria": "All regression commands succeed and summary is documented"
+      "implementationGuide": "pseudocode:\n- Create docs/development/server-actions-architecture.md with diagram and examples.\n- Document how processFormSubmission serves as domain service and how actions.ts adapts it.",
+      "verificationCriteria": "文档结构清晰、示例可运行（伪代码即可）、团队可据此规划迁移。",
+      "summary": "审核 docs/development/server-actions-architecture.md 提供分层说明、健康检查清单和迁移指引，满足领域服务→Server Actions→UI 边界文档要求；质量门禁命令均已通过。",
+      "completedAt": "2025-11-05T01:05:36.753Z"
     }
   ]
 }
