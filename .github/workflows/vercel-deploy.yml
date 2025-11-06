@@ -219,9 +219,19 @@ jobs:
           echo "检查 robots.txt..."
           curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/robots.txt" | grep -q "User-agent" || exit 1
 
-          # 检查 sitemap.xml
+          # 检查 sitemap.xml - 先输出内容以诊断
           echo "检查 sitemap.xml..."
-          curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/sitemap.xml" | grep -q "urlset" || exit 1
+          echo "获取 sitemap.xml 内容:"
+          SITEMAP_CONTENT=$(curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/sitemap.xml")
+          echo "$SITEMAP_CONTENT"
+          echo "---"
+
+          # 尝试 grep 验证
+          echo "$SITEMAP_CONTENT" | grep -q "urlset" || {
+            echo "❌ sitemap.xml 不包含 'urlset' 字符串"
+            echo "内容长度: $(echo "$SITEMAP_CONTENT" | wc -c)"
+            exit 1
+          }
 
           echo "✅ API 端点验证通过"
 
