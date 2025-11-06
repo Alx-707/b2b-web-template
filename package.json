@@ -2,6 +2,11 @@
   "name": "tucsenberg-web-frontier",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20 <21",
+    "pnpm": ">=10.13.1 <11"
+  },
+  "packageManager": "pnpm@10.13.1",
   "scripts": {
     "dev": "next dev --turbopack",
     "dev:no-turbo": "next dev",

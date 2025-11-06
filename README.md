@@ -17,9 +17,11 @@
 
 ## 🛠️ 环境要求
 
-- **Node.js**: 18.17.0 或更高版本
-- **包管理器**: pnpm 8.0+ (推荐)
+- **Node.js**: 20.x（与 CI/Vercel 一致，已在 `.nvmrc` 固定为 20）
+- **包管理器**: pnpm 10.13.1（已在 `.npmrc` 与 CI 固定）
 - **操作系统**: macOS, Linux, Windows
+
+> 提示：使用 nvm/fnm/asdf 进入仓库目录后自动切到 Node 20；若不生效，请执行 `nvm use`。
 
 ### 🔐 Turnstile 配置
 
