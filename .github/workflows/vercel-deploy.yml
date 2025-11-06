@@ -164,10 +164,10 @@ jobs:
           delay=5            # 初始等待 5 秒
 
           for i in $(seq 1 $max_tries); do
-            # 先 HEAD（更轻量），失败再 GET
-            status=$(curl -s -o /dev/null -w "%{http_code}" -I "$url" || echo "000")
+            # 先 HEAD（更轻量），失败再 GET - 添加 Protection Bypass header
+            status=$(curl -s -o /dev/null -w "%{http_code}" -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" -I "$url" || echo "000")
             if [ "$status" = "000" ]; then
-              status=$(curl -s -o /dev/null -w "%{http_code}" "$url" || echo "000")
+              status=$(curl -s -o /dev/null -w "%{http_code}" -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$url" || echo "000")
             fi
 
             echo "第 $i 次探测: $status"
@@ -199,15 +199,15 @@ jobs:
 
           # 检查根路径
           echo "检查根路径..."
-          curl -f -s -o /dev/null -w "%{http_code}" "$DEPLOYMENT_URL" || exit 1
+          curl -f -s -o /dev/null -w "%{http_code}" -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL" || exit 1
 
           # 检查英文路由
           echo "检查英文路由..."
-          curl -f -s -o /dev/null -w "%{http_code}" "$DEPLOYMENT_URL/en" || exit 1
+          curl -f -s -o /dev/null -w "%{http_code}" -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/en" || exit 1
 
           # 检查中文路由
           echo "检查中文路由..."
-          curl -f -s -o /dev/null -w "%{http_code}" "$DEPLOYMENT_URL/zh" || exit 1
+          curl -f -s -o /dev/null -w "%{http_code}" -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/zh" || exit 1
 
           echo "✅ 所有路由验证通过"
 
@@ -217,11 +217,11 @@ jobs:
 
           # 检查 robots.txt
           echo "检查 robots.txt..."
-          curl -f -s "$DEPLOYMENT_URL/robots.txt" | grep -q "User-agent" || exit 1
+          curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/robots.txt" | grep -q "User-agent" || exit 1
 
           # 检查 sitemap.xml
           echo "检查 sitemap.xml..."
-          curl -f -s "$DEPLOYMENT_URL/sitemap.xml" | grep -q "urlset" || exit 1
+          curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/sitemap.xml" | grep -q "urlset" || exit 1
 
           echo "✅ API 端点验证通过"
 

@@ -333,7 +333,7 @@ describe('ContactFormContainer - 提交和错误处理', () => {
 
     it('should re-enable submission after cooldown duration elapses', async () => {
       const originalCooldown = process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS;
-      process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS = '25';
+      process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS = '50';
 
       try {
         mockUseActionState.mockReturnValue([{ success: true }, vi.fn(), false]);
@@ -347,25 +347,29 @@ describe('ContactFormContainer - 提交和错误处理', () => {
 
         const submitButton = screen.getByRole('button', { name: /submit/i });
 
-        // 在不同环境下，速率限制提示或 disabled 属性的应用时机可能不同。
-        // 以“提示可见”或“按钮禁用”任一成立作为已进入速率限制窗口的判据，提升鲁棒性。
-        await waitFor(() => {
-          const hint = screen.queryByText(/wait before submitting again/i);
-          const isDisabled =
-            submitButton.hasAttribute('disabled') ||
-            submitButton.getAttribute('aria-disabled') === 'true';
-          if (!hint && !isDisabled) {
-            throw new Error('Cooldown not applied yet');
-          }
+        // 使用 findByText 自动等待速率限制提示出现 (符合 Testing Library 最佳实践)
+        await screen.findByText(
+          /wait before submitting again/i,
+          {},
+          { timeout: 3000 },
+        );
+
+        // 验证按钮被禁用
+        await waitFor(() => expect(submitButton).toBeDisabled(), {
+          timeout: 3000,
         });
 
+        // 等待冷却时间过去
         await act(async () => {
           await new Promise((resolve) => {
-            setTimeout(resolve, 50);
+            setTimeout(resolve, 100);
           });
         });
 
-        await waitFor(() => expect(submitButton).not.toBeDisabled());
+        // 验证按钮重新启用
+        await waitFor(() => expect(submitButton).not.toBeDisabled(), {
+          timeout: 3000,
+        });
       } finally {
         if (originalCooldown === undefined) {
           delete process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS;
