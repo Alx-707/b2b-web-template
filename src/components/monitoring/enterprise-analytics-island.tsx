@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { track } from '@vercel/analytics';
 import { useLocale } from 'next-intl';
 import { logger } from '@/lib/logger';
 
@@ -56,12 +55,18 @@ export function EnterpriseAnalyticsIsland() {
           } as const;
         };
 
-        const report = (m: { name: string; value: number; rating: string }) => {
+        const report = async (m: {
+          name: string;
+          value: number;
+          rating: string;
+        }) => {
           logger.warn(
             `[Web Vitals] ${m.name}: ${m.value} (${m.rating}) - ${locale}`,
           );
           if (RUM_ENABLED && process.env.NODE_ENV === 'production') {
             try {
+              // Dynamic import to avoid pulling @vercel/analytics into initial vendors
+              const { track } = await import('@vercel/analytics');
               track('web-vital', {
                 name: m.name,
                 value: Math.round(m.value),

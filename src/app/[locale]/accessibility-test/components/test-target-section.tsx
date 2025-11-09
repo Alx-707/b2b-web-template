@@ -1,7 +1,7 @@
 /**
  * 测试目标组件 - 显示主导航组件
  */
-import { VercelNavigation } from '@/components/layout/vercel-navigation';
+import { VercelNavigationI18n } from '@/components/layout/vercel-navigation-i18n.client';
 
 export function TestTargetSection() {
   return (
@@ -10,7 +10,7 @@ export function TestTargetSection() {
         测试目标：主导航组件
       </h2>
       <div className='rounded-lg border bg-gray-50 p-4'>
-        <VercelNavigation />
+        <VercelNavigationI18n />
       </div>
     </div>
   );

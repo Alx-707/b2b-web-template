@@ -1,8 +1,8 @@
 {
-  "timestamp": "2025-11-04T05:56:13.309Z",
+  "timestamp": "2025-11-09T07:53:35.521Z",
   "summary": {
-    "totalFiles": 714,
-    "scannedFiles": 714,
+    "totalFiles": 726,
+    "scannedFiles": 726,
     "errorCount": 0,
     "warningCount": 0,
     "totalKeys": 550,
@@ -800,11 +800,6 @@
         "file": "src/components/layout/mobile-navigation.tsx",
         "line": 84,
         "column": 15
-      },
-      {
-        "file": "src/components/layout/logo.tsx",
-        "line": 72,
-        "column": 18
       }
     ],
     "common.loading": [
@@ -1979,7 +1974,7 @@
       },
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 381,
+        "line": 387,
         "column": 24
       }
     ],
@@ -1993,14 +1988,14 @@
     "contact.form.submit": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 380,
+        "line": 386,
         "column": 21
       }
     ],
     "contact.form.rateLimitMessage": [
       {
         "file": "src/components/forms/contact-form-container.tsx",
-        "line": 386,
+        "line": 392,
         "column": 13
       }
     ],

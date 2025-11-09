@@ -1,4 +1,21 @@
 
+> tucsenberg-web-frontier@0.1.0 prebuild /Users/Data/Warehouse/Focus/tucsenberg-web-frontier
+> node scripts/copy-translations.js
+
+📦 Copying translation files to public directory...
+
+✅ Copied en/critical.json (18491 → 14125 bytes, saved 23.6%)
+✅ Copied en/deferred.json (11681 → 9266 bytes, saved 20.7%)
+✅ Copied zh/critical.json (17507 → 13141 bytes, saved 24.9%)
+✅ Copied zh/deferred.json (11050 → 8635 bytes, saved 21.9%)
+
+📊 Summary:
+   Total source size: 58729 bytes
+   Total output size: 45167 bytes
+   Total saved: 13562 bytes (23.1%)
+
+✅ All translation files copied successfully!
+
 > tucsenberg-web-frontier@0.1.0 build /Users/Data/Warehouse/Focus/tucsenberg-web-frontier
 > next build
 
@@ -6,51 +23,107 @@
    - Environments: .env.local
    - Experiments (use with caution):
      ⨯ testProxy
-     · clientTraceMetadata
+     ✓ inlineCss
      · optimizePackageImports
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 13.9s
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of /Users/Data/Warehouse/Focus/tucsenberg-web-frontier/node_modules/.pnpm/@next+mdx@15.5.3_@mdx-js+loader@3.1.1_webpack@5.101.3__@mdx-js+react@3.1.1_@types+react@19.1.8_react@19.1.1_/node_modules/@next/mdx/mdx-js-loader.js for build dependencies failed at 'import(process.platform === 'win32' ? pathToFileURL(path) : path)'.
+<w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
+ ✓ Compiled successfully in 6.1s
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
-   Generating static pages (0/16) ...
-   Generating static pages (4/16) 
-   Generating static pages (8/16) 
-   Generating static pages (12/16) 
- ✓ Generating static pages (16/16)
+   Generating static pages (0/26) ...
+   Generating static pages (6/26) 
+Failed to load critical messages for en: TypeError: fetch failed
+    at async f.revalidate (.next/server/chunks/7428.js:1:81088)
+    at async (.next/server/chunks/9.js:1:131761)
+    at async al (.next/server/chunks/7428.js:1:79897) {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+Failed to load critical messages for zh: TypeError: fetch failed
+    at async f.revalidate (.next/server/chunks/7428.js:1:81088)
+    at async (.next/server/chunks/9.js:1:131761)
+    at async al (.next/server/chunks/7428.js:1:79897) {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+Failed to load critical messages for en: [TypeError: fetch failed] {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+Failed to load critical messages for en: [TypeError: fetch failed] {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+Failed to load critical messages for zh: [TypeError: fetch failed] {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+Failed to load critical messages for zh: [TypeError: fetch failed] {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+Failed to load critical messages for zh: TypeError: fetch failed
+    at async f.revalidate (.next/server/chunks/7428.js:1:81088)
+    at async (.next/server/chunks/9.js:1:131761)
+    at async al (.next/server/chunks/7428.js:1:79897) {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+Failed to load critical messages for en: TypeError: fetch failed
+    at async f.revalidate (.next/server/chunks/7428.js:1:81088)
+    at async (.next/server/chunks/9.js:1:131761)
+    at async al (.next/server/chunks/7428.js:1:79897) {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+Failed to load critical messages for en: TypeError: fetch failed
+    at async f.revalidate (.next/server/chunks/7428.js:1:81088)
+    at async (.next/server/chunks/9.js:1:131761)
+    at async al (.next/server/chunks/7428.js:1:79897) {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+   Generating static pages (12/26) 
+   Generating static pages (19/26) 
+ ✓ Generating static pages (26/26)
    Finalizing page optimization ...
    Collecting build traces ...
 
 Route (app)                                 Size  First Load JS  Revalidate  Expire
-┌ ƒ /                                      342 B         252 kB
-├ ƒ /_not-found                            406 B         252 kB
-├ ● /[locale]                            24.2 kB         320 kB          1h      1y
+┌ ○ /                                      159 B         181 kB
+├ ○ /_not-found                            233 B         181 kB
+├ ● /[locale]                            30.6 kB         227 kB          1h      1y
 ├   ├ /en                                                                1h      1y
 ├   └ /zh                                                                1h      1y
-├ ƒ /[locale]/about                        320 B         293 kB
-├ ƒ /[locale]/accessibility-test         6.62 kB         299 kB
-├ ƒ /[locale]/blog                         320 B         293 kB
-├ ƒ /[locale]/contact                    3.95 kB         293 kB
-├ ƒ /[locale]/products                     318 B         293 kB
-├ ƒ /api/analytics/i18n                    342 B         252 kB
-├ ƒ /api/analytics/web-vitals              342 B         252 kB
-├ ƒ /api/contact                           342 B         252 kB
-├ ƒ /api/csp-report                        342 B         252 kB
-├ ƒ /api/monitoring/dashboard              342 B         252 kB
-├ ƒ /api/subscribe                         342 B         252 kB
-├ ƒ /api/test-content                      342 B         252 kB
-├ ƒ /api/verify-turnstile                  341 B         252 kB
-├ ƒ /api/whatsapp/send                     342 B         252 kB
-├ ƒ /api/whatsapp/webhook                  341 B         252 kB
-├ ƒ /error-test                          1.85 kB         253 kB
-└ ƒ /test-mdx                              390 B         252 kB
-+ First Load JS shared by all             252 kB
-  ├ chunks/0a4bdfb2-5100464d59c6e182.js  54.4 kB
-  ├ chunks/vendors-7b9c11ff8cb41726.js    194 kB
-  └ other shared chunks (total)          4.08 kB
+├ ● /[locale]/about                        132 B         195 kB          1h      1y
+├   ├ /en/about                                                          1h      1y
+├   └ /zh/about                                                          1h      1y
+├ ● /[locale]/accessibility-test         15.9 kB         207 kB          1h      1y
+├   ├ /en/accessibility-test                                             1h      1y
+├   └ /zh/accessibility-test                                             1h      1y
+├ ● /[locale]/blog                         132 B         195 kB          1h      1y
+├   ├ /en/blog                                                           1h      1y
+├   └ /zh/blog                                                           1h      1y
+├ ● /[locale]/contact                    4.55 kB         195 kB          1h      1y
+├   ├ /en/contact                                                        1h      1y
+├   └ /zh/contact                                                        1h      1y
+├ ● /[locale]/products                     129 B         195 kB          1h      1y
+├   ├ /en/products                                                       1h      1y
+├   └ /zh/products                                                       1h      1y
+├ ƒ /api/analytics/i18n                    159 B         181 kB
+├ ƒ /api/analytics/web-vitals              159 B         181 kB
+├ ƒ /api/contact                           159 B         181 kB
+├ ƒ /api/csp-report                        159 B         181 kB
+├ ƒ /api/health                            159 B         181 kB
+├ ƒ /api/monitoring/dashboard              159 B         181 kB
+├ ƒ /api/subscribe                         159 B         181 kB
+├ ƒ /api/test-content                      159 B         181 kB
+├ ƒ /api/verify-turnstile                  159 B         181 kB
+├ ƒ /api/whatsapp/send                     159 B         181 kB
+├ ƒ /api/whatsapp/webhook                  159 B         181 kB
+├ ○ /error-test                          1.72 kB         182 kB
+└ ○ /test-mdx                              209 B         181 kB
++ First Load JS shared by all             181 kB
+  ├ chunks/c101ad1e-bac46bdeeec2c83c.js  54.3 kB
+  ├ chunks/vendors-5e56dbc05ea14fa4.js    123 kB
+  └ other shared chunks (total)          3.52 kB
 
 
+○  (Static)   prerendered as static content
 ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
 ƒ  (Dynamic)  server-rendered on demand
 

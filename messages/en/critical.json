@@ -1,0 +1,516 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "services": "Services",
+    "products": "Products",
+    "solutions": "Solutions",
+    "resources": "Resources",
+    "enterprise": "Enterprise",
+    "docs": "Docs",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile",
+    "settings": "Settings",
+    "frameworks": "Frameworks",
+    "infrastructure": "Infrastructure",
+    "security": "Security",
+    "aiApps": "AI Apps",
+    "webApps": "Web Apps",
+    "ecommerce": "Ecommerce",
+    "guides": "Guides",
+    "frameworksDescription": "Build with the best frameworks",
+    "infrastructureDescription": "Scalable and reliable infrastructure",
+    "securityDescription": "Enterprise-grade security",
+    "aiAppsDescription": "Deploy AI applications at scale",
+    "webAppsDescription": "Modern web application platform",
+    "ecommerceDescription": "Power your online store",
+    "docsDescription": "Complete documentation and guides",
+    "guidesDescription": "Step-by-step tutorials",
+    "blogDescription": "Latest updates and insights"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "toggleLabel": "Theme toggle",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "selectTheme": "Select display theme",
+    "selectDisplayTheme": "Select a display theme:",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme",
+    "switchToSystem": "Switch to system theme"
+  },
+  "language": {
+    "toggle": "Toggle language",
+    "selectLanguage": "Select Language",
+    "english": "English",
+    "chinese": "中文",
+    "switching": "Switching language...",
+    "switchSuccess": "Language switched successfully",
+    "switchError": "Failed to switch language",
+    "fallbackWarning": "Some content may not be available in your selected language",
+    "detectionInfo": "Detection Info",
+    "source": "Source",
+    "confidence": "Confidence",
+    "userPreference": "User preference saved",
+    "detector": {
+      "title": "Detection Info",
+      "source": "Source",
+      "confidence": "Confidence",
+      "userSaved": "✓ User preference saved",
+      "sources": {
+        "browser": "Browser",
+        "cookie": "Cookie",
+        "url": "URL",
+        "header": "Header",
+        "default": "Default",
+        "user": "User",
+        "stored": "Stored",
+        "geo": "Geo",
+        "timezone": "Timezone"
+      }
+    }
+  },
+  "home": {
+    "hero": {
+      "version": "v1.0.0 - Production Ready",
+      "title": {
+        "line1": "Modern B2B Enterprise",
+        "line2": "Web Platform"
+      },
+      "subtitle": "Built with Next.js 15, React 19, TypeScript 5.8, and Tailwind CSS 4. Features enterprise-grade security, internationalization, and performance optimization.",
+      "cta": {
+        "demo": "View Demo",
+        "github": "View on GitHub"
+      },
+      "stats": {
+        "technologies": "Technologies",
+        "typescript": "TypeScript",
+        "performance": "Performance",
+        "languages": "Languages"
+      }
+    },
+    "techStack": {
+      "title": "Technology Stack",
+      "subtitle": "Built with cutting-edge technologies for enterprise-grade performance and scalability.",
+      "learnMore": "Learn More",
+      "learnMoreLabel": "Learn more about {target}",
+      "categories": {
+        "core": "Core Frameworks",
+        "ui": "UI System",
+        "i18n": "Internationalization",
+        "tools": "Tooling",
+        "testing": "Testing",
+        "dev": "Dev Tools",
+        "performance": "Performance Monitoring",
+        "security": "Security",
+        "animation": "Animation",
+        "deployment": "Deployment",
+        "quality": "Code Quality",
+        "docs": "Documentation",
+        "data": "Data Fetching",
+        "state": "State Management"
+      },
+      "technologies": {
+        "nextjs": "React full-stack framework with SSR/SSG",
+        "react": "Modern user interface library",
+        "typescript": "Type-safe JavaScript superset",
+        "tailwindcss": "Utility-first CSS framework",
+        "shadcn-ui": "Copy-paste component library",
+        "radix-ui": "Unstyled, accessible component primitives",
+        "next-intl": "Next.js internationalization solution",
+        "eslint": "JavaScript/TypeScript code linter",
+        "prettier": "Code formatting tool",
+        "husky": "Git hooks management tool",
+        "jest": "JavaScript testing framework",
+        "testing-library": "React component testing tool",
+        "pnpm": "Fast, disk space efficient package manager",
+        "turbo": "High-performance build system",
+        "lighthouse": "Web performance audit tool",
+        "semgrep": "Static code security analysis tool",
+        "embla-carousel": "Lightweight carousel component library",
+        "vercel": "Next.js application deployment platform",
+        "sonarqube": "Code quality and security analysis platform",
+        "storybook": "Component development and documentation tool",
+        "swr": "Data fetching and caching library",
+        "zustand": "Lightweight state management library"
+      },
+      "stats": {
+        "totalTech": "Total Technologies",
+        "categories": "Categories",
+        "modern": "Modern Stack",
+        "quality": "Quality Score"
+      }
+    },
+    "showcase": {
+      "title": "Component Showcase",
+      "subtitle": "Explore our comprehensive UI component library with live examples and interactive demos.",
+      "tabs": {
+        "components": "Components",
+        "themes": "Themes",
+        "responsive": "Responsive"
+      },
+      "components": {
+        "buttons": {
+          "title": "Button Components",
+          "description": "Various button styles and sizes for different use cases.",
+          "primary": "Primary",
+          "secondary": "Secondary",
+          "outline": "Outline",
+          "ghost": "Ghost",
+          "small": "Small",
+          "default": "Default",
+          "large": "Large"
+        },
+        "forms": {
+          "title": "Form Components",
+          "description": "Input fields and form controls with validation support.",
+          "name": "Full Name",
+          "namePlaceholder": "Enter your full name",
+          "email": "Email Address",
+          "emailPlaceholder": "Enter your email",
+          "submit": "Submit Form"
+        },
+        "interactive": {
+          "title": "Interactive Elements",
+          "description": "Buttons and controls with dynamic behavior and state management.",
+          "likes": "Likes",
+          "star": "Star",
+          "download": "Download",
+          "share": "Share"
+        },
+        "badges": {
+          "title": "Badge Components",
+          "description": "Status indicators and labels for various content types.",
+          "default": "Default",
+          "secondary": "Secondary",
+          "outline": "Outline",
+          "destructive": "Error",
+          "success": "Success",
+          "warning": "Warning",
+          "info": "Info"
+        }
+      },
+      "themes": {
+        "title": "Theme System",
+        "description": "Dynamic theme switching with light and dark mode support.",
+        "toggle": "Theme Toggle",
+        "language": "Language Switch",
+        "colors": {
+          "title": "Color Palette"
+        },
+        "typography": {
+          "title": "Typography",
+          "bold": "Bold Text",
+          "medium": "Medium Text",
+          "normal": "Normal Text",
+          "muted": "Muted Text"
+        }
+      },
+      "responsive": {
+        "title": "Responsive Design",
+        "description": "Optimized layouts for all device sizes and screen resolutions.",
+        "mobile": {
+          "title": "Mobile First",
+          "description": "Optimized for mobile devices with touch-friendly interfaces."
+        },
+        "tablet": {
+          "title": "Tablet Ready",
+          "description": "Perfect layout adaptation for tablet screens and orientations."
+        },
+        "desktop": {
+          "title": "Desktop Enhanced",
+          "description": "Full-featured desktop experience with advanced interactions."
+        }
+      }
+    },
+    "overview": {
+      "title": "Project Overview",
+      "subtitle": "A comprehensive enterprise web platform designed for modern B2B applications with cutting-edge technology stack.",
+      "features": {
+        "performance": {
+          "title": "High Performance",
+          "description": "Optimized for speed with SSR, SSG, and advanced caching strategies."
+        },
+        "security": {
+          "title": "Enterprise Security",
+          "description": "Built-in security features with industry-standard practices and compliance."
+        },
+        "i18n": {
+          "title": "Internationalization",
+          "description": "Full support for multiple languages with dynamic content switching.",
+          "languageUnit": "Languages"
+        },
+        "themes": {
+          "title": "Theme System",
+          "description": "Dynamic theme switching with light, dark, and custom theme support.",
+          "multiTheme": "Multi-theme"
+        },
+        "typescript": {
+          "title": "Type Safety",
+          "description": "100% TypeScript coverage for enhanced developer experience and reliability."
+        },
+        "deployment": {
+          "title": "Easy Deployment",
+          "description": "One-click deployment to Vercel with automatic CI/CD pipeline."
+        }
+      },
+      "highlights": {
+        "title": "Key Highlights",
+        "subtitle": "What makes this platform stand out from the competition.",
+        "modern": "Modern Architecture",
+        "scalable": "Scalable Design",
+        "accessible": "Accessibility First",
+        "performant": "High Performance",
+        "secure": "Security Focused",
+        "maintainable": "Easy Maintenance"
+      },
+      "architecture": {
+        "title": "Technical Architecture",
+        "frontend": {
+          "title": "Frontend Layer",
+          "description": "React-based frontend with Next.js for optimal performance and SEO."
+        },
+        "ui": {
+          "title": "UI System",
+          "description": "Comprehensive design system with reusable components and themes."
+        },
+        "tooling": {
+          "title": "Development Tools",
+          "description": "Modern development workflow with automated testing and quality checks."
+        }
+      },
+      "cta": {
+        "title": "Ready to Get Started?",
+        "description": "Join thousands of developers building amazing B2B applications with our platform.",
+        "getStarted": "Get Started Now",
+        "viewSource": "View Source Code"
+      }
+    },
+    "cta": {
+      "badge": "Open Source",
+      "title": "Start Building Today",
+      "subtitle": "Get started with our modern B2B enterprise platform and accelerate your development process.",
+      "primary": {
+        "github": "Star on GitHub",
+        "demo": "Live Demo"
+      },
+      "actions": {
+        "github": {
+          "title": "GitHub Repository",
+          "description": "Explore the source code and contribute to the project."
+        },
+        "download": {
+          "title": "Download Template",
+          "description": "Get the complete template and start building immediately."
+        },
+        "docs": {
+          "title": "Documentation",
+          "description": "Comprehensive guides and API documentation."
+        }
+      },
+      "buttons": {
+        "getStarted": "Get Started",
+        "learnMore": "Learn More"
+      },
+      "stats": {
+        "technologies": "Technologies",
+        "typescript": "TypeScript",
+        "performance": "Performance",
+        "languages": "Languages"
+      },
+      "community": {
+        "title": "Join Our Community",
+        "description": "Connect with other developers and get support from our community.",
+        "discussions": "GitHub Discussions",
+        "issues": "Report Issues"
+      }
+    }
+  },
+  "footer": {
+    "sections": {
+      "product": {
+        "title": "Product",
+        "home": "Home",
+        "enterprise": "Enterprise",
+        "pricing": "Pricing"
+      },
+      "company": {
+        "title": "Company",
+        "terms": "Terms",
+        "aiPolicy": "AI Policy",
+        "privacy": "Privacy"
+      },
+      "resources": {
+        "title": "Resources",
+        "faqs": "FAQs",
+        "docs": "Docs",
+        "ambassadors": "Ambassadors",
+        "community": "Vercel Community",
+        "vercel": "Vercel"
+      },
+      "social": {
+        "title": "Social"
+      }
+    }
+  },
+  "accessibility": {
+    "skipToContent": "Skip to main content",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "loading": "Content is loading",
+    "error": "An error has occurred",
+    "languageSelector": "Select language",
+    "themeSelector": "Select theme"
+  },
+  "seo": {
+    "title": "Tucsenberg Web Frontier",
+    "description": "Modern B2B Enterprise Web Platform with Next.js 15, React 19, and TypeScript",
+    "siteName": "Tucsenberg Web Frontier",
+    "keywords": "Next.js, React, TypeScript, B2B, Enterprise, Web Platform",
+    "pages": {
+      "home": {
+        "title": "Tucsenberg Web Frontier - Modern B2B Enterprise Platform",
+        "description": "Build modern B2B applications with Next.js 15, React 19, TypeScript, and enterprise-grade features."
+      },
+      "about": {
+        "title": "About Us - Tucsenberg Web Frontier",
+        "description": "Learn about our mission to provide cutting-edge B2B enterprise web solutions."
+      },
+      "contact": {
+        "title": "Contact Us - Tucsenberg Web Frontier",
+        "description": "Get in touch with our team for enterprise solutions and support."
+      },
+      "products": {
+        "title": "Products - Tucsenberg Web Frontier",
+        "description": "Discover our enterprise-grade products and solutions for modern businesses."
+      },
+      "blog": {
+        "title": "Blog - Tucsenberg Web Frontier",
+        "description": "Latest insights, tutorials, and updates from our development team."
+      }
+    }
+  },
+  "underConstruction": {
+    "title": "Under Construction",
+    "subtitle": "We're working hard to bring you something amazing",
+    "description": "This page is currently under development. We're building something great and will have it ready soon.",
+    "backToHome": "Back to Home",
+    "comingSoon": "Coming Soon",
+    "expectedCompletion": "Expected completion: {date}",
+    "expectedLaunch": "Expected launch: {date}",
+    "dates": {
+      "q2_2024": "Q2 2024",
+      "q3_2024": "Q3 2024"
+    },
+    "stayTuned": "Stay tuned for updates",
+    "contactUs": "Contact us for more information",
+    "progress": {
+      "title": "Development Progress"
+    },
+    "pages": {
+      "products": {
+        "title": "Products - Under Construction",
+        "description": "Our product showcase is being crafted with care. Discover innovative solutions that will transform your business.",
+        "features": "Product features and specifications coming soon"
+      },
+      "blog": {
+        "title": "Blog - Under Construction",
+        "description": "Our blog is being prepared with insightful content. Stay tuned for industry insights and company updates.",
+        "features": "Articles, tutorials, and industry insights coming soon"
+      },
+      "about": {
+        "title": "About Us - Under Construction",
+        "description": "Learn more about our story, mission, and the team behind our innovative solutions.",
+        "features": "Company story, team profiles, and mission statement coming soon"
+      },
+      "contact": {
+        "title": "Contact Us",
+        "description": "Get in touch with our team for inquiries, support, or partnership opportunities.",
+        "features": "Multiple ways to reach us and get the support you need",
+        "panel": {
+          "contactTitle": "Contact Methods",
+          "email": "Email",
+          "phone": "Phone",
+          "hoursTitle": "Business Hours",
+          "weekdays": "Mon - Fri",
+          "saturday": "Saturday",
+          "sunday": "Sunday",
+          "closed": "Closed"
+        }
+      }
+    },
+    "animation": {
+      "loading": "Loading animation",
+      "construction": "Construction in progress"
+    },
+    "status": {
+      "inProgress": "In Progress"
+    },
+    "features": {
+      "title": "Feature Preview",
+      "performance": "High Performance",
+      "performanceDesc": "Optimized performance and fast loading experience",
+      "collaboration": "Team Collaboration",
+      "collaborationDesc": "Powerful team collaboration and project management features",
+      "quality": "Quality Assurance",
+      "qualityDesc": "Strict quality control and testing processes"
+    },
+    "social": {
+      "followUs": "Follow us for the latest updates"
+    },
+    "subscription": {
+      "title": "Get Launch Notifications",
+      "description": "Be the first to know about our latest updates",
+      "placeholder": "Enter your email address",
+      "submit": "Subscribe",
+      "submitting": "Submitting...",
+      "success": "Successfully subscribed! We'll notify you soon"
+    },
+    "emailSubscription": {
+      "title": "Stay in the Loop",
+      "description": "Subscribe to receive updates about our launch timeline and new features.",
+      "success": "You're subscribed! We'll keep you posted.",
+      "placeholder": "Enter your email address",
+      "button": "Notify Me"
+    },
+    "contact": {
+      "title": "Need Assistance?",
+      "description": "Reach out to our team for tailored support and partnership opportunities.",
+      "button": "Contact Support"
+    }
+  },
+  "structured-data": {
+    "organization": {
+      "name": "Tucsenberg Web Frontier",
+      "description": "Modern B2B Enterprise Web Platform",
+      "phone": "+1-555-0123",
+      "social": {
+        "twitter": "https://twitter.com/tucsenberg",
+        "linkedin": "https://linkedin.com/company/tucsenberg",
+        "github": "https://github.com/tucsenberg"
+      }
+    },
+    "website": {
+      "name": "Tucsenberg Web Frontier",
+      "description": "Modern B2B Enterprise Web Platform with Next.js 15"
+    },
+    "article": {
+      "defaultTitle": "Article",
+      "defaultDescription": "Article description",
+      "defaultAuthor": "Tucsenberg Team"
+    },
+    "product": {
+      "defaultName": "Product",
+      "defaultDescription": "Product description"
+    }
+  }
+}

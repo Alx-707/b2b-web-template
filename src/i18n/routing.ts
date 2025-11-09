@@ -13,16 +13,18 @@ export const routing = defineRouting({
   localePrefix: 'always',
 
   // Shared Pathnames - 所有语言使用相同路径，简单可靠
+  // 注意：仅包含已实现的页面路径，避免 404 错误
   pathnames: {
     '/': '/',
     '/about': '/about',
     '/contact': '/contact',
     '/products': '/products',
     '/blog': '/blog',
-    '/pricing': '/pricing',
-    '/support': '/support',
-    '/privacy': '/privacy',
-    '/terms': '/terms',
+    // 以下页面尚未实现，暂时移除以避免 404 错误
+    // '/pricing': '/pricing',
+    // '/support': '/support',
+    // '/privacy': '/privacy',
+    // '/terms': '/terms',
   },
 
   // 启用hreflang链接

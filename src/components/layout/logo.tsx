@@ -7,7 +7,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { HOURS_PER_DAY } from '@/constants';
 import { COUNT_120 } from '@/constants/count';
@@ -31,11 +30,15 @@ interface LogoProps {
   className?: string;
   showText?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  ariaLabel?: string;
 }
 
-export function Logo({ className, showText = true, size = 'md' }: LogoProps) {
-  const t = useTranslations('seo');
-
+export function Logo({
+  className,
+  showText = true,
+  size = 'md',
+  ariaLabel = 'Tucsenberg',
+}: LogoProps) {
   const getSizeClass = (sizeValue: 'sm' | 'md' | 'lg'): string => {
     switch (sizeValue) {
       case 'sm':
@@ -69,7 +72,7 @@ export function Logo({ className, showText = true, size = 'md' }: LogoProps) {
         'flex items-center gap-2 transition-opacity hover:opacity-80',
         className,
       )}
-      aria-label={t('siteName')}
+      aria-label={ariaLabel}
     >
       {/* Logo Image - Using Next.js logo as placeholder */}
       <Image

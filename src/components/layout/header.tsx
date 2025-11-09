@@ -24,12 +24,14 @@ interface HeaderProps {
   className?: string;
   variant?: 'default' | 'minimal' | 'transparent';
   sticky?: boolean;
+  locale?: 'en' | 'zh';
 }
 
 export function Header({
   className,
   variant = 'default',
   sticky = true,
+  locale,
 }: HeaderProps) {
   // 透明头部不吸顶
   const isSticky = variant === 'transparent' ? false : sticky;
@@ -65,7 +67,7 @@ export function Header({
               strategy='visible'
               rootMargin={VISIBLE_MARGIN}
             >
-              <MobileNavigationIsland />
+              {locale && <MobileNavigationIsland locale={locale} />}
             </Idle>
             <Logo />
           </div>
@@ -78,7 +80,7 @@ export function Header({
                 strategy='visible'
                 rootMargin={VISIBLE_MARGIN}
               >
-                <NavSwitcherIsland />
+                {locale && <NavSwitcherIsland locale={locale} />}
               </Idle>
             </div>
           )}
@@ -90,7 +92,7 @@ export function Header({
               strategy='visible'
               rootMargin={VISIBLE_MARGIN}
             >
-              <LanguageToggleIsland />
+              {locale && <LanguageToggleIsland locale={locale} />}
             </Idle>
           </div>
         </div>

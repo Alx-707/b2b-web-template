@@ -42,6 +42,9 @@ export function generateCSP(nonce?: string): string {
       // Only allow unsafe-inline in development for Tailwind CSS
       ...(isDevelopment ? ["'unsafe-inline'"] : []),
       ...(nonce ? [`'nonce-${nonce}'`] : []),
+      // Allow Next.js inline styles (for CSS-in-JS and dynamic styles)
+      // This fixes the "Refused to execute script from _next/static/css" warning
+      ...(isProduction ? ["'unsafe-inline'"] : []),
       'https://fonts.googleapis.com',
     ],
     'img-src': [

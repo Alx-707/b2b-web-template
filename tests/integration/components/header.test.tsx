@@ -79,7 +79,8 @@ describe('Header Integration Tests', () => {
 
   describe('Component Integration', () => {
     it('should render all child components correctly', async () => {
-      render(<Header />);
+      render(<Header locale='en' />);
+      await (await import('@/test/setup')).triggerAll();
 
       // Verify all child components are rendered
       expect(screen.getByTestId('logo')).toBeInTheDocument();
@@ -175,7 +176,8 @@ describe('Header Integration Tests', () => {
     });
 
     it('should render both desktop and mobile navigation', async () => {
-      render(<Header />);
+      render(<Header locale='en' />);
+      await (await import('@/test/setup')).triggerAll();
 
       // Both navigation components should be present
       // (visibility is controlled by CSS classes)
@@ -194,7 +196,8 @@ describe('Header Integration Tests', () => {
     });
 
     it('should be keyboard navigable', async () => {
-      render(<Header />);
+      render(<Header locale='en' />);
+      await (await import('@/test/setup')).triggerAll();
 
       const header = screen.getByRole('banner');
 
@@ -209,7 +212,8 @@ describe('Header Integration Tests', () => {
 
   describe('Component Interaction', () => {
     it('should maintain component hierarchy', async () => {
-      render(<Header />);
+      render(<Header locale='en' />);
+      await (await import('@/test/setup')).triggerAll();
 
       const header = screen.getByRole('banner');
       const container = header.querySelector('.mx-auto.max-w-7xl');

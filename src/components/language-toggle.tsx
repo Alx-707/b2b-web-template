@@ -9,7 +9,6 @@ import {
   useTransition,
 } from 'react';
 import { Check, Globe, Loader2 } from 'lucide-react';
-import { useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -89,14 +88,19 @@ const useLanguageSwitch = () => {
   };
 };
 
-export const LanguageToggle = memo(() => {
-  const locale = useLocale();
+export const LanguageToggle = memo(({ locale }: { locale?: 'en' | 'zh' }) => {
   const pathname = usePathname();
+  // Derive locale from <html lang> when not provided
+  const effectiveLocale: 'en' | 'zh' =
+    locale ||
+    (typeof document !== 'undefined' && document.documentElement?.lang === 'zh'
+      ? 'zh'
+      : 'en');
   const { switchingTo, isPending, handleLanguageSwitch } = useLanguageSwitch();
   const [isOpen, setIsOpen] = useState(false);
 
   // Get current language display name
-  const currentLanguageName = locale === 'en' ? 'English' : '简体中文';
+  const currentLanguageName = effectiveLocale === 'en' ? 'English' : '简体中文';
 
   return (
     <div data-testid='language-switcher'>
@@ -203,7 +207,7 @@ export const LanguageToggle = memo(() => {
               {switchingTo === 'en' && (
                 <Loader2 className='h-4 w-4 animate-spin' />
               )}
-              {locale === 'en' && switchingTo !== 'en' && (
+              {effectiveLocale === 'en' && switchingTo !== 'en' && (
                 <Check
                   className='text-foreground h-4 w-4'
                   data-testid='check-icon'
@@ -239,7 +243,7 @@ export const LanguageToggle = memo(() => {
               {switchingTo === 'zh' && (
                 <Loader2 className='h-4 w-4 animate-spin' />
               )}
-              {locale === 'zh' && switchingTo !== 'zh' && (
+              {effectiveLocale === 'zh' && switchingTo !== 'zh' && (
                 <Check
                   className='text-foreground h-4 w-4'
                   data-testid='check-icon'

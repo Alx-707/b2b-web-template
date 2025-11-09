@@ -68,7 +68,7 @@ export class I18nCacheManager implements CacheManager {
     try {
       const messages = await getCachedMessages(locale);
       this.updateTranslationCoverage();
-      return messages;
+      return messages as unknown as Messages;
     } catch (error) {
       this.metricsCollector.recordError();
       throw error;
@@ -80,7 +80,7 @@ export class I18nCacheManager implements CacheManager {
     try {
       const messages = await getCachedMessages(locale);
       this.updateTranslationCoverage();
-      return messages;
+      return messages as unknown as Messages;
     } catch (error) {
       this.metricsCollector.recordError();
       throw error;

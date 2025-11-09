@@ -1,152 +1,128 @@
 {
   "tasks": [
     {
-      "id": "5344ebd5-95ee-4467-b6c0-496a1e3b38f5",
-      "name": "获取 CI 失败日志并分类错误类型",
-      "description": "使用 GitHub API 获取 2025-11-04 至 2025-11-06 期间失败的 CI 运行日志，并分类错误类型（TypeScript/ESLint/测试/构建）。",
-      "notes": "重点关注 Run #102 和 #101，因为它们是最近的失败。Run #85 是 2025-11-04 的首次失败，可能包含根因线索。",
+      "id": "3d2c2e5d-c74b-4e1b-9cfb-6075e5164a31",
+      "name": "增强 IntersectionObserver 测试可见性控制 (setup)",
+      "description": "在 src/test/setup.ts 中为 IntersectionObserver Mock 增强可控触发能力：导出 triggerVisible(el)/triggerAll() 辅助函数；默认策略可配置（全部可见或按选择器）以适配 Idle/客户端小岛在 jsdom 下的渲染时机。确保 PerformanceObserver 与 ResizeObserver 现有 Mock 不受影响。",
       "status": "completed",
       "dependencies": [],
-      "createdAt": "2025-11-07T01:12:28.035Z",
-      "updatedAt": "2025-11-07T16:45:00.000Z",
-      "completedAt": "2025-11-07T16:45:00.000Z",
-      "summary": "✅ 完成 CI 失败日志分析（2025-11-04 至 2025-11-06）。统计：CI/CD Pipeline 10次失败，Code Quality 5次失败，Vercel Deploy 13次失败。错误分类：(1) 测试失败 - ContactForm 速率限制测试不稳定（高优先级），(2) Vercel 部署验证失败 - 401错误和sitemap.xml验证失败（高优先级），(3) 架构依赖违规 - 47个跨域访问错误+238个域边界警告+2个循环依赖（中优先级），(4) CI汇总失败 - 级联失败（低优先级）。已收集详细失败日志并完成错误分类。",
+      "createdAt": "2025-11-09T06:52:39.788Z",
+      "updatedAt": "2025-11-09T07:04:00.000Z",
       "relatedFiles": [
         {
-          "path": ".github/workflows/ci.yml",
-          "type": "REFERENCE",
-          "description": "CI/CD Pipeline 工作流配置文件",
-          "lineStart": 1,
-          "lineEnd": 100
-        },
-        {
-          "path": ".github/workflows/code-quality.yml",
-          "type": "REFERENCE",
-          "description": "Code Quality 工作流配置文件",
-          "lineStart": 1,
-          "lineEnd": 100
+          "path": "src/test/setup.ts",
+          "type": "TO_MODIFY",
+          "description": "增强 IntersectionObserver Mock 并导出触发可见的辅助函数"
         }
       ],
-      "implementationGuide": "1. 使用 get_job_logs_github 获取失败 Job 日志：\\n   - Run #102 (run_id: 19127657358, failed_only: true, tail_lines: 1000)\\n   - Run #101 (run_id: 19123904421, failed_only: true, tail_lines: 1000)\\n   - Run #85 (run_id: 19056695079, failed_only: true, tail_lines: 1000)\\n\\n2. 分类错误类型：\\n   - TypeScript 错误：搜索 'TS[0-9]+:', 'Type error', 'Cannot find'\\n   - ESLint 错误：搜索 'eslint', 'warning', 'error' + 规则名称\\n   - 测试失败：搜索 'FAIL', 'Expected', 'Received', 'AssertionError'\\n   - 构建失败：搜索 'Build failed', 'Module not found', 'Cannot resolve'\\n\\n3. 记录每个错误的：\\n   - 文件路径和行号\\n   - 错误消息\\n   - 错误类型\\n   - 出现频率",
-      "verificationCriteria": "1. 成功获取所有 3 个失败运行的日志\\n2. 错误分类完整（至少识别出 TypeScript/ESLint/测试/构建 4 种类型中的 2 种）\\n3. 每个错误记录包含文件路径、行号、错误消息\\n4. 识别出至少 3 个具体的错误实例",
-      "analysisResult": "CI 失败排查任务（tucsenberg-web-frontier 项目，2025-11-04 至 2025-11-06）\\n\\n**全局目标**：\\n1. 分析 CI 失败模式和错误类型（workflow IDs: 188766168, 188766167, 200540174）\\n2. 本地环境验证质量门槛（format/lint/type-check/build/test）\\n3. 检查近期变更历史，识别破坏性提交\\n4. 生成完整的根因分析报告（根因、影响、修复建议、预防策略）\\n\\n**技术栈**：Next.js 15.5.4 + React 19.1.1 + TypeScript 5.9.2 + pnpm 10.13.1 + Vitest 3.2.4\\n\\n**质量阈值**：test:coverage ≥65%, TypeScript/ESLint 错误 ≤基线, 构建必须成功"
+      "implementationGuide": "pseudocode:\n- extend globalThis.IntersectionObserver mock:\n  class IO { constructor(cb, options) { this.cb = cb; } observe(el){ registry.push(el); } }\n- export function triggerVisible(el){ cb([{ target: el, isIntersecting: true }], ioInstance) }\n- export function triggerAll(){ for each observed el -> triggerVisible(el) }\n- default autoVisible=true in tests to simplify header/footer cases",
+      "verificationCriteria": "在使用 Idle/IntersectionObserver 的组件测试中，调用 triggerAll() 后，延迟加载的子树应可被查询到（getByRole/getByTestId）。",
+      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
     },
     {
-      "id": "ed21be85-ef3f-4ab7-932e-ac6b4c140d0d",
-      "name": "本地环境验证质量门槛",
-      "description": "在本地运行所有质量检查命令（format/lint/type-check/build/test），对比 CI 环境差异。",
-      "notes": "如果本地通过但 CI 失败，重点检查 .github/workflows/*.yml 中的 Node 版本、缓存策略、环境变量。",
-      "status": "completed",
-      "dependencies": [],
-      "createdAt": "2025-11-07T01:12:28.035Z",
-      "updatedAt": "2025-11-07T10:10:00.000Z",
-      "completedAt": "2025-11-07T10:10:00.000Z",
-      "summary": "✅ 完成本地环境质量门槛验证（2025-11-07）。验证结果：(1) 全部通过 7/8 检查 - ContactForm 测试 7/7 通过、Prettier 格式正确、ESLint 无错误、TypeScript 无类型错误、构建成功（26 个静态页面）、架构检查仅 69 个 info 警告、安全审计无漏洞，(2) 发现 1 个配置问题 - Sitemap 验证脚本检查 sitemap.xml 但实际是 sitemapindex 格式（导致 CI 部署验证失败 13 次），(3) 关键发现 - CI 中 ContactForm 测试间歇性失败（10 次）但本地 100% 通过（推断 CI 环境特定问题：资源竞争/时序/缓存），本地环境完全健康，所有质量门槛通过。质量评分：9/10。",
-      "relatedFiles": [
-        {
-          "path": "package.json",
-          "type": "REFERENCE",
-          "description": "项目依赖和脚本配置",
-          "lineStart": 1,
-          "lineEnd": 176
-        },
-        {
-          "path": "pnpm-lock.yaml",
-          "type": "REFERENCE",
-          "description": "依赖锁定文件",
-          "lineStart": 1,
-          "lineEnd": 100
-        },
-        {
-          "path": ".nvmrc",
-          "type": "REFERENCE",
-          "description": "Node 版本配置（如果存在）",
-          "lineStart": 1,
-          "lineEnd": 10
-        }
-      ],
-      "implementationGuide": "1. 使用 launch-process 顺序执行以下命令（快速失败）：\\n   pnpm format:check\\n   pnpm lint:check\\n   pnpm type-check\\n   pnpm build:check\\n   pnpm test:coverage\\n\\n2. 记录每个命令的：\\n   - 退出码（0=成功, 非0=失败）\\n   - 标准输出（stdout）\\n   - 标准错误（stderr）\\n   - 执行时间\\n\\n3. 对比本地 vs CI 结果：\\n   - 本地通过但 CI 失败 → 环境差异（Node 版本、依赖版本、缓存）\\n   - 本地也失败 → 代码问题（需修复）\\n   - 本地失败但 CI 通过 → 本地环境问题（需同步）\\n\\n4. 检查环境配置：\\n   - Node 版本：node --version（期望 >=20 <21）\\n   - pnpm 版本：pnpm --version（期望 >=10.13.1 <11）\\n   - 依赖锁定：检查 pnpm-lock.yaml 是否与 CI 一致",
-      "verificationCriteria": "1. 所有 5 个质量检查命令都已执行\\n2. 记录了每个命令的退出码和输出\\n3. 对比了本地 vs CI 的结果差异\\n4. 识别了至少 1 个环境差异（如果存在）或确认环境一致",
-      "analysisResult": "CI 失败排查任务（tucsenberg-web-frontier 项目，2025-11-04 至 2025-11-06）\\n\\n**全局目标**：\\n1. 分析 CI 失败模式和错误类型（workflow IDs: 188766168, 188766167, 200540174）\\n2. 本地环境验证质量门槛（format/lint/type-check/build/test）\\n3. 检查近期变更历史，识别破坏性提交\\n4. 生成完整的根因分析报告（根因、影响、修复建议、预防策略）\\n\\n**技术栈**：Next.js 15.5.4 + React 19.1.1 + TypeScript 5.9.2 + pnpm 10.13.1 + Vitest 3.2.4\\n\\n**质量阈值**：test:coverage ≥65%, TypeScript/ESLint 错误 ≤基线, 构建必须成功"
-    },
-    {
-      "id": "7f41f4e9-fc94-4003-9941-25ab2c837053",
-      "name": "检查近期变更历史并识别破坏性提交",
-      "description": "使用 git-commit-retrieval 和 git log 查询 2025-11-01 至 2025-11-06 的提交历史，识别引入问题的破坏性提交。",
-      "notes": "重点关注 2025-11-04 03:20:38Z 之前的提交，因为 Run #85 是首次失败。从提交消息看，可能与测试断言、jsdom 导航、速率限制相关。",
-      "status": "completed",
-      "dependencies": [],
-      "createdAt": "2025-11-07T01:12:28.035Z",
-      "updatedAt": "2025-11-07T09:45:00.000Z",
-      "completedAt": "2025-11-07T09:45:00.000Z",
-      "summary": "✅ 完成 Git 历史审查（2025-11-01 至 2025-11-06，33 个提交）。识别出 4 个破坏性提交：(1) 2c50d1b (2025-11-03 14:29:22) - 大规模测试重构（40个文件，7295行变更），主要根因，(2) c45c4dd (2025-11-05 13:26:28) - 架构规则细化，导致 47 个跨域访问错误，(3) a047076 (2025-11-04 09:00:21) - E2E 测试策略变更 + 删除 8 个规则文件，(4) bdc838d (2025-11-05 10:30:27) - Vitest ESM 配置变更。变更类型分类：测试修复/重构 12 个、配置变更 8 个、依赖更新 3 个、CI/CD 优化 6 个、功能开发 4 个。时间线分析显示首次失败（2025-11-04 03:20:38Z）在 2c50d1b 提交后约 13 小时。所有破坏性提交已记录详细信息（hash、日期、消息、变更文件）。",
-      "relatedFiles": [
-        {
-          "path": "tsconfig.json",
-          "type": "REFERENCE",
-          "description": "TypeScript 配置文件",
-          "lineStart": 1,
-          "lineEnd": 100
-        },
-        {
-          "path": "eslint.config.mjs",
-          "type": "REFERENCE",
-          "description": "ESLint 配置文件",
-          "lineStart": 1,
-          "lineEnd": 100
-        },
-        {
-          "path": "vitest.config.ts",
-          "type": "REFERENCE",
-          "description": "Vitest 测试配置文件",
-          "lineStart": 1,
-          "lineEnd": 100
-        }
-      ],
-      "implementationGuide": "1. 使用 git-commit-retrieval 查询相关提交：\\n   - 查询 'TypeScript 类型错误修复'\\n   - 查询 'ESLint 配置变更'\\n   - 查询 '依赖更新 package.json'\\n   - 查询 '测试覆盖率相关变更'\\n   - 查询 'CI 配置修改'\\n\\n2. 使用 launch-process 执行 git 命令：\\n   git log --since='2025-11-01' --until='2025-11-06' --oneline --all\\n   git log --since='2025-11-01' --until='2025-11-06' --stat\\n\\n3. 对于可疑提交，使用 git show 查看详细变更：\\n   git show <commit_hash>\\n\\n4. 识别破坏性变更的特征：\\n   - 依赖版本升级（Next.js, React, TypeScript, ESLint）\\n   - 配置文件修改（tsconfig.json, eslint.config.mjs, vitest.config.ts）\\n   - 新增严格规则（ESLint 规则、TypeScript 编译选项）\\n   - 测试文件修改（断言逻辑变更、Mock 配置变更）\\n\\n5. 记录每个破坏性提交的：\\n   - Commit hash\\n   - 提交日期和作者\\n   - 提交消息\\n   - 变更文件列表\\n   - 变更类型（依赖/配置/代码/测试）",
-      "verificationCriteria": "1. 使用 git-commit-retrieval 查询了至少 3 个相关主题\\n2. 使用 git log 获取了完整的提交历史\\n3. 识别了至少 1 个破坏性提交的 commit hash\\n4. 记录了破坏性提交的详细信息（hash, 日期, 消息, 变更文件）",
-      "analysisResult": "CI 失败排查任务（tucsenberg-web-frontier 项目，2025-11-04 至 2025-11-06）\\n\\n**全局目标**：\\n1. 分析 CI 失败模式和错误类型（workflow IDs: 188766168, 188766167, 200540174）\\n2. 本地环境验证质量门槛（format/lint/type-check/build/test）\\n3. 检查近期变更历史，识别破坏性提交\\n4. 生成完整的根因分析报告（根因、影响、修复建议、预防策略）\\n\\n**技术栈**：Next.js 15.5.4 + React 19.1.1 + TypeScript 5.9.2 + pnpm 10.13.1 + Vitest 3.2.4\\n\\n**质量阈值**：test:coverage ≥65%, TypeScript/ESLint 错误 ≤基线, 构建必须成功"
-    },
-    {
-      "id": "c4c7f540-7e15-4140-9949-6a3e0a3db807",
-      "name": "生成完整的根因分析报告",
-      "description": "综合前 3 个任务的所有证据，生成包含根因、影响评估、修复建议、预防策略的完整报告。",
-      "notes": "报告应基于实际证据，避免猜测。所有结论必须可追溯到具体的日志、提交或本地验证结果。",
+      "id": "cbfac057-1d74-4672-96a7-6cd8fdfb5086",
+      "name": "提供测试渲染助手：renderWithI18nAndLocale",
+      "description": "新增测试级渲染 helper，封装 NextIntlClientProvider/ClientI18nProvider 注入 locale 与最小 messages fixture，便于渲染 Header/Footer 并稳定 i18n 钩子。",
       "status": "completed",
       "dependencies": [
         {
-          "taskId": "5344ebd5-95ee-4467-b6c0-496a1e3b38f5"
-        },
-        {
-          "taskId": "ed21be85-ef3f-4ab7-932e-ac6b4c140d0d"
-        },
-        {
-          "taskId": "7f41f4e9-fc94-4003-9941-25ab2c837053"
+          "taskId": "3d2c2e5d-c74b-4e1b-9cfb-6075e5164a31"
         }
       ],
-      "createdAt": "2025-11-07T01:12:28.035Z",
-      "updatedAt": "2025-11-07T10:30:00.000Z",
-      "completedAt": "2025-11-07T10:30:00.000Z",
-      "summary": "✅ 完成完整的根因分析报告生成（2025-11-07）。报告包含 4 个完整部分：(1) 根因分析 - 识别 4 个主要根因（ContactForm 测试不稳定、Sitemap 验证失败、架构依赖违规、Vitest ESM 配置变更）和 3 个破坏性提交（2c50d1b、c45c4dd、a047076），(2) 影响评估 - 28 次失败（CI/CD 10次、Quality 5次、Vercel 13次）、阻塞程度 High、业务影响分析，(3) 修复建议 - 3 个 Critical 优先级修复（Sitemap 验证脚本、ContactForm 测试稳定性、架构规则调整）+ 配置调整 + 回滚选项，(4) 预防策略 - 5 个可执行措施（Lefthook 已实施、环境一致性检查、测试稳定性监控、架构依赖检查、依赖审查流程）。报告保存至 reports/ci-analysis/root-cause-analysis-2025-11-07.md，包含代码块、表格、时间线、验证清单，所有结论可追溯到任务 1/2/3 的证据。质量评分：10/10。",
+      "createdAt": "2025-11-09T06:52:39.788Z",
+      "updatedAt": "2025-11-09T07:04:00.000Z",
       "relatedFiles": [
         {
-          "path": "docs/ci-troubleshooting.md",
-          "type": "TO_MODIFY",
-          "description": "CI 故障排查文档（如果存在）",
-          "lineStart": 1,
-          "lineEnd": 100
+          "path": "src/test/render-with-i18n.tsx",
+          "type": "CREATE",
+          "description": "测试渲染助手，统一注入 i18n 上下文"
         },
         {
-          "path": "reports/ci-analysis/",
+          "path": "src/test/fixtures/messages.min.json",
           "type": "CREATE",
-          "description": "CI 分析报告输出目录",
-          "lineStart": 1,
-          "lineEnd": 1
+          "description": "最小 i18n 消息 fixture（仅含 header/footer 必需命名空间）"
         }
       ],
-      "implementationGuide": "1. 根因分析部分：\\n   - 主要原因：基于日志分类和 Git 历史，确定具体错误类型\\n   - 触发提交：识别的破坏性提交 hash + 日期\\n   - 影响范围：受影响的文件/模块列表（从日志中提取）\\n   - 证据：关键日志片段、错误信息、Git diff 摘要\\n\\n2. 影响评估部分：\\n   - 失败批次：统计 2025-11-04 至 2025-11-06 的失败次数\\n   - 受影响工作流：CI/CD Pipeline, Code Quality, Vercel Deploy\\n   - 受影响 Job：type-check, lint:check, test:coverage, build\\n   - 阻塞程度：Critical（阻塞所有 PR 合并）/ High / Medium\\n\\n3. 修复建议部分：\\n   3.1 立即修复（Critical）：\\n       - 修复 TypeScript 错误：文件路径:行号 + 错误类型\\n       - 修复 ESLint 违规：规则名称 @ 文件路径\\n       - 提升测试覆盖率：当前 X% → 目标 65%\\n   3.2 配置调整：\\n       - 更新依赖版本：package.json 变更建议\\n       - 调整 CI 缓存策略：.github/workflows/*.yml 变更建议\\n   3.3 回滚选项：\\n       - 回滚提交：git revert <commit_hash>\\n       - 回滚依赖：pnpm install <package>@<version>\\n\\n4. 预防策略部分：\\n   - 启用 Lefthook pre-commit hooks（本地质量门槛）\\n   - 添加依赖更新审查流程\\n   - 增强 CI 缓存失效检测\\n   - 定期运行 pnpm audit 安全审计\\n\\n5. 报告格式：\\n   - 使用 Markdown 格式\\n   - 包含代码块、表格、清单\\n   - 提供可执行的命令示例\\n   - 添加时间戳和版本信息",
-      "verificationCriteria": "1. 报告包含 4 个完整部分（根因、影响、修复、预防）\\n2. 根因部分包含具体的 commit hash 和证据\\n3. 修复建议具体到文件路径和行号\\n4. 预防策略包含至少 3 个可执行的措施\\n5. 报告格式为 Markdown，包含代码块和清单",
-      "analysisResult": "CI 失败排查任务（tucsenberg-web-frontier 项目，2025-11-04 至 2025-11-06）\\n\\n**全局目标**：\\n1. 分析 CI 失败模式和错误类型（workflow IDs: 188766168, 188766167, 200540174）\\n2. 本地环境验证质量门槛（format/lint/type-check/build/test）\\n3. 检查近期变更历史，识别破坏性提交\\n4. 生成完整的根因分析报告（根因、影响、修复建议、预防策略）\\n\\n**技术栈**：Next.js 15.5.4 + React 19.1.1 + TypeScript 5.9.2 + pnpm 10.13.1 + Vitest 3.2.4\\n\\n**质量阈值**：test:coverage ≥65%, TypeScript/ESLint 错误 ≤基线, 构建必须成功"
+      "implementationGuide": "pseudocode:\n- create src/test/render-with-i18n.tsx\n- export function renderWithI18nAndLocale(ui, { locale='en', messages=fixture }) { return render(<NextIntlClientProvider locale={locale} messages={messages}>{ui}</NextIntlClientProvider>) }\n- 提供最小 messages fixture 覆盖 header/footer 所需命名空间",
+      "verificationCriteria": "使用该 helper 渲染 Header/Footer 后，无 i18n 报错，能查询到期望的文本或 testid。",
+      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
+    },
+    {
+      "id": "473ecd2f-845a-4e5b-8166-cf7e8351f158",
+      "name": "修复 Header 集成测试：适配 Idle/小岛与 i18n",
+      "description": "更新 header 集成测试：使用 renderWithI18nAndLocale 渲染 Header（传入 locale），在断言前调用 triggerAll() 令 Idle 子树可见；优先使用语义化查询（byRole/byText），若现有用例强依赖 data-testid=\"nav-switcher\"，则最小化在小岛根容器补充 testid；清理未使用导入与参数。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "cbfac057-1d74-4672-96a7-6cd8fdfb5086"
+        }
+      ],
+      "createdAt": "2025-11-09T06:52:39.788Z",
+      "updatedAt": "2025-11-09T07:04:00.000Z",
+      "relatedFiles": [
+        {
+          "path": "tests/integration/components/header.test.tsx",
+          "type": "TO_MODIFY",
+          "description": "适配 Idle 与 i18n 渲染顺序，稳定断言方式"
+        },
+        {
+          "path": "src/components/layout/header-client.tsx",
+          "type": "TO_MODIFY",
+          "description": "仅当必须时，补充最小 data-testid 到 NavSwitcher 根容器"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- import { renderWithI18nAndLocale } from '@/test/render-with-i18n'\n- const { getByRole } = renderWithI18nAndLocale(<Header locale='en' />)\n- await act(async ()=> triggerAll())\n- expect(getByRole('navigation',{name:/main/i})).toBeInTheDocument()\n- 如确需：expect(getByTestId('nav-switcher')).toBeInTheDocument()",
+      "verificationCriteria": "header 测试所有用例通过，且不再出现无法找到 nav-switcher 的错误；lint 通过。",
+      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
+    },
+    {
+      "id": "893b131f-7d59-475e-8117-ae97bf13d03c",
+      "name": "修复 Footer 集成测试：稳健查询与 i18n mock",
+      "description": "更新 footer 集成测试：使用渲染 helper 或保持 next-intl/server 的 mock；改用 byRole/byText 等语义查询；移除未使用导入 fireEvent/waitFor 与未用形参。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "cbfac057-1d74-4672-96a7-6cd8fdfb5086"
+        }
+      ],
+      "createdAt": "2025-11-09T06:52:39.788Z",
+      "updatedAt": "2025-11-09T07:04:00.000Z",
+      "relatedFiles": [
+        {
+          "path": "tests/integration/components/footer.test.tsx",
+          "type": "TO_MODIFY",
+          "description": "改用更稳健的查询并清理未使用导入/参数"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- const { getByText, getAllByRole } = renderWithI18nAndLocale(<Footer />)\n- expect(getByText(/Tucsenberg/i)).toBeInTheDocument()\n- expect(getAllByRole('link').length).toBeGreaterThan(0)",
+      "verificationCriteria": "footer 测试所有用例通过；lint 通过。",
+      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
+    },
+    {
+      "id": "ae129e39-1023-4f72-9444-8dec301f75d7",
+      "name": "文档完善：Idle/动态小岛测试指南",
+      "description": "在 docs/testing-standards.md 新增章节，说明 Idle/IntersectionObserver 在测试中的处理方式、如何触发可见、以及 i18n 小岛在测试中的渲染辅助方法与示例。",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "3d2c2e5d-c74b-4e1b-9cfb-6075e5164a31"
+        },
+        {
+          "taskId": "cbfac057-1d74-4672-96a7-6cd8fdfb5086"
+        }
+      ],
+      "createdAt": "2025-11-09T06:52:39.788Z",
+      "updatedAt": "2025-11-09T07:04:00.000Z",
+      "relatedFiles": [
+        {
+          "path": "docs/testing-standards.md",
+          "type": "TO_MODIFY",
+          "description": "新增 Idle/小岛测试实践章节"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n- Add section 'Testing Idle & Client Islands'\n- 示例：调用 triggerAll() 让小岛渲染，再进行断言；如何使用 renderWithI18nAndLocale 包裹组件。",
+      "verificationCriteria": "文档包含清晰步骤与代码片段，遵循项目书写风格，便于后续审阅。",
+      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
     }
   ]
 }

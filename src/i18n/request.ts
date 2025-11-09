@@ -50,7 +50,7 @@ function handleCacheMetrics(locale: string, loadTime: number) {
   I18nPerformanceMonitor.recordLoadTime(loadTime);
 
   const cache = TranslationCache.getInstance();
-  const cached = cache.get(`messages-${locale}`);
+  const cached = cache.get(`messages-${locale}-critical`);
   if (cached) {
     I18nPerformanceMonitor.recordCacheHit();
   } else {

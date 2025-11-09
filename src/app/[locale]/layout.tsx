@@ -5,21 +5,20 @@ import '@/app/globals.css';
 import { Suspense, type ReactNode } from 'react';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import enMessages from '@messages/en.json';
-import zhMessages from '@messages/zh.json';
 import { NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import { generateJSONLD } from '@/lib/structured-data';
 import { ErrorBoundary } from '@/components/error-boundary';
-import { TranslationPreloader } from '@/components/i18n/translation-preloader';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { LazyToaster } from '@/components/lazy/lazy-toaster';
 import { LazyTopLoader } from '@/components/lazy/lazy-top-loader';
+import { LazyWebVitalsReporter } from '@/components/lazy/lazy-web-vitals-reporter';
 import { EnterpriseAnalyticsIsland } from '@/components/monitoring/enterprise-analytics-island';
 import { WebVitalsIndicator } from '@/components/performance/web-vitals-indicator';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ThemePerformanceMonitor } from '@/components/theme/theme-performance-monitor';
+import { MAGIC_0_1 } from '@/constants/decimal';
 import { routing } from '@/i18n/routing';
 
 // Client analytics are rendered as an island to avoid impacting LCP
@@ -55,14 +54,10 @@ export default async function LocaleLayout({
   const headerList = await headers();
   const nonce = headerList.get('x-csp-nonce') ?? undefined;
 
-  // Use static imports for messages to avoid runtime translation IO on the
-  // critical path. The homepage will independently render LCP-critical content
-  // from compile-time messages and wrap below-the-fold content in a nested
-  // provider; keeping this here preserves compatibility for other pages.
-  const messages = (locale === 'zh' ? zhMessages : enMessages) as Record<
-    string,
-    unknown
-  >;
+  // Load critical messages dynamically for root provider (keeps client i18n stable across routes)
+  const messages = await (
+    await import('@/lib/load-messages')
+  ).loadCriticalMessages(locale as 'en' | 'zh');
 
   // 生成结构化数据
   const { organizationData, websiteData } = await generatePageStructuredData(
@@ -103,6 +98,13 @@ export default async function LocaleLayout({
             defaultTheme='system'
             enableSystem
           >
+            {/* Web Vitals 监控 - 开发环境启用以便测试 */}
+            <LazyWebVitalsReporter
+              enabled={true}
+              debug={isDevelopment}
+              sampleRate={isDevelopment ? 1.0 : MAGIC_0_1}
+            />
+
             {/* 页面导航进度条 - P1 优化：懒加载，减少 vendors chunk */}
             <LazyTopLoader nonce={nonce} />
 
@@ -115,7 +117,7 @@ export default async function LocaleLayout({
                     </div>
                   }
                 >
-                  <TranslationPreloader strategy='idle' />
+                  {/* i18n preloader depends on next-intl context; disable here now that provider is scoped */}
                   <ThemePerformanceMonitor />
                   <WebVitalsIndicator />
                 </ErrorBoundary>
@@ -123,7 +125,7 @@ export default async function LocaleLayout({
             )}
 
             {/* 导航栏 */}
-            <Header />
+            <Header locale={locale as 'en' | 'zh'} />
 
             {/* 主要内容 */}
             <main className='flex-1'>{children}</main>
@@ -135,9 +137,9 @@ export default async function LocaleLayout({
             <LazyToaster />
 
             {/* 企业级监控组件：延迟加载的客户端岛，避免阻塞首屏 */}
-            {process.env.NODE_ENV === 'production' && (
+            {process.env.NODE_ENV === 'production' ? (
               <EnterpriseAnalyticsIsland />
-            )}
+            ) : null}
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

@@ -1,38 +1,17 @@
-import localFont from 'next/font/local';
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
 
 /**
  * Geist Sans 字体配置
  * 用于主要文本内容
  */
-export const geistSans = localFont({
-  variable: '--font-geist-sans',
-  src: [
-    {
-      path: '../../../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2',
-      weight: '100 900',
-      style: 'normal',
-    },
-  ],
-  display: 'swap',
-  preload: true,
-});
+export const geistSans = GeistSans;
 
 /**
  * Geist Mono 字体配置
  * 用于代码和等宽文本
  */
-export const geistMono = localFont({
-  variable: '--font-geist-mono',
-  src: [
-    {
-      path: '../../../node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2',
-      weight: '100 900',
-      style: 'normal',
-    },
-  ],
-  display: 'swap',
-  preload: true,
-});
+export const geistMono = GeistMono;
 
 /**
  * 中文字体采用系统字体栈与可选子集（见 head.tsx 注入的 @font-face）。

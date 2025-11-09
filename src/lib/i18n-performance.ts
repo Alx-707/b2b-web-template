@@ -1,5 +1,4 @@
 import { cache } from 'react';
-import { logger } from '@/lib/logger';
 import {
   ANIMATION_DURATION_SLOW,
   COUNT_FIVE,
@@ -95,27 +94,42 @@ export class TranslationCache {
   }
 }
 
-// 缓存的消息加载器
-export const getCachedMessages = cache(async (locale: string) => {
-  const cacheInstance = TranslationCache.getInstance();
-  const cacheKey = `messages-${locale}`;
-
-  // 检查缓存
-  const cached = cacheInstance.get(cacheKey);
-  if (cached) {
-    return cached;
+// 获取基础 URL（用于 fetch）
+function getBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
   }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+}
 
-  // 加载消息
-  try {
-    const messages = (await import(`../../messages/${locale}.json`)).default;
+// 缓存的消息加载器（使用外部化翻译文件）
+// 注意：不能直接导入 load-messages.ts，因为它包含 Node.js 模块（fs/promises）
+// 而 i18n-performance.ts 被客户端组件（translation-preloader.tsx）使用
+export const getCachedMessages = cache(
+  async (locale: string): Promise<Record<string, unknown>> => {
+    const cacheInstance = TranslationCache.getInstance();
+    const cacheKey = `messages-${locale}-critical`;
+
+    // 检查缓存
+    const cached = cacheInstance.get(cacheKey);
+    if (cached) {
+      return cached as Record<string, unknown>;
+    }
+
+    // 从 public 目录加载外部化的翻译文件
+    // 使用 fetch 而不是 loadCriticalMessages，避免导入 Node.js 模块
+    const baseUrl = getBaseUrl();
+    const url = `${baseUrl}/messages/${locale}/critical.json`;
+    const response = await fetch(url, { next: { revalidate: 3600 } });
+    const messages = (await response.json()) as Record<string, unknown>;
+
     cacheInstance.set(cacheKey, messages);
     return messages;
-  } catch (error) {
-    logger.error(`Failed to load messages for locale ${locale}:`, error);
-    return {};
-  }
-});
+  },
+);
 
 // React缓存的翻译函数
 export const getCachedTranslations = cache(
