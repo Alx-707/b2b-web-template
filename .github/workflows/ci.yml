@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -41,18 +41,13 @@ jobs:
         id: cache-key
         run: echo "key=deps-${{ hashFiles('**/pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
 
-      - name: Setup pnpm cache
+      - name: Cache pnpm store
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.pnpm-store
-            node_modules
-            .next/cache
-            .vitest/cache
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node20-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}-
-            ${{ runner.os }}-pnpm-
+            ${{ runner.os }}-node20-pnpm-
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
@@ -92,6 +87,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node20-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node20-pnpm-
+
+      - name: Cache Vitest
+        uses: actions/cache@v4
+        with:
+          path: .vitest/cache
+          key: ${{ runner.os }}-vitest-cache-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('vitest.config.*', 'tsconfig*.json', 'src/**/*.{ts,tsx,js,jsx}', 'tests/**/*.{ts,tsx,js,jsx}') }}
+          restore-keys: |
+            ${{ runner.os }}-vitest-cache-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
@@ -139,14 +150,27 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node20-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node20-pnpm-
+
+      - name: Cache Next.js
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-next-cache-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('next.config.*', 'tsconfig*.json', 'tailwind.config.js', 'postcss.config.*', 'src/**/*.{ts,tsx,js,jsx,css,scss,mdx}') }}
+          restore-keys: |
+            ${{ runner.os }}-next-cache-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
       - name: 安装Playwright浏览器
         run: pnpm exec playwright install --with-deps
-
-      - name: 构建项目
-        run: pnpm build
 
       - name: 运行E2E测试
         run: pnpm test:e2e
@@ -181,6 +205,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node20-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node20-pnpm-
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-next-cache-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('next.config.*', 'tsconfig*.json', 'tailwind.config.js', 'postcss.config.*', 'src/**/*.{ts,tsx,js,jsx,css,scss,mdx}') }}
+          restore-keys: |
+            ${{ runner.os }}-next-cache-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
@@ -221,6 +261,14 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node20-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node20-pnpm-
+
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
@@ -251,6 +299,14 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node20-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node20-pnpm-
+
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
@@ -280,6 +336,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node20-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node20-pnpm-
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
