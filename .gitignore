@@ -23,6 +23,9 @@
 # production
 /build
 
+# Translation files (generated during build)
+public/messages/
+
 # misc
 .DS_Store
 *.pem

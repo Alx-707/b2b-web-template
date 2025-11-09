@@ -20,6 +20,18 @@ const compat = new FlatCompat({
 
 export default [
   {
+    name: 'ignores',
+    ignores: [
+      'performance-audit/**',
+      'scripts/**',
+      'reports/**',
+      '.next/**',
+      'coverage/**',
+      'dist/**',
+      'build/**',
+    ],
+  },
+  {
     name: 'global-plugin-registration',
     plugins: {
       security,
