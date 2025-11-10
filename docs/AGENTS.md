@@ -9,8 +9,20 @@ type: "manual"
 - 坚持“强制优先、结果导向、可审计”，所有流程需可追溯。
 - 若与本指南冲突的用户显式指令出现，必须遵循并在前置说明记录偏差原因。
 
+### 技术栈版本
+详见 `.augment/rules/nextjs-architecture.md` 和 `.augment/rules/core-coding-standards.md`，当前版本:
+- **Next.js 15** (App Router)
+- **React 19** (Server Components)
+- **TypeScript 5.x** (strict mode)
+- **Vitest** (测试框架)
+- **pnpm** (包管理器)
+- **shadcn/ui** + **Tailwind CSS** (UI 框架)
+- **next-intl** (国际化)
+- **Resend** (邮件服务)
+- **Vercel Analytics** (监控)
+
 ## 1. 适用范围与优先级
-- 禁用一切 CI/CD 自动化；构建、测试、发布需人工操作并停用流水线。
+- **CI/CD 约束**: 禁止手动触发或修改 CI/CD 配置文件（`.github/workflows/`、`package.json` scripts、`vercel.json`）。允许代码提交后自动触发的 CI/CD 流程（如 GitHub Actions 自动运行）。详见 `.augment/rules/eslint-cicd-integration.md`。
 - 每次任务须在开始与结束整理任务日志，将最新结论沉淀至 `evidence/` 或项目日志。
 - 所有沟通、代码注释、文档必须使用中文，新文件需 UTF-8（无 BOM）。
 - 每次回复开头提供“前置说明”，有外部调用时需在末尾补充“工具调用简报”。
@@ -95,26 +107,60 @@ type: "manual"
 | P7 交付与复盘 | 闭环完成，可审计 | 交付清单、证据存档、复盘结论入库（`evidence/` 目录） |
 
 ## 6. 质量与安全门槛
-### 6.1 质量门禁
+### 6.1 代码质量指标
+详见 `.augment/rules/core-coding-standards.md`，关键指标:
+- **函数长度**: ≤120行（核心代码）/ ≤160行（测试代码）
+- **圈复杂度**: ≤15（核心代码）/ ≤20（测试代码）
+- **嵌套深度**: ≤4
+- **参数数量**: ≤3（核心代码）/ ≤5（测试代码）
+- **Bundle 预算**: main≤10KB, framework≤200KB, vendors≤150KB, CSS≤50KB
+- **TypeScript**: strict mode, no any, prefer interface, avoid enum, use satisfies
+- **命名规范**: Boolean 前缀(is/has/can/should), 事件处理器(handle*), kebab-case 目录
+- **Git 提交**: Conventional Commits 规范
+
+### 6.2 测试覆盖率
+详见 `.augment/rules/testing-standards.md`，渐进式路线图:
+- **当前基线**: 42.92%
+- **第1阶段(3个月)**: ≥65%
+- **第2阶段(6个月)**: ≥75%
+- **第3阶段(12个月)**: ≥80%
+- **测试框架**: 仅使用 Vitest，禁止 Jest API
+- **Mock 规范**: vi.hoisted 用于变量提升，完整 mock 实现
+
+### 6.3 安全规范
+详见 `.augment/rules/security-implementation.md`，包含:
+- **29条自动化安全规则** (19 ESLint + 10 Semgrep)
+- **XSS 防护**: DOMPurify 配置, CSP 头部设置
+- **CSRF 防护**: CSRF token 生成/验证, SameSite cookies
+- **输入验证**: Zod schema 验证, 文件上传验证
+- **路径遍历防护**: sanitizePath() 和 validateFilename() 函数
+- **SQL 注入防护**: Prisma 参数化查询
+- **认证授权**: JWT 最佳实践, 会话管理
+- **敏感数据处理**: 环境变量验证, 加密/解密, 日志清理
+- **速率限制**: API 速率限制实现
+- **依赖安全**: pnpm audit, Semgrep 扫描
+
+关键禁止事项:
+- 禁止修改 .env 文件
+- 禁止硬编码敏感信息
+- 禁止绕过安全检查
+
+### 6.4 质量门禁
 - 构建、编译、静态检查必须零报错；完整测试矩阵全部通过。
-- 单元、集成、契约、E2E、性能、压力、容量、混沌与回归测试覆盖关键路径及异常分支，总体覆盖率 ≥ 90%。
+- 单元、集成、契约、E2E、性能、压力、容量、混沌与回归测试覆盖关键路径及异常分支。
 - 生成覆盖率报告与 SBOM，确认依赖无高危 CVE。
 - 构建流程需可重复、版本锁定、可审计并可回滚。
 
-### 6.2 测试与观测
+### 6.5 测试与观测
 - 单元测试需隔离、可重复、快速；必要时 Mock 外部依赖。
 - 集成/契约测试基于接口契约自动校验；E2E 覆盖关键业务与异常路径并校验数据一致性。
 - 性能测试包含冷/热启动、负载/压力/容量与故障注入，输出 P95/P99、吞吐、CPU、内存等基准并与基线对比。
 - 观测性需提供结构化日志、RED/USE 指标、端到端追踪及报警阈值。
 
-### 6.3 技术标准
+### 6.6 技术标准
 - 遵循 SOLID、DDD、关注点分离、DRY 原则。
 - 优先使用活跃维护的主流库；若存在官方 SDK 必须优先选择并锁定最新稳定版。
 - 采用 Conventional Commits，PR 模板需记录动机、变更、测试、风险、回滚与关联 ADR。
-
-### 6.4 最低安全基线
-- 保留必要的身份、授权与依赖风险控制；禁止引入额外安全设计。
-- 敏感字段审计需打码，禁止持久化明文秘钥。
 
 ## 7. 交付与存档
 - 发布需记录迁移脚本、割接窗口、回滚方案及完成状态，确保全流程可审计。

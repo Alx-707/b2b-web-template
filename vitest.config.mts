@@ -269,6 +269,8 @@ export default defineConfig({
         'next-intl',
         '@radix-ui/react-*',
         'lucide-react',
+        // Inline geist so that resolve.alias applies to its imports
+        'geist',
       ],
     },
 
@@ -282,6 +284,8 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, './src'),
       '@messages': resolve(__dirname, './messages'),
+      // Fix directory import resolution in Vitest for packages that import "next/font/local"
+      'next/font/local': 'next/font/local/index.js',
     },
   },
 

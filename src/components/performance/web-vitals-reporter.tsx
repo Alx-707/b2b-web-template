@@ -128,14 +128,16 @@ function sendToCustomEndpoint(metric: Metric) {
       navigator.sendBeacon('/api/analytics/web-vitals', blob);
     } else {
       // Fallback to fetch
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       fetch('/api/analytics/web-vitals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sanitized),
         keepalive: true, // 保持连接，即使页面卸载
-      }).catch(() => {
+      }).catch((err) => {
         // 忽略错误，避免影响用户体验
+        if (process.env.NODE_ENV !== 'production') {
+          logger.warn('Web Vitals send failed', { error: err });
+        }
       });
     }
   } catch {

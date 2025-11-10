@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 interface LazyWebVitalsReporterProps {
   /**
@@ -68,8 +69,11 @@ export function LazyWebVitalsReporter({
     if ('requestIdleCallback' in window) {
       const idleCallbackId = requestIdleCallback(
         () => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          loadReporter();
+          loadReporter().catch((err) => {
+            if (debug) {
+              logger.error('Failed to load WebVitalsReporter', { error: err });
+            }
+          });
         },
         { timeout: 2000 },
       );
@@ -77,8 +81,11 @@ export function LazyWebVitalsReporter({
     }
 
     const timeoutId = setTimeout(() => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      loadReporter();
+      loadReporter().catch((err) => {
+        if (debug) {
+          logger.error('Failed to load WebVitalsReporter', { error: err });
+        }
+      });
     }, 1000);
     return () => clearTimeout(timeoutId);
   }, [debug]);

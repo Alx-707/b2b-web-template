@@ -23,6 +23,7 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
+import { routing } from '@/i18n/routing';
 
 /**
  * Supported locale types
@@ -33,6 +34,17 @@ type Locale = 'en' | 'zh';
  * Translation message structure
  */
 type Messages = Record<string, unknown>;
+
+/**
+ * Runtime locale sanitizer to guard against unexpected values.
+ * Falls back to routing.defaultLocale when input is not in the whitelist.
+ */
+function sanitizeLocale(input: string): Locale {
+  const allowed = ['en', 'zh'] as const;
+  return (allowed as readonly string[]).includes(input)
+    ? (input as Locale)
+    : (routing.defaultLocale as Locale);
+}
 
 /**
  * Get the base URL for fetching translation files
@@ -94,7 +106,8 @@ export const loadCriticalMessages = unstable_cache(
 
     // Runtime: Fetch from public directory
     const baseUrl = getBaseUrl();
-    const url = `${baseUrl}/messages/${locale}/critical.json`;
+    const safeLocale = sanitizeLocale(locale as string);
+    const url = `${baseUrl}/messages/${safeLocale}/critical.json`;
 
     try {
       const response = await fetch(url, {
@@ -115,7 +128,7 @@ export const loadCriticalMessages = unstable_cache(
           process.cwd(),
           'public',
           'messages',
-          locale,
+          safeLocale,
           'critical.json',
         );
         // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -126,7 +139,8 @@ export const loadCriticalMessages = unstable_cache(
           `Fallback file read also failed for ${locale}:`,
           fallbackError,
         );
-        throw new Error(`Cannot load critical messages for ${locale}`);
+        // Final fallback: return empty messages instead of throwing
+        return {} as Messages;
       }
     }
   },
@@ -179,7 +193,8 @@ export const loadDeferredMessages = unstable_cache(
 
     // Runtime: Fetch from public directory
     const baseUrl = getBaseUrl();
-    const url = `${baseUrl}/messages/${locale}/deferred.json`;
+    const safeLocale = sanitizeLocale(locale as string);
+    const url = `${baseUrl}/messages/${safeLocale}/deferred.json`;
 
     try {
       const response = await fetch(url, {
@@ -200,7 +215,7 @@ export const loadDeferredMessages = unstable_cache(
           process.cwd(),
           'public',
           'messages',
-          locale,
+          safeLocale,
           'deferred.json',
         );
         // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -211,7 +226,8 @@ export const loadDeferredMessages = unstable_cache(
           `Fallback file read also failed for ${locale}:`,
           fallbackError,
         );
-        throw new Error(`Cannot load deferred messages for ${locale}`);
+        // Final fallback: return empty messages instead of throwing
+        return {} as Messages;
       }
     }
   },

@@ -132,6 +132,8 @@ export default defineConfig({
             NODE_ENV: 'test',
             PLAYWRIGHT_TEST: 'true',
             NEXT_PUBLIC_TEST_MODE: 'true',
+            NEXT_PUBLIC_BASE_URL: 'http://localhost:3000',
+
             NEXT_PUBLIC_DISABLE_REACT_SCAN: 'true',
             NEXT_PUBLIC_DISABLE_DEV_TOOLS: 'true',
             NEXT_PUBLIC_ENABLE_ANALYTICS: 'false',

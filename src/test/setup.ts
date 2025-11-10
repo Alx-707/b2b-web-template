@@ -11,6 +11,114 @@ import React from 'react';
 import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
 import { afterEach, beforeEach, vi } from 'vitest';
 
+/**
+ * Global fetch polyfill and stable mock for externalized messages requests
+ *
+ * Purpose:
+ * - Avoid ECONNREFUSED when local dev server is not running during unit tests
+ * - Provide deterministic responses for /messages/* so tests don't depend on network
+ *
+ * Scope:
+ * - Only intercepts URLs containing '/messages/'
+ * - All other requests fall back to the original global fetch if present
+ *
+ * Environment switch:
+ * - Set VITEST_USE_REAL_MESSAGES=true to bypass this mock and use real network
+ * - Useful for integration tests that need actual message loading
+ *
+ * Example:
+ *   VITEST_USE_REAL_MESSAGES=true pnpm test src/lib/__tests__/i18n-performance.test.ts
+ *
+ * Note:
+ * - This is test-only behavior. Production builds and runtime are unaffected.
+ */
+
+// Global fetch polyfill and stable mock for externalized messages requests
+// - Avoid ECONNREFUSED when local server is not running during tests
+// - If a test needs real network, set VITEST_USE_REAL_MESSAGES=true in that test
+(() => {
+  // Minimal Response polyfill if not available
+  const hasNativeResponse = typeof (globalThis as any).Response !== 'undefined';
+  const SimpleResponse: any = hasNativeResponse
+    ? (globalThis as any).Response
+    : class SimpleResponse {
+        private _body: string;
+        status: number;
+        ok: boolean;
+        headers: Map<string, string>;
+        constructor(
+          body: string,
+          init: { status: number; headers?: Record<string, string> },
+        ) {
+          this._body = body ?? '{}';
+          this.status = init.status;
+          this.ok = this.status >= 200 && this.status < 300;
+          this.headers = new Map(Object.entries(init.headers || {}));
+        }
+        async json() {
+          try {
+            return JSON.parse(this._body || '{}');
+          } catch {
+            return {};
+          }
+        }
+        async text() {
+          return this._body || '';
+        }
+      };
+
+  const OriginalFetch = (globalThis as any).fetch as
+    | ((input: any, init?: any) => Promise<any>)
+    | undefined;
+
+  const mockFetch = vi.fn(async (input: any, init?: any) => {
+    // Normalize URL
+    let url = '';
+    try {
+      url =
+        typeof input === 'string'
+          ? input
+          : input && input.url
+            ? (input.url as string)
+            : String(input);
+    } catch {
+      url = '';
+    }
+
+    // Stable mock for externalized messages under public/messages/*
+    if (!process.env.VITEST_USE_REAL_MESSAGES && url.includes('/messages/')) {
+      const body = JSON.stringify({});
+      return new SimpleResponse(body, {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }) as Response;
+    }
+
+    // Fallback to original fetch if available
+    if (typeof OriginalFetch === 'function') {
+      return OriginalFetch(input, init);
+    }
+
+    // Final fallback: return empty JSON
+    return new SimpleResponse(JSON.stringify({}), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    }) as Response;
+  });
+
+  // Publish polyfills if missing
+  if (typeof (globalThis as any).Response === 'undefined') {
+    (globalThis as any).Response = SimpleResponse;
+  }
+  if (typeof (globalThis as any).Headers === 'undefined') {
+    // Minimal Headers no-op polyfill to satisfy type checks
+    (globalThis as any).Headers = class {};
+  }
+
+  // Set global fetch to our mocked version to ensure stability in unit tests
+  vi.stubGlobal('fetch', mockFetch);
+})();
+
 declare module 'vitest' {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface Assertion<T = any> extends TestingLibraryMatchers<T, void> {}
@@ -1208,6 +1316,11 @@ vi.mock('next-intl/server', () => ({
 
 // Mock @/i18n/routing - 提供完整的路由Mock配置
 vi.mock('@/i18n/routing', () => ({
+  // Minimal routing config for tests
+  routing: {
+    locales: ['en', 'zh'],
+    defaultLocale: 'en',
+  },
   Link: ({ children, href, ...props }: any) =>
     React.createElement('a', { href, ...props }, children),
   useRouter: vi.fn(() => ({
@@ -1582,3 +1695,13 @@ beforeEach(() => {
 afterEach(() => {
   console.error = originalError;
 });
+
+// Mock next/font/local for Vitest to avoid directory import resolution issues
+// This is a test-only stub and has no effect on production builds
+vi.mock('next/font/local', () => ({
+  default: (options: { variable?: string }) => ({
+    variable: options?.variable ?? '--font-local',
+    className: 'local-font-class',
+    style: { fontFamily: 'Local Font' },
+  }),
+}));

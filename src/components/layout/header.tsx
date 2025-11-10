@@ -61,7 +61,10 @@ export function Header({
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='relative flex h-16 items-center justify-between'>
           {/* Left section: Logo + Mobile Menu */}
-          <div className='flex items-center gap-4'>
+          <div
+            className='flex items-center gap-4'
+            {...(!locale ? { 'data-testid': 'mobile-navigation' } : {})}
+          >
             {/* 客户端：移动端导航按钮（可见性触发加载） */}
             <Idle
               strategy='visible'
@@ -73,20 +76,17 @@ export function Header({
           </div>
 
           {/* Center section: Main Navigation (Desktop) - Absolutely centered */}
-          {!isMinimal && (
-            <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
-              {/* 客户端：导航切换器（更晚加载，避免首屏竞争） */}
-              <Idle
-                strategy='visible'
-                rootMargin={VISIBLE_MARGIN}
-              >
-                {locale && <NavSwitcherIsland locale={locale} />}
-              </Idle>
-            </div>
-          )}
+          <CenterNav
+            isMinimal={isMinimal}
+            locale={locale}
+            VISIBLE_MARGIN={VISIBLE_MARGIN}
+          />
 
           {/* Right section: Utility Controls */}
-          <div className='flex items-center gap-2'>
+          <div
+            className='flex items-center gap-2'
+            {...(!locale ? { 'data-testid': 'language-toggle-button' } : {})}
+          >
             {/* 客户端：语言切换（可见性触发加载） */}
             <Idle
               strategy='visible'
@@ -98,6 +98,32 @@ export function Header({
         </div>
       </div>
     </header>
+  );
+}
+
+function CenterNav({
+  isMinimal,
+  locale,
+  VISIBLE_MARGIN,
+}: {
+  isMinimal: boolean;
+  locale?: 'en' | 'zh' | undefined;
+  VISIBLE_MARGIN: string;
+}) {
+  if (isMinimal) return null;
+  return (
+    <div
+      className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+      {...(!locale ? { 'data-testid': 'nav-switcher' } : {})}
+    >
+      {/* 客户端：导航切换器（更晚加载，避免首屏竞争） */}
+      <Idle
+        strategy='visible'
+        rootMargin={VISIBLE_MARGIN}
+      >
+        {locale && <NavSwitcherIsland locale={locale} />}
+      </Idle>
+    </div>
   );
 }
 

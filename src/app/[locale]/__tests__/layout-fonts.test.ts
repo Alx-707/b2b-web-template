@@ -1,20 +1,12 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
   geistMono,
   geistSans,
   getFontClassNames,
 } from '@/app/[locale]/layout-fonts';
 
-// Mock Next.js字体函数 - 使用vi.hoisted确保正确初始化
-// 使用 next/font/local 的通用 mock，具体字体对象结构在断言中验证
-
-vi.mock('next/font/local', () => ({
-  default: vi.fn((options: { variable?: string }) => ({
-    variable: options.variable ?? '--font-local',
-    className: 'local-font-class',
-    style: { fontFamily: 'Local Font' },
-  })),
-}));
+// 使用全局 setup 中的 next/font/local mock（src/test/setup.ts）
+// 该全局 mock 提供 variable/className/style，避免 ESM 目录导入问题
 
 describe('Layout Fonts Configuration', () => {
   describe('geistSans字体配置', () => {

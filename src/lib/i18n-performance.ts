@@ -123,8 +123,25 @@ export const getCachedMessages = cache(
     // 使用 fetch 而不是 loadCriticalMessages，避免导入 Node.js 模块
     const baseUrl = getBaseUrl();
     const url = `${baseUrl}/messages/${locale}/critical.json`;
-    const response = await fetch(url, { next: { revalidate: 3600 } });
-    const messages = (await response.json()) as Record<string, unknown>;
+
+    let messages: Record<string, unknown> = {};
+    try {
+      const response = (await fetch(url, {
+        next: { revalidate: 3600 },
+      } as unknown as RequestInit)) as Response;
+      if (!response || typeof response.ok !== 'boolean' || !response.ok) {
+        throw new Error('bad status');
+      }
+      const parsed = (await response.json()) as unknown;
+      messages =
+        parsed && typeof parsed === 'object'
+          ? (parsed as Record<string, unknown>)
+          : {};
+    } catch {
+      // Network or non-2xx status: record error and return empty object to avoid crashes
+      I18nPerformanceMonitor.recordError();
+      messages = {};
+    }
 
     cacheInstance.set(cacheKey, messages);
     return messages;

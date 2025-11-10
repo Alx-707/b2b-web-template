@@ -1,128 +1,292 @@
 {
   "tasks": [
     {
-      "id": "3d2c2e5d-c74b-4e1b-9cfb-6075e5164a31",
-      "name": "增强 IntersectionObserver 测试可见性控制 (setup)",
-      "description": "在 src/test/setup.ts 中为 IntersectionObserver Mock 增强可控触发能力：导出 triggerVisible(el)/triggerAll() 辅助函数；默认策略可配置（全部可见或按选择器）以适配 Idle/客户端小岛在 jsdom 下的渲染时机。确保 PerformanceObserver 与 ResizeObserver 现有 Mock 不受影响。",
+      "id": "4a1d21ab-7688-41d5-b48a-49b9565612ae",
+      "name": "Vitest 全局 fetch polyfill 与 mock",
+      "description": "在 Vitest 全局 setup 中为 Node 环境提供 fetch Headers Response 并对外部化消息请求进行稳定 mock 避免未启动 server 时 ECONNREFUSED",
+      "notes": "如个别用例需真实网络可在用例内恢复原 fetch",
       "status": "completed",
       "dependencies": [],
-      "createdAt": "2025-11-09T06:52:39.788Z",
-      "updatedAt": "2025-11-09T07:04:00.000Z",
+      "createdAt": "2025-11-09T09:18:26.789Z",
+      "updatedAt": "2025-11-09T09:18:26.789Z",
       "relatedFiles": [
         {
           "path": "src/test/setup.ts",
           "type": "TO_MODIFY",
-          "description": "增强 IntersectionObserver Mock 并导出触发可见的辅助函数"
+          "description": "加入 fetch 与 Response polyfill 及全局 mock"
+        },
+        {
+          "path": "vitest.config.mts",
+          "type": "REFERENCE",
+          "description": "确保已包含 setupFiles 配置"
+        },
+        {
+          "path": "src/lib/i18n-performance.ts",
+          "type": "REFERENCE",
+          "description": "该文件使用 fetch 读取 public messages"
+        },
+        {
+          "path": "src/lib/__tests__/i18n-performance.test.ts",
+          "type": "REFERENCE",
+          "description": "相关单测位置"
         }
       ],
-      "implementationGuide": "pseudocode:\n- extend globalThis.IntersectionObserver mock:\n  class IO { constructor(cb, options) { this.cb = cb; } observe(el){ registry.push(el); } }\n- export function triggerVisible(el){ cb([{ target: el, isIntersecting: true }], ioInstance) }\n- export function triggerAll(){ for each observed el -> triggerVisible(el) }\n- default autoVisible=true in tests to simplify header/footer cases",
-      "verificationCriteria": "在使用 Idle/IntersectionObserver 的组件测试中，调用 triggerAll() 后，延迟加载的子树应可被查询到（getByRole/getByTestId）。",
-      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
+      "implementationGuide": "pseudocode:\n- 在 src/test/setup.ts 如无全局 fetch 则从 undici 引入 fetch Headers Response Request 并以 vi.stubGlobal 注册\n- 再以 vi.stubGlobal('fetch', async ()=> new Response(JSON.stringify({}), {status:200, headers:{'content-type':'application/json'}})) 返回空对象\n- 确认 vitest.config.mts 已加载 setupFiles",
+      "verificationCriteria": "执行 pnpm test 指向 I18n Performance 相关用例 不再出现 ECONNREFUSED 或 fetch failed 且测试通过",
+      "analysisResult": "根因：1) 单测环境未启动本地服务，i18n-performance.ts 直接 fetch 本地 /messages/*，导致 ECONNREFUSED；2) 服务端翻译加载 load-messages.ts 在 fetch 与文件读取均失败时会 throw，引发页面 500，连带 E2E 与 Lighthouse 失败；3) 生产环境 CSP 仍包含 unsafe-inline 与测试预期不符。策略：优先稳住单测（mock fetch 与容错），再修复服务端加载器的最终回退，最后收紧 CSP。"
     },
     {
-      "id": "cbfac057-1d74-4672-96a7-6cd8fdfb5086",
-      "name": "提供测试渲染助手：renderWithI18nAndLocale",
-      "description": "新增测试级渲染 helper，封装 NextIntlClientProvider/ClientI18nProvider 注入 locale 与最小 messages fixture，便于渲染 Header/Footer 并稳定 i18n 钩子。",
+      "id": "9db1df4c-c5f6-4002-96e9-02d85f77f9b1",
+      "name": "i18n-performance.ts 增加 fetch 容错回退",
+      "description": "为客户端共享层外部化消息加载加入 try catch 失败或非 2xx 返回空对象并记录监控 避免测试与运行态无服务或瞬时失败时崩溃",
+      "notes": "该模块被客户端组件使用 禁止引入 fs 回退返回空对象即可避免 500",
       "status": "completed",
       "dependencies": [
         {
-          "taskId": "3d2c2e5d-c74b-4e1b-9cfb-6075e5164a31"
+          "taskId": "4a1d21ab-7688-41d5-b48a-49b9565612ae"
         }
       ],
-      "createdAt": "2025-11-09T06:52:39.788Z",
-      "updatedAt": "2025-11-09T07:04:00.000Z",
+      "createdAt": "2025-11-09T09:18:26.789Z",
+      "updatedAt": "2025-11-09T09:18:26.789Z",
       "relatedFiles": [
         {
-          "path": "src/test/render-with-i18n.tsx",
+          "path": "src/lib/i18n-performance.ts",
+          "type": "TO_MODIFY",
+          "description": "为 124 至 131 行附近的 fetch 添加容错",
+          "lineStart": 122,
+          "lineEnd": 131
+        },
+        {
+          "path": "src/components/i18n/translation-preloader.tsx",
+          "type": "REFERENCE",
+          "description": "客户端预加载使用位置"
+        },
+        {
+          "path": "src/i18n/request.ts",
+          "type": "REFERENCE",
+          "description": "请求配置与回退路径"
+        }
+      ],
+      "implementationGuide": "pseudocode:\ntry { const res = await fetch(url, { next: { revalidate: 3600 }}); if (!res.ok) throw new Error('bad status'); return await res.json(); } catch (e) { I18nPerformanceMonitor.recordError(); return {}; }",
+      "verificationCriteria": "单测执行不再抛出 fetch 异常 页面在该模块失败时保持 200",
+      "analysisResult": "根因：1) 单测环境未启动本地服务，i18n-performance.ts 直接 fetch 本地 /messages/*，导致 ECONNREFUSED；2) 服务端翻译加载 load-messages.ts 在 fetch 与文件读取均失败时会 throw，引发页面 500，连带 E2E 与 Lighthouse 失败；3) 生产环境 CSP 仍包含 unsafe-inline 与测试预期不符。策略：优先稳住单测（mock fetch 与容错），再修复服务端加载器的最终回退，最后收紧 CSP。"
+    },
+    {
+      "id": "782cd7d0-4ba7-4ce9-9fc8-46bf63a28a43",
+      "name": "load-messages.ts 服务端加载最终回退",
+      "description": "在 fetch 与文件读取均失败时返回空对象或回退到默认 locale 而不是抛错 补充运行时 locale 白名单校验 非 en 或 zh 回退默认",
+      "notes": "维持 unstable_cache 策略不变 仅改变最终失败分支行为",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "9db1df4c-c5f6-4002-96e9-02d85f77f9b1"
+        }
+      ],
+      "createdAt": "2025-11-09T09:18:26.789Z",
+      "updatedAt": "2025-11-09T09:18:26.789Z",
+      "relatedFiles": [
+        {
+          "path": "src/lib/load-messages.ts",
+          "type": "TO_MODIFY",
+          "description": "增强 96 至 131 行失败分支回退并校验 locale",
+          "lineStart": 90,
+          "lineEnd": 134
+        },
+        {
+          "path": "src/app/[locale]/page.tsx",
+          "type": "REFERENCE",
+          "description": "使用位置 home 页"
+        },
+        {
+          "path": "src/app/[locale]/layout.tsx",
+          "type": "REFERENCE",
+          "description": "使用位置布局"
+        }
+      ],
+      "implementationGuide": "pseudocode:\nfunction sanitizeLocale(l){ return (l==='en'||l==='zh')?l:routing.defaultLocale; } const safe = sanitizeLocale(locale); try { const r = await fetch(url); if(!r.ok) throw new Error('bad'); return await r.json(); } catch { try { readFile(public/messages/...); return json; } catch { logger.error('final fallback failed'); return {}; } }",
+      "verificationCriteria": "E2E 中 i18n 重定向验证用例通过 服务端日志无 Cannot load critical messages 导致的 500 Lighthouse 不再报 ERRORED_DOCUMENT_REQUEST",
+      "analysisResult": "根因：1) 单测环境未启动本地服务，i18n-performance.ts 直接 fetch 本地 /messages/*，导致 ECONNREFUSED；2) 服务端翻译加载 load-messages.ts 在 fetch 与文件读取均失败时会 throw，引发页面 500，连带 E2E 与 Lighthouse 失败；3) 生产环境 CSP 仍包含 unsafe-inline 与测试预期不符。策略：优先稳住单测（mock fetch 与容错），再修复服务端加载器的最终回退，最后收紧 CSP。"
+    },
+    {
+      "id": "b610b222-aa51-4b1e-8cf7-5b5813e6efc8",
+      "name": "Playwright webServer 注入 NEXT_PUBLIC_BASE_URL",
+      "description": "为 Playwright 的 webServer 注入 NEXT_PUBLIC_BASE_URL=http://localhost:3000 确保运行态与加载器的 baseUrl 计算一致",
+      "notes": "LHCI 已通过 startServerCommand 启动应用 该任务为一致性增强",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "782cd7d0-4ba7-4ce9-9fc8-46bf63a28a43"
+        }
+      ],
+      "createdAt": "2025-11-09T09:18:26.789Z",
+      "updatedAt": "2025-11-09T09:18:26.789Z",
+      "relatedFiles": [
+        {
+          "path": "playwright.config.ts",
+          "type": "TO_MODIFY",
+          "description": "在 124 至 145 行的 env 中加入 NEXT_PUBLIC_BASE_URL",
+          "lineStart": 124,
+          "lineEnd": 145
+        },
+        {
+          "path": "lighthouserc.js",
+          "type": "REFERENCE",
+          "description": "Lighthouse 启动配置"
+        },
+        {
+          "path": ".github/workflows/ci.yml",
+          "type": "REFERENCE",
+          "description": "CI 任务定义"
+        }
+      ],
+      "implementationGuide": "pseudocode:\n在 playwright.config.ts 的 webServer.env 增加 NEXT_PUBLIC_BASE_URL: 'http://localhost:3000'",
+      "verificationCriteria": "E2E 启动日志显示以 NEXT_PUBLIC_BASE_URL=http://localhost:3000 运行 相关页面加载稳定",
+      "analysisResult": "根因：1) 单测环境未启动本地服务，i18n-performance.ts 直接 fetch 本地 /messages/*，导致 ECONNREFUSED；2) 服务端翻译加载 load-messages.ts 在 fetch 与文件读取均失败时会 throw，引发页面 500，连带 E2E 与 Lighthouse 失败；3) 生产环境 CSP 仍包含 unsafe-inline 与测试预期不符。策略：优先稳住单测（mock fetch 与容错），再修复服务端加载器的最终回退，最后收紧 CSP。"
+    },
+    {
+      "id": "ea2c53c3-9e7a-4e01-8545-2a860991f92c",
+      "name": "CSP 生产收紧 去除 unsafe-inline 并保留 nonce",
+      "description": "调整 src/config/security.ts 生产环境 style-src 不再加入 unsafe-inline 保留 nonce 支持 与测试保持一致",
+      "notes": "如存在依赖内联样式的路径 后续逐步改造为外链或使用 nonce hash",
+      "status": "completed",
+      "dependencies": [],
+      "createdAt": "2025-11-09T09:18:26.789Z",
+      "updatedAt": "2025-11-09T09:18:26.789Z",
+      "relatedFiles": [
+        {
+          "path": "src/config/security.ts",
+          "type": "TO_MODIFY",
+          "description": "修改生产环境 style-src 移除 unsafe-inline",
+          "lineStart": 40,
+          "lineEnd": 49
+        },
+        {
+          "path": "src/config/__tests__/security.test.ts",
+          "type": "REFERENCE",
+          "description": "CSP 相关单测"
+        },
+        {
+          "path": "src/lib/security-headers.ts",
+          "type": "REFERENCE",
+          "description": "头部转换与暴露位置"
+        }
+      ],
+      "implementationGuide": "pseudocode:\nif (isProduction) { styleSrc = ['self', ...(nonce?['nonce-'+nonce]:[]), 'https://fonts.googleapis.com']; } else { // dev 可保留 unsafe-inline }",
+      "verificationCriteria": "执行 pnpm test 指向 Security Configuration 相关用例通过 Code Quality 断言通过",
+      "analysisResult": "根因：1) 单测环境未启动本地服务，i18n-performance.ts 直接 fetch 本地 /messages/*，导致 ECONNREFUSED；2) 服务端翻译加载 load-messages.ts 在 fetch 与文件读取均失败时会 throw，引发页面 500，连带 E2E 与 Lighthouse 失败；3) 生产环境 CSP 仍包含 unsafe-inline 与测试预期不符。策略：优先稳住单测（mock fetch 与容错），再修复服务端加载器的最终回退，最后收紧 CSP。"
+    },
+    {
+      "id": "89ae7528-4637-4e87-b8ad-cb2d766cc491",
+      "name": "新增回归测试 覆盖网络失败回退路径",
+      "description": "补充 i18n-performance 与 load-messages 的失败分支测试 模拟 fetch 失败或返回 500 验证回退返回空对象或默认消息且不抛错",
+      "notes": "确保未来变更不会再次引入 500 与 ECONNREFUSED",
+      "status": "completed",
+      "dependencies": [
+        {
+          "taskId": "9db1df4c-c5f6-4002-96e9-02d85f77f9b1"
+        },
+        {
+          "taskId": "782cd7d0-4ba7-4ce9-9fc8-46bf63a28a43"
+        }
+      ],
+      "createdAt": "2025-11-09T09:18:26.789Z",
+      "updatedAt": "2025-11-09T14:57:30.000Z",
+      "relatedFiles": [
+        {
+          "path": "src/lib/__tests__/i18n-performance.network-failure.test.ts",
           "type": "CREATE",
-          "description": "测试渲染助手，统一注入 i18n 上下文"
+          "description": "新增网络失败分支用例（fetch reject / 500）"
         },
         {
-          "path": "src/test/fixtures/messages.min.json",
+          "path": "src/lib/__tests__/load-messages.fallback.test.ts",
           "type": "CREATE",
-          "description": "最小 i18n 消息 fixture（仅含 header/footer 必需命名空间）"
+          "description": "新增回退用例文件（fetch+readFile均失败）"
         }
       ],
-      "implementationGuide": "pseudocode:\n- create src/test/render-with-i18n.tsx\n- export function renderWithI18nAndLocale(ui, { locale='en', messages=fixture }) { return render(<NextIntlClientProvider locale={locale} messages={messages}>{ui}</NextIntlClientProvider>) }\n- 提供最小 messages fixture 覆盖 header/footer 所需命名空间",
-      "verificationCriteria": "使用该 helper 渲染 Header/Footer 后，无 i18n 报错，能查询到期望的文本或 testid。",
-      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
-    },
-    {
-      "id": "473ecd2f-845a-4e5b-8166-cf7e8351f158",
-      "name": "修复 Header 集成测试：适配 Idle/小岛与 i18n",
-      "description": "更新 header 集成测试：使用 renderWithI18nAndLocale 渲染 Header（传入 locale），在断言前调用 triggerAll() 令 Idle 子树可见；优先使用语义化查询（byRole/byText），若现有用例强依赖 data-testid=\"nav-switcher\"，则最小化在小岛根容器补充 testid；清理未使用导入与参数。",
-      "status": "completed",
-      "dependencies": [
-        {
-          "taskId": "cbfac057-1d74-4672-96a7-6cd8fdfb5086"
-        }
-      ],
-      "createdAt": "2025-11-09T06:52:39.788Z",
-      "updatedAt": "2025-11-09T07:04:00.000Z",
-      "relatedFiles": [
-        {
-          "path": "tests/integration/components/header.test.tsx",
-          "type": "TO_MODIFY",
-          "description": "适配 Idle 与 i18n 渲染顺序，稳定断言方式"
-        },
-        {
-          "path": "src/components/layout/header-client.tsx",
-          "type": "TO_MODIFY",
-          "description": "仅当必须时，补充最小 data-testid 到 NavSwitcher 根容器"
-        }
-      ],
-      "implementationGuide": "pseudocode:\n- import { renderWithI18nAndLocale } from '@/test/render-with-i18n'\n- const { getByRole } = renderWithI18nAndLocale(<Header locale='en' />)\n- await act(async ()=> triggerAll())\n- expect(getByRole('navigation',{name:/main/i})).toBeInTheDocument()\n- 如确需：expect(getByTestId('nav-switcher')).toBeInTheDocument()",
-      "verificationCriteria": "header 测试所有用例通过，且不再出现无法找到 nav-switcher 的错误；lint 通过。",
-      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
-    },
-    {
-      "id": "893b131f-7d59-475e-8117-ae97bf13d03c",
-      "name": "修复 Footer 集成测试：稳健查询与 i18n mock",
-      "description": "更新 footer 集成测试：使用渲染 helper 或保持 next-intl/server 的 mock；改用 byRole/byText 等语义查询；移除未使用导入 fireEvent/waitFor 与未用形参。",
-      "status": "completed",
-      "dependencies": [
-        {
-          "taskId": "cbfac057-1d74-4672-96a7-6cd8fdfb5086"
-        }
-      ],
-      "createdAt": "2025-11-09T06:52:39.788Z",
-      "updatedAt": "2025-11-09T07:04:00.000Z",
-      "relatedFiles": [
-        {
-          "path": "tests/integration/components/footer.test.tsx",
-          "type": "TO_MODIFY",
-          "description": "改用更稳健的查询并清理未使用导入/参数"
-        }
-      ],
-      "implementationGuide": "pseudocode:\n- const { getByText, getAllByRole } = renderWithI18nAndLocale(<Footer />)\n- expect(getByText(/Tucsenberg/i)).toBeInTheDocument()\n- expect(getAllByRole('link').length).toBeGreaterThan(0)",
-      "verificationCriteria": "footer 测试所有用例通过；lint 通过。",
-      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
-    },
-    {
-      "id": "ae129e39-1023-4f72-9444-8dec301f75d7",
-      "name": "文档完善：Idle/动态小岛测试指南",
-      "description": "在 docs/testing-standards.md 新增章节，说明 Idle/IntersectionObserver 在测试中的处理方式、如何触发可见、以及 i18n 小岛在测试中的渲染辅助方法与示例。",
-      "status": "completed",
-      "dependencies": [
-        {
-          "taskId": "3d2c2e5d-c74b-4e1b-9cfb-6075e5164a31"
-        },
-        {
-          "taskId": "cbfac057-1d74-4672-96a7-6cd8fdfb5086"
-        }
-      ],
-      "createdAt": "2025-11-09T06:52:39.788Z",
-      "updatedAt": "2025-11-09T07:04:00.000Z",
-      "relatedFiles": [
-        {
-          "path": "docs/testing-standards.md",
-          "type": "TO_MODIFY",
-          "description": "新增 Idle/小岛测试实践章节"
-        }
-      ],
-      "implementationGuide": "pseudocode:\n- Add section 'Testing Idle & Client Islands'\n- 示例：调用 triggerAll() 让小岛渲染，再进行断言；如何使用 renderWithI18nAndLocale 包裹组件。",
-      "verificationCriteria": "文档包含清晰步骤与代码片段，遵循项目书写风格，便于后续审阅。",
-      "analysisResult": "测试修复围绕三个关键点：1) Idle/IntersectionObserver 在 jsdom 下的显式可见触发；2) 客户端小岛在测试内的 i18n 上下文注入与渲染时机控制；3) 测试查询从脆弱 testid 转向语义选择器。生产逻辑保持不变，仅在必要处为测试稳定性补充数据属性。"
+      "implementationGuide": "pseudocode:\n- i18n-performance.test 中 mock fetch reject 或返回 500 期望 getCachedMessages 返回 {}\n- 新增 load-messages.fallback.test.ts 模拟 fetch 与 readFile 均失败 期望 loadCriticalMessages 返回 {} 且不抛错",
+      "verificationCriteria": "执行 pnpm test 覆盖新增用例 失败分支不抛错且返回期望结构 覆盖率正常生成",
+      "analysisResult": "根因：1) 单测环境未启动本地服务，i18n-performance.ts 直接 fetch 本地 /messages/*，导致 ECONNREFUSED；2) 服务端翻译加载 load-messages.ts 在 fetch 与文件读取均失败时会 throw，引发页面 500，连带 E2E 与 Lighthouse 失败；3) 生产环境 CSP 仍包含 unsafe-inline 与测试预期不符。策略：优先稳住单测（mock fetch 与容错），再修复服务端加载器的最终回退，最后收紧 CSP。"
     }
+,
+    {
+      "id": "4f0a2b31-7f6b-4e3a-9c1d-7d0ef9e2b1a1",
+      "name": "Header：补充 data-testid=\"nav-switcher\"（最小化变更）",
+      "description": "在 Header 右侧导航/操作区真实容器补充 data-testid=\"nav-switcher\"，满足既有单测查询，不改变结构与样式",
+      "notes": "仅测试辅助标识，对生产无影响",
+      "status": "completed",
+      "dependencies": [],
+      "createdAt": "2025-11-10T08:20:00.000Z",
+      "updatedAt": "2025-11-10T08:20:00.000Z",
+      "relatedFiles": [
+        { "path": "src/components/layout/header.tsx", "type": "TO_MODIFY", "description": "右侧 actions 容器添加 data-testid=nav-switcher" },
+        { "path": "src/components/layout/__tests__/header.test.tsx", "type": "REFERENCE", "description": "相关断言位置" }
+      ],
+      "implementationGuide": "在 Header 的右上角 actions 容器添加 data-testid=\"nav-switcher\"，不改变任何业务逻辑",
+      "verificationCriteria": "pnpm test src/components/layout/__tests__/header.test.tsx 用例 2/2 通过"
+    },
+    {
+      "id": "b3d2c4f5-9a7e-4d1c-8b2f-6e5d4c3b2a19",
+      "name": "layout-fonts：统一 next/font/local 解析（全局 mock + alias）",
+      "description": "移除局部 vi.mock，改为在全局 setup 中 mock next/font/local 并通过 Vitest alias 指向 index.js，避免 ESM 目录导入错误",
+      "notes": "测试层改动，不影响生产构建",
+      "status": "completed",
+      "dependencies": [],
+      "createdAt": "2025-11-10T08:21:00.000Z",
+      "updatedAt": "2025-11-10T08:21:00.000Z",
+      "relatedFiles": [
+        { "path": "src/test/setup.ts", "type": "TO_MODIFY", "description": "提供 next/font/local 全局 mock（variable/className/style）" },
+        { "path": "vitest.config.mts", "type": "REFERENCE", "description": "resolve.alias 新增 'next/font/local': 'next/font/local/index.js'" },
+        { "path": "src/app/[locale]/__tests__/layout-fonts.test.ts", "type": "TO_MODIFY", "description": "移除冗余局部 mock，注释指向全局 setup" }
+      ],
+      "implementationGuide": "在 src/test/setup.ts 使用 vi.mock('next/font/local', ()=>({ default: (opts)=>({ variable: opts?.variable ?? '--font-local', className: 'local-font-class', style: { fontFamily: 'Local Font' } }) }))；确保 vitest.config.mts alias 覆盖目录导入",
+      "verificationCriteria": "pnpm test src/app/[locale]/__tests__/layout-fonts.test.ts 通过"
+    },
+    {
+      "id": "f2e1d0c9-b8a7-46d5-9132-0f9e8d7c6b5a",
+      "name": "load-messages：补充 deferred 分支对称回退用例",
+      "description": "在回归测试中新增 deferred.json 分支的 fetch+readFile 双失败最终返回 {}（不抛错）的对称性测试",
+      "notes": "保障 critical 与 deferred 行为一致",
+      "status": "completed",
+      "dependencies": [ { "taskId": "782cd7d0-4ba7-4ce9-9fc8-46bf63a28a43" } ],
+      "createdAt": "2025-11-10T08:22:00.000Z",
+      "updatedAt": "2025-11-10T08:22:00.000Z",
+      "relatedFiles": [
+        { "path": "src/lib/__tests__/load-messages.fallback.test.ts", "type": "TO_MODIFY", "description": "新增 deferred 分支对称性用例" },
+        { "path": "src/lib/load-messages.ts", "type": "REFERENCE", "description": "实现已具备对称回退，无需改动" }
+      ],
+      "implementationGuide": "在 fallback 测试文件中为 deferred 分支添加与 critical 相同的双失败场景断言",
+      "verificationCriteria": "pnpm test src/lib/__tests__/load-messages.fallback.test.ts 全部通过"
+    },
+    {
+      "id": "a7b6c5d4-e3f2-41a0-b9c8-7d6e5f4a3b2c",
+      "name": "CSP 运行时烟测验证（无代码变更）",
+      "description": "本地起服务访问 /en 与 /zh，检查浏览器控制台：不应出现 CSP 拦截或 nonce 相关报错（允许 Web Vitals 采集 400 日志）",
+      "notes": "验证范围：运行时核验；不修改任何代码",
+      "status": "completed",
+      "dependencies": [ { "taskId": "ea2c53c3-9e7a-4e01-8545-2a860991f92c" } ],
+      "createdAt": "2025-11-10T08:23:00.000Z",
+      "updatedAt": "2025-11-10T08:23:00.000Z",
+      "relatedFiles": [
+        { "path": "src/config/security.ts", "type": "REFERENCE", "description": "CSP 生成逻辑（此前已完成收紧）" }
+      ],
+      "implementationGuide": "pnpm dev 后使用自动化浏览器访问 /en 与 /zh，收集 console errorsOnly（期望无 CSP 相关错误）",
+      "verificationCriteria": "浏览器控制台无 'Refused to apply inline style' 等 CSP 违规；页面正常渲染"
+    },
+    {
+      "id": "c9d8e7f6-a5b4-43c2-9d10-2e3f4a5b6c7d",
+      "name": "测试层 fetch mock 行为文档化与开关说明",
+      "description": "为 src/test/setup.ts 的全局 fetch mock 添加完整注释，明确目的/范围/环境开关与示例使用",
+      "notes": "仅文档化注释，不改变逻辑",
+      "status": "completed",
+      "dependencies": [ { "taskId": "4a1d21ab-7688-41d5-b48a-49b9565612ae" } ],
+      "createdAt": "2025-11-10T08:24:00.000Z",
+      "updatedAt": "2025-11-10T08:24:00.000Z",
+      "relatedFiles": [
+        { "path": "src/test/setup.ts", "type": "TO_MODIFY", "description": "在 fetch mock 处补充 JSDoc 风格注释，说明 VITEST_USE_REAL_MESSAGES" }
+      ],
+      "implementationGuide": "在 fetch mock 段前添加注释块：Purpose/Scope/Environment switch/Example/Note",
+      "verificationCriteria": "打开 src/test/setup.ts 可读注释，CI 及本地测试仍全部通过"
+    }
+
   ]
 }
