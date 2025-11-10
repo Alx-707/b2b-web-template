@@ -298,20 +298,31 @@ class QualityGate {
     try {
       // 构建性能检查
       const buildStart = Date.now();
-      const buildOutput = execSync('pnpm build', {
+      // 使用 spawnSync 捕获 stdout + stderr，确保能识别写入 stderr 的 i18n 报错
+      const buildRes = spawnSync('pnpm', ['build'], {
         encoding: 'utf8',
-        stdio: 'pipe',
-        timeout: 180000,
+        shell: true,
+        maxBuffer: 50 * 1024 * 1024,
       });
+      const buildOutput = (buildRes.stdout || '') + (buildRes.stderr || '');
       const buildTime = Date.now() - buildStart;
 
       gate.checks.buildTime = buildTime;
 
-      // Zero-tolerance i18n smoke test: fail if next-intl reports missing messages
-      if (/MISSING_MESSAGE/i.test(buildOutput)) {
-        gate.issues.push('next-intl MISSING_MESSAGE detected in build logs');
+      // 构建失败时直接阻断并输出节选日志，便于诊断
+      if (typeof buildRes.status === 'number' && buildRes.status !== 0) {
+        gate.issues.push(`构建失败（退出码 ${buildRes.status}）`);
+        gate.issues.push('构建输出（节选）：');
+        gate.issues.push(buildOutput.slice(0, 2000));
         gate.status = 'failed';
-        gate.blocking = true; // enforce blocking when i18n is broken
+        gate.blocking = true;
+      } else {
+        // Zero-tolerance i18n smoke test: fail if next-intl reports missing messages（stdout 或 stderr 均可识别）
+        if (/MISSING_MESSAGE/i.test(buildOutput)) {
+          gate.issues.push('next-intl MISSING_MESSAGE detected in build logs');
+          gate.status = 'failed';
+          gate.blocking = true; // enforce blocking when i18n is broken
+        }
       }
 
       // 测试性能检查

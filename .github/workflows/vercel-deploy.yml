@@ -116,13 +116,27 @@ jobs:
       - name: 安装项目依赖（显式）
         run: pnpm install --frozen-lockfile
 
-      - name: 使用 Vercel CLI 构建
+      - name: 使用 Vercel CLI 构建（保存日志）
+        id: vercel_build
         run: |
-          VERCEL_LOGS=1 VERCEL_BUILDER_DEBUG=1 vercel build --token=${{ secrets.VERCEL_TOKEN }} --debug --yes
+          set -euo pipefail
+          # 将 stdout + stderr 一并保存，供后续质量拦截步骤使用
+          VERCEL_LOGS=1 VERCEL_BUILDER_DEBUG=1 vercel build --token=${{ secrets.VERCEL_TOKEN }} --debug --yes 2>&1 | tee vercel_build.log
+          echo "log-path=$(pwd)/vercel_build.log" >> "$GITHUB_OUTPUT"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           CI: true
+
+      - name: 阻断：检测 next-intl MISSING_MESSAGE
+        run: |
+          set -euo pipefail
+          if grep -E -i "MISSING_MESSAGE" vercel_build.log; then
+            echo "❌ Detected next-intl MISSING_MESSAGE in Vercel build logs"
+            exit 1
+          else
+            echo "✅ No MISSING_MESSAGE found in Vercel build logs"
+          fi
 
       - name: 通过 Token 部署预构建产物
         id: vercel_cli_deploy
