@@ -220,7 +220,7 @@ jobs:
         id: vercel_build_prod
         run: |
           set -euo pipefail
-          VERCEL_LOGS=1 VERCEL_BUILDER_DEBUG=1 vercel build --token=${{ secrets.VERCEL_TOKEN }} --debug --yes 2>&1 | tee vercel_build_prod.log
+          VERCEL_LOGS=1 VERCEL_BUILDER_DEBUG=1 vercel build --prod --token=${{ secrets.VERCEL_TOKEN }} --debug --yes 2>&1 | tee vercel_build_prod.log
           echo "log-path=$(pwd)/vercel_build_prod.log" >> "$GITHUB_OUTPUT"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
