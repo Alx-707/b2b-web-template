@@ -298,10 +298,21 @@ class QualityGate {
     try {
       // 构建性能检查
       const buildStart = Date.now();
-      execSync('pnpm build', { stdio: 'pipe', timeout: 180000 });
+      const buildOutput = execSync('pnpm build', {
+        encoding: 'utf8',
+        stdio: 'pipe',
+        timeout: 180000,
+      });
       const buildTime = Date.now() - buildStart;
 
       gate.checks.buildTime = buildTime;
+
+      // Zero-tolerance i18n smoke test: fail if next-intl reports missing messages
+      if (/MISSING_MESSAGE/i.test(buildOutput)) {
+        gate.issues.push('next-intl MISSING_MESSAGE detected in build logs');
+        gate.status = 'failed';
+        gate.blocking = true; // enforce blocking when i18n is broken
+      }
 
       // 测试性能检查
       const testStart = Date.now();

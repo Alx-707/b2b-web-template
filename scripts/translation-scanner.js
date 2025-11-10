@@ -545,16 +545,43 @@ function getAllKeys(obj, prefix = '') {
 }
 
 /**
+ * 获取所有对象路径（非叶子键）
+ */
+function getAllObjectPaths(obj, prefix = '') {
+  const paths = new Set();
+  for (const [key, value] of Object.entries(obj || {})) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      // 当前即为对象路径
+      paths.add(fullKey);
+      // 继续深入
+      getAllObjectPaths(value, fullKey).forEach((p) => paths.add(p));
+    }
+  }
+  return paths;
+}
+
+/**
  * 分析翻译键使用情况
  */
 function analyzeTranslationUsage(translations) {
   const allTranslationKeys = new Set();
 
-  // 收集所有翻译文件中的键
+  // 收集所有翻译文件中的叶子键
   for (const locale of CONFIG.LOCALES) {
     if (translations[locale]) {
       getAllKeys(translations[locale]).forEach((key) =>
         allTranslationKeys.add(key),
+      );
+    }
+  }
+
+  // 收集所有“对象路径”（非叶子键），用于检测 object-as-string-key 误用
+  const objectPaths = new Set();
+  for (const locale of CONFIG.LOCALES) {
+    if (translations[locale]) {
+      getAllObjectPaths(translations[locale]).forEach((p) =>
+        objectPaths.add(p),
       );
     }
   }
@@ -580,6 +607,32 @@ function analyzeTranslationUsage(translations) {
     missingKeys.push(key);
   });
 
+  // 检测对象键被当作叶子键使用的情况（例如 t('seo')）
+  const misuseKeys = [];
+  scanResults.translationKeys.forEach((key) => {
+    if (objectPaths.has(key)) {
+      misuseKeys.push(key);
+      const usages = scanResults.keyUsages.get(key) || [];
+      if (usages.length === 0) {
+        scanResults.errors.push({
+          file: '<unknown>',
+          error: `object_key_misuse: ${key} (object path used as leaf key)`,
+          type: 'object_key_misuse',
+        });
+      } else {
+        usages.forEach((u) =>
+          scanResults.errors.push({
+            file: u.file,
+            line: u.line,
+            column: u.column,
+            error: `object_key_misuse: ${key} (object path used as leaf key)`,
+            type: 'object_key_misuse',
+          }),
+        );
+      }
+    }
+  });
+
   // 找出未使用的键（翻译文件中有但代码中没有使用）
   const unusedKeys = [];
   allTranslationKeys.forEach((key) => {
@@ -593,9 +646,10 @@ function analyzeTranslationUsage(translations) {
     uniqueKeys: scanResults.translationKeys.size,
     missingKeys,
     unusedKeys,
+    misuseKeys,
   };
 
-  return { missingKeys, unusedKeys };
+  return { missingKeys, unusedKeys, misuseKeys };
 }
 
 /**

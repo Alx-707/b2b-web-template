@@ -1,8 +1,8 @@
 {
-  "timestamp": "2025-11-10T01:02:29.542Z",
+  "timestamp": "2025-11-10T02:02:40.507Z",
   "summary": {
-    "totalFiles": 728,
-    "scannedFiles": 728,
+    "totalFiles": 729,
+    "scannedFiles": 729,
     "errorCount": 0,
     "warningCount": 0,
     "totalKeys": 550,
@@ -408,7 +408,8 @@
       "structured-data.product.defaultName",
       "structured-data.product.defaultDescription",
       "title"
-    ]
+    ],
+    "misuseKeys": []
   },
   "translationKeys": [
     "acceptPrivacy",
@@ -2636,7 +2637,8 @@
       "structured-data.product.defaultName",
       "structured-data.product.defaultDescription",
       "title"
-    ]
+    ],
+    "misuseKeys": []
   },
   "errors": [],
   "warnings": []

@@ -36,6 +36,7 @@ function runESLint(files) {
     ...files,
     '--config',
     'eslint.config.mjs',
+    '--no-warn-ignored',
     '--max-warnings',
     '0',
   ];
