@@ -236,13 +236,8 @@ const VALIDATION_SCHEMA = z
     messageMinLength: z.number().int().positive(),
     messageMaxLength: z.number().int().positive(),
   })
-  .superRefine((value, ctx) => {
-    if (value.messageMinLength > value.messageMaxLength) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'messageMinLength must be <= messageMaxLength',
-      });
-    }
+  .refine((value) => value.messageMinLength <= value.messageMaxLength, {
+    message: 'messageMinLength must be <= messageMaxLength',
   });
 
 const CONTACT_FORM_FIELD_KEYS_ENUM = z.enum(
