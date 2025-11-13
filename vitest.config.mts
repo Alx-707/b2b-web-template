@@ -3,6 +3,16 @@ import { resolve } from 'path';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  // SSR 配置 - 修复 Sentry 依赖解析问题
+  ssr: {
+    noExternal: [
+      '@sentry/nextjs',
+      '@sentry/core',
+      '@sentry/utils',
+      '@sentry/node',
+    ],
+  },
+
   test: {
     // 测试环境配置 - 使用标准 jsdom 环境
     environment: 'jsdom',

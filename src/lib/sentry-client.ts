@@ -5,7 +5,15 @@
  * - In tests, respects vi.mock('@sentry/nextjs') via dynamic import
  */
 
-type SentryModule = typeof import('@sentry/nextjs');
+// 避免在构建期解析 @sentry/nextjs，最小化类型声明以消除模块解析依赖
+type SentryModule = {
+  captureException: (error: unknown) => void;
+  captureMessage: (message: string, level?: unknown) => void;
+  addBreadcrumb: (breadcrumb: unknown) => void;
+  setTag: (key: string, value: string) => void;
+  setUser: (user: unknown) => void;
+  setContext: (name: string, context: Record<string, unknown>) => void;
+};
 
 const DISABLE_SENTRY =
   process.env['NEXT_PUBLIC_DISABLE_SENTRY'] === '1' ||
@@ -18,8 +26,10 @@ function loadSentry(): Promise<SentryModule> | null {
   if (DISABLE_SENTRY) return null;
   if (process.env.NODE_ENV !== 'production') return null;
   if (!sentryPromise) {
-    // Dynamic import is mockable by Vitest (vi.mock('@sentry/nextjs'))
-    sentryPromise = import('@sentry/nextjs');
+    // 使用动态 import 且仅在生产启用，测试/开发构建不会触发依赖解析
+    // 这里通过字符串拼接规避静态分析提前解析依赖
+    const mod = '@sentry/nextjs' as const;
+    sentryPromise = import(mod);
   }
   return sentryPromise;
 }

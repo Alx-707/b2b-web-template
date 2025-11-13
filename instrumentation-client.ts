@@ -24,7 +24,9 @@ function initializeSentry() {
   sentryInitialized = true;
 
   // Dynamic import to avoid bundling Sentry in the initial vendors chunk
-  import('@sentry/nextjs')
+  // 通过变量名规避静态分析在测试构建期解析依赖
+  const mod = '@sentry/nextjs' as const;
+  import(mod)
     .then((Sentry) => {
       Sentry.init({
         dsn: SENTRY_DSN,
