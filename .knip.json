@@ -1,34 +1,62 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/app/**/*.tsx",
+    "src/app/api/**/*.ts",
+    "src/middleware.ts",
+    "src/app/layout.tsx",
+    "src/app/not-found.tsx",
+    "src/app/global-error.tsx"
+  ],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": [
+    "src/**/*.{test,spec}.{ts,tsx}",
+    "src/**/__tests__/**",
+    "src/test/**",
+    "src/testing/**",
+    "src/components/dev-tools/**",
+    "scripts/**",
+    "src/templates/**",
+    "src/components/shared/animation-examples.tsx",
+    "src/components/shared/animations/**",
+    "src/components/shared/under-construction-v*.tsx",
+    "src/components/shared/under-construction-v*/**",
+    "src/components/i18n/*-demo.tsx",
+    "src/components/performance/**",
+    "src/lib/performance-monitoring-*.ts",
+    "src/lib/react-scan-config.ts",
+    "src/lib/i18n-*.ts",
+    "src/constants/test-*.ts",
+    "src/constants/performance.ts"
+  ],
   "ignoreDependencies": [
-    "embla-carousel-react",
-    "geist",
-    "next-sitemap",
+    "@axe-core/playwright",
+    "@lhci/cli",
     "@next/eslint-plugin-next",
+    "@sentry/cli",
+    "axe-core",
+    "concurrently",
+    "embla-carousel-react",
     "eslint-config-next",
     "eslint-import-resolver-typescript",
     "eslint-plugin-import",
     "eslint-plugin-promise",
     "eslint-plugin-react",
     "eslint-plugin-react-hooks",
-    "typescript-eslint",
-    "source-map-explorer"
+    "geist",
+    "husky",
+    "js-yaml",
+    "lighthouse",
+    "next-sitemap",
+    "postcss",
+    "react-scan",
+    "sharp",
+    "source-map-explorer",
+    "typescript-eslint"
   ],
-  "entry": [
-    "src/app/**/*.{ts,tsx}",
-    "src/components/**/*.{ts,tsx}",
-    "src/lib/**/*.{ts,tsx}",
-    "src/hooks/**/*.{ts,tsx}",
-    "src/types/**/*.{ts,tsx}",
-    "src/config/**/*.{ts,tsx}",
-    "src/constants/**/*.{ts,tsx}",
-    "src/scripts/**/*.{ts,tsx}",
-    "!src/**/*.test.{ts,tsx}",
-    "!src/**/__tests__/**"
-  ],
-  "ignore": ["**/*.test.{ts,tsx}", "**/__tests__/**", "**/__mocks__/**"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
-  }
+  },
+  "includeEntryExports": true
 }

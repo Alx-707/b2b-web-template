@@ -221,27 +221,43 @@ vi.spyOn(HTMLAnchorElement.prototype as any, 'click').mockImplementation(
 );
 
 // Mock lucide-react icons - 返回真正的React元素而不是字符串
-const MockIcon = vi.fn(({ className, ...props }: any) =>
-  React.createElement('svg', {
-    'className': className || '',
-    'data-testid': 'mock-icon',
-    'width': '24',
-    'height': '24',
-    'viewBox': '0 0 24 24',
-    'fill': 'none',
-    'stroke': 'currentColor',
-    'strokeWidth': '2',
-    'strokeLinecap': 'round',
-    'strokeLinejoin': 'round',
-    ...props,
-  }),
-);
+// Browser Mode（BROWSER_TEST=true）下跳过此 Mock，避免 v4 Browser 手动 mock 解析冲突
+if (process.env.BROWSER_TEST !== 'true') {
+  const _MockIcon = vi.fn(({ className, ...props }: any) =>
+    React.createElement('svg', {
+      'className': className || '',
+      'data-testid': 'mock-icon',
+      'width': '24',
+      'height': '24',
+      'viewBox': '0 0 24 24',
+      'fill': 'none',
+      'stroke': 'currentColor',
+      'strokeWidth': '2',
+      'strokeLinecap': 'round',
+      'strokeLinejoin': 'round',
+      ...props,
+    }),
+  );
 
-vi.mock('lucide-react', async (importOriginal) => {
-  const actual = await importOriginal<any>();
-  return new Proxy(
-    {
-      ...actual,
+  vi.mock('lucide-react', () => {
+    // 在 factory 内定义 MockIcon，避免 Vitest v4 hoist 导致的未定义错误
+    const MockIcon = ({ className, ...props }: any) =>
+      React.createElement('svg', {
+        'className': className || '',
+        'data-testid': 'mock-icon',
+        'width': '24',
+        'height': '24',
+        'viewBox': '0 0 24 24',
+        'fill': 'none',
+        'stroke': 'currentColor',
+        'strokeWidth': '2',
+        'strokeLinecap': 'round',
+        'strokeLinejoin': 'round',
+        ...props,
+      });
+    return {
+      __esModule: true,
+      default: MockIcon,
       // 常用图标
       Home: MockIcon,
       User: MockIcon,
@@ -263,6 +279,7 @@ vi.mock('lucide-react', async (importOriginal) => {
       MapPin: MockIcon,
       Smartphone: MockIcon,
       Mail: MockIcon,
+      MessageCircle: MockIcon,
       Phone: MockIcon,
       ExternalLink: MockIcon,
       Github: MockIcon,
@@ -273,6 +290,7 @@ vi.mock('lucide-react', async (importOriginal) => {
       Youtube: MockIcon,
       Check: MockIcon,
       CheckIcon: MockIcon,
+      CheckCircle: MockIcon,
       AlertCircle: MockIcon,
       Info: MockIcon,
       Warning: MockIcon,
@@ -289,6 +307,7 @@ vi.mock('lucide-react', async (importOriginal) => {
       Heart: MockIcon,
       Star: MockIcon,
       Bookmark: MockIcon,
+      BookOpen: MockIcon,
       Calendar: MockIcon,
       Clock: MockIcon,
       Eye: MockIcon,
@@ -322,6 +341,7 @@ vi.mock('lucide-react', async (importOriginal) => {
       Music: MockIcon,
       Film: MockIcon,
       FileText: MockIcon,
+      Code: MockIcon,
       File: MockIcon,
       Folder: MockIcon,
       FolderOpen: MockIcon,
@@ -1120,15 +1140,9 @@ vi.mock('lucide-react', async (importOriginal) => {
       Xm: MockIcon,
       Ym: MockIcon,
       Zm: MockIcon,
-    },
-    {
-      get(target, prop: string | symbol) {
-        if (prop === '__esModule') return true;
-        return prop in target ? (target as any)[prop] : MockIcon;
-      },
-    },
-  );
-});
+    };
+  });
+}
 
 // Mock Zod validation library
 const createMockZodString = () => {
@@ -1733,4 +1747,8 @@ beforeEach(() => {
 
 afterEach(() => {
   console.error = originalError;
+});
+// Ensure each test starts from a clean slate under Vitest v4
+beforeEach(() => {
+  vi.resetAllMocks();
 });

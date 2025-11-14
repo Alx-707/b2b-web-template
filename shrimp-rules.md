@@ -704,16 +704,6 @@ import { debugLog } from './debug'; // Temporary debugging
   });
   ```
 
-### Web-Eval-Agent测试
-
-- **测试工具**: web-eval-agent MCP服务器
-- **测试命令**: `pnpm test:web-eval-agent`
-- **测试范围**: UX/UI评估、用户体验流程
-- **集成验证**: `pnpm test:verify-integration`
-- **测试服务器**: `pnpm test:server:start`
-- **并发测试**: `pnpm test:server:with-tests`
-- **用途**: 自动化用户体验评估和界面质量检查
-
 ## 性能优化规则
 
 ### 包大小限制

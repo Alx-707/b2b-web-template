@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
-/// <reference types="@vitest/browser/providers/playwright" />
+// v4: provider types reference removed; provider is configured via function API
 import { resolve } from 'path';
+import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
 
 /**
@@ -12,15 +13,26 @@ import { defineConfig } from 'vitest/config';
  * - 响应式布局测试
  */
 export default defineConfig({
+  optimizeDeps: {
+    include: [
+      '@testing-library/react',
+      '@testing-library/dom',
+      'next/router',
+      'next/navigation',
+      'next-intl',
+      'next-intl/server',
+      '@t3-oss/env-nextjs',
+      'react/jsx-dev-runtime',
+    ],
+  },
   test: {
-    // 浏览器测试环境配置
-    environment: 'happy-dom', // 轻量级DOM环境，比jsdom更快
+    // 浏览器测试环境由 Browser Mode 提供（v4），不再与 happy-dom 混用
 
     // 全局设置
     globals: true,
 
-    // 设置文件
-    setupFiles: ['./src/test/setup.ts'],
+    // 设置文件（Browser Mode 使用轻量版 setup，避免与手动 Mock 冲突）
+    setupFiles: ['./src/test/setup.browser.ts'],
 
     // 浏览器测试文件匹配模式 - 严格限制范围
     include: [
@@ -46,24 +58,21 @@ export default defineConfig({
       '**/test-utils.{js,jsx,ts,tsx}',
     ],
 
-    // 浏览器特定配置 - Vitest 3新格式
+    // 浏览器特定配置 - Vitest v4 Provider API
     browser: {
       enabled: true,
-      provider: 'playwright',
+      // 在容器/CI 环境中禁用 sandbox 以提升兼容性
+      provider: playwright({
+        launchOptions: {
+          args: ['--no-sandbox', '--disable-dev-shm-usage'],
+        },
+      }),
       headless: true, // 无头模式，提高CI性能
 
-      // 浏览器实例配置
+      // 浏览器实例配置（v4）
       instances: [
         {
           browser: 'chromium',
-          launch: {
-            args: [
-              '--no-sandbox',
-              '--disable-setuid-sandbox',
-              '--disable-dev-shm-usage',
-              '--disable-gpu',
-            ],
-          },
         },
       ],
 
@@ -112,20 +121,11 @@ export default defineConfig({
     },
 
     // 测试超时设置 - 优化浏览器测试性能
-    testTimeout: 20000, // 从30秒降低到20秒，提高测试执行效率
+    testTimeout: 60000, // 提高浏览器用例稳定性
     hookTimeout: 8000, // 从10秒降低到8秒，减少等待时间
 
     // 并发设置 - 浏览器测试资源消耗大，进一步优化
     pool: 'threads',
-    poolOptions: {
-      threads: {
-        singleThread: false,
-        maxThreads: 2, // 保持2个线程，浏览器测试资源消耗大
-        minThreads: 1,
-        useAtomics: true, // 启用原子操作，提高线程安全性
-        isolate: true, // 确保测试隔离，避免状态污染
-      },
-    },
 
     // 报告器配置
     reporters: ['verbose', 'json'],
@@ -151,17 +151,22 @@ export default defineConfig({
     // 依赖优化 - 浏览器环境特定优化
     deps: {
       optimizer: {
-        web: {
+        client: {
           enabled: true,
+          include: [
+            'next/router',
+            'next/navigation',
+            'zod',
+            'next-intl',
+            'next-intl/server',
+            '@t3-oss/env-nextjs',
+            'next/font/local',
+            'react/jsx-dev-runtime',
+            '@testing-library/react',
+          ],
         },
       },
-      // 浏览器测试内联依赖
-      inline: [
-        'next-intl',
-        '@radix-ui/react-*',
-        'lucide-react',
-        '@testing-library/*',
-      ],
+      // 浏览器测试内联依赖（v4：移除 inline，改用 optimizer.include 或 optimizeDeps.include）
     },
 
     // 重试配置 - 浏览器测试可能不稳定
