@@ -81,6 +81,11 @@ docs/data/003-Dashboard/
 docs/data/Data/
 docs/data/tucsenberg-web-frontier/
 
+# WebGUI generated files
+WebGUI.md
+docs/data/WebGUI.md
+docs/data/*/WebGUI.md
+
 # 临时实现文档
 docs/best-practices-from-*.md
 docs/bundle-optimization-analysis.md

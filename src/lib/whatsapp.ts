@@ -1,9 +1,8 @@
 import WhatsApp from 'whatsapp';
+import { z } from 'zod';
 import { env } from '@/lib/env';
 import { logger } from '@/lib/logger';
 import { COUNT_TEN, ZERO } from '@/constants';
-
-import { z } from 'zod';
 
 /**
  * WhatsApp webhook schema definition using Zod
@@ -36,8 +35,6 @@ const WhatsAppWebhookSchema = z.object({
     )
     .optional(),
 });
-
-
 
 function extractIncomingMessage(body: unknown) {
   const result = WhatsAppWebhookSchema.safeParse(body);
