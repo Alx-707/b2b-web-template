@@ -242,17 +242,12 @@ jobs:
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
-      - name: 构建检查（使用 Webpack 以兼容 size-limit）
-        run: pnpm build --webpack
+      - name: 构建检查
+        run: pnpm build
         env:
-          # Next.js 16 默认使用 Turbopack，但 .size-limit.js 配置基于 Webpack splitChunks
-          # 临时使用 --webpack 标志以保持现有 bundle 监控，待后续适配 Turbopack
           NODE_ENV: production
 
-      - name: 包大小检查
-        run: pnpm size:check
-
-      - name: Lighthouse CI
+      - name: Lighthouse CI（包含 Core Web Vitals 和 Bundle 大小监控）
         timeout-minutes: 15
         run: pnpm exec lhci autorun --config=lighthouserc.js
         env:
