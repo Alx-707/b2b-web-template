@@ -48,6 +48,11 @@ export interface DevToolConfig {
  * - 左下角：Web Vitals (主要性能监控)
  * - 右下角：React Scan Indicator (渲染性能)
  *
+ * z-index 策略：
+ * - 使用最大 z-index (2147483647) 确保开发工具始终在最上层
+ * - 符合 Chrome DevTools、React DevTools、Vercel Speed Insights 等主流工具的实践
+ * - 开发工具应该始终可见，不被任何页面元素遮挡
+ *
  * 注意：仅保留实际使用的开发工具配置
  */
 export const DEV_TOOLS_CONFIG: Record<string, DevToolConfig> = {
@@ -58,7 +63,7 @@ export const DEV_TOOLS_CONFIG: Record<string, DevToolConfig> = {
     position: 'bottom-left',
     size: 'medium',
     priority: 10,
-    zIndex: 9999,
+    zIndex: 2147483647, // 最大 z-index 值 (2^31 - 1)，确保始终在最上层
     collapsible: true,
     defaultCollapsed: false,
   },
