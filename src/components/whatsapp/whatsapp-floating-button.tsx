@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState, useSyncExternalStore } from 'react';
 import { MessageCircle } from 'lucide-react';
 import Draggable from 'react-draggable';
 
@@ -11,6 +11,7 @@ export interface WhatsAppFloatingButtonProps {
 }
 
 const POSITION_STORAGE_KEY = 'whatsapp-button-position';
+const DEFAULT_POSITION = { x: 0, y: 0 };
 
 const normalizePhoneNumber = (value: string) => {
   const digits = value.replace(/[^0-9]/g, '');
@@ -21,13 +22,12 @@ const normalizePhoneNumber = (value: string) => {
 /**
  * 从 localStorage 读取保存的位置
  */
-const loadPosition = (): { x: number; y: number } => {
-  if (typeof window === 'undefined') return { x: 0, y: 0 };
+const getStoredPosition = (): { x: number; y: number } => {
   try {
     const saved = localStorage.getItem(POSITION_STORAGE_KEY);
-    return saved ? JSON.parse(saved) : { x: 0, y: 0 };
+    return saved ? JSON.parse(saved) : DEFAULT_POSITION;
   } catch {
-    return { x: 0, y: 0 };
+    return DEFAULT_POSITION;
   }
 };
 
@@ -35,13 +35,42 @@ const loadPosition = (): { x: number; y: number } => {
  * 保存位置到 localStorage
  */
 const savePosition = (x: number, y: number): void => {
-  if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify({ x, y }));
+    // 触发 storage 事件以通知其他订阅者
+    window.dispatchEvent(
+      new StorageEvent('storage', { key: POSITION_STORAGE_KEY }),
+    );
   } catch {
     // 忽略存储错误（如隐私模式）
   }
 };
+
+/**
+ * 使用 useSyncExternalStore 安全地读取 localStorage
+ * 避免 SSR/hydration 不匹配导致的 CLS
+ */
+function useStoredPosition() {
+  const subscribe = useCallback((callback: () => void) => {
+    window.addEventListener('storage', callback);
+    return () => window.removeEventListener('storage', callback);
+  }, []);
+
+  const getSnapshot = useCallback(() => {
+    return JSON.stringify(getStoredPosition());
+  }, []);
+
+  const getServerSnapshot = useCallback(() => {
+    return JSON.stringify(DEFAULT_POSITION);
+  }, []);
+
+  const positionString = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
+  return JSON.parse(positionString) as { x: number; y: number };
+}
 
 export function WhatsAppFloatingButton({
   number,
@@ -50,9 +79,16 @@ export function WhatsAppFloatingButton({
 }: WhatsAppFloatingButtonProps) {
   const normalizedNumber = normalizePhoneNumber(number);
   const nodeRef = useRef<HTMLDivElement>(null);
-  // 使用 lazy initializer 从 localStorage 恢复位置（避免 useEffect 初始化状态）
-  const [position, setPosition] = useState(() => loadPosition());
+  // 使用 useSyncExternalStore 安全读取 localStorage，避免 SSR/hydration CLS
+  const storedPosition = useStoredPosition();
+  const [localPosition, setLocalPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  // 优先使用本地拖拽位置，否则使用存储的位置
+  const position = localPosition ?? storedPosition;
 
   if (!normalizedNumber) return null;
 
@@ -71,7 +107,7 @@ export function WhatsAppFloatingButton({
   // 拖拽结束时保存位置
   const handleStop = (_e: unknown, data: { x: number; y: number }) => {
     const newPosition = { x: data.x, y: data.y };
-    setPosition(newPosition);
+    setLocalPosition(newPosition);
     savePosition(newPosition.x, newPosition.y);
     // 延迟重置拖拽状态，避免触发点击
     setTimeout(() => setIsDragging(false), 100);
