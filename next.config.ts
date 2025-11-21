@@ -2,7 +2,7 @@ import path from 'path';
 import type { NextConfig } from 'next';
 import bundleAnalyzer from '@next/bundle-analyzer';
 import createMDX from '@next/mdx';
-import { withSentryConfig } from '@sentry/nextjs';
+// import { withSentryConfig } from '@sentry/nextjs'; // Removed: Sentry package not installed
 import createNextIntlPlugin from 'next-intl/plugin';
 import { getSecurityHeaders } from './src/config/security';
 
@@ -279,46 +279,9 @@ const nextConfig: NextConfig = {
   },
 };
 
+// Sentry integration removed - package not installed
 // Optimized Sentry webpack plugin options for smaller bundle size
-const sentryWebpackPluginOptions = {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
+// const sentryWebpackPluginOptions = { ... };
 
-  org: process.env['SENTRY_ORG'] || '',
-  project: process.env['SENTRY_PROJECT'] || '',
-
-  // Only print logs for uploading source maps in CI
-  silent: !process.env['CI'],
-
-  // Optimize for smaller bundle size - disable source map upload in development
-  widenClientFileUpload: process.env['NODE_ENV'] === 'production',
-
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
-
-  // Disable automatic instrumentation to reduce bundle size
-  automaticVercelMonitors: false,
-
-  // Additional bundle size optimizations
-  hideSourceMaps: false, // Temporarily disabled for bundle analysis
-
-  // Only enable in production to reduce development build time
-  enabled: process.env['NODE_ENV'] === 'production',
-};
-
-// Allow disabling Sentry integration entirely for analysis runs
-const base = withBundleAnalyzer(withNextIntl(withMDX(nextConfig)));
-
-export default SENTRY_DISABLED
-  ? base
-  : withSentryConfig(base, {
-      // Build options for withSentryConfig (not just webpack plugin)
-      autoInstrumentAppDirectory: false, // avoid injecting client instrumentation into app router
-      disableManifestInjection: true, // save client bytes by skipping route manifest injection
-      bundleSizeOptimizations: {
-        excludeTracing: true, // 不使用性能追踪时可移除 tracing 相关代码
-        excludeDebugStatements: true,
-      },
-      // Pass through webpack plugin options
-      ...sentryWebpackPluginOptions,
-    });
+// Export final config with all plugins applied
+export default withBundleAnalyzer(withNextIntl(withMDX(nextConfig)));
