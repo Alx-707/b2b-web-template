@@ -21,10 +21,6 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { ThemePerformanceMonitor } from '@/components/theme/theme-performance-monitor';
 import { getAppConfig } from '@/config/app';
 import { SITE_CONFIG } from '@/config/paths/site-config';
-import {
-  getThemeCssVariables,
-  THEME_CUSTOMIZATION,
-} from '@/config/theme-customization';
 import { MAGIC_0_1 } from '@/constants/decimal';
 import { routing } from '@/i18n/routing';
 
@@ -45,8 +41,6 @@ const LazyWhatsAppFloatingButton = nextDynamic(
     loading: () => null,
   },
 );
-
-const THEME_CSS_VARIABLES = getThemeCssVariables();
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -96,8 +90,6 @@ export default async function LocaleLayout({
     >
       <body
         className='flex min-h-screen flex-col antialiased'
-        data-header-style={THEME_CUSTOMIZATION.layout.headerStyle}
-        style={THEME_CSS_VARIABLES}
         suppressHydrationWarning
       >
         {/* JSON-LD 结构化数据 */}

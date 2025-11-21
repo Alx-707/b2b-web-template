@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { WhatsAppFloatingButton } from '@/components/whatsapp/whatsapp-floating-button';
 
 // 局部 Mock lucide-react，避免集中 Mock/真实包体在极端环境下的解析开销
@@ -22,7 +22,23 @@ vi.mock('lucide-react', () => ({
   ),
 }));
 
+// Mock react-draggable 以简化测试
+vi.mock('react-draggable', () => ({
+  default: ({
+    children,
+    nodeRef,
+  }: {
+    children: React.ReactNode;
+    nodeRef: React.RefObject<HTMLElement>;
+  }) => <div data-testid='draggable-wrapper'>{children}</div>,
+}));
+
 describe('WhatsAppFloatingButton', () => {
+  beforeEach(() => {
+    // 清理 localStorage
+    localStorage.clear();
+  });
+
   it('renders link with normalized phone number', () => {
     render(<WhatsAppFloatingButton number='+1 (555) 123-4567' />);
 
@@ -37,5 +53,19 @@ describe('WhatsAppFloatingButton', () => {
     expect(
       screen.queryByRole('link', { name: /chat with us on whatsapp/i }),
     ).toBeNull();
+  });
+
+  it('renders draggable wrapper', () => {
+    render(<WhatsAppFloatingButton number='+1 (555) 123-4567' />);
+
+    const draggableWrapper = screen.getByTestId('draggable-wrapper');
+    expect(draggableWrapper).toBeInTheDocument();
+  });
+
+  it('renders drag handle with cursor-move class', () => {
+    render(<WhatsAppFloatingButton number='+1 (555) 123-4567' />);
+
+    const dragHandle = screen.getByLabelText('Drag to move');
+    expect(dragHandle).toHaveClass('drag-handle', 'cursor-move');
   });
 });
