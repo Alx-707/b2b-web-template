@@ -1,8 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Augment AI configuration and rules (local development only)
-.augment/
-
 # dependencies
 /node_modules
 /.pnp
