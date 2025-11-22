@@ -5,8 +5,8 @@
 
 ## ✨ 特性
 
-- 🎯 **现代技术栈**: Next.js 16.0.3 + React 19.1.1 + TypeScript 5.9.2
-- 🎨 **现代化UI**: Tailwind CSS 4.1.11 + 响应式设计
+- 🎯 **现代技术栈**: Next.js 16.0.3 + React 19.1.1 + TypeScript 5.9.3
+- 🎨 **现代化UI**: Tailwind CSS 4.1.17 + 响应式设计
 - 📝 **内容管理**: MDX + Git-based 工作流
 - 🌍 **国际化支持**: 英中双语切换 + next-intl
 - 🎭 **主题系统**: 明亮/暗黑/系统主题
@@ -100,16 +100,14 @@ pnpm install
 ### 3. 启动开发服务器
 
 ```bash
-pnpm dev --turbo  # 使用Turbopack加速开发（React Scan自动启用）
-
-# 可选：禁用React Scan性能监控
-pnpm dev:no-scan  # 禁用React组件性能分析
+pnpm dev          # 开发服务器（默认 Turbopack）
+# 或显式使用 Turbopack
+pnpm dev:turbopack
 ```
 
 ### 4. 访问应用
 
 - **主站**: [http://localhost:3000](http://localhost:3000)
-- **开发工具**: [http://localhost:3000/dev-tools](http://localhost:3000/dev-tools) (仅开发环境)
 
 ### 5. 构建生产版本
 
@@ -122,19 +120,19 @@ pnpm start
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── error-test/        # Sentry错误测试页面
-│   ├── globals.css        # 全局样式
-│   ├── layout.tsx         # 根布局组件
-│   └── page.tsx           # 首页
-├── components/            # 可复用UI组件
-├── features/              # 功能模块
-│   ├── auth/             # 认证功能
-│   └── dashboard/        # 仪表板功能
-├── lib/                   # 工具库
-├── shared/               # 共享工具函数
-│   └── utils.ts          # 通用工具函数
-└── types/                # TypeScript类型定义
+├── app/          # Next.js App Router 入口、布局、路由
+├── components/   # 共享 UI 组件
+├── config/       # 配置与常量（feature flags、主题等）
+├── constants/    # 常量定义
+├── hooks/        # 自定义 hooks
+├── i18n/         # 国际化辅助
+├── lib/          # 工具函数与通用逻辑
+├── services/     # 后端/第三方集成
+├── shared/       # 共享类型与工具
+├── templates/    # 模板片段
+├── test/         # 测试辅助
+├── testing/      # 测试基建
+└── types/        # TypeScript 类型
 ```
 
 ## 🔧 可用脚本
@@ -142,78 +140,51 @@ src/
 ### 开发相关
 
 ```bash
-pnpm dev              # 启动开发服务器
-pnpm dev --turbo      # 使用Turbopack启动开发服务器
-pnpm build            # 构建生产版本
-pnpm start            # 启动生产服务器
+pnpm dev               # 启动开发服务器（默认 Turbopack）
+pnpm dev:turbopack     # 显式使用 Turbopack
+pnpm build             # 构建生产版本（默认 Turbopack）
+pnpm build:webpack     # 使用 Webpack 构建（回退/对比）
+pnpm build:analyze     # 生成 Turbopack 构建分析
+pnpm start             # 启动生产服务器
 ```
-
-
 
 ### 代码质量
 
 ```bash
-pnpm lint             # ESLint检查
-pnpm lint:fix         # 自动修复ESLint问题
-pnpm lint:strict      # 严格模式检查 (0警告)
-pnpm format:check     # Prettier格式检查
-pnpm format:write     # 自动格式化代码
-pnpm type-check       # TypeScript类型检查
-pnpm type-check:strict # 严格TypeScript检查
+pnpm lint:check        # ESLint 检查
+pnpm lint:fix          # 自动修复 ESLint 问题
+pnpm format:check      # Prettier 格式检查
+pnpm format:write      # 自动格式化
+pnpm type-check        # TypeScript 类型检查
+pnpm type-check:tests   # 测试相关类型检查
+pnpm validate:translations # 翻译完整性校验
 ```
 
-### 质量保障
+### 质量与安全
 
 ```bash
-# 四层质量保障体系
-pnpm quality:check:strict  # 完整质量检查
-pnpm quality:quick         # 快速质量检查
-pnpm health               # 项目健康状态
-pnpm ready                # 部署就绪检查
-pnpm report               # 质量报告查看
-
-# 架构和安全检查
-pnpm arch:validate        # 架构一致性检查
-pnpm security:check   # 安全扫描
-pnpm size:check       # 包大小检查
-pnpm duplication:check # 代码重复度检查
+pnpm quality:monitor        # 本地质量监控
+pnpm quality:report:local   # 生成质量报告
+pnpm quality:gate           # 类型+lint+质量关卡
+pnpm quality:quick:staged   # 暂存区快速质量检查
+pnpm arch:check             # 依赖与架构检查
+pnpm circular:check         # 循环依赖检测
+pnpm security:check         # 安全扫描（npm audit + semgrep）
+pnpm config:check           # 配置一致性检查
+pnpm unused:check           # 未使用代码检查（knip）
 ```
 
 ### 测试相关
 
 ```bash
 pnpm test             # 运行测试
-pnpm test:watch       # 监听模式测试
 pnpm test:coverage    # 测试覆盖率报告
-pnpm test:ui          # 可视化测试界面
+pnpm test:e2e         # Playwright E2E 测试
+pnpm test:e2e:no-reuse # Playwright E2E（隔离上下文）
+pnpm perf:lighthouse  # Lighthouse CI（性能）
 ```
 
-#### 测试覆盖率状态
-
-- **当前覆盖率**: 57.09% (目标: 60%)
-- **已覆盖行数**: 9,971 / 17,463 行
-- **函数覆盖率**: 81.11% (524 / 646)
-- **分支覆盖率**: 87.38% (1,573 / 1,800)
-
-#### 关键组件测试状态
-
-- ✅ **hero-section.tsx**: 100% 覆盖率
-- ✅ **project-overview.tsx**: 100% 覆盖率
-- ✅ **enhanced-locale-switcher.tsx**: 100% 覆盖率
-- ✅ **structured-data-generators.ts**: 100% 覆盖率
-- ✅ **navigation.ts**: 100% 覆盖率
-- ✅ **contact-form.tsx**: 98.63% 覆盖率
-- ✅ **dropdown-menu.tsx**: 100% 覆盖率
-- 🔄 **tech-stack-section.tsx**: 测试已创建，待验证
-- 🔄 **contact/page.tsx**: 测试已创建，待验证
-
-#### 测试技术栈
-
-- **测试框架**: Vitest 3.2.4
-- **测试库**: @testing-library/react 16.3.0
-- **Mock配置**: vi.hoisted 模式
-- **覆盖率工具**: @vitest/coverage-v8
-- **测试模式**: React Server Components 兼容
+> 覆盖率、关键组件清单请以最新 `pnpm test:coverage` 输出为准。
 
 ## 🏗️ 技术栈详情
 
@@ -221,11 +192,11 @@ pnpm test:ui          # 可视化测试界面
 
 - **Next.js 16.0.3** - React全栈框架，App Router架构
 - **React 19.1.1** - 用户界面库，支持服务器组件
-- **TypeScript 5.9.2** - 类型安全的JavaScript超集
+- **TypeScript 5.9.3** - 类型安全的JavaScript超集
 
 ### 样式和UI
 
-- **Tailwind CSS 4.1.11** - 原子化CSS框架，CSS-first配置
+- **Tailwind CSS 4.1.17** - 原子化CSS框架，CSS-first配置
 - **Geist字体** - Vercel设计的现代字体系列
 
 ### 内容管理
@@ -244,61 +215,9 @@ pnpm test:ui          # 可视化测试界面
 ### 质量保障
 
 - **dependency-cruiser** - 架构一致性检查
-- **eslint-plugin-security** - 安全扫描
-- **size-limit** - 包大小控制
+- **eslint-plugin-security / semgrep** - 安全扫描
+- **npm audit** - 依赖安全基线
 - **Sentry（可选）** - 默认禁用客户端；服务端/边缘可按需启用
-
-## 🛡️ 四层质量保障体系
-
-本项目采用**企业级四层质量保障体系**，确保代码质量和项目稳定性：
-
-### 🔧 第一层：自动化检查
-
-- **TypeScript严格检查**: `pnpm type-check:strict`
-- **ESLint严格检查**: `pnpm lint:strict`
-- **代码格式检查**: `pnpm format:check`
-- **构建验证**: `pnpm build`
-- **安全扫描**: `pnpm security:check`
-- **性能预算**: `pnpm size:check`
-
-### 🤖 第二层：AI技术审查
-
-- **技术实现质量** (30%): 代码正确性、架构合理性
-- **最佳实践遵循** (30%): 框架最佳实践、编码规范
-- **企业级标准** (25%): 安全性、性能、可维护性
-- **项目整体影响** (15%): 架构一致性、后续影响
-
-### 📈 第三层：项目聚合
-
-- **健康状态监控**: 实时项目健康度评估
-- **部署就绪度评估**: 自动化部署条件检查
-- **质量报告生成**: 多维度质量分析报告
-- **性能指标追踪**: 持续性能监控
-
-### 👤 第四层：人工确认
-
-- **功能验证清单**: 具体功能点验证
-- **用户体验测试**: 实际使用场景测试
-- **业务逻辑确认**: 业务需求符合性检查
-- **最终质量把关**: 人工最终审核
-
-### 📊 质量指标
-
-- **配置覆盖率**: 92.1% (35/38个任务有完整QA配置)
-- **自动化检查点**: 140+个检查点
-- **问题发现率**: 100%
-- **问题修复率**: 100%
-
-## 🔍 质量标准
-
-本项目遵循企业级质量标准：
-
-- ✅ **类型安全**: TypeScript严格模式，100%类型覆盖
-- ✅ **代码规范**: ESLint 9生态，0警告标准
-- ✅ **架构一致性**: 0循环依赖，架构规则验证
-- ✅ **安全扫描**: 28个安全规则，0安全问题
-- ✅ **性能预算**: 包大小控制，性能监控
-- ✅ **错误监控**: 默认不启用客户端 Sentry；支持按需启用服务端/边缘错误上报
 
 ## ✅ 架构重构成果
 

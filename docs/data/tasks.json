@@ -1,760 +1,262 @@
 {
   "tasks": [
     {
-      "id": "054e3ca6-15c0-4f5e-af1a-38ecb7f5bdc4",
-      "name": "依赖与脚本升级至 Next 16 稳定线",
-      "description": "将 next/React/next-intl 等核心依赖提升至 16.0.x/19.x 最新稳定版，执行 @next/codemod@canary upgrade latest（dry-run 后正式），更新 package.json 脚本移除 --turbopack 标记，并同步 @next/eslint-plugin-next、@types/react 等。保留短期 build:webpack 兜底脚本。",
-      "status": "completed",
+      "id": "c3f269df-ab01-44f4-8063-2029e2bd724c",
+      "name": "覆盖率基线与优先级确认",
+      "description": "读取 reports/coverage/coverage-summary.json 与测试配置，形成当前覆盖率基线，列出覆盖率最低的前10个模块，并确定短期覆盖率目标≥55%。",
+      "status": "pending",
       "dependencies": [],
-      "createdAt": "2025-02-10T00:00:00.000Z",
-      "updatedAt": "2025-02-10T12:00:00.000Z",
+      "createdAt": "2025-11-21T09:19:40.094Z",
+      "updatedAt": "2025-11-21T09:19:40.094Z",
       "relatedFiles": [
-        { "path": "package.json", "type": "TO_MODIFY", "description": "更新依赖与脚本" },
-        { "path": "pnpm-lock.yaml", "type": "TO_MODIFY", "description": "锁文件同步" }
+        {
+          "path": "reports/coverage/coverage-summary.json",
+          "type": "REFERENCE",
+          "description": "最新覆盖率摘要"
+        },
+        {
+          "path": "vitest.config.mts",
+          "type": "REFERENCE",
+          "description": "覆盖率阈值与排除项"
+        }
       ],
-      "implementationGuide": "1) 备份 package.json/lock；2) npx @next/codemod@canary upgrade latest --dry-run；3) 安装 next/react/react-dom/next-intl 等最新稳定版及类型；4) 更新 scripts 去掉 --turbopack，新增 build:webpack 兜底；5) 核对 pnpm overrides；6) 记录变更。",
-      "verificationCriteria": "pnpm install 成功；next --version 输出 16.x；脚本无 --turbopack；存在 build:webpack 兜底脚本。",
-      "evidence": {
-        "completedAt": "2025-02-10T12:00:00.000Z",
-        "changes": {
-          "dependencies": {
-            "next": "15.5.4 → 16.0.3",
-            "@next/mdx": "15.5.6 → 16.0.3",
-            "@next/bundle-analyzer": "15.5.3 → 16.0.3",
-            "@next/eslint-plugin-next": "15.5.6 → 16.0.3",
-            "eslint-config-next": "15.5.6 → 16.0.3"
-          },
-          "scripts": {
-            "dev": "next dev --turbopack → next dev",
-            "dev:turbopack": "新增: next dev --turbopack",
-            "build:webpack": "新增: NEXT_USE_TURBOPACK=0 next build"
-          }
-        },
-        "verification": {
-          "nextVersion": "Next.js v16.0.3",
-          "pnpmInstall": "成功 (Done in 1.9s)",
-          "typeCheck": "通过 (无错误)",
-          "notes": "ESLint 配置有循环引用问题，需要在后续任务中修复，不影响 Next.js 16 核心升级。"
-        },
-        "commands": [
-          "cp package.json package.json.bak",
-          "cp pnpm-lock.yaml pnpm-lock.yaml.bak",
-          "pnpm add next@16.0.3 @next/mdx@16.0.3",
-          "pnpm add -D @next/bundle-analyzer@16.0.3 @next/eslint-plugin-next@16.0.3 eslint-config-next@16.0.3",
-          "pnpm install",
-          "npx next --version",
-          "pnpm type-check"
-        ]
-      }
+      "implementationGuide": "分析 coverage-summary.json，统计低覆盖模块（安全/监控/服务），输出文件路径+lines/functions/branches 覆盖率表格，存档到 evidence/ 或任务输出，不改代码。",
+      "verificationCriteria": "生成基线报告，含Top-N低覆盖模块与短期目标(≥55%)，已存档或输出。",
+      "analysisResult": "全局覆盖率约34.7%（lines），Cache Components PoC 未启用且 next-intl 兼容性阻滞，短期计划不依赖 PoC。设定短期目标：全局 lines/functions 覆盖率提升至≥55%，优先纯逻辑/安全/服务层与稳定 UI 组件。"
     },
     {
-      "id": "b02fffb8-23f2-45f8-a3f8-80af47d524c4",
-      "name": "Turbopack 配置迁移与 Webpack 退出方案",
-      "description": "将 experimental.turbopack 提升为顶层 turbopack 配置，评估/迁移现有 webpack splitChunks 拆分逻辑。初期允许 build:webpack 兜底；在 Turbopack 通过 bundle 预算验证后移除 webpack 自定义配置。",
-      "status": "completed",
-      "dependencies": [{ "taskId": "054e3ca6-15c0-4f5e-af1a-38ecb7f5bdc4" }],
-      "createdAt": "2025-02-10T00:00:00.000Z",
-      "updatedAt": "2025-11-20T03:30:00.000Z",
-      "relatedFiles": [
-        { "path": "next.config.ts", "type": "MODIFIED", "description": "已添加 webpack 配置待移除注释 (L85-87)" },
-        { "path": "package.json", "type": "REFERENCE", "description": "build:webpack 兜底脚本已存在但 NEXT_USE_TURBOPACK=0 无效" },
-        { "path": "proxy.ts", "type": "VERIFIED", "description": "已确认默认 Node.js runtime,支持 fs/path/process APIs" },
-        { "path": ".size-limit.js", "type": "REFERENCE", "description": "不兼容 Turbopack 内容哈希命名" }
-      ],
-      "implementationGuide": "1) next.config.ts 顶层 turbopack 配置（必要时 resolveAlias）；2) 暂留 webpack 配置并注明待移除；3) 跑 pnpm build (turbopack) + pnpm size:check；4) 通过后删除 splitChunks 与 build:webpack；5) 记录性能差异。",
-      "verificationCriteria": "pnpm build (Turbopack) 成功；size-limit 未超预算；是否保留 webpack 配置有记录。",
-      "evidence": {
-        "completedAt": "2025-11-20T03:30:00.000Z",
-        "findings": {
-          "turbopackConfig": "Next.js 16 默认启用 Turbopack,无需 experimental.turbopack 配置迁移",
-          "webpackConfig": "已在 next.config.ts:85-87 添加待移除注释,标注 Turbopack 验证后清理",
-          "edgeRuntimeFix": "修复 proxy.ts Edge Runtime 兼容性问题 - Proxy 默认 Node.js runtime,移除错误的 runtime export",
-          "reactImports": "修复 11 个文件的 React 19 自动 JSX 运行时兼容性问题",
-          "filesFixed": [
-            "src/components/shared/animated-icon.tsx (React.memo → memo)",
-            "src/components/shared/progress-indicator.tsx (React.memo → memo)",
-            "src/components/theme/theme-toggle-button.tsx (React.forwardRef → forwardRef)",
-            "src/components/ui/textarea.tsx (React.* → 直接导入)",
-            "src/components/ui/separator.tsx (React.* → 直接导入)",
-            "src/components/ui/badge.tsx (React.* → 直接导入)",
-            "src/components/contact/contact-form.tsx (移除未使用 React 导入)",
-            "src/components/forms/contact-form.tsx (移除未使用 React 导入)",
-            "src/components/layout/nav-switcher.tsx (添加 useEffect 导入)",
-            "src/components/layout/vercel-navigation.tsx (添加 hooks 导入)",
-            "src/components/security/turnstile.tsx (添加 hooks 导入)"
-          ]
-        },
-        "build": {
-          "success": true,
-          "buildTime": "6.0s",
-          "staticPages": 23,
-          "dynamicRoutes": 11,
-          "totalAssets": "7.6M",
-          "jsBundle": "1.5M",
-          "totalChunks": 131,
-          "chunkNaming": "content-hash (例: 956748298813dd63.js, 2ec76db87844d77c.js)"
-        },
-        "sizeCheck": {
-          "compatible": false,
-          "reason": "size-limit 配置依赖 Webpack 语义化命名 (framework-*.js, main-*.js, vendors-*.js) 但 Turbopack 使用内容哈希",
-          "impactedRules": [
-            "Framework Bundle (.next/static/chunks/framework-*.js) - 无匹配",
-            "Main App Bundle (.next/static/chunks/main-app-*.js) - 无匹配",
-            "Vendors Bundle (.next/static/chunks/vendors-*.js) - 无匹配",
-            "其他所有基于语义化命名的规则"
-          ],
-          "solution": {
-            "name": "@next/bundle-analyzer",
-            "status": "已安装和配置 (16.0.3)",
-            "configLocation": "next.config.ts:11-13",
-            "usage": "ANALYZE=true pnpm build",
-            "rationale": "Next.js 官方推荐方案,完全兼容 Turbopack,提供可视化交互式分析",
-            "documentation": "https://nextjs.org/docs/app/api-reference/config/next-config-js/webpack"
-          },
-          "alternatives": {
-            "modifySizeLimit": {
-              "feasibility": "低",
-              "reason": "内容哈希无语义,无法追踪特定包体积变化"
-            },
-            "waitForTurbopack": {
-              "feasibility": "待观察",
-              "reason": "Turbopack 仍在快速迭代,可能未来引入语义化命名或官方 size-limit 支持"
-            },
-            "customScript": {
-              "feasibility": "中",
-              "reason": "可解析 .next/build-manifest.json 自定义监控,但需额外开发成本"
-            }
-          }
-        },
-        "decisions": {
-          "webpackConfig": "保留但添加待移除注释 - NEXT_USE_TURBOPACK=0 在 Next.js 16 中无效,无法回退到 Webpack",
-          "sizeLimit": "保留 .size-limit.js 配置文件但不可用,使用 @next/bundle-analyzer 替代",
-          "bundleMonitoring": "短期使用 @next/bundle-analyzer 手动分析,Task #8 验证阶段评估 Lighthouse CI 或自定义脚本",
-          "nextSteps": "等待 Turbopack 稳定后再决定是否移除 webpack 配置和 .size-limit.js"
-        },
-        "warnings": [
-          "5 个 OpenTelemetry 依赖警告 (import-in-the-middle, require-in-the-middle)",
-          "非阻塞但需在 Task #8 评估生产监控影响",
-          "build:webpack 脚本保留但 NEXT_USE_TURBOPACK=0 环境变量无效"
-        ],
-        "commands": [
-          "pnpm build",
-          "pnpm size:check",
-          "ls -lh .next/static/chunks/*.js | wc -l",
-          "du -sh .next/static/chunks",
-          "grep -r 'bundle-analyzer' package.json next.config.ts"
-        ]
-      }
-    },
-    {
-      "id": "684ad596-a22e-438e-8120-c902565ab4fb",
-      "name": "Async Request API 全量核对与 typegen",
-      "description": "对 cookies/headers/draftMode/params/searchParams 等调用进行 async 化确认，运行 npx next typegen 生成 PageProps/LayoutProps，修正仍同步访问的调用点。",
-      "status": "completed",
-      "dependencies": [{ "taskId": "054e3ca6-15c0-4f5e-af1a-38ecb7f5bdc4" }],
-      "createdAt": "2025-02-10T00:00:00.000Z",
-      "updatedAt": "2025-11-20T04:00:00.000Z",
-      "relatedFiles": [
-        { "path": "src/app/[locale]/layout.tsx", "type": "VERIFIED", "description": "已正确实现 async params 和 await headers()" },
-        { "path": "src/app/[locale]/page.tsx", "type": "VERIFIED", "description": "已正确实现 async params" },
-        { "path": "src/app/[locale]/contact/page.tsx", "type": "VERIFIED", "description": "已正确实现 async params" },
-        { "path": "src/app/[locale]/blog/page.tsx", "type": "VERIFIED", "description": "已正确实现 async params" },
-        { "path": ".next/types/routes.d.ts", "type": "GENERATED", "description": "由 npx next typegen 生成的类型定义" }
-      ],
-      "implementationGuide": "1) 检索同步调用；2) 运行 npx next typegen；3) 调整 await；4) 补 TS/测试。",
-      "verificationCriteria": "静态扫描无同步 API；type-check 通过；相关单测通过。",
-      "evidence": {
-        "completedAt": "2025-11-20T04:00:00.000Z",
-        "findings": {
-          "asyncAPIsStatus": "所有异步 Request API 均已正确实现,无需修改",
-          "headersUsage": "src/app/[locale]/layout.tsx:78 - 正确使用 await headers()",
-          "paramsUsage": "所有页面和布局组件均使用 params: Promise<T> 并正确 await",
-          "searchParamsUsage": "未在代码库中使用（符合预期）",
-          "cookiesUsage": "未在代码库中使用（符合预期）",
-          "draftModeUsage": "未在代码库中使用（符合预期）",
-          "codePattern": "一致使用 async 函数签名和 await 关键字访问所有 Request API"
-        },
-        "typegen": {
-          "success": true,
-          "command": "npx next typegen",
-          "output": "✓ Types generated successfully",
-          "generatedFiles": [
-            ".next/types/cache-life.d.ts",
-            ".next/types/routes.d.ts",
-            ".next/types/validator.ts"
-          ],
-          "globalTypes": {
-            "PageProps": "interface PageProps<AppRoute> { params: Promise<ParamMap[AppRoute]>, searchParams: Promise<Record<...>> }",
-            "LayoutProps": "type LayoutProps<LayoutRoute> { params: Promise<ParamMap[LayoutRoute]>, children: ReactNode, ... }",
-            "RouteContext": "interface RouteContext<AppRouteHandlerRoute> { params: Promise<ParamMap[AppRouteHandlerRoute]> }"
-          }
-        },
-        "verification": {
-          "typeCheck": "通过 - pnpm type-check 无错误",
-          "staticScan": "通过 - 使用 Grep 搜索未发现同步 API 调用模式",
-          "testFiles": "通过 - 测试文件正确使用 Promise.resolve() 创建异步 params"
-        },
-        "pagesVerified": [
-          {
-            "file": "src/app/[locale]/layout.tsx",
-            "interface": "LocaleLayoutProps { params: Promise<{ locale: string }> }",
-            "usage": "const { locale } = await params; const headerList = await headers();"
-          },
-          {
-            "file": "src/app/[locale]/page.tsx",
-            "interface": "HomePageProps { params: Promise<{ locale: 'en' | 'zh' }> }",
-            "usage": "const { locale } = await params;"
-          },
-          {
-            "file": "src/app/[locale]/contact/page.tsx",
-            "interface": "ContactPageProps { params: Promise<{ locale: string }> }",
-            "usage": "const { locale } = await params; (在 generateMetadata 和 ContactPage 中)"
-          },
-          {
-            "file": "src/app/[locale]/blog/page.tsx",
-            "interface": "BlogPageProps { params: Promise<{ locale: string }> }",
-            "usage": "const { locale } = await params; (仅在 generateMetadata 中)"
-          }
-        ],
-        "apiRoutesVerified": [
-          "11 个 API 路由文件使用 NextRequest,无动态 params 使用（符合预期）"
-        ],
-        "testFilesVerified": [
-          {
-            "file": "src/app/[locale]/__tests__/layout-metadata.test.ts",
-            "pattern": "const params = Promise.resolve({ locale: 'en' }); await generateLocaleMetadata({ params });"
-          }
-        ],
-        "conclusion": "✅ Next.js 16 异步 Request API 迁移已提前完成,所有代码均符合最佳实践",
-        "commands": [
-          "grep -r 'cookies\\|headers\\|draftMode' --include='*.ts' --include='*.tsx' src/",
-          "grep -r 'params.*:' --include='*.tsx' src/app/",
-          "npx next typegen",
-          "pnpm type-check"
-        ]
-      }
-    },
-    {
-      "id": "b1ef051a-b11b-4c67-b733-5d4b49bab79d",
-      "name": "middleware → proxy 迁移与 flags 更新",
-      "description": "按 Next 16 要求将 middleware.ts 重命名为 proxy.ts，导出函数改名 proxy，并更新 skipMiddleware* 配置为 skipProxy*。",
-      "status": "completed",
-      "dependencies": [{ "taskId": "054e3ca6-15c0-4f5e-af1a-38ecb7f5bdc4" }],
-      "createdAt": "2025-02-10T00:00:00.000Z",
-      "updatedAt": "2025-11-20T04:15:00.000Z",
-      "relatedFiles": [
-        { "path": "proxy.ts", "type": "VERIFIED", "description": "已重命名并正确导出 proxy 函数" },
-        { "path": "next.config.ts", "type": "VERIFIED", "description": "无需 skipProxy 配置" }
-      ],
-      "implementationGuide": "1) 重命名 middleware.* → proxy.*；2) 导出函数名改 proxy；3) 配置项改 skipProxy*；4) 验证路由/i18n 行为。",
-      "verificationCriteria": "文件与导出均为 proxy；pnpm test / pnpm build 通过；路由行为不变。",
-      "evidence": {
-        "completedAt": "2025-11-20T04:15:00.000Z",
-        "findings": {
-          "migrationStatus": "已在 Task #2 中完成,此任务仅验证完成情况",
-          "fileRenamed": "middleware.ts 已删除, proxy.ts 存在并正常工作",
-          "exportFunction": "正确导出 export default function proxy(request: NextRequest)",
-          "skipProxyConfig": "Next.js 16 不需要 skipProxy 配置,matcher 配置足够",
-          "routingBehavior": "国际化路由和 CSP nonce 注入正常工作"
-        },
-        "verification": {
-          "fileExists": "proxy.ts 文件存在 (1176 bytes)",
-          "middlewareDeleted": "middleware.ts 已删除 (No such file or directory)",
-          "exportPattern": "export default function proxy(request: NextRequest) - 符合 Next.js 16 要求",
-          "matcherConfig": "matcher: '/((?!api|_next|_vercel|admin|^$|.*\\\\..*).*)'",
-          "noSkipProxyConfig": "next.config.ts 中无 skipProxy 相关配置 (无需配置)"
-        },
-        "build": {
-          "success": true,
-          "proxyLoaded": "Proxy 在 Task #2 构建中成功加载",
-          "i18nWorking": "国际化路由正常工作 (23 个静态页面包含 /[locale] 路由)",
-          "cspWorking": "CSP nonce 注入正常工作"
-        },
-        "conclusion": "✅ middleware → proxy 迁移已完成,符合 Next.js 16 规范,无需额外配置",
-        "commands": [
-          "ls -la proxy.ts middleware.ts",
-          "grep 'export default function proxy' proxy.ts",
-          "grep 'skipProxy\\|skipMiddleware' next.config.ts",
-          "grep 'matcher' proxy.ts"
-        ]
-      }
-    },
-    {
-      "id": "d89ba5a5-3306-4fc6-9516-810e9992637a",
-      "name": "testProxy flag 行为复核",
-      "description": "确认 experimental.testProxy 在 Next 16 的行为，决定去除或限制条件。",
-      "status": "completed",
-      "dependencies": [{ "taskId": "054e3ca6-15c0-4f5e-af1a-38ecb7f5bdc4" }],
-      "createdAt": "2025-02-10T00:00:00.000Z",
-      "updatedAt": "2025-11-20T04:20:00.000Z",
-      "relatedFiles": [
-        { "path": "next.config.ts", "type": "MODIFIED", "description": "已移除 testProxy flag 并添加迁移注释 (L70-79)" }
-      ],
-      "implementationGuide": "1) 查文档/变更记录；2) 升级分支跑 build/E2E 观察告警；3) 若无必要移除或仅限 CI。",
-      "verificationCriteria": "Next 16 下无 testProxy 警告；构建与 E2E 通过。",
-      "evidence": {
-        "completedAt": "2025-11-20T04:20:00.000Z",
-        "findings": {
-          "deprecationStatus": "testProxy 在 Next.js 16 中已完全废弃",
-          "originalConfig": "testProxy: process.env.CI === 'true' (位于 next.config.ts:73)",
-          "buildWarning": "构建输出显示: ⨯ testProxy (表示该选项无效)",
-          "officialMigrationPath": "使用 next/experimental/testing/server 替代",
-          "newTestingAPI": "unstable_doesProxyMatch(), isRewrite(), getRewrittenUrl() 等工具函数"
-        },
-        "research": {
-          "source": "Next.js DevTools MCP - /docs/app/api-reference/config/next-config-js/experimental",
-          "documentation": "官方文档确认 testProxy 已移除",
-          "replacement": {
-            "package": "next/experimental/testing/server",
-            "usage": "在单元测试中直接导入使用,无需配置文件",
-            "example": "import { unstable_doesProxyMatch } from 'next/experimental/testing/server'"
-          }
-        },
-        "changes": {
-          "removed": "experimental.testProxy: process.env.CI === 'true'",
-          "added": "详细的迁移注释说明新 API 用法",
-          "location": "next.config.ts:70-79",
-          "migrationComment": "// Next.js 16 已移除 testProxy 配置 - 使用 next/experimental/testing/server 替代\n// 旧配置: testProxy: process.env.CI === 'true',\n// 新方式: 在测试文件中使用 unstable_doesProxyMatch() 和相关 API"
-        },
-        "verification": {
-          "buildSuccess": true,
-          "noWarnings": "testProxy 警告已消除",
-          "configClean": "experimental 配置仅保留 optimizePackageImports 和 inlineCss",
-          "typeCheck": "通过 - pnpm type-check 无错误"
-        },
-        "nextSteps": {
-          "testUpdate": "如需要在测试中验证 Proxy 行为,使用 next/experimental/testing/server API",
-          "ciEnvironment": "CI 环境无需特殊配置,Proxy 自动在测试环境正常工作",
-          "documentation": "团队需了解新测试 API,更新测试文档"
-        },
-        "conclusion": "✅ testProxy flag 已移除,迁移路径已文档化,构建正常无警告",
-        "commands": [
-          "grep -n 'testProxy' next.config.ts",
-          "pnpm build 2>&1 | grep -i 'testProxy\\|experiments'",
-          "pnpm type-check"
-        ]
-      }
-    },
-    {
-      "id": "2620d770-bc8c-42fb-8a02-c234086764e0",
-      "name": "Tailwind 4 与 Next 16/Turbopack 兼容验证",
-      "description": "验证 tailwindcss@4.1.17 在 Turbopack 下的构建与样式输出；如有问题，退回稳定版本或调整配置。",
-      "status": "completed",
+      "id": "d6758c9f-e4b3-48dc-a3a9-677463916b70",
+      "name": "安全与输入验证模块测试补齐",
+      "description": "为安全/输入验证模块补单测，优先 security-headers/validation/rate-limit/file-upload/tokens，目标相关文件 lines/functions 覆盖率≥60%。",
+      "status": "pending",
       "dependencies": [
-        { "taskId": "054e3ca6-15c0-4f5e-af1a-38ecb7f5bdc4" },
-        { "taskId": "b02fffb8-23f2-45f8-a3f8-80af47d524c4" }
+        {
+          "taskId": "c3f269df-ab01-44f4-8063-2029e2bd724c"
+        }
       ],
-      "createdAt": "2025-02-10T00:00:00.000Z",
-      "updatedAt": "2025-11-20T11:55:00.000Z",
+      "createdAt": "2025-11-21T09:19:40.094Z",
+      "updatedAt": "2025-11-21T09:19:40.094Z",
       "relatedFiles": [
-        { "path": "tailwind.config.js", "type": "VERIFIED", "description": "Tailwind 4.1.17 配置与 Next.js 16/Turbopack 完全兼容,无需修改" },
-        { "path": "src/app/globals.css", "type": "VERIFIED", "description": "Tailwind 4 @layer directives 正确编译" },
-        { "path": ".next/static/chunks/76056c0281f38a0d.css", "type": "GENERATED", "description": "Turbopack 生成的 CSS 文件 (96KB, 包含所有 Tailwind utilities)" },
-        { "path": "src/components/ui/badge.tsx", "type": "VERIFIED", "description": "使用 Tailwind utility classes 正常工作" },
-        { "path": "src/components/ui/separator.tsx", "type": "VERIFIED", "description": "使用 Tailwind utility classes 正常工作" },
-        { "path": "src/components/ui/button.tsx", "type": "VERIFIED", "description": "使用 Tailwind utility classes 正常工作" }
+        {
+          "path": "src/lib/security-headers.ts",
+          "type": "TO_MODIFY",
+          "description": "安全头工具"
+        },
+        {
+          "path": "src/lib/security-validation.ts",
+          "type": "TO_MODIFY",
+          "description": "输入校验工具"
+        },
+        {
+          "path": "src/lib/security-rate-limit.ts",
+          "type": "TO_MODIFY",
+          "description": "速率限制"
+        },
+        {
+          "path": "src/lib/security-file-upload.ts",
+          "type": "TO_MODIFY",
+          "description": "文件上传校验"
+        },
+        {
+          "path": "src/lib/security-tokens.ts",
+          "type": "TO_MODIFY",
+          "description": "令牌生成与验证"
+        },
+        {
+          "path": "tests/unit/security",
+          "type": "CREATE",
+          "description": "新增安全模块测试目录"
+        }
       ],
-      "implementationGuide": "1) 跑 pnpm build (turbopack) 观察样式告警；2) 若异常，按推荐配置或降级；3) 关键页面样式/快照验证。",
-      "verificationCriteria": "构建无 tailwind 报错；关键页面样式正常。",
-      "evidence": {
-        "completedAt": "2025-11-20T11:55:00.000Z",
-        "findings": {
-          "compatibility": "Tailwind CSS 4.1.17 与 Next.js 16.0.3 + Turbopack 完全兼容,零错误零警告",
-          "tailwindVersion": "4.1.17 (使用 Lightning CSS 引擎)",
-          "buildSuccess": "Turbopack 成功编译 Tailwind CSS,构建时间 6.6s",
-          "tailwindProcessing": "总耗时 240.10ms (扫描: 72.16ms, 构建: 57.48ms, 优化: 42.21ms, Lightning CSS: 31.04ms)",
-          "cssOutput": "生成 76056c0281f38a0d.css (96KB minified)",
-          "noWarnings": "构建过程中无任何 Tailwind 相关错误或警告",
-          "modernFeatures": "Tailwind 4 新特性全部正常工作 (CSS custom properties, oklch colors, Lightning CSS)"
-        },
-        "tailwindFeatures": {
-          "lightningCSS": "✅ Lightning CSS 优化器正常工作 (31.04ms)",
-          "cssCustomProperties": "✅ CSS 变量正常生成 (--color-*, --spacing, --text-*, etc.)",
-          "oklchColors": "✅ 现代 oklch() 色彩空间支持 (例: --color-red-50:oklch(97.1% .013 17.38))",
-          "layers": "✅ 所有 @layer 指令正确编译 (properties, theme, base, components, utilities)",
-          "containerQueries": "✅ Container queries 支持 (@container/card-header)",
-          "viewTransitions": "✅ View transitions API 支持",
-          "accessibility": "✅ 无障碍特性支持 (prefers-reduced-motion, prefers-contrast)",
-          "customTheme": "✅ 自定义主题正常工作 (GeistSans, GeistMono, PingFang SC fonts, custom colors)",
-          "plugins": "✅ tailwindcss-animate 和 @tailwindcss/typography 插件正常工作"
-        },
-        "buildMetrics": {
-          "buildTime": "6.6s (符合预期)",
-          "tailwindTotalTime": "240.10ms",
-          "setupCompiler": "20.20ms",
-          "scanCandidates": "72.16ms",
-          "buildUtilities": "57.48ms",
-          "optimization": "42.21ms",
-          "lightningCSS": "31.04ms",
-          "astToCss": "1.00ms",
-          "cssToPostCSS": "10.15ms",
-          "updatePostCSS": "10.32ms",
-          "cssFileSize": "96KB (minified)",
-          "cssLines": "3 (高度压缩)"
-        },
-        "componentVerification": {
-          "badge": "✅ 使用 badgeVariants + cn() 正确应用 Tailwind classes",
-          "separator": "✅ 使用 shrink-0, bg-border, h-[1px], w-full 等 utility classes",
-          "button": "✅ 使用 inline-flex, rounded-md, ring-ring, focus-visible:ring-[3px] 等 utilities"
-        },
-        "verification": {
-          "buildSuccess": true,
-          "typeCheck": "通过 - pnpm type-check 无错误",
-          "cssGeneration": "正常 - Lightning CSS 成功生成优化的 CSS",
-          "tailwindLogs": "详细构建日志显示所有 Tailwind 处理步骤正常",
-          "noRegressions": "与 Task #2 构建性能持平 (6.0s → 6.6s, 差异可忽略)"
-        },
-        "configAnalysis": {
-          "tailwindConfig": "tailwind.config.js 配置完全兼容 Tailwind 4",
-          "darkMode": "class 模式正常工作",
-          "content": "内容路径正确配置 (./src/**/*.{ts,tsx})",
-          "customTheme": "自定义主题扩展正常 (fontFamily, colors, borderRadius, keyframes, animation)",
-          "plugins": "tailwindcss-animate 和 @tailwindcss/typography 正常加载"
-        },
-        "turbopackIntegration": {
-          "status": "完美集成",
-          "cssNaming": "内容哈希命名 (76056c0281f38a0d.css) 而非语义化命名",
-          "postcssIntegration": "[@tailwindcss/postcss] 插件正常处理 globals.css",
-          "quickBailCheck": "快速保释检查优化生效 (node_modules 中的 CSS 文件)",
-          "hotReload": "开发模式下 Tailwind 热重载预期正常 (未在此任务中测试)"
-        },
-        "decisions": {
-          "noConfigChanges": "无需修改 tailwind.config.js 或降级版本",
-          "productionReady": "Tailwind 4.1.17 已可在生产环境使用",
-          "monitoring": "持续监控 Tailwind 4 更新以获取新功能和优化"
-        },
-        "nextSteps": {
-          "task7": "继续执行 Task #7 图片配置验证",
-          "futureOptimization": "关注 Tailwind 4 未来版本的性能优化和新特性",
-          "documentation": "团队了解 Tailwind 4 新特性 (Lightning CSS, oklch colors, CSS custom properties)"
-        },
-        "conclusion": "✅ Tailwind CSS 4.1.17 与 Next.js 16.0.3 + Turbopack 完全兼容,Lightning CSS 引擎性能优异,所有现代特性正常工作,无需任何配置调整,可直接用于生产环境",
-        "commands": [
-          "grep '\"tailwindcss\"' package.json",
-          "pnpm build",
-          "find .next -name '*.css' -type f",
-          "wc -l .next/static/chunks/76056c0281f38a0d.css",
-          "du -h .next/static/chunks/76056c0281f38a0d.css",
-          "grep -A 5 'className' src/components/ui/badge.tsx",
-          "grep -A 5 'className' src/components/ui/separator.tsx",
-          "grep 'inline-flex\\|rounded-md\\|ring-offset' src/components/ui/button.tsx",
-          "pnpm type-check"
-        ]
-      }
+      "implementationGuide": "编写 Vitest 单测覆盖正常/异常/边界输入；rate limit 用 fake timers；禁止真实网络；必要时微调代码以便注入依赖但保持 API 兼容。",
+      "verificationCriteria": "相关模块 lines/functions 覆盖率≥60%，包含非法输入/边界用例，测试使用 Vitest。",
+      "analysisResult": "全局覆盖率约34.7%（lines），Cache Components PoC 未启用且 next-intl 兼容性阻滞，短期计划不依赖 PoC。设定短期目标：全局 lines/functions 覆盖率提升至≥55%，优先纯逻辑/安全/服务层与稳定 UI 组件。"
     },
     {
-      "id": "35a1eb6d-74e5-4544-835d-aa9830d0ff94",
-      "name": "图片配置与缓存行为对齐 Next16",
-      "description": "按 Next16 变更检查 images.localPatterns.search、minimumCacheTTL、imageSizes/qualities、dangerouslyAllowLocalIP、maximumRedirects 配置，确保与现有使用兼容。",
-      "status": "completed",
-      "dependencies": [{ "taskId": "054e3ca6-15c0-4f5e-af1a-38ecb7f5bdc4" }],
-      "createdAt": "2025-02-10T00:00:00.000Z",
-      "updatedAt": "2025-11-20T12:10:00.000Z",
-      "relatedFiles": [
-        { "path": "next.config.ts", "type": "VERIFIED", "description": "现有图片配置完全兼容 Next.js 16,无需修改" },
-        { "path": "src/components/layout/logo.tsx", "type": "VERIFIED", "description": "使用本地 SVG 图片 (/next.svg) 正常工作" },
-        { "path": "public/next.svg", "type": "VERIFIED", "description": "本地 SVG 文件,Next.js 自动跳过优化" }
-      ],
-      "implementationGuide": "1) 审核 next.config.ts 与实际用法；2) 有 querystring 本地图则补 localPatterns.search；3) 评估 minimumCacheTTL/qualities/imageSizes 需求；4) 调整 maximumRedirects/dangerouslyAllowLocalIP；5) 记录变更。",
-      "verificationCriteria": "pnpm build 通过；图片正常加载；无新增警告。",
-      "evidence": {
-        "completedAt": "2025-11-20T12:10:00.000Z",
-        "findings": {
-          "configCompatibility": "现有图片配置完全兼容 Next.js 16,无需任何调整",
-          "automaticDefaults": "Next.js 16 自动应用所有必需的默认配置",
-          "imageUsage": "项目仅使用本地 SVG 和远程图片,配置简单且安全",
-          "noWarnings": "Task #6 构建验证零图片相关警告或错误"
-        },
-        "currentConfig": {
-          "location": "next.config.ts:44-55",
-          "remotePatterns": [
-            {
-              "protocol": "https",
-              "hostname": "images.unsplash.com",
-              "description": "Unsplash 图片服务"
-            },
-            {
-              "protocol": "https",
-              "hostname": "via.placeholder.com",
-              "description": "占位符图片服务"
-            }
-          ],
-          "status": "完全兼容 Next.js 16"
-        },
-        "nextjs16Defaults": {
-          "qualities": "[75] - 默认图片质量",
-          "minimumCacheTTL": "14400 (4 小时) - 缓存 TTL",
-          "formats": "['image/webp'] - 默认格式",
-          "maximumRedirects": "3 - 最多重定向次数",
-          "dangerouslyAllowLocalIP": "false - 禁止本地 IP",
-          "deviceSizes": "[640, 750, 828, 1080, 1200, 1920, 2048, 3840]",
-          "imageSizes": "[32, 48, 64, 96, 128, 256, 384]",
-          "contentDispositionType": "attachment - SVG 安全默认值"
-        },
-        "imageAnalysis": {
-          "localImages": {
-            "count": 1,
-            "files": ["/next.svg"],
-            "usage": "Logo 组件中使用,设置了 priority 和 dark:invert",
-            "optimization": "SVG 自动跳过优化 (src 以 .svg 结尾)"
-          },
-          "remoteImages": {
-            "count": 2,
-            "patterns": ["images.unsplash.com", "via.placeholder.com"],
-            "security": "已通过 remotePatterns 限制,仅允许 HTTPS"
-          },
-          "componentUsage": {
-            "file": "src/components/layout/logo.tsx:78-88",
-            "component": "<Image src='/next.svg' width={120} height={24} priority />",
-            "accessibility": "正确设置 alt 属性和 priority"
-          }
-        },
-        "securityVerification": {
-          "remotePatterns": "✅ 正确配置,仅允许指定域名 HTTPS 访问",
-          "svgHandling": "✅ SVG 自动安全处理,无需 dangerouslyAllowSVG",
-          "localIP": "✅ 默认禁止,符合安全最佳实践",
-          "queryStrings": "✅ remotePatterns 未设置 search 属性,默认允许所有查询字符串 (可接受)",
-          "pathRestriction": "⚠️ remotePatterns 未设置 pathname,允许所有路径 (建议未来优化但不影响安全性)"
-        },
-        "performanceOptimization": {
-          "cacheTTL": "使用默认 4 小时,对于静态资源足够",
-          "formats": "默认 WebP 提供良好的压缩比和兼容性",
-          "deviceSizes": "覆盖主流设备断点,响应式优化充分",
-          "imageSizes": "涵盖小尺寸图片需求,避免过度优化",
-          "qualities": "默认 75 质量平衡文件大小和视觉效果"
-        },
-        "decisions": {
-          "noConfigChanges": "确认无需修改 next.config.ts 图片配置",
-          "useDefaults": "Next.js 16 默认值完全满足项目需求",
-          "futureOptimization": "可考虑添加 AVIF 格式支持 (formats: ['image/avif', 'image/webp'])",
-          "securityEnhancement": "未来可为 remotePatterns 添加 pathname 限制增强安全性"
-        },
-        "verification": {
-          "buildSuccess": true,
-          "imageLoading": "正常 - Logo SVG 在所有页面正确显示",
-          "noWarnings": "零图片配置相关警告 (Task #6 验证)",
-          "typeCheck": "通过 - pnpm type-check 无错误",
-          "remoteImageTest": "remotePatterns 配置验证通过"
-        },
-        "research": {
-          "source": "Next.js DevTools MCP - /docs/app/api-reference/components/image",
-          "documentation": "Next.js 16.0.3 官方图片组件和配置文档",
-          "keyChanges": {
-            "v16.0.0": "qualities 默认值改为 [75], dangerouslyAllowLocalIP 和 maximumRedirects 新增",
-            "v15.3.0": "remotePatterns 支持 URL 对象数组",
-            "v14.2.15": "localPatterns 和 decoding 属性新增",
-            "v14.2.14": "remotePatterns.search 属性新增"
-          }
-        },
-        "nextSteps": {
-          "task8": "继续执行 Task #8 验证与回归基线",
-          "monitoring": "持续监控图片加载性能和缓存效率",
-          "futureEnhancement": "评估 AVIF 格式支持以进一步优化图片大小"
-        },
-        "conclusion": "✅ Next.js 16 图片配置验证完成,现有配置完全兼容,无需任何调整。Next.js 16 自动应用的默认值 (qualities: [75], minimumCacheTTL: 14400, formats: ['image/webp']) 完全满足项目需求,构建零警告,图片加载正常",
-        "commands": [
-          "grep -A 20 'images:' next.config.ts",
-          "find public -name '*.png' -o -name '*.jpg' -o -name '*.svg'",
-          "grep -r 'next/image' src --include='*.tsx'",
-          "cat src/components/layout/logo.tsx",
-          "pnpm build"
-        ]
-      }
-    },
-    {
-      "id": "d7f6ea74-3b23-47ac-b019-b98eb1af6e3d",
-      "name": "验证与回归基线（Turbopack 下）",
-      "description": "在升级分支跑 type-check/lint/test/e2e/size:check/security/arch，确认所有门禁在 Turbopack 下通过，并保留 build:webpack 回滚验证。",
-      "status": "completed",
+      "id": "6db8d1ed-65e4-4bd9-b341-acd6300e3ba0",
+      "name": "API 边界与输入校验测试",
+      "description": "为 contact/web-vitals/whatsapp/subscribe/health 等 API 路由补集成/契约测试，覆盖成功与失败路径，目标各路由文件 lines/functions ≥50%。",
+      "status": "pending",
       "dependencies": [
-        { "taskId": "b02fffb8-23f2-45f8-a3f8-80af47d524c4" },
-        { "taskId": "684ad596-a22e-438e-8120-c902565ab4fb" },
-        { "taskId": "b1ef051a-b11b-4c67-b733-5d4b49bab79d" },
-        { "taskId": "d89ba5a5-3306-4fc6-9516-810e9992637a" },
-        { "taskId": "2620d770-bc8c-42fb-8a02-c234086764e0" },
-        { "taskId": "35a1eb6d-74e5-4544-835d-aa9830d0ff94" }
+        {
+          "taskId": "c3f269df-ab01-44f4-8063-2029e2bd724c"
+        }
       ],
-      "createdAt": "2025-02-10T00:00:00.000Z",
-      "updatedAt": "2025-11-20T12:30:00.000Z",
+      "createdAt": "2025-11-21T09:19:40.094Z",
+      "updatedAt": "2025-11-21T09:19:40.094Z",
       "relatedFiles": [
-        { "path": "reports/test-results.json", "type": "GENERATED", "description": "单元测试结果报告 - 4715 测试通过" }
+        {
+          "path": "src/app/api/contact/route.ts",
+          "type": "TO_MODIFY",
+          "description": "联系表单 API"
+        },
+        {
+          "path": "src/app/api/verify-turnstile/route.ts",
+          "type": "TO_MODIFY",
+          "description": "Turnstile 验证"
+        },
+        {
+          "path": "src/app/api/analytics/web-vitals/route.ts",
+          "type": "TO_MODIFY",
+          "description": "Web Vitals ingestion"
+        },
+        {
+          "path": "src/app/api/whatsapp/send/route.ts",
+          "type": "TO_MODIFY",
+          "description": "WhatsApp 发送"
+        },
+        {
+          "path": "src/app/api/whatsapp/webhook/route.ts",
+          "type": "TO_MODIFY",
+          "description": "WhatsApp Webhook"
+        },
+        {
+          "path": "src/app/api/subscribe/route.ts",
+          "type": "TO_MODIFY",
+          "description": "订阅 API"
+        },
+        {
+          "path": "src/app/api/health/route.ts",
+          "type": "TO_MODIFY",
+          "description": "健康检查"
+        },
+        {
+          "path": "tests/integration/api",
+          "type": "CREATE",
+          "description": "新增 API 集成测试"
+        }
       ],
-      "implementationGuide": "1) pnpm type-check + lint:check；2) pnpm test（如需 coverage 可加）；3) pnpm test:e2e；4) pnpm size:check & security:audit；5) Turbopack 异常时用 build:webpack 对比。",
-      "verificationCriteria": "上述命令均成功；Turbopack 构建稳定；必要时 webpack 兜底可用。",
-      "evidence": {
-        "completedAt": "2025-11-20T12:30:00.000Z",
-        "findings": {
-          "qualityGateStatus": "核心质量门禁全部通过 (类型检查、单元测试、安全审计)",
-          "typeCheckSuccess": "✅ TypeScript 类型检查零错误",
-          "testSuccess": "✅ 4715 个单元测试通过，1 个跳过",
-          "securitySuccess": "✅ 安全审计零已知漏洞",
-          "lintIssue": "⚠️ ESLint 循环引用错误 (已知，非阻塞)",
-          "overallStatus": "Next.js 16 升级已准备就绪，可部署至生产环境"
+      "implementationGuide": "用 Vitest 调用 handler 或 supertest；mock Resend/Airtable/Turnstile 等外部依赖；覆盖 4xx/5xx/成功路径，并检查基本头部/状态码。",
+      "verificationCriteria": "每个目标路由覆盖成功+错误输入+异常路径；无真实外部网络；相关文件 lines/functions ≥50%。",
+      "analysisResult": "全局覆盖率约34.7%（lines），Cache Components PoC 未启用且 next-intl 兼容性阻滞，短期计划不依赖 PoC。设定短期目标：全局 lines/functions 覆盖率提升至≥55%，优先纯逻辑/安全/服务层与稳定 UI 组件。"
+    },
+    {
+      "id": "d0b3b23f-4a7e-48e1-a386-40178863a34f",
+      "name": "业务服务与缓存工具测试",
+      "description": "提升服务层与缓存/存储工具覆盖率（content-parser、content-validation、cache-utils、locale-storage、i18n cache），目标相关文件 lines/functions ≥55%。",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c3f269df-ab01-44f4-8063-2029e2bd724c"
+        }
+      ],
+      "createdAt": "2025-11-21T09:19:40.094Z",
+      "updatedAt": "2025-11-21T09:19:40.094Z",
+      "relatedFiles": [
+        {
+          "path": "src/lib/content-parser.ts",
+          "type": "TO_MODIFY",
+          "description": "内容解析"
         },
-        "typeCheck": {
-          "command": "pnpm type-check",
-          "result": "✅ PASSED",
-          "errors": 0,
-          "warnings": 0,
-          "duration": "快速 (<10s)",
-          "conclusion": "所有 TypeScript 类型定义正确，Next.js 16 异步 API 类型全部兼容"
+        {
+          "path": "src/lib/content-validation.ts",
+          "type": "TO_MODIFY",
+          "description": "内容校验"
         },
-        "lintCheck": {
-          "command": "pnpm lint:check",
-          "result": "⚠️ KNOWN ISSUE",
-          "error": "TypeError: Converting circular structure to JSON (ESLint 配置循环引用)",
-          "errorPath": "property 'react' closes the circle in plugin configs",
-          "impact": "不影响构建、运行或生产部署",
-          "origin": "Task #1 evidence 已记录此问题",
-          "resolution": "延后至 Task #8 后专项修复",
-          "estimatedEffort": "2-4 小时",
-          "workaround": "可使用 eslint --fix 修复代码问题，但配置循环引用需调整 eslint.config.mjs",
-          "blocking": false
+        {
+          "path": "src/lib/cache-utils.ts",
+          "type": "TO_MODIFY",
+          "description": "缓存工具"
         },
-        "unitTests": {
-          "command": "pnpm test",
-          "result": "✅ PASSED",
-          "summary": {
-            "testFiles": 267,
-            "testsPassed": 4715,
-            "testsSkipped": 1,
-            "testsTotal": 4716,
-            "duration": "49.64s"
-          },
-          "testSuites": [
-            "Accessibility Tests - PASSED",
-            "Component Tests - PASSED (Badge, Button, Card, Dropdown Menu, Input, Label, Navigation Menu, Separator, Sheet, Tabs, Textarea)",
-            "Home Page Tests - PASSED (Hero Section, Project Overview, Tech Stack Section, Responsive Showcase)",
-            "Layout Tests - PASSED (Mobile Navigation, Navigation items, Vercel Navigation)",
-            "i18n Tests - PASSED (Enhanced Locale Switcher 全系列测试)",
-            "Theme Tests - PASSED (Theme Toggle, Theme Menu Item)",
-            "Form Tests - PASSED (Contact Form)",
-            "Security Tests - PASSED (Turnstile)",
-            "Shared Components - PASSED (Progress Indicator, Animated Counter)",
-            "Chart Components - PASSED (Area, Bar, Line, Pie, Radar Charts)"
-          ],
-          "reportLocation": "/reports/test-results.json",
-          "coverage": "未启用 (可选: pnpm test --coverage)",
-          "conclusion": "所有核心功能、组件、国际化、无障碍测试全部通过，Next.js 16 + React 19 兼容性完美"
+        {
+          "path": "src/lib/locale-storage-*",
+          "type": "TO_MODIFY",
+          "description": "本地存储/历史"
         },
-        "securityAudit": {
-          "command": "pnpm security:audit",
-          "result": "✅ PASSED",
-          "vulnerabilities": {
-            "high": 0,
-            "moderate": 0,
-            "low": 0,
-            "info": 0,
-            "total": 0
-          },
-          "message": "No known vulnerabilities found",
-          "auditLevel": "moderate",
-          "conclusion": "依赖包安全性完全符合生产环境要求，无需任何安全修复"
+        {
+          "path": "src/lib/i18n-cache.ts",
+          "type": "TO_MODIFY",
+          "description": "i18n 缓存"
         },
-        "e2eTests": {
-          "status": "未执行",
-          "reason": "项目未配置 E2E 测试 (无 test:e2e 脚本)",
-          "recommendation": "未来可集成 Playwright 或 Cypress 进行端到端测试",
-          "impact": "不阻塞升级，单元测试覆盖充分"
+        {
+          "path": "tests/unit/cache",
+          "type": "CREATE",
+          "description": "新增缓存相关测试"
+        }
+      ],
+      "implementationGuide": "为纯函数/缓存逻辑写单测，使用 fake timers/内存 stub；验证命中/失效/异常路径；如需拆小函数以便测试，保持对外接口不变。",
+      "verificationCriteria": "目标文件 lines/functions ≥55%，覆盖命中/失效/异常路径，测试可重复且无外部 IO。",
+      "analysisResult": "全局覆盖率约34.7%（lines），Cache Components PoC 未启用且 next-intl 兼容性阻滞，短期计划不依赖 PoC。设定短期目标：全局 lines/functions 覆盖率提升至≥55%，优先纯逻辑/安全/服务层与稳定 UI 组件。"
+    },
+    {
+      "id": "a0708c22-dcf0-465e-b0c4-8ca85de8dc3e",
+      "name": "核心交互与表单组件测试",
+      "description": "为稳定的 UI 组件（Header/Footer/语言切换/联系表单等）补交互与可访问性测试，目标组件 lines/functions ≥60%。",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "c3f269df-ab01-44f4-8063-2029e2bd724c"
+        }
+      ],
+      "createdAt": "2025-11-21T09:19:40.094Z",
+      "updatedAt": "2025-11-21T09:19:40.094Z",
+      "relatedFiles": [
+        {
+          "path": "src/components/layout/header.tsx",
+          "type": "TO_MODIFY",
+          "description": "头部"
         },
-        "sizeCheck": {
-          "status": "不兼容",
-          "reason": "size-limit 不兼容 Turbopack 内容哈希命名 (已在 Task #2 解决)",
-          "replacement": "@next/bundle-analyzer@16.0.3",
-          "usage": "ANALYZE=true pnpm build",
-          "manualVerification": "Task #2 和 Task #6 构建输出显示 bundle 大小正常 (JS Bundle: 1.5M, Total: 7.6M)",
-          "conclusion": "使用官方 @next/bundle-analyzer 替代，bundle 大小在预期范围内"
+        {
+          "path": "src/components/layout/footer.tsx",
+          "type": "TO_MODIFY",
+          "description": "底部"
         },
-        "turbopackStability": {
-          "buildSuccess": "✅ 连续 3 次构建成功 (Task #2, #6, #7)",
-          "buildTime": "6.0s ~ 6.6s (稳定一致)",
-          "staticPages": 23,
-          "dynamicRoutes": 11,
-          "totalChunks": 131,
-          "tailwindProcessing": "240ms (Lightning CSS 优化)",
-          "noErrors": "零构建错误或警告 (除已知 OpenTelemetry 警告)",
-          "conclusion": "Turbopack 在 Next.js 16.0.3 中完全稳定，已可用于生产环境"
+        {
+          "path": "src/components/language-toggle.tsx",
+          "type": "TO_MODIFY",
+          "description": "语言切换"
         },
-        "webpackFallback": {
-          "script": "build:webpack (NEXT_USE_TURBOPACK=0 next build)",
-          "status": "环境变量无效",
-          "reason": "Next.js 16 中 NEXT_USE_TURBOPACK=0 不再支持回退到 Webpack",
-          "documentation": "next.config.ts:85-87 已注明 webpack 配置待移除",
-          "decision": "保留 webpack 配置作为参考，等待 Turbopack 长期稳定后移除",
-          "noRollback": "无法回退到 Webpack，Turbopack 是唯一构建器"
+        {
+          "path": "src/components/forms/contact-form*.tsx",
+          "type": "TO_MODIFY",
+          "description": "联系表单相关"
         },
-        "knownIssues": {
-          "eslintCircularRef": {
-            "severity": "Low",
-            "blocking": false,
-            "description": "ESLint 配置存在循环引用 (plugin 'react')",
-            "workaround": "不影响代码质量检查和 lint:fix 功能",
-            "plannedFix": "Task #8 后专项修复，预计 2-4 小时"
-          },
-          "sizeLimitIncompat": {
-            "severity": "Low",
-            "blocking": false,
-            "description": "size-limit 不兼容 Turbopack",
-            "solution": "已使用 @next/bundle-analyzer 替代",
-            "status": "已解决"
-          },
-          "openTelemetryWarnings": {
-            "severity": "Info",
-            "blocking": false,
-            "description": "5 个 OpenTelemetry 依赖警告",
-            "impact": "不影响构建和运行",
-            "action": "观察生产环境监控是否受影响，必要时调整 Sentry 集成"
-          }
+        {
+          "path": "tests/unit/components",
+          "type": "CREATE",
+          "description": "新增组件测试"
+        }
+      ],
+      "implementationGuide": "Testing Library + jsdom，覆盖渲染、主要交互、必备 aria；表单含错误/成功提示；避免依赖未来 Cache Components 行为，聚焦现有 UI。",
+      "verificationCriteria": "目标组件 lines/functions ≥60%；交互含键盘/aria；无 Cache Components 依赖。",
+      "analysisResult": "全局覆盖率约34.7%（lines），Cache Components PoC 未启用且 next-intl 兼容性阻滞，短期计划不依赖 PoC。设定短期目标：全局 lines/functions 覆盖率提升至≥55%，优先纯逻辑/安全/服务层与稳定 UI 组件。"
+    },
+    {
+      "id": "436deca8-d538-40f1-8144-b550ba932851",
+      "name": "报告与阈值调优",
+      "description": "聚合新增测试后更新覆盖率报告，若个别文件超高阈值阻断，可在不降低总体目标下微调阈值或拆分文件。",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "d6758c9f-e4b3-48dc-a3a9-677463916b70"
         },
-        "productionReadiness": {
-          "coreUpgrade": "✅ Next.js 15.5.4 → 16.0.3 成功",
-          "reactUpgrade": "✅ React 18.x → 19.x 成功",
-          "turbopackMigration": "✅ 默认 Turbopack 构建器稳定",
-          "tailwindCompatibility": "✅ Tailwind CSS 4.1.17 完全兼容",
-          "asyncAPIs": "✅ 所有异步 Request API 正确实现",
-          "proxyMigration": "✅ middleware → proxy 迁移完成",
-          "imageConfig": "✅ 图片配置兼容 Next.js 16",
-          "typesSafety": "✅ TypeScript 类型检查通过",
-          "testCoverage": "✅ 4715 个测试通过",
-          "securityCompliance": "✅ 零安全漏洞",
-          "overallScore": "10/10 - 准备就绪"
+        {
+          "taskId": "6db8d1ed-65e4-4bd9-b341-acd6300e3ba0"
         },
-        "deploymentRecommendations": {
-          "preDeployment": [
-            "✅ 已完成所有 8 个升级任务",
-            "✅ 核心质量门禁全部通过",
-            "✅ Turbopack 构建稳定一致"
-          ],
-          "postDeployment": [
-            "🔄 监控生产环境构建时间和性能",
-            "🔄 验证 OpenTelemetry/Sentry 监控正常",
-            "🔄 检查图片加载性能和缓存行为",
-            "🔄 收集用户反馈关于页面加载速度"
-          ],
-          "followUp": [
-            "📋 修复 ESLint 循环引用问题 (2-4 小时)",
-            "📋 3 个 sprint 后评估移除 webpack 配置",
-            "📋 建立 bundle 监控流程 (Lighthouse CI 或自定义脚本)",
-            "📋 评估启用 PPR (Partial Prerendering) 当 Next.js 16 stable 支持"
-          ]
+        {
+          "taskId": "d0b3b23f-4a7e-48e1-a386-40178863a34f"
         },
-        "verification": {
-          "allTasksCompleted": "✅ 8/8 任务完成",
-          "criticalGatesPassed": "✅ 类型检查、测试、安全审计全部通过",
-          "buildStability": "✅ Turbopack 构建稳定且可复现",
-          "noBlockingIssues": "✅ 无阻塞性问题",
-          "productionReady": "✅ 可部署至生产环境"
+        {
+          "taskId": "a0708c22-dcf0-465e-b0c4-8ca85de8dc3e"
+        }
+      ],
+      "createdAt": "2025-11-21T09:19:40.094Z",
+      "updatedAt": "2025-11-21T09:19:40.094Z",
+      "relatedFiles": [
+        {
+          "path": "vitest.config.mts",
+          "type": "TO_MODIFY",
+          "description": "阈值调整"
         },
-        "conclusion": "✅ Next.js 16 升级验证与回归基线全部通过。核心质量门禁 (类型检查、单元测试、安全审计) 全部成功，4715 个测试通过，零安全漏洞。已知 ESLint 循环引用问题为非阻塞配置问题，不影响代码质量和生产部署。Turbopack 构建稳定一致 (6.0s ~ 6.6s)，Tailwind CSS 4.1.17 完全兼容，所有异步 API 正确实现。项目已准备就绪，可部署至生产环境。",
-        "commands": [
-          "pnpm type-check",
-          "pnpm lint:check || echo 'ESLint 循环引用已知问题'",
-          "pnpm test",
-          "pnpm security:audit",
-          "pnpm build",
-          "grep 'Test Files\\|Tests' reports/test-results.json || echo 'Test summary from console output'"
-        ]
-      }
+        {
+          "path": "reports/coverage",
+          "type": "REFERENCE",
+          "description": "覆盖率报告输出"
+        }
+      ],
+      "implementationGuide": "运行 pnpm test:coverage，收集 reports/coverage；仅对不合理的阈值下调至现实可达（仍≥55%）；记录调整理由并更新配置。",
+      "verificationCriteria": "全局 lines/functions 覆盖率≥55%；无不合理阈值导致的阻断；阈值调整有记录。",
+      "analysisResult": "全局覆盖率约34.7%（lines），Cache Components PoC 未启用且 next-intl 兼容性阻滞，短期计划不依赖 PoC。设定短期目标：全局 lines/functions 覆盖率提升至≥55%，优先纯逻辑/安全/服务层与稳定 UI 组件。"
     }
   ]
 }
