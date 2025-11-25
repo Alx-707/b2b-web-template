@@ -30,6 +30,9 @@ messages/
     ├── critical.json
     └── deferred.json
 ```
+> 注: `messages/en.json` 和 `messages/zh.json` 仅用于 Vitest 测试与翻译形状校验, 运行时代码不会直接从这些文件加载翻译。
+
+
 
 ### 快速定制
 
