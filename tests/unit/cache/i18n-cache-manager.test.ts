@@ -4,7 +4,7 @@ import {
   createI18nCacheManager,
   I18nCacheManager,
 } from '@/lib/i18n-cache-manager';
-import type { CacheConfig } from '@/lib/i18n-cache-types';
+import type { CacheConfig, PreloadConfig } from '@/lib/i18n-cache-types';
 
 // --- Mocks & helpers -------------------------------------------------------
 
@@ -117,6 +117,15 @@ vi.mock('@/lib/logger', () => ({
 describe('I18nCacheManager', () => {
   const managers: I18nCacheManager[] = [];
 
+  type TestLRUCache = {
+    set: (key: string, value: unknown) => void;
+    cleanup: () => number;
+    entries: () => IterableIterator<[string, unknown]>;
+    keys: () => IterableIterator<string>;
+    has: (key: string) => boolean;
+    delete: (key: string) => boolean;
+  };
+
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
@@ -178,7 +187,7 @@ describe('I18nCacheManager', () => {
     });
 
     const manager = createManager({ maxSize: 2 });
-    const internal = manager as unknown as { cache: MockLRUCache<unknown> };
+    const internal = manager as unknown as { cache: TestLRUCache };
     internal.cache.set('en', { message: 'cached' });
     internal.cache.set('zh', { message: 'cached' });
 
@@ -202,7 +211,7 @@ describe('I18nCacheManager', () => {
     mockGetCachedMessages.mockResolvedValue({});
 
     const manager = createManager();
-    const internal = manager as unknown as { cache: MockLRUCache<unknown> };
+    const internal = manager as unknown as { cache: TestLRUCache };
     const cleanupSpy = vi.spyOn(internal.cache, 'cleanup');
 
     await manager.optimizeCache();
@@ -213,7 +222,7 @@ describe('I18nCacheManager', () => {
 
   it('exportCache/importCache 循环数据保持并可删除特定 locale', () => {
     const manager = createManager();
-    const internal = manager as unknown as { cache: MockLRUCache<unknown> };
+    const internal = manager as unknown as { cache: TestLRUCache };
     internal.cache.set('en', { message: 'hello' });
 
     const exported = manager.exportCache();
@@ -230,7 +239,7 @@ describe('I18nCacheManager', () => {
 
   it('getCacheKey/hasMessages 使用命名空间生成键并检查存在性', () => {
     const manager = createManager();
-    const internal = manager as unknown as { cache: MockLRUCache<unknown> };
+    const internal = manager as unknown as { cache: TestLRUCache };
     internal.cache.set('en:marketing', { hero: 'cta' });
 
     expect(manager.getCacheKey('en', 'marketing')).toBe('en:marketing');
@@ -265,7 +274,7 @@ describe('I18nCacheManager', () => {
     expect(manager.getCacheStats()).toHaveProperty('size');
     expect(manager.getDetailedStats()).toHaveProperty('config');
 
-    const internal = manager as unknown as { cache: MockLRUCache<unknown> };
+    const internal = manager as unknown as { cache: TestLRUCache };
     internal.cache.set('en', { ready: true });
     expect(manager.getCachedLocales()).toContain('en');
     expect(manager.deleteMessages('en')).toBe(true);
@@ -288,7 +297,7 @@ describe('I18nCacheManager', () => {
 
     manager.updatePreloadConfig({
       preload: true,
-    } as unknown as Partial<CacheConfig>);
+    } as unknown as Partial<PreloadConfig>);
     manager.updateConfig({ ttl: 20 });
     expect(manager.generatePerformanceReport()).toEqual({ summary: 'ok' });
 

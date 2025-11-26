@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   ALLOWED_FILE_TYPES,
-  FileValidationResult,
   generateSafeFileName,
   getFileCategory,
   sanitizeFileName,
   validateFileSignature,
   validateFileUpload,
   validateMultipleFiles,
+  type FileValidationResult,
 } from '@/lib/security-file-upload';
 
 const createFile = (bytes: number[], name: string, type: string) =>
@@ -77,7 +77,7 @@ describe('security-file-upload', () => {
 
     const archive = createFile([1], 'data.zip', 'application/zip');
     const blocked = validateFileUpload(archive, {
-      allowedTypes: ALLOWED_FILE_TYPES.images,
+      allowedTypes: [...ALLOWED_FILE_TYPES.images],
     });
     expect(blocked.valid).toBe(false);
   });

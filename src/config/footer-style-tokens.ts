@@ -1,12 +1,7 @@
-import type {
-  FooterStyleTokens,
-  WhatsAppStyleTokens,
-} from '@/config/footer-links';
-
 /**
  * Footer 视觉 token：独立文件，避免 footer-links.ts 体积超过 max-lines 限制。
  */
-export const FOOTER_STYLE_TOKENS: FooterStyleTokens = {
+export const FOOTER_STYLE_TOKENS = {
   layout: {
     maxWidthPx: 1080,
     marginXClamp: 'clamp(24px, 12vw, 184px)',
@@ -76,7 +71,7 @@ export const FOOTER_STYLE_TOKENS: FooterStyleTokens = {
   },
 };
 
-export const WHATSAPP_STYLE_TOKENS: WhatsAppStyleTokens = {
+export const WHATSAPP_STYLE_TOKENS = {
   sizePx: 52,
   iconSizePx: 22,
   borderRadiusPx: 16,
