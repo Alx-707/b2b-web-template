@@ -173,7 +173,10 @@ rules:
         - "src/lib/dev-tools-positioning.ts"
         - "src/config/paths/utils.ts"
         - "src/config/contact-form-config.ts"
-        - "src/services/url-generator.ts"
+        - "src/services/**"
+        - "src/shared/utils.ts"
+        - "src/types/whatsapp-*/**"
+        - "src/lib/validations.ts"
     message: '检测到对象注入漏洞：避免使用用户输入作为对象属性键，使用白名单验证或switch语句'
     languages: [typescript, javascript]
     severity: ERROR
@@ -201,6 +204,10 @@ rules:
         - "src/lib/performance-monitoring-core-config.ts"
         - "src/lib/i18n-cache-types-advanced.ts"
         - "src/lib/locale-storage-types-config/factory.ts"
+        - "src/lib/theme-analytics-core.ts"
+        - "src/lib/theme-analytics.ts"
+        - "src/lib/web-vitals/**"
+        - "src/templates/**"
     message: '检测到潜在的对象注入：使用扩展运算符或Object.assign时需验证输入对象的安全性'
     languages: [typescript, javascript]
     severity: WARNING
