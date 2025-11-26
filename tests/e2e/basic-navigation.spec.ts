@@ -32,8 +32,17 @@ test.describe('Basic Navigation', () => {
     await removeInterferingElements(page);
     await waitForStablePage(page);
 
-    // Test navigation to different pages - use nav-scoped selector to avoid footer links
-    const aboutLink = page.locator('nav a[href*="/about"]').first();
+    // Wait for navigation component to be fully loaded
+    // Use the main navigation selector from vercel-navigation.tsx
+    const navigation = page
+      .locator('nav[aria-label="Main navigation"]')
+      .first();
+    await expect(navigation).toBeVisible({ timeout: 10_000 });
+
+    // Test navigation to different pages - use more specific selector with ARIA label
+    const aboutLink = page
+      .locator('nav[aria-label="Main navigation"] a[href*="/about"]')
+      .first();
     await expect(aboutLink).toBeVisible({ timeout: 10_000 });
 
     // Wait for navigation to complete with URL change
