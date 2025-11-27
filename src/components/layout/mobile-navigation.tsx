@@ -142,7 +142,7 @@ export function MobileNavigation({ className }: MobileNavigationProps) {
                   }}
                   onClick={() => setIsOpen(false)}
                 >
-                  {t('contactSales')}
+                  {t('navigation.contactSales')}
                 </Link>
               </Button>
             </div>
