@@ -320,5 +320,117 @@
   "article": {
     "defaultAuthor": "Tucsenberg Team"
   },
-  "title": "Tucsenberg Web Frontier"
+  "blog": {
+    "pageTitle": "Blog",
+    "pageDescription": "Explore our latest articles, insights, and updates on technology, design, and enterprise solutions.",
+    "readingTime": "min read",
+    "emptyState": "No articles published yet. Check back soon!"
+  },
+  "about": {
+    "pageTitle": "About Us",
+    "pageDescription": "Learn more about our company, mission, and the team dedicated to delivering quality products.",
+    "hero": {
+      "title": "About Our Company",
+      "subtitle": "Your Trusted Partner in Global Trade",
+      "description": "We are a leading manufacturer and exporter specializing in high-quality industrial products. With years of experience in international trade, we are committed to delivering excellence to clients worldwide."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "content": "To provide innovative, high-quality products that meet the evolving needs of our global customers, while maintaining the highest standards of service and integrity."
+    },
+    "values": {
+      "title": "Our Values",
+      "quality": {
+        "title": "Quality First",
+        "description": "We never compromise on quality. Every product undergoes rigorous testing and quality control."
+      },
+      "innovation": {
+        "title": "Continuous Innovation",
+        "description": "We invest in R&D to bring cutting-edge solutions to market."
+      },
+      "service": {
+        "title": "Customer Service",
+        "description": "Your success is our priority. We provide comprehensive pre-sale and after-sale support."
+      },
+      "integrity": {
+        "title": "Business Integrity",
+        "description": "We build long-term relationships based on trust, transparency, and mutual respect."
+      }
+    },
+    "stats": {
+      "yearsExperience": "Years Experience",
+      "countriesServed": "Countries Served",
+      "happyClients": "Happy Clients",
+      "productsDelivered": "Products Delivered"
+    },
+    "cta": {
+      "title": "Ready to Work With Us?",
+      "description": "Contact our team to discuss your requirements and discover how we can help grow your business.",
+      "button": "Get in Touch"
+    }
+  },
+  "products": {
+    "pageTitle": "Products",
+    "pageDescription": "Explore our comprehensive range of high-quality products for your business needs.",
+    "emptyState": "No products available. Please check back later.",
+    "viewDetails": "View Details",
+    "requestQuote": "Request Quote",
+    "allCategories": "All Categories",
+    "featured": "Featured",
+    "card": {
+      "moq": "MOQ",
+      "leadTime": "Lead Time",
+      "supplyCapacity": "Capacity"
+    },
+    "detail": {
+      "specifications": "Specifications",
+      "tradeInfo": "Trade Information",
+      "certifications": "Certifications",
+      "relatedProducts": "Related Products",
+      "labels": {
+        "moq": "Minimum Order",
+        "leadTime": "Lead Time",
+        "supplyCapacity": "Supply Capacity",
+        "packaging": "Packaging",
+        "portOfLoading": "Port of Loading"
+      }
+    },
+    "inquiry": {
+      "title": "Product Inquiry",
+      "description": "Interested in this product? Send us an inquiry for pricing and availability.",
+      "productName": "Product",
+      "quantity": "Quantity Required",
+      "quantityPlaceholder": "e.g., 500 pieces",
+      "targetPrice": "Target Price (optional)",
+      "targetPricePlaceholder": "e.g., $10 per unit",
+      "requirements": "Special Requirements",
+      "requirementsPlaceholder": "Please describe any special requirements such as customization, packaging, or certifications...",
+      "submit": "Send Inquiry",
+      "submitting": "Sending...",
+      "success": "Your inquiry has been sent successfully! We will get back to you within 24 hours.",
+      "error": "Failed to send inquiry. Please try again later."
+    }
+  },
+  "title": "Tucsenberg Web Frontier",
+  "trust": {
+    "testimonials": {
+      "title": "What Our Clients Say",
+      "subtitle": "Trusted by businesses worldwide"
+    },
+    "partners": {
+      "title": "Our Partners",
+      "subtitle": "Collaborating with industry leaders"
+    },
+    "certifications": {
+      "title": "Certifications & Standards",
+      "subtitle": "Quality you can trust"
+    },
+    "stats": {
+      "title": "By the Numbers",
+      "yearsInBusiness": "Years in Business",
+      "countriesServed": "Countries Served",
+      "satisfactionRate": "Client Satisfaction",
+      "projectsCompleted": "Projects Delivered"
+    }
+  }
 }

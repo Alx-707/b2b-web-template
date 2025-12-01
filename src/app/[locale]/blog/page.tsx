@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { UnderConstruction } from '@/components/shared/under-construction';
+import type { Locale } from '@/types/content';
+import { getAllPostsCached } from '@/lib/content/blog';
+import { PostGrid } from '@/components/blog';
 import { generateLocaleStaticParams } from '@/app/[locale]/generate-static-params';
-import { ZERO } from '@/constants';
 
 export function generateStaticParams() {
   return generateLocaleStaticParams();
@@ -20,22 +21,53 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({
     locale,
-    namespace: 'underConstruction.pages.blog',
+    namespace: 'blog',
   });
 
   return {
-    title: t('title'),
-    description: t('description'),
+    title: t('pageTitle'),
+    description: t('pageDescription'),
   };
 }
 
-export default function BlogPage() {
+export default async function BlogPage({ params }: BlogPageProps) {
+  const { locale } = await params;
+  const t = await getTranslations({
+    locale,
+    namespace: 'blog',
+  });
+
+  const posts = await getAllPostsCached(locale as Locale, {
+    sortBy: 'publishedAt',
+    sortOrder: 'desc',
+    draft: false,
+  });
+
+  const linkPrefix = `/${locale}/blog`;
+
   return (
-    <UnderConstruction
-      pageType='blog'
-      currentStep={ZERO}
-      expectedDateKey='dates.q3_2024'
-      showProgress={true}
-    />
+    <main className='container mx-auto px-4 py-8 md:py-12'>
+      {/* Page Header */}
+      <header className='mb-8 md:mb-12'>
+        <h1 className='mb-4 text-heading'>{t('pageTitle')}</h1>
+        <p className='max-w-2xl text-body text-muted-foreground'>
+          {t('pageDescription')}
+        </p>
+      </header>
+
+      {/* Post Grid */}
+      <PostGrid
+        posts={posts}
+        linkPrefix={linkPrefix}
+        cardProps={{
+          readingTimeLabel: t('readingTime'),
+        }}
+        emptyState={
+          <div className='py-12 text-center'>
+            <p className='text-muted-foreground'>{t('emptyState')}</p>
+          </div>
+        }
+      />
+    </main>
   );
 }

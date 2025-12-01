@@ -15,6 +15,7 @@ import { COUNT_160 } from '@/constants/count';
 export const CONTENT_DIR = path.join(process.cwd(), 'content');
 export const POSTS_DIR = path.join(CONTENT_DIR, 'posts');
 export const PAGES_DIR = path.join(CONTENT_DIR, 'pages');
+export const PRODUCTS_DIR = path.join(CONTENT_DIR, 'products');
 export const CONFIG_DIR = path.join(CONTENT_DIR, 'config');
 
 // Allowed file extensions for security

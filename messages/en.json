@@ -884,5 +884,96 @@
   "article": {
     "defaultAuthor": "Tucsenberg Team"
   },
+  "products": {
+    "pageTitle": "Products",
+    "pageDescription": "Explore our comprehensive range of high-quality products for your business needs.",
+    "emptyState": "No products available. Please check back later.",
+    "viewDetails": "View Details",
+    "requestQuote": "Request Quote",
+    "allCategories": "All Categories",
+    "featured": "Featured",
+    "card": {
+      "moq": "MOQ",
+      "leadTime": "Lead Time",
+      "supplyCapacity": "Capacity"
+    },
+    "detail": {
+      "specifications": "Specifications",
+      "tradeInfo": "Trade Information",
+      "certifications": "Certifications",
+      "relatedProducts": "Related Products",
+      "labels": {
+        "moq": "Minimum Order",
+        "leadTime": "Lead Time",
+        "supplyCapacity": "Supply Capacity",
+        "packaging": "Packaging",
+        "portOfLoading": "Port of Loading"
+      }
+    },
+    "inquiry": {
+      "title": "Product Inquiry",
+      "description": "Interested in this product? Send us an inquiry for pricing and availability.",
+      "productName": "Product",
+      "quantity": "Quantity Required",
+      "quantityPlaceholder": "e.g., 500 pieces",
+      "targetPrice": "Target Price (optional)",
+      "targetPricePlaceholder": "e.g., $10 per unit",
+      "requirements": "Special Requirements",
+      "requirementsPlaceholder": "Please describe any special requirements such as customization, packaging, or certifications...",
+      "submit": "Send Inquiry",
+      "submitting": "Sending...",
+      "success": "Your inquiry has been sent successfully! We will get back to you within 24 hours.",
+      "error": "Failed to send inquiry. Please try again later."
+    }
+  },
+  "blog": {
+    "pageTitle": "Blog",
+    "pageDescription": "Latest news, insights, and updates from our team.",
+    "readingTime": "{minutes} min read",
+    "emptyState": "No posts available. Please check back later."
+  },
+  "about": {
+    "pageTitle": "About Us",
+    "pageDescription": "Learn more about our company, mission, and the team dedicated to delivering quality products.",
+    "hero": {
+      "title": "About Our Company",
+      "subtitle": "Your Trusted Partner in Global Trade",
+      "description": "With years of experience in international trade, we are committed to providing high-quality products and exceptional service to our clients worldwide."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "content": "To bridge the gap between manufacturers and global markets by providing reliable sourcing solutions, ensuring quality at every step, and building lasting partnerships based on trust and transparency."
+    },
+    "values": {
+      "title": "Our Values",
+      "quality": {
+        "title": "Quality First",
+        "description": "We never compromise on quality. Every product undergoes rigorous inspection before shipment."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "We continuously improve our processes and adopt new technologies to serve you better."
+      },
+      "service": {
+        "title": "Customer Service",
+        "description": "Your satisfaction is our priority. Our team is always ready to assist you."
+      },
+      "integrity": {
+        "title": "Integrity",
+        "description": "We conduct business with honesty and transparency in all our dealings."
+      }
+    },
+    "stats": {
+      "yearsExperience": "Years Experience",
+      "countriesServed": "Countries Served",
+      "happyClients": "Happy Clients",
+      "productsDelivered": "Products Delivered"
+    },
+    "cta": {
+      "title": "Ready to Partner with Us?",
+      "description": "Let's discuss how we can help your business grow with our quality products and services.",
+      "button": "Contact Us"
+    }
+  },
   "title": "Tucsenberg Web Frontier"
 }

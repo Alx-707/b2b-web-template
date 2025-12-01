@@ -59,8 +59,28 @@ export interface Page extends ParsedContent<PageMetadata> {
   metadata: PageMetadata;
 }
 
+// Product specific metadata (for MDX frontmatter)
+export interface ProductMetadata extends ContentMetadata {
+  coverImage: string;
+  images?: string[];
+  category: string;
+  moq?: string;
+  leadTime?: string;
+  supplyCapacity?: string;
+  specs?: Record<string, string>;
+  certifications?: string[];
+  packaging?: string;
+  portOfLoading?: string;
+  relatedProducts?: string[];
+}
+
+// Product content
+export interface Product extends ParsedContent<ProductMetadata> {
+  metadata: ProductMetadata;
+}
+
 // Content collection types
-export type ContentType = 'posts' | 'pages';
+export type ContentType = 'posts' | 'pages' | 'products';
 export type _ContentType = ContentType;
 export type Locale = 'en' | 'zh';
 
@@ -118,16 +138,26 @@ export interface PostDetail extends PostSummary {
 /**
  * Summary view of a product for listing and overview sections.
  *
- * Products currently re-use the generic ContentMetadata shape; this domain
- * model keeps the fields we expect to surface in the UI.
+ * Designed for B2B/foreign trade scenarios with common fields that most
+ * industries need. Additional fields can be added via the `specs` record.
  */
 export interface ProductSummary {
   slug: string;
   locale: Locale;
   title: string;
   description?: string;
+  coverImage: string;
+  images?: string[];
+  category: string;
   categories?: string[];
   tags?: string[];
+  featured?: boolean;
+
+  // Foreign trade common fields (optional)
+  moq?: string; // Minimum Order Quantity, e.g. "100 pieces"
+  leadTime?: string; // Delivery time, e.g. "15-30 days"
+  supplyCapacity?: string; // e.g. "10000 pieces/month"
+
   seo?: {
     title?: string;
     description?: string;
@@ -138,11 +168,54 @@ export interface ProductSummary {
 
 /**
  * Detail view of a product for dedicated product pages.
+ *
+ * Includes full content and extensible specs for industry-specific attributes.
  */
 export interface ProductDetail extends ProductSummary {
   content: string;
   filePath: string;
+
+  // Extensible key-value specs for industry-specific attributes
+  specs?: Record<string, string>;
+
+  // Certifications like ISO, CE, etc.
+  certifications?: string[];
+
+  // Packaging and shipping info
+  packaging?: string;
+  portOfLoading?: string;
+
+  // Related products by slug
+  relatedProducts?: string[];
 }
+
+/**
+ * Options for product listing queries.
+ */
+export interface ProductListOptions {
+  limit?: number;
+  offset?: number;
+  category?: string;
+  tags?: string[];
+  featured?: boolean;
+}
+
+/**
+ * Cache-friendly wrapper signatures for products.
+ */
+export type GetAllProductsCachedFn = (
+  locale: Locale,
+  options?: ProductListOptions,
+) => Promise<ProductSummary[]>;
+
+export type GetProductBySlugCachedFn = (
+  locale: Locale,
+  slug: string,
+) => Promise<ProductDetail>;
+
+export type GetProductCategoriesCachedFn = (
+  locale: Locale,
+) => Promise<string[]>;
 
 /**
  * Options for cache-friendly blog post listing wrappers.
