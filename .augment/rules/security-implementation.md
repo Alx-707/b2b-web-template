@@ -796,6 +796,58 @@ export async function POST(request: NextRequest) {
 }
 ```
 
+### Semgrep 
+
+This project uses a custom Semgrep ruleset (`semgrep.yml`) to detect common
+object-injection and unsafe HTML patterns. To keep the signal high without
+introducing blind spots, we maintain a lightweight governance log:
+
+- **`object-injection-sink-dynamic-property`**
+  - **Pattern tuning**: Added a `pattern-not-inside` clause to ignore canonical
+    `for (let i = 0; i < arr.length; i += 1) { arr[i] ... }` index access
+    loops. In these cases the key is a locally controlled numeric index
+    bounded by `arr.length`, not user input.
+  - **Code annotation**: For `renderPrivacyContent` in
+    `src/app/[locale]/privacy/page.tsx`, we explicitly documented the
+    reasoning with `// nosemgrep: object-injection-sink-dynamic-property` to
+    clarify that `lines[index]` is derived from static privacy content and
+    only used for safe JSX text rendering.
+
+- **`object-injection-sink-spread-operator`**
+  - **UI-only spreads (acceptable low risk, documented)**:
+    - `src/app/[locale]/about/page.tsx` (`ValuesSection`): spreads
+      `values.*` from controlled translation/config objects into display-only
+      cards.
+    - `src/app/[locale]/products/[slug]/page.tsx` (`buildTradeInfoProps`):
+      builds a shallow map from `ProductDetail` for `ProductTradeInfo` UI,
+      with fields sourced from internal content models.
+    - `src/components/products/product-card.tsx` (`mergedLabels`): merges
+      `DEFAULT_LABELS` and `labels` for card UI labels only.
+    - `src/components/products/product-specs.tsx` (`mergedLabels`): merges
+      trade info labels for display-only specs.
+
+    These call sites are annotated with
+    `// nosemgrep: object-injection-sink-spread-operator` and a short
+    **Reason** comment to record that the data is controlled and used solely
+    for rendering, never as input to DB/FS/exec sinks. To further reduce
+    noise while keeping other security rules active, these files are also
+    listed under `paths.exclude` for this rule in `semgrep.yml`.
+
+  - **Configuration modules (clear false positives, rule-level exclusion)**:
+    - `src/lib/performance-monitoring-config-history.ts`
+    - `src/lib/performance-monitoring-config-modules.ts`
+
+    Both files operate on internal `PerformanceConfig` objects, cloning and
+    merging configuration for diagnostics only. They do not process
+    user-controlled input and are now excluded from this rule via the
+    `paths.exclude` list in `semgrep.yml`.
+
+This governance section should be updated whenever we:
+
+- Add new `// nosemgrep` suppressions for Semgrep rules, or
+- Change Semgrep rule patterns / exclusions that affect what constitutes a
+  security finding.
+
 ### GitHub Actions Security Workflow
 
 ```yaml
