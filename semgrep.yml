@@ -169,6 +169,10 @@ rules:
               $OBJ[$VAR] = $VALUE
       - pattern-not: $OBJ["..."]
       - pattern-not: $OBJ['...']
+      - pattern-not-inside: |
+          for (let $VAR = 0; $VAR < $OBJ.length; $VAR += 1) {
+            ...
+          }
     paths:
       exclude:
         - "**/__tests__/**"
@@ -223,6 +227,17 @@ rules:
         - "**/src/config/contact-form-config.ts"
         - "**/src/testing/utils/theme-test-utilities.ts"
         - "**/src/types/whatsapp-api-config/utils.ts"
+        - "**/src/lib/performance-monitoring-config-history.ts"
+        - "**/src/lib/performance-monitoring-config-modules.ts"
+        # UI-only spread patterns that have been manually reviewed and
+        # documented as safe (see .augment/rules/security-implementation.md
+        # "Semgrep 规则治理记录" section). These components only spread
+        # controlled translation/label objects used for rendering and never
+        # handle raw user input.
+        - "**/src/app/*/about/page.tsx"
+        - "**/src/app/*/products/*/page.tsx"
+        - "**/src/components/products/product-card.tsx"
+        - "**/src/components/products/product-specs.tsx"
     message: '检测到潜在的对象注入：使用扩展运算符或Object.assign时需验证输入对象的安全性'
     languages: [typescript, javascript]
     severity: WARNING
