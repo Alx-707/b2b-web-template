@@ -331,30 +331,83 @@ jobs:
 
       - name: 验证 API 端点
         run: |
+          set -euo pipefail
           DEPLOYMENT_URL="${{ needs.deploy-to-vercel.outputs.preview_url }}"
+          BYPASS_SECRET="${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}"
+
+          # 带重试的 curl 函数
+          fetch_with_retry() {
+            local url="$1"
+            local max_retries=3
+            local retry_delay=5
+            local attempt=1
+
+            while [ $attempt -le $max_retries ]; do
+              echo "  尝试 $attempt/$max_retries: $url"
+
+              # 获取 HTTP 状态码和内容
+              HTTP_RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}" \
+                -H "x-vercel-protection-bypass: $BYPASS_SECRET" \
+                "$url" 2>&1) || true
+
+              HTTP_CODE=$(echo "$HTTP_RESPONSE" | grep "HTTP_CODE:" | cut -d: -f2)
+              CONTENT=$(echo "$HTTP_RESPONSE" | sed '/HTTP_CODE:/d')
+
+              echo "  HTTP 状态码: $HTTP_CODE"
+
+              if [ "$HTTP_CODE" = "200" ]; then
+                echo "$CONTENT"
+                return 0
+              fi
+
+              echo "  ⚠️ 请求失败 (HTTP $HTTP_CODE)，${retry_delay}s 后重试..."
+              sleep $retry_delay
+              attempt=$((attempt + 1))
+              retry_delay=$((retry_delay * 2))
+            done
+
+            echo "  ❌ 所有重试均失败"
+            return 1
+          }
 
           # 检查 robots.txt
           echo "检查 robots.txt..."
-          curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/robots.txt" | grep -q "User-agent" || exit 1
+          ROBOTS_CONTENT=$(fetch_with_retry "$DEPLOYMENT_URL/robots.txt") || {
+            echo "❌ 无法获取 robots.txt"
+            echo "请检查 VERCEL_AUTOMATION_BYPASS_SECRET 是否正确配置"
+            exit 1
+          }
 
-          # 检查 sitemap.xml - 支持 sitemapindex 和 urlset 两种格式
+          if echo "$ROBOTS_CONTENT" | grep -q "User-agent"; then
+            echo "✓ robots.txt 验证通过"
+          else
+            echo "❌ robots.txt 格式无效"
+            echo "内容预览:"
+            echo "$ROBOTS_CONTENT" | head -n 10
+            exit 1
+          fi
+
+          # 检查 sitemap.xml
           echo "检查 sitemap.xml..."
-          SITEMAP_CONTENT=$(curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/sitemap.xml")
+          SITEMAP_CONTENT=$(fetch_with_retry "$DEPLOYMENT_URL/sitemap.xml") || {
+            echo "❌ 无法获取 sitemap.xml"
+            exit 1
+          }
 
           # 检测 sitemap 格式
           if echo "$SITEMAP_CONTENT" | grep -q '<sitemapindex'; then
             echo "✓ Sitemap index format detected"
             echo "Checking sitemap-0.xml..."
 
-            # 验证 sitemap-0.xml 存在且包含 urlset
-            SITEMAP_0_CONTENT=$(curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$DEPLOYMENT_URL/sitemap-0.xml")
+            SITEMAP_0_CONTENT=$(fetch_with_retry "$DEPLOYMENT_URL/sitemap-0.xml") || {
+              echo "❌ 无法获取 sitemap-0.xml"
+              exit 1
+            }
 
             if echo "$SITEMAP_0_CONTENT" | grep -q '<urlset'; then
-              # 统计 URL 数量
-              URL_COUNT=$(echo "$SITEMAP_0_CONTENT" | grep -o '<loc>' | wc -l)
+              URL_COUNT=$(echo "$SITEMAP_0_CONTENT" | grep -o '<loc>' | wc -l | tr -d ' ')
               echo "✓ Found $URL_COUNT URLs in sitemap-0.xml"
 
-              # 验证 URL 数量（期望至少 20 个）
               if [ "$URL_COUNT" -lt 20 ]; then
                 echo "❌ URL count is too low: $URL_COUNT (expected >= 20)"
                 exit 1
@@ -366,11 +419,9 @@ jobs:
           elif echo "$SITEMAP_CONTENT" | grep -q '<urlset'; then
             echo "✓ Sitemap urlset format detected"
 
-            # 统计 URL 数量
-            URL_COUNT=$(echo "$SITEMAP_CONTENT" | grep -o '<loc>' | wc -l)
+            URL_COUNT=$(echo "$SITEMAP_CONTENT" | grep -o '<loc>' | wc -l | tr -d ' ')
             echo "✓ Found $URL_COUNT URLs in sitemap.xml"
 
-            # 验证 URL 数量
             if [ "$URL_COUNT" -lt 20 ]; then
               echo "❌ URL count is too low: $URL_COUNT (expected >= 20)"
               exit 1
@@ -430,11 +481,38 @@ jobs:
         run: |
           set -euo pipefail
           BASE="${{ needs.deploy-to-vercel-prod.outputs.prod_url }}"
-          echo "检查根路径..."; curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$BASE" > /dev/null
-          echo "检查英文首页..."; curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$BASE/en" > /dev/null
-          echo "检查中文首页..."; curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$BASE/zh" > /dev/null
-          echo "检查 robots.txt..."; curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$BASE/robots.txt" | grep -q "User-agent"
-          echo "检查 sitemap.xml..."; curl -f -s -H "x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" "$BASE/sitemap.xml" | head -n 5
+          BYPASS_SECRET="${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}"
+
+          # 带重试的请求函数
+          check_url() {
+            local url="$1"
+            local desc="$2"
+            local max_retries=3
+            local attempt=1
+
+            echo "检查 $desc..."
+            while [ $attempt -le $max_retries ]; do
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+                -H "x-vercel-protection-bypass: $BYPASS_SECRET" "$url") || HTTP_CODE="000"
+
+              if [ "$HTTP_CODE" = "200" ]; then
+                echo "  ✓ $desc (HTTP $HTTP_CODE)"
+                return 0
+              fi
+
+              echo "  尝试 $attempt/$max_retries: HTTP $HTTP_CODE"
+              sleep $((attempt * 3))
+              attempt=$((attempt + 1))
+            done
+            echo "  ❌ $desc 失败"
+            return 1
+          }
+
+          check_url "$BASE" "根路径"
+          check_url "$BASE/en" "英文首页"
+          check_url "$BASE/zh" "中文首页"
+          check_url "$BASE/robots.txt" "robots.txt"
+          check_url "$BASE/sitemap.xml" "sitemap.xml"
           echo "✅ 健康检查与多语言抽样通过"
 
   deployment-summary:
