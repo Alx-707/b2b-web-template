@@ -136,6 +136,25 @@ src/
 ├── test/         # 测试辅助
 ├── testing/      # 测试基建
 └── types/        # TypeScript 类型
+
+content/          # MDX 内容文件
+├── posts/        # 博客文章
+│   ├── en/       # 英文博客
+│   └── zh/       # 中文博客
+├── products/     # 产品目录
+│   ├── en/       # 英文产品
+│   └── zh/       # 中文产品
+└── pages/        # 静态页面（FAQ、隐私政策等）
+    ├── en/
+    └── zh/
+
+messages/         # 国际化翻译文件
+├── en/
+│   ├── critical.json   # 首屏必需翻译
+│   └── deferred.json   # 延迟加载翻译
+└── zh/
+    ├── critical.json
+    └── deferred.json
 ```
 
 ## 🔧 可用脚本
@@ -197,6 +216,102 @@ pnpm perf:lighthouse  # Lighthouse CI（性能）
 ```
 
 > 覆盖率、关键组件清单请以最新 `pnpm test:coverage` 输出为准。
+
+## 📝 内容管理系统
+
+本模板使用基于文件系统的 MDX 内容管理，支持产品目录、博客文章和静态页面。
+
+### 产品内容 (`content/products/`)
+
+产品文件支持 B2B 外贸特有的字段：
+
+```yaml
+---
+locale: 'en'
+title: 'Product Name'
+slug: 'product-slug'           # 英中版本必须使用相同 slug
+publishedAt: '2024-01-15'
+draft: false
+description: 'Product description'
+coverImage: '/images/products/cover.jpg'
+images:
+  - '/images/products/image1.jpg'
+  - '/images/products/image2.jpg'
+category: 'Industrial Equipment'
+tags: ['tag1', 'tag2']
+featured: true
+moq: '10 Units'                # 最小起订量
+leadTime: '15-20 Days'         # 交货期
+supplyCapacity: '5000 Units/Month'
+certifications: ['CE', 'ISO 9001']
+packaging: 'Wooden Crate'
+portOfLoading: 'Shanghai Port'
+specs:
+  Power: '7.5kW'
+  Voltage: '380V AC'
+relatedProducts: ['related-product-slug']
+seo:
+  title: 'SEO Title'
+  description: 'SEO Description'
+  keywords: ['keyword1', 'keyword2']
+---
+
+Product detailed description in MDX format...
+```
+
+### 博客文章 (`content/posts/`)
+
+```yaml
+---
+locale: 'en'
+title: 'Article Title'
+slug: 'article-slug'
+description: 'Article summary'
+publishedAt: '2024-01-15'
+author: 'Author Name'
+tags: ['Trade', 'Export']
+categories: ['Industry Insights']
+featured: false
+readingTime: 8
+coverImage: '/images/blog/cover.jpg'
+seo:
+  title: 'SEO Title'
+  description: 'SEO Description'
+---
+
+Article content in MDX format...
+```
+
+### 静态页面 (`content/pages/`)
+
+适用于 FAQ、隐私政策、关于我们等页面：
+
+```yaml
+---
+locale: 'en'
+title: 'Page Title'
+slug: 'page-slug'
+description: 'Page description'
+publishedAt: '2024-01-01'
+updatedAt: '2024-04-01'
+author: 'Team Name'
+layout: 'default'
+showToc: true
+draft: false
+seo:
+  title: 'SEO Title'
+  description: 'SEO Description'
+  keywords: ['keyword1', 'keyword2']
+---
+
+Page content in MDX format...
+```
+
+### 内容国际化规则
+
+1. **Slug 必须一致**：英文和中文版本必须使用相同的 `slug`，以确保 i18n 路由正确工作
+2. **文件命名**：建议使用 slug 作为文件名，如 `variable-frequency-drive.mdx`
+3. **locale 字段**：必须与所在目录匹配（`en` 或 `zh`）
 
 ## 🏗️ 技术栈详情
 
