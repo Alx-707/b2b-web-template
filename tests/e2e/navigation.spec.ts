@@ -7,6 +7,14 @@ import {
   waitForStablePage,
 } from './test-environment-setup';
 
+const rawBaseUrl =
+  process.env.PLAYWRIGHT_BASE_URL ??
+  process.env.BASE_URL ??
+  process.env.STAGING_URL ??
+  'http://localhost:3000';
+
+const BASE_ORIGIN = new URL(rawBaseUrl).origin;
+
 test.describe('Navigation System', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -27,14 +35,14 @@ test.describe('Navigation System', () => {
   }) => {
     // On Firefox, validate redirect via API to avoid page navigation flakiness
     if (browserName === 'firefox') {
-      const resp = await request.get('http://localhost:3000/', {
+      const resp = await request.get(`${BASE_ORIGIN}/`, {
         maxRedirects: 0,
       });
       expect([301, 302, 307, 308]).toContain(resp.status());
       const location =
         resp.headers()['location'] || resp.headers()['Location'] || '';
       expect(location).toMatch(/\/en(\/|$)/);
-      await page.goto('http://localhost:3000/en');
+      await page.goto(`${BASE_ORIGIN}/en`);
 
       await waitForLoadWithFallback(page, {
         context: 'navigation firefox redirect',
@@ -47,7 +55,7 @@ test.describe('Navigation System', () => {
     }
 
     // For other browsers: navigate to root and assert client-side end state
-    await page.goto('http://localhost:3000/');
+    await page.goto(`${BASE_ORIGIN}/`);
     await page.waitForURL('**/en');
 
     await waitForLoadWithFallback(page, {

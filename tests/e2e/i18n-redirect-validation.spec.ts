@@ -6,7 +6,13 @@
 
 import { expect, test } from '@playwright/test';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+const rawBaseUrl =
+  process.env.PLAYWRIGHT_BASE_URL ??
+  process.env.BASE_URL ??
+  process.env.STAGING_URL ??
+  'http://localhost:3000';
+
+const BASE_URL = rawBaseUrl.replace(/\/$/, '');
 
 test.describe('Next.js 15.4.7 国际化重定向验证', () => {
   test.beforeEach(async ({ page }) => {
