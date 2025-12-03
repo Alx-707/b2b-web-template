@@ -54,8 +54,52 @@ function tryHandleExplicitLocalizedRequest(
   return null;
 }
 
+function tryHandleInvalidLocalePrefix(
+  request: NextRequest,
+  nonce: string,
+): NextResponse | null {
+  const { pathname } = request.nextUrl;
+  const segments = pathname.split('/').filter(Boolean);
+
+  if (segments.length < 2) {
+    return null;
+  }
+
+  const [first, ...rest] = segments;
+
+  // 已知 locale 前缀交由默认逻辑处理
+  if (SUPPORTED_LOCALES.has(first)) {
+    return null;
+  }
+
+  // 尝试将余下路径解析为已知业务路径，例如 /invalid-lang/about -> /about
+  const candidatePath = `/${rest.join('/')}`;
+  const pathnames = routing.pathnames as Record<string, unknown> | undefined;
+  const isKnownPath = Boolean(
+    pathnames && Object.prototype.hasOwnProperty.call(pathnames, candidatePath),
+  );
+
+  if (!isKnownPath) {
+    return null;
+  }
+
+  // 对于形如 /invalid-lang/about 但 about 为已知路径的情况，
+  // 将请求安全重定向到默认语言版本，例如 /en/about
+  const targetUrl = request.nextUrl.clone();
+  targetUrl.pathname = `/${routing.defaultLocale}${candidatePath}`;
+
+  const resp = NextResponse.redirect(targetUrl);
+  setLocaleCookie(resp, routing.defaultLocale);
+  addSecurityHeaders(resp, nonce);
+
+  return resp;
+}
+
 export default function proxy(request: NextRequest) {
   const nonce = generateNonce();
+  const invalidLocaleHandled = tryHandleInvalidLocalePrefix(request, nonce);
+  if (invalidLocaleHandled) return invalidLocaleHandled;
+
   const early = tryHandleExplicitLocalizedRequest(request, nonce);
   if (early) return early;
 
