@@ -61,6 +61,8 @@
     "docs": "Docs",
     "pricing": "Pricing",
     "blog": "Blog",
+    "faq": "FAQ",
+    "privacy": "Privacy Policy",
     "login": "Login",
     "logout": "Logout",
     "profile": "Profile",
@@ -566,6 +568,11 @@
         "ambassadors": "Ambassadors",
         "community": "Vercel Community",
         "vercel": "Vercel"
+      },
+      "support": {
+        "title": "Support",
+        "faq": "FAQs",
+        "privacy": "Privacy Policy"
       },
       "social": {
         "title": "Social"
