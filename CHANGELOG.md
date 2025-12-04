@@ -7,6 +7,13 @@
 
 ## [Unreleased]
 
+### Security
+- **[CRITICAL]** 升级 Next.js 16.0.4 → 16.0.7，修复 CVE-2025-66478（CVSS 10.0）
+  - 漏洞类型：React Server Components (RSC) "Flight" 协议反序列化漏洞
+  - 影响：未认证远程代码执行 (RCE)
+  - 相关 CVE：CVE-2025-55182 (React)
+  - 参考：https://nextjs.org/blog/CVE-2025-66478
+
 ### Added
 - 产品目录系统：6 个示例产品（变频器、液压泵站、不锈钢紧固件、LED 工业照明、气缸、工业阀门组）
 - 博客系统：4 篇 B2B 外贸主题文章（国际贸易术语、质量控制、供应商选择、出口单证）
