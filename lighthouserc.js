@@ -10,7 +10,13 @@
  * 2. Bundle 大小监控 (total-byte-weight, bootup-time)
  * 3. 未使用 JavaScript 检测 (unused-javascript)
  *
- * 更新时间：2025-11-21
+ * 阶段性阈值规划（详见 docs/p2-1-lighthouse-thresholds-and-perf-plan.md）：
+ * - Phase 0: Performance 0.68, LCP 5200ms, TBT 800ms (已完成)
+ * - Phase 1: Performance 0.85, LCP 4500ms, TBT 200ms (当前)
+ * - Phase 2: Performance 0.90, LCP 3500ms, TBT 150ms
+ * - Phase 3: Performance 0.95, LCP 2500ms, TBT 100ms
+ *
+ * 更新时间：2025-12-04 (Phase 1 实施)
  */
 
 // 关键URL优先策略：CI_DAILY=true时运行全部URL，否则仅运行关键3个URL
@@ -45,23 +51,22 @@ module.exports = {
     },
     assert: {
       assertions: {
-        // CI 环境实测中文页面性能分数 0.68-0.7，使用optimistic聚合取最佳运行结果
-        // 阈值设为 0.68 以匹配当前 CI 环境性能上限，后续通过性能优化逐步提升
+        // Phase 1 目标：Performance ≥0.85（实测 0.85-0.98，有充足安全余量）
+        // 使用 optimistic 聚合取最佳运行结果，避免 CI 冷启动噪声
         'categories:performance': [
           'error',
-          { minScore: 0.68, aggregationMethod: 'optimistic' },
+          { minScore: 0.85, aggregationMethod: 'optimistic' },
         ],
         'categories:accessibility': ['error', { minScore: 0.9 }],
         'categories:best-practices': ['error', { minScore: 0.9 }],
         'categories:seo': ['error', { minScore: 0.9 }],
         'first-contentful-paint': ['error', { maxNumericValue: 2000 }],
-        // 临时放宽LCP阈值至5200ms，避免CI环境下冷启动噪声导致频繁失败
-        'largest-contentful-paint': ['error', { maxNumericValue: 5200 }],
+        // Phase 1: LCP ≤4500ms（实测 2429-4331ms，有安全余量）
+        'largest-contentful-paint': ['error', { maxNumericValue: 4500 }],
         // 调整CLS阈值为0，对齐GPT-5性能目标（CLS=0）
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.15 }],
-        // NOTE: CI 机器性能波动较大，TBT 在冷启动下存在较高噪声。
-        // 将阈值临时放宽到 800ms，避免误报；后续通过代码分割/延迟加载优化再收紧到 200ms。
-        'total-blocking-time': ['error', { maxNumericValue: 800 }],
+        // Phase 1: TBT ≤200ms（实测仅 13-54ms，有充足安全余量）
+        'total-blocking-time': ['error', { maxNumericValue: 200 }],
         'speed-index': ['error', { maxNumericValue: 3000 }],
         // 'first-meaningful-paint' 已废弃，Lighthouse 不再产出该数值，移除以避免 NaN 断言
         // CI冷启动下TTI波动较大，允许最高6s，线下优化后可再收紧
