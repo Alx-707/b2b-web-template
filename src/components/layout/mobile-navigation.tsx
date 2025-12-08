@@ -82,6 +82,7 @@ export function MobileNavigation({ className }: MobileNavigationProps) {
           side='left'
           className='w-[300px] sm:w-[350px]'
           id='mobile-navigation'
+          aria-label={NAVIGATION_ARIA.mobileMenu}
           onEscapeKeyDown={() => setIsOpen(false)}
         >
           <SheetHeader className='text-left'>

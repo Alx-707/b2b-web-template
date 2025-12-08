@@ -224,7 +224,9 @@ test.describe('Navigation System', () => {
       await mobileMenuButton.click();
 
       // Mobile navigation sheet should be visible
-      const mobileNavSheet = page.getByRole('dialog');
+      const mobileNavSheet = page.getByRole('dialog', {
+        name: /mobile navigation/i,
+      });
       await expect(mobileNavSheet).toBeVisible();
 
       // Verify sheet content
@@ -260,7 +262,9 @@ test.describe('Navigation System', () => {
       });
       await mobileMenuButton.click();
 
-      const mobileNavSheet = page.getByRole('dialog');
+      const mobileNavSheet = page.getByRole('dialog', {
+        name: /mobile navigation/i,
+      });
       await expect(mobileNavSheet).toBeVisible();
 
       // Click on About link
@@ -290,7 +294,9 @@ test.describe('Navigation System', () => {
         await mobileMenuButton.click();
       }
 
-      const mobileNavSheet = page.getByRole('dialog');
+      const mobileNavSheet = page.getByRole('dialog', {
+        name: /mobile navigation/i,
+      });
       await expect(mobileNavSheet).toBeVisible();
 
       // Test swipe to close (if implemented)
@@ -337,7 +343,9 @@ test.describe('Navigation System', () => {
         });
         await expect(mobileMenuButton).toBeVisible();
         await mobileMenuButton.click();
-        const mobileNavSheet = page.getByRole('dialog');
+        const mobileNavSheet = page.getByRole('dialog', {
+          name: /mobile navigation/i,
+        });
         await mobileNavSheet
           .getByRole('link', { name: 'About' })
           .first()
@@ -365,7 +373,9 @@ test.describe('Navigation System', () => {
         });
         await expect(mobileMenuButton).toBeVisible();
         await mobileMenuButton.click();
-        const mobileNavSheet = page.getByRole('dialog');
+        const mobileNavSheet = page.getByRole('dialog', {
+          name: /mobile navigation/i,
+        });
         await mobileNavSheet
           .getByRole('link', { name: 'About' })
           .first()
@@ -414,7 +424,9 @@ test.describe('Navigation System', () => {
         await expect(mobileMenuButton).toBeVisible();
         await mobileMenuButton.click();
 
-        const mobileNavSheet = page.getByRole('dialog');
+        const mobileNavSheet = page.getByRole('dialog', {
+          name: /mobile navigation/i,
+        });
         await expect(mobileNavSheet).toBeVisible();
 
         const sheetHandle = await mobileNavSheet.elementHandle();
@@ -452,7 +464,9 @@ test.describe('Navigation System', () => {
           'Toggle mobile menu',
         );
         await mobileMenuButton.click();
-        const mobileNavSheet = page.getByRole('dialog');
+        const mobileNavSheet = page.getByRole('dialog', {
+          name: /mobile navigation/i,
+        });
         await expect(mobileNavSheet.getByRole('link').first()).toBeVisible();
       } else {
         const nav = getNav(page);
@@ -515,7 +529,9 @@ test.describe('Navigation System', () => {
         } catch {
           await mobileMenuButton.click();
         }
-        const mobileNavSheet = page.getByRole('dialog');
+        const mobileNavSheet = page.getByRole('dialog', {
+          name: /mobile navigation/i,
+        });
         await expect(
           mobileNavSheet.getByRole('link', { name: 'Home' }).first(),
         ).toBeVisible();

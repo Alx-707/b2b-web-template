@@ -105,7 +105,9 @@ test.describe('Internationalization (i18n)', () => {
             // Fallback to click if tap fails
             await mobileMenuButton.click();
           }
-          const mobileNavSheet = page.getByRole('dialog');
+          const mobileNavSheet = page.getByRole('dialog', {
+            name: /mobile navigation/i,
+          });
           await expect(mobileNavSheet).toBeVisible();
           await expect(
             mobileNavSheet.getByRole('link', { name: '首页' }),
@@ -190,7 +192,9 @@ test.describe('Internationalization (i18n)', () => {
           } catch {
             await mobileMenuButton.click();
           }
-          const mobileNavSheet = page.getByRole('dialog');
+          const mobileNavSheet = page.getByRole('dialog', {
+            name: /mobile navigation/i,
+          });
           await expect(
             mobileNavSheet.getByRole('link', { name: 'Home' }),
           ).toBeVisible();
@@ -265,7 +269,9 @@ test.describe('Internationalization (i18n)', () => {
           } catch {
             await mobileMenuButton.click();
           }
-          const mobileNavSheet = page.getByRole('dialog');
+          const mobileNavSheet = page.getByRole('dialog', {
+            name: /mobile navigation/i,
+          });
           await expect(mobileNavSheet).toBeVisible();
           await mobileNavSheet
             .getByRole('link', { name: 'About' })
@@ -418,7 +424,9 @@ test.describe('Internationalization (i18n)', () => {
         } catch {
           await mobileMenuButton.click();
         }
-        container = page.getByRole('dialog');
+        container = page.getByRole('dialog', {
+          name: /mobile navigation/i,
+        });
         await expect(container).toBeVisible();
       }
       const englishNavItems = ['Home', 'Products', 'Blog', 'About'];
@@ -447,7 +455,7 @@ test.describe('Internationalization (i18n)', () => {
         } catch {
           // Close action failed, continue
         }
-        await expect(page.getByRole('dialog'))
+        await expect(page.getByRole('dialog', { name: /mobile navigation/i }))
           .not.toBeVisible({ timeout: 2000 })
           .catch(() => {
             // Dialog still visible, continue
@@ -484,7 +492,9 @@ test.describe('Internationalization (i18n)', () => {
           } catch {
             await mobileMenuButton2.click();
           }
-          container = page.getByRole('dialog');
+          container = page.getByRole('dialog', {
+            name: /mobile navigation/i,
+          });
           await expect(container).toBeVisible();
         } else {
           container = getNav(page);
@@ -591,7 +601,9 @@ test.describe('Internationalization (i18n)', () => {
         await mobileMenuButton.click();
       }
 
-      const mobileNavSheet = page.getByRole('dialog');
+      const mobileNavSheet = page.getByRole('dialog', {
+        name: /mobile navigation/i,
+      });
       await expect(mobileNavSheet).toBeVisible();
 
       // Verify Chinese navigation items in mobile menu
@@ -704,7 +716,9 @@ test.describe('Internationalization (i18n)', () => {
           } catch {
             await mobileMenuButton.click();
           }
-          const mobileNavSheet = page.getByRole('dialog');
+          const mobileNavSheet = page.getByRole('dialog', {
+            name: /mobile navigation/i,
+          });
           await expect(mobileNavSheet).toBeVisible();
           await mobileNavSheet
             .getByRole('link', { name: 'About' })
