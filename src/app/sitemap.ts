@@ -1,10 +1,11 @@
 import type { MetadataRoute } from 'next';
 import type { Locale, ProductSummary } from '@/types/content';
 import { getAllProductsCached } from '@/lib/content/products';
+import { SITE_CONFIG } from '@/config/paths';
 import { routing } from '@/i18n/routing';
 
-// Base URL for the site - should be configured in env
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://example.com';
+// Base URL for the site - uses centralized SITE_CONFIG for consistency
+const BASE_URL = SITE_CONFIG.baseUrl;
 
 // Static pages that exist in all locales
 const STATIC_PAGES = [
@@ -15,6 +16,7 @@ const STATIC_PAGES = [
   '/blog',
   '/faq',
   '/privacy',
+  '/terms',
 ] as const;
 
 // Change frequency mapping for different page types

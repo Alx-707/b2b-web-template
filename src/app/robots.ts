@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next';
+import { SITE_CONFIG } from '@/config/paths';
 
-// Base URL for the site - should be configured in env
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://example.com';
+// Base URL for the site - uses centralized SITE_CONFIG for consistency
+const BASE_URL = SITE_CONFIG.baseUrl;
 
 /**
  * Dynamic robots.txt generation for Next.js.

@@ -22,10 +22,10 @@ export const routing = defineRouting({
     '/blog': '/blog',
     '/faq': '/faq',
     '/privacy': '/privacy',
+    '/terms': '/terms',
     // 以下页面尚未实现，暂时移除以避免 404 错误
     // '/pricing': '/pricing',
     // '/support': '/support',
-    // '/terms': '/terms',
   },
 
   // 启用hreflang链接

@@ -31,8 +31,8 @@ This directory contains social media sharing images for SEO optimization.
 ## Current Status
 
 - ✅ SEO configuration updated to reference `/images/og-image.jpg`
-- ⏳ Actual image files need to be created by design team
-- ⏳ Images should be optimized for web (compressed but high quality)
+- ✅ SVG placeholder provided (`og-image.svg`) - convert to JPG for production
+- ⏳ For production: Replace SVG with optimized JPG (1200x630px, <200KB)
 
 ## Testing
 
