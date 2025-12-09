@@ -640,8 +640,54 @@ describe('Structured Data Generation', () => {
 
       const result = generateJSONLD(testData);
 
-      expect(result).toBe(JSON.stringify(testData, null, 2));
+      // 结果应该是有效的 JSON（转义字符会被正确解析）
       expect(() => JSON.parse(result)).not.toThrow();
+      const parsed = JSON.parse(result);
+      expect(parsed['@context']).toBe('https://schema.org');
+      expect(parsed['@type']).toBe('Organization');
+      expect(parsed.name).toBe('Test Organization');
+    });
+
+    it('should escape < characters to prevent XSS attacks', () => {
+      const maliciousData = {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        'name': 'Test</script><script>alert("XSS")</script>',
+        'description': 'Content with <b>HTML</b> tags',
+      };
+
+      const result = generateJSONLD(maliciousData);
+
+      // 所有 < 字符应被转义为 \u003c
+      expect(result).not.toContain('</script>');
+      expect(result).not.toContain('<script>');
+      expect(result).not.toContain('<b>');
+      expect(result).toContain('\\u003c/script>');
+      expect(result).toContain('\\u003cscript>');
+      expect(result).toContain('\\u003cb>');
+
+      // 转义后的字符串仍然是有效的 JSON
+      expect(() => JSON.parse(result)).not.toThrow();
+      const parsed = JSON.parse(result);
+      // JSON.parse 会自动将 \u003c 解码回 <
+      expect(parsed.name).toBe('Test</script><script>alert("XSS")</script>');
+      expect(parsed.description).toBe('Content with <b>HTML</b> tags');
+    });
+
+    it('should handle data without < characters unchanged', () => {
+      const safeData = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        'name': 'Safe Organization Name',
+        'url': 'https://example.com',
+      };
+
+      const result = generateJSONLD(safeData);
+
+      expect(() => JSON.parse(result)).not.toThrow();
+      const parsed = JSON.parse(result);
+      expect(parsed.name).toBe('Safe Organization Name');
+      expect(parsed.url).toBe('https://example.com');
     });
 
     it('should handle complex nested objects', () => {

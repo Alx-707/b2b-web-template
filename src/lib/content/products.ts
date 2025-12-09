@@ -36,7 +36,11 @@ function mapProductDetailToSummary(product: ProductDetail): ProductSummary {
     title: product.title,
     coverImage: product.coverImage,
     category: product.category,
+    publishedAt: product.publishedAt,
   };
+
+  // Timestamp fields
+  if (product.updatedAt !== undefined) summary.updatedAt = product.updatedAt;
 
   if (product.description !== undefined) summary.description = product.description;
   if (product.images !== undefined) summary.images = product.images;

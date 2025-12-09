@@ -94,7 +94,8 @@ export class URLGenerator {
     includeLocale: boolean,
   ): string {
     let path = '';
-    if (includeLocale && locale !== this.defaultLocale) {
+    // Always include locale prefix when localePrefix: 'always' is configured
+    if (includeLocale) {
       path += `/${locale}`;
     }
     if (localizedPath !== '/' || path === '') {
@@ -157,16 +158,24 @@ export class URLGenerator {
   }
 
   /**
-   * 生成所有语言版本的URL映射
+   * 生成所有语言版本的URL映射（含 x-default）
    */
-  generateLanguageAlternates(pageType: PageType): Record<Locale, string> {
+  generateLanguageAlternates(
+    pageType: PageType,
+  ): Record<Locale | 'x-default', string> {
     const alternates: Record<string, string> = {};
 
     this.locales.forEach((locale) => {
       alternates[locale] = this.generateCanonicalURL(pageType, locale);
     });
 
-    return alternates as Record<Locale, string>;
+    // x-default 指向默认语言版本
+    alternates['x-default'] = this.generateCanonicalURL(
+      pageType,
+      this.defaultLocale,
+    );
+
+    return alternates as Record<Locale | 'x-default', string>;
   }
 
   /**

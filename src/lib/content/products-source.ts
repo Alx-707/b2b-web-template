@@ -81,9 +81,13 @@ function mapProductToDetail(product: Product, locale: Locale): ProductDetail {
     title: metadata.title,
     coverImage: metadata.coverImage,
     category: metadata.category,
+    publishedAt: metadata.publishedAt,
     content,
     filePath,
   };
+
+  // Timestamp fields
+  if (metadata.updatedAt !== undefined) detail.updatedAt = metadata.updatedAt;
 
   assignStringFields(detail, metadata);
   assignArrayFields(detail, metadata);

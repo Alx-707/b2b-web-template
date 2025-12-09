@@ -153,6 +153,10 @@ export interface ProductSummary {
   tags?: string[];
   featured?: boolean;
 
+  // Timestamps for SEO (sitemap lastmod)
+  publishedAt: string;
+  updatedAt?: string;
+
   // Foreign trade common fields (optional)
   moq?: string; // Minimum Order Quantity, e.g. "100 pieces"
   leadTime?: string; // Delivery time, e.g. "15-30 days"

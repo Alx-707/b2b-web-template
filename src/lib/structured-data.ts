@@ -73,10 +73,14 @@ export async function generateLocalizedStructuredData(
 
 /**
  * 生成JSON-LD脚本标签
+ * 包含 XSS 转义处理，防止 </script> 注入攻击
+ * @see https://nextjs.org/docs/app/guides/json-ld
  */
 export function generateJSONLD(structuredData: unknown): string {
   const JSON_INDENT = COUNT_PAIR;
-  return JSON.stringify(structuredData, null, JSON_INDENT);
+  const jsonString = JSON.stringify(structuredData, null, JSON_INDENT);
+  // 转义 < 字符防止 </script> 截断攻击（Next.js 官方推荐）
+  return jsonString.replace(/</g, '\\u003c');
 }
 
 // 重新导出便捷函数

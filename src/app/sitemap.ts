@@ -1,6 +1,11 @@
 import type { MetadataRoute } from 'next';
 import type { Locale, ProductSummary } from '@/types/content';
 import { getAllProductsCached } from '@/lib/content/products';
+import {
+  getProductLastModified,
+  getStaticPageLastModified,
+  type StaticPageLastModConfig,
+} from '@/lib/sitemap-utils';
 import { SITE_CONFIG } from '@/config/paths';
 import { routing } from '@/i18n/routing';
 
@@ -51,6 +56,26 @@ const DEFAULT_CONFIG: PageConfig = {
   priority: 0.5,
 };
 
+// Static page last modified dates configuration
+// Update these dates when static page content changes significantly
+const STATIC_PAGE_LASTMOD: StaticPageLastModConfig = new Map([
+  // Homepage - updated frequently
+  ['', new Date('2024-12-01T00:00:00Z')],
+  // About page - rarely changes
+  ['/about', new Date('2024-06-01T00:00:00Z')],
+  // Contact page - rarely changes
+  ['/contact', new Date('2024-06-01T00:00:00Z')],
+  // Products listing - updated when products change
+  ['/products', new Date('2024-11-01T00:00:00Z')],
+  // Blog listing - updated when posts change
+  ['/blog', new Date('2024-11-01T00:00:00Z')],
+  // FAQ - occasionally updated
+  ['/faq', new Date('2024-09-01T00:00:00Z')],
+  // Legal pages - updated when terms change
+  ['/privacy', new Date('2024-06-01T00:00:00Z')],
+  ['/terms', new Date('2024-06-01T00:00:00Z')],
+]);
+
 // Helper to get page config
 function getPageConfig(path: string): PageConfig {
   return PAGE_CONFIG_MAP.get(path) ?? DEFAULT_CONFIG;
@@ -62,6 +87,8 @@ function buildAlternateLanguages(path: string): Record<string, string> {
     locale,
     `${BASE_URL}/${locale}${path}`,
   ]);
+  // x-default 指向默认语言版本，帮助搜索引擎识别语言选择器页面
+  entries.push(['x-default', `${BASE_URL}/${routing.defaultLocale}${path}`]);
   return Object.fromEntries(entries);
 }
 
@@ -90,16 +117,16 @@ function createSitemapEntry(
 // Generate static page entries for all locales
 function generateStaticPageEntries(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
-  const now = new Date();
 
   for (const locale of routing.locales) {
     for (const page of STATIC_PAGES) {
       const config = getPageConfig(page);
       const url = `${BASE_URL}/${locale}${page}`;
       const alternates = buildAlternateLanguages(page);
+      const lastModified = getStaticPageLastModified(page, STATIC_PAGE_LASTMOD);
 
       entries.push(
-        createSitemapEntry({ url, lastModified: now, config, alternates }),
+        createSitemapEntry({ url, lastModified, config, alternates }),
       );
     }
   }
@@ -122,6 +149,15 @@ function buildProductAlternates(
       return locale === currentLocale || products.some((p) => p.slug === slug);
     })
     .map((locale) => [locale, `${BASE_URL}/${locale}${productPath}`]);
+
+  // x-default 指向默认语言版本
+  const defaultLocaleProducts = allProductsByLocale.get(routing.defaultLocale);
+  if (defaultLocaleProducts?.some((p) => p.slug === slug)) {
+    entries.push([
+      'x-default',
+      `${BASE_URL}/${routing.defaultLocale}${productPath}`,
+    ]);
+  }
 
   return Object.fromEntries(entries);
 }
@@ -148,7 +184,6 @@ async function fetchAllProductsByLocale(): Promise<
 async function generateProductEntries(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
   const config = getPageConfig('product');
-  const now = new Date();
   const allProductsByLocale = await fetchAllProductsByLocale();
 
   // Track processed product slugs to avoid duplicates
@@ -169,9 +204,11 @@ async function generateProductEntries(): Promise<MetadataRoute.Sitemap> {
         locale,
         allProductsByLocale,
       );
+      // Use real product timestamps for lastmod
+      const lastModified = getProductLastModified(product);
 
       entries.push(
-        createSitemapEntry({ url, lastModified: now, config, alternates }),
+        createSitemapEntry({ url, lastModified, config, alternates }),
       );
     }
   }

@@ -22,7 +22,7 @@ describe('URLGenerator', () => {
   describe('generatePageURL', () => {
     it('should generate correct URL for home page in English', () => {
       const url = generator.generatePageURL('home', 'en');
-      expect(url).toBe('/');
+      expect(url).toBe('/en');
     });
 
     it('should generate correct URL for home page in Chinese', () => {
@@ -32,7 +32,7 @@ describe('URLGenerator', () => {
 
     it('should generate correct URL for about page in English', () => {
       const url = generator.generatePageURL('about', 'en');
-      expect(url).toBe('/about');
+      expect(url).toBe('/en/about');
     });
 
     it('should generate correct URL for about page in Chinese', () => {
@@ -42,14 +42,14 @@ describe('URLGenerator', () => {
 
     it('should generate absolute URL when requested', () => {
       const url = generator.generatePageURL('about', 'en', { absolute: true });
-      expect(url).toBe('https://tucsenberg.com/about');
+      expect(url).toBe('https://tucsenberg.com/en/about');
     });
 
     it('should add trailing slash when requested', () => {
       const url = generator.generatePageURL('about', 'en', {
         trailingSlash: true,
       });
-      expect(url).toBe('/about/');
+      expect(url).toBe('/en/about/');
     });
 
     it('should exclude locale when requested', () => {
@@ -63,7 +63,7 @@ describe('URLGenerator', () => {
   describe('generateCanonicalURL', () => {
     it('should generate correct canonical URL for English pages', () => {
       const url = generator.generateCanonicalURL('about', 'en');
-      expect(url).toBe('https://tucsenberg.com/about');
+      expect(url).toBe('https://tucsenberg.com/en/about');
     });
 
     it('should generate correct canonical URL for Chinese pages', () => {
@@ -73,18 +73,26 @@ describe('URLGenerator', () => {
 
     it('should generate correct canonical URL for home page', () => {
       const url = generator.generateCanonicalURL('home', 'en');
-      expect(url).toBe('https://tucsenberg.com/');
+      expect(url).toBe('https://tucsenberg.com/en');
     });
   });
 
   describe('generateLanguageAlternates', () => {
-    it('should generate alternates for all supported languages', () => {
+    it('should generate alternates for all supported languages including x-default', () => {
       const alternates = generator.generateLanguageAlternates('about');
 
       expect(alternates).toEqual({
-        en: 'https://tucsenberg.com/about',
-        zh: 'https://tucsenberg.com/zh/about',
+        'en': 'https://tucsenberg.com/en/about',
+        'zh': 'https://tucsenberg.com/zh/about',
+        'x-default': 'https://tucsenberg.com/en/about',
       });
+    });
+
+    it('should have x-default pointing to default locale', () => {
+      const alternates = generator.generateLanguageAlternates('home');
+
+      expect(alternates['x-default']).toBe('https://tucsenberg.com/en');
+      expect(alternates['x-default']).toBe(alternates['en']);
     });
   });
 
@@ -94,7 +102,7 @@ describe('URLGenerator', () => {
 
       expect(links).toHaveLength(3); // en, zh, x-default
       expect(links).toContainEqual({
-        href: 'https://tucsenberg.com/about',
+        href: 'https://tucsenberg.com/en/about',
         hreflang: 'en',
       });
       expect(links).toContainEqual({
@@ -102,7 +110,7 @@ describe('URLGenerator', () => {
         hreflang: 'zh',
       });
       expect(links).toContainEqual({
-        href: 'https://tucsenberg.com/about',
+        href: 'https://tucsenberg.com/en/about',
         hreflang: 'x-default',
       });
     });
@@ -113,12 +121,12 @@ describe('URLGenerator', () => {
       const entry = generator.generateSitemapEntry('about', 'en');
 
       expect(entry).toMatchObject({
-        loc: 'https://tucsenberg.com/about',
+        loc: 'https://tucsenberg.com/en/about',
         changefreq: 'weekly',
         priority: SEO_CONSTANTS.URL_GENERATION.DEFAULT_PAGE_PRIORITY,
         alternateRefs: expect.arrayContaining([
           expect.objectContaining({
-            href: 'https://tucsenberg.com/about',
+            href: 'https://tucsenberg.com/en/about',
             hreflang: 'en',
           }),
         ]),
@@ -151,7 +159,7 @@ describe('URLGenerator', () => {
       // 检查是否包含主页条目
       const homeEntries = entries.filter(
         (entry) =>
-          entry.loc === 'https://tucsenberg.com/' ||
+          entry.loc === 'https://tucsenberg.com/en' ||
           entry.loc === 'https://tucsenberg.com/zh',
       );
       expect(homeEntries).toHaveLength(2);
@@ -166,7 +174,9 @@ describe('URLGenerator', () => {
 
   describe('parseURLToPageInfo', () => {
     it('should parse English URLs correctly', () => {
-      const info = generator.parseURLToPageInfo('https://tucsenberg.com/about');
+      const info = generator.parseURLToPageInfo(
+        'https://tucsenberg.com/en/about',
+      );
 
       expect(info).toEqual({
         pageType: 'about',
@@ -188,7 +198,7 @@ describe('URLGenerator', () => {
     });
 
     it('should parse home page URLs correctly', () => {
-      const info = generator.parseURLToPageInfo('https://tucsenberg.com/');
+      const info = generator.parseURLToPageInfo('https://tucsenberg.com/en');
 
       expect(info).toEqual({
         pageType: 'home',
@@ -211,7 +221,7 @@ describe('URLGenerator', () => {
 
     it('should handle URLs with query parameters', () => {
       const info = generator.parseURLToPageInfo(
-        'https://tucsenberg.com/about?param=value#anchor',
+        'https://tucsenberg.com/en/about?param=value#anchor',
       );
 
       expect(info).toEqual({
@@ -224,8 +234,10 @@ describe('URLGenerator', () => {
 
   describe('isValidURL', () => {
     it('should validate correct URLs', () => {
-      expect(generator.isValidURL('https://tucsenberg.com/')).toBe(true);
-      expect(generator.isValidURL('https://tucsenberg.com/about')).toBe(true);
+      expect(generator.isValidURL('https://tucsenberg.com/en')).toBe(true);
+      expect(generator.isValidURL('https://tucsenberg.com/en/about')).toBe(
+        true,
+      );
       expect(generator.isValidURL('https://tucsenberg.com/zh/about')).toBe(
         true,
       );
@@ -259,11 +271,11 @@ describe('URLGenerator', () => {
 
 describe('Exported functions', () => {
   it('should work as standalone functions', () => {
-    expect(generatePageURL('about', 'en')).toBe('/about');
+    expect(generatePageURL('about', 'en')).toBe('/en/about');
     expect(generateCanonicalURL('about', 'en')).toBe(
-      'https://tucsenberg.com/about',
+      'https://tucsenberg.com/en/about',
     );
-    expect(isValidURL('https://tucsenberg.com/about')).toBe(true);
+    expect(isValidURL('https://tucsenberg.com/en/about')).toBe(true);
   });
 });
 
@@ -287,14 +299,16 @@ describe('URLGeneratorOptions edge cases', () => {
       protocol: 'http',
       host: 'localhost:3000',
     });
-    expect(url).toBe('http://localhost:3000/about');
+    // With localePrefix: 'always', all URLs include locale prefix
+    expect(url).toBe('http://localhost:3000/en/about');
   });
 
   it('should handle empty path with trailing slash', () => {
     const url = generator.generatePageURL('home', 'en', {
       trailingSlash: true,
     });
-    expect(url).toBe('/');
+    // With localePrefix: 'always', English home page is /en/
+    expect(url).toBe('/en/');
   });
 
   it('should handle Chinese home page with trailing slash', () => {
@@ -401,11 +415,16 @@ describe('Comprehensive sitemap generation', () => {
   it('should have correct priorities for different page types', () => {
     const entries = generator.generateAllSitemapEntries();
 
+    // With localePrefix: 'always', home URLs are /en and /zh (no trailing slash)
     const homeEntries = entries.filter(
-      (entry) => entry.loc.endsWith('/') || entry.loc.endsWith('/zh'),
+      (entry) =>
+        entry.loc === 'https://tucsenberg.com/en' ||
+        entry.loc === 'https://tucsenberg.com/zh',
     );
     const otherEntries = entries.filter(
-      (entry) => !entry.loc.endsWith('/') && !entry.loc.endsWith('/zh'),
+      (entry) =>
+        entry.loc !== 'https://tucsenberg.com/en' &&
+        entry.loc !== 'https://tucsenberg.com/zh',
     );
 
     homeEntries.forEach((entry) => {
