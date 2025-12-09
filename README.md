@@ -85,6 +85,18 @@ TURNSTILE_SECRET_KEY=你的服务端私钥
 - **WhatsApp 支持**：`FEATURE_FLAGS.ENABLE_WHATSAPP_CHAT`（可通过 `ENABLE_WHATSAPP_CHAT` 环境变量关闭）配合 `SITE_CONFIG.contact.whatsappNumber`（可通过 `NEXT_PUBLIC_WHATSAPP_NUMBER` 覆盖）自动在右下角注入 `WhatsAppFloatingButton`。
 - **主题与变量**：`src/config/theme-customization.ts` 定义品牌色、布局与组件默认样式，`getThemeCssVariables()` 注入 CSS 变量，并将 `THEME_CUSTOMIZATION.components.button` 应用于所有 `Button` 默认变体。
 
+## 🔧 二次开发
+
+如果您计划基于此模板进行二次开发，请参阅 **[DEVELOPMENT.md](./DEVELOPMENT.md)** 了解：
+
+- **快速定制清单** - 品牌、SEO、功能模块配置指南
+- **已知问题与遗留事项** - 生产就绪检查项、测试覆盖率说明
+- **架构约束与最佳实践** - 路由注册、i18n 规范、Server Components 原则
+- **质量门禁说明** - Git hooks、commit 规范、紧急推送方式
+- **部署检查清单** - 环境变量、SEO 资源、构建验证步骤
+
+---
+
 ## 🚀 快速开始
 
 ### 1. 克隆项目
