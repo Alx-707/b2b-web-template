@@ -135,7 +135,7 @@ function CenterNav({
   if (isMinimal) return null;
   return (
     <div
-      className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
+      className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
       {...(!locale ? { 'data-testid': 'nav-switcher' } : {})}
     >
       {/* 客户端：导航切换器（更晚加载，避免首屏竞争） */}

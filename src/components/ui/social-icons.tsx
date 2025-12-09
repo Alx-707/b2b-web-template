@@ -215,7 +215,7 @@ export const SocialIconLink: FC<SocialIconLinkProps> = (props) => {
         target='_blank'
         rel='noopener noreferrer'
         aria-label={ariaLabel}
-        className={`inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[15px] font-medium text-foreground outline-none transition-colors duration-150 hover:text-foreground/50 focus-visible:ring-[3px] focus-visible:ring-ring/50 dark:hover:text-white/50 ${className}`}
+        className={`inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[15px] font-medium text-foreground transition-colors duration-150 outline-none hover:text-foreground/50 focus-visible:ring-[3px] focus-visible:ring-ring/50 dark:hover:text-white/50 ${className}`}
         {...(dataTestId && { 'data-testid': dataTestId })}
       >
         <SocialIconMapper

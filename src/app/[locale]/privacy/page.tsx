@@ -224,7 +224,7 @@ function renderPrivacyContent(content: string): ReactNode {
       elements.push(
         <p
           key={`p-${index}`}
-          className='mt-3 whitespace-pre-line text-sm leading-relaxed text-muted-foreground'
+          className='mt-3 text-sm leading-relaxed whitespace-pre-line text-muted-foreground'
         >
           {line}
         </p>,
@@ -279,8 +279,8 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
 
       <main className='container mx-auto px-4 py-8 md:py-12'>
         <header className='mb-6 md:mb-8'>
-          <h1 className='mb-4 text-heading'>{t('pageTitle')}</h1>
-          <p className='max-w-2xl text-body text-muted-foreground'>
+          <h1 className='text-heading mb-4'>{t('pageTitle')}</h1>
+          <p className='text-body max-w-2xl text-muted-foreground'>
             {t('pageDescription')}
           </p>
         </header>
@@ -307,7 +307,7 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
 
           {hasTocItems && (
             <aside className='order-first rounded-lg border bg-muted/40 p-4 text-sm lg:order-none'>
-              <h2 className='mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
+              <h2 className='mb-3 text-xs font-semibold tracking-wide text-muted-foreground uppercase'>
                 {t('tableOfContents')}
               </h2>
               <nav aria-label={t('tableOfContents')}>

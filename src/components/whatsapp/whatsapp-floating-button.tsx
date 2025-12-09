@@ -137,7 +137,7 @@ export function WhatsAppFloatingButton({
         ref={nodeRef}
         role='complementary'
         aria-label='Support chat'
-        className='fixed bottom-6 right-6 z-[1100]'
+        className='fixed right-6 bottom-6 z-[1100]'
         style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
       >
         <a

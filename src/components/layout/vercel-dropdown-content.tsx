@@ -25,10 +25,10 @@ export function DropdownContent({
           <Link
             href={child.href as ValidPathname}
             className={cn(
-              'inline-flex select-none rounded-lg px-3 py-2 leading-none no-underline outline-none transition-colors',
+              'inline-flex rounded-lg px-3 py-2 leading-none no-underline transition-colors outline-none select-none',
               'text-muted-foreground hover:text-foreground',
               'hover:bg-muted/80 dark:hover:bg-foreground/10',
-              'dark:focus-visible:bg-foreground/12 focus-visible:bg-muted/80',
+              'focus-visible:bg-muted/80 dark:focus-visible:bg-foreground/12',
               'font-normal',
             )}
           >

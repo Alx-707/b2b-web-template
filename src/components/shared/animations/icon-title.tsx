@@ -27,7 +27,7 @@ export const AnimatedHeroIcon = ({ className }: { className?: string }) => (
         </div>
 
         {/* 状态徽章 */}
-        <div className='absolute -right-2 -top-2 duration-700 animate-in slide-in-from-top-2'>
+        <div className='animate-in slide-in-from-top-2 absolute -top-2 -right-2 duration-700'>
           <Badge
             variant='secondary'
             className='animate-bounce shadow-md transition-all duration-200 hover:scale-105 hover:animate-pulse'
@@ -55,7 +55,7 @@ export const AnimatedTitle = ({
   <h1
     className={cn(
       'text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl',
-      'duration-1000 animate-in fade-in slide-in-from-bottom-4',
+      'animate-in fade-in slide-in-from-bottom-4 duration-1000',
       className,
     )}
   >

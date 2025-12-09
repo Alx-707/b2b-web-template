@@ -68,8 +68,8 @@ export default async function ProductsPage({
     <main className='container mx-auto px-4 py-8 md:py-12'>
       {/* Page Header */}
       <header className='mb-8 md:mb-12'>
-        <h1 className='mb-4 text-heading'>{t('pageTitle')}</h1>
-        <p className='max-w-2xl text-body text-muted-foreground'>
+        <h1 className='text-heading mb-4'>{t('pageTitle')}</h1>
+        <p className='text-body max-w-2xl text-muted-foreground'>
           {t('pageDescription')}
         </p>
       </header>

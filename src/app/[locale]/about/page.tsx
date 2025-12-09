@@ -55,7 +55,7 @@ function HeroSection({ title, subtitle, description }: HeroSectionProps) {
     <section className='relative overflow-hidden bg-muted/30 py-16 md:py-24'>
       <div className='container mx-auto px-4'>
         <div className='max-w-3xl'>
-          <h1 className='mb-4 text-heading'>{title}</h1>
+          <h1 className='text-heading mb-4'>{title}</h1>
           <p className='mb-4 text-xl font-medium text-primary'>{subtitle}</p>
           <p className='text-body text-muted-foreground'>{description}</p>
         </div>

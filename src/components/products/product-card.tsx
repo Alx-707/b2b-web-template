@@ -61,7 +61,7 @@ function CoverImage({ src, alt, featured, featuredLabel }: CoverImageProps) {
         className='object-cover transition-transform duration-300 group-hover:scale-105'
       />
       {featured === true && (
-        <Badge className='absolute left-3 top-3 bg-primary text-primary-foreground'>
+        <Badge className='absolute top-3 left-3 bg-primary text-primary-foreground'>
           {featuredLabel}
         </Badge>
       )}

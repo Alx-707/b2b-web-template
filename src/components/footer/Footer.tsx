@@ -152,7 +152,7 @@ export function Footer({
   };
 
   const linkClassName = cn(
-    'inline-flex items-center gap-2 px-0 py-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+    'inline-flex items-center gap-2 px-0 py-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none',
     hover.transition,
     colors.light.text,
     colors.dark.text,

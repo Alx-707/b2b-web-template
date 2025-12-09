@@ -269,7 +269,7 @@ export default async function ProductDetailPage({
       </div>
 
       {product.content !== '' && (
-        <article className='prose prose-neutral mt-12 max-w-none dark:prose-invert'>
+        <article className='prose prose-neutral dark:prose-invert mt-12 max-w-none'>
           <div dangerouslySetInnerHTML={{ __html: product.content }} />
         </article>
       )}

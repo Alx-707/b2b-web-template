@@ -144,7 +144,7 @@ function LocaleTrigger({
           </div>
         )}
         {switchSuccess && (
-          <div className='absolute -right-1 -top-1'>
+          <div className='absolute -top-1 -right-1'>
             <div className='h-2 w-2 animate-pulse rounded-full bg-green-500' />
           </div>
         )}

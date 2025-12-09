@@ -53,7 +53,7 @@ export function CookieBanner({ className }: CookieBannerProps) {
       aria-modal='false'
       aria-label={t('title')}
       className={cn(
-        'fixed inset-x-0 bottom-0 z-[100] duration-300 animate-in slide-in-from-bottom',
+        'animate-in slide-in-from-bottom fixed inset-x-0 bottom-0 z-[100] duration-300',
         'border-t bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80',
         'shadow-lg',
         className,
@@ -263,7 +263,7 @@ function CategoryToggle({
         className='mt-0.5 h-4 w-4 rounded border-input accent-primary disabled:cursor-not-allowed disabled:opacity-50'
       />
       <div className='flex-1 space-y-0.5'>
-        <p className='text-xs font-medium leading-none text-foreground'>
+        <p className='text-xs leading-none font-medium text-foreground'>
           {label}
         </p>
         <p className='text-xs text-muted-foreground'>{description}</p>

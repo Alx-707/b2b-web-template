@@ -147,7 +147,7 @@ export function UnderConstruction({
       {/* 背景装饰 - 延后呈现，降低 LCP 绘制压力 */}
       {showBg ? (
         <div className='pointer-events-none fixed inset-0 -z-10 overflow-hidden'>
-          <div className='bg-primary/3 absolute left-1/4 top-1/4 h-64 w-64 rounded-full blur-3xl' />
+          <div className='absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-primary/3 blur-3xl' />
         </div>
       ) : null}
     </div>

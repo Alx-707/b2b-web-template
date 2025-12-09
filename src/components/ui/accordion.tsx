@@ -43,7 +43,7 @@ const AccordionTrigger = React.forwardRef<
       ref={ref}
       data-slot='accordion-trigger'
       className={cn(
-        'flex flex-1 items-center justify-between py-4 text-left text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&[data-state=open]]:text-foreground',
+        'flex flex-1 items-center justify-between py-4 text-left text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none [&[data-state=open]]:text-foreground',
         className,
       )}
       {...props}
@@ -63,12 +63,12 @@ const AccordionContent = React.forwardRef<
     ref={ref}
     data-slot='accordion-content'
     className={cn(
-      'overflow-hidden text-sm text-muted-foreground data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
+      'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm text-muted-foreground',
       className,
     )}
     {...props}
   >
-    <div className='pb-4 pt-0'>{children}</div>
+    <div className='pt-0 pb-4'>{children}</div>
   </AccordionPrimitive.Content>
 ));
 

@@ -163,7 +163,7 @@ function HeroSectionBody(props: {
         <>
           <div className='absolute inset-0 -z-10 bg-background md:hidden' />
           <div className='absolute inset-0 -z-10 hidden md:block'>
-            <div className='absolute left-1/2 top-0 -translate-x-1/2 transform'>
+            <div className='absolute top-0 left-1/2 -translate-x-1/2 transform'>
               <div className='h-[600px] w-[600px] bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.03)_0%,transparent_32px)]' />
             </div>
           </div>

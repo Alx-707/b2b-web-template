@@ -159,7 +159,7 @@ const ProgressIndicatorComponent = ({
 
       {/* 连接线 */}
       <div className='relative -mt-8 mb-4'>
-        <div className='absolute left-4 right-4 top-4 h-0.5 bg-muted'>
+        <div className='absolute top-4 right-4 left-4 h-0.5 bg-muted'>
           <div
             className='h-full bg-primary transition-all duration-500 ease-out'
             style={{
