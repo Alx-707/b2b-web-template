@@ -3,14 +3,15 @@ import { generatePageStructuredData } from '@/app/[locale]/layout-structured-dat
 import '@/app/globals.css';
 import { Suspense, type ReactNode } from 'react';
 import nextDynamic from 'next/dynamic';
-import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import { CookieConsentProvider } from '@/lib/cookie-consent';
+import { loadCriticalMessages } from '@/lib/load-messages';
 import { generateJSONLD } from '@/lib/structured-data';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Footer } from '@/components/footer';
+import { LangUpdater } from '@/components/i18n/lang-updater';
 import { Header } from '@/components/layout/header';
 import { LazyToaster } from '@/components/lazy/lazy-toaster';
 import { LazyTopLoader } from '@/components/lazy/lazy-top-loader';
@@ -69,13 +70,12 @@ async function AsyncLocaleLayoutContent({
     appConfig.features.ENABLE_WHATSAPP_CHAT &&
     Boolean(SITE_CONFIG.contact.whatsappNumber);
 
-  const headerList = await headers();
-  const nonce = headerList.get('x-csp-nonce') ?? undefined;
+  // Note: Removed headers() call for CSP nonce to enable Cache Components static generation.
+  // JSON-LD scripts are data-only and don't require nonce for CSP compliance.
+  // For client-side scripts that need nonce, consider using a dynamic island component.
 
-  // Load critical messages dynamically for root provider (keeps client i18n stable across routes)
-  const messages = await (
-    await import('@/lib/load-messages')
-  ).loadCriticalMessages(locale);
+  // Load critical messages for root provider (keeps client i18n stable across routes)
+  const messages = await loadCriticalMessages(locale);
 
   // 生成结构化数据
   const { organizationData, websiteData } =
@@ -83,16 +83,17 @@ async function AsyncLocaleLayoutContent({
 
   return (
     <>
-      {/* JSON-LD 结构化数据 */}
+      {/* Client-side html[lang] correction for PPR mode */}
+      <LangUpdater locale={locale} />
+
+      {/* JSON-LD structured data for SEO - no nonce needed as it's data-only */}
       <script
-        nonce={nonce}
         type='application/ld+json'
         dangerouslySetInnerHTML={{
           __html: generateJSONLD(organizationData),
         }}
       />
       <script
-        nonce={nonce}
         type='application/ld+json'
         dangerouslySetInnerHTML={{
           __html: generateJSONLD(websiteData),
@@ -116,7 +117,7 @@ async function AsyncLocaleLayoutContent({
             />
 
             {/* 页面导航进度条 - P1 优化：懒加载，减少 vendors chunk */}
-            <LazyTopLoader nonce={nonce} />
+            <LazyTopLoader />
 
             {isDevelopment && (
               <Suspense fallback={null}>

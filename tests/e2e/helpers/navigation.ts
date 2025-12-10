@@ -1,8 +1,37 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 const MAIN_NAV_ROLE_OPTIONS = {
   name: /main navigation/i,
 } as const;
+
+/**
+ * Wait for the html[lang] attribute to be updated after hydration.
+ * In PPR mode, the initial HTML has lang="en" (default), and LangUpdater
+ * corrects it client-side after hydration.
+ */
+export async function waitForHtmlLang(
+  page: Page,
+  expectedLang: string,
+  timeout = process.env.CI ? 8000 : 10000,
+): Promise<void> {
+  await page.waitForFunction(
+    (lang) => document.documentElement.lang === lang,
+    expectedLang,
+    { timeout },
+  );
+}
+
+/**
+ * Assert html[lang] attribute after waiting for hydration.
+ * Use this instead of direct toHaveAttribute('lang', ...) assertions.
+ */
+export async function expectHtmlLang(
+  page: Page,
+  expectedLang: string,
+): Promise<void> {
+  await waitForHtmlLang(page, expectedLang);
+  await expect(page.locator('html')).toHaveAttribute('lang', expectedLang);
+}
 
 /**
  * 获取主导航栏定位器，针对桌面/移动场景自动回退

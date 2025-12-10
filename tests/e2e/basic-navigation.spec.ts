@@ -69,25 +69,38 @@ test.describe('Basic Navigation', () => {
   test('should be responsive on mobile', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/');
+    // localePrefix: 'always' 要求所有路径必须包含语言前缀
+    await page.goto('/en');
+    await waitForLoadWithFallback(page, {
+      context: 'mobile responsive test',
+      loadTimeout: 5_000,
+      fallbackDelay: 500,
+    });
+    await removeInterferingElements(page);
+    await waitForStablePage(page);
 
-    // Check if mobile navigation works
+    // Check if mobile navigation works - match actual component: "Toggle mobile menu"
     const mobileMenuButton = page
       .locator('[data-testid="mobile-menu-button"]')
-      .or(
-        page
-          .locator('button[aria-label*="menu"]')
-          .or(page.locator('.hamburger')),
-      );
+      .or(page.getByRole('button', { name: /toggle.*menu|mobile.*menu|menu/i }))
+      .or(page.locator('button[aria-label*="menu"]'))
+      .or(page.locator('.hamburger'));
 
-    if (await mobileMenuButton.first().isVisible()) {
-      await mobileMenuButton.first().click();
+    // 在移动视口下，菜单按钮应该可见（给予更多等待时间）
+    await expect(mobileMenuButton.first()).toBeVisible({ timeout: 5000 });
 
-      // Check if mobile menu opens
-      const mobileMenu = page
-        .locator('[data-testid="mobile-menu"]')
-        .or(page.locator('.mobile-menu'));
-      await expect(mobileMenu.first()).toBeVisible();
-    }
+    // 点击菜单按钮
+    await mobileMenuButton.first().click();
+
+    // Check if mobile menu opens - wait for menu animation
+    // 移动菜单可能是 sheet, dialog, 或带有特定 data-state 的元素
+    const mobileMenu = page
+      .locator('[data-testid="mobile-menu"]')
+      .or(page.locator('.mobile-menu'))
+      .or(page.locator('[data-state="open"]'))
+      .or(page.getByRole('dialog'))
+      .or(page.locator('[role="menu"]'))
+      .or(page.locator('nav[aria-label="Main"]'));
+    await expect(mobileMenu.first()).toBeVisible({ timeout: 5000 });
   });
 });

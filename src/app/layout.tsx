@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { getFontClassNames } from '@/app/[locale]/layout-fonts';
+import { routing } from '@/i18n/routing';
 
 interface RootLayoutProps {
   children: ReactNode;
-  params: Promise<{ locale?: string }>;
 }
 
 // 基础 metadata 配置
@@ -19,17 +19,13 @@ export const metadata: Metadata = {
 };
 
 // Root layout renders the document shell so that metadata can be injected into <head>.
-// The lang attribute defaults to 'en' here and is overridden by locale layout's generateMetadata.
-export default async function RootLayout({
-  children,
-  params,
-}: RootLayoutProps) {
-  const { locale } = await params;
-  const lang = locale ?? 'en';
-
+// Note: We use the default locale for the root layout since getLocale() is a request-scoped
+// API that's incompatible with Cache Components static generation. Pages under [locale]/
+// will have the correct lang attribute set by their own layout.
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
-      lang={lang}
+      lang={routing.defaultLocale}
       className={getFontClassNames()}
       suppressHydrationWarning
     >

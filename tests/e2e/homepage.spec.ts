@@ -108,6 +108,9 @@ test.describe('Homepage Core Functionality', () => {
   test('should handle CTA button interactions correctly', async ({ page }) => {
     const heroSection = page.getByTestId('hero-section');
 
+    // 等待 hero-section 完全渲染，避免在高并发下 DOM 未完全填充
+    await expect(heroSection).toBeVisible();
+
     // Look for buttons/links in hero section
     const links = heroSection.getByRole('link');
     const linkCount = await links.count();
@@ -268,8 +271,12 @@ test.describe('Homepage Core Functionality', () => {
           ? loadMetrics.loadEventEnd
           : loadMetrics.domContentLoaded) ?? Date.now() - navigationStart;
 
-      // Verify page loads within 2 seconds
-      expect(loadTime).toBeLessThan(2000);
+      // Verify page loads within budget
+      // Dev server has compilation overhead and parallel tests share resources
+      // CI uses production build which is faster
+      const isCI = Boolean(process.env.CI);
+      const performanceBudget = isCI ? 2000 : 8000;
+      expect(loadTime).toBeLessThan(performanceBudget);
 
       // Check Core Web Vitals
       const vitals = await page.evaluate(() => {

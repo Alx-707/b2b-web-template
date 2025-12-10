@@ -1,5 +1,4 @@
 import type { CSSProperties, ReactNode } from 'react';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import {
@@ -12,6 +11,7 @@ import {
   type FooterColumnConfig,
   type FooterStyleTokens,
 } from '@/config/footer-links';
+import { Link } from '@/i18n/routing';
 
 export interface FooterProps {
   /** 页脚列配置，默认使用 Vercel 抓取的四列数据 */
@@ -89,7 +89,7 @@ function FooterSection({
               ) : (
                 <Link
                   className={linkClassName}
-                  href={link.href}
+                  href={link.href as '/faq' | '/privacy' | '/terms'}
                   style={linkStyle}
                 >
                   {content}

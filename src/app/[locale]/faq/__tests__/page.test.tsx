@@ -4,20 +4,13 @@ import type { Locale } from '@/types/content';
 import FaqPage, { generateMetadata } from '@/app/[locale]/faq/page';
 
 // 使用 vi.hoisted 配置 mock，确保在模块导入前生效
-const { mockGetTranslations, mockGetPageBySlug, mockHeaders } = vi.hoisted(
-  () => ({
-    mockGetTranslations: vi.fn(),
-    mockGetPageBySlug: vi.fn(),
-    mockHeaders: vi.fn(),
-  }),
-);
+const { mockGetTranslations, mockGetPageBySlug } = vi.hoisted(() => ({
+  mockGetTranslations: vi.fn(),
+  mockGetPageBySlug: vi.fn(),
+}));
 
 vi.mock('next-intl/server', () => ({
   getTranslations: mockGetTranslations,
-}));
-
-vi.mock('next/headers', () => ({
-  headers: mockHeaders,
 }));
 
 vi.mock('@/lib/content', () => ({
@@ -70,11 +63,6 @@ describe('FAQ Page', () => {
         'cta.contact': 'Still have questions? Contact our sales team.',
       };
       return map[key] ?? key;
-    });
-
-    // headers() 提供一个带 nonce 的对象
-    mockHeaders.mockResolvedValue({
-      get: (name: string) => (name === 'x-csp-nonce' ? 'test-nonce' : null),
     });
   });
 
@@ -130,7 +118,6 @@ describe('FAQ Page', () => {
       'script[type="application/ld+json"]',
     );
     expect(script).not.toBeNull();
-    expect(script?.getAttribute('nonce')).toBe('test-nonce');
 
     const json = script?.textContent ?? '';
     const parsed = JSON.parse(json) as {

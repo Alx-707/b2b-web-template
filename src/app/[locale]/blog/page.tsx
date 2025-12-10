@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/types/content';
 import { getAllPostsCached } from '@/lib/content/blog';
 import { PostGrid } from '@/components/blog';
@@ -32,6 +32,8 @@ export async function generateMetadata({
 
 export default async function BlogPage({ params }: BlogPageProps) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations({
     locale,
     namespace: 'blog',

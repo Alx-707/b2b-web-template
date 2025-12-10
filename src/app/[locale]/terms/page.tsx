@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/types/content';
 import { getPageBySlug } from '@/lib/content';
 import {
@@ -114,6 +113,8 @@ function buildTocItems(
 
 export default async function TermsPage({ params }: TermsPageProps) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const page = getPageBySlug('terms', locale as Locale);
 
   const t = await getTranslations({
@@ -123,9 +124,6 @@ export default async function TermsPage({ params }: TermsPageProps) {
 
   const headings = extractHeadings(page.content);
   const tocItems = buildTocItems((key) => t(key), headings);
-
-  const headerList = await headers();
-  const nonce = headerList.get('x-csp-nonce') ?? undefined;
 
   const termsSchema = {
     '@context': 'https://schema.org',
@@ -144,8 +142,8 @@ export default async function TermsPage({ params }: TermsPageProps) {
 
   return (
     <>
+      {/* JSON-LD structured data for SEO - no nonce needed as it's data-only */}
       <script
-        nonce={nonce}
         type='application/ld+json'
         dangerouslySetInnerHTML={{
           __html: generateJSONLD(termsSchema),

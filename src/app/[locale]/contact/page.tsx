@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/types/i18n';
 import { getContactCopy } from '@/lib/contact/getContactCopy';
 import { getTranslationsCached } from '@/lib/i18n/server/getTranslationsCached';
@@ -56,6 +57,8 @@ function ContactPageHeader({
 
 export default async function ContactPage({ params }: ContactPageProps) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const copy = await getContactCopy(locale as Locale);
 
   return (

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Download, MessageSquare } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale, ProductDetail } from '@/types/content';
 import {
   getAllProductsCached,
@@ -203,6 +203,8 @@ export default async function ProductDetailPage({
 }: ProductDetailPageProps) {
   const { locale: localeParam, slug } = await params;
   const locale = localeParam as Locale;
+  setRequestLocale(localeParam);
+
   const t = await getTranslations({ locale, namespace: 'products' });
 
   let product: ProductDetail;

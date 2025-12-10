@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/types/content';
 import {
   getAllProductsCached,
@@ -42,6 +42,8 @@ export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const { category } = await searchParams;
   const t = await getTranslations({
     locale,

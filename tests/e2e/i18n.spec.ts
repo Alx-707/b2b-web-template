@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { checkA11y, injectAxe } from './helpers/axe';
-import { clickNavLinkByName, getNav } from './helpers/navigation';
+import {
+  clickNavLinkByName,
+  getNav,
+  waitForHtmlLang,
+} from './helpers/navigation';
 import {
   removeInterferingElements,
   safeClick,
@@ -549,7 +553,13 @@ test.describe('Internationalization (i18n)', () => {
     // as configured in playwright.config.ts projects. No need to use test.use() here.
 
     test('should work correctly on mobile devices', async ({ page }) => {
-      // Verify mobile language toggle
+      // Wait for lazy-loaded language toggle to be available and enabled
+      // The button may be disabled during transition (isPending state)
+      await page.waitForSelector(
+        'button[data-testid="language-toggle-button"]:not(:disabled)',
+        { state: 'visible', timeout: 10000 },
+      );
+
       const languageToggleButton = page.getByTestId('language-toggle-button');
       await expect(languageToggleButton).toBeVisible();
 
@@ -578,16 +588,10 @@ test.describe('Internationalization (i18n)', () => {
       await page.waitForURL('**/zh');
       await page.waitForLoadState('networkidle');
       await waitForStablePage(page);
-      // Prefer semantic verification in mobile context: URL + visible Chinese UI.
-      // Some runtimes may temporarily omit <html lang> right after navigation.
+      // Wait for hydration to update html[lang] (PPR mode requires client-side correction)
+      await waitForHtmlLang(page, 'zh');
       const currentLang = await page.locator('html').getAttribute('lang');
-      if (currentLang === 'zh') {
-        expect(currentLang).toBe('zh');
-      } else {
-        // Fallback: verify Chinese nav item is visible
-        const nav = getNav(page);
-        await expect(nav.getByRole('link', { name: '首页' })).toBeVisible();
-      }
+      expect(currentLang).toBe('zh');
 
       // Verify mobile navigation works in Chinese
       const mobileMenuButton = page.getByRole('button', {
@@ -624,6 +628,12 @@ test.describe('Internationalization (i18n)', () => {
         detailedReport: true,
         detailedReportOptions: { html: true },
       });
+
+      // Wait for language toggle to be enabled (not in isPending state)
+      await page.waitForSelector(
+        'button[data-testid="language-toggle-button"]:not(:disabled)',
+        { state: 'visible', timeout: 10000 },
+      );
 
       // Switch to Chinese and check again
       const languageToggleButton = page.getByTestId('language-toggle-button');
@@ -751,16 +761,19 @@ test.describe('Internationalization (i18n)', () => {
       await page.waitForLoadState('networkidle');
       await waitForStablePage(page);
 
-      // Verify Chinese content
+      // Verify Chinese content (wait for hydration to update html[lang])
+      await waitForHtmlLang(page, 'zh');
       const htmlLang = await page.locator('html').getAttribute('lang');
       expect(htmlLang).toBe('zh');
 
       // Direct navigation to Chinese About page
       await page.goto('/zh/about');
       await page.waitForLoadState('networkidle');
+      await waitForHtmlLang(page, 'zh');
 
       expect(page.url()).toContain('/zh/about');
-      expect(htmlLang).toBe('zh');
+      const aboutLang = await page.locator('html').getAttribute('lang');
+      expect(aboutLang).toBe('zh');
     });
   });
 });

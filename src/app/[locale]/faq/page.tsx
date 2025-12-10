@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/types/content';
 import { getPageBySlug } from '@/lib/content';
 import { generateFAQSchema, generateJSONLD } from '@/lib/structured-data';
@@ -123,6 +122,8 @@ function parseFaqContent(rawContent: string): FaqCategory[] {
 
 export default async function FaqPage({ params }: FaqPageProps) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const page = getPageBySlug('faq', locale as Locale);
   const t = await getTranslations({
     locale,
@@ -131,9 +132,6 @@ export default async function FaqPage({ params }: FaqPageProps) {
 
   const parsedCategories = parseFaqContent(page.content);
   const faqItems = parsedCategories.flatMap((category) => category.items);
-
-  const headerList = await headers();
-  const nonce = headerList.get('x-csp-nonce') ?? undefined;
 
   const faqSchema = generateFAQSchema(
     faqItems.map((item) => ({
@@ -147,8 +145,8 @@ export default async function FaqPage({ params }: FaqPageProps) {
 
   return (
     <>
+      {/* JSON-LD structured data for SEO - no nonce needed as it's data-only */}
       <script
-        nonce={nonce}
         type='application/ld+json'
         dangerouslySetInnerHTML={{
           __html: generateJSONLD(faqSchema),

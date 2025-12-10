@@ -3,20 +3,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Locale } from '@/types/content';
 import PrivacyPage, { generateMetadata } from '@/app/[locale]/privacy/page';
 
-const { mockGetTranslations, mockGetPageBySlug, mockHeaders } = vi.hoisted(
-  () => ({
-    mockGetTranslations: vi.fn(),
-    mockGetPageBySlug: vi.fn(),
-    mockHeaders: vi.fn(),
-  }),
-);
+const { mockGetTranslations, mockGetPageBySlug } = vi.hoisted(() => ({
+  mockGetTranslations: vi.fn(),
+  mockGetPageBySlug: vi.fn(),
+}));
 
 vi.mock('next-intl/server', () => ({
   getTranslations: mockGetTranslations,
-}));
-
-vi.mock('next/headers', () => ({
-  headers: mockHeaders,
 }));
 
 vi.mock('@/lib/content', () => ({
@@ -62,10 +55,6 @@ describe('Privacy Page', () => {
         'sections.howWeUse': 'How We Use Your Information',
       };
       return map[key] ?? key;
-    });
-
-    mockHeaders.mockResolvedValue({
-      get: (name: string) => (name === 'x-csp-nonce' ? 'privacy-nonce' : null),
     });
   });
 
@@ -120,7 +109,6 @@ describe('Privacy Page', () => {
       'script[type="application/ld+json"]',
     );
     expect(script).not.toBeNull();
-    expect(script?.getAttribute('nonce')).toBe('privacy-nonce');
 
     const json = script?.textContent ?? '';
     const parsed = JSON.parse(json) as {

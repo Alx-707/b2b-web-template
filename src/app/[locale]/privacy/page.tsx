@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/types/content';
 import { getPageBySlug } from '@/lib/content';
 import { generateJSONLD } from '@/lib/structured-data';
@@ -238,6 +237,8 @@ function renderPrivacyContent(content: string): ReactNode {
 
 export default async function PrivacyPage({ params }: PrivacyPageProps) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const page = getPageBySlug('privacy', locale as Locale);
 
   const t = await getTranslations({
@@ -247,9 +248,6 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
 
   const headings = extractHeadings(page.content);
   const tocItems = buildTocItems((key) => t(key), headings);
-
-  const headerList = await headers();
-  const nonce = headerList.get('x-csp-nonce') ?? undefined;
 
   const privacySchema = {
     '@context': 'https://schema.org',
@@ -268,10 +266,9 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
 
   return (
     <>
+      {/* JSON-LD structured data for SEO - no nonce needed as it's data-only */}
       <script
-        nonce={nonce}
         type='application/ld+json'
-        // 仅注入受控 JSON-LD 数据，内容来自本地元数据和翻译，不包含用户输入
         dangerouslySetInnerHTML={{
           __html: generateJSONLD(privacySchema),
         }}

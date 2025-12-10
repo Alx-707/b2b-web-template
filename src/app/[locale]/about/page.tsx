@@ -7,7 +7,7 @@ import {
   Lightbulb,
   ShieldCheck,
 } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -243,6 +243,8 @@ function CTASection({
 
 export default async function AboutPage({ params }: AboutPageProps) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations({
     locale,
     namespace: 'about',
