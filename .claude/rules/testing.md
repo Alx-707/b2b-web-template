@@ -132,3 +132,86 @@ describe('getAllProductsCached', () => {
 - Aim for meaningful coverage, not 100%
 - Critical paths: authentication, payment, data validation
 - UI components: test user interactions, not implementation details
+
+## Component-Test Sync (Twin File Principle)
+
+When modifying source files, **MUST** follow these steps:
+
+1. **Check**: Does `__tests__/` contain corresponding test file?
+2. **Read**: Read the test file to understand current assertions
+3. **Sync**: Update test file to reflect changes:
+   - DOM structure changes (e.g., `<a>` → `<button>` requires `getByRole` update)
+   - API/prop changes
+   - New edge cases
+4. **Verify**: Run related tests before committing
+
+### Common Sync Issues
+
+| Source Change | Test Update Required |
+|---------------|---------------------|
+| Element type change (`<a>` → `<button>`) | Update `getByRole()` queries |
+| New required props | Update mock data and render calls |
+| Interface property added | Update mock configurations |
+| Function signature change | Update test assertions |
+
+## Type-Safe Mocking
+
+### Avoid Weak Typing
+
+```typescript
+// ❌ Bad: Bypasses type checking
+const mockConfig = { enabled: true } as any;
+
+// ❌ Bad: Partial allows missing required fields
+const mockConfig: Partial<Config> = { enabled: true };
+
+// ✅ Good: satisfies ensures completeness at compile time
+const mockConfig = {
+  enabled: true,
+  requiredField: 'value',
+} satisfies Config;
+
+// ✅ Good: Factory function ensures all fields
+const mockConfig = createMockConfig({ enabled: true });
+```
+
+### Mock Factory Pattern
+
+For complex config objects, create factory functions in `src/test/factories/`:
+
+```typescript
+// src/test/factories/config.factory.ts
+export function createMockConfig(overrides?: Partial<Config>): Config {
+  return {
+    enabled: false,
+    requiredField: 'default',
+    nested: { prop: 'value' },
+    ...overrides,
+  };
+}
+```
+
+**Benefit**: When source interface changes, factory fails first—not at test runtime.
+
+### Unused Variable Convention
+
+When destructuring to exclude properties, prefix with underscore:
+
+```typescript
+// ✅ Correct: Underscore prefix for intentionally unused
+const { unusedProp: _unusedProp, ...rest } = obj;
+
+// ❌ Wrong: ESLint no-unused-vars error
+const { unusedProp, ...rest } = obj;
+```
+
+## Pre-commit Test Verification
+
+Before committing, run related tests:
+
+```bash
+# Vitest 4: Run tests related to specific files
+pnpm vitest related src/path/to/file.tsx --run
+
+# The pre-commit hook runs this automatically for staged source files
+```
