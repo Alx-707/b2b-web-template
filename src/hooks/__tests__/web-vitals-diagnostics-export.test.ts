@@ -27,6 +27,25 @@ function createMockReport(
       cls: 0.05,
       fcp: 1500,
       ttfb: 600,
+      domContentLoaded: 1000,
+      loadComplete: 3000,
+      firstPaint: 800,
+      resourceTiming: {
+        totalResources: 10,
+        slowResources: [],
+        totalSize: 100000,
+        totalDuration: 1500,
+      },
+      device: {
+        userAgent: 'TestAgent',
+        viewport: { width: 1920, height: 1080 },
+      },
+      page: {
+        url: '/test-page',
+        referrer: '',
+        title: 'Test Page',
+        timestamp: Date.now(),
+      },
     },
     score: 85,
     issues: [],
@@ -69,14 +88,12 @@ describe('exportJsonReport', () => {
       revokeObjectURL: mockRevokeObjectURL,
     });
 
-    vi.spyOn(document.body, 'appendChild').mockImplementation((node) => {
-      mockAppendChild(node);
-      return node;
-    });
-    vi.spyOn(document.body, 'removeChild').mockImplementation((node) => {
-      mockRemoveChild(node);
-      return node;
-    });
+    mockAppendChild = vi
+      .spyOn(document.body, 'appendChild')
+      .mockImplementation((node) => node);
+    mockRemoveChild = vi
+      .spyOn(document.body, 'removeChild')
+      .mockImplementation((node) => node);
 
     // Save original before spying to avoid infinite recursion
     const originalCreateElement = document.createElement.bind(document);
@@ -174,10 +191,6 @@ describe('exportCsvReport', () => {
   it('creates CSV with headers', () => {
     const reports = [createMockReport()];
 
-    mockCreateObjectURL.mockImplementation((_blob: Blob) => {
-      return 'blob:test-url';
-    });
-
     exportCsvReport(reports);
 
     expect(mockCreateObjectURL).toHaveBeenCalledWith(expect.any(Blob));
@@ -207,6 +220,25 @@ describe('exportCsvReport', () => {
           cls: 0.123,
           fcp: 1800,
           ttfb: 800,
+          domContentLoaded: 1000,
+          loadComplete: 3000,
+          firstPaint: 800,
+          resourceTiming: {
+            totalResources: 10,
+            slowResources: [],
+            totalSize: 100000,
+            totalDuration: 1500,
+          },
+          device: {
+            userAgent: 'TestAgent',
+            viewport: { width: 1920, height: 1080 },
+          },
+          page: {
+            url: '/test-page',
+            referrer: '',
+            title: 'Test Page',
+            timestamp: Date.now(),
+          },
         },
       }),
     ];
@@ -452,7 +484,32 @@ describe('generateDetailedReport', () => {
     const state = createMockState({
       historicalReports: [
         createMockReport({
-          vitals: { lcp: 5000, fid: 300, cls: 0.3, fcp: 2000, ttfb: 1000 },
+          vitals: {
+            lcp: 5000,
+            fid: 300,
+            cls: 0.3,
+            fcp: 2000,
+            ttfb: 1000,
+            domContentLoaded: 1000,
+            loadComplete: 3000,
+            firstPaint: 800,
+            resourceTiming: {
+              totalResources: 10,
+              slowResources: [],
+              totalSize: 100000,
+              totalDuration: 1500,
+            },
+            device: {
+              userAgent: 'TestAgent',
+              viewport: { width: 1920, height: 1080 },
+            },
+            page: {
+              url: '/test-page',
+              referrer: '',
+              title: 'Test Page',
+              timestamp: Date.now(),
+            },
+          },
         }),
       ],
     });
@@ -492,10 +549,60 @@ describe('generateDetailedReport', () => {
     const state = createMockState({
       historicalReports: [
         createMockReport({
-          vitals: { lcp: 2000, fid: 100, cls: 0.1, fcp: 1500, ttfb: 500 },
+          vitals: {
+            lcp: 2000,
+            fid: 100,
+            cls: 0.1,
+            fcp: 1500,
+            ttfb: 500,
+            domContentLoaded: 1000,
+            loadComplete: 3000,
+            firstPaint: 800,
+            resourceTiming: {
+              totalResources: 10,
+              slowResources: [],
+              totalSize: 100000,
+              totalDuration: 1500,
+            },
+            device: {
+              userAgent: 'TestAgent',
+              viewport: { width: 1920, height: 1080 },
+            },
+            page: {
+              url: '/test-page',
+              referrer: '',
+              title: 'Test Page',
+              timestamp: Date.now(),
+            },
+          },
         }),
         createMockReport({
-          vitals: { lcp: 3000, fid: 200, cls: 0.2, fcp: 2500, ttfb: 700 },
+          vitals: {
+            lcp: 3000,
+            fid: 200,
+            cls: 0.2,
+            fcp: 2500,
+            ttfb: 700,
+            domContentLoaded: 1200,
+            loadComplete: 3500,
+            firstPaint: 900,
+            resourceTiming: {
+              totalResources: 12,
+              slowResources: [],
+              totalSize: 120000,
+              totalDuration: 1700,
+            },
+            device: {
+              userAgent: 'TestAgent',
+              viewport: { width: 1920, height: 1080 },
+            },
+            page: {
+              url: '/test-page',
+              referrer: '',
+              title: 'Test Page',
+              timestamp: Date.now(),
+            },
+          },
         }),
       ],
     });
@@ -510,7 +617,32 @@ describe('generateDetailedReport', () => {
     const state = createMockState({
       historicalReports: [
         createMockReport({
-          vitals: { lcp: 2000, fid: 80, cls: 0.15, fcp: 1500, ttfb: 600 },
+          vitals: {
+            lcp: 2000,
+            fid: 80,
+            cls: 0.15,
+            fcp: 1500,
+            ttfb: 600,
+            domContentLoaded: 1000,
+            loadComplete: 3000,
+            firstPaint: 800,
+            resourceTiming: {
+              totalResources: 10,
+              slowResources: [],
+              totalSize: 100000,
+              totalDuration: 1500,
+            },
+            device: {
+              userAgent: 'TestAgent',
+              viewport: { width: 1920, height: 1080 },
+            },
+            page: {
+              url: '/test-page',
+              referrer: '',
+              title: 'Test Page',
+              timestamp: Date.now(),
+            },
+          },
         }),
       ],
     });
@@ -527,7 +659,32 @@ describe('generateDetailedReport', () => {
     const state = createMockState({
       historicalReports: [
         createMockReport({
-          vitals: { lcp: 3000, fid: 80, cls: 0.05, fcp: 1500, ttfb: 600 },
+          vitals: {
+            lcp: 3000,
+            fid: 80,
+            cls: 0.05,
+            fcp: 1500,
+            ttfb: 600,
+            domContentLoaded: 1000,
+            loadComplete: 3000,
+            firstPaint: 800,
+            resourceTiming: {
+              totalResources: 10,
+              slowResources: [],
+              totalSize: 100000,
+              totalDuration: 1500,
+            },
+            device: {
+              userAgent: 'TestAgent',
+              viewport: { width: 1920, height: 1080 },
+            },
+            page: {
+              url: '/test-page',
+              referrer: '',
+              title: 'Test Page',
+              timestamp: Date.now(),
+            },
+          },
         }),
       ],
     });

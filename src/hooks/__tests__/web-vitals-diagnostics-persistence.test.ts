@@ -46,6 +46,25 @@ function createMockReport(
       cls: 0.05,
       fcp: 1500,
       ttfb: 600,
+      domContentLoaded: 1000,
+      loadComplete: 3000,
+      firstPaint: 800,
+      resourceTiming: {
+        totalResources: 10,
+        slowResources: [],
+        totalSize: 100000,
+        totalDuration: 1500,
+      },
+      device: {
+        userAgent: 'TestAgent',
+        viewport: { width: 1920, height: 1080 },
+      },
+      page: {
+        url: '/test-page',
+        referrer: '',
+        title: 'Test Page',
+        timestamp: Date.now(),
+      },
     },
     score: 85,
     issues: [],
@@ -161,7 +180,7 @@ describe('useWebVitalsDataPersistence', () => {
 
       const savedData = JSON.parse(
         (localStorage.setItem as ReturnType<typeof vi.fn>).mock
-          .calls[0][1] as string,
+          .calls[0]![1] as string,
       );
       expect(savedData.length).toBe(100);
     });

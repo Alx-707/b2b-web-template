@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import type { ZodIssue, ZodIssueCode } from 'zod';
+import type { ZodIssue } from 'zod';
 import { mapZodIssueToErrorKey } from '../contact-form-error-utils';
 
-// Helper to create ZodIssue
+// Helper to create ZodIssue for testing
+// Uses Record<string, unknown> to allow any Zod issue properties
 function createZodIssue(
-  overrides: Partial<ZodIssue> & {
+  overrides: Record<string, unknown> & {
     path: (string | number)[];
-    code: ZodIssueCode;
+    code: string;
   },
 ): ZodIssue {
   return {

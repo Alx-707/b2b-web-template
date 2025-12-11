@@ -254,9 +254,11 @@ describe('WhatsAppService (Core)', () => {
     it('should delegate sendMessage to messageService', async () => {
       const service = new WhatsAppService(mockAccessToken, mockPhoneNumberId);
       const request = {
+        messaging_product: 'whatsapp' as const,
+        recipient_type: 'individual' as const,
         to: '1234567890',
         type: 'text' as const,
-        text: 'Hello',
+        text: { body: 'Hello' },
       };
 
       await service.sendMessage(request);

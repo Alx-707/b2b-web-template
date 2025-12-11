@@ -96,17 +96,17 @@ describe('I18nMonitor', () => {
 
       const events = monitor.getEvents();
       expect(events.length).toBeGreaterThan(0);
-      expect(events[0].type).toBe('translation_missing');
-      expect(events[0].level).toBe('warning');
-      expect(events[0].locale).toBe('en');
-      expect(events[0].message).toContain('common.greeting');
+      expect(events[0]!.type).toBe('translation_missing');
+      expect(events[0]!.level).toBe('warning');
+      expect(events[0]!.locale).toBe('en');
+      expect(events[0]!.message).toContain('common.greeting');
     });
 
     it('should include key in metadata', () => {
       monitor.recordTranslationMissing('products.title', 'zh');
 
       const events = monitor.getEvents();
-      expect(events[0].metadata).toEqual({ key: 'products.title' });
+      expect(events[0]!.metadata).toEqual({ key: 'products.title' });
     });
   });
 
@@ -116,16 +116,16 @@ describe('I18nMonitor', () => {
 
       const events = monitor.getEvents();
       expect(events.length).toBeGreaterThan(0);
-      expect(events[0].type).toBe('locale_switch');
-      expect(events[0].level).toBe('info');
-      expect(events[0].locale).toBe('zh');
+      expect(events[0]!.type).toBe('locale_switch');
+      expect(events[0]!.level).toBe('info');
+      expect(events[0]!.locale).toBe('zh');
     });
 
     it('should include switch details in metadata', () => {
       monitor.recordLocaleSwitch('en', 'zh', 150);
 
       const events = monitor.getEvents();
-      expect(events[0].metadata).toEqual({
+      expect(events[0]!.metadata).toEqual({
         fromLocale: 'en',
         toLocale: 'zh',
         duration: 150,
@@ -136,8 +136,8 @@ describe('I18nMonitor', () => {
       monitor.recordLocaleSwitch('en', 'zh', 150);
 
       const events = monitor.getEvents();
-      expect(events[0].message).toContain('en');
-      expect(events[0].message).toContain('zh');
+      expect(events[0]!.message).toContain('en');
+      expect(events[0]!.message).toContain('zh');
     });
   });
 
@@ -164,8 +164,13 @@ describe('I18nMonitor', () => {
 
   describe('recordError', () => {
     it('should delegate to PerformanceMonitor', () => {
-      const error = { key: 'test.key', locale: 'en', message: 'Test error' };
-      monitor.recordError(error, 'en');
+      const error = {
+        code: 'MISSING_KEY' as const,
+        message: 'Test error',
+        key: 'test.key',
+        locale: 'en' as const,
+      };
+      monitor.recordError(error, 'en' as const);
       expect(I18nPerformanceMonitor.recordError).toHaveBeenCalled();
     });
   });

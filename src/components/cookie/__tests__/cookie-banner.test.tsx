@@ -222,7 +222,8 @@ describe('CookieBanner', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
 
       const checkboxes = screen.getAllByRole('checkbox');
-      fireEvent.click(checkboxes[1]);
+      const analyticsCheckbox = checkboxes[1]!;
+      fireEvent.click(analyticsCheckbox);
 
       expect(checkboxes[1]).toBeChecked();
     });
@@ -233,7 +234,8 @@ describe('CookieBanner', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
 
       const checkboxes = screen.getAllByRole('checkbox');
-      fireEvent.click(checkboxes[2]);
+      const marketingCheckbox = checkboxes[2]!;
+      fireEvent.click(marketingCheckbox);
 
       expect(checkboxes[2]).toBeChecked();
     });
@@ -265,7 +267,8 @@ describe('CookieBanner', () => {
 
       // Enable analytics (second checkbox)
       const checkboxes = screen.getAllByRole('checkbox');
-      fireEvent.click(checkboxes[1]);
+      const analyticsCheckbox = checkboxes[1]!;
+      fireEvent.click(analyticsCheckbox);
 
       // Save preferences
       fireEvent.click(screen.getByRole('button', { name: 'Save Preferences' }));

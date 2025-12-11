@@ -54,43 +54,22 @@ vi.mock('next/link', () => ({
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
-  Clock: ({
-    className,
-    'aria-hidden': ariaHidden,
-  }: {
-    'className'?: string;
-    'aria-hidden'?: string;
-  }) => (
+  Clock: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       data-testid='clock-icon'
-      className={className}
-      aria-hidden={ariaHidden}
+      {...props}
     />
   ),
-  Factory: ({
-    className,
-    'aria-hidden': ariaHidden,
-  }: {
-    'className'?: string;
-    'aria-hidden'?: string;
-  }) => (
+  Factory: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       data-testid='factory-icon'
-      className={className}
-      aria-hidden={ariaHidden}
+      {...props}
     />
   ),
-  Package: ({
-    className,
-    'aria-hidden': ariaHidden,
-  }: {
-    'className'?: string;
-    'aria-hidden'?: string;
-  }) => (
+  Package: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       data-testid='package-icon'
-      className={className}
-      aria-hidden={ariaHidden}
+      {...props}
     />
   ),
 }));
@@ -206,18 +185,20 @@ vi.mock('@/components/ui/card', () => ({
 function createMockProduct(
   overrides: Partial<ProductSummary> = {},
 ): ProductSummary {
-  return {
+  const base: ProductSummary = {
     slug: 'test-product',
+    locale: 'en',
     title: 'Test Product',
     description: 'A test product description',
     coverImage: '/images/test-product.jpg',
     category: 'Test Category',
     featured: false,
+    publishedAt: '2024-01-01',
     moq: '100 units',
     leadTime: '7-14 days',
     supplyCapacity: '10000/month',
-    ...overrides,
   };
+  return { ...base, ...overrides };
 }
 
 describe('ProductCard', () => {
@@ -334,7 +315,9 @@ describe('ProductCard', () => {
     });
 
     it('does not render description when undefined', () => {
-      const product = createMockProduct({ description: undefined });
+      const { description: _description, ...productWithoutDescription } =
+        createMockProduct();
+      const product: ProductSummary = productWithoutDescription;
       render(<ProductCard product={product} />);
       expect(screen.queryByTestId('card-content')).not.toBeInTheDocument();
     });
@@ -383,11 +366,13 @@ describe('ProductCard', () => {
     });
 
     it('does not render trade info section when no trade info is provided', () => {
-      const product = createMockProduct({
-        moq: undefined,
-        leadTime: undefined,
-        supplyCapacity: undefined,
-      });
+      const {
+        moq: _moq,
+        leadTime: _leadTime,
+        supplyCapacity: _supplyCapacity,
+        ...productBase
+      } = createMockProduct();
+      const product: ProductSummary = productBase;
       render(<ProductCard product={product} />);
       expect(screen.queryByTestId('card-footer')).not.toBeInTheDocument();
     });

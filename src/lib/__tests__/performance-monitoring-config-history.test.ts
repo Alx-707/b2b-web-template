@@ -7,13 +7,18 @@ function createBaseConfig(
   overrides?: Partial<PerformanceConfig>,
 ): PerformanceConfig {
   return {
-    reactScan: { enabled: false },
-    bundleAnalyzer: { enabled: false },
-    sizeLimit: { enabled: false, maxSize: 500 },
+    reactScan: {
+      enabled: false,
+      showToolbar: false,
+      trackUnnecessaryRenders: false,
+    },
+    bundleAnalyzer: { enabled: false, openAnalyzer: false },
+    sizeLimit: { enabled: false, limits: {} },
     global: {
       enabled: true,
       dataRetentionTime: 300000,
       maxMetrics: 100,
+      enableInProduction: false,
     },
     ...overrides,
   };
@@ -55,7 +60,7 @@ describe('performance-monitoring-config-history', () => {
         manager.recordChange(config, 'Initial configuration');
 
         const history = manager.getHistory();
-        expect(history[0].reason).toBe('Initial configuration');
+        expect(history[0]!.reason).toBe('Initial configuration');
       });
 
       it('should record timestamp', () => {
@@ -67,19 +72,31 @@ describe('performance-monitoring-config-history', () => {
         manager.recordChange(config);
 
         const history = manager.getHistory();
-        expect(history[0].timestamp).toBe(now);
+        expect(history[0]!.timestamp).toBe(now);
       });
 
       it('should store config at record time', () => {
         const manager = new ConfigHistoryManager();
         // recordChange does shallow copy { ...config }
         // So nested objects like reactScan are shared
-        const config1 = createBaseConfig({ reactScan: { enabled: false } });
+        const config1 = createBaseConfig({
+          reactScan: {
+            enabled: false,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
 
         manager.recordChange(config1);
 
         // Later record with different config
-        const config2 = createBaseConfig({ reactScan: { enabled: true } });
+        const config2 = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         manager.recordChange(config2);
 
         const history = manager.getHistory();
@@ -93,7 +110,13 @@ describe('performance-monitoring-config-history', () => {
         // Record 15 changes
         for (let i = 0; i < 15; i++) {
           manager.recordChange(
-            createBaseConfig({ reactScan: { enabled: i % 2 === 0 } }),
+            createBaseConfig({
+              reactScan: {
+                enabled: i % 2 === 0,
+                showToolbar: false,
+                trackUnnecessaryRenders: false,
+              },
+            }),
           );
         }
 
@@ -110,8 +133,8 @@ describe('performance-monitoring-config-history', () => {
 
         const history = manager.getHistory();
         // Should have entries 2-11 (last 10)
-        expect(history[0].reason).toBe('Change 2');
-        expect(history[9].reason).toBe('Change 11');
+        expect(history[0]!.reason).toBe('Change 2');
+        expect(history[9]!.reason).toBe('Change 11');
       });
     });
 
@@ -133,8 +156,8 @@ describe('performance-monitoring-config-history', () => {
 
         const history = manager.getHistory();
         expect(history).toHaveLength(3);
-        expect(history[0].reason).toBe('First');
-        expect(history[2].reason).toBe('Third');
+        expect(history[0]!.reason).toBe('First');
+        expect(history[2]!.reason).toBe('Third');
       });
 
       it('should return a copy of the history array', () => {
@@ -179,11 +202,23 @@ describe('performance-monitoring-config-history', () => {
         const manager = new ConfigHistoryManager();
 
         manager.recordChange(
-          createBaseConfig({ reactScan: { enabled: false } }),
+          createBaseConfig({
+            reactScan: {
+              enabled: false,
+              showToolbar: false,
+              trackUnnecessaryRenders: false,
+            },
+          }),
           'First',
         );
         manager.recordChange(
-          createBaseConfig({ reactScan: { enabled: true } }),
+          createBaseConfig({
+            reactScan: {
+              enabled: true,
+              showToolbar: false,
+              trackUnnecessaryRenders: false,
+            },
+          }),
           'Second',
         );
 
@@ -197,15 +232,29 @@ describe('performance-monitoring-config-history', () => {
         const manager = new ConfigHistoryManager();
 
         manager.recordChange(
-          createBaseConfig({ reactScan: { enabled: false } }),
+          createBaseConfig({
+            reactScan: {
+              enabled: false,
+              showToolbar: false,
+              trackUnnecessaryRenders: false,
+            },
+          }),
           'First',
         );
         manager.recordChange(
-          createBaseConfig({ reactScan: { enabled: true } }),
+          createBaseConfig({
+            reactScan: {
+              enabled: true,
+              showToolbar: false,
+              trackUnnecessaryRenders: false,
+            },
+          }),
           'Second',
         );
         manager.recordChange(
-          createBaseConfig({ bundleAnalyzer: { enabled: true } }),
+          createBaseConfig({
+            bundleAnalyzer: { enabled: true, openAnalyzer: false },
+          }),
           'Third',
         );
 
@@ -219,10 +268,22 @@ describe('performance-monitoring-config-history', () => {
         const manager = new ConfigHistoryManager();
 
         manager.recordChange(
-          createBaseConfig({ reactScan: { enabled: false } }),
+          createBaseConfig({
+            reactScan: {
+              enabled: false,
+              showToolbar: false,
+              trackUnnecessaryRenders: false,
+            },
+          }),
         );
         manager.recordChange(
-          createBaseConfig({ reactScan: { enabled: true } }),
+          createBaseConfig({
+            reactScan: {
+              enabled: true,
+              showToolbar: false,
+              trackUnnecessaryRenders: false,
+            },
+          }),
         );
 
         const result1 = manager.rollback();

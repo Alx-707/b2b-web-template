@@ -26,6 +26,25 @@ function createMockVitals(
     cls: 0.05,
     fcp: 1500,
     ttfb: 600,
+    domContentLoaded: 1000,
+    loadComplete: 3000,
+    firstPaint: 800,
+    resourceTiming: {
+      totalResources: 10,
+      slowResources: [],
+      totalSize: 100000,
+      totalDuration: 1500,
+    },
+    device: {
+      userAgent: 'TestAgent',
+      viewport: { width: 1920, height: 1080 },
+    },
+    page: {
+      url: '/test',
+      referrer: '',
+      title: 'Test Page',
+      timestamp: Date.now(),
+    },
     ...overrides,
   };
 }
@@ -125,13 +144,12 @@ describe('calculatePerformanceScore', () => {
   });
 
   it('handles undefined metrics', () => {
-    const vitals = createMockVitals({
-      lcp: undefined,
-      fid: undefined,
-      cls: undefined,
-    });
+    const vitals = { ...createMockVitals() };
+    delete (vitals as { lcp?: number }).lcp;
+    delete (vitals as { fid?: number }).fid;
+    delete (vitals as { cls?: number }).cls;
 
-    const score = calculatePerformanceScore(vitals);
+    const score = calculatePerformanceScore(vitals as DetailedWebVitals);
 
     expect(score).toBe(100);
   });
@@ -398,13 +416,14 @@ describe('calculateImprovementPotential', () => {
   });
 
   it('handles undefined metrics', () => {
-    const vitals = createMockVitals({
-      lcp: undefined,
-      fid: undefined,
-      cls: undefined,
-    });
+    const vitals = { ...createMockVitals() };
+    delete (vitals as { lcp?: number }).lcp;
+    delete (vitals as { fid?: number }).fid;
+    delete (vitals as { cls?: number }).cls;
 
-    const potential = calculateImprovementPotential(vitals);
+    const potential = calculateImprovementPotential(
+      vitals as DetailedWebVitals,
+    );
 
     expect(potential).toBe(0);
   });
@@ -504,14 +523,20 @@ describe('calculatePerformanceTrends', () => {
   });
 
   it('handles reports with missing metric values', () => {
+    const createVitalsWithoutLcp = () => {
+      const vitals = { ...createMockVitals() };
+      delete (vitals as { lcp?: number }).lcp;
+      return vitals as DetailedWebVitals;
+    };
+
     const previousReports = Array.from({ length: 5 }, () =>
       createMockReport({
-        vitals: createMockVitals({ lcp: undefined }),
+        vitals: createVitalsWithoutLcp(),
       }),
     );
     const recentReports = Array.from({ length: 5 }, () =>
       createMockReport({
-        vitals: createMockVitals({ lcp: undefined }),
+        vitals: createVitalsWithoutLcp(),
       }),
     );
     const reports = [...previousReports, ...recentReports];

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { StorageEvent as LocaleStorageEvent } from '@/lib/locale-storage-types-data';
 import { logger } from '@/lib/logger';
 import {
   addMultipleListeners,
@@ -241,8 +242,8 @@ describe('locale-storage-history-events', () => {
         });
 
         const history = HistoryEventManager.getEventHistory();
-        expect(history[0].source).toBe('second');
-        expect(history[1].source).toBe('first');
+        expect(history[0]!.source).toBe('second');
+        expect(history[1]!.source).toBe('first');
       });
 
       it('should limit history to MAX_EVENT_HISTORY (100)', () => {
@@ -328,20 +329,44 @@ describe('locale-storage-history-events', () => {
       it('should create cleanup event for duplicates', () => {
         const event = createCleanupEvent('duplicates', 3);
 
-        expect(event.data?.cleanupType).toBe('duplicates');
+        expect(event.data).toBeDefined();
+        expect(
+          (
+            event.data as {
+              cleanupType: string;
+              removedCount: number;
+              action: string;
+            }
+          ).cleanupType,
+        ).toBe('duplicates');
       });
 
       it('should create cleanup event for size_limit', () => {
         const event = createCleanupEvent('size_limit', 10);
 
-        expect(event.data?.cleanupType).toBe('size_limit');
+        expect(event.data).toBeDefined();
+        expect(
+          (
+            event.data as {
+              cleanupType: string;
+              removedCount: number;
+              action: string;
+            }
+          ).cleanupType,
+        ).toBe('size_limit');
       });
 
       it('should create cleanup event for all', () => {
         const event = createCleanupEvent('all', 100);
 
-        expect(event.data?.cleanupType).toBe('all');
-        expect(event.data?.removedCount).toBe(100);
+        expect(event.data).toBeDefined();
+        const data = event.data as {
+          cleanupType: string;
+          removedCount: number;
+          action: string;
+        };
+        expect(data.cleanupType).toBe('all');
+        expect(data.removedCount).toBe(100);
       });
     });
 
@@ -360,7 +385,16 @@ describe('locale-storage-history-events', () => {
       it('should create export event for backup format', () => {
         const event = createExportEvent('backup', 100);
 
-        expect(event.data?.format).toBe('backup');
+        expect(event.data).toBeDefined();
+        expect(
+          (
+            event.data as {
+              format: string;
+              recordCount: number;
+              action: string;
+            }
+          ).format,
+        ).toBe('backup');
       });
     });
 
@@ -380,7 +414,17 @@ describe('locale-storage-history-events', () => {
       it('should create import event on failure', () => {
         const event = createImportEvent('backup', 0, false);
 
-        expect(event.data?.success).toBe(false);
+        expect(event.data).toBeDefined();
+        expect(
+          (
+            event.data as {
+              format: string;
+              recordCount: number;
+              success: boolean;
+              action: string;
+            }
+          ).success,
+        ).toBe(false);
       });
     });
 
@@ -593,15 +637,17 @@ describe('locale-storage-history-events', () => {
 
     describe('performanceListener', () => {
       it('should log warning for large cleanup (>100 records)', () => {
+        // Note: 'history_cleanup' is not in StorageEventType but is used in implementation
+        // via type assertion (event.type as string)
         const event = {
-          type: 'history_cleanup' as const,
+          type: 'history_cleanup',
           timestamp: Date.now(),
           source: 'test',
           data: {
             cleanupType: 'expired',
             removedCount: 150,
           },
-        };
+        } as unknown as LocaleStorageEvent;
 
         performanceListener(event);
 
@@ -613,14 +659,14 @@ describe('locale-storage-history-events', () => {
 
       it('should not log warning for small cleanup', () => {
         const event = {
-          type: 'history_cleanup' as const,
+          type: 'history_cleanup',
           timestamp: Date.now(),
           source: 'test',
           data: {
             cleanupType: 'expired',
             removedCount: 50,
           },
-        };
+        } as unknown as LocaleStorageEvent;
 
         performanceListener(event);
 

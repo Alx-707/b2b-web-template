@@ -52,7 +52,7 @@ vi.mock('@/hooks/theme-transition-utils', () => ({
 }));
 
 describe('theme-transition-core', () => {
-  let mockSetTheme: ReturnType<typeof vi.fn>;
+  let mockSetTheme: ReturnType<typeof vi.fn> & ((_theme: string) => void);
   let mockStartViewTransition: ReturnType<typeof vi.fn>;
   let mockPerformanceMark: ReturnType<typeof vi.fn>;
   let mockPerformanceNow: ReturnType<typeof vi.fn>;
@@ -60,7 +60,8 @@ describe('theme-transition-core', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockSetTheme = vi.fn();
+    mockSetTheme = vi.fn() as ReturnType<typeof vi.fn> &
+      ((_theme: string) => void);
     mockPerformanceMark = vi.fn();
     mockPerformanceNow = vi.fn().mockReturnValue(1000);
 
@@ -155,9 +156,10 @@ describe('theme-transition-core', () => {
         mockSupportsViewTransitions.mockReturnValue(true);
         (
           document as Document & {
-            startViewTransition: typeof mockStartViewTransition;
+            startViewTransition: typeof document.startViewTransition;
           }
-        ).startViewTransition = mockStartViewTransition;
+        ).startViewTransition =
+          mockStartViewTransition as unknown as typeof document.startViewTransition;
       });
 
       it('calls startViewTransition', () => {
@@ -177,7 +179,7 @@ describe('theme-transition-core', () => {
         });
 
         const transitionCallback = mockStartViewTransition.mock
-          .calls[0][0] as () => void;
+          .calls[0]![0] as () => void;
         transitionCallback();
 
         expect(mockSetTheme).toHaveBeenCalledWith('dark');
@@ -350,9 +352,10 @@ describe('theme-transition-core', () => {
       });
       (
         document as Document & {
-          startViewTransition: typeof mockStartViewTransition;
+          startViewTransition: typeof document.startViewTransition;
         }
-      ).startViewTransition = mockStartViewTransition;
+      ).startViewTransition =
+        mockStartViewTransition as unknown as typeof document.startViewTransition;
 
       document.documentElement.animate = vi.fn();
     });

@@ -43,7 +43,7 @@ function createValidHistory(overrides = {}) {
     history: [
       {
         locale: 'en' as const,
-        source: 'browser',
+        source: 'browser' as const,
         timestamp: Date.now(),
         confidence: 0.9,
         metadata: {},
@@ -148,7 +148,7 @@ describe('locale-storage-history-core', () => {
 
       const result = addDetectionRecord({
         locale: 'zh',
-        source: 'browser',
+        source: 'browser' as const,
         confidence: 0.8,
       });
 
@@ -162,13 +162,14 @@ describe('locale-storage-history-core', () => {
 
       addDetectionRecord({
         locale: 'en',
-        source: 'browser',
+        source: 'browser' as const,
         confidence: 1.5,
       });
 
       const setCall = vi.mocked(LocalStorageManager.set).mock.calls[0];
-      const savedHistory = setCall[1] as { history: { confidence: number }[] };
-      expect(savedHistory.history[0].confidence).toBeLessThanOrEqual(1);
+      expect(setCall).toBeDefined();
+      const savedHistory = setCall![1] as { history: { confidence: number }[] };
+      expect(savedHistory.history[0]!.confidence).toBeLessThanOrEqual(1);
     });
 
     it('should include metadata', () => {
@@ -177,16 +178,17 @@ describe('locale-storage-history-core', () => {
 
       addDetectionRecord({
         locale: 'en',
-        source: 'browser',
+        source: 'browser' as const,
         confidence: 0.9,
         metadata: { custom: 'data' },
       });
 
       const setCall = vi.mocked(LocalStorageManager.set).mock.calls[0];
-      const savedHistory = setCall[1] as {
+      expect(setCall).toBeDefined();
+      const savedHistory = setCall![1] as {
         history: { metadata: Record<string, unknown> }[];
       };
-      expect(savedHistory.history[0].metadata).toEqual({ custom: 'data' });
+      expect(savedHistory.history[0]!.metadata).toEqual({ custom: 'data' });
     });
 
     it('should clear cache after adding', () => {
@@ -197,7 +199,7 @@ describe('locale-storage-history-core', () => {
 
       addDetectionRecord({
         locale: 'en',
-        source: 'browser',
+        source: 'browser' as const,
         confidence: 0.9,
       });
 
@@ -213,7 +215,7 @@ describe('locale-storage-history-core', () => {
 
       const result = addDetectionRecord({
         locale: 'en',
-        source: 'browser',
+        source: 'browser' as const,
         confidence: 0.9,
       });
 
@@ -294,7 +296,7 @@ describe('locale-storage-history-core', () => {
 
       const record = {
         locale: 'zh' as const,
-        source: 'browser',
+        source: 'browser' as const,
         timestamp: Date.now(),
         confidence: 0.9,
         metadata: {},
@@ -309,7 +311,7 @@ describe('locale-storage-history-core', () => {
     it('should prepend record to beginning of history', () => {
       const existingRecord = {
         locale: 'en' as const,
-        source: 'browser',
+        source: 'browser' as const,
         timestamp: Date.now() - 1000,
         confidence: 0.8,
         metadata: {},
@@ -319,7 +321,7 @@ describe('locale-storage-history-core', () => {
 
       const newRecord = {
         locale: 'zh' as const,
-        source: 'geo',
+        source: 'geo' as const,
         timestamp: Date.now(),
         confidence: 0.9,
         metadata: {},
@@ -327,14 +329,14 @@ describe('locale-storage-history-core', () => {
 
       const result = updateDetectionHistory(newRecord);
 
-      expect(result.data?.history[0].locale).toBe('zh');
-      expect(result.data?.history[1].locale).toBe('en');
+      expect(result.data?.history[0]!.locale).toBe('zh');
+      expect(result.data?.history[1]!.locale).toBe('en');
     });
 
     it('should limit history size', () => {
       const largeHistory = Array.from({ length: 150 }, (_, i) => ({
         locale: 'en' as const,
-        source: 'browser',
+        source: 'browser' as const,
         timestamp: Date.now() - i * 1000,
         confidence: 0.9,
         metadata: {},
@@ -344,7 +346,7 @@ describe('locale-storage-history-core', () => {
 
       const newRecord = {
         locale: 'zh' as const,
-        source: 'browser',
+        source: 'browser' as const,
         timestamp: Date.now(),
         confidence: 0.9,
         metadata: {},
@@ -368,7 +370,7 @@ describe('locale-storage-history-core', () => {
 
       const record = {
         locale: 'en' as const,
-        source: 'browser',
+        source: 'browser' as const,
         timestamp: now,
         confidence: 0.9,
         metadata: {},
@@ -445,14 +447,14 @@ describe('locale-storage-history-core', () => {
         history: [
           {
             locale: 'en',
-            source: 'browser',
+            source: 'browser' as const,
             timestamp: now,
             confidence: 0.9,
             metadata: {},
           },
           {
             locale: 'zh',
-            source: 'browser',
+            source: 'browser' as const,
             timestamp: now - 10000,
             confidence: 0.8,
             metadata: {},
@@ -475,7 +477,7 @@ describe('locale-storage-history-core', () => {
         history: [
           {
             locale: 'en',
-            source: 'browser',
+            source: 'browser' as const,
             timestamp: now,
             confidence: 0.9,
             metadata: {},
@@ -497,7 +499,7 @@ describe('locale-storage-history-core', () => {
         history: [
           {
             locale: 'en',
-            source: 'browser',
+            source: 'browser' as const,
             timestamp: oldTimestamp,
             confidence: 0.9,
             metadata: {},
@@ -515,7 +517,7 @@ describe('locale-storage-history-core', () => {
     it('should detect too many records', () => {
       const largeHistory = Array.from({ length: 150 }, (_, i) => ({
         locale: 'en' as const,
-        source: 'browser',
+        source: 'browser' as const,
         timestamp: Date.now() - i * 1000,
         confidence: 0.9,
         metadata: {},

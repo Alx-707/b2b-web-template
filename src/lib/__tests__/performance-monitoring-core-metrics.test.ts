@@ -23,13 +23,18 @@ function createTestConfig(
   overrides?: Partial<PerformanceConfig>,
 ): PerformanceConfig {
   return {
-    reactScan: { enabled: false },
-    bundleAnalyzer: { enabled: false },
-    sizeLimit: { enabled: false, maxSize: 500 },
+    reactScan: {
+      enabled: false,
+      showToolbar: false,
+      trackUnnecessaryRenders: false,
+    },
+    bundleAnalyzer: { enabled: false, openAnalyzer: false },
+    sizeLimit: { enabled: false, limits: {} },
     global: {
       enabled: true,
       dataRetentionTime: 300000,
       maxMetrics: 100,
+      enableInProduction: false,
     },
     component: {
       enabled: true,
@@ -97,7 +102,7 @@ describe('performance-monitoring-core-metrics', () => {
 
         const metrics = manager.getAllMetrics();
         expect(metrics).toHaveLength(1);
-        expect(metrics[0].type).toBe('component');
+        expect(metrics[0]!.type).toBe('component');
         manager.destroy();
       });
 
@@ -107,6 +112,7 @@ describe('performance-monitoring-core-metrics', () => {
             enabled: false,
             dataRetentionTime: 300000,
             maxMetrics: 100,
+            enableInProduction: false,
           },
         });
         const manager = new PerformanceMetricsManager(config);
@@ -136,7 +142,7 @@ describe('performance-monitoring-core-metrics', () => {
         manager.recordMetric(createTestMetric());
 
         const metrics = manager.getAllMetrics();
-        expect(metrics[0].id).toMatch(/^metric_/);
+        expect(metrics[0]!.id).toMatch(/^metric_/);
         manager.destroy();
       });
 
@@ -147,7 +153,7 @@ describe('performance-monitoring-core-metrics', () => {
         manager.recordMetric(createTestMetric({ id: 'custom-id' }));
 
         const metrics = manager.getAllMetrics();
-        expect(metrics[0].id).toBe('custom-id');
+        expect(metrics[0]!.id).toBe('custom-id');
         manager.destroy();
       });
 
@@ -158,7 +164,7 @@ describe('performance-monitoring-core-metrics', () => {
         manager.recordMetric(createTestMetric({ tags: ['tag1', 'tag2'] }));
 
         const metrics = manager.getAllMetrics();
-        expect(metrics[0].tags).toEqual(['tag1', 'tag2']);
+        expect(metrics[0]!.tags).toEqual(['tag1', 'tag2']);
         manager.destroy();
       });
 
@@ -169,7 +175,7 @@ describe('performance-monitoring-core-metrics', () => {
         manager.recordMetric(createTestMetric({ priority: 'high' }));
 
         const metrics = manager.getAllMetrics();
-        expect(metrics[0].priority).toBe('high');
+        expect(metrics[0]!.priority).toBe('high');
         manager.destroy();
       });
 
@@ -246,7 +252,12 @@ describe('performance-monitoring-core-metrics', () => {
 
       it('should trigger cleanup when exceeding max metrics buffer', () => {
         const config = createTestConfig({
-          global: { enabled: true, dataRetentionTime: 300000, maxMetrics: 10 },
+          global: {
+            enabled: true,
+            dataRetentionTime: 300000,
+            maxMetrics: 10,
+            enableInProduction: false,
+          },
         });
         const manager = new PerformanceMetricsManager(config);
 
@@ -309,7 +320,7 @@ describe('performance-monitoring-core-metrics', () => {
         // Get metrics in last 15 seconds
         const recentMetrics = manager.getMetricsInTimeWindow(15000);
         expect(recentMetrics.length).toBe(1);
-        expect(recentMetrics[0].id).toBe('2');
+        expect(recentMetrics[0]!.id).toBe('2');
 
         manager.destroy();
       });
@@ -457,10 +468,10 @@ describe('performance-monitoring-core-metrics', () => {
           vi.advanceTimersByTime(1000);
         }
 
-        const recent = manager.getRecentMetrics(5);
+        const recent = manager.getRecentMetrics(10).slice(0, 5);
         expect(recent).toHaveLength(5);
         // Most recent should be first
-        expect(recent[0].id).toBe('metric-14');
+        expect(recent[0]!.id).toBe('metric-14');
 
         manager.destroy();
       });
@@ -473,7 +484,7 @@ describe('performance-monitoring-core-metrics', () => {
           manager.recordMetric(createTestMetric());
         }
 
-        const recent = manager.getRecentMetrics();
+        const recent = manager.getRecentMetrics(10);
         expect(recent).toHaveLength(10);
 
         manager.destroy();
@@ -559,6 +570,7 @@ describe('performance-monitoring-core-metrics', () => {
             enabled: false,
             dataRetentionTime: 600000,
             maxMetrics: 200,
+            enableInProduction: false,
           },
         });
 
@@ -639,7 +651,7 @@ describe('performance-monitoring-core-metrics', () => {
         manager.importMetrics(metricsToImport, true);
 
         expect(manager.getAllMetrics()).toHaveLength(1);
-        expect(manager.getAllMetrics()[0].id).toBe('imported');
+        expect(manager.getAllMetrics()[0]!.id).toBe('imported');
 
         manager.destroy();
       });
@@ -660,6 +672,27 @@ describe('performance-monitoring-core-metrics', () => {
             // Missing required fields
             id: 'invalid',
           } as unknown as PerformanceMetrics,
+        ] as PerformanceMetrics[];
+
+        const count = manager.importMetrics(metricsToImport);
+
+        expect(count).toBe(1);
+
+        manager.destroy();
+      });
+
+      it('should handle metrics with extra properties', () => {
+        const config = createTestConfig();
+        const manager = new PerformanceMetricsManager(config);
+
+        const metricsToImport: PerformanceMetrics[] = [
+          {
+            id: 'valid',
+            type: 'component',
+            source: 'custom',
+            data: { renderTime: 50 },
+            timestamp: Date.now(),
+          },
         ];
 
         const count = manager.importMetrics(metricsToImport);

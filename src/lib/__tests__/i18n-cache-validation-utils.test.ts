@@ -146,9 +146,8 @@ describe('CacheValidationUtils', () => {
     });
 
     it('should fail for non-number maxSize', () => {
-      // @ts-expect-error - testing invalid input
       const result = CacheValidationUtils.validateConfig({
-        maxSize: 'invalid',
+        maxSize: 'invalid' as unknown as number,
       });
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('maxSize must be a positive number');
@@ -169,8 +168,9 @@ describe('CacheValidationUtils', () => {
     });
 
     it('should fail for non-number ttl', () => {
-      // @ts-expect-error - testing invalid input
-      const result = CacheValidationUtils.validateConfig({ ttl: 'invalid' });
+      const result = CacheValidationUtils.validateConfig({
+        ttl: 'invalid' as unknown as number,
+      });
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('ttl must be a non-negative number');
     });
@@ -201,16 +201,16 @@ describe('CacheValidationUtils', () => {
     });
 
     it('should fail for non-string storageKey', () => {
-      // @ts-expect-error - testing invalid input
-      const result = CacheValidationUtils.validateConfig({ storageKey: 123 });
+      const result = CacheValidationUtils.validateConfig({
+        storageKey: 123 as unknown as string,
+      });
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('storageKey must be a non-empty string');
     });
 
     it('should fail for non-boolean enablePersistence', () => {
-      // @ts-expect-error - testing invalid input
       const result = CacheValidationUtils.validateConfig({
-        enablePersistence: 'yes',
+        enablePersistence: 'yes' as unknown as boolean,
       });
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('enablePersistence must be a boolean');
@@ -234,12 +234,17 @@ describe('CacheValidationUtils', () => {
         ttl: 5000,
         compression: {
           enableCompression: true,
+          algorithm: 'gzip' as const,
           threshold: 1024,
           level: 6,
         },
         performance: {
+          enableLazyLoading: true,
+          prefetchThreshold: 0.8,
           maxConcurrentLoads: 5,
           loadTimeout: 5000,
+          retryAttempts: 3,
+          retryDelay: 1000,
         },
       });
 
@@ -259,7 +264,9 @@ describe('CacheValidationUtils', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         compression: {
           enableCompression: true,
+          algorithm: 'gzip' as const,
           threshold: -1,
+          level: 6,
         },
       });
       expect(result.isValid).toBe(false);
@@ -272,7 +279,9 @@ describe('CacheValidationUtils', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         compression: {
           enableCompression: false,
+          algorithm: 'gzip' as const,
           threshold: -1,
+          level: 6,
         },
       });
       expect(result.isValid).toBe(true);
@@ -282,6 +291,7 @@ describe('CacheValidationUtils', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         compression: {
           enableCompression: true,
+          algorithm: 'gzip' as const,
           threshold: 1024,
           level: 0,
         },
@@ -296,6 +306,7 @@ describe('CacheValidationUtils', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         compression: {
           enableCompression: true,
+          algorithm: 'gzip' as const,
           threshold: 1024,
           level: 10,
         },
@@ -311,6 +322,7 @@ describe('CacheValidationUtils', () => {
         CacheValidationUtils.validateAdvancedConfig({
           compression: {
             enableCompression: true,
+            algorithm: 'gzip' as const,
             threshold: 1024,
             level: 1,
           },
@@ -321,6 +333,7 @@ describe('CacheValidationUtils', () => {
         CacheValidationUtils.validateAdvancedConfig({
           compression: {
             enableCompression: true,
+            algorithm: 'gzip' as const,
             threshold: 1024,
             level: 9,
           },
@@ -331,7 +344,12 @@ describe('CacheValidationUtils', () => {
     it('should fail for maxConcurrentLoads less than 1', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         performance: {
+          enableLazyLoading: true,
+          prefetchThreshold: 0.8,
           maxConcurrentLoads: 0,
+          loadTimeout: 5000,
+          retryAttempts: 3,
+          retryDelay: 1000,
         },
       });
       expect(result.isValid).toBe(false);
@@ -341,7 +359,12 @@ describe('CacheValidationUtils', () => {
     it('should warn for very short loadTimeout', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         performance: {
+          enableLazyLoading: true,
+          prefetchThreshold: 0.8,
+          maxConcurrentLoads: 5,
           loadTimeout: 500,
+          retryAttempts: 3,
+          retryDelay: 1000,
         },
       });
       expect(result.isValid).toBe(true);
@@ -353,7 +376,12 @@ describe('CacheValidationUtils', () => {
     it('should pass for loadTimeout at 1 second', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         performance: {
+          enableLazyLoading: true,
+          prefetchThreshold: 0.8,
+          maxConcurrentLoads: 5,
           loadTimeout: 1000,
+          retryAttempts: 3,
+          retryDelay: 1000,
         },
       });
       expect(result.isValid).toBe(true);
@@ -365,11 +393,17 @@ describe('CacheValidationUtils', () => {
         maxSize: 0,
         compression: {
           enableCompression: true,
+          algorithm: 'gzip' as const,
           threshold: -1,
           level: 15,
         },
         performance: {
+          enableLazyLoading: true,
+          prefetchThreshold: 0.8,
           maxConcurrentLoads: 0,
+          loadTimeout: 5000,
+          retryAttempts: 3,
+          retryDelay: 1000,
         },
       });
       expect(result.isValid).toBe(false);
@@ -385,8 +419,9 @@ describe('CacheValidationUtils', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         compression: {
           enableCompression: true,
+          algorithm: 'gzip' as const,
           threshold: 1024,
-          // level not provided
+          level: 6,
         },
       });
       expect(result.isValid).toBe(true);
@@ -395,8 +430,12 @@ describe('CacheValidationUtils', () => {
     it('should not check undefined performance fields', () => {
       const result = CacheValidationUtils.validateAdvancedConfig({
         performance: {
-          // maxConcurrentLoads not provided
-          // loadTimeout not provided
+          enableLazyLoading: true,
+          prefetchThreshold: 0.8,
+          maxConcurrentLoads: 5,
+          loadTimeout: 5000,
+          retryAttempts: 3,
+          retryDelay: 1000,
         },
       });
       expect(result.isValid).toBe(true);

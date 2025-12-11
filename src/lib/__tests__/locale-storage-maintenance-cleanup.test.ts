@@ -182,8 +182,10 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupExpiredDetections(oneDay);
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedCount).toBe(1);
-        expect(result.data?.remainingCount).toBe(1);
+        expect((result.data as { cleanedCount: number })?.cleanedCount).toBe(1);
+        expect(
+          (result.data as { remainingCount: number })?.remainingCount,
+        ).toBe(1);
         expect(LocalStorageManager.set).toHaveBeenCalled();
       });
 
@@ -201,8 +203,12 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupExpiredDetections();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedCount).toBe(0);
-        expect(result.data?.remainingCount).toBe(2);
+        expect((result.data as { cleanedCount?: number })?.cleanedCount).toBe(
+          0,
+        );
+        expect(
+          (result.data as { remainingCount?: number })?.remainingCount,
+        ).toBe(2);
         expect(LocalStorageManager.set).not.toHaveBeenCalled();
       });
 
@@ -222,7 +228,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupExpiredDetections();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedCount).toBe(1);
+        expect((result.data as { cleanedCount?: number })?.cleanedCount).toBe(
+          1,
+        );
       });
 
       it('should return error result when exception occurs', () => {
@@ -243,7 +251,9 @@ describe('locale-storage-maintenance-cleanup', () => {
           LocaleCleanupManager.clearSpecificData('LOCALE_PREFERENCE');
 
         expect(result.success).toBe(true);
-        expect(result.data?.dataType).toBe('LOCALE_PREFERENCE');
+        expect((result.data as { dataType?: string })?.dataType).toBe(
+          'LOCALE_PREFERENCE',
+        );
         expect(CookieManager.remove).toHaveBeenCalledWith(
           STORAGE_KEYS.LOCALE_PREFERENCE,
         );
@@ -258,7 +268,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         );
 
         expect(result.success).toBe(true);
-        expect(result.data?.dataType).toBe('LOCALE_DETECTION_HISTORY');
+        expect((result.data as { dataType?: string })?.dataType).toBe(
+          'LOCALE_DETECTION_HISTORY',
+        );
         expect(CookieManager.remove).toHaveBeenCalledWith(
           STORAGE_KEYS.LOCALE_DETECTION_HISTORY,
         );
@@ -328,7 +340,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(0);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          0,
+        );
       });
 
       it('should not clean valid localStorage preference', () => {
@@ -340,7 +354,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(0);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          0,
+        );
         expect(LocalStorageManager.remove).not.toHaveBeenCalled();
       });
 
@@ -354,7 +370,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(1);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          1,
+        );
         expect(LocalStorageManager.remove).toHaveBeenCalledWith(
           STORAGE_KEYS.LOCALE_PREFERENCE,
         );
@@ -372,7 +390,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(1);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          1,
+        );
       });
 
       it('should clean localStorage preference with invalid confidence range', () => {
@@ -384,7 +404,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(1);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          1,
+        );
       });
 
       it('should clean localStorage preference with negative confidence', () => {
@@ -396,7 +418,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(1);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          1,
+        );
       });
 
       it('should clean localStorage preference with future timestamp', () => {
@@ -408,7 +432,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(1);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          1,
+        );
       });
 
       it('should clean localStorage preference with negative timestamp', () => {
@@ -420,7 +446,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(1);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          1,
+        );
       });
 
       it('should not clean valid Cookie preference', () => {
@@ -432,7 +460,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(0);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          0,
+        );
         expect(CookieManager.remove).not.toHaveBeenCalled();
       });
 
@@ -445,8 +475,12 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(1);
-        expect(result.data?.issues).toContain('已清理Cookie中的无效偏好数据');
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          1,
+        );
+        expect((result.data as { issues?: string[] })?.issues).toContain(
+          '已清理Cookie中的无效偏好数据',
+        );
         expect(CookieManager.remove).toHaveBeenCalledWith(
           STORAGE_KEYS.LOCALE_PREFERENCE,
         );
@@ -459,8 +493,10 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(1);
-        expect(result.data?.issues).toContain(
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          1,
+        );
+        expect((result.data as { issues?: string[] })?.issues).toContain(
           '已清理Cookie中的格式错误偏好数据',
         );
       });
@@ -472,7 +508,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupInvalidPreferences();
 
         expect(result.success).toBe(true);
-        expect(result.data?.cleanedItems).toBe(2);
+        expect((result.data as { cleanedItems?: number })?.cleanedItems).toBe(
+          2,
+        );
         expect(LocalStorageManager.remove).toHaveBeenCalled();
         expect(CookieManager.remove).toHaveBeenCalled();
       });
@@ -537,8 +575,12 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupDuplicateDetections();
 
         expect(result.success).toBe(true);
-        expect(result.data?.duplicateCount).toBe(1);
-        expect(result.data?.remainingCount).toBe(2);
+        expect(
+          (result.data as { duplicateCount?: number })?.duplicateCount,
+        ).toBe(1);
+        expect(
+          (result.data as { remainingCount?: number })?.remainingCount,
+        ).toBe(2);
         expect(LocalStorageManager.set).toHaveBeenCalled();
       });
 
@@ -565,8 +607,12 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupDuplicateDetections();
 
         expect(result.success).toBe(true);
-        expect(result.data?.duplicateCount).toBe(0);
-        expect(result.data?.remainingCount).toBe(2);
+        expect(
+          (result.data as { duplicateCount?: number })?.duplicateCount,
+        ).toBe(0);
+        expect(
+          (result.data as { remainingCount?: number })?.remainingCount,
+        ).toBe(2);
         expect(LocalStorageManager.set).not.toHaveBeenCalled();
       });
 
@@ -593,8 +639,12 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupDuplicateDetections();
 
         expect(result.success).toBe(true);
-        expect(result.data?.duplicateCount).toBe(0);
-        expect(result.data?.remainingCount).toBe(2);
+        expect(
+          (result.data as { duplicateCount?: number })?.duplicateCount,
+        ).toBe(0);
+        expect(
+          (result.data as { remainingCount?: number })?.remainingCount,
+        ).toBe(2);
       });
 
       it('should not consider detections with different locales as duplicates', () => {
@@ -620,7 +670,9 @@ describe('locale-storage-maintenance-cleanup', () => {
         const result = LocaleCleanupManager.cleanupDuplicateDetections();
 
         expect(result.success).toBe(true);
-        expect(result.data?.duplicateCount).toBe(0);
+        expect(
+          (result.data as { duplicateCount?: number })?.duplicateCount,
+        ).toBe(0);
       });
 
       it('should return error result when exception occurs', () => {

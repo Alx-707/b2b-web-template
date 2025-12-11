@@ -330,8 +330,8 @@ describe('WhatsAppMessageService', () => {
         parameters: ['John', 'Doe'],
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.template.components).toEqual([
         {
@@ -360,8 +360,8 @@ describe('WhatsAppMessageService', () => {
         parameters: [],
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.template.components).toBeUndefined();
     });
@@ -386,8 +386,8 @@ describe('WhatsAppMessageService', () => {
         ],
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.type).toBe('interactive');
       expect(body.interactive.type).toBe('button');
@@ -410,8 +410,8 @@ describe('WhatsAppMessageService', () => {
         buttons: [{ id: 'yes', title: 'Yes' }],
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.action.buttons[0]).toEqual({
         type: 'reply',
@@ -438,8 +438,8 @@ describe('WhatsAppMessageService', () => {
         headerText: 'Header Text',
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.header).toEqual({
         type: 'text',
@@ -463,8 +463,8 @@ describe('WhatsAppMessageService', () => {
         footerText: 'Footer Text',
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.footer).toEqual({
         text: 'Footer Text',
@@ -486,8 +486,8 @@ describe('WhatsAppMessageService', () => {
         buttons: [{ id: 'btn1', title: 'OK' }],
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.header).toBeUndefined();
       expect(body.interactive.footer).toBeUndefined();
@@ -519,8 +519,8 @@ describe('WhatsAppMessageService', () => {
         ],
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.type).toBe('interactive');
       expect(body.interactive.type).toBe('list');
@@ -552,8 +552,8 @@ describe('WhatsAppMessageService', () => {
         ],
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.action.sections).toHaveLength(2);
       expect(body.interactive.action.sections[0].title).toBe('Products');
@@ -577,8 +577,8 @@ describe('WhatsAppMessageService', () => {
         options: { headerText: 'Header' },
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.header).toEqual({
         type: 'text',
@@ -603,8 +603,8 @@ describe('WhatsAppMessageService', () => {
         options: { footerText: 'Footer' },
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.footer).toEqual({
         text: 'Footer',
@@ -639,8 +639,8 @@ describe('WhatsAppMessageService', () => {
         ],
       });
 
-      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
-      const body = JSON.parse(callArgs.body);
+      const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
+      const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.action.sections[0].rows).toHaveLength(2);
       expect(body.interactive.action.sections[1].rows).toHaveLength(1);

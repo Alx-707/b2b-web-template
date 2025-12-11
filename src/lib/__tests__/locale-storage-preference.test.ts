@@ -451,7 +451,6 @@ describe('locale-storage-preference', () => {
       it('should not emit event when sync returns no data', () => {
         vi.mocked(syncPreferenceData).mockReturnValueOnce({
           success: true,
-          data: undefined,
           timestamp: Date.now(),
         });
 

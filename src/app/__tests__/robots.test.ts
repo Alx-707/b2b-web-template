@@ -1,3 +1,4 @@
+import type { MetadataRoute } from 'next';
 import { describe, expect, it, vi } from 'vitest';
 import robots from '../robots';
 
@@ -7,6 +8,21 @@ vi.mock('@/config/paths', () => ({
     baseUrl: 'https://example.com',
   },
 }));
+
+// Helper to normalize rules to array (Next.js allows object or array)
+type RobotsRuleItem = {
+  userAgent?: string | string[];
+  allow?: string | string[];
+  disallow?: string | string[];
+  crawlDelay?: number;
+};
+
+function normalizeRules(
+  rules: MetadataRoute.Robots['rules'],
+): RobotsRuleItem[] {
+  if (!rules) return [];
+  return (Array.isArray(rules) ? rules : [rules]) as RobotsRuleItem[];
+}
 
 describe('robots.ts', () => {
   describe('robots()', () => {
@@ -20,14 +36,15 @@ describe('robots.ts', () => {
 
     it('should have rules array', () => {
       const result = robots();
+      const rulesArray = normalizeRules(result.rules);
 
-      expect(Array.isArray(result.rules)).toBe(true);
-      expect(result.rules.length).toBeGreaterThan(0);
+      expect(rulesArray.length).toBeGreaterThan(0);
     });
 
     it('should have wildcard user agent rule', () => {
       const result = robots();
-      const wildcardRule = result.rules.find(
+      const rulesArray = normalizeRules(result.rules);
+      const wildcardRule = rulesArray.find(
         (rule) => !Array.isArray(rule.userAgent) && rule.userAgent === '*',
       );
 
@@ -36,15 +53,17 @@ describe('robots.ts', () => {
 
     it('should allow root path', () => {
       const result = robots();
-      const wildcardRule = result.rules[0];
+      const rulesArray = normalizeRules(result.rules);
+      const wildcardRule = rulesArray[0];
 
-      expect(wildcardRule.allow).toBe('/');
+      expect(wildcardRule?.allow).toBe('/');
     });
 
     it('should disallow sensitive paths', () => {
       const result = robots();
-      const wildcardRule = result.rules[0];
-      const disallowed = wildcardRule.disallow;
+      const rulesArray = normalizeRules(result.rules);
+      const wildcardRule = rulesArray[0];
+      const disallowed = wildcardRule?.disallow;
 
       expect(disallowed).toContain('/api/');
       expect(disallowed).toContain('/_next/');
@@ -52,8 +71,9 @@ describe('robots.ts', () => {
 
     it('should disallow test paths', () => {
       const result = robots();
-      const wildcardRule = result.rules[0];
-      const disallowed = wildcardRule.disallow;
+      const rulesArray = normalizeRules(result.rules);
+      const wildcardRule = rulesArray[0];
+      const disallowed = wildcardRule?.disallow;
 
       expect(disallowed).toContain('/error-test/');
       expect(disallowed).toContain('/accessibility-test/');

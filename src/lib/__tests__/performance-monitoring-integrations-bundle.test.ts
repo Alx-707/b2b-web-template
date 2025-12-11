@@ -22,13 +22,18 @@ function createBaseConfig(
   overrides?: Partial<PerformanceConfig>,
 ): PerformanceConfig {
   return {
-    reactScan: { enabled: false },
-    bundleAnalyzer: { enabled: true },
-    sizeLimit: { enabled: false, maxSize: 500 },
+    reactScan: {
+      enabled: false,
+      showToolbar: false,
+      trackUnnecessaryRenders: false,
+    },
+    bundleAnalyzer: { enabled: true, openAnalyzer: false },
+    sizeLimit: { enabled: false, limits: {} },
     global: {
       enabled: true,
       dataRetentionTime: 300000,
       maxMetrics: 100,
+      enableInProduction: false,
     },
     bundle: {
       enabled: true,
@@ -49,7 +54,9 @@ describe('performance-monitoring-integrations-bundle', () => {
 
   describe('useBundleAnalyzerIntegration', () => {
     it('should return integration with enabled status', () => {
-      const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+      const config = createBaseConfig({
+        bundleAnalyzer: { enabled: true, openAnalyzer: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useBundleAnalyzerIntegration(config, recordMetric);
@@ -58,7 +65,9 @@ describe('performance-monitoring-integrations-bundle', () => {
     });
 
     it('should return disabled when bundleAnalyzer is disabled', () => {
-      const config = createBaseConfig({ bundleAnalyzer: { enabled: false } });
+      const config = createBaseConfig({
+        bundleAnalyzer: { enabled: false, openAnalyzer: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useBundleAnalyzerIntegration(config, recordMetric);
@@ -67,7 +76,9 @@ describe('performance-monitoring-integrations-bundle', () => {
     });
 
     it('should record bundle size metric', () => {
-      const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+      const config = createBaseConfig({
+        bundleAnalyzer: { enabled: true, openAnalyzer: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useBundleAnalyzerIntegration(config, recordMetric);
@@ -87,7 +98,9 @@ describe('performance-monitoring-integrations-bundle', () => {
     });
 
     it('should not record when disabled', () => {
-      const config = createBaseConfig({ bundleAnalyzer: { enabled: false } });
+      const config = createBaseConfig({
+        bundleAnalyzer: { enabled: false, openAnalyzer: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useBundleAnalyzerIntegration(config, recordMetric);
@@ -97,7 +110,9 @@ describe('performance-monitoring-integrations-bundle', () => {
     });
 
     it('should record chunk info', () => {
-      const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+      const config = createBaseConfig({
+        bundleAnalyzer: { enabled: true, openAnalyzer: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useBundleAnalyzerIntegration(config, recordMetric);
@@ -117,7 +132,9 @@ describe('performance-monitoring-integrations-bundle', () => {
     });
 
     it('should generate size report', () => {
-      const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+      const config = createBaseConfig({
+        bundleAnalyzer: { enabled: true, openAnalyzer: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useBundleAnalyzerIntegration(config, recordMetric);
@@ -133,7 +150,9 @@ describe('performance-monitoring-integrations-bundle', () => {
 
   describe('validateBundleAnalyzerConfig', () => {
     it('should return valid for proper config', () => {
-      const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+      const config = createBaseConfig({
+        bundleAnalyzer: { enabled: true, openAnalyzer: false },
+      });
 
       const result = validateBundleAnalyzerConfig(config);
 
@@ -153,7 +172,10 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     it('should error on non-boolean enabled', () => {
       const config = createBaseConfig({
-        bundleAnalyzer: { enabled: 'yes' as unknown as boolean },
+        bundleAnalyzer: {
+          enabled: 'yes' as unknown as boolean,
+          openAnalyzer: false,
+        },
       });
 
       const result = validateBundleAnalyzerConfig(config);
@@ -164,7 +186,7 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     it('should warn on invalid port', () => {
       const config = createBaseConfig({
-        bundleAnalyzer: { enabled: true, port: -1 },
+        bundleAnalyzer: { enabled: true, openAnalyzer: false, port: -1 },
       });
 
       const result = validateBundleAnalyzerConfig(config);
@@ -174,7 +196,11 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     it('should warn on invalid reportDir', () => {
       const config = createBaseConfig({
-        bundleAnalyzer: { enabled: true, reportDir: 123 as unknown as string },
+        bundleAnalyzer: {
+          enabled: true,
+          openAnalyzer: false,
+          reportDir: 123 as unknown as string,
+        },
       });
 
       const result = validateBundleAnalyzerConfig(config);
@@ -195,7 +221,9 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     describe('recordBundleSize', () => {
       it('should record bundle size when enabled', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordBundleSize('main', 500000, 200000);
@@ -205,7 +233,9 @@ describe('performance-monitoring-integrations-bundle', () => {
       });
 
       it('should not record when disabled', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: false } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: false, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordBundleSize('main', 500000);
@@ -216,7 +246,7 @@ describe('performance-monitoring-integrations-bundle', () => {
 
       it('should log warning when size exceeds threshold', () => {
         const config = createBaseConfig({
-          bundleAnalyzer: { enabled: true },
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
           bundle: { enabled: true, thresholds: { size: 500000 } },
         });
         const analyzer = new BundleAnalyzerAnalyzer(config);
@@ -232,7 +262,9 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     describe('recordChunkInfo', () => {
       it('should record chunk info when enabled', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordChunkInfo('vendor', 300000, ['react', 'react-dom']);
@@ -243,7 +275,7 @@ describe('performance-monitoring-integrations-bundle', () => {
 
       it('should log warning when chunk exceeds threshold', () => {
         const config = createBaseConfig({
-          bundleAnalyzer: { enabled: true },
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
           bundle: { enabled: true, thresholds: { size: 100000 } },
         });
         const analyzer = new BundleAnalyzerAnalyzer(config);
@@ -256,7 +288,9 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     describe('generateBundleReport', () => {
       it('should return report structure', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         const report = analyzer.generateBundleReport();
@@ -269,7 +303,9 @@ describe('performance-monitoring-integrations-bundle', () => {
       });
 
       it('should calculate totals correctly', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordBundleSize('main', 500000, 200000);
@@ -282,7 +318,9 @@ describe('performance-monitoring-integrations-bundle', () => {
       });
 
       it('should sort largest bundles by size', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordBundleSize('small', 100000);
@@ -291,24 +329,28 @@ describe('performance-monitoring-integrations-bundle', () => {
 
         const report = analyzer.generateBundleReport();
 
-        expect(report.largestBundles[0].name).toBe('large');
-        expect(report.largestBundles[1].name).toBe('medium');
-        expect(report.largestBundles[2].name).toBe('small');
+        expect(report.largestBundles[0]!.name).toBe('large');
+        expect(report.largestBundles[1]!.name).toBe('medium');
+        expect(report.largestBundles[2]!.name).toBe('small');
       });
 
       it('should calculate compression ratio', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordBundleSize('main', 1000000, 300000);
 
         const report = analyzer.generateBundleReport();
 
-        expect(report.largestBundles[0].compressionRatio).toBe(0.3);
+        expect(report.largestBundles[0]!.compressionRatio).toBe(0.3);
       });
 
       it('should generate recommendations for large total size', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         // Add 6MB total
@@ -325,7 +367,9 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     describe('generateChunkReport', () => {
       it('should return report structure', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         const report = analyzer.generateChunkReport();
@@ -337,7 +381,9 @@ describe('performance-monitoring-integrations-bundle', () => {
       });
 
       it('should detect duplicate modules', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordChunkInfo('chunk1', 100000, ['lodash', 'react']);
@@ -353,7 +399,9 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     describe('getOptimizationSuggestions', () => {
       it('should return suggestions array', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         const suggestions = analyzer.getOptimizationSuggestions();
@@ -362,7 +410,9 @@ describe('performance-monitoring-integrations-bundle', () => {
       });
 
       it('should suggest code splitting for large bundles', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordBundleSize('main', 6000000);
@@ -375,7 +425,9 @@ describe('performance-monitoring-integrations-bundle', () => {
       });
 
       it('should suggest shared chunks for duplicates', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordChunkInfo('chunk1', 100000, ['lodash']);
@@ -393,7 +445,9 @@ describe('performance-monitoring-integrations-bundle', () => {
 
     describe('reset', () => {
       it('should clear all data', () => {
-        const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+        const config = createBaseConfig({
+          bundleAnalyzer: { enabled: true, openAnalyzer: false },
+        });
         const analyzer = new BundleAnalyzerAnalyzer(config);
 
         analyzer.recordBundleSize('main', 500000);

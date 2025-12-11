@@ -232,7 +232,7 @@ describe('contact-api-utils', () => {
 
       await verifyTurnstile('token', '192.168.1.100');
 
-      const callArgs = mockFetch.mock.calls[0];
+      const callArgs = mockFetch.mock.calls[0]!;
       expect(callArgs[1].body.toString()).toContain('remoteip=192.168.1.100');
     });
 
@@ -247,7 +247,7 @@ describe('contact-api-utils', () => {
 
       await verifyTurnstile('token', 'unknown');
 
-      const callArgs = mockFetch.mock.calls[0];
+      const callArgs = mockFetch.mock.calls[0]!;
       expect(callArgs[1].body.toString()).not.toContain('remoteip');
     });
   });

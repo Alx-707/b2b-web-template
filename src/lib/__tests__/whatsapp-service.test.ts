@@ -96,9 +96,11 @@ describe('WhatsApp Service Module', () => {
   describe('sendWhatsAppMessage', () => {
     it('should send a message using the service singleton', async () => {
       const message = {
+        messaging_product: 'whatsapp' as const,
+        recipient_type: 'individual' as const,
         to: '1234567890',
         type: 'text' as const,
-        text: 'Hello World',
+        text: { body: 'Hello World' },
       };
 
       await sendWhatsAppMessage(message);
@@ -111,9 +113,11 @@ describe('WhatsApp Service Module', () => {
       mockServiceMethods.sendMessage.mockResolvedValue(expectedResponse);
 
       const message = {
+        messaging_product: 'whatsapp' as const,
+        recipient_type: 'individual' as const,
         to: '1234567890',
         type: 'text' as const,
-        text: 'Hello',
+        text: { body: 'Hello' },
       };
 
       const result = await sendWhatsAppMessage(message);

@@ -23,14 +23,16 @@ function createMockRequest(
   body?: Record<string, unknown>,
 ): NextRequest {
   const url = 'http://localhost:3000/api/whatsapp/send';
-  const init: RequestInit = { method };
 
   if (body) {
-    init.body = JSON.stringify(body);
-    init.headers = { 'Content-Type': 'application/json' };
+    return new NextRequest(url, {
+      method,
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
-  return new NextRequest(url, init);
+  return new NextRequest(url, { method });
 }
 
 describe('WhatsApp Send Route', () => {

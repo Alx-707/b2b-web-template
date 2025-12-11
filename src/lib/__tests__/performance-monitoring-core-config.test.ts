@@ -9,6 +9,7 @@ import {
 import {
   generateEnvironmentConfig,
   validateConfig,
+  type PerformanceConfig,
 } from '@/lib/performance-monitoring-types';
 import { PerformanceConfigManager } from '../performance-monitoring-core-config';
 
@@ -52,13 +53,18 @@ vi.mock('@/lib/performance-monitoring-config-modules', () => ({
 }));
 
 const mockDefaultConfig = {
-  reactScan: { enabled: false },
-  bundleAnalyzer: { enabled: false },
-  sizeLimit: { enabled: false, maxSize: 500 },
+  reactScan: {
+    enabled: false,
+    showToolbar: false,
+    trackUnnecessaryRenders: false,
+  },
+  bundleAnalyzer: { enabled: false, openAnalyzer: false },
+  sizeLimit: { enabled: false, limits: {} },
   global: {
     enabled: true,
     dataRetentionTime: 86400000,
     maxMetrics: 1000,
+    enableInProduction: false,
   },
   component: {
     enabled: false,
@@ -76,7 +82,7 @@ const mockDefaultConfig = {
 
 vi.mock('@/lib/performance-monitoring-types', () => ({
   generateEnvironmentConfig: vi.fn(() => ({ ...mockDefaultConfig })),
-  validateConfig: vi.fn(() => ({ isValid: true, errors: [] })),
+  validateConfig: vi.fn(() => ({ isValid: true, errors: [], warnings: [] })),
 }));
 
 describe('performance-monitoring-core-config', () => {
@@ -86,7 +92,11 @@ describe('performance-monitoring-core-config', () => {
     vi.mocked(generateEnvironmentConfig).mockReturnValue({
       ...mockDefaultConfig,
     });
-    vi.mocked(validateConfig).mockReturnValue({ isValid: true, errors: [] });
+    vi.mocked(validateConfig).mockReturnValue({
+      isValid: true,
+      errors: [],
+      warnings: [],
+    });
   });
 
   afterEach(() => {
@@ -103,7 +113,13 @@ describe('performance-monitoring-core-config', () => {
       });
 
       it('should create instance with custom config', () => {
-        const customConfig = { reactScan: { enabled: true } };
+        const customConfig = {
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        } as Partial<PerformanceConfig>;
         const manager = new PerformanceConfigManager(customConfig);
 
         expect(manager).toBeInstanceOf(PerformanceConfigManager);
@@ -114,11 +130,16 @@ describe('performance-monitoring-core-config', () => {
         vi.mocked(validateConfig).mockReturnValueOnce({
           isValid: false,
           errors: ['Invalid config'],
+          warnings: [],
         });
 
         const manager = new PerformanceConfigManager({
-          reactScan: { enabled: true },
-        });
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        } as Partial<PerformanceConfig>);
 
         expect(logger.warn).toHaveBeenCalledWith(
           'Performance monitoring config validation failed',
@@ -143,7 +164,13 @@ describe('performance-monitoring-core-config', () => {
       it('should update configuration', () => {
         const manager = new PerformanceConfigManager();
 
-        manager.updateConfig({ reactScan: { enabled: true } });
+        manager.updateConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        } as Partial<PerformanceConfig>);
 
         expect(manager.getConfig().reactScan.enabled).toBe(true);
       });
@@ -153,9 +180,16 @@ describe('performance-monitoring-core-config', () => {
         vi.mocked(validateConfig).mockReturnValueOnce({
           isValid: false,
           errors: ['Invalid'],
+          warnings: [],
         });
 
-        manager.updateConfig({ reactScan: { enabled: true } });
+        manager.updateConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        } as Partial<PerformanceConfig>);
 
         expect(logger.warn).toHaveBeenCalledWith(
           'Updated performance config validation failed',
@@ -167,7 +201,13 @@ describe('performance-monitoring-core-config', () => {
     describe('resetConfig', () => {
       it('should reset to default configuration', () => {
         const manager = new PerformanceConfigManager();
-        manager.updateConfig({ reactScan: { enabled: true } });
+        manager.updateConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        } as Partial<PerformanceConfig>);
 
         manager.resetConfig();
 
@@ -187,6 +227,7 @@ describe('performance-monitoring-core-config', () => {
         vi.mocked(validateConfig).mockReturnValueOnce({
           isValid: false,
           errors: ['Invalid'],
+          warnings: [],
         });
 
         expect(manager.isConfigValid()).toBe(false);
@@ -223,10 +264,14 @@ describe('performance-monitoring-core-config', () => {
 
       it('should return undefined for missing optional module', () => {
         vi.mocked(generateEnvironmentConfig).mockReturnValue({
-          reactScan: { enabled: false },
-          bundleAnalyzer: { enabled: false },
-          sizeLimit: { enabled: false, maxSize: 500 },
-        });
+          reactScan: {
+            enabled: false,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+          bundleAnalyzer: { enabled: false, openAnalyzer: false },
+          sizeLimit: { enabled: false, limits: {} },
+        } as PerformanceConfig);
 
         const manager = new PerformanceConfigManager();
         const webVitalsConfig = manager.getModuleConfig('webVitals');
@@ -294,6 +339,7 @@ describe('performance-monitoring-core-config', () => {
         vi.mocked(validateConfig).mockReturnValueOnce({
           isValid: false,
           errors: ['Invalid'],
+          warnings: [],
         });
 
         const configJson = JSON.stringify({ invalid: true });
@@ -337,7 +383,7 @@ describe('performance-monitoring-core-config', () => {
           ...mockDefaultConfig,
           component: { enabled: true, thresholds: { renderTime: 100 } },
           network: { enabled: true, thresholds: { responseTime: 200 } },
-        });
+        } as PerformanceConfig);
 
         const manager = new PerformanceConfigManager();
         const summary = manager.getConfigSummary();
@@ -348,10 +394,14 @@ describe('performance-monitoring-core-config', () => {
 
       it('should use defaults when global config missing', () => {
         vi.mocked(generateEnvironmentConfig).mockReturnValue({
-          reactScan: { enabled: false },
-          bundleAnalyzer: { enabled: false },
-          sizeLimit: { enabled: false, maxSize: 500 },
-        });
+          reactScan: {
+            enabled: false,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+          bundleAnalyzer: { enabled: false, openAnalyzer: false },
+          sizeLimit: { enabled: false, limits: {} },
+        } as PerformanceConfig);
 
         const manager = new PerformanceConfigManager();
         const summary = manager.getConfigSummary();
@@ -365,7 +415,7 @@ describe('performance-monitoring-core-config', () => {
     describe('compareConfigs', () => {
       it('should compare configurations', () => {
         const manager = new PerformanceConfigManager();
-        const otherConfig = { ...mockDefaultConfig };
+        const otherConfig = { ...mockDefaultConfig } as PerformanceConfig;
 
         const result = manager.compareConfigs(otherConfig);
 
@@ -383,7 +433,7 @@ describe('performance-monitoring-core-config', () => {
         });
 
         const manager = new PerformanceConfigManager();
-        const otherConfig = { ...mockDefaultConfig };
+        const otherConfig = { ...mockDefaultConfig } as PerformanceConfig;
 
         const result = manager.compareConfigs(otherConfig);
 
@@ -443,9 +493,16 @@ describe('performance-monitoring-core-config', () => {
       it('should merge configurations correctly', () => {
         const manager = new PerformanceConfigManager();
 
-        const merged = manager.mergeConfig(mockDefaultConfig, {
-          reactScan: { enabled: true },
-        });
+        const merged = manager.mergeConfig(
+          mockDefaultConfig as PerformanceConfig,
+          {
+            reactScan: {
+              enabled: true,
+              showToolbar: false,
+              trackUnnecessaryRenders: false,
+            },
+          } as Partial<PerformanceConfig>,
+        );
 
         expect(merged.reactScan.enabled).toBe(true);
         expect(merged.bundleAnalyzer).toEqual(mockDefaultConfig.bundleAnalyzer);
@@ -455,12 +512,12 @@ describe('performance-monitoring-core-config', () => {
         const manager = new PerformanceConfigManager();
         const configWithWebVitals = {
           ...mockDefaultConfig,
-          webVitals: { enabled: false },
-        };
+          webVitals: { enabled: false, reportToAnalytics: false },
+        } as PerformanceConfig;
 
         const merged = manager.mergeConfig(configWithWebVitals, {
-          webVitals: { enabled: true },
-        });
+          webVitals: { enabled: true, reportToAnalytics: false },
+        } as Partial<PerformanceConfig>);
 
         // The mergeConfig method merges webVitals when the default has it
         expect(merged.webVitals?.enabled).toBe(true);
@@ -470,12 +527,20 @@ describe('performance-monitoring-core-config', () => {
         const manager = new PerformanceConfigManager();
         const configWithWebVitals = {
           ...mockDefaultConfig,
-          webVitals: { enabled: true, thresholds: {} },
-        };
+          webVitals: {
+            enabled: true,
+            reportToAnalytics: false,
+            thresholds: {},
+          },
+        } as PerformanceConfig;
 
         const merged = manager.mergeConfig(configWithWebVitals, {
-          reactScan: { enabled: true },
-        });
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        } as Partial<PerformanceConfig>);
 
         expect(merged.webVitals).toEqual(configWithWebVitals.webVitals);
       });

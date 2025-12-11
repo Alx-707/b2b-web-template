@@ -101,9 +101,9 @@ describe('EventCollector', () => {
 
       const events = collector.getEvents();
       expect(events).toHaveLength(1);
-      expect(events[0].id).toBeDefined();
-      expect(events[0].timestamp).toBeDefined();
-      expect(events[0].type).toBe(MonitoringEventType.TRANSLATION_MISSING);
+      expect(events[0]!.id).toBeDefined();
+      expect(events[0]!.timestamp).toBeDefined();
+      expect(events[0]!.type).toBe(MonitoringEventType.TRANSLATION_MISSING);
     });
 
     it('should not add event when collector is disabled', () => {
@@ -133,7 +133,7 @@ describe('EventCollector', () => {
       });
 
       const events = collector.getEvents();
-      expect(events[0].userAgent).toBe(mockUserAgent);
+      expect(events[0]!.userAgent).toBe(mockUserAgent);
 
       vi.unstubAllGlobals();
     });
@@ -150,7 +150,7 @@ describe('EventCollector', () => {
       });
 
       const events = collector.getEvents();
-      expect(events[0].url).toBe(mockUrl);
+      expect(events[0]!.url).toBe(mockUrl);
 
       vi.unstubAllGlobals();
     });
@@ -231,8 +231,8 @@ describe('EventCollector', () => {
 
       const events = smallCollector.getEvents();
       expect(events).toHaveLength(3);
-      expect(events[0].message).toBe('Event 2');
-      expect(events[2].message).toBe('Event 4');
+      expect(events[0]!.message).toBe('Event 2');
+      expect(events[2]!.message).toBe('Event 4');
     });
 
     it('should send critical events immediately', async () => {
@@ -522,7 +522,7 @@ describe('EventCollector', () => {
       });
 
       const events = collector.getEvents();
-      expect(events[0].id).not.toBe(events[1].id);
+      expect(events[0]!.id).not.toBe(events[1]!.id);
     });
 
     it('should generate ids with timestamp prefix', () => {
@@ -537,7 +537,7 @@ describe('EventCollector', () => {
       });
 
       const events = collector.getEvents();
-      expect(events[0].id).toMatch(/^\d+-/);
+      expect(events[0]!.id).toMatch(/^\d+-/);
     });
   });
 });

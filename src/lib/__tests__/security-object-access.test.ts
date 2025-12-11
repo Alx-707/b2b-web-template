@@ -394,7 +394,7 @@ describe('security-object-access', () => {
 
       expect(result.a).toBe(1);
       expect(result.b).toBe(3);
-      expect(result.c).toBe(4);
+      expect((result as Record<string, unknown>).c).toBe(4);
     });
 
     it('should not merge disallowed keys', () => {
@@ -405,7 +405,7 @@ describe('security-object-access', () => {
       const result = safeMergeObjects(target, source, allowedKeys);
 
       expect(result.a).toBe(1);
-      expect(result.b).toBe(2);
+      expect((result as Record<string, unknown>).b).toBe(2);
       expect((result as Record<string, unknown>).secret).toBeUndefined();
     });
 
@@ -417,7 +417,7 @@ describe('security-object-access', () => {
       const result = safeMergeObjects(target, source, allowedKeys);
 
       expect(result.a).toBe(1);
-      expect(result.b).toBe(2);
+      expect((result as Record<string, unknown>).b).toBe(2);
     });
 
     it('should preserve target properties', () => {

@@ -24,6 +24,25 @@ function createMockVitals(
     cls: 0.05,
     fcp: 1500,
     ttfb: 600,
+    domContentLoaded: 1000,
+    loadComplete: 3000,
+    firstPaint: 800,
+    resourceTiming: {
+      totalResources: 10,
+      slowResources: [],
+      totalSize: 100000,
+      totalDuration: 1500,
+    },
+    device: {
+      userAgent: 'TestAgent',
+      viewport: { width: 1920, height: 1080 },
+    },
+    page: {
+      url: '/test',
+      referrer: '',
+      title: 'Test Page',
+      timestamp: Date.now(),
+    },
     ...overrides,
   };
 }
@@ -121,15 +140,19 @@ describe('generateRecommendations', () => {
   });
 
   it('handles undefined metrics', () => {
-    const vitals = createMockVitals({
-      lcp: undefined,
-      fid: undefined,
-      cls: undefined,
-      fcp: undefined,
-      ttfb: undefined,
-    });
+    const vitals = {
+      ...createMockVitals(),
+    };
+    // Remove optional metrics to test undefined handling
+    delete (vitals as { lcp?: number }).lcp;
+    delete (vitals as { fid?: number }).fid;
+    delete (vitals as { cls?: number }).cls;
+    delete (vitals as { fcp?: number }).fcp;
+    delete (vitals as { ttfb?: number }).ttfb;
 
-    const recommendations = generateRecommendations(vitals);
+    const recommendations = generateRecommendations(
+      vitals as DetailedWebVitals,
+    );
 
     expect(recommendations).toEqual([]);
   });
@@ -288,11 +311,16 @@ describe('comparePagePerformance', () => {
   });
 
   it('handles undefined metrics', () => {
+    const currentVitals = { ...createMockVitals() };
+    const comparedVitals = { ...createMockVitals() };
+    delete (currentVitals as { lcp?: number }).lcp;
+    delete (comparedVitals as { lcp?: number }).lcp;
+
     const current = createMockReport({
-      vitals: createMockVitals({ lcp: undefined }),
+      vitals: currentVitals as DetailedWebVitals,
     });
     const compared = createMockReport({
-      vitals: createMockVitals({ lcp: undefined }),
+      vitals: comparedVitals as DetailedWebVitals,
     });
 
     const comparison = comparePagePerformance(current, compared);
@@ -475,12 +503,13 @@ describe('generateCSVData', () => {
   });
 
   it('handles empty metric values', () => {
+    const vitals = { ...createMockVitals() };
+    delete (vitals as { lcp?: number }).lcp;
+    delete (vitals as { fid?: number }).fid;
+
     const reports = [
       createMockReport({
-        vitals: createMockVitals({
-          lcp: undefined,
-          fid: undefined,
-        }),
+        vitals: vitals as DetailedWebVitals,
       }),
     ];
 

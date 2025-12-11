@@ -121,22 +121,24 @@ describe('useDeferredContent', () => {
   let mockObserve: ReturnType<typeof vi.fn>;
   let mockDisconnect: ReturnType<typeof vi.fn>;
 
-  class MockIntersectionObserver {
-    constructor(callback: (entries: IntersectionObserverEntry[]) => void) {
-      observerCallback = callback;
-    }
-
-    observe = vi.fn();
-    disconnect = vi.fn();
-    unobserve = vi.fn();
-    takeRecords = vi.fn().mockReturnValue([]);
-    root = null;
-    rootMargin = '';
-    thresholds = [];
-  }
-
   beforeEach(() => {
     vi.clearAllMocks();
+    mockObserve = vi.fn();
+    mockDisconnect = vi.fn();
+
+    class MockIntersectionObserver {
+      constructor(callback: (entries: IntersectionObserverEntry[]) => void) {
+        observerCallback = callback;
+      }
+
+      observe = mockObserve;
+      disconnect = mockDisconnect;
+      unobserve = vi.fn();
+      takeRecords = vi.fn().mockReturnValue([]);
+      root = null;
+      rootMargin = '';
+      thresholds = [];
+    }
 
     vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
 

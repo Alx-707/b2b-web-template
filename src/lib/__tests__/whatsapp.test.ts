@@ -168,8 +168,8 @@ describe('whatsapp module', () => {
           components: [],
         });
 
-        const callArg = mockMessages.template.mock.calls[0][0];
-        expect(callArg.components).toBeUndefined();
+        const callArg = mockMessages.template.mock.calls[0]![0];
+        expect(callArg!.components).toBeUndefined();
       });
 
       it('should handle template errors', async () => {
@@ -611,8 +611,8 @@ describe('whatsapp module', () => {
         },
       });
 
-      const callArg = mockMessages.template.mock.calls[0][0];
-      expect(callArg.components).toBeUndefined();
+      const callArg = mockMessages.template.mock.calls[0]![0];
+      expect(callArg!.components).toBeUndefined();
     });
   });
 });

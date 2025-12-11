@@ -161,7 +161,8 @@ describe('PostCard', () => {
     });
 
     it('does not render cover image when post has no coverImage', () => {
-      const post = createMockPost({ coverImage: undefined });
+      const { coverImage: _coverImage, ...postWithoutCover } = createMockPost();
+      const post: PostSummary = postWithoutCover;
       render(
         <PostCard
           post={post}
@@ -211,7 +212,8 @@ describe('PostCard', () => {
     });
 
     it('does not render tags when post has no tags', () => {
-      const post = createMockPost({ tags: undefined });
+      const { tags: _tags, ...postWithoutTags } = createMockPost();
+      const post: PostSummary = postWithoutTags;
       render(
         <PostCard
           post={post}
@@ -282,7 +284,9 @@ describe('PostCard', () => {
     });
 
     it('does not render reading time when undefined', () => {
-      const post = createMockPost({ readingTime: undefined });
+      const { readingTime: _readingTime, ...postWithoutReadingTime } =
+        createMockPost();
+      const post: PostSummary = postWithoutReadingTime;
       render(
         <PostCard
           post={post}
@@ -342,20 +346,23 @@ describe('PostCard', () => {
     });
 
     it('shows excerpt when description is undefined', () => {
-      const post = createMockPost({
-        description: undefined,
+      const { description: _description, ...postBase } = createMockPost();
+      const post: PostSummary = {
+        ...postBase,
         excerpt: 'Excerpt text',
-      });
+      };
       render(<PostCard post={post} />);
 
       expect(screen.getByText('Excerpt text')).toBeInTheDocument();
     });
 
     it('shows nothing when both are undefined', () => {
-      const post = createMockPost({
-        description: undefined,
-        excerpt: undefined,
-      });
+      const {
+        description: _desc,
+        excerpt: _excerpt,
+        ...postBase
+      } = createMockPost();
+      const post: PostSummary = postBase;
       render(<PostCard post={post} />);
 
       // Card content should not render description/excerpt section

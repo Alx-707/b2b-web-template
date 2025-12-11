@@ -442,8 +442,8 @@ describe('performance-monitoring-core-conflicts', () => {
         ]);
 
         expect(plans).toHaveLength(1);
-        expect(plans[0].priority).toBe('high');
-        expect(plans[0].actions.length).toBeGreaterThan(0);
+        expect(plans[0]!.priority).toBe('high');
+        expect(plans[0]!.actions.length).toBeGreaterThan(0);
       });
 
       it('should generate high priority plan for APM tool conflicts', () => {
@@ -451,7 +451,7 @@ describe('performance-monitoring-core-conflicts', () => {
 
         const plans = checker.generateResolutionPlan(['多个APM工具可能冲突']);
 
-        expect(plans[0].priority).toBe('high');
+        expect(plans[0]!.priority).toBe('high');
       });
 
       it('should generate medium priority plan for multiple tools', () => {
@@ -459,7 +459,7 @@ describe('performance-monitoring-core-conflicts', () => {
 
         const plans = checker.generateResolutionPlan(['检测到多个工具在监听']);
 
-        expect(plans[0].priority).toBe('medium');
+        expect(plans[0]!.priority).toBe('medium');
       });
 
       it('should generate low priority plan for other conflicts', () => {
@@ -467,7 +467,7 @@ describe('performance-monitoring-core-conflicts', () => {
 
         const plans = checker.generateResolutionPlan(['一般性冲突']);
 
-        expect(plans[0].priority).toBe('low');
+        expect(plans[0]!.priority).toBe('low');
       });
 
       it('should return empty array for no conflicts', () => {

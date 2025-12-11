@@ -41,18 +41,20 @@ vi.mock('@/components/products/product-card', () => ({
 function createMockProduct(
   overrides: Partial<ProductSummary> = {},
 ): ProductSummary {
-  return {
+  const base: ProductSummary = {
     slug: 'test-product',
+    locale: 'en',
     title: 'Test Product',
     description: 'A test product description',
     coverImage: '/images/test-product.jpg',
     category: 'Test Category',
     featured: false,
+    publishedAt: '2024-01-01',
     moq: '100 units',
     leadTime: '7-14 days',
     supplyCapacity: '10000/month',
-    ...overrides,
   };
+  return { ...base, ...overrides };
 }
 
 describe('ProductGrid', () => {

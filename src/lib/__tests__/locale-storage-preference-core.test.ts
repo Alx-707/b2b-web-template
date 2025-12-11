@@ -372,12 +372,12 @@ describe('locale-storage-preference-core', () => {
       const result = getPreferenceSourcePriority();
 
       expect(result).toHaveLength(3);
-      expect(result[0].source).toBe('localStorage');
-      expect(result[0].priority).toBe(1);
-      expect(result[1].source).toBe('cookies');
-      expect(result[1].priority).toBe(2);
-      expect(result[2].source).toBe('default');
-      expect(result[2].priority).toBe(3);
+      expect(result[0]!.source).toBe('localStorage');
+      expect(result[0]!.priority).toBe(1);
+      expect(result[1]!.source).toBe('cookies');
+      expect(result[1]!.priority).toBe(2);
+      expect(result[2]!.source).toBe('default');
+      expect(result[2]!.priority).toBe(3);
     });
 
     it('should mark unavailable sources', () => {
@@ -386,9 +386,9 @@ describe('locale-storage-preference-core', () => {
 
       const result = getPreferenceSourcePriority();
 
-      expect(result[0].available).toBe(false);
-      expect(result[1].available).toBe(false);
-      expect(result[2].available).toBe(true);
+      expect(result[0]!.available).toBe(false);
+      expect(result[1]!.available).toBe(false);
+      expect(result[2]!.available).toBe(true);
     });
   });
 

@@ -11,6 +11,7 @@ function createMockDocument() {
     set cookie(value: string) {
       // Parse incoming cookie string
       const [nameValue] = value.split(';');
+      if (!nameValue) return;
       const [name, val] = nameValue.split('=');
 
       // Handle deletion (expires in past)
@@ -85,9 +86,9 @@ describe('CookieManager', () => {
     it('should set cookie with custom options', () => {
       CookieManager.set('key', 'value', {
         maxAge: 3600,
-        sameSite: 'strict',
+        sameSite: 'strict' as 'lax',
         secure: true,
-        path: '/test',
+        path: '/test' as '/',
       });
       expect(mockDoc.cookie).toContain('key=value');
     });
@@ -325,8 +326,8 @@ describe('CookieManager', () => {
         expiryDays: 1,
         options: {
           secure: true,
-          sameSite: 'strict',
-          path: '/custom',
+          sameSite: 'strict' as 'lax',
+          path: '/custom' as '/',
         },
       });
 
@@ -368,14 +369,16 @@ describe('CookieManager', () => {
         });
 
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'development';
+      vi.stubEnv('NODE_ENV', 'development');
 
       const result = CookieManager.getExpiry('key');
 
       expect(result).toBeNull();
       expect(consoleWarnSpy).toHaveBeenCalled();
 
-      process.env.NODE_ENV = originalEnv;
+      if (originalEnv) {
+        vi.stubEnv('NODE_ENV', originalEnv);
+      }
       consoleWarnSpy.mockRestore();
     });
 
@@ -387,14 +390,16 @@ describe('CookieManager', () => {
         });
 
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'production';
+      vi.stubEnv('NODE_ENV', 'production');
 
       const result = CookieManager.getExpiry('key');
 
       expect(result).toBeNull();
       expect(consoleWarnSpy).not.toHaveBeenCalled();
 
-      process.env.NODE_ENV = originalEnv;
+      if (originalEnv) {
+        vi.stubEnv('NODE_ENV', originalEnv);
+      }
       consoleWarnSpy.mockRestore();
     });
   });

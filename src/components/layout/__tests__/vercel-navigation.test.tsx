@@ -290,7 +290,7 @@ describe('VercelNavigation', () => {
     it('opens dropdown after hover delay', () => {
       render(<VercelNavigation />);
 
-      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1];
+      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1]!;
       fireEvent.mouseEnter(dropdownItem);
 
       // Before delay, not expanded
@@ -307,7 +307,7 @@ describe('VercelNavigation', () => {
     it('closes dropdown after mouse leave delay', () => {
       render(<VercelNavigation />);
 
-      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1];
+      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1]!;
 
       // Open dropdown
       fireEvent.mouseEnter(dropdownItem);
@@ -332,7 +332,7 @@ describe('VercelNavigation', () => {
     it('cancels close timer when re-entering', () => {
       render(<VercelNavigation />);
 
-      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1];
+      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1]!;
 
       // Open dropdown
       fireEvent.mouseEnter(dropdownItem);
@@ -414,7 +414,7 @@ describe('VercelNavigation', () => {
     it('cleans up timers on unmount', () => {
       const { unmount } = render(<VercelNavigation />);
 
-      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1];
+      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1]!;
       fireEvent.mouseEnter(dropdownItem);
 
       // Unmount before timer fires

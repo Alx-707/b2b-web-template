@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getDetectionHistory } from '@/lib/locale-storage-history-core';
+import type {
+  LocaleDetectionHistory,
+  StorageOperationResult,
+} from '@/lib/locale-storage-types';
 import {
   getDetectionsByConfidence,
   getDetectionsByLocale,
@@ -23,14 +27,22 @@ vi.mock('@/lib/locale-storage-history-core', () => ({
 function createMockHistory(
   records: Array<{
     locale: 'en' | 'zh';
-    source: string;
+    source:
+      | 'user'
+      | 'geo'
+      | 'browser'
+      | 'default'
+      | 'auto'
+      | 'fallback'
+      | 'user_override';
     timestamp: number;
     confidence: number;
     metadata?: Record<string, unknown>;
   }>,
-) {
+): StorageOperationResult<LocaleDetectionHistory> {
   return {
     success: true,
+    timestamp: Date.now(),
     data: {
       detections: [],
       history: records.map((r) => ({
@@ -51,31 +63,31 @@ describe('locale-storage-history-query', () => {
   const mockRecords = [
     {
       locale: 'en' as const,
-      source: 'browser',
+      source: 'browser' as const,
       timestamp: now,
       confidence: 0.9,
     },
     {
       locale: 'zh' as const,
-      source: 'geo',
+      source: 'geo' as const,
       timestamp: now - 1000,
       confidence: 0.8,
     },
     {
       locale: 'en' as const,
-      source: 'browser',
+      source: 'browser' as const,
       timestamp: now - 2000,
       confidence: 0.7,
     },
     {
       locale: 'zh' as const,
-      source: 'browser',
+      source: 'browser' as const,
       timestamp: now - 3000,
       confidence: 0.6,
     },
     {
       locale: 'en' as const,
-      source: 'geo',
+      source: 'geo' as const,
       timestamp: now - 4000,
       confidence: 0.5,
     },
@@ -107,6 +119,7 @@ describe('locale-storage-history-query', () => {
       vi.mocked(getDetectionHistory).mockReturnValue({
         success: false,
         error: 'No data',
+        timestamp: Date.now(),
       });
       const result = getRecentDetections();
       expect(result).toEqual([]);
@@ -185,9 +198,11 @@ describe('locale-storage-history-query', () => {
 
     it('should sort by timestamp ascending', () => {
       const result = queryDetections({ sortBy: 'timestamp', sortOrder: 'asc' });
-      expect(result.records[0].timestamp).toBeLessThan(
-        result.records[1].timestamp,
-      );
+      const first = result.records[0];
+      const second = result.records[1];
+      if (first && second) {
+        expect(first.timestamp).toBeLessThan(second.timestamp);
+      }
     });
 
     it('should sort by confidence descending', () => {
@@ -195,9 +210,11 @@ describe('locale-storage-history-query', () => {
         sortBy: 'confidence',
         sortOrder: 'desc',
       });
-      expect(result.records[0].confidence).toBeGreaterThanOrEqual(
-        result.records[1].confidence,
-      );
+      const first = result.records[0];
+      const second = result.records[1];
+      if (first && second) {
+        expect(first.confidence).toBeGreaterThanOrEqual(second.confidence);
+      }
     });
 
     it('should paginate results', () => {
@@ -277,19 +294,27 @@ describe('locale-storage-history-query', () => {
     it('should calculate count and percentage', () => {
       const result = getLocaleGroupStats();
       const enStat = result.find((s) => s.locale === 'en');
-      expect(enStat?.count).toBe(3);
-      expect(enStat?.percentage).toBe(60);
+      if (enStat) {
+        expect(enStat.count).toBe(3);
+        expect(enStat.percentage).toBe(60);
+      }
     });
 
     it('should calculate average confidence', () => {
       const result = getLocaleGroupStats();
       const enStat = result.find((s) => s.locale === 'en');
-      expect(enStat?.avgConfidence).toBeCloseTo((0.9 + 0.7 + 0.5) / 3);
+      if (enStat) {
+        expect(enStat.avgConfidence).toBeCloseTo((0.9 + 0.7 + 0.5) / 3);
+      }
     });
 
     it('should sort by count descending', () => {
       const result = getLocaleGroupStats();
-      expect(result[0].count).toBeGreaterThanOrEqual(result[1].count);
+      const first = result[0];
+      const second = result[1];
+      if (first && second) {
+        expect(first.count).toBeGreaterThanOrEqual(second.count);
+      }
     });
   });
 

@@ -40,7 +40,6 @@ describe('GlobalError', () => {
   const mockReset = vi.fn();
   const mockError = new Error('Test error message');
 
-  const originalEnv = process.env.NODE_ENV;
   const originalLocation = window.location;
 
   beforeEach(() => {
@@ -59,7 +58,7 @@ describe('GlobalError', () => {
       writable: true,
       value: originalLocation,
     });
-    process.env.NODE_ENV = originalEnv;
+    vi.unstubAllEnvs();
   });
 
   describe('rendering', () => {
@@ -190,7 +189,7 @@ describe('GlobalError', () => {
 
   describe('development mode', () => {
     beforeEach(() => {
-      process.env.NODE_ENV = 'development';
+      vi.stubEnv('NODE_ENV', 'development');
     });
 
     it('should show error details in development mode', () => {

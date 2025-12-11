@@ -69,11 +69,11 @@ describe('security-tokens', () => {
       const uuid = generateUUID();
       const parts = uuid.split('-');
       expect(parts.length).toBe(5);
-      expect(parts[0].length).toBe(8);
-      expect(parts[1].length).toBe(4);
-      expect(parts[2].length).toBe(4);
-      expect(parts[3].length).toBe(4);
-      expect(parts[4].length).toBe(12);
+      expect(parts[0]!.length).toBe(8);
+      expect(parts[1]!.length).toBe(4);
+      expect(parts[2]!.length).toBe(4);
+      expect(parts[3]!.length).toBe(4);
+      expect(parts[4]!.length).toBe(12);
     });
 
     it('should have version 4 indicator', () => {

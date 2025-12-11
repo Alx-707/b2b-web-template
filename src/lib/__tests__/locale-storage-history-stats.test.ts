@@ -21,14 +21,21 @@ vi.mock('@/lib/locale-storage-history-query', () => ({
 function createHistoryRecord(
   overrides: Partial<{
     locale: 'en' | 'zh';
-    source: string;
+    source:
+      | 'browser'
+      | 'cookie'
+      | 'user'
+      | 'geo'
+      | 'header'
+      | 'url'
+      | 'default';
     confidence: number;
     timestamp: number;
   }> = {},
 ) {
   return {
     locale: 'en' as const,
-    source: 'browser',
+    source: 'browser' as const,
     confidence: 0.9,
     timestamp: Date.now(),
     ...overrides,
@@ -39,8 +46,20 @@ function mockHistorySuccess(records: ReturnType<typeof createHistoryRecord>[]) {
   vi.mocked(getDetectionHistory).mockReturnValue({
     success: true,
     data: {
-      history: records,
+      detections: [],
+      history: records.map((r) => ({
+        ...r,
+        source: r.source as
+          | 'browser'
+          | 'geo'
+          | 'user'
+          | 'default'
+          | 'auto'
+          | 'fallback'
+          | 'user_override',
+      })),
       lastUpdated: Date.now(),
+      totalDetections: records.length,
     },
     timestamp: Date.now(),
   });
@@ -298,7 +317,7 @@ describe('locale-storage-history-stats', () => {
       const dates = trends.dailyDetections.map((d) => d.date);
 
       for (let i = 1; i < dates.length; i++) {
-        expect(dates[i] >= dates[i - 1]).toBe(true);
+        expect(dates[i]! >= dates[i - 1]!).toBe(true);
       }
     });
 
@@ -706,10 +725,15 @@ describe('locale-storage-history-stats', () => {
           source: 'browser',
           avgConfidence: 0.9,
           count: 10,
-          locales: ['en', 'zh'],
         },
-        { source: 'cookie', avgConfidence: 0.8, count: 5, locales: ['en'] },
-      ]);
+        { source: 'cookie', avgConfidence: 0.8, count: 5 },
+      ] as Array<{
+        source: string;
+        count: number;
+        percentage: number;
+        avgConfidence: number;
+        lastDetection: number;
+      }>);
 
       mockHistorySuccess([createHistoryRecord()]);
 

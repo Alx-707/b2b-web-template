@@ -28,8 +28,8 @@ describe('security-crypto', () => {
       expect(hash).toContain(':');
 
       const [saltHex, hashHex] = hash.split(':');
-      expect(saltHex.length).toBe(32); // 16 bytes = 32 hex chars
-      expect(hashHex.length).toBe(64); // SHA-256 = 64 hex chars
+      expect(saltHex!.length).toBe(32); // 16 bytes = 32 hex chars
+      expect(hashHex!.length).toBe(64); // SHA-256 = 64 hex chars
     });
 
     it('should hash password with provided salt', async () => {

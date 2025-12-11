@@ -12,13 +12,18 @@ function createBaseConfig(
   overrides?: Partial<PerformanceConfig>,
 ): PerformanceConfig {
   return {
-    reactScan: { enabled: false },
-    bundleAnalyzer: { enabled: false },
-    sizeLimit: { enabled: false, maxSize: 500 },
+    reactScan: {
+      enabled: false,
+      showToolbar: false,
+      trackUnnecessaryRenders: false,
+    },
+    bundleAnalyzer: { enabled: false, openAnalyzer: false },
+    sizeLimit: { enabled: false, limits: {} },
     global: {
       enabled: true,
       dataRetentionTime: 300000,
       maxMetrics: 100,
+      enableInProduction: false,
     },
     component: {
       enabled: true,
@@ -51,7 +56,12 @@ describe('performance-monitoring-config-compare', () => {
     it('should detect global.enabled difference', () => {
       const config1 = createBaseConfig();
       const config2 = createBaseConfig({
-        global: { enabled: false, dataRetentionTime: 300000, maxMetrics: 100 },
+        global: {
+          enabled: false,
+          dataRetentionTime: 300000,
+          maxMetrics: 100,
+          enableInProduction: false,
+        },
       });
       const differences: string[] = [];
 
@@ -63,7 +73,12 @@ describe('performance-monitoring-config-compare', () => {
     it('should detect global.dataRetentionTime difference', () => {
       const config1 = createBaseConfig();
       const config2 = createBaseConfig({
-        global: { enabled: true, dataRetentionTime: 600000, maxMetrics: 100 },
+        global: {
+          enabled: true,
+          dataRetentionTime: 600000,
+          maxMetrics: 100,
+          enableInProduction: false,
+        },
       });
       const differences: string[] = [];
 
@@ -75,7 +90,12 @@ describe('performance-monitoring-config-compare', () => {
     it('should detect global.maxMetrics difference', () => {
       const config1 = createBaseConfig();
       const config2 = createBaseConfig({
-        global: { enabled: true, dataRetentionTime: 300000, maxMetrics: 200 },
+        global: {
+          enabled: true,
+          dataRetentionTime: 300000,
+          maxMetrics: 200,
+          enableInProduction: false,
+        },
       });
       const differences: string[] = [];
 
@@ -87,7 +107,12 @@ describe('performance-monitoring-config-compare', () => {
     it('should detect multiple global differences', () => {
       const config1 = createBaseConfig();
       const config2 = createBaseConfig({
-        global: { enabled: false, dataRetentionTime: 600000, maxMetrics: 200 },
+        global: {
+          enabled: false,
+          dataRetentionTime: 600000,
+          maxMetrics: 200,
+          enableInProduction: false,
+        },
       });
       const differences: string[] = [];
 
@@ -103,7 +128,7 @@ describe('performance-monitoring-config-compare', () => {
       const config2 = {
         ...createBaseConfig(),
         global: undefined,
-      } as PerformanceConfig;
+      } as unknown as PerformanceConfig;
       const differences: string[] = [];
 
       compareGlobalConfig(config1, config2, differences);
@@ -152,7 +177,7 @@ describe('performance-monitoring-config-compare', () => {
       const config2 = {
         ...createBaseConfig(),
         component: undefined,
-      } as PerformanceConfig;
+      } as unknown as PerformanceConfig;
       const differences: string[] = [];
 
       compareComponentConfig(config1, config2, differences);
@@ -201,7 +226,7 @@ describe('performance-monitoring-config-compare', () => {
       const config2 = {
         ...createBaseConfig(),
         network: undefined,
-      } as PerformanceConfig;
+      } as unknown as PerformanceConfig;
       const differences: string[] = [];
 
       compareNetworkConfig(config1, config2, differences);
@@ -250,7 +275,7 @@ describe('performance-monitoring-config-compare', () => {
       const config2 = {
         ...createBaseConfig(),
         bundle: undefined,
-      } as PerformanceConfig;
+      } as unknown as PerformanceConfig;
       const differences: string[] = [];
 
       compareBundleConfig(config1, config2, differences);

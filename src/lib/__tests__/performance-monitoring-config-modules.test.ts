@@ -13,13 +13,18 @@ function createBaseConfig(
   overrides?: Partial<PerformanceConfig>,
 ): PerformanceConfig {
   return {
-    reactScan: { enabled: false },
-    bundleAnalyzer: { enabled: false },
-    sizeLimit: { enabled: false, maxSize: 500 },
+    reactScan: {
+      enabled: false,
+      showToolbar: false,
+      trackUnnecessaryRenders: false,
+    },
+    bundleAnalyzer: { enabled: false, openAnalyzer: false },
+    sizeLimit: { enabled: false, limits: {} },
     global: {
       enabled: true,
       dataRetentionTime: 300000,
       maxMetrics: 100,
+      enableInProduction: false,
     },
     component: {
       enabled: true,
@@ -36,6 +41,7 @@ function createBaseConfig(
     webVitals: {
       enabled: true,
       reportAllChanges: false,
+      reportToAnalytics: false,
     },
     debug: true,
     ...overrides,
@@ -45,29 +51,41 @@ function createBaseConfig(
 describe('performance-monitoring-config-modules', () => {
   describe('getPrimaryModuleConfig', () => {
     it('should return reactScan config', () => {
-      const config = createBaseConfig({ reactScan: { enabled: true } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
 
       const result = getPrimaryModuleConfig(config, 'reactScan');
 
-      expect(result).toEqual({ enabled: true });
+      expect(result).toEqual({
+        enabled: true,
+        showToolbar: false,
+        trackUnnecessaryRenders: false,
+      });
     });
 
     it('should return bundleAnalyzer config', () => {
-      const config = createBaseConfig({ bundleAnalyzer: { enabled: true } });
+      const config = createBaseConfig({
+        bundleAnalyzer: { enabled: true, openAnalyzer: false },
+      });
 
       const result = getPrimaryModuleConfig(config, 'bundleAnalyzer');
 
-      expect(result).toEqual({ enabled: true });
+      expect(result).toEqual({ enabled: true, openAnalyzer: false });
     });
 
     it('should return sizeLimit config', () => {
       const config = createBaseConfig({
-        sizeLimit: { enabled: true, maxSize: 600 },
+        sizeLimit: { enabled: true, limits: { main: 600 } },
       });
 
       const result = getPrimaryModuleConfig(config, 'sizeLimit');
 
-      expect(result).toEqual({ enabled: true, maxSize: 600 });
+      expect(result).toEqual({ enabled: true, limits: { main: 600 } });
     });
 
     it('should return undefined for non-primary modules', () => {
@@ -79,7 +97,13 @@ describe('performance-monitoring-config-modules', () => {
     });
 
     it('should return a copy of the config', () => {
-      const config = createBaseConfig({ reactScan: { enabled: false } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: false,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
 
       const result = getPrimaryModuleConfig(config, 'reactScan');
       if (result && 'enabled' in result) {
@@ -93,12 +117,20 @@ describe('performance-monitoring-config-modules', () => {
   describe('getOptionalModuleConfig', () => {
     it('should return webVitals config', () => {
       const config = createBaseConfig({
-        webVitals: { enabled: true, reportAllChanges: true },
+        webVitals: {
+          enabled: true,
+          reportAllChanges: true,
+          reportToAnalytics: false,
+        },
       });
 
       const result = getOptionalModuleConfig(config, 'webVitals');
 
-      expect(result).toEqual({ enabled: true, reportAllChanges: true });
+      expect(result).toEqual({
+        enabled: true,
+        reportAllChanges: true,
+        reportToAnalytics: false,
+      });
     });
 
     it('should return component config', () => {
@@ -140,6 +172,7 @@ describe('performance-monitoring-config-modules', () => {
         enabled: true,
         dataRetentionTime: 300000,
         maxMetrics: 100,
+        enableInProduction: false,
       });
     });
 

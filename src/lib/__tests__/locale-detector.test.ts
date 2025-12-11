@@ -903,7 +903,9 @@ describe('SmartLocaleDetector - Additional Methods', () => {
   describe('detectBestLocale', () => {
     it('should return stored preference first', async () => {
       mockStorageManager.getUserPreference.mockReturnValue({
-        locale: 'zh',
+        locale: 'zh' as const,
+        source: 'user' as const,
+        timestamp: Date.now(),
         confidence: 0.9,
       });
 

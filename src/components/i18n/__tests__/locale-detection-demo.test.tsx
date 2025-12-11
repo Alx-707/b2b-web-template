@@ -175,8 +175,8 @@ async function renderWithMicrotask(ui: React.ReactElement) {
   await act(async () => {
     result = render(ui);
     // Wait for queueMicrotask in useEffect to complete
-    await new Promise((resolve) => {
-      queueMicrotask(resolve);
+    await new Promise<void>((resolve) => {
+      queueMicrotask(() => resolve());
     });
   });
   return result!;

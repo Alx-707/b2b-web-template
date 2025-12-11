@@ -16,17 +16,23 @@ function createBaseConfig(
   overrides?: Partial<PerformanceConfig>,
 ): PerformanceConfig {
   return {
-    reactScan: { enabled: false },
-    bundleAnalyzer: { enabled: false },
-    sizeLimit: { enabled: false, maxSize: 500 },
+    reactScan: {
+      enabled: false,
+      showToolbar: false,
+      trackUnnecessaryRenders: false,
+    },
+    bundleAnalyzer: { enabled: false, openAnalyzer: false },
+    sizeLimit: { enabled: false, limits: { main: 500000 } },
     global: {
       enabled: true,
       dataRetentionTime: 300000,
       maxMetrics: 100,
+      enableInProduction: false,
     },
     webVitals: {
       enabled: true,
       reportAllChanges: false,
+      reportToAnalytics: false,
     },
     ...overrides,
   };
@@ -36,16 +42,19 @@ describe('performance-monitoring-integrations-vitals', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.env = { ...originalEnv };
-    process.env.NODE_ENV = 'test';
+    vi.stubEnv('NODE_ENV', 'test');
   });
 
   afterEach(() => {
+    vi.unstubAllEnvs();
     process.env = originalEnv;
   });
 
   describe('useWebVitalsIntegration', () => {
     it('should return integration with enabled status', () => {
-      const config = createBaseConfig({ webVitals: { enabled: true } });
+      const config = createBaseConfig({
+        webVitals: { enabled: true, reportToAnalytics: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useWebVitalsIntegration(config, recordMetric);
@@ -54,7 +63,9 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should return disabled when webVitals is disabled', () => {
-      const config = createBaseConfig({ webVitals: { enabled: false } });
+      const config = createBaseConfig({
+        webVitals: { enabled: false, reportToAnalytics: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useWebVitalsIntegration(config, recordMetric);
@@ -63,7 +74,9 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should record web vital metric', () => {
-      const config = createBaseConfig({ webVitals: { enabled: true } });
+      const config = createBaseConfig({
+        webVitals: { enabled: true, reportToAnalytics: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useWebVitalsIntegration(config, recordMetric);
@@ -83,7 +96,9 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should not record web vital when disabled', () => {
-      const config = createBaseConfig({ webVitals: { enabled: false } });
+      const config = createBaseConfig({
+        webVitals: { enabled: false, reportToAnalytics: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useWebVitalsIntegration(config, recordMetric);
@@ -93,7 +108,9 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should set high priority for poor rating', () => {
-      const config = createBaseConfig({ webVitals: { enabled: true } });
+      const config = createBaseConfig({
+        webVitals: { enabled: true, reportToAnalytics: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useWebVitalsIntegration(config, recordMetric);
@@ -107,7 +124,9 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should record custom metric', () => {
-      const config = createBaseConfig({ webVitals: { enabled: true } });
+      const config = createBaseConfig({
+        webVitals: { enabled: true, reportToAnalytics: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useWebVitalsIntegration(config, recordMetric);
@@ -127,7 +146,9 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should use default unit for custom metric', () => {
-      const config = createBaseConfig({ webVitals: { enabled: true } });
+      const config = createBaseConfig({
+        webVitals: { enabled: true, reportToAnalytics: false },
+      });
       const recordMetric = vi.fn();
 
       const integration = useWebVitalsIntegration(config, recordMetric);
@@ -155,7 +176,7 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should detect test environment', () => {
-      process.env.NODE_ENV = 'test';
+      vi.stubEnv('NODE_ENV', 'test');
       process.env.NEXT_PUBLIC_DISABLE_REACT_SCAN = 'true';
 
       const result = checkEnvironmentCompatibility();
@@ -165,7 +186,7 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should warn when React Scan not disabled in test', () => {
-      process.env.NODE_ENV = 'test';
+      vi.stubEnv('NODE_ENV', 'test');
       delete process.env.NEXT_PUBLIC_DISABLE_REACT_SCAN;
 
       const result = checkEnvironmentCompatibility();
@@ -174,7 +195,7 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should check development environment', () => {
-      process.env.NODE_ENV = 'development';
+      vi.stubEnv('NODE_ENV', 'development');
 
       const result = checkEnvironmentCompatibility();
 
@@ -182,7 +203,7 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should check production environment', () => {
-      process.env.NODE_ENV = 'production';
+      vi.stubEnv('NODE_ENV', 'production');
       process.env.NEXT_PUBLIC_DISABLE_REACT_SCAN = 'true';
 
       const result = checkEnvironmentCompatibility();
@@ -203,7 +224,13 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should check reactScan status', () => {
-      const config = createBaseConfig({ reactScan: { enabled: false } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: false,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
 
       const result = performHealthCheck(config);
 
@@ -220,7 +247,7 @@ describe('performance-monitoring-integrations-vitals', () => {
 
     it('should warn when sizeLimit is disabled', () => {
       const config = createBaseConfig({
-        sizeLimit: { enabled: false, maxSize: 500 },
+        sizeLimit: { enabled: false, limits: { main: 500000 } },
       });
 
       const result = performHealthCheck(config);
@@ -230,7 +257,7 @@ describe('performance-monitoring-integrations-vitals', () => {
 
     it('should be healthy when sizeLimit is enabled', () => {
       const config = createBaseConfig({
-        sizeLimit: { enabled: true, maxSize: 500 },
+        sizeLimit: { enabled: true, limits: { main: 500000 } },
       });
 
       const result = performHealthCheck(config);
@@ -239,8 +266,14 @@ describe('performance-monitoring-integrations-vitals', () => {
     });
 
     it('should warn about React Scan in test environment', () => {
-      process.env.NODE_ENV = 'test';
-      const config = createBaseConfig({ reactScan: { enabled: true } });
+      vi.stubEnv('NODE_ENV', 'test');
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
 
       const result = performHealthCheck(config);
 
@@ -251,7 +284,11 @@ describe('performance-monitoring-integrations-vitals', () => {
   describe('validateWebVitalsConfig', () => {
     it('should return valid for proper config', () => {
       const config = createBaseConfig({
-        webVitals: { enabled: true, reportAllChanges: false },
+        webVitals: {
+          enabled: true,
+          reportAllChanges: false,
+          reportToAnalytics: false,
+        },
       });
 
       const result = validateWebVitalsConfig(config);
@@ -262,7 +299,10 @@ describe('performance-monitoring-integrations-vitals', () => {
 
     it('should error on non-boolean enabled', () => {
       const config = createBaseConfig({
-        webVitals: { enabled: 'yes' as unknown as boolean },
+        webVitals: {
+          enabled: 'yes' as unknown as boolean,
+          reportToAnalytics: false,
+        },
       });
 
       const result = validateWebVitalsConfig(config);
@@ -276,6 +316,7 @@ describe('performance-monitoring-integrations-vitals', () => {
         webVitals: {
           enabled: true,
           reportAllChanges: 'yes' as unknown as boolean,
+          reportToAnalytics: false,
         },
       });
 
@@ -291,6 +332,7 @@ describe('performance-monitoring-integrations-vitals', () => {
         webVitals: {
           enabled: true,
           thresholds: { lcp: -100 },
+          reportToAnalytics: false,
         },
       });
 
@@ -323,7 +365,9 @@ describe('performance-monitoring-integrations-vitals', () => {
 
     describe('recordWebVital', () => {
       it('should record web vital when enabled', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         analyzer.recordWebVital('LCP', 2500, 'good');
@@ -333,7 +377,9 @@ describe('performance-monitoring-integrations-vitals', () => {
       });
 
       it('should not record when disabled', () => {
-        const config = createBaseConfig({ webVitals: { enabled: false } });
+        const config = createBaseConfig({
+          webVitals: { enabled: false, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         analyzer.recordWebVital('LCP', 2500, 'good');
@@ -343,18 +389,22 @@ describe('performance-monitoring-integrations-vitals', () => {
       });
 
       it('should accumulate multiple values', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         analyzer.recordWebVital('LCP', 2500, 'good');
         analyzer.recordWebVital('LCP', 3000, 'needs-improvement');
 
         const report = analyzer.getWebVitalsReport();
-        expect(report.vitals.LCP.average).toBe(2750);
+        expect(report.vitals.LCP!.average).toBe(2750);
       });
 
       it('should limit values array size', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         // Record more than 100 values
@@ -370,7 +420,9 @@ describe('performance-monitoring-integrations-vitals', () => {
 
     describe('recordCustomMetric', () => {
       it('should record custom metric when enabled', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         analyzer.recordCustomMetric('custom', 100, 'ms');
@@ -381,7 +433,9 @@ describe('performance-monitoring-integrations-vitals', () => {
       });
 
       it('should not record when disabled', () => {
-        const config = createBaseConfig({ webVitals: { enabled: false } });
+        const config = createBaseConfig({
+          webVitals: { enabled: false, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         // Should not throw
@@ -392,7 +446,9 @@ describe('performance-monitoring-integrations-vitals', () => {
 
     describe('getWebVitalsReport', () => {
       it('should return report structure', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         const report = analyzer.getWebVitalsReport();
@@ -403,7 +459,9 @@ describe('performance-monitoring-integrations-vitals', () => {
       });
 
       it('should calculate score from ratings', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         analyzer.recordWebVital('LCP', 2500, 'good');
@@ -414,7 +472,9 @@ describe('performance-monitoring-integrations-vitals', () => {
       });
 
       it('should calculate score with mixed ratings', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         analyzer.recordWebVital('LCP', 2500, 'good');
@@ -425,7 +485,9 @@ describe('performance-monitoring-integrations-vitals', () => {
       });
 
       it('should generate recommendations for poor metrics', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         analyzer.recordWebVital('LCP', 5000, 'poor');
@@ -437,7 +499,9 @@ describe('performance-monitoring-integrations-vitals', () => {
       });
 
       it('should detect trend', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         // Record improving trend
@@ -449,14 +513,16 @@ describe('performance-monitoring-integrations-vitals', () => {
         const report = analyzer.getWebVitalsReport();
         // Trend should be improving or stable depending on calculation
         expect(['improving', 'stable', 'degrading']).toContain(
-          report.vitals.LCP.trend,
+          report.vitals.LCP!.trend,
         );
       });
     });
 
     describe('reset', () => {
       it('should clear all data', () => {
-        const config = createBaseConfig({ webVitals: { enabled: true } });
+        const config = createBaseConfig({
+          webVitals: { enabled: true, reportToAnalytics: false },
+        });
         const analyzer = new WebVitalsAnalyzer(config);
 
         analyzer.recordWebVital('LCP', 2500, 'good');

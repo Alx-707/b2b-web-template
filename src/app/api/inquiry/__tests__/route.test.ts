@@ -233,7 +233,7 @@ describe('/api/inquiry route', () => {
 
       await POST(request);
 
-      const callArgs = vi.mocked(processLead).mock.calls[0][0];
+      const callArgs = vi.mocked(processLead).mock.calls[0]![0];
       expect(callArgs).not.toHaveProperty('turnstileToken');
     });
   });

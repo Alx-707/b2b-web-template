@@ -179,8 +179,8 @@ describe('AnimatedSkeleton', () => {
     const { container } = render(<AnimatedSkeleton />);
 
     const skeletons = container.querySelectorAll('.rounded-md');
-    expect(skeletons[0].className).toContain('w-[250px]');
-    expect(skeletons[1].className).toContain('w-[200px]');
-    expect(skeletons[2].className).toContain('w-[150px]');
+    expect(skeletons[0]!.className).toContain('w-[250px]');
+    expect(skeletons[1]!.className).toContain('w-[200px]');
+    expect(skeletons[2]!.className).toContain('w-[150px]');
   });
 });

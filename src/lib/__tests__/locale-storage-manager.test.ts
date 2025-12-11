@@ -148,6 +148,7 @@ describe('LocaleStorageManager', () => {
       vi.mocked(LocalePreferenceManager.getUserPreference).mockReturnValueOnce({
         success: false,
         error: 'Not found',
+        timestamp: Date.now(),
       });
 
       const result = LocaleStorageManager.getUserPreference();
@@ -157,7 +158,7 @@ describe('LocaleStorageManager', () => {
     it('should return null when data is undefined', () => {
       vi.mocked(LocalePreferenceManager.getUserPreference).mockReturnValueOnce({
         success: true,
-        data: undefined,
+        timestamp: Date.now(),
       });
 
       const result = LocaleStorageManager.getUserPreference();
@@ -187,6 +188,7 @@ describe('LocaleStorageManager', () => {
       vi.mocked(LocalePreferenceManager.getUserOverride).mockReturnValueOnce({
         success: false,
         error: 'Not found',
+        timestamp: Date.now(),
       });
 
       const result = LocaleStorageManager.getUserOverride();
@@ -196,7 +198,7 @@ describe('LocaleStorageManager', () => {
     it('should return null when data is undefined', () => {
       vi.mocked(LocalePreferenceManager.getUserOverride).mockReturnValueOnce({
         success: true,
-        data: undefined,
+        timestamp: Date.now(),
       });
 
       const result = LocaleStorageManager.getUserOverride();
@@ -227,6 +229,7 @@ describe('LocaleStorageManager', () => {
       vi.mocked(LocaleHistoryManager.getDetectionHistory).mockReturnValueOnce({
         success: false,
         error: 'Not found',
+        timestamp: Date.now(),
       });
 
       const result = LocaleStorageManager.getDetectionHistory();
@@ -236,7 +239,7 @@ describe('LocaleStorageManager', () => {
     it('should return null when data is falsy', () => {
       vi.mocked(LocaleHistoryManager.getDetectionHistory).mockReturnValueOnce({
         success: true,
-        data: undefined,
+        timestamp: Date.now(),
       });
 
       const result = LocaleStorageManager.getDetectionHistory();
@@ -350,7 +353,8 @@ describe('LocaleStorageManager', () => {
       // Default is 30 days
       const call = vi.mocked(LocaleMaintenanceManager.cleanupExpiredDetections)
         .mock.calls[0];
-      expect(call[0]).toBeGreaterThan(0);
+      expect(call).toBeDefined();
+      expect(call![0]).toBeGreaterThan(0);
     });
 
     it('should delegate to LocaleMaintenanceManager with custom maxAge', () => {
@@ -385,7 +389,12 @@ describe('LocaleStorageManager', () => {
         timestamp: Date.now(),
         confidence: 0.9,
       };
-      const history = { records: [], lastUpdated: Date.now() };
+      const history = {
+        detections: [],
+        history: [],
+        lastUpdated: Date.now(),
+        totalDetections: 0,
+      };
 
       LocaleStorageManager.importData({
         version: '1.0.0',

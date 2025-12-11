@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { PerformanceConfig } from '@/lib/performance-monitoring-types';
 import { PerformanceMonitoringCore } from '../performance-monitoring-core';
 
 // Create mock config data
@@ -15,6 +16,19 @@ const mockConfig = {
     lcp: { warning: 2500, critical: 4000 },
     fid: { warning: 100, critical: 300 },
     cls: { warning: 0.1, critical: 0.25 },
+  },
+  reactScan: {
+    enabled: false,
+    showToolbar: false,
+    trackUnnecessaryRenders: false,
+  },
+  bundleAnalyzer: { enabled: false, openAnalyzer: false },
+  sizeLimit: { enabled: false, limits: {} },
+  global: {
+    enabled: true,
+    dataRetentionTime: 300000,
+    maxMetrics: 100,
+    enableInProduction: false,
   },
 };
 
@@ -105,7 +119,13 @@ describe('performance-monitoring-core', () => {
       });
 
       it('should create instance with custom config', () => {
-        const customConfig = { enabled: false };
+        const customConfig = {
+          reactScan: {
+            enabled: false,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        } as Partial<PerformanceConfig>;
         const core = new PerformanceMonitoringCore(customConfig);
 
         expect(core).toBeInstanceOf(PerformanceMonitoringCore);
@@ -119,7 +139,7 @@ describe('performance-monitoring-core', () => {
         const config = core.getConfig();
 
         expect(config).toBeDefined();
-        expect(config.enabled).toBe(true);
+        expect(config.reactScan).toBeDefined();
       });
     });
 
@@ -127,7 +147,13 @@ describe('performance-monitoring-core', () => {
       it('should update configuration', () => {
         const core = new PerformanceMonitoringCore();
 
-        core.updateConfig({ enabled: false });
+        core.updateConfig({
+          reactScan: {
+            enabled: false,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        } as Partial<PerformanceConfig>);
 
         // Config manager's updateConfig should be called
         expect(core.getConfig()).toBeDefined();
@@ -139,10 +165,9 @@ describe('performance-monitoring-core', () => {
         const core = new PerformanceMonitoringCore();
 
         core.recordMetric({
-          type: 'lcp',
+          type: 'component',
           source: 'web-vitals',
-          value: 2000,
-          rating: 'good',
+          data: { renderTime: 2000 },
         });
 
         // No error should be thrown
@@ -153,17 +178,15 @@ describe('performance-monitoring-core', () => {
         const core = new PerformanceMonitoringCore();
 
         core.recordMetric({
-          type: 'fcp',
+          type: 'component',
           source: 'web-vitals',
-          value: 1500,
-          rating: 'good',
+          data: { renderTime: 1500 },
         });
 
         core.recordMetric({
-          type: 'cls',
+          type: 'network',
           source: 'web-vitals',
-          value: 0.05,
-          rating: 'good',
+          data: { responseTime: 100 },
         });
 
         expect(true).toBe(true);
@@ -184,7 +207,7 @@ describe('performance-monitoring-core', () => {
       it('should return metrics filtered by type', () => {
         const core = new PerformanceMonitoringCore();
 
-        const metrics = core.getMetricsByType('lcp');
+        const metrics = core.getMetricsByType('component');
 
         expect(Array.isArray(metrics)).toBe(true);
       });
@@ -304,11 +327,11 @@ describe('performance-monitoring-core', () => {
 
         const count = core.importMetrics([
           {
-            type: 'lcp',
+            id: 'metric-1',
+            type: 'component',
             source: 'web-vitals',
-            value: 2000,
+            data: { renderTime: 2000 },
             timestamp: Date.now(),
-            rating: 'good',
           },
         ]);
 

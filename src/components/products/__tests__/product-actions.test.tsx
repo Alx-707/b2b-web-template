@@ -237,7 +237,7 @@ describe('ProductActions', () => {
       render(<ProductActions {...defaultProps} />);
 
       const buttons = screen.getAllByRole('button', { name: /Request Quote/i });
-      fireEvent.click(buttons[0]);
+      fireEvent.click(buttons[0]!);
 
       const drawer = screen.getByTestId('inquiry-drawer');
       expect(drawer).toHaveAttribute('data-open', 'true');
@@ -256,7 +256,7 @@ describe('ProductActions', () => {
 
       // Open drawer
       const buttons = screen.getAllByRole('button', { name: /Request Quote/i });
-      fireEvent.click(buttons[0]);
+      fireEvent.click(buttons[0]!);
       expect(screen.getByTestId('inquiry-drawer')).toHaveAttribute(
         'data-open',
         'true',

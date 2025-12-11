@@ -13,13 +13,18 @@ function createTestConfig(
   overrides?: Partial<PerformanceConfig>,
 ): PerformanceConfig {
   return {
-    reactScan: { enabled: false },
-    bundleAnalyzer: { enabled: false },
-    sizeLimit: { enabled: false, maxSize: 500 },
+    reactScan: {
+      enabled: false,
+      showToolbar: false,
+      trackUnnecessaryRenders: false,
+    },
+    bundleAnalyzer: { enabled: false, openAnalyzer: false },
+    sizeLimit: { enabled: false, limits: {} },
     global: {
       enabled: true,
       dataRetentionTime: 300000,
       maxMetrics: 100,
+      enableInProduction: false,
     },
     component: {
       enabled: true,
@@ -427,7 +432,7 @@ describe('performance-monitoring-core-reports', () => {
           report.analysis.componentAnalysis.slowestComponents,
         ).toHaveLength(2);
         expect(
-          report.analysis.componentAnalysis.slowestComponents[0].name,
+          report.analysis.componentAnalysis.slowestComponents[0]!.name,
         ).toBe('slow-2');
       });
 

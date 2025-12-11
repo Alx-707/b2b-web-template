@@ -229,9 +229,9 @@ describe('locale-storage-analytics-events', () => {
         const log = AccessLogger.getAccessLog();
 
         expect(log).toHaveLength(1);
-        expect(log[0].key).toBe('pref');
-        expect(log[0].operation).toBe('read');
-        expect(log[0].success).toBe(true);
+        expect(log[0]!.key).toBe('pref');
+        expect(log[0]!.operation).toBe('read');
+        expect(log[0]!.success).toBe(true);
       });
 
       it('should include optional fields when provided', () => {
@@ -241,8 +241,8 @@ describe('locale-storage-analytics-events', () => {
 
         const log = AccessLogger.getAccessLog();
 
-        expect(log[0].responseTime).toBe(50);
-        expect(log[0].error).toBe('timeout');
+        expect(log[0]!.responseTime).toBe(50);
+        expect(log[0]!.error).toBe('timeout');
       });
 
       it('should prepend new entries', () => {
@@ -251,8 +251,8 @@ describe('locale-storage-analytics-events', () => {
 
         const log = AccessLogger.getAccessLog();
 
-        expect(log[0].key).toBe('second');
-        expect(log[1].key).toBe('first');
+        expect(log[0]!.key).toBe('second');
+        expect(log[1]!.key).toBe('first');
       });
 
       it('should limit log entries to max', () => {
@@ -354,9 +354,10 @@ describe('locale-storage-analytics-events', () => {
       });
 
       it('should return 0 average when no response times', () => {
-        AccessLogger.logAccess(
-          createAccessPayload({ responseTime: undefined }),
-        );
+        const payload = createAccessPayload();
+        const { responseTime: _responseTime, ...payloadWithoutResponseTime } =
+          payload;
+        AccessLogger.logAccess(payloadWithoutResponseTime);
 
         const stats = AccessLogger.getAccessStats();
 
@@ -416,8 +417,8 @@ describe('locale-storage-analytics-events', () => {
         const log = ErrorLogger.getErrorLog();
 
         expect(log).toHaveLength(1);
-        expect(log[0].error).toBe('boom');
-        expect(log[0].severity).toBe('medium');
+        expect(log[0]!.error).toBe('boom');
+        expect(log[0]!.severity).toBe('medium');
       });
 
       it('should include optional fields when provided', () => {
@@ -427,8 +428,8 @@ describe('locale-storage-analytics-events', () => {
 
         const log = ErrorLogger.getErrorLog();
 
-        expect(log[0].context).toBe('test-ctx');
-        expect(log[0].stack).toBe('stacktrace');
+        expect(log[0]!.context).toBe('test-ctx');
+        expect(log[0]!.stack).toBe('stacktrace');
       });
 
       it('should use default severity when not provided', () => {
@@ -436,7 +437,7 @@ describe('locale-storage-analytics-events', () => {
 
         const log = ErrorLogger.getErrorLog();
 
-        expect(log[0].severity).toBe('medium');
+        expect(log[0]!.severity).toBe('medium');
       });
 
       it('should emit error_occurred event', () => {
@@ -673,10 +674,10 @@ describe('locale-storage-analytics-events', () => {
       const accessLog = AccessLogger.getAccessLog();
       const errorLog = ErrorLogger.getErrorLog();
 
-      expect(accessLog[0].responseTime).toBe(50);
-      expect(accessLog[0].error).toBe('test-error');
-      expect(errorLog[0].context).toBe('test-ctx');
-      expect(errorLog[0].stack).toBe('test-stack');
+      expect(accessLog[0]!.responseTime).toBe(50);
+      expect(accessLog[0]!.error).toBe('test-error');
+      expect(errorLog[0]!.context).toBe('test-ctx');
+      expect(errorLog[0]!.stack).toBe('test-stack');
     });
   });
 });

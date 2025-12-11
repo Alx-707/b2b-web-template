@@ -39,19 +39,19 @@ describe('WhatsAppFloatingButton', () => {
     localStorage.clear();
   });
 
-  it('renders link with normalized phone number', () => {
+  it('renders button with aria-label for WhatsApp chat', () => {
     render(<WhatsAppFloatingButton number='+1 (555) 123-4567' />);
 
-    const button = screen.getByRole('link', {
+    const button = screen.getByRole('button', {
       name: /chat with us on whatsapp/i,
     });
-    expect(button).toHaveAttribute('href', 'https://wa.me/15551234567');
+    expect(button).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('skips rendering when number is invalid', () => {
     render(<WhatsAppFloatingButton number='invalid' />);
     expect(
-      screen.queryByRole('link', { name: /chat with us on whatsapp/i }),
+      screen.queryByRole('button', { name: /chat with us on whatsapp/i }),
     ).toBeNull();
   });
 
@@ -65,7 +65,7 @@ describe('WhatsAppFloatingButton', () => {
   it('renders circular FAB with WhatsApp brand color', () => {
     render(<WhatsAppFloatingButton number='+1 (555) 123-4567' />);
 
-    const button = screen.getByRole('link', {
+    const button = screen.getByRole('button', {
       name: /chat with us on whatsapp/i,
     });
     expect(button).toHaveStyle({

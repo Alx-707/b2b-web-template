@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { LocaleParam } from '@/app/[locale]/generate-static-params';
 import TermsPage, { generateMetadata, generateStaticParams } from '../page';
 
 // Mock dependencies using vi.hoisted
@@ -84,7 +85,7 @@ We provide quality products.`,
     },
   };
 
-  const mockParams = { locale: 'en' };
+  const mockParams = { locale: 'en' } as const satisfies LocaleParam;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -133,7 +134,11 @@ We provide quality products.`,
     });
 
     it('should handle different locales', async () => {
-      await generateMetadata({ params: Promise.resolve({ locale: 'zh' }) });
+      await generateMetadata({
+        params: Promise.resolve({
+          locale: 'zh',
+        } as const satisfies LocaleParam),
+      });
 
       expect(mockGetTranslations).toHaveBeenCalledWith({
         locale: 'zh',
@@ -384,7 +389,7 @@ We provide quality products.`,
       });
 
       it('should handle delayed params resolution', async () => {
-        const delayedParams = new Promise<{ locale: string }>((resolve) =>
+        const delayedParams = new Promise<LocaleParam>((resolve) =>
           setTimeout(() => resolve(mockParams), 10),
         );
 
@@ -424,7 +429,11 @@ We provide quality products.`,
 
     describe('i18n integration', () => {
       it('should handle zh locale correctly', async () => {
-        await TermsPage({ params: Promise.resolve({ locale: 'zh' }) });
+        await TermsPage({
+          params: Promise.resolve({
+            locale: 'zh',
+          } as const satisfies LocaleParam),
+        });
 
         expect(mockSetRequestLocale).toHaveBeenCalledWith('zh');
         expect(mockGetTranslations).toHaveBeenCalledWith({

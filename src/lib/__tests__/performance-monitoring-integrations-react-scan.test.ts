@@ -21,13 +21,18 @@ function createBaseConfig(
   overrides?: Partial<PerformanceConfig>,
 ): PerformanceConfig {
   return {
-    reactScan: { enabled: true, trackUnnecessaryRenders: true },
-    bundleAnalyzer: { enabled: false },
-    sizeLimit: { enabled: false, maxSize: 500 },
+    reactScan: {
+      enabled: true,
+      showToolbar: false,
+      trackUnnecessaryRenders: true,
+    },
+    bundleAnalyzer: { enabled: false, openAnalyzer: false },
+    sizeLimit: { enabled: false, limits: {} },
     global: {
       enabled: true,
       dataRetentionTime: 300000,
       maxMetrics: 100,
+      enableInProduction: false,
     },
     ...overrides,
   };
@@ -46,7 +51,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
   describe('useReactScanIntegration', () => {
     it('should return integration with enabled status', () => {
-      const config = createBaseConfig({ reactScan: { enabled: true } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
       const recordMetric = vi.fn();
 
       const integration = useReactScanIntegration(config, recordMetric);
@@ -55,7 +66,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
     });
 
     it('should return disabled when reactScan is disabled', () => {
-      const config = createBaseConfig({ reactScan: { enabled: false } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: false,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
       const recordMetric = vi.fn();
 
       const integration = useReactScanIntegration(config, recordMetric);
@@ -64,7 +81,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
     });
 
     it('should record render metric', () => {
-      const config = createBaseConfig({ reactScan: { enabled: true } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
       const recordMetric = vi.fn();
 
       const integration = useReactScanIntegration(config, recordMetric);
@@ -84,7 +107,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
     });
 
     it('should not record render when disabled', () => {
-      const config = createBaseConfig({ reactScan: { enabled: false } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: false,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
       const recordMetric = vi.fn();
 
       const integration = useReactScanIntegration(config, recordMetric);
@@ -94,7 +123,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
     });
 
     it('should set high priority for frequent renders', () => {
-      const config = createBaseConfig({ reactScan: { enabled: true } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
       const recordMetric = vi.fn();
 
       const integration = useReactScanIntegration(config, recordMetric);
@@ -109,7 +144,11 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
     it('should record unnecessary render', () => {
       const config = createBaseConfig({
-        reactScan: { enabled: true, trackUnnecessaryRenders: true },
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: true,
+        },
       });
       const recordMetric = vi.fn();
 
@@ -134,7 +173,11 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
     it('should not record unnecessary render when tracking disabled', () => {
       const config = createBaseConfig({
-        reactScan: { enabled: true, trackUnnecessaryRenders: false },
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
       });
       const recordMetric = vi.fn();
 
@@ -148,7 +191,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
     });
 
     it('should track component stats', () => {
-      const config = createBaseConfig({ reactScan: { enabled: true } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
       const recordMetric = vi.fn();
 
       const integration = useReactScanIntegration(config, recordMetric);
@@ -166,7 +215,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
   describe('validateReactScanConfig', () => {
     it('should return valid for proper config', () => {
-      const config = createBaseConfig({ reactScan: { enabled: true } });
+      const config = createBaseConfig({
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
+      });
 
       const result = validateReactScanConfig(config);
 
@@ -186,7 +241,11 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
     it('should error on non-boolean enabled', () => {
       const config = createBaseConfig({
-        reactScan: { enabled: 'yes' as unknown as boolean },
+        reactScan: {
+          enabled: 'yes' as unknown as boolean,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+        },
       });
 
       const result = validateReactScanConfig(config);
@@ -199,6 +258,7 @@ describe('performance-monitoring-integrations-react-scan', () => {
       const config = createBaseConfig({
         reactScan: {
           enabled: true,
+          showToolbar: false,
           trackUnnecessaryRenders: 'yes' as unknown as boolean,
         },
       });
@@ -212,7 +272,12 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
     it('should warn on invalid maxTrackedComponents', () => {
       const config = createBaseConfig({
-        reactScan: { enabled: true, maxTrackedComponents: -1 },
+        reactScan: {
+          enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
+          maxTrackedComponents: -1,
+        },
       });
 
       const result = validateReactScanConfig(config);
@@ -226,6 +291,8 @@ describe('performance-monitoring-integrations-react-scan', () => {
       const config = createBaseConfig({
         reactScan: {
           enabled: true,
+          showToolbar: false,
+          trackUnnecessaryRenders: false,
           showRenderTime: 'yes' as unknown as boolean,
         },
       });
@@ -250,7 +317,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
     describe('recordRender', () => {
       it('should record render when enabled', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         analyzer.recordRender('TestComponent', 10);
@@ -261,7 +334,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
       });
 
       it('should not record when disabled', () => {
-        const config = createBaseConfig({ reactScan: { enabled: false } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: false,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         analyzer.recordRender('TestComponent', 10);
@@ -271,7 +350,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
       });
 
       it('should accumulate render stats', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         analyzer.recordRender('TestComponent', 10);
@@ -287,6 +372,7 @@ describe('performance-monitoring-integrations-react-scan', () => {
         const config = createBaseConfig({
           reactScan: {
             enabled: true,
+            showToolbar: false,
             trackUnnecessaryRenders: true,
             renderThreshold: 100,
           },
@@ -305,7 +391,11 @@ describe('performance-monitoring-integrations-react-scan', () => {
     describe('recordUnnecessaryRender', () => {
       it('should record when tracking enabled', () => {
         const config = createBaseConfig({
-          reactScan: { enabled: true, trackUnnecessaryRenders: true },
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: true,
+          },
         });
         const analyzer = new ReactScanAnalyzer(config);
 
@@ -318,7 +408,11 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
       it('should not record when tracking disabled', () => {
         const config = createBaseConfig({
-          reactScan: { enabled: true, trackUnnecessaryRenders: false },
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
         });
         const analyzer = new ReactScanAnalyzer(config);
 
@@ -340,7 +434,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
     describe('getPerformanceReport', () => {
       it('should return report structure', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         const report = analyzer.getPerformanceReport();
@@ -353,7 +453,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
       });
 
       it('should calculate totals correctly', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         analyzer.recordRender('Component1', 10);
@@ -368,7 +474,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
       });
 
       it('should sort slow components by average time', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         analyzer.recordRender('FastComponent', 5);
@@ -377,11 +489,17 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
         const report = analyzer.getPerformanceReport();
 
-        expect(report.topSlowComponents[0].name).toBe('SlowComponent');
+        expect(report.topSlowComponents[0]!.name).toBe('SlowComponent');
       });
 
       it('should generate recommendations for slow components', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         analyzer.recordRender('SlowComponent', 50); // > 16ms (one frame)
@@ -397,6 +515,7 @@ describe('performance-monitoring-integrations-react-scan', () => {
         const config = createBaseConfig({
           reactScan: {
             enabled: true,
+            showToolbar: false,
             trackUnnecessaryRenders: true,
             renderThreshold: 100,
           },
@@ -418,7 +537,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
     describe('getComponentStats', () => {
       it('should return null for unknown component', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         const stats = analyzer.getComponentStats('UnknownComponent');
@@ -427,7 +552,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
       });
 
       it('should return stats for known component', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         analyzer.recordRender('TestComponent', 10);
@@ -443,7 +574,13 @@ describe('performance-monitoring-integrations-react-scan', () => {
 
     describe('reset', () => {
       it('should clear all data', () => {
-        const config = createBaseConfig({ reactScan: { enabled: true } });
+        const config = createBaseConfig({
+          reactScan: {
+            enabled: true,
+            showToolbar: false,
+            trackUnnecessaryRenders: false,
+          },
+        });
         const analyzer = new ReactScanAnalyzer(config);
 
         analyzer.recordRender('TestComponent', 10);

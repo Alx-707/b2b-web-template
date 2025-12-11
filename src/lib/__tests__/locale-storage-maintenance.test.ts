@@ -213,7 +213,12 @@ describe('locale-storage-maintenance', () => {
 
       describe('validatePreferenceData', () => {
         it('should delegate to LocaleValidationManager', () => {
-          const preference = { locale: 'en', source: 'user' };
+          const preference = {
+            locale: 'en' as const,
+            source: 'user' as const,
+            timestamp: Date.now(),
+            confidence: 0.9,
+          };
           const result =
             LocaleMaintenanceManager.validatePreferenceData(preference);
 
@@ -226,7 +231,12 @@ describe('locale-storage-maintenance', () => {
 
       describe('validateHistoryData', () => {
         it('should delegate to LocaleValidationManager', () => {
-          const history = { detections: [], lastUpdated: Date.now() };
+          const history = {
+            detections: [],
+            history: [],
+            lastUpdated: Date.now(),
+            totalDetections: 0,
+          };
           const result = LocaleMaintenanceManager.validateHistoryData(history);
 
           expect(
@@ -249,13 +259,12 @@ describe('locale-storage-maintenance', () => {
 
       describe('validateSpecificData', () => {
         it('should delegate to LocaleValidationManager', () => {
-          const result = LocaleMaintenanceManager.validateSpecificData(
-            'user-locale-preference',
-          );
+          const result =
+            LocaleMaintenanceManager.validateSpecificData('LOCALE_PREFERENCE');
 
           expect(
             LocaleValidationManager.validateSpecificData,
-          ).toHaveBeenCalledWith('user-locale-preference');
+          ).toHaveBeenCalledWith('LOCALE_PREFERENCE');
           expect(result.isValid).toBe(true);
         });
       });
@@ -265,7 +274,7 @@ describe('locale-storage-maintenance', () => {
           const result = LocaleMaintenanceManager.validateAllData();
 
           expect(LocaleValidationManager.validateAllData).toHaveBeenCalled();
-          expect(result.preference.isValid).toBe(true);
+          expect(result.preference?.isValid).toBe(true);
         });
       });
 
@@ -287,7 +296,7 @@ describe('locale-storage-maintenance', () => {
           expect(
             LocaleValidationManager.getValidationSummary,
           ).toHaveBeenCalled();
-          expect(result.totalChecks).toBe(5);
+          expect((result as { totalChecks?: number }).totalChecks).toBe(5);
         });
       });
 
@@ -391,7 +400,13 @@ describe('locale-storage-maintenance', () => {
 
       describe('importData', () => {
         it('should delegate to LocaleImportExportManager', () => {
-          const data = { preference: { locale: 'en' }, history: [] };
+          const data = {
+            version: '1.0',
+            timestamp: Date.now(),
+            metadata: {},
+            preference: { locale: 'en' },
+            history: [],
+          } as any;
           const result = LocaleMaintenanceManager.importData(data);
 
           expect(LocaleImportExportManager.importData).toHaveBeenCalledWith(
@@ -488,7 +503,7 @@ describe('locale-storage-maintenance', () => {
           const result = LocaleMaintenanceManager.getExportStats();
 
           expect(LocaleImportExportManager.getExportStats).toHaveBeenCalled();
-          expect(result.totalExports).toBe(5);
+          expect((result as { totalExports?: number }).totalExports).toBe(5);
         });
       });
     });

@@ -314,9 +314,9 @@ describe('locale-storage-preference-override', () => {
 
       const history = getOverrideHistory();
 
-      expect(history[0].timestamp).toBe(3000);
-      expect(history[1].timestamp).toBe(2000);
-      expect(history[2].timestamp).toBe(1000);
+      expect(history[0]!.timestamp).toBe(3000);
+      expect(history[1]!.timestamp).toBe(2000);
+      expect(history[2]!.timestamp).toBe(1000);
     });
 
     it('should handle non-array values', () => {
@@ -387,7 +387,7 @@ describe('locale-storage-preference-override', () => {
       recordOverrideOperation('zh', 'set');
 
       const setCall = vi.mocked(LocalStorageManager.set).mock.calls[0];
-      expect(setCall[1]).toHaveLength(50);
+      expect(setCall![1]).toHaveLength(50);
     });
   });
 
