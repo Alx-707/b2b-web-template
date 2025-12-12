@@ -170,8 +170,14 @@ test.describe('Internationalization (i18n)', () => {
 
       const englishLink = page.getByTestId('language-link-en');
       await englishLink.click();
-      await page.waitForURL('**/en');
-      await page.waitForLoadState('networkidle');
+
+      // More robust waiting: expect key English UI elements instead of just URL
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en', {
+        timeout: 30_000,
+      });
+      await expect(
+        page.getByRole('link', { name: 'Home' }).first(),
+      ).toBeVisible({ timeout: 30_000 });
       await waitForStablePage(page);
 
       // Verify language via attribute with a graceful fallback
@@ -675,8 +681,14 @@ test.describe('Internationalization (i18n)', () => {
 
       const chineseLink = page.getByTestId('language-link-zh');
       await chineseLink.click();
-      await page.waitForURL('**/zh');
-      await page.waitForLoadState('networkidle');
+
+      // More robust: wait for Chinese UI elements instead of just URL/networkidle
+      await expect(page.locator('html')).toHaveAttribute('lang', 'zh', {
+        timeout: 30_000,
+      });
+      await expect(
+        page.getByRole('link', { name: '首页' }).first(),
+      ).toBeVisible({ timeout: 30_000 });
       await waitForStablePage(page);
 
       // Verify Chinese lang attribute with fallback to visible Chinese UI

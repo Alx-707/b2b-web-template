@@ -119,7 +119,16 @@ test.describe('Navigation System', () => {
 
       // Navigate back to home via nav
       await homeLink.click();
-      await page.waitForURL('**/en');
+
+      // More robust: wait for home page key elements instead of just URL
+      await expect(page.getByRole('heading', { name: /welcome/i })).toBeVisible(
+        {
+          timeout: 30_000,
+        },
+      );
+      await expect(page.getByTestId('hero-section').first()).toBeVisible({
+        timeout: 30_000,
+      });
       await waitForStablePage(page);
     });
 

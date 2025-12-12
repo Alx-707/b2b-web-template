@@ -100,8 +100,9 @@ export default defineConfig({
     baseURL: resolvedBaseUrl,
 
     // 控制动作/导航等待上限，避免无界等待导致整体卡时
-    actionTimeout: 5_000,
-    navigationTimeout: 20_000,
+    // Increased for CI environment stability (GitHub Actions can be slower)
+    actionTimeout: 10_000,
+    navigationTimeout: 30_000,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -137,6 +138,12 @@ export default defineConfig({
             PLAYWRIGHT_TEST: 'true',
             NEXT_PUBLIC_TEST_MODE: 'true',
             NEXT_PUBLIC_BASE_URL: 'http://localhost:3000',
+
+            // Turnstile test keys (always pass mode)
+            // See: https://developers.cloudflare.com/turnstile/reference/testing/
+            NEXT_PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
+            TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA',
+            NEXT_PUBLIC_TURNSTILE_ACTION: 'contact-form',
 
             NEXT_PUBLIC_DISABLE_REACT_SCAN: 'true',
             NEXT_PUBLIC_DISABLE_DEV_TOOLS: 'true',
