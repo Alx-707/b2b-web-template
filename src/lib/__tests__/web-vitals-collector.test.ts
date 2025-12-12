@@ -269,9 +269,9 @@ describe('EnhancedWebVitalsCollector', () => {
     });
 
     it('should handle PerformanceObserver not being available', () => {
-      const originalPerformanceObserver = global.PerformanceObserver;
-      // @ts-expect-error - Testing edge case
-      delete global.PerformanceObserver;
+      const originalPerformanceObserver = globalThis.PerformanceObserver;
+
+      vi.stubGlobal('PerformanceObserver', undefined);
 
       expect(() => {
         // EnhancedWebVitalsCollector is not constructable, using instance
@@ -280,7 +280,7 @@ describe('EnhancedWebVitalsCollector', () => {
       }).not.toThrow();
 
       // Restore
-      global.PerformanceObserver = originalPerformanceObserver;
+      vi.stubGlobal('PerformanceObserver', originalPerformanceObserver);
     });
   });
 
@@ -739,29 +739,29 @@ describe('EnhancedWebVitalsCollector', () => {
     });
 
     it('should handle undefined performance API', () => {
-      const originalPerformance = global.performance;
-      // @ts-expect-error - Testing edge case
-      delete global.performance;
+      const originalPerformance = globalThis.performance;
+
+      vi.stubGlobal('performance', undefined);
 
       expect(() => {
         collector.getDetailedMetrics();
       }).not.toThrow();
 
       // Restore
-      global.performance = originalPerformance;
+      vi.stubGlobal('performance', originalPerformance);
     });
 
     it('should handle missing window object', () => {
-      const originalWindow = global.window;
-      // @ts-expect-error - Testing edge case
-      delete global.window;
+      const originalWindow = globalThis.window;
+
+      vi.stubGlobal('window', undefined);
 
       expect(() => {
         collector.getDetailedMetrics();
       }).not.toThrow();
 
       // Restore
-      global.window = originalWindow;
+      vi.stubGlobal('window', originalWindow);
     });
   });
 });

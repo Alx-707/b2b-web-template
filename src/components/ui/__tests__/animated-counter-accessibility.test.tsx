@@ -317,30 +317,30 @@ describe('AnimatedCounter - Accessibility & Edge Cases', () => {
 
     it('handles missing requestAnimationFrame', () => {
       // Remove requestAnimationFrame
-      const originalRAF = global.requestAnimationFrame;
-      // @ts-expect-error - Testing edge case
-      delete global.requestAnimationFrame;
+      const originalRAF = globalThis.requestAnimationFrame;
+
+      vi.stubGlobal('requestAnimationFrame', undefined);
 
       expect(() => {
         render(<AnimatedCounter to={100} />);
       }).not.toThrow();
 
       // Restore
-      global.requestAnimationFrame = originalRAF;
+      vi.stubGlobal('requestAnimationFrame', originalRAF);
     });
 
     it('handles missing performance.now', () => {
       // Remove performance.now
-      const originalPerformance = global.performance;
-      // @ts-expect-error - Testing edge case
-      delete global.performance;
+      const originalPerformance = globalThis.performance;
+
+      vi.stubGlobal('performance', undefined);
 
       expect(() => {
         render(<AnimatedCounter to={100} />);
       }).not.toThrow();
 
       // Restore
-      global.performance = originalPerformance;
+      vi.stubGlobal('performance', originalPerformance);
     });
 
     it('handles component re-mounting', () => {

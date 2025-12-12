@@ -794,19 +794,16 @@ describe('BaseLocaleDetector - Additional Coverage', () => {
     });
 
     it('should return null when Intl unavailable', () => {
-      const originalIntl = global.Intl;
-      // @ts-expect-error - testing undefined Intl
-      delete global.Intl;
+      const originalIntl = globalThis.Intl;
+
+      vi.stubGlobal('Intl', undefined);
 
       const localDetector = new BaseLocaleDetector();
       const info = localDetector.getTimeZoneInfo();
 
       expect(info).toBeNull();
 
-      Object.defineProperty(global, 'Intl', {
-        value: originalIntl,
-        writable: true,
-      });
+      vi.stubGlobal('Intl', originalIntl);
     });
   });
 

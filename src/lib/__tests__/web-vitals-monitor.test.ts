@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { GlobalWithDeletableProperties } from '@/types/test-types';
 import { WebVitalsMonitor } from '@/lib/web-vitals-monitor';
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
@@ -170,14 +169,15 @@ describe('WebVitalsMonitor', () => {
   describe('错误处理', () => {
     it('应该处理浏览器环境检测', () => {
       // 测试在服务器端环境下的行为
-      const originalWindow = global.window;
-      delete (global as GlobalWithDeletableProperties).window;
+      const originalWindow = globalThis.window;
+
+      vi.stubGlobal('window', undefined);
 
       const newMonitor = WebVitalsMonitor.getInstance();
       expect(newMonitor).toBeInstanceOf(WebVitalsMonitor);
 
       // 恢复window对象
-      (global as GlobalWithDeletableProperties).window = originalWindow;
+      vi.stubGlobal('window', originalWindow);
     });
 
     it('应该处理无效的指标值', () => {

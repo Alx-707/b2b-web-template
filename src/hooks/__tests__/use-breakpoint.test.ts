@@ -380,18 +380,17 @@ describe('useBreakpoint', () => {
 
     it('should handle ResizeObserver not supported', () => {
       // Note: useBreakpoint doesn't use ResizeObserver, only window resize events
-      const originalResizeObserver = global.ResizeObserver;
+      const originalResizeObserver = globalThis.ResizeObserver;
 
       try {
-        // @ts-expect-error - Testing edge case
-        delete global.ResizeObserver;
+        vi.stubGlobal('ResizeObserver', undefined);
 
         expect(() => {
           renderHook(() => useBreakpoint());
         }).not.toThrow();
       } finally {
         // Restore ResizeObserver
-        global.ResizeObserver = originalResizeObserver;
+        vi.stubGlobal('ResizeObserver', originalResizeObserver);
       }
     });
 
