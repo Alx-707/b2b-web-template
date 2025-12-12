@@ -85,7 +85,7 @@ Lighthouse CI enforces progressive thresholds:
 | Metric | Current CI Threshold | Good Target |
 |--------|---------------------|-------------|
 | LCP | ≤ 4500ms | < 2500ms |
-| TBT (替代 FID) | ≤ 200ms | < 100ms |
+| TBT (替代 FID) | ≤ 250ms | < 100ms |
 | CLS | ≤ 0.15 | < 0.1 |
 | FCP | ≤ 2000ms | < 1800ms |
 

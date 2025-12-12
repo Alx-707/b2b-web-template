@@ -9,6 +9,7 @@
  * - Fetches translation files as static assets from /messages/
  * - Provides fallback to file system reads during build time
  * - Supports both critical and deferred translation types
+ * - CI/E2E environments bypass cache to prevent empty object caching
  *
  * Architecture:
  * - Translation files are copied to public/messages/ during build (prebuild script)
@@ -26,6 +27,13 @@ import { mergeObjects } from '@/lib/locale-storage-types-utils/object-utils';
 import { logger } from '@/lib/logger';
 import { MONITORING_INTERVALS } from '@/constants/performance-constants';
 import { routing } from '@/i18n/routing';
+
+/**
+ * Detect CI/E2E environment to bypass caching.
+ * Prevents empty object {} from being cached when translation files are missing.
+ */
+const isCiLikeEnvironment =
+  process.env.CI === 'true' || process.env.PLAYWRIGHT_TEST === 'true';
 
 const I18N_CACHE_REVALIDATE_DEFAULT_SECONDS =
   MONITORING_INTERVALS.CACHE_CLEANUP;
@@ -46,26 +54,39 @@ type Locale = 'en' | 'zh';
  */
 type Messages = Record<string, unknown>;
 
+type MessageType = 'critical' | 'deferred';
+
 /**
  * Internal helper: load messages from the source /messages directory.
- *
- * 专门给构建阶段（NEXT_PHASE === 'phase-production-build'）使用，
- * 避免经过 unstable_cache，确保每次构建都直接读取最新的 JSON 文件，
- * 从而消除缓存导致的旧数据问题。
+ * Used as final fallback and during build phase.
  */
 async function loadMessagesFromSource(
   locale: Locale,
-  type: 'critical' | 'deferred',
+  type: MessageType,
 ): Promise<Messages> {
-  try {
-    const filePath = join(process.cwd(), 'messages', locale, `${type}.json`);
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
-    const content = await readFile(filePath, 'utf-8');
-    return JSON.parse(content) as Messages;
-  } catch (error) {
-    logger.error(`Failed to read ${type} messages for ${locale}:`, error);
-    throw new Error(`Cannot load ${type} messages for ${locale}`);
-  }
+  const filePath = join(process.cwd(), 'messages', locale, `${type}.json`);
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- locale is sanitized
+  const content = await readFile(filePath, 'utf-8');
+  return JSON.parse(content) as Messages;
+}
+
+/**
+ * Internal helper: load messages from public/messages directory.
+ */
+async function loadMessagesFromPublic(
+  locale: Locale,
+  type: MessageType,
+): Promise<Messages> {
+  const filePath = join(
+    process.cwd(),
+    'public',
+    'messages',
+    locale,
+    `${type}.json`,
+  );
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- locale is sanitized
+  const content = await readFile(filePath, 'utf-8');
+  return JSON.parse(content) as Messages;
 }
 
 /**
@@ -93,96 +114,106 @@ function getBaseUrl(): string {
 }
 
 /**
- * Load critical translation messages (externalized)
- *
- * This function loads the critical translation file from the public directory
- * using fetch + unstable_cache for optimal performance.
- *
- * Caching Strategy:
- * - Server-side cache: 1 hour (3600 seconds)
- * - Revalidation: On-demand via Next.js revalidation
- * - Fallback: Static import if fetch fails
- *
- * @param locale - The locale to load ('en' or 'zh')
- * @returns Promise resolving to the translation messages object
- *
- * @example
- * ```typescript
- * const messages = await loadCriticalMessages('en');
- * ```
+ * Load messages with fallback chain: public → source
+ * Never returns empty object - throws on complete failure
  */
-/* eslint-disable max-statements */
-export const loadCriticalMessages = unstable_cache(
-  async (locale: Locale): Promise<Messages> => {
-    const safeLocale = sanitizeLocale(locale as string);
+async function loadMessagesWithFallback(
+  locale: Locale,
+  type: MessageType,
+): Promise<Messages> {
+  // Try public directory first
+  try {
+    return await loadMessagesFromPublic(locale, type);
+  } catch (publicError) {
+    logger.error(
+      `Failed to read ${type} from public for ${locale}:`,
+      publicError,
+    );
+  }
 
-    // 构建阶段和开发阶段直接从文件系统读取，避免 HTTP 请求的端口问题
-    // 生产环境运行时通过 HTTP fetch 以利用 CDN 缓存
-    const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
-    const isDevelopment = process.env.NODE_ENV === 'development';
+  // Fallback to source directory
+  try {
+    return await loadMessagesFromSource(locale, type);
+  } catch (sourceError) {
+    logger.error(
+      `Failed to read ${type} from source for ${locale}:`,
+      sourceError,
+    );
+    throw new Error(`Cannot load ${type} messages for ${locale}`);
+  }
+}
 
-    if (isBuildTime || isDevelopment) {
-      try {
-        const filePath = join(
-          process.cwd(),
-          'public',
-          'messages',
-          safeLocale,
-          'critical.json',
-        );
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        const content = await readFile(filePath, 'utf-8');
-        return JSON.parse(content) as Messages;
-      } catch (error) {
-        logger.error(
-          `File system read of critical messages failed for ${locale}:`,
-          error,
-        );
-        return {} as Messages;
-      }
+/**
+ * Fetch messages via HTTP with fallback chain
+ */
+async function fetchMessagesWithFallback(
+  locale: Locale,
+  type: MessageType,
+): Promise<Messages> {
+  const baseUrl = getBaseUrl();
+  const url = `${baseUrl}/messages/${locale}/${type}.json`;
+
+  // Try HTTP fetch first (production runtime)
+  try {
+    const revalidate = getRevalidateTime();
+    const response = await fetch(url, {
+      next: { revalidate },
+      cache: 'force-cache',
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
-    // Production runtime: Fetch from public directory via HTTP
-    const baseUrl = getBaseUrl();
-    const url = `${baseUrl}/messages/${safeLocale}/critical.json`;
+    return (await response.json()) as Messages;
+  } catch (fetchError) {
+    logger.error(`HTTP fetch of ${type} failed for ${locale}:`, fetchError);
+  }
 
-    try {
-      const revalidate = getRevalidateTime();
-      const response = await fetch(url, {
-        next: { revalidate },
-        cache: 'force-cache',
-      });
+  // Fallback to file system
+  return loadMessagesWithFallback(locale, type);
+}
 
-      if (!response.ok) {
-        throw new Error(`Failed to load messages: ${response.statusText}`);
-      }
+/**
+ * Core loader for critical messages (no caching)
+ */
+async function loadCriticalMessagesCore(locale: Locale): Promise<Messages> {
+  const safeLocale = sanitizeLocale(locale as string);
+  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
+  const isDevelopment = process.env.NODE_ENV === 'development';
 
-      return (await response.json()) as Messages;
-    } catch (error) {
-      logger.error(`Failed to load critical messages for ${locale}:`, error);
+  // Build/dev: direct file read, production: HTTP fetch with fallback
+  const messages =
+    isBuildTime || isDevelopment
+      ? await loadMessagesWithFallback(safeLocale, 'critical')
+      : await fetchMessagesWithFallback(safeLocale, 'critical');
 
-      // Fallback: Read from file system
-      try {
-        const filePath = join(
-          process.cwd(),
-          'public',
-          'messages',
-          safeLocale,
-          'critical.json',
-        );
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        const content = await readFile(filePath, 'utf-8');
-        return JSON.parse(content) as Messages;
-      } catch (fallbackError) {
-        logger.error(
-          `Fallback file read also failed for ${locale}:`,
-          fallbackError,
-        );
-        return {} as Messages;
-      }
-    }
-  },
-  ['i18n-critical'], // Cache key prefix
+  return messages;
+}
+
+/**
+ * Core loader for deferred messages (no caching)
+ */
+async function loadDeferredMessagesCore(locale: Locale): Promise<Messages> {
+  const safeLocale = sanitizeLocale(locale as string);
+  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
+  // Build/dev: direct file read, production: HTTP fetch with fallback
+  const messages =
+    isBuildTime || isDevelopment
+      ? await loadMessagesWithFallback(safeLocale, 'deferred')
+      : await fetchMessagesWithFallback(safeLocale, 'deferred');
+
+  return messages;
+}
+
+/**
+ * Cached version of critical messages loader
+ */
+const loadCriticalMessagesCached = unstable_cache(
+  loadCriticalMessagesCore,
+  ['i18n-critical'],
   {
     revalidate: getRevalidateTime(),
     tags: ['i18n', 'critical'],
@@ -190,95 +221,11 @@ export const loadCriticalMessages = unstable_cache(
 );
 
 /**
- * Load deferred translation messages (externalized)
- *
- * This function loads the deferred translation file from the public directory
- * using fetch + unstable_cache for optimal performance.
- *
- * Caching Strategy:
- * - Server-side cache: 1 hour (3600 seconds)
- * - Revalidation: On-demand via Next.js revalidation
- * - Fallback: Static import if fetch fails
- *
- * @param locale - The locale to load ('en' or 'zh')
- * @returns Promise resolving to the translation messages object
- *
- * @example
- * ```typescript
- * const messages = await loadDeferredMessages('zh');
- * ```
+ * Cached version of deferred messages loader
  */
-export const loadDeferredMessages = unstable_cache(
-  async (locale: Locale): Promise<Messages> => {
-    const safeLocale = sanitizeLocale(locale as string);
-
-    // 构建阶段和开发阶段直接从文件系统读取，避免 HTTP 请求的端口问题
-    // 生产环境运行时通过 HTTP fetch 以利用 CDN 缓存
-    const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
-    const isDevelopment = process.env.NODE_ENV === 'development';
-
-    if (isBuildTime || isDevelopment) {
-      try {
-        const filePath = join(
-          process.cwd(),
-          'public',
-          'messages',
-          safeLocale,
-          'deferred.json',
-        );
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        const content = await readFile(filePath, 'utf-8');
-        return JSON.parse(content) as Messages;
-      } catch (error) {
-        logger.error(
-          `File system read of deferred messages failed for ${locale}:`,
-          error,
-        );
-        return {} as Messages;
-      }
-    }
-
-    // Production runtime: Fetch from public directory via HTTP
-    const baseUrl = getBaseUrl();
-    const url = `${baseUrl}/messages/${safeLocale}/deferred.json`;
-
-    try {
-      const revalidate = getRevalidateTime();
-      const response = await fetch(url, {
-        next: { revalidate },
-        cache: 'force-cache',
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to load messages: ${response.statusText}`);
-      }
-
-      return (await response.json()) as Messages;
-    } catch (error) {
-      logger.error(`Failed to load deferred messages for ${locale}:`, error);
-
-      // Fallback: Read from file system
-      try {
-        const filePath = join(
-          process.cwd(),
-          'public',
-          'messages',
-          safeLocale,
-          'deferred.json',
-        );
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        const content = await readFile(filePath, 'utf-8');
-        return JSON.parse(content) as Messages;
-      } catch (fallbackError) {
-        logger.error(
-          `Fallback file read also failed for ${locale}:`,
-          fallbackError,
-        );
-        return {} as Messages;
-      }
-    }
-  },
-  ['i18n-deferred'], // Cache key prefix
+const loadDeferredMessagesCached = unstable_cache(
+  loadDeferredMessagesCore,
+  ['i18n-deferred'],
   {
     revalidate: getRevalidateTime(),
     tags: ['i18n', 'deferred'],
@@ -286,18 +233,35 @@ export const loadDeferredMessages = unstable_cache(
 );
 
 /**
+ * Load critical translation messages (externalized)
+ *
+ * This function loads the critical translation file from the public directory
+ * using fetch + unstable_cache for optimal performance.
+ *
+ * CI/E2E environments bypass cache to prevent empty object caching issues.
+ *
+ * @param locale - The locale to load ('en' or 'zh')
+ * @returns Promise resolving to the translation messages object
+ */
+export const loadCriticalMessages: (locale: Locale) => Promise<Messages> =
+  isCiLikeEnvironment ? loadCriticalMessagesCore : loadCriticalMessagesCached;
+
+/**
+ * Load deferred translation messages (externalized)
+ *
+ * This function loads the deferred translation file from the public directory
+ * using fetch + unstable_cache for optimal performance.
+ *
+ * CI/E2E environments bypass cache to prevent empty object caching issues.
+ *
+ * @param locale - The locale to load ('en' or 'zh')
+ * @returns Promise resolving to the translation messages object
+ */
+export const loadDeferredMessages: (locale: Locale) => Promise<Messages> =
+  isCiLikeEnvironment ? loadDeferredMessagesCore : loadDeferredMessagesCached;
+
+/**
  * Preload critical messages for a locale
- *
- * This function can be used to preload messages before they're needed,
- * improving perceived performance.
- *
- * @param locale - The locale to preload
- *
- * @example
- * ```typescript
- * // In a layout or page component
- * void preloadCriticalMessages('en');
- * ```
  */
 export function preloadCriticalMessages(locale: Locale): void {
   loadCriticalMessages(locale);
@@ -305,17 +269,6 @@ export function preloadCriticalMessages(locale: Locale): void {
 
 /**
  * Preload deferred messages for a locale
- *
- * This function can be used to preload messages before they're needed,
- * improving perceived performance.
- *
- * @param locale - The locale to preload
- *
- * @example
- * ```typescript
- * // In a component that will need deferred messages
- * void preloadDeferredMessages('zh');
- * ```
  */
 export function preloadDeferredMessages(locale: Locale): void {
   loadDeferredMessages(locale);
@@ -323,17 +276,6 @@ export function preloadDeferredMessages(locale: Locale): void {
 
 /**
  * Load complete translation messages (critical + deferred combined)
- *
- * This function loads both critical and deferred messages and merges them
- * into a single object. Use this for pages that need access to all translations.
- *
- * @param locale - The locale to load ('en' or 'zh')
- * @returns Promise resolving to the complete translation messages object
- *
- * @example
- * ```typescript
- * const messages = await loadCompleteMessages('en');
- * ```
  */
 export async function loadCompleteMessages(locale: Locale): Promise<Messages> {
   const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
@@ -346,56 +288,24 @@ export async function loadCompleteMessages(locale: Locale): Promise<Messages> {
       : loadDeferredMessages(locale),
   ]);
 
-  // 使用安全加固的深度合并，确保相同顶层键的嵌套字段不会被整体覆盖
-  // 例如：critical 的 footer.vercel.* 与 deferred 的 footer.copyright 可以共存
+  // Deep merge ensuring nested fields coexist
   const merged = mergeObjects(
     (critical ?? {}) as Record<string, unknown>,
     (deferred ?? {}) as Record<string, unknown>,
   ) as Messages;
 
-  // 在构建阶段按需输出调试信息，用于诊断 MISSING_MESSAGE 根因
+  // Debug output during build (when I18N_DEBUG_BUILD=1)
   if (
     process.env.I18N_DEBUG_BUILD === '1' &&
     process.env.NEXT_PHASE === 'phase-production-build'
   ) {
     const topLevelKeys = Object.keys(merged);
-    const criticalTopLevelKeys = Object.keys(critical ?? {});
-    const deferredTopLevelKeys = Object.keys(deferred ?? {});
-
-    // 检查嵌套路径 products.detail.downloadPdf 是否存在
-    const productsValue = (merged as Record<string, unknown>).products;
-    let productsDetailHasDownloadPdf = false;
-    if (typeof productsValue === 'object' && productsValue !== null) {
-      const productsRecord = productsValue as Record<string, unknown>;
-      const detailValue = productsRecord.detail;
-      if (typeof detailValue === 'object' && detailValue !== null) {
-        const detailRecord = detailValue as Record<string, unknown>;
-        productsDetailHasDownloadPdf = Object.prototype.hasOwnProperty.call(
-          detailRecord,
-          'downloadPdf',
-        );
-      }
-    }
-
-    // 仅打印关键信息，避免泄露敏感内容
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console -- intentional debug output
     console.error('[i18n-debug] loadCompleteMessages snapshot', {
       locale,
       topLevelKeys,
-      criticalTopLevelKeys,
-      deferredTopLevelKeys,
-      hasProducts: Object.prototype.hasOwnProperty.call(merged, 'products'),
-      hasFaq: Object.prototype.hasOwnProperty.call(merged, 'faq'),
-      hasPrivacy: Object.prototype.hasOwnProperty.call(merged, 'privacy'),
-      deferredHasFaq: Object.prototype.hasOwnProperty.call(
-        deferred ?? {},
-        'faq',
-      ),
-      deferredHasPrivacy: Object.prototype.hasOwnProperty.call(
-        deferred ?? {},
-        'privacy',
-      ),
-      productsDetailHasDownloadPdf,
+      criticalKeys: Object.keys(critical ?? {}),
+      deferredKeys: Object.keys(deferred ?? {}),
     });
   }
 

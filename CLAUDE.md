@@ -68,9 +68,9 @@ pnpm test         # Vitest unit tests
 
 ## Codebase Exploration
 
-Use **ace `search_context`** for semantic/exploratory queries before attempting multiple Grep searches. Built-in tools (Grep, Glob, Read) suffice for precise symbol lookups.
+Use **auggic `codebase-retrieval`** for semantic/exploratory queries before attempting multiple Grep searches. Built-in tools (Grep, Glob, Read) suffice for precise symbol lookups.
 
-For Next.js specifics: `nextjs_docs` MCP tool.
+**Mandatory**: Before any coding action, use **Context7** (`resolve-library-id` → `get-library-docs`) to query official documentation, ensuring implementations align with latest APIs and best practices.
 
 ---
 

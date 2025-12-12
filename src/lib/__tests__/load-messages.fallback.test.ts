@@ -7,7 +7,7 @@ import {
 
 // Hoisted mocks
 vi.mock('next/cache', () => ({
-  unstable_cache: (fn: any) => fn,
+  unstable_cache: (fn: unknown) => fn,
 }));
 
 vi.mock('@/lib/logger', () => ({
@@ -29,14 +29,17 @@ describe('Load Messages - Fallback Behavior', () => {
     vi.spyOn(process, 'cwd').mockReturnValue('/__vitest_nonexistent__');
   });
 
-  it('should return empty object when both fetch and file read fail (no throw)', async () => {
-    const result = await loadCriticalMessages('en' as any);
-    expect(result).toStrictEqual({});
+  it('should throw error when both fetch and file read fail', async () => {
+    await expect(loadCriticalMessages('en' as 'en' | 'zh')).rejects.toThrow(
+      'Cannot load critical messages for en',
+    );
   });
 
-  it('should sanitize invalid locale and still return {} on failures', async () => {
-    const result = await loadCriticalMessages('invalid-locale' as any);
-    expect(result).toStrictEqual({});
+  it('should sanitize invalid locale and throw on failures', async () => {
+    // Invalid locale gets sanitized to default ('en'), then throws
+    await expect(
+      loadCriticalMessages('invalid-locale' as 'en' | 'zh'),
+    ).rejects.toThrow('Cannot load critical messages for en');
   });
 });
 
@@ -50,13 +53,15 @@ describe('Load Deferred Messages - Fallback Behavior', () => {
     vi.spyOn(process, 'cwd').mockReturnValue('/__vitest_nonexistent__');
   });
 
-  it('should return {} when deferred fetch and file read both fail (no throw)', async () => {
-    const result = await loadDeferredMessages('en' as any);
-    expect(result).toStrictEqual({});
+  it('should throw error when deferred fetch and file read both fail', async () => {
+    await expect(loadDeferredMessages('en' as 'en' | 'zh')).rejects.toThrow(
+      'Cannot load deferred messages for en',
+    );
   });
 
-  it('should sanitize invalid locale for deferred and still return {} on failures', async () => {
-    const result = await loadDeferredMessages('invalid-locale' as any);
-    expect(result).toStrictEqual({});
+  it('should sanitize invalid locale for deferred and throw on failures', async () => {
+    await expect(
+      loadDeferredMessages('invalid-locale' as 'en' | 'zh'),
+    ).rejects.toThrow('Cannot load deferred messages for en');
   });
 });
