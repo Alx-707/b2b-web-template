@@ -1,10 +1,7 @@
 import { NextRequest } from 'next/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { processLead } from '@/lib/lead-pipeline';
-import {
-  checkRateLimit,
-  verifyTurnstile,
-} from '@/app/api/contact/contact-api-utils';
+import { verifyTurnstile } from '@/app/api/contact/contact-api-utils';
 import { OPTIONS, POST } from '../route';
 
 // Mock dependencies before imports
@@ -14,6 +11,16 @@ vi.mock('@/lib/logger', () => ({
     warn: vi.fn(),
     error: vi.fn(),
   },
+}));
+
+vi.mock('@/lib/security/distributed-rate-limit', () => ({
+  checkDistributedRateLimit: vi.fn(async () => ({
+    allowed: true,
+    remaining: 5,
+    resetTime: Date.now() + 60000,
+    retryAfter: null,
+  })),
+  createRateLimitHeaders: vi.fn(() => new Headers()),
 }));
 
 vi.mock('@/lib/lead-pipeline', () => ({
@@ -39,7 +46,6 @@ vi.mock('@/lib/lead-pipeline/lead-schema', () => ({
 }));
 
 vi.mock('@/app/api/contact/contact-api-utils', () => ({
-  checkRateLimit: vi.fn(() => true),
   getClientIP: vi.fn(() => '192.168.1.1'),
   verifyTurnstile: vi.fn(() => Promise.resolve(true)),
 }));
@@ -99,7 +105,13 @@ describe('/api/inquiry route', () => {
     });
 
     it('should return 429 when rate limited', async () => {
-      vi.mocked(checkRateLimit).mockReturnValueOnce(false);
+      const rateLimit = await import('@/lib/security/distributed-rate-limit');
+      vi.mocked(rateLimit.checkDistributedRateLimit).mockResolvedValueOnce({
+        allowed: false,
+        remaining: 0,
+        resetTime: Date.now() + 60000,
+        retryAfter: 60,
+      });
 
       const request = new NextRequest('http://localhost:3000/api/inquiry', {
         method: 'POST',

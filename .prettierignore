@@ -11,6 +11,7 @@ build/
 # Generated files
 *.min.js
 *.min.css
+*.generated.ts
 
 # Reports and generated content
 reports/

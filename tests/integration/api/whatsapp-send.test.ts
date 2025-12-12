@@ -50,6 +50,6 @@ describe('api/whatsapp/send', () => {
     const res = await route.POST(req);
     const body = await res.json();
     expect(res.status).toBe(400);
-    expect(body._error).toBe('INVALID_JSON');
+    expect(body.error).toBe('INVALID_JSON');
   });
 });

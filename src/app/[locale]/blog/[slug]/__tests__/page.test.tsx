@@ -11,18 +11,36 @@ const {
   mockSetRequestLocale,
   mockGetAllPostsCached,
   mockGetPostBySlugCached,
+  mockGetStaticParamsForType,
   mockNotFound,
 } = vi.hoisted(() => ({
   mockGetTranslations: vi.fn(),
   mockSetRequestLocale: vi.fn(),
   mockGetAllPostsCached: vi.fn(),
   mockGetPostBySlugCached: vi.fn(),
+  mockGetStaticParamsForType: vi.fn(),
   mockNotFound: vi.fn(),
 }));
 
 vi.mock('next-intl/server', () => ({
   getTranslations: mockGetTranslations,
   setRequestLocale: mockSetRequestLocale,
+}));
+
+// Mock i18n routing Link component
+vi.mock('@/i18n/routing', () => ({
+  Link: ({
+    href,
+    children,
+    ...props
+  }: React.PropsWithChildren<{ href: string; [key: string]: unknown }>) => (
+    <a
+      href={typeof href === 'string' ? href : href}
+      {...props}
+    >
+      {children}
+    </a>
+  ),
 }));
 
 vi.mock('next/navigation', () => ({
@@ -32,9 +50,31 @@ vi.mock('next/navigation', () => ({
   },
 }));
 
+// Mock content-query to prevent MDX importer from being loaded
+vi.mock('@/lib/content-query', () => ({
+  getAllPosts: vi.fn(),
+  getPostBySlug: vi.fn(),
+  getAllProducts: vi.fn(),
+  getProductBySlug: vi.fn(),
+  getAllPages: vi.fn(),
+  getPageBySlug: vi.fn(),
+}));
+
+// Mock content-manifest to prevent real static params generation
+vi.mock('@/lib/content-manifest', () => ({
+  getStaticParamsForType: mockGetStaticParamsForType,
+}));
+
 vi.mock('@/lib/content/blog', () => ({
   getAllPostsCached: mockGetAllPostsCached,
   getPostBySlugCached: mockGetPostBySlugCached,
+}));
+
+// Mock MDX importers to prevent Vite from trying to resolve MDX files
+vi.mock('@/lib/mdx-importers.generated', () => ({
+  postImporters: {},
+  productImporters: {},
+  pageImporters: {},
 }));
 
 vi.mock('lucide-react', async (importOriginal) => {
@@ -63,6 +103,22 @@ vi.mock('@/components/ui/badge', () => ({
     >
       {children}
     </span>
+  ),
+}));
+
+vi.mock('@/components/mdx', () => ({
+  MDXContent: ({
+    type: _type,
+    locale: _locale,
+    slug: _slug,
+  }: {
+    type: string;
+    locale: string;
+    slug: string;
+  }) => (
+    <div data-testid='mdx-content'>
+      <p>Test content</p>
+    </div>
   ),
 }));
 
@@ -111,14 +167,16 @@ describe('BlogDetailPage', () => {
       { slug: 'post-2', locale: 'en' },
     ]);
     mockGetPostBySlugCached.mockResolvedValue(mockPost);
+    mockGetStaticParamsForType.mockReturnValue([
+      { locale: 'en', slug: 'post-1' },
+      { locale: 'en', slug: 'post-2' },
+      { locale: 'zh', slug: 'post-1' },
+      { locale: 'zh', slug: 'post-2' },
+    ]);
   });
 
   describe('generateStaticParams', () => {
     it('should return params for all posts in all locales', async () => {
-      mockGetAllPostsCached
-        .mockResolvedValueOnce([{ slug: 'post-1' }, { slug: 'post-2' }])
-        .mockResolvedValueOnce([{ slug: 'post-1' }, { slug: 'post-2' }]);
-
       const params = await generateStaticParams();
 
       expect(params).toEqual([

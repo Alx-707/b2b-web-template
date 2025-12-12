@@ -3,8 +3,8 @@ import { safeParseJson } from '@/lib/api/safe-parse-json';
 import { env } from '@/lib/env';
 import { logger } from '@/lib/logger';
 import {
-  getClientIP,
-  verifyTurnstile,
+  getFullClientIPChain,
+  verifyTurnstileDetailed,
 } from '@/app/api/contact/contact-api-utils';
 
 interface TurnstileVerificationRequest {
@@ -27,6 +27,44 @@ function validateRequestBody(body: TurnstileVerificationRequest) {
     );
   }
   return null;
+}
+
+/**
+ * Create verification error response
+ */
+function createVerificationErrorResponse(verificationResult: {
+  success: boolean;
+  errorCodes?: string[];
+}) {
+  return NextResponse.json(
+    {
+      success: false,
+      error: 'Verification failed',
+      message: 'Bot protection challenge failed',
+      ...(verificationResult.errorCodes
+        ? { errorCodes: verificationResult.errorCodes }
+        : {}),
+    },
+    { status: 400 },
+  );
+}
+
+/**
+ * Create network error response
+ */
+function createNetworkErrorResponse(verifyError: Error, clientIP: string) {
+  logger.error('Turnstile verification request failed', {
+    error: verifyError,
+    clientIP,
+  });
+  return NextResponse.json(
+    {
+      success: false,
+      error: 'Verification request failed',
+      message: 'Failed to communicate with bot protection service',
+    },
+    { status: 500 },
+  );
 }
 
 /**
@@ -74,21 +112,20 @@ export async function POST(request: NextRequest) {
       return validationError;
     }
 
-    // Get client IP (prefer remoteip from body if provided)
-    const clientIP = body.remoteip || getClientIP(request);
+    // Get client IP chain (prefer remoteip from body if provided)
+    // Use full IP chain for Turnstile verification
+    const clientIP = body.remoteip || getFullClientIPChain(request);
 
-    // Use shared verifyTurnstile function
-    const isValid = await verifyTurnstile(body.token, clientIP);
+    // Use shared verifyTurnstile function with detailed result
+    let verificationResult: { success: boolean; errorCodes?: string[] };
+    try {
+      verificationResult = await verifyTurnstileDetailed(body.token, clientIP);
+    } catch (verifyError) {
+      return createNetworkErrorResponse(verifyError as Error, clientIP);
+    }
 
-    if (!isValid) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Verification failed',
-          message: 'Bot protection challenge failed',
-        },
-        { status: 400 },
-      );
+    if (!verificationResult.success) {
+      return createVerificationErrorResponse(verificationResult);
     }
 
     // Verification successful

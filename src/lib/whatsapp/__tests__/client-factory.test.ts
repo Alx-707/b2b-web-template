@@ -10,24 +10,22 @@ vi.mock('@/lib/logger', () => ({
 }));
 
 describe('WhatsApp Client Factory', () => {
-  const originalEnv = process.env;
-
   beforeEach(() => {
     vi.resetModules();
-    process.env = { ...originalEnv };
+    vi.unstubAllEnvs();
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    vi.unstubAllEnvs();
     vi.restoreAllMocks();
   });
 
   describe('detectEnvironment', () => {
     it('should return production when NODE_ENV and VERCEL_ENV are production', async () => {
-      process.env.NODE_ENV = 'production';
-      process.env.VERCEL_ENV = 'production';
-      process.env.WHATSAPP_ACCESS_TOKEN = 'token';
-      process.env.WHATSAPP_PHONE_NUMBER_ID = 'phone-id';
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('VERCEL_ENV', 'production');
+      vi.stubEnv('WHATSAPP_ACCESS_TOKEN', 'token');
+      vi.stubEnv('WHATSAPP_PHONE_NUMBER_ID', 'phone-id');
 
       const { getClientEnvironmentInfo } = await import('../client-factory');
       const info = getClientEnvironmentInfo();
@@ -36,7 +34,7 @@ describe('WhatsApp Client Factory', () => {
     });
 
     it('should return test when NODE_ENV is test', async () => {
-      process.env.NODE_ENV = 'test';
+      vi.stubEnv('NODE_ENV', 'test');
 
       const { getClientEnvironmentInfo } = await import('../client-factory');
       const info = getClientEnvironmentInfo();
@@ -45,8 +43,8 @@ describe('WhatsApp Client Factory', () => {
     });
 
     it('should return development for preview deployments', async () => {
-      process.env.NODE_ENV = 'production';
-      process.env.VERCEL_ENV = 'preview';
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('VERCEL_ENV', 'preview');
 
       const { getClientEnvironmentInfo } = await import('../client-factory');
       const info = getClientEnvironmentInfo();
@@ -57,9 +55,7 @@ describe('WhatsApp Client Factory', () => {
 
   describe('createWhatsAppClient', () => {
     it('should create mock client when no credentials', async () => {
-      process.env.NODE_ENV = 'development';
-      delete process.env.WHATSAPP_ACCESS_TOKEN;
-      delete process.env.WHATSAPP_PHONE_NUMBER_ID;
+      vi.stubEnv('NODE_ENV', 'development');
 
       const { createWhatsAppClient } = await import('../client-factory');
       const client = createWhatsAppClient();
@@ -68,9 +64,9 @@ describe('WhatsApp Client Factory', () => {
     });
 
     it('should create real client when credentials exist in development', async () => {
-      process.env.NODE_ENV = 'development';
-      process.env.WHATSAPP_ACCESS_TOKEN = 'test-token';
-      process.env.WHATSAPP_PHONE_NUMBER_ID = 'test-phone-id';
+      vi.stubEnv('NODE_ENV', 'development');
+      vi.stubEnv('WHATSAPP_ACCESS_TOKEN', 'test-token');
+      vi.stubEnv('WHATSAPP_PHONE_NUMBER_ID', 'test-phone-id');
 
       const { createWhatsAppClient } = await import('../client-factory');
       const client = createWhatsAppClient();
@@ -79,9 +75,8 @@ describe('WhatsApp Client Factory', () => {
     });
 
     it('should throw in production without credentials', async () => {
-      process.env.NODE_ENV = 'production';
-      process.env.VERCEL_ENV = 'production';
-      delete process.env.WHATSAPP_ACCESS_TOKEN;
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('VERCEL_ENV', 'production');
 
       const { createWhatsAppClient } = await import('../client-factory');
 
@@ -93,7 +88,7 @@ describe('WhatsApp Client Factory', () => {
 
   describe('getWhatsAppClient', () => {
     it('should return singleton instance', async () => {
-      process.env.NODE_ENV = 'test';
+      vi.stubEnv('NODE_ENV', 'test');
 
       const { getWhatsAppClient, resetWhatsAppClient } = await import(
         '../client-factory'
@@ -109,7 +104,7 @@ describe('WhatsApp Client Factory', () => {
 
   describe('resetWhatsAppClient', () => {
     it('should create new instance after reset', async () => {
-      process.env.NODE_ENV = 'test';
+      vi.stubEnv('NODE_ENV', 'test');
 
       const { getWhatsAppClient, resetWhatsAppClient } = await import(
         '../client-factory'
@@ -126,8 +121,7 @@ describe('WhatsApp Client Factory', () => {
 
   describe('isMockClient', () => {
     it('should return true for mock client', async () => {
-      process.env.NODE_ENV = 'test';
-      delete process.env.WHATSAPP_ACCESS_TOKEN;
+      vi.stubEnv('NODE_ENV', 'test');
 
       const { isMockClient, resetWhatsAppClient } = await import(
         '../client-factory'

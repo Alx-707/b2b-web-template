@@ -38,21 +38,35 @@ vi.mock('@/i18n/routing', () => ({
     onClick,
     className,
     ...props
-  }: React.ComponentProps<'a'> & { href: string; locale: string }) => (
-    <a
-      data-testid={`language-link-${locale}`}
-      href={href}
-      data-locale={locale}
-      className={className}
-      onClick={(e) => {
-        mockLinkClick({ href, locale });
-        onClick?.(e);
-      }}
-      {...props}
-    >
-      {children}
-    </a>
-  ),
+  }: {
+    children: React.ReactNode;
+    href: string | { pathname: string; params?: Record<string, string> };
+    locale: string;
+    onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+    className?: string;
+    [key: string]: unknown;
+  }) => {
+    // Normalize href to string for test assertions
+    const hrefString =
+      typeof href === 'string'
+        ? href
+        : href.pathname.replace('[slug]', href.params?.slug || '');
+    return (
+      <a
+        data-testid={`language-link-${locale}`}
+        href={hrefString}
+        data-locale={locale}
+        className={className}
+        onClick={(e) => {
+          mockLinkClick({ href: hrefString, locale });
+          onClick?.(e);
+        }}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  },
   usePathname: () => mockUsePathname(),
 }));
 

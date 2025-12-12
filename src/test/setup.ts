@@ -16,6 +16,27 @@ import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers'
 // Mock CSS imports to avoid PostCSS processing in tests
 vi.mock('@/app/globals.css', () => ({ default: {} }));
 
+// Mock server-only to prevent import errors in test environment
+vi.mock('server-only', () => ({}));
+
+// Mock MDX importers to prevent Vite from resolving @content imports in test environment
+// This is necessary because @content/* paths reference actual MDX files that may not exist
+// or should not be loaded during unit/integration tests
+vi.mock('@/lib/mdx-importers.generated', () => ({
+  postImporters: {
+    en: {},
+    zh: {},
+  },
+  productImporters: {
+    en: {},
+    zh: {},
+  },
+  pageImporters: {
+    en: {},
+    zh: {},
+  },
+}));
+
 // Mock next/font/local for local font loading (P2-1 Phase 3: Geist Sans Latin subset)
 vi.mock('next/font/local', () => ({
   default: vi.fn(() => ({
@@ -197,6 +218,20 @@ vi.mock('next/navigation', () => ({
   redirect: vi.fn(),
   permanentRedirect: vi.fn(),
   notFound: vi.fn(),
+}));
+
+// Mock Next.js 16 Cache Components API
+// - cacheLife() and cacheTag() are no-ops in test environment
+// - unstable_cache passes through the function for testing
+// - revalidatePath and revalidateTag are no-ops in tests
+vi.mock('next/cache', () => ({
+  cacheLife: vi.fn(() => undefined),
+  cacheTag: vi.fn(() => undefined),
+  unstable_cache: vi.fn((fn) => fn),
+  revalidatePath: vi.fn(() => undefined),
+  revalidateTag: vi.fn(() => undefined),
+  unstable_expireTag: vi.fn(() => undefined),
+  unstable_expirePath: vi.fn(() => undefined),
 }));
 
 // Suppress jsdom navigation errors during unit tests
@@ -1171,6 +1206,7 @@ const createMockZodString = () => {
     default: vi.fn(() => mockString),
     transform: vi.fn(() => mockString),
     refine: vi.fn(() => mockString),
+    overwrite: vi.fn(() => mockString),
     parse: vi.fn((value) => value),
     safeParse: vi.fn((value) => ({ success: true, data: value })),
   };

@@ -1,4 +1,4 @@
-import { COUNT_PAIR, MAGIC_16 } from '../constants/count';
+import { COUNT_PAIR, MAGIC_8, MAGIC_16 } from '../constants/count';
 import { ZERO } from '../constants/magic-numbers';
 
 export type SecurityHeader = {
@@ -191,13 +191,14 @@ export function getSecurityHeaders(
  * - Alphanumeric only for CSP compatibility
  * - Must pass isValidNonce validation
  */
-const NONCE_BYTE_LENGTH = MAGIC_16;
+const NONCE_BYTE_LENGTH = MAGIC_8; // 8 bytes = 16 hex characters
 const NONCE_HEX_PAD = COUNT_PAIR;
 
 export function generateNonce(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     // randomUUID returns 36 chars with hyphens, removing hyphens gives 32 hex chars
-    return crypto.randomUUID().replace(/-/g, '');
+    // Take first 16 chars to match expected nonce length
+    return crypto.randomUUID().replace(/-/g, '').substring(0, 16);
   }
 
   if (

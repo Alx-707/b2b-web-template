@@ -30,6 +30,7 @@ export function sanitizePlainText(input: string): string {
     .replace(/javascript:/gi, '') // Remove javascript: protocol
     .replace(/on\w+=/gi, '') // Remove event handlers
     .replace(/data:/gi, '') // Remove data: protocol
+    .replace(/\s+/g, ' ') // Replace multiple spaces with single space
     .trim();
 }
 

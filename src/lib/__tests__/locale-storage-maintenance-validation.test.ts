@@ -3,12 +3,12 @@ import type { Locale } from '@/types/i18n';
 import { CookieManager } from '../locale-storage-cookie';
 import { LocalStorageManager } from '../locale-storage-local';
 import { LocaleValidationManager } from '../locale-storage-maintenance-validation';
-import type {
-  LocaleDetectionHistory,
-  LocaleSource,
-  UserLocalePreference,
+import {
+  STORAGE_KEYS,
+  type LocaleDetectionHistory,
+  type LocaleSource,
+  type UserLocalePreference,
 } from '../locale-storage-types';
-import { STORAGE_KEYS } from '../locale-storage-types-constants';
 
 // Helper type for result.data with issues/warnings
 interface ValidationResultData {

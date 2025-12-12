@@ -184,7 +184,7 @@ describe('Verify Turnstile API Route', () => {
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Internal server error');
+      expect(data.error).toBe('Verification request failed');
     });
 
     it('应该处理Cloudflare API响应错误', async () => {

@@ -19,6 +19,7 @@ describe('Content Validation - Advanced Tests', () => {
   describe('validateContentMetadata - Advanced Validation', () => {
     const validMetadata = {
       title: 'Test Article',
+      slug: 'test-article',
       publishedAt: '2024-01-01T00:00:00Z',
       updatedAt: '2024-01-02T00:00:00Z',
       excerpt: 'This is a test excerpt',

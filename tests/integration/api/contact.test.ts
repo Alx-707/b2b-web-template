@@ -2,8 +2,17 @@ import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as contactRoute from '@/app/api/contact/route';
 
+vi.mock('@/lib/security/distributed-rate-limit', () => ({
+  checkDistributedRateLimit: vi.fn(async () => ({
+    allowed: true,
+    remaining: 5,
+    resetTime: Date.now() + 60000,
+    retryAfter: null,
+  })),
+  createRateLimitHeaders: vi.fn(() => new Headers()),
+}));
+
 vi.mock('@/app/api/contact/contact-api-utils', () => ({
-  checkRateLimit: vi.fn(() => true),
   getClientIP: vi.fn(() => '1.1.1.1'),
 }));
 
@@ -62,10 +71,15 @@ describe('api/contact', () => {
   });
 
   it('returns 429 when rate limited', async () => {
-    const utils = await import('@/app/api/contact/contact-api-utils');
-    (utils.checkRateLimit as ReturnType<typeof vi.fn>).mockReturnValueOnce(
-      false,
-    );
+    const rateLimit = await import('@/lib/security/distributed-rate-limit');
+    (
+      rateLimit.checkDistributedRateLimit as ReturnType<typeof vi.fn>
+    ).mockResolvedValueOnce({
+      allowed: false,
+      remaining: 0,
+      resetTime: Date.now() + 60000,
+      retryAfter: 60,
+    });
 
     const res = await contactRoute.POST(
       makeRequest({ email: 'a@example.com' }),

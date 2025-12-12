@@ -14,6 +14,15 @@ vi.mock('@/lib/content-query', () => ({
   getPostBySlug: mockGetPostBySlug,
 }));
 
+// Mock the blog module to avoid 'use cache' directive issues in test environment
+vi.mock('@/lib/content/blog', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/content/blog')>();
+  return {
+    ...actual,
+    // Re-export the actual functions but they'll use the mocked content-query
+  };
+});
+
 function createBlogPost(
   locale: Locale,
   overrides: Partial<BlogPostMetadata> = {},

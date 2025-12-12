@@ -5,21 +5,48 @@ import ProductDetailPage, {
   generateMetadata,
 } from '@/app/[locale]/products/[slug]/page';
 
-const { mockGetTranslations, mockGetProductBySlugCached, mockGetAllProducts } =
-  vi.hoisted(() => ({
-    mockGetTranslations: vi.fn(),
-    mockGetProductBySlugCached: vi.fn(),
-    mockGetAllProducts: vi.fn(),
-  }));
+const {
+  mockGetTranslations,
+  mockGetProductBySlugCached,
+  mockGetAllProducts,
+  mockGetStaticParamsForType,
+} = vi.hoisted(() => ({
+  mockGetTranslations: vi.fn(),
+  mockGetProductBySlugCached: vi.fn(),
+  mockGetAllProducts: vi.fn(),
+  mockGetStaticParamsForType: vi.fn(),
+}));
 
 vi.mock('next-intl/server', () => ({
   getTranslations: mockGetTranslations,
   setRequestLocale: vi.fn(),
 }));
 
+// Mock content-query to prevent MDX importer from being loaded
+vi.mock('@/lib/content-query', () => ({
+  getAllPosts: vi.fn(),
+  getPostBySlug: vi.fn(),
+  getAllProducts: vi.fn(),
+  getProductBySlug: vi.fn(),
+  getAllPages: vi.fn(),
+  getPageBySlug: vi.fn(),
+}));
+
+// Mock content-manifest to prevent real static params generation
+vi.mock('@/lib/content-manifest', () => ({
+  getStaticParamsForType: mockGetStaticParamsForType,
+}));
+
 vi.mock('@/lib/content/products', () => ({
   getAllProductsCached: mockGetAllProducts,
   getProductBySlugCached: mockGetProductBySlugCached,
+}));
+
+// Mock MDX importers to prevent Vite from trying to resolve MDX files
+vi.mock('@/lib/mdx-importers.generated', () => ({
+  postImporters: {},
+  productImporters: {},
+  pageImporters: {},
 }));
 
 vi.mock('next/link', () => ({
@@ -37,6 +64,56 @@ vi.mock('next/link', () => ({
     >
       {children}
     </a>
+  ),
+}));
+
+// Mock i18n routing Link component
+vi.mock('@/i18n/routing', () => ({
+  Link: ({
+    href,
+    children,
+    ...props
+  }: React.PropsWithChildren<{ href: string; [key: string]: unknown }>) => (
+    <a
+      href={typeof href === 'string' ? href : href}
+      {...props}
+    >
+      {children}
+    </a>
+  ),
+}));
+
+// Mock UI components
+vi.mock('@/components/ui/button', () => ({
+  Button: ({
+    children,
+    asChild: _asChild,
+    ...props
+  }: React.PropsWithChildren<{
+    asChild?: boolean;
+    [key: string]: unknown;
+  }>) => <button {...props}>{children}</button>,
+}));
+
+vi.mock('@/components/ui/badge', () => ({
+  Badge: ({ children }: React.PropsWithChildren) => (
+    <span data-testid='badge'>{children}</span>
+  ),
+}));
+
+vi.mock('@/components/mdx', () => ({
+  MDXContent: ({
+    type: _type,
+    locale: _locale,
+    slug: _slug,
+  }: {
+    type: string;
+    locale: string;
+    slug: string;
+  }) => (
+    <div data-testid='mdx-content'>
+      <p>Test content</p>
+    </div>
   ),
 }));
 

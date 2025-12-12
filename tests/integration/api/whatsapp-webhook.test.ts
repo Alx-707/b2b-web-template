@@ -2,12 +2,12 @@ import { NextRequest } from 'next/server';
 import { describe, expect, it, vi } from 'vitest';
 import * as route from '@/app/api/whatsapp/webhook/route';
 
-vi.mock('@/lib/whatsapp', () => ({
-  getWhatsAppService: () => ({
-    verifyWebhook: (mode: string, token: string, challenge: string) =>
-      mode === 'subscribe' && token === 'token' ? challenge : null,
-    handleIncomingMessage: vi.fn(async () => {}),
+vi.mock('@/lib/whatsapp-service', () => ({
+  verifyWebhook: vi.fn((mode: string, token: string, challenge: string) => {
+    return mode === 'subscribe' && token === 'token' ? challenge : null;
   }),
+  verifyWebhookSignature: vi.fn(() => true),
+  handleIncomingMessage: vi.fn(async () => {}),
 }));
 
 describe('api/whatsapp/webhook', () => {
@@ -49,6 +49,6 @@ describe('api/whatsapp/webhook', () => {
     const res = await route.POST(req);
     const body = await res.json();
     expect(res.status).toBe(400);
-    expect(body.error).toBe('INVALID_JSON');
+    expect(body.error).toBe('Invalid JSON body');
   });
 });

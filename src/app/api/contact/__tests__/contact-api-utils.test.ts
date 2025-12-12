@@ -130,6 +130,7 @@ describe('contact-api-utils', () => {
   describe('verifyTurnstile', () => {
     it('should return true for valid turnstile response', async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () =>
           Promise.resolve({
             success: true,
@@ -146,6 +147,7 @@ describe('contact-api-utils', () => {
 
     it('should return false when turnstile verification fails', async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () =>
           Promise.resolve({
             'success': false,
@@ -160,6 +162,7 @@ describe('contact-api-utils', () => {
 
     it('should return false for invalid hostname', async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () =>
           Promise.resolve({
             success: true,
@@ -180,6 +183,7 @@ describe('contact-api-utils', () => {
       vi.mocked(isAllowedTurnstileAction).mockReturnValueOnce(false);
 
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () =>
           Promise.resolve({
             success: true,
@@ -193,36 +197,58 @@ describe('contact-api-utils', () => {
       expect(result).toBe(false);
     });
 
-    it('should return false on fetch error', async () => {
+    it('should throw on fetch error', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-      const result = await verifyTurnstile('valid-token', '192.168.1.1');
-
-      expect(result).toBe(false);
+      await expect(
+        verifyTurnstile('valid-token', '192.168.1.1'),
+      ).rejects.toThrow('Network error');
     });
 
     it('should return false when secret key is not configured', async () => {
-      // Re-mock env without secret key
+      // This test verifies the early-return path when TURNSTILE_SECRET_KEY is empty
+      // verifyTurnstileDetailed should return {success: false, errorCodes: ['not-configured']}
+      // without calling fetch at all
+
+      // Temporarily override the env mock
       vi.doMock('@/lib/env', () => ({
         env: {
-          TURNSTILE_SECRET_KEY: undefined,
+          TURNSTILE_SECRET_KEY: '',
         },
       }));
 
-      // Need to re-import to get new mock
-      const { verifyTurnstile: verifyTurnstileNoKey } = await import(
+      // Also re-mock logger to avoid reset issues
+      vi.doMock('@/lib/logger', () => ({
+        logger: {
+          warn: vi.fn(),
+          error: vi.fn(),
+          info: vi.fn(),
+        },
+      }));
+
+      // Re-import module with new env mock
+      vi.resetModules();
+      const { verifyTurnstile: testVerify } = await import(
         '../contact-api-utils'
       );
 
-      // This test is tricky because the mock is hoisted, so we'll test error path
-      mockFetch.mockRejectedValueOnce(new Error('No key'));
+      const result = await testVerify('token', '192.168.1.1');
 
-      const result = await verifyTurnstileNoKey('token', '192.168.1.1');
+      // Should return false due to missing secret key (early return, no fetch)
       expect(result).toBe(false);
+
+      // Verify fetch was NOT called (early return path)
+      expect(mockFetch).not.toHaveBeenCalled();
+
+      // Cleanup
+      vi.doUnmock('@/lib/env');
+      vi.doUnmock('@/lib/logger');
+      vi.resetModules();
     });
 
     it('should include IP in payload when not unknown', async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () =>
           Promise.resolve({
             success: true,
@@ -238,6 +264,7 @@ describe('contact-api-utils', () => {
 
     it('should not include IP in payload when unknown', async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () =>
           Promise.resolve({
             success: true,

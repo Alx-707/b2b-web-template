@@ -259,7 +259,10 @@ We provide quality products.`,
     });
 
     it('should call generateJSONLD with correct schema', async () => {
-      await TermsPage({ params: Promise.resolve(mockParams) });
+      const pageElement = await TermsPage({
+        params: Promise.resolve(mockParams),
+      });
+      render(pageElement);
 
       expect(mockGenerateJSONLD).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -283,7 +286,10 @@ We provide quality products.`,
         },
       });
 
-      await TermsPage({ params: Promise.resolve(mockParams) });
+      const pageElement = await TermsPage({
+        params: Promise.resolve(mockParams),
+      });
+      render(pageElement);
 
       expect(mockGenerateJSONLD).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -300,7 +306,10 @@ We provide quality products.`,
         },
       });
 
-      await TermsPage({ params: Promise.resolve(mockParams) });
+      const pageElement = await TermsPage({
+        params: Promise.resolve(mockParams),
+      });
+      render(pageElement);
 
       expect(mockGenerateJSONLD).toHaveBeenCalledWith(
         expect.objectContaining({

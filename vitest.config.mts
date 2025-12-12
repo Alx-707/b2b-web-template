@@ -319,6 +319,8 @@ export default defineConfig({
       },
       // Fix directory import resolution in Vitest for packages that import "next/font/local"
       { find: 'next/font/local', replacement: 'next/font/local/index.js' },
+      // Content path alias (must match tsconfig.json paths for consistency)
+      { find: '@content', replacement: resolve(__dirname, './content') },
       // Main path aliases
       { find: '@messages', replacement: resolve(__dirname, './messages') },
       { find: '@', replacement: resolve(__dirname, './src') },

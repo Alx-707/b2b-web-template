@@ -72,18 +72,13 @@ async function requestTurnstileVerification(
     },
   );
 
-  return response.json();
-}
+  if (!response.ok) {
+    throw new Error(
+      `Turnstile API returned ${response.status}: ${response.statusText}`,
+    );
+  }
 
-function handleVerificationFailure(
-  result: TurnstileVerificationResult,
-  ip: string,
-): false {
-  logger.warn('Turnstile verification failed', {
-    errorCodes: result['error-codes'],
-    ip,
-  });
-  return false;
+  return response.json();
 }
 
 function validateTurnstileHostnameResponse(
@@ -169,37 +164,71 @@ export async function verifyTurnstile(
   token: string,
   ip: string,
 ): Promise<boolean> {
+  const result = await verifyTurnstileDetailed(token, ip);
+  return result.success;
+}
+
+/**
+ * Handle Turnstile verification failure
+ */
+function handleTurnstileFailure(
+  result: TurnstileVerificationResult,
+  ip: string,
+): { success: false; errorCodes?: string[] } {
+  logger.warn('Turnstile verification failed:', {
+    errorCodes: result['error-codes'],
+    clientIP: ip,
+  });
+  const errorCodes = result['error-codes'];
+  return errorCodes ? { success: false, errorCodes } : { success: false };
+}
+
+/**
+ * 验证Turnstile令牌（详细结果）
+ * Verify Turnstile token with detailed result
+ */
+export async function verifyTurnstileDetailed(
+  token: string,
+  ip: string,
+): Promise<{ success: boolean; errorCodes?: string[] }> {
   try {
     if (shouldBypassTurnstile(ip)) {
-      return true;
+      return { success: true };
     }
 
     const secretKey = env.TURNSTILE_SECRET_KEY;
 
     if (!secretKey) {
       logger.warn('Turnstile secret key not configured');
-      return false;
+      return { success: false, errorCodes: ['not-configured'] };
     }
 
     const payload = buildTurnstilePayload(token, ip, secretKey);
     const result = await requestTurnstileVerification(payload);
 
     if (!result.success) {
-      return handleVerificationFailure(result, ip);
+      return handleTurnstileFailure(result, ip);
     }
 
     if (!validateTurnstileHostnameResponse(result, ip)) {
-      return false;
+      return { success: false, errorCodes: ['invalid-hostname'] };
     }
 
     if (!validateTurnstileActionResponse(result, ip)) {
-      return false;
+      return { success: false, errorCodes: ['invalid-action'] };
     }
 
-    return true;
+    // Log successful verification
+    logger.info('Turnstile verification attempt', {
+      success: true,
+      hostname: result.hostname,
+      clientIP: ip,
+    });
+
+    return { success: true };
   } catch (error) {
     logger.error('Turnstile verification error', { error, ip });
-    return false;
+    throw error; // Re-throw to let caller handle 500 errors
   }
 }
 
@@ -214,6 +243,26 @@ export function getClientIP(request: NextRequest): string {
   if (forwarded) {
     const first = forwarded.split(',').shift()?.trim();
     return first || 'unknown';
+  }
+
+  if (realIP) {
+    return realIP;
+  }
+
+  return 'unknown';
+}
+
+/**
+ * 获取完整的客户端IP链（用于 Turnstile）
+ * Get full client IP chain for Turnstile verification
+ */
+export function getFullClientIPChain(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  const realIP = request.headers.get('x-real-ip');
+
+  if (forwarded) {
+    // Return the full chain for Turnstile to analyze
+    return forwarded.trim();
   }
 
   if (realIP) {

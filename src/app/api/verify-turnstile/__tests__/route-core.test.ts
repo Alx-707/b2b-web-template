@@ -198,7 +198,9 @@ describe('Verify Turnstile API Route - Core Tests', () => {
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.message).toBe('An error occurred while verifying the token');
+      expect(data.message).toBe(
+        'Failed to communicate with bot protection service',
+      );
     });
   });
 });

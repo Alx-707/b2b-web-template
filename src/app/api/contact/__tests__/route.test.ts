@@ -43,13 +43,23 @@ vi.mock('@/lib/logger', () => ({
   logger: mockLogger,
 }));
 
+// Mock distributed rate limit
+vi.mock('@/lib/security/distributed-rate-limit', () => ({
+  checkDistributedRateLimit: vi.fn(async () => ({
+    allowed: true,
+    remaining: 5,
+    resetTime: Date.now() + 60000,
+    retryAfter: null,
+  })),
+  createRateLimitHeaders: vi.fn(() => new Headers()),
+}));
+
 // 移除全局validations Mock，使用真实的验证逻辑
 // 在需要的地方进行局部Mock
 // vi.mock('@/lib/validations', () => { ... });
 
 // Mock contact API utils
 vi.mock('@/app/api/contact/contact-api-utils', () => ({
-  checkRateLimit: vi.fn().mockReturnValue(true),
   getClientIP: vi.fn().mockReturnValue('127.0.0.1'),
   verifyTurnstile: vi.fn().mockResolvedValue(true),
 }));
@@ -104,7 +114,6 @@ describe('Contact API Route', () => {
 
     // Reset contact-api-utils mocks
     const contactApiUtils = await import('@/app/api/contact/contact-api-utils');
-    vi.mocked(contactApiUtils.checkRateLimit).mockReturnValue(true);
     vi.mocked(contactApiUtils.getClientIP).mockReturnValue('127.0.0.1');
     vi.mocked(contactApiUtils.verifyTurnstile).mockResolvedValue(true);
   });

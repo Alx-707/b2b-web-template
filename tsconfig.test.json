@@ -14,6 +14,10 @@
     "skipLibCheck": true
   },
   "include": [
+    // 类型声明文件（必须包含以获得 MDX 和环境类型）
+    "env.d.ts",
+    "next-env.d.ts",
+
     // 包含所有测试文件
     "**/*.test.ts",
     "**/*.test.tsx",
@@ -34,7 +38,13 @@
     // 测试配置文件
     "vitest.config.mts",
     "vitest.config.browser.ts",
-    "playwright.config.ts"
+    "playwright.config.ts",
+
+    // MDX 内容文件（用于 @content 路径别名解析）
+    "content/**/*.mdx",
+
+    // 生成的导入器文件
+    "src/lib/mdx-importers.generated.ts"
   ],
   "exclude": [
     "node_modules",
