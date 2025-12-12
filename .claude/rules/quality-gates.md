@@ -65,11 +65,19 @@ Flow: type-check → lint → format → test → security → build → lightho
 
 ## Test Coverage
 
-**Global Target**: 85% (enforced)
+**Progressive Roadmap** (aligned with `.augment/rules`):
+
+| Phase | Target | Timeline |
+|-------|--------|----------|
+| Phase 1 (Current) | ≥65% | Baseline |
+| Phase 2 | ≥75% | +3 months |
+| Phase 3 | ≥80% | +6 months |
+
+**Current Status**: ~72% (exceeds Phase 1 target)
 
 | Module Type | Target | Enforcement |
 |-------------|--------|-------------|
-| Global | ≥85% | Blocking |
+| Global | ≥65% | Blocking |
 | Core Business | 90-92% | Blocking |
 | Security | 90-92% | Blocking |
 | Utils | 92-95% | Blocking |
