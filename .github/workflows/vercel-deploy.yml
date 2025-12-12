@@ -51,7 +51,11 @@ jobs:
           cache: "pnpm"
 
       - name: 安装 Vercel CLI
-        run: npm i -g vercel@latest
+        run: |
+          set -euo pipefail
+          # Pin 到最后一次成功部署版本（避免 vercel@latest 在发布窗口回归）
+          npm i -g vercel@50.0.0
+          vercel --version
         env:
           CI: true
 
@@ -117,7 +121,30 @@ jobs:
         id: vercel_cli_deploy
         run: |
           set -euo pipefail
-          DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          # GitHub Actions 环境偶发 IPv6 连接问题时，优先使用 IPv4
+          export NODE_OPTIONS="--dns-result-order=ipv4first"
+
+          # 有限重试：仅失败时等待，不影响正常路径耗时
+          attempt=1
+          max_attempts=3
+          while true; do
+            echo "Vercel deploy attempt ${attempt}/${max_attempts}"
+            set +e
+            DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --yes --debug)
+            status=$?
+            set -e
+            if [ $status -eq 0 ] && [ -n "${DEPLOY_URL}" ]; then
+              break
+            fi
+            if [ $attempt -ge $max_attempts ]; then
+              echo "❌ Vercel deploy failed after ${max_attempts} attempts"
+              exit 1
+            fi
+            sleep_seconds=$((attempt * 5))
+            echo "Retrying in ${sleep_seconds}s..."
+            sleep "${sleep_seconds}"
+            attempt=$((attempt + 1))
+          done
           echo "deployment-url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
           echo "VERCEL_DEPLOYMENT_URL=${DEPLOY_URL}" >> "$GITHUB_ENV"
           echo "部署 URL: ${DEPLOY_URL}"
@@ -162,7 +189,11 @@ jobs:
           cache: "pnpm"
 
       - name: 安装 Vercel CLI
-        run: npm i -g vercel@latest
+        run: |
+          set -euo pipefail
+          # Pin 到最后一次成功部署版本（避免 vercel@latest 在发布窗口回归）
+          npm i -g vercel@50.0.0
+          vercel --version
         env:
           CI: true
 
@@ -208,7 +239,28 @@ jobs:
         id: vercel_cli_deploy_prod
         run: |
           set -euo pipefail
-          DEPLOY_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          export NODE_OPTIONS="--dns-result-order=ipv4first"
+
+          attempt=1
+          max_attempts=3
+          while true; do
+            echo "Vercel prod deploy attempt ${attempt}/${max_attempts}"
+            set +e
+            DEPLOY_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} --yes --debug)
+            status=$?
+            set -e
+            if [ $status -eq 0 ] && [ -n "${DEPLOY_URL}" ]; then
+              break
+            fi
+            if [ $attempt -ge $max_attempts ]; then
+              echo "❌ Vercel prod deploy failed after ${max_attempts} attempts"
+              exit 1
+            fi
+            sleep_seconds=$((attempt * 5))
+            echo "Retrying in ${sleep_seconds}s..."
+            sleep "${sleep_seconds}"
+            attempt=$((attempt + 1))
+          done
           echo "deployment-url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
           echo "PROD_DEPLOYMENT_URL=${DEPLOY_URL}" >> "$GITHUB_ENV"
           echo "生产部署 URL: ${DEPLOY_URL}"
