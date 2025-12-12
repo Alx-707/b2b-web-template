@@ -1,6 +1,5 @@
 'use client';
 
-import type { ComponentProps } from 'react';
 import {
   memo,
   useCallback,
@@ -9,6 +8,7 @@ import {
   useRef,
   useState,
   useTransition,
+  type ComponentProps,
 } from 'react';
 import { Check, Globe, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';

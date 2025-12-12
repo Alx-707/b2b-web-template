@@ -16,7 +16,7 @@ interface BlogDetailPageProps {
   }>;
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return getStaticParamsForType('posts');
 }
 

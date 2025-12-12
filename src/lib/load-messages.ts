@@ -258,7 +258,7 @@ function createDeferredMessagesCached(locale: Locale) {
  * @param locale - The locale to load ('en' or 'zh')
  * @returns Promise resolving to the translation messages object
  */
-export async function loadCriticalMessages(locale: Locale): Promise<Messages> {
+export function loadCriticalMessages(locale: Locale): Promise<Messages> {
   if (isCiLikeEnvironment) {
     return loadCriticalMessagesCore(locale);
   }
@@ -281,7 +281,7 @@ export async function loadCriticalMessages(locale: Locale): Promise<Messages> {
  * @param locale - The locale to load ('en' or 'zh')
  * @returns Promise resolving to the translation messages object
  */
-export async function loadDeferredMessages(locale: Locale): Promise<Messages> {
+export function loadDeferredMessages(locale: Locale): Promise<Messages> {
   if (isCiLikeEnvironment) {
     return loadDeferredMessagesCore(locale);
   }

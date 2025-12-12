@@ -67,8 +67,68 @@ function validateApiKey(request: NextRequest): boolean {
   return token === secret;
 }
 
+interface InvalidationResult {
+  success: boolean;
+  invalidatedTags: string[];
+  errors: string[];
+}
+
+function handleI18nInvalidation(
+  locale: Locale | undefined,
+  entity: string | undefined,
+): InvalidationResult {
+  if (locale && isValidLocale(locale)) {
+    if (entity === 'critical') return invalidateI18n.critical(locale);
+    if (entity === 'deferred') return invalidateI18n.deferred(locale);
+    return invalidateI18n.locale(locale);
+  }
+  return invalidateI18n.all();
+}
+
+function handleContentInvalidation(
+  locale: Locale,
+  entity: string | undefined,
+  identifier: string | undefined,
+): InvalidationResult {
+  if (entity === 'blog' && identifier) {
+    return invalidateContent.blogPost(identifier, locale);
+  }
+  if (entity === 'page' && identifier) {
+    return invalidateContent.page(identifier, locale);
+  }
+  return invalidateContent.locale(locale);
+}
+
+function handleProductInvalidation(
+  locale: Locale,
+  entity: string | undefined,
+  identifier: string | undefined,
+): InvalidationResult {
+  if (entity === 'detail' && identifier) {
+    return invalidateProduct.detail(identifier, locale);
+  }
+  if (entity === 'categories') return invalidateProduct.categories(locale);
+  if (entity === 'featured') return invalidateProduct.featured(locale);
+  return invalidateProduct.locale(locale);
+}
+
+function handleAllInvalidation(locale: Locale | undefined): InvalidationResult {
+  if (locale && isValidLocale(locale)) {
+    return invalidateLocale(locale);
+  }
+  const results = [
+    invalidateDomain(CACHE_DOMAINS.I18N),
+    invalidateDomain(CACHE_DOMAINS.CONTENT),
+    invalidateDomain(CACHE_DOMAINS.PRODUCT),
+  ];
+  return {
+    success: results.every((r) => r.errors.length === 0),
+    invalidatedTags: results.flatMap((r) => r.invalidatedTags),
+    errors: results.flatMap((r) => r.errors),
+  };
+}
+
 export async function POST(request: NextRequest) {
-  // Authenticate
   if (!validateApiKey(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -77,82 +137,17 @@ export async function POST(request: NextRequest) {
     const body = (await request.json()) as InvalidationRequest;
     const { domain, locale, entity, identifier } = body;
 
-    let result;
-
-    switch (domain) {
-      case 'i18n':
-        if (locale && isValidLocale(locale)) {
-          if (entity === 'critical') {
-            result = invalidateI18n.critical(locale);
-          } else if (entity === 'deferred') {
-            result = invalidateI18n.deferred(locale);
-          } else {
-            result = invalidateI18n.locale(locale);
-          }
-        } else {
-          result = invalidateI18n.all();
-        }
-        break;
-
-      case 'content':
-        if (!locale || !isValidLocale(locale)) {
-          return NextResponse.json(
-            { error: 'Locale required for content invalidation' },
-            { status: 400 },
-          );
-        }
-        if (entity === 'blog' && identifier) {
-          result = invalidateContent.blogPost(identifier, locale);
-        } else if (entity === 'page' && identifier) {
-          result = invalidateContent.page(identifier, locale);
-        } else {
-          result = invalidateContent.locale(locale);
-        }
-        break;
-
-      case 'product':
-        if (!locale || !isValidLocale(locale)) {
-          return NextResponse.json(
-            { error: 'Locale required for product invalidation' },
-            { status: 400 },
-          );
-        }
-        if (entity === 'detail' && identifier) {
-          result = invalidateProduct.detail(identifier, locale);
-        } else if (entity === 'categories') {
-          result = invalidateProduct.categories(locale);
-        } else if (entity === 'featured') {
-          result = invalidateProduct.featured(locale);
-        } else {
-          result = invalidateProduct.locale(locale);
-        }
-        break;
-
-      case 'all':
-        if (locale && isValidLocale(locale)) {
-          result = invalidateLocale(locale);
-        } else {
-          // Invalidate all domains for all locales
-          const results = [
-            invalidateDomain(CACHE_DOMAINS.I18N),
-            invalidateDomain(CACHE_DOMAINS.CONTENT),
-            invalidateDomain(CACHE_DOMAINS.PRODUCT),
-          ];
-          const allTags = results.flatMap((r) => r.invalidatedTags);
-          const allErrors = results.flatMap((r) => r.errors);
-          result = {
-            success: allErrors.length === 0,
-            invalidatedTags: allTags,
-            errors: allErrors,
-          };
-        }
-        break;
-
-      default:
-        return NextResponse.json(
-          { error: `Invalid domain: ${domain}` },
-          { status: 400 },
-        );
+    const result = processDomainInvalidation({
+      domain,
+      locale,
+      entity,
+      identifier,
+    });
+    if ('error' in result) {
+      return NextResponse.json(
+        { error: result.error },
+        { status: result.status },
+      );
     }
 
     logger.info('Cache invalidation triggered', {
@@ -177,7 +172,48 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+type ProcessResult = InvalidationResult | { error: string; status: number };
+
+interface ProcessOptions {
+  domain: string;
+  locale: Locale | undefined;
+  entity: string | undefined;
+  identifier: string | undefined;
+}
+
+function processDomainInvalidation(options: ProcessOptions): ProcessResult {
+  const { domain, locale, entity, identifier } = options;
+  switch (domain) {
+    case 'i18n':
+      return handleI18nInvalidation(locale, entity);
+
+    case 'content':
+      if (!locale || !isValidLocale(locale)) {
+        return {
+          error: 'Locale required for content invalidation',
+          status: 400,
+        };
+      }
+      return handleContentInvalidation(locale, entity, identifier);
+
+    case 'product':
+      if (!locale || !isValidLocale(locale)) {
+        return {
+          error: 'Locale required for product invalidation',
+          status: 400,
+        };
+      }
+      return handleProductInvalidation(locale, entity, identifier);
+
+    case 'all':
+      return handleAllInvalidation(locale);
+
+    default:
+      return { error: `Invalid domain: ${domain}`, status: 400 };
+  }
+}
+
+export function GET() {
   return NextResponse.json({
     message: 'Cache Invalidation API',
     usage: {

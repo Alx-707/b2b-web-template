@@ -77,8 +77,8 @@ export const getAllProductsCached: GetAllProductsCachedFn = async (locale, optio
   // Filter by tags if specified
   if (options.tags !== undefined && options.tags.length > 0) {
     filtered = filtered.filter((p) => {
-      const productTags = p.tags ?? [];
-      return options.tags!.some((tag) => productTags.includes(tag));
+      const pTags = p.tags ?? [];
+      return options.tags!.some((tag) => pTags.includes(tag));
     });
   }
 

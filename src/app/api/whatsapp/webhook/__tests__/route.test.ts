@@ -5,12 +5,12 @@ import { GET, POST } from '../route';
 // Mock dependencies
 const mockVerifyWebhook = vi.hoisted(() => vi.fn());
 const mockHandleIncomingMessage = vi.hoisted(() => vi.fn());
+const mockVerifyWebhookSignature = vi.hoisted(() => vi.fn());
 
-vi.mock('@/lib/whatsapp', () => ({
-  getWhatsAppService: vi.fn(() => ({
-    verifyWebhook: mockVerifyWebhook,
-    handleIncomingMessage: mockHandleIncomingMessage,
-  })),
+vi.mock('@/lib/whatsapp-service', () => ({
+  verifyWebhook: mockVerifyWebhook,
+  handleIncomingMessage: mockHandleIncomingMessage,
+  verifyWebhookSignature: mockVerifyWebhookSignature,
 }));
 
 vi.mock('@/lib/logger', () => ({
@@ -32,12 +32,18 @@ function createMockGetRequest(
   return new NextRequest(url.toString(), { method: 'GET' });
 }
 
-function createMockPostRequest(body: Record<string, unknown>): NextRequest {
+function createMockPostRequest(
+  body: Record<string, unknown>,
+  signature = 'sha256=valid-signature',
+): NextRequest {
   const url = 'http://localhost:3000/api/whatsapp/webhook';
   return new NextRequest(url, {
     method: 'POST',
     body: JSON.stringify(body),
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-hub-signature-256': signature,
+    },
   });
 }
 
@@ -46,6 +52,7 @@ describe('WhatsApp Webhook Route', () => {
     vi.clearAllMocks();
     mockVerifyWebhook.mockReturnValue(null);
     mockHandleIncomingMessage.mockResolvedValue(undefined);
+    mockVerifyWebhookSignature.mockReturnValue(true);
   });
 
   afterEach(() => {
@@ -251,12 +258,64 @@ describe('WhatsApp Webhook Route', () => {
       expect(data.success).toBe(true);
     });
 
+    it('should return 401 when signature verification fails', async () => {
+      mockVerifyWebhookSignature.mockReturnValue(false);
+
+      const request = createMockPostRequest({
+        object: 'whatsapp_business_account',
+        entry: [],
+      });
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(401);
+      expect(data.error).toBe('Invalid signature');
+      expect(mockHandleIncomingMessage).not.toHaveBeenCalled();
+    });
+
+    it('should return 401 when signature header is missing', async () => {
+      mockVerifyWebhookSignature.mockReturnValue(false);
+
+      const url = 'http://localhost:3000/api/whatsapp/webhook';
+      const request = new NextRequest(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          object: 'whatsapp_business_account',
+          entry: [],
+        }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(401);
+      expect(data.error).toBe('Invalid signature');
+    });
+
+    it('should verify signature with raw body and header', async () => {
+      const payload = { object: 'whatsapp_business_account', entry: [] };
+      const signature = 'sha256=test-signature';
+      const request = createMockPostRequest(payload, signature);
+
+      await POST(request);
+
+      expect(mockVerifyWebhookSignature).toHaveBeenCalledWith(
+        JSON.stringify(payload),
+        signature,
+      );
+    });
+
     it('should return 400 for invalid JSON', async () => {
       const url = 'http://localhost:3000/api/whatsapp/webhook';
       const request = new NextRequest(url, {
         method: 'POST',
         body: 'invalid json',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-hub-signature-256': 'sha256=test-signature',
+        },
       });
 
       const response = await POST(request);

@@ -25,7 +25,7 @@ interface ProductDetailPageProps {
 }
 
 // Generate static params for all products
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return getStaticParamsForType('products');
 }
 

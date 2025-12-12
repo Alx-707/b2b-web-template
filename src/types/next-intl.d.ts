@@ -42,5 +42,6 @@ declare global {
    * Module augmentation for next-intl's IntlMessages interface.
    * This enables strict type checking for all translation function calls.
    */
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- Required for next-intl module augmentation
   interface IntlMessages extends Messages {}
 }

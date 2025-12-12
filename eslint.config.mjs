@@ -34,6 +34,8 @@ export default [
       'coverage/**',
       'dist/**',
       'build/**',
+      // Auto-generated files
+      'src/lib/*.generated.ts',
     ],
   },
   // Base JavaScript configuration

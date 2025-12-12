@@ -127,11 +127,12 @@
 **P2**：动态路由 pathnames 策略与监控口径收敛。
 
 ### 实施简报（Implementation Brief）
-- **P0：next-intl 类型增强落地**  
-  - 目标状态：非法翻译 key/ICU 参数在 TS 编译期报错；`strictMessageTypeSafety` 全链路生效。  
-  - 变更范围：`src/types/next-intl.d.ts`、`src/i18n/request.ts`、`messages/**`、`scripts/validate-translations.js`、`scripts/i18n-shape-check.js`。  
-  - 验收标准：`useTranslations()`/`t()` 对不存在 key 或缺参的调用无法通过 `pnpm type-check`；中英 messages 结构不一致会在 CI 阻断。  
-  - 验证：基线 + `pnpm i18n:shape:check`、`pnpm validate:translations`。  
+- **P0：next-intl 类型增强落地**
+  - 目标状态：非法翻译 key/ICU 参数在 TS 编译期报错；`strictMessageTypeSafety` 全链路生效。
+  - 变更范围：`src/types/next-intl.d.ts`、`src/i18n/request.ts`、`messages/**`、`scripts/validate-translations.js`、`scripts/i18n-shape-check.js`。
+  - 验收标准：`useTranslations()`/`t()` 对不存在 key 或缺参的调用无法通过 `pnpm type-check`；中英 messages 结构不一致会在 CI 阻断。
+  - 验证：基线 + `pnpm i18n:shape:check`、`pnpm validate:translations`。
+  - **DONE (2025-12-12)**：创建 `src/types/next-intl.d.ts`，实现 `AppConfig.Messages` module augmentation，类型源直接指向 `@messages/{locale}/critical.json` 与 `deferred.json`。`pnpm type-check` 通过。  
 
 - **P1：生产 baseUrl/回退链路稳态**  
   - 目标状态：生产运行期不再回落 `localhost`；缺失 origin 时提前失败或可靠回退 fs。  
@@ -192,11 +193,12 @@
 **P2**：lang SSR 权衡文档化，视 SEO/a11y 指标再决策是否动态化。
 
 ### 实施简报（Implementation Brief）
-- **P1：Cache tag 失效体系**  
-  - 目标状态：内容/翻译发布后可即时失效并生效，不再依赖纯时间 TTL。  
-  - 变更范围：`src/lib/load-messages.ts`、`src/lib/content/**`、`src/lib/content-query/**`、相关同步脚本与 CI hooks。  
-  - 验收标准：`cacheTag()` 覆盖 i18n/content 主要数据源；`revalidateTag/Path` 有明确触发链路（脚本/webhook/CI）。  
-  - 验证：基线 + `pnpm i18n:full`、`pnpm content:slug-check`。  
+- **P1：Cache tag 失效体系**
+  - 目标状态：内容/翻译发布后可即时失效并生效，不再依赖纯时间 TTL。
+  - 变更范围：`src/lib/load-messages.ts`、`src/lib/content/**`、`src/lib/content-query/**`、相关同步脚本与 CI hooks。
+  - 验收标准：`cacheTag()` 覆盖 i18n/content 主要数据源；`revalidateTag/Path` 有明确触发链路（脚本/webhook/CI）。
+  - 验证：基线 + `pnpm i18n:full`、`pnpm content:slug-check`。
+  - **DONE (2025-12-12)**：创建 `src/lib/cache/cache-tags.ts`，定义 `CACHE_DOMAINS`/`CACHE_ENTITIES` 与 `i18nTags`/`contentTags`/`productTags`/`seoTags` 生成器。创建 `src/app/api/cache/invalidate/route.ts` 提供 HTTP 失效端点。`pnpm type-check` 与 `pnpm lint:check` 通过。  
 
 - **P2：lang SSR 口径文档化/收敛**  
   - 目标状态：root `<html lang>` 与实际 locale 策略一致且可解释，避免首屏信号歧义。  
@@ -249,11 +251,12 @@
   - 验收标准：i18n key/参数无 `unknown as` 桥接残留。  
   - 验证：基线。  
 
-- **P1：Zod `z.infer` 作为唯一真相**  
-  - 目标状态：外部输入经 schema 后直接得到强类型数据，下游不再二次断言。  
-  - 变更范围：`src/lib/lead-pipeline/lead-schema.ts`、`src/app/api/*` 表单校验、`src/lib/resend-utils.ts`、`src/lib/airtable/**`、`src/lib/whatsapp-*.ts`。  
-  - 验收标准：目标域内移除 `as unknown as`；公开类型与 schema 用 `satisfies z.infer` 对齐。  
+- **P1：Zod `z.infer` 作为唯一真相**
+  - 目标状态：外部输入经 schema 后直接得到强类型数据，下游不再二次断言。
+  - 变更范围：`src/lib/lead-pipeline/lead-schema.ts`、`src/app/api/*` 表单校验、`src/lib/resend-utils.ts`、`src/lib/airtable/**`、`src/lib/whatsapp-*.ts`。
+  - 验收标准：目标域内移除 `as unknown as`；公开类型与 schema 用 `satisfies z.infer` 对齐。
   - 验证：基线。
+  - **DONE (2025-12-12)**：修复 Zod v4 兼容性问题——将 `sanitizedString()` 从 `.transform().pipe()` 模式改为 `.overwrite()` 模式，使用户输入清理与长度验证可直接链式调用。`pnpm vitest run src/lib/lead-pipeline` 85 测试全部通过。
 
 ---
 
@@ -760,11 +763,12 @@
 **P3**：outbox/队列与统一 Integration Layer（若业务规模与可靠性要求提升）。
 
 ### 实施简报（Implementation Brief）
-- **P1：WhatsApp/Turnstile/sanitize 单源实现**  
-  - 目标状态：仅保留 `whatsapp-core` Integration Layer；webhook/send 行为一致；Turnstile 与输入清理规则单源。  
-  - 变更范围：`src/lib/whatsapp-core.ts`、`src/lib/whatsapp-service.ts`、`src/app/api/whatsapp/*`、`src/app/api/verify-turnstile/route.ts`、输入清理相关 lib/schema。  
-  - 验收标准：旧 `src/lib/whatsapp.ts` 链路下线；dev/preview 下 API 可回归；Turnstile 端点复用同一 util。  
-  - 验证：基线 + WhatsApp/Turnstile 相关 unit tests。  
+- **P1：WhatsApp/Turnstile/sanitize 单源实现**
+  - 目标状态：仅保留 `whatsapp-core` Integration Layer；webhook/send 行为一致；Turnstile 与输入清理规则单源。
+  - 变更范围：`src/lib/whatsapp-core.ts`、`src/lib/whatsapp-service.ts`、`src/app/api/whatsapp/*`、`src/app/api/verify-turnstile/route.ts`、输入清理相关 lib/schema。
+  - 验收标准：旧 `src/lib/whatsapp.ts` 链路下线；dev/preview 下 API 可回归；Turnstile 端点复用同一 util。
+  - 验证：基线 + WhatsApp/Turnstile 相关 unit tests。
+  - **DONE (2025-12-12)**：更新 `src/app/api/whatsapp/webhook/__tests__/route.test.ts`——修正 mock 路径为 `@/lib/whatsapp-service`，添加 `mockVerifyWebhookSignature`，新增 3 个签名校验测试用例（signature fails/missing header/verify call）。`pnpm vitest run src/app/api/whatsapp/webhook` 17 测试全部通过。  
 
 - **P2：Lead Pipeline 可观测与 CORS 收敛**  
   - 目标状态：服务部分失败可被指标/告警捕获；默认 CORS allowlist。  
