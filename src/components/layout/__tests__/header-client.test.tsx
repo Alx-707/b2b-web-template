@@ -96,10 +96,10 @@ describe('LanguageToggleIsland', () => {
     expect(toggle).toHaveAttribute('locale', 'zh');
   });
 
-  it('does not wrap in ClientI18nProvider', () => {
+  it('does not wrap in extra i18n provider', () => {
     render(<LanguageToggleIsland locale='en' />);
 
-    // Should not have i18n-provider wrapper
+    // Should not have extra i18n-provider wrapper
     expect(screen.queryByTestId('i18n-provider')).not.toBeInTheDocument();
   });
 });

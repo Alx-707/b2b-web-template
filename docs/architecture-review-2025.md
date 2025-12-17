@@ -72,7 +72,7 @@
 - 核心文件：`src/i18n/request.ts`, `src/i18n/routing.ts`, `src/lib/load-messages.ts`, `src/types/i18n.ts`, `proxy.ts`, `src/components/language-toggle.tsx`，以及 `scripts/translation-*.js`/`scripts/validate-*.ts`。
 - Next.js 16 官方 `proxy.ts` 入口（Node runtime）已正确使用，负责 locale 重写与 CSP nonce。
 - messages 外部化：构建前脚本复制到 `public/messages/**`；运行期 `load-messages.ts` 通过 HTTP fetch + fs fallback 加载，并用 `unstable_cache` 做 Data Cache。
-- 分层 Provider：root layout 注入 critical messages；页面级 `TranslationsBoundary` 再补 deferred；客户端 island 有 `ClientI18nProvider`。
+- 分层 Provider：root layout 注入 critical messages；需要完整文案的页面通过各自 layout 注入 complete messages（critical + deferred），客户端 island 不再单独包裹 i18n provider。
 
 ### 发现的问题
 1. **next-intl 类型增强缺口**（严重程度: 高）  
