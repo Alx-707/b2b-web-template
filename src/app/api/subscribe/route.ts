@@ -14,6 +14,7 @@ import {
   verifyTurnstile,
 } from '@/app/api/contact/contact-api-utils';
 import { HTTP_BAD_REQUEST_CONST } from '@/constants';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 // HTTP status codes as named constants
 const HTTP_INTERNAL_ERROR = 500;
@@ -40,7 +41,7 @@ function createSuccessResponse(result: LeadResult, email: string): object {
 
   return {
     success: true,
-    message: 'Successfully subscribed to notifications',
+    errorCode: API_ERROR_CODES.SUBSCRIBE_SUCCESS,
     email,
     referenceId: result.referenceId,
   };
@@ -56,9 +57,9 @@ function createErrorResponse(result: LeadResult): NextResponse {
   return NextResponse.json(
     {
       success: false,
-      message: isValidationError
-        ? 'Invalid email address'
-        : 'An error occurred. Please try again.',
+      errorCode: isValidationError
+        ? API_ERROR_CODES.SUBSCRIBE_VALIDATION_EMAIL_INVALID
+        : API_ERROR_CODES.SUBSCRIBE_PROCESSING_ERROR,
     },
     {
       status: isValidationError ? HTTP_BAD_REQUEST_CONST : HTTP_INTERNAL_ERROR,
@@ -83,7 +84,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Too many requests. Please try again later.',
+        errorCode: API_ERROR_CODES.RATE_LIMIT_EXCEEDED,
       },
       { status: HTTP_TOO_MANY_REQUESTS, headers },
     );
@@ -101,7 +102,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: parsedBody.error,
+          errorCode: API_ERROR_CODES.INVALID_JSON_BODY,
         },
         { status: HTTP_BAD_REQUEST_CONST },
       );
@@ -114,7 +115,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Email is required',
+          errorCode: API_ERROR_CODES.SUBSCRIBE_VALIDATION_EMAIL_REQUIRED,
         },
         { status: HTTP_BAD_REQUEST_CONST },
       );
@@ -128,7 +129,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Security verification required',
+          errorCode: API_ERROR_CODES.SUBSCRIBE_SECURITY_REQUIRED,
         },
         { status: HTTP_BAD_REQUEST_CONST },
       );
@@ -140,7 +141,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Security verification failed. Please try again.',
+          errorCode: API_ERROR_CODES.SUBSCRIBE_SECURITY_FAILED,
         },
         { status: HTTP_BAD_REQUEST_CONST },
       );

@@ -6,6 +6,7 @@ import {
   type RateLimitContext,
 } from '@/lib/api/with-rate-limit';
 import { logger } from '@/lib/logger';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 // HTTP 状态码常量
 const HTTP_STATUS = {
@@ -114,7 +115,7 @@ function buildLogPayload(body: WebVitalsData): LogPayload {
 function buildSuccessResponse(body: WebVitalsData) {
   return NextResponse.json({
     success: true,
-    message: 'Web Vitals data recorded successfully',
+    errorCode: API_ERROR_CODES.WEB_VITALS_RECORDED,
     data: {
       metric: body.name,
       value: body.value,
@@ -124,15 +125,8 @@ function buildSuccessResponse(body: WebVitalsData) {
   });
 }
 
-function buildErrorResponse(
-  errorType: string,
-  message: string,
-  status: number,
-) {
-  return NextResponse.json(
-    { success: false, _error: errorType, message },
-    { status },
-  );
+function buildErrorResponse(errorCode: string, status: number) {
+  return NextResponse.json({ success: false, errorCode }, { status });
 }
 
 /**
@@ -214,8 +208,7 @@ async function handlePost(
 
     if (!parsedBody.ok) {
       return buildErrorResponse(
-        parsedBody.error,
-        'Invalid JSON body for Web Vitals endpoint',
+        API_ERROR_CODES.INVALID_JSON_BODY,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
@@ -224,8 +217,7 @@ async function handlePost(
 
     if (!validateWebVitalsData(body)) {
       return buildErrorResponse(
-        'Invalid web vitals data format',
-        'The provided data does not match the expected Web Vitals format',
+        API_ERROR_CODES.WEB_VITALS_INVALID_FORMAT,
         HTTP_STATUS.BAD_REQUEST,
       );
     }
@@ -239,8 +231,7 @@ async function handlePost(
     });
 
     return buildErrorResponse(
-      'Internal server _error',
-      'Failed to process Web Vitals data',
+      API_ERROR_CODES.WEB_VITALS_PROCESS_FAILED,
       HTTP_STATUS.INTERNAL_SERVER_ERROR,
     );
   }
@@ -285,8 +276,7 @@ function handleGet(request: NextRequest, _ctx: RateLimitContext): NextResponse {
     return NextResponse.json(
       {
         success: false,
-        _error: 'Internal server _error',
-        message: 'Failed to retrieve Web Vitals statistics',
+        errorCode: API_ERROR_CODES.WEB_VITALS_RETRIEVE_FAILED,
       },
       { status: 500 },
     );
@@ -309,8 +299,7 @@ function handleDelete(
       return NextResponse.json(
         {
           success: false,
-          _error: 'Confirmation required',
-          message: 'Please add confirm=true parameter to confirm deletion',
+          errorCode: API_ERROR_CODES.CONFIRMATION_REQUIRED,
         },
         { status: 400 },
       );
@@ -323,7 +312,7 @@ function handleDelete(
 
     return NextResponse.json({
       success: true,
-      message: `Web Vitals data deleted for time range: ${timeRange || 'all'}`,
+      errorCode: API_ERROR_CODES.WEB_VITALS_DELETED,
       deletedAt: new Date().toISOString(),
     });
   } catch (_error) {
@@ -335,8 +324,7 @@ function handleDelete(
     return NextResponse.json(
       {
         success: false,
-        _error: 'Internal server _error',
-        message: 'Failed to delete Web Vitals data',
+        errorCode: API_ERROR_CODES.WEB_VITALS_DELETE_FAILED,
       },
       { status: 500 },
     );

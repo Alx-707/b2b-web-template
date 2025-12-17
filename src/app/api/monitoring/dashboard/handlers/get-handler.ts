@@ -6,6 +6,7 @@ import {
   HOURS_24_IN_MS,
 } from '@/app/api/monitoring/dashboard/types';
 import { COUNT_PAIR, ZERO } from '@/constants';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 import {
   COUNT_45,
   COUNT_120,
@@ -139,8 +140,7 @@ export function handleGetRequest(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to retrieve monitoring dashboard data',
+        errorCode: API_ERROR_CODES.MONITORING_RETRIEVE_FAILED,
       },
       { status: 500 },
     );

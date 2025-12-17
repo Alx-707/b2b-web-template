@@ -36,6 +36,7 @@ import {
   createRateLimitHeaders,
 } from '@/lib/security/distributed-rate-limit';
 import { getClientIP } from '@/app/api/contact/contact-api-utils';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 const VALID_LOCALES = ['en', 'zh'] as const;
 
@@ -147,7 +148,7 @@ async function checkRateLimitAndRespond(
       retryAfter: rateLimitResult.retryAfter,
     });
     return NextResponse.json(
-      { error: 'Rate limit exceeded' },
+      { success: false, errorCode: API_ERROR_CODES.RATE_LIMIT_EXCEEDED },
       { status: 429, headers: createRateLimitHeaders(rateLimitResult) },
     );
   }
@@ -167,7 +168,10 @@ export async function POST(request: NextRequest) {
 
   // 2. Auth check
   if (!validateApiKey(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { success: false, errorCode: API_ERROR_CODES.UNAUTHORIZED },
+      { status: 401 },
+    );
   }
 
   // 3. Post-auth rate limit (defense in depth - finer limit for valid tokens)
@@ -188,9 +192,9 @@ export async function POST(request: NextRequest) {
       entity,
       identifier,
     });
-    if ('error' in result) {
+    if ('errorCode' in result) {
       return NextResponse.json(
-        { error: result.error },
+        { success: false, errorCode: result.errorCode },
         { status: result.status },
       );
     }
@@ -205,19 +209,20 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: result.success,
+      errorCode: API_ERROR_CODES.CACHE_INVALIDATED,
       invalidatedTags: result.invalidatedTags,
       ...(result.errors.length > 0 && { errors: result.errors }),
     });
   } catch (error) {
     logger.error('Cache invalidation failed', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { success: false, errorCode: API_ERROR_CODES.CACHE_INVALIDATION_FAILED },
       { status: 500 },
     );
   }
 }
 
-type ProcessResult = InvalidationResult | { error: string; status: number };
+type ProcessResult = InvalidationResult | { errorCode: string; status: number };
 
 interface ProcessOptions {
   domain: string;
@@ -235,7 +240,7 @@ function processDomainInvalidation(options: ProcessOptions): ProcessResult {
     case 'content':
       if (!locale || !isValidLocale(locale)) {
         return {
-          error: 'Locale required for content invalidation',
+          errorCode: API_ERROR_CODES.CACHE_LOCALE_REQUIRED,
           status: 400,
         };
       }
@@ -244,7 +249,7 @@ function processDomainInvalidation(options: ProcessOptions): ProcessResult {
     case 'product':
       if (!locale || !isValidLocale(locale)) {
         return {
-          error: 'Locale required for product invalidation',
+          errorCode: API_ERROR_CODES.CACHE_LOCALE_REQUIRED,
           status: 400,
         };
       }
@@ -254,7 +259,7 @@ function processDomainInvalidation(options: ProcessOptions): ProcessResult {
       return handleAllInvalidation(locale);
 
     default:
-      return { error: `Invalid domain: ${domain}`, status: 400 };
+      return { errorCode: API_ERROR_CODES.CACHE_INVALID_DOMAIN, status: 400 };
   }
 }
 

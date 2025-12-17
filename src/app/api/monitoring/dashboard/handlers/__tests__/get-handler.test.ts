@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 import { handleGetRequest } from '../get-handler';
 
 // Mock logger
@@ -209,7 +210,7 @@ describe('handleGetRequest', () => {
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Internal server error');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_RETRIEVE_FAILED);
     });
   });
 });

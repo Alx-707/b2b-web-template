@@ -4,6 +4,7 @@
  */
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 import { DELETE, GET, POST, PUT } from '../route';
 
 // Mock logger
@@ -142,7 +143,7 @@ describe('Monitoring Dashboard Route - All Methods', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Confirmation required');
+      expect(data.errorCode).toBe(API_ERROR_CODES.CONFIRMATION_REQUIRED);
     });
 
     it('should accept filter parameters', async () => {
@@ -154,8 +155,8 @@ describe('Monitoring Dashboard Route - All Methods', () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.message).toContain('web-vitals');
-      expect(data.message).toContain('1h');
+      expect(data.success).toBe(true);
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DELETED);
     });
   });
 });

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { safeParseJson } from '@/lib/api/safe-parse-json';
 import { logger } from '@/lib/logger';
 import { HTTP_BAD_REQUEST } from '@/constants';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 /**
  * PUT /api/monitoring/dashboard
@@ -16,8 +17,7 @@ export async function handlePutRequest(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: parsedBody.error,
-          message: 'Invalid JSON body for monitoring dashboard configuration',
+          errorCode: API_ERROR_CODES.INVALID_JSON_BODY,
         },
         { status: HTTP_BAD_REQUEST },
       );
@@ -29,8 +29,7 @@ export async function handlePutRequest(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid configuration data',
-          message: 'Configuration object is required',
+          errorCode: API_ERROR_CODES.MONITORING_CONFIG_INVALID,
         },
         { status: HTTP_BAD_REQUEST },
       );
@@ -45,7 +44,7 @@ export async function handlePutRequest(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Monitoring configuration updated successfully',
+      errorCode: API_ERROR_CODES.MONITORING_CONFIG_UPDATED,
       data: {
         configUpdated: Object.keys(body.config),
         timestamp: new Date().toISOString(),
@@ -61,8 +60,7 @@ export async function handlePutRequest(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to update monitoring configuration',
+        errorCode: API_ERROR_CODES.MONITORING_CONFIG_UPDATE_FAILED,
       },
       { status: 500 },
     );

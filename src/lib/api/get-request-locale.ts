@@ -87,6 +87,10 @@ export function getRequestLocale(request: NextRequest): SupportedLocale {
  *
  * These messages are used across user-facing API endpoints.
  * Structure matches the apiMessages namespace in translation files.
+ *
+ * @deprecated This interface is part of the legacy server-side i18n mechanism.
+ * New APIs should use the errorCode pattern with client-side translation.
+ * See: src/lib/api/translate-error-code.ts
  */
 export interface ApiMessages {
   rateLimit: string;
@@ -119,6 +123,10 @@ export interface ApiMessages {
  * 1. API routes run in Edge/Node runtime without next-intl context
  * 2. Messages are simple and rarely change
  * 3. Avoids async translation loading in API hot paths
+ *
+ * @deprecated This constant is part of the legacy server-side i18n mechanism.
+ * New APIs should use the errorCode pattern with client-side translation.
+ * See: src/lib/api/translate-error-code.ts and src/constants/api-error-codes.ts
  */
 const API_MESSAGES: Record<SupportedLocale, ApiMessages> = {
   en: {
@@ -175,6 +183,16 @@ const API_MESSAGES: Record<SupportedLocale, ApiMessages> = {
  *
  * @param request - Next.js API request
  * @returns Localized API message strings
+ *
+ * @deprecated This function is part of the legacy server-side i18n mechanism.
+ * New APIs should use the errorCode pattern with client-side translation.
+ *
+ * Migration guide:
+ * 1. API returns { success: false, errorCode: 'ERROR_CODE' }
+ * 2. Client uses translateApiError(t, errorCode) to get localized message
+ * 3. See: src/lib/api/translate-error-code.ts and src/constants/api-error-codes.ts
+ *
+ * Currently used by: /api/contact, /api/inquiry, /api/verify-turnstile
  */
 export function getApiMessages(request: NextRequest): ApiMessages {
   const locale = getRequestLocale(request);

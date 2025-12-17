@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 import { handlePostRequest } from '../post-handler';
 
 // Mock logger
@@ -40,7 +41,7 @@ describe('handlePostRequest', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe('Monitoring data received successfully');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DATA_RECEIVED);
     });
 
     it('should return processed data with id', async () => {
@@ -141,7 +142,7 @@ describe('handlePostRequest', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Invalid monitoring data format');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_INVALID_FORMAT);
     });
 
     it('should reject missing metrics', async () => {
@@ -283,7 +284,7 @@ describe('handlePostRequest', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('INVALID_JSON');
+      expect(data.errorCode).toBe(API_ERROR_CODES.INVALID_JSON_BODY);
     });
 
     it('should reject empty body', async () => {

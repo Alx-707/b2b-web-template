@@ -3,6 +3,7 @@ import { safeParseJson } from '@/lib/api/safe-parse-json';
 import { logger } from '@/lib/logger';
 import { validateMonitoringData } from '@/app/api/monitoring/dashboard/types';
 import { HTTP_BAD_REQUEST } from '@/constants';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 /**
  * POST /api/monitoring/dashboard
@@ -17,8 +18,7 @@ export async function handlePostRequest(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: parsedBody.error,
-          message: 'Invalid JSON body for monitoring dashboard',
+          errorCode: API_ERROR_CODES.INVALID_JSON_BODY,
         },
         { status: HTTP_BAD_REQUEST },
       );
@@ -30,8 +30,7 @@ export async function handlePostRequest(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid monitoring data format',
-          message: 'Required fields: source, metrics, timestamp',
+          errorCode: API_ERROR_CODES.MONITORING_INVALID_FORMAT,
         },
         { status: HTTP_BAD_REQUEST },
       );
@@ -56,7 +55,7 @@ export async function handlePostRequest(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Monitoring data received successfully',
+      errorCode: API_ERROR_CODES.MONITORING_DATA_RECEIVED,
       data: processedData,
     });
   } catch (_error) {
@@ -69,8 +68,7 @@ export async function handlePostRequest(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to process monitoring dashboard data',
+        errorCode: API_ERROR_CODES.MONITORING_PROCESS_FAILED,
       },
       { status: 500 },
     );

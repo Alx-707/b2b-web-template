@@ -8,6 +8,7 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from '@/app/api/monitoring/dashboard/route';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 // Mock logger - 使用 vi.hoisted 解决初始化顺序问题
 const { mockLogger } = vi.hoisted(() => {
@@ -56,7 +57,7 @@ describe('Monitoring Dashboard API Route - 核心功能测试', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe('Monitoring data received successfully');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DATA_RECEIVED);
       expect(data.data.source).toBe('web-vitals');
       // API返回的是processedAt等字段，不是metricsProcessed
       expect(data.data.processedAt).toBeDefined();
@@ -136,10 +137,10 @@ describe('Monitoring Dashboard API Route - 核心功能测试', () => {
       const response = await POST(request);
       const data = await response.json();
 
-      // 空请求体会导致 JSON 解析失败，返回 400 + INVALID_JSON
+      // 空请求体会导致 JSON 解析失败，返回 400 + INVALID_JSON_BODY
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('INVALID_JSON');
+      expect(data.errorCode).toBe(API_ERROR_CODES.INVALID_JSON_BODY);
     });
 
     it('应该拒绝无效的JSON', async () => {
@@ -155,10 +156,10 @@ describe('Monitoring Dashboard API Route - 核心功能测试', () => {
       const response = await POST(request);
       const data = await response.json();
 
-      // 无效 JSON 会导致解析失败，返回 400 + INVALID_JSON
+      // 无效 JSON 会导致解析失败，返回 400 + INVALID_JSON_BODY
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('INVALID_JSON');
+      expect(data.errorCode).toBe(API_ERROR_CODES.INVALID_JSON_BODY);
     });
 
     it('应该拒绝缺少必需字段的数据', async () => {
@@ -183,8 +184,8 @@ describe('Monitoring Dashboard API Route - 核心功能测试', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      // API实际返回的错误消息
-      expect(data.error).toBe('Invalid monitoring data format');
+      // API实际返回的错误代码
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_INVALID_FORMAT);
     });
 
     it('应该拒绝无效的source值', async () => {
@@ -211,7 +212,7 @@ describe('Monitoring Dashboard API Route - 核心功能测试', () => {
       // 验证函数不检查source值的有效性，所以会成功处理
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe('Monitoring data received successfully');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DATA_RECEIVED);
     });
   });
 
@@ -259,7 +260,7 @@ describe('Monitoring Dashboard API Route - 核心功能测试', () => {
       // API不验证Content-Type，只要JSON有效就会成功处理
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe('Monitoring data received successfully');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DATA_RECEIVED);
     });
 
     it('应该拒绝缺少content type的请求', async () => {
@@ -283,7 +284,7 @@ describe('Monitoring Dashboard API Route - 核心功能测试', () => {
       // API不验证Content-Type，缺少Content-Type也会成功处理
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe('Monitoring data received successfully');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DATA_RECEIVED);
     });
   });
 

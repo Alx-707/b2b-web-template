@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 import { handleDeleteRequest } from '../delete-handler';
 
 // Mock logger
@@ -27,8 +28,7 @@ describe('handleDeleteRequest', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Confirmation required');
-      expect(data.message).toContain('confirm=true');
+      expect(data.errorCode).toBe(API_ERROR_CODES.CONFIRMATION_REQUIRED);
     });
 
     it('should reject when confirm is false', async () => {
@@ -41,7 +41,7 @@ describe('handleDeleteRequest', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Confirmation required');
+      expect(data.errorCode).toBe(API_ERROR_CODES.CONFIRMATION_REQUIRED);
     });
 
     it('should reject when confirm is not exactly "true"', async () => {
@@ -68,7 +68,7 @@ describe('handleDeleteRequest', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toContain('all');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DELETED);
       expect(data.deletedAt).toBeDefined();
     });
 
@@ -82,7 +82,7 @@ describe('handleDeleteRequest', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toContain('web-vitals');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DELETED);
     });
 
     it('should delete specific time range when provided', async () => {
@@ -95,7 +95,7 @@ describe('handleDeleteRequest', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toContain('1h');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DELETED);
     });
 
     it('should delete with both source and timeRange', async () => {
@@ -108,8 +108,7 @@ describe('handleDeleteRequest', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toContain('performance');
-      expect(data.message).toContain('24h');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DELETED);
     });
 
     it('should log deletion request', async () => {
@@ -142,7 +141,7 @@ describe('handleDeleteRequest', () => {
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Internal server error');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_DELETE_FAILED);
     });
   });
 });

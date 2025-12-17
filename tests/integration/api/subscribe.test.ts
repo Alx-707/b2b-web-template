@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as route from '@/app/api/subscribe/route';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 vi.mock('@/lib/security/distributed-rate-limit', () => ({
   checkDistributedRateLimit: vi.fn(async () => ({
@@ -53,7 +54,7 @@ describe('api/subscribe', () => {
     expect(res.status).toBe(400);
     const json = await res.json();
     expect(json.success).toBe(false);
-    expect(json.error).toBe('INVALID_JSON');
+    expect(json.errorCode).toBe(API_ERROR_CODES.INVALID_JSON_BODY);
   });
 
   it('accepts valid email with idempotency key and caches', async () => {
@@ -81,7 +82,7 @@ describe('api/subscribe', () => {
     expect(res.status).toBe(400);
     const json = await res.json();
     expect(json.success).toBe(false);
-    expect(json.message).toBe('Security verification required');
+    expect(json.errorCode).toBe(API_ERROR_CODES.SUBSCRIBE_SECURITY_REQUIRED);
   });
 
   it('returns 400 when turnstile verification fails', async () => {
@@ -96,9 +97,7 @@ describe('api/subscribe', () => {
     expect(res.status).toBe(400);
     const json = await res.json();
     expect(json.success).toBe(false);
-    expect(json.message).toBe(
-      'Security verification failed. Please try again.',
-    );
+    expect(json.errorCode).toBe(API_ERROR_CODES.SUBSCRIBE_SECURITY_FAILED);
   });
 
   it('returns 429 when rate limited', async () => {
@@ -125,6 +124,8 @@ describe('api/subscribe', () => {
     expect(res.status).toBe(400);
     const json = await res.json();
     expect(json.success).toBe(false);
-    expect(json.message).toBe('Email is required');
+    expect(json.errorCode).toBe(
+      API_ERROR_CODES.SUBSCRIBE_VALIDATION_EMAIL_REQUIRED,
+    );
   });
 });

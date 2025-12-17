@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { describe, expect, it } from 'vitest';
 import * as route from '@/app/api/analytics/web-vitals/route';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 const baseMetric = {
   name: 'CLS',
@@ -40,7 +41,7 @@ describe('api/analytics/web-vitals', () => {
     const body = await res.json();
     expect(res.status).toBe(400);
     expect(body.success).toBe(false);
-    expect(body._error).toBe('INVALID_JSON');
+    expect(body.errorCode).toBe(API_ERROR_CODES.INVALID_JSON_BODY);
   });
 
   it('rejects invalid payload', async () => {

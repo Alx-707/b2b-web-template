@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 import { handlePutRequest } from '../put-handler';
 
 // Mock logger
@@ -37,9 +38,7 @@ describe('handlePutRequest', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe(
-        'Monitoring configuration updated successfully',
-      );
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_CONFIG_UPDATED);
       expect(data.data.configUpdated).toContain('alertThreshold');
       expect(data.data.configUpdated).toContain('retentionDays');
     });
@@ -159,7 +158,7 @@ describe('handlePutRequest', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Invalid configuration data');
+      expect(data.errorCode).toBe(API_ERROR_CODES.MONITORING_CONFIG_INVALID);
     });
 
     it('should reject null config', async () => {
@@ -236,7 +235,7 @@ describe('handlePutRequest', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('INVALID_JSON');
+      expect(data.errorCode).toBe(API_ERROR_CODES.INVALID_JSON_BODY);
     });
 
     it('should reject empty body', async () => {

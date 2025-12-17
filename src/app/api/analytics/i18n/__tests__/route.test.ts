@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DELETE, GET, POST } from '@/app/api/analytics/i18n/route';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 // Mock logger - 使用vi.hoisted确保正确的初始化顺序
 const mockLogger = vi.hoisted(() => ({
@@ -41,7 +42,7 @@ describe('/api/analytics/i18n', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe('i18n analytics data recorded successfully');
+      expect(data.errorCode).toBe(API_ERROR_CODES.I18N_ANALYTICS_RECORDED);
       expect(data.data.locale).toBe('en');
       expect(data.data.event).toBe('locale_switch');
       expect(mockLogger.info).toHaveBeenCalledWith(
@@ -73,7 +74,9 @@ describe('/api/analytics/i18n', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Invalid i18n analytics data format');
+      expect(data.errorCode).toBe(
+        API_ERROR_CODES.I18N_ANALYTICS_INVALID_FORMAT,
+      );
     });
 
     it('应该处理JSON解析错误', async () => {
@@ -89,13 +92,10 @@ describe('/api/analytics/i18n', () => {
       const response = await POST(request);
       const data = await response.json();
 
-      // 使用 safeParseJson 后，JSON 解析错误应返回 400 + INVALID_JSON
+      // 使用 safeParseJson 后，JSON 解析错误应返回 400 + errorCode
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('INVALID_JSON');
-      expect(data.message).toBe(
-        'Invalid JSON body for i18n analytics endpoint',
-      );
+      expect(data.errorCode).toBe(API_ERROR_CODES.INVALID_JSON_BODY);
 
       // safeParseJson 会通过 logger.warn 记录解析失败日志
       expect(mockLogger.warn).toHaveBeenCalledWith(
@@ -176,7 +176,7 @@ describe('/api/analytics/i18n', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toContain('i18n analytics data deleted');
+      expect(data.errorCode).toBe(API_ERROR_CODES.I18N_ANALYTICS_DELETED);
       expect(data.deletedAt).toBeDefined();
       expect(mockLogger.info).toHaveBeenCalledWith(
         'i18n analytics data deletion requested',
@@ -197,7 +197,7 @@ describe('/api/analytics/i18n', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Confirmation required');
+      expect(data.errorCode).toBe(API_ERROR_CODES.CONFIRMATION_REQUIRED);
     });
 
     it('应该处理DELETE请求错误', async () => {

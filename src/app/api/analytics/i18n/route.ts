@@ -6,6 +6,7 @@ import {
   type RateLimitContext,
 } from '@/lib/api/with-rate-limit';
 import { logger } from '@/lib/logger';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 /**
  * i18n分析数据类型定义
@@ -108,8 +109,7 @@ async function handlePost(
       return NextResponse.json(
         {
           success: false,
-          error: parsedBody.error,
-          message: 'Invalid JSON body for i18n analytics endpoint',
+          errorCode: API_ERROR_CODES.INVALID_JSON_BODY,
         },
         { status: 400 },
       );
@@ -120,9 +120,7 @@ async function handlePost(
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid i18n analytics data format',
-          message:
-            'The provided data does not match the expected i18n analytics format',
+          errorCode: API_ERROR_CODES.I18N_ANALYTICS_INVALID_FORMAT,
         },
         { status: 400 },
       );
@@ -137,7 +135,7 @@ async function handlePost(
 
     return NextResponse.json({
       success: true,
-      message: 'i18n analytics data recorded successfully',
+      errorCode: API_ERROR_CODES.I18N_ANALYTICS_RECORDED,
       data: {
         locale: body.locale,
         event: body.event,
@@ -153,8 +151,7 @@ async function handlePost(
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to process i18n analytics data',
+        errorCode: API_ERROR_CODES.I18N_ANALYTICS_PROCESS_FAILED,
       },
       { status: 500 },
     );
@@ -215,7 +212,10 @@ function handleGet(request: NextRequest, _ctx: RateLimitContext): NextResponse {
 
       if (!allowedLocales.includes(locale as AllowedLocale)) {
         return NextResponse.json(
-          { success: false, error: 'Invalid locale parameter' },
+          {
+            success: false,
+            errorCode: API_ERROR_CODES.INVALID_LOCALE_PARAMETER,
+          },
           { status: 400 },
         );
       }
@@ -254,8 +254,7 @@ function handleGet(request: NextRequest, _ctx: RateLimitContext): NextResponse {
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to retrieve i18n analytics statistics',
+        errorCode: API_ERROR_CODES.I18N_ANALYTICS_RETRIEVE_FAILED,
       },
       { status: 500 },
     );
@@ -279,8 +278,7 @@ function handleDelete(
       return NextResponse.json(
         {
           success: false,
-          error: 'Confirmation required',
-          message: 'Please add confirm=true parameter to confirm deletion',
+          errorCode: API_ERROR_CODES.CONFIRMATION_REQUIRED,
         },
         { status: 400 },
       );
@@ -294,7 +292,7 @@ function handleDelete(
 
     return NextResponse.json({
       success: true,
-      message: `i18n analytics data deleted for locale: ${locale || 'all'}, time range: ${timeRange || 'all'}`,
+      errorCode: API_ERROR_CODES.I18N_ANALYTICS_DELETED,
       deletedAt: new Date().toISOString(),
     });
   } catch (_error) {
@@ -306,8 +304,7 @@ function handleDelete(
     return NextResponse.json(
       {
         success: false,
-        _error: 'Internal server _error',
-        message: 'Failed to delete i18n analytics data',
+        errorCode: API_ERROR_CODES.I18N_ANALYTICS_DELETE_FAILED,
       },
       { status: 500 },
     );

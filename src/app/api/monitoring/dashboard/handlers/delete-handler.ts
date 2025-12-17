@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { HTTP_BAD_REQUEST } from '@/constants';
+import { API_ERROR_CODES } from '@/constants/api-error-codes';
 
 /**
  * DELETE /api/monitoring/dashboard
@@ -17,8 +18,7 @@ export function handleDeleteRequest(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Confirmation required',
-          message: 'Please add confirm=true parameter to confirm deletion',
+          errorCode: API_ERROR_CODES.CONFIRMATION_REQUIRED,
         },
         { status: HTTP_BAD_REQUEST },
       );
@@ -33,7 +33,7 @@ export function handleDeleteRequest(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Monitoring data deleted for source: ${source || 'all'}, time range: ${timeRange || 'all'}`,
+      errorCode: API_ERROR_CODES.MONITORING_DELETED,
       deletedAt: new Date().toISOString(),
     });
   } catch (_error) {
@@ -46,8 +46,7 @@ export function handleDeleteRequest(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to delete monitoring dashboard data',
+        errorCode: API_ERROR_CODES.MONITORING_DELETE_FAILED,
       },
       { status: 500 },
     );
