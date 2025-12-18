@@ -1,6 +1,6 @@
 # Create Pull Request
 
-Automate the Git PR workflow: commit, push, and create PR.
+Automate the Git PR workflow: commit, push, create PR, and enable auto-merge.
 
 ## Execution Steps
 
@@ -20,20 +20,28 @@ Automate the Git PR workflow: commit, push, and create PR.
 
 6. **Push**: Execute `git push -u origin <current-branch>`.
 
-7. **Create PR**: Execute `gh pr create --base main --fill` or with custom title/body.
-   - If `--auto` flag requested, add `--auto` for auto-merge after CI passes.
+7. **Create PR**: Execute `gh pr create --base main --fill`.
 
-8. **Return**: Output the PR URL for user reference.
+8. **Enable Auto-merge**: Execute `gh pr merge --auto --squash` (default behavior).
+   - Use `--no-auto` flag to skip auto-merge.
+
+9. **Return**: Output the PR URL for user reference.
 
 ## Options
 
-- `--auto`: Enable auto-merge (requires CI to pass)
-- `--draft`: Create as draft PR
+- `--no-auto`: Skip auto-merge (manual merge required)
+- `--draft`: Create as draft PR (no auto-merge)
 
 ## Example Usage
 
 ```
-/pr                    # Standard PR flow
-/pr --auto             # PR with auto-merge enabled
+/pr                    # Standard PR flow with auto-merge enabled
+/pr --no-auto          # PR without auto-merge
 /pr --draft            # Create draft PR
 ```
+
+## Notes
+
+- Auto-merge uses GitHub's native feature (requires "Allow auto-merge" in repo settings)
+- PR will automatically merge after CI passes
+- Branch will be automatically deleted after merge (if enabled in repo settings)
