@@ -1,5 +1,7 @@
 {
   "scripts": {
-    "setup": "./conductor-setup.sh"
-  }
+    "setup": "corepack enable; corepack prepare pnpm@10.13.1 --activate; pnpm install --frozen-lockfile",
+    "run": "pnpm dev"
+  },
+  "runScriptMode": "nonconcurrent"
 }
