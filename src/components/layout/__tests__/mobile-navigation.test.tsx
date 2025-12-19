@@ -215,7 +215,7 @@ describe('MobileNavigation Component', () => {
     it('renders mobile navigation trigger', () => {
       renderWithIntl(<MobileNavigation />);
 
-      expect(screen.getByTestId('sheet-trigger')).toBeInTheDocument();
+      expect(screen.getByTestId('mobile-menu-button')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /menu/i })).toBeInTheDocument();
       expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
     });
