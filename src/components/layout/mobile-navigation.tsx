@@ -54,7 +54,7 @@ export function MobileNavigation({ className }: MobileNavigationProps) {
   }, [pathname, isOpen]);
 
   return (
-    <div className={cn('md:hidden', className)}>
+    <div className={cn('lg:hidden', className)}>
       <Sheet
         open={isOpen}
         onOpenChange={setIsOpen}
@@ -182,7 +182,7 @@ export function MobileMenuButton({
     <Button
       variant='ghost'
       size='icon'
-      className={cn('md:hidden', className)}
+      className={cn('lg:hidden', className)}
       onClick={onClick}
       aria-label={NAVIGATION_ARIA.mobileMenuButton}
       aria-expanded={isOpen}

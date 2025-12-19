@@ -225,7 +225,7 @@ describe('MobileNavigation Component', () => {
 
       const container = screen.getByTestId('sheet').parentElement;
       // Should have mobile-only classes
-      expect(container).toHaveClass('md:hidden');
+      expect(container).toHaveClass('lg:hidden');
     });
 
     it('applies custom className when provided', () => {
@@ -385,7 +385,7 @@ describe('MobileNavigation Component', () => {
       renderWithIntl(<MobileNavigation />);
 
       const container = screen.getByTestId('sheet').parentElement;
-      expect(container).toHaveClass('md:hidden');
+      expect(container).toHaveClass('lg:hidden');
     });
 
     it('adapts to different screen orientations', () => {
