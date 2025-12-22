@@ -125,6 +125,22 @@ export async function updateTheme(theme: string) {
 - **Image config**: Local images with query strings require `images.localPatterns.search`; `images.domains` is deprecated—use `remotePatterns`; `minimumCacheTTL` defaults to 4 hours; default `imageSizes` no longer includes 16px.
 - **Tooling updates**: `next lint` removed (use ESLint CLI/flat config); `serverRuntimeConfig`/`publicRuntimeConfig` removed—use env vars; minimum Node 20.9, TypeScript ≥ 5.1.
 
+## Dynamic Import + Radix UI Hydration
+
+When using `next/dynamic` with Radix UI components, **always add `ssr: false`** to prevent hydration mismatch caused by `useId()` generating different IDs between server and client:
+
+```typescript
+// ✅ Correct
+const Tabs = dynamic(() => import('./tabs'), { ssr: false });
+
+// ❌ Will cause hydration mismatch
+const Tabs = dynamic(() => import('./tabs'));
+```
+
+**Affected**: Radix UI primitives with `aria-*` bindings — Tabs, Dialog, Accordion, Select, DropdownMenu, Popover.
+
+**LCP-critical content**: Avoid `dynamic`, use direct import instead.
+
 ## React Hooks Guidelines
 
 - **Call order**: Hooks must be called at component top level in same order; no conditional calls
