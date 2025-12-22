@@ -392,6 +392,10 @@ describe('Content Utils', () => {
       vi.clearAllMocks();
     });
 
+    afterEach(() => {
+      vi.unstubAllEnvs();
+    });
+
     it('should return false when content is not a draft', () => {
       mockFs.existsSync.mockReturnValue(false);
 
@@ -405,19 +409,10 @@ describe('Content Utils', () => {
         JSON.stringify({ enableDrafts: false }),
       );
 
-      const originalEnv = process.env.NODE_ENV;
-      const originalDraftsEnv = process.env.CONTENT_ENABLE_DRAFTS;
-      process.env.NODE_ENV = 'production';
-      delete process.env.CONTENT_ENABLE_DRAFTS;
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('CONTENT_ENABLE_DRAFTS', '');
 
-      try {
-        expect(shouldFilterDraft(true)).toBe(true);
-      } finally {
-        process.env.NODE_ENV = originalEnv;
-        if (originalDraftsEnv !== undefined) {
-          process.env.CONTENT_ENABLE_DRAFTS = originalDraftsEnv;
-        }
-      }
+      expect(shouldFilterDraft(true)).toBe(true);
     });
 
     it('should return false when draft but drafts enabled', () => {
@@ -426,18 +421,9 @@ describe('Content Utils', () => {
         JSON.stringify({ enableDrafts: true }),
       );
 
-      const originalEnv = process.env.CONTENT_ENABLE_DRAFTS;
-      process.env.CONTENT_ENABLE_DRAFTS = 'true';
+      vi.stubEnv('CONTENT_ENABLE_DRAFTS', 'true');
 
-      try {
-        expect(shouldFilterDraft(true)).toBe(false);
-      } finally {
-        if (originalEnv !== undefined) {
-          process.env.CONTENT_ENABLE_DRAFTS = originalEnv;
-        } else {
-          delete process.env.CONTENT_ENABLE_DRAFTS;
-        }
-      }
+      expect(shouldFilterDraft(true)).toBe(false);
     });
   });
 
@@ -446,30 +432,23 @@ describe('Content Utils', () => {
       vi.clearAllMocks();
     });
 
+    afterEach(() => {
+      vi.unstubAllEnvs();
+    });
+
     it('should log warning when drafts enabled in production', async () => {
       const { logger } = await import('@/lib/logger');
 
       mockFs.existsSync.mockReturnValue(true);
       mockFs.readFileSync.mockReturnValue(JSON.stringify({}));
 
-      const originalNodeEnv = process.env.NODE_ENV;
-      const originalDraftsEnv = process.env.CONTENT_ENABLE_DRAFTS;
-      process.env.NODE_ENV = 'production';
-      process.env.CONTENT_ENABLE_DRAFTS = 'true';
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('CONTENT_ENABLE_DRAFTS', 'true');
 
-      try {
-        warnIfDraftsInProduction();
-        expect(logger.warn).toHaveBeenCalledWith(
-          expect.stringContaining('CONTENT_WARNING'),
-        );
-      } finally {
-        process.env.NODE_ENV = originalNodeEnv;
-        if (originalDraftsEnv !== undefined) {
-          process.env.CONTENT_ENABLE_DRAFTS = originalDraftsEnv;
-        } else {
-          delete process.env.CONTENT_ENABLE_DRAFTS;
-        }
-      }
+      warnIfDraftsInProduction();
+      expect(logger.warn).toHaveBeenCalledWith(
+        expect.stringContaining('CONTENT_WARNING'),
+      );
     });
 
     it('should not log warning when drafts disabled in production', async () => {
@@ -477,22 +456,13 @@ describe('Content Utils', () => {
 
       mockFs.existsSync.mockReturnValue(false);
 
-      const originalNodeEnv = process.env.NODE_ENV;
-      const originalDraftsEnv = process.env.CONTENT_ENABLE_DRAFTS;
-      process.env.NODE_ENV = 'production';
-      delete process.env.CONTENT_ENABLE_DRAFTS;
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('CONTENT_ENABLE_DRAFTS', '');
 
-      try {
-        warnIfDraftsInProduction();
-        expect(logger.warn).not.toHaveBeenCalledWith(
-          expect.stringContaining('CONTENT_WARNING'),
-        );
-      } finally {
-        process.env.NODE_ENV = originalNodeEnv;
-        if (originalDraftsEnv !== undefined) {
-          process.env.CONTENT_ENABLE_DRAFTS = originalDraftsEnv;
-        }
-      }
+      warnIfDraftsInProduction();
+      expect(logger.warn).not.toHaveBeenCalledWith(
+        expect.stringContaining('CONTENT_WARNING'),
+      );
     });
   });
 
