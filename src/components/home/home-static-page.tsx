@@ -10,15 +10,19 @@ type TranslationMessages = Record<string, TranslationValue>;
 
 // Dynamic imports use leaf module paths directly to ensure optimal code splitting
 // Importing from barrel (@/components/blocks) risks chunk size bloat
-const TechStackSection = nextDynamic(() =>
-  import('@/components/blocks/tech/tech-tabs-block').then(
-    (m) => m.TechTabsBlock,
-  ),
+const TechStackSection = nextDynamic(
+  () =>
+    import('@/components/blocks/tech/tech-tabs-block').then(
+      (m) => m.TechTabsBlock,
+    ),
+  { ssr: false },
 );
-const ComponentShowcase = nextDynamic(() =>
-  import('@/components/home/component-showcase').then(
-    (m) => m.ComponentShowcase,
-  ),
+const ComponentShowcase = nextDynamic(
+  () =>
+    import('@/components/home/component-showcase').then(
+      (m) => m.ComponentShowcase,
+    ),
+  { ssr: false },
 );
 const ProjectOverview = nextDynamic(() =>
   import('@/components/blocks/features/features-grid-block').then(

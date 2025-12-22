@@ -109,6 +109,20 @@ Server → Client props must be serializable:
 - Cached functions in `src/lib/content/`
 - Example: `getAllProductsCached()`, `getProductBySlugCached(slug)`
 
+## Dynamic Import + Radix UI
+
+When using `next/dynamic` with Radix UI components (Tabs, Dialog, Accordion, Select, DropdownMenu, Popover), **always add `ssr: false`** to prevent hydration mismatch caused by `useId()` generating different IDs between server and client:
+
+```typescript
+// ✅ Correct
+const Tabs = dynamic(() => import('./tabs'), { ssr: false });
+
+// ❌ Will cause hydration mismatch
+const Tabs = dynamic(() => import('./tabs'));
+```
+
+For LCP-critical content, avoid `dynamic` and use direct import instead.
+
 ## Key Files
 
 | File | Purpose |
