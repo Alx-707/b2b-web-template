@@ -1310,13 +1310,24 @@ class QualityGate {
       });
     }
 
-    // 设置输出变量
-    console.log(
-      `::set-output name=quality-gate-passed::${!this.results.summary.blocked}`,
-    );
-    console.log(
-      `::set-output name=quality-gate-score::${this.calculateQualityScore()}`,
-    );
+    // GitHub Actions outputs: use Environment Files (set-output is deprecated)
+    const outputPath = process.env.GITHUB_OUTPUT;
+    if (outputPath) {
+      try {
+        fs.appendFileSync(
+          outputPath,
+          `quality-gate-passed=${String(!this.results.summary.blocked)}\n`,
+          'utf8',
+        );
+        fs.appendFileSync(
+          outputPath,
+          `quality-gate-score=${String(this.calculateQualityScore())}\n`,
+          'utf8',
+        );
+      } catch {
+        // Ignore output write failures to avoid blocking the gate itself.
+      }
+    }
   }
 
   /**
