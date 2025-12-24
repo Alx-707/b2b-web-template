@@ -12,7 +12,7 @@ This document defines the canonical testing patterns for this project. All new t
 
 CI enforces an incremental coverage gate based on **changed executable lines** (diff-line coverage).
 
-- Run locally (recommended): `pnpm test:coverage` then `QUALITY_DIFF_BASE=origin/main pnpm quality:gate:ci`
+- Run locally (recommended): `pnpm test:coverage` then `QUALITY_DIFF_BASE=origin/main pnpm quality:gate:ci -- --skip-test-run`
 - Notes: E2E tests do not contribute to Vitest coverage; keep critical logic covered by unit/integration tests.
 
 ## E2E Layout Regression (bbox)
