@@ -8,6 +8,13 @@ This document defines the canonical testing patterns for this project. All new t
 - **E2E**: Playwright
 - **Coverage Target**: 85% global threshold
 
+## CI Quality Gate (diff-line coverage)
+
+CI enforces an incremental coverage gate based on **changed executable lines** (diff-line coverage).
+
+- Run locally (recommended): `pnpm test:coverage` then `QUALITY_DIFF_BASE=origin/main pnpm quality:gate:ci`
+- Notes: E2E tests do not contribute to Vitest coverage; keep critical logic covered by unit/integration tests.
+
 ## E2E Layout Regression (bbox)
 
 This project uses a lightweight “layout regression” check based on element bounding boxes (bbox) to catch header overlap regressions without relying on screenshot diffs.

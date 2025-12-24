@@ -56,6 +56,7 @@
     "quality:monitor": "node scripts/quality-monitor.js",
     "quality:report:local": "node scripts/quality-monitor.js && open reports/quality/latest-quality-summary.json",
     "quality:gate": "node scripts/quality-gate.js",
+    "quality:gate:ci": "node scripts/quality-gate.js --mode=ci",
     "quality:gate:fast": "node scripts/quality-gate.js --mode=fast",
     "quality:gate:full": "node scripts/quality-gate.js --mode=full",
     "quality:gate:json": "node scripts/quality-gate.js --output=json",

@@ -6,7 +6,10 @@ pre-commit:
   commands:
     # 代码格式检查 (Prettier)
     format-check:
-      run: pnpm format:check
+      run: |
+        FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|ts|tsx|json|md|mdx|yml|yaml|css|scss|html)$' || true)
+        if [ -z "$FILES" ]; then echo "✅ 格式检查通过 (无可格式化变更)"; exit 0; fi
+        pnpm exec prettier --check $FILES
       fail_text: '代码格式检查失败 - 请运行 pnpm format:write 修复格式问题'
       stage_fixed: true
 
