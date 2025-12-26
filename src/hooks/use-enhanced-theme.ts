@@ -5,6 +5,7 @@ import { useTheme } from 'next-themes';
 import {
   executeBasicThemeTransition,
   executeCircularThemeTransition,
+  executeCornerExpandTransition,
 } from '@/hooks/theme-transition-core';
 import type { EnhancedThemeHook } from '@/hooks/theme-transition-types';
 import { createDebounce, DEFAULT_CONFIG } from '@/hooks/theme-transition-utils';
@@ -77,18 +78,48 @@ export function useEnhancedTheme(): EnhancedThemeHook {
     [originalSetTheme, theme],
   );
 
+  // 创建防抖的角落扩展动画主题切换函数
+  const debouncedSetCornerExpandThemeRef = useRef<
+    ((_theme: string) => void) | null
+  >(null);
+
+  const setCornerExpandTheme = useCallback(
+    (newTheme: string) => {
+      if (!debouncedSetCornerExpandThemeRef.current) {
+        debouncedSetCornerExpandThemeRef.current = createDebounce(
+          (themeToSet: string) => {
+            const base = {
+              originalSetTheme,
+              newTheme: themeToSet,
+            } as {
+              originalSetTheme: (_theme: string) => void;
+              newTheme: string;
+              currentTheme?: string;
+            };
+            if (theme !== undefined) base.currentTheme = theme;
+            executeCornerExpandTransition(base);
+          },
+          DEFAULT_CONFIG.debounceDelay,
+        );
+      }
+      debouncedSetCornerExpandThemeRef.current?.(newTheme);
+    },
+    [originalSetTheme, theme],
+  );
+
   // 返回增强的主题 Hook
   return useMemo(
     () => ({
       theme,
       setTheme,
       setCircularTheme,
+      setCornerExpandTheme,
       themes: themeContext.themes,
       forcedTheme: themeContext.forcedTheme,
       resolvedTheme: themeContext.resolvedTheme,
       systemTheme: themeContext.systemTheme,
     }),
-    [theme, setTheme, setCircularTheme, themeContext],
+    [theme, setTheme, setCircularTheme, setCornerExpandTheme, themeContext],
   );
 }
 

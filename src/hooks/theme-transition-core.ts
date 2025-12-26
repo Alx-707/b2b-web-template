@@ -287,3 +287,48 @@ export function executeCircularThemeTransition(args: {
   if (animationSetup) base.animationSetup = animationSetup;
   executeThemeTransition(base);
 }
+
+/**
+ * 执行角落扩展动画主题切换
+ * 从右下角 (100% 100%) 向外扩展的圆形动画
+ */
+export function executeCornerExpandTransition(args: {
+  originalSetTheme: (_theme: string) => void;
+  newTheme: string;
+  currentTheme?: string;
+}): void {
+  const { originalSetTheme, newTheme, currentTheme } = args;
+  const expandRadius = '150%';
+
+  const animationSetup = (transition: ViewTransition) => {
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0% at 100% 100%)`,
+              `circle(${expandRadius} at 100% 100%)`,
+            ],
+          },
+          {
+            duration: DEFAULT_CONFIG.animationDuration,
+            easing: DEFAULT_CONFIG.easing,
+            pseudoElement: '::view-transition-new(root)',
+          },
+        );
+      })
+      .catch((error: Error) => {
+        logger.warn('Failed to setup corner expand animation', { error });
+      });
+  };
+
+  const base = { originalSetTheme, newTheme } as {
+    originalSetTheme: (_theme: string) => void;
+    newTheme: string;
+    currentTheme?: string;
+    animationSetup?: (_transition: ViewTransition) => void;
+  };
+  if (currentTheme) base.currentTheme = currentTheme;
+  base.animationSetup = animationSetup;
+  executeThemeTransition(base);
+}
