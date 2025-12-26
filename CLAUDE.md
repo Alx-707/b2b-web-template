@@ -47,7 +47,12 @@ All operations must strictly adhere to the following system constraints:
    - **Forbidden**: Answering based on assumptions.
    - Use natural language (NL) to construct semantic queries (Where/What/How).
    - **Completeness Check**: Must obtain complete definitions and signatures for relevant classes, functions, and variables. If context is insufficient, trigger recursive retrieval.
-3. **Requirement Alignment**: If ambiguity remains after retrieval, **must** output a list of guiding questions to the user until requirement boundaries are clear (no omissions, no redundancy).
+3. **Requirement Alignment**: If ambiguity remains after retrieval:
+   - **Invoke** `.claude/rules/socratic-questioning.md` methodology
+   - Use `AskUserQuestion` tool for multiple-choice questions (single question per message)
+   - Apply YAGNI ruthlessly—砍掉"可能需要"的功能
+   - Continue until requirement boundaries are clear (no omissions, no redundancy)
+   - **Output**: Clarified requirement summary + YAGNI 裁剪记录
 
 ### Phase 2: Multi-Model Analysis (Analysis & Strategy)
 
@@ -57,7 +62,11 @@ All operations must strictly adhere to the following system constraints:
 2. **Solution Iteration**:
    - Request multi-perspective solutions from both models.
    - Execute **cross-validation**: Integrate ideas, iterate optimization, perform logical reasoning and complement strengths/weaknesses until a step-by-step implementation plan with no logical gaps is generated.
-3. **User Confirmation**: Present the final implementation plan to the user (with appropriate pseudo-code).
+3. **User Confirmation**: Present the implementation plan using **渐进验证**:
+   - First: Architecture overview (200-300 words) → user confirms
+   - Then: Key components and data flow → user confirms
+   - Finally: Edge cases and error handling → user confirms
+   - If user disagrees at any stage, backtrack and revise before proceeding
 
 ### Phase 3: Prototyping
 
@@ -196,3 +205,4 @@ Detailed rules in `.claude/rules/`:
 - `security.md` — XSS prevention, input validation, CSP
 - `debugging.md` — Systematic troubleshooting workflow
 - `threat-modeling.md` — STRIDE analysis
+- `socratic-questioning.md` — Requirement clarification methodology

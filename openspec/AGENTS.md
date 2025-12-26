@@ -76,7 +76,10 @@ After deployment, create separate PR to:
 - Always check if capability already exists
 - Prefer modifying existing specs over creating duplicates
 - Use `openspec show [spec]` to review current state
-- If request is ambiguous, ask 1–2 clarifying questions before scaffolding
+- If request is ambiguous, **invoke** `.claude/rules/socratic-questioning.md`:
+  - Single question per message (use `AskUserQuestion` with 2-4 options)
+  - Lead with recommended approach + explain reasoning
+  - Apply YAGNI ruthlessly before scaffolding
 
 ### Search Guidance
 - Enumerate specs: `openspec spec list --long` (or `--json` for scripts)
