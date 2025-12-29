@@ -95,7 +95,10 @@ describe('Footer (Vercel style)', () => {
   it('外部链接带 target/rel，内部链接保持可点击', () => {
     render(<Footer />);
 
-    const externalItem = FOOTER_COLUMNS[0]?.links.find((item) => item.external);
+    // Find external link across all columns
+    const externalItem = FOOTER_COLUMNS.flatMap((col) => col.links).find(
+      (item) => item.external,
+    );
     if (!externalItem) {
       throw new Error('Expected at least one external footer link');
     }

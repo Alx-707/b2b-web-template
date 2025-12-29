@@ -44,12 +44,12 @@
     "tryAgain": "Try Again"
   },
   "home": {
-    "title": "Tucsenberg Web Frontier",
+    "title": "[PROJECT_NAME]",
     "subtitle": "Modern B2B Enterprise Web Platform",
     "description": "A cutting-edge web platform built with Next.js 15, React 19, and TypeScript for modern B2B enterprises.",
     "getStarted": "Get Started",
     "learnMore": "Learn More",
-    "welcome": "Welcome to Tucsenberg",
+    "welcome": "Welcome to [PROJECT_NAME]",
     "modernApp": "A modern web application built with Next.js 15 and React 19",
     "features": {
       "title": "Features",
@@ -203,13 +203,6 @@
       }
     }
   },
-  "footer": {
-    "learn": "Learn",
-    "examples": "Examples",
-    "goToNextjs": "Go to nextjs.org",
-    "copyright": "© {year} Tucsenberg. All rights reserved.",
-    "description": "Modern B2B enterprise web solutions with cutting-edge technology."
-  },
   "formatting": {
     "date": {
       "today": "Today",
@@ -303,21 +296,21 @@
   "emailPlaceholder": "your@email.com",
   "phone": "Phone Number",
   "organization": {
-    "name": "Tucsenberg Web Frontier",
+    "name": "[PROJECT_NAME]",
     "description": "Modern B2B Enterprise Web Platform",
     "phone": "+1-555-0123",
     "social": {
-      "twitter": "https://twitter.com/tucsenberg",
-      "linkedin": "https://linkedin.com/company/tucsenberg",
-      "github": "https://github.com/tucsenberg"
+      "twitter": "https://[TWITTER_URL]",
+      "linkedin": "https://[LINKEDIN_URL]",
+      "github": "https://[GITHUB_URL]"
     }
   },
   "website": {
-    "name": "Tucsenberg Web Frontier",
+    "name": "[PROJECT_NAME]",
     "description": "Modern B2B Enterprise Web Platform with Next.js 15"
   },
   "article": {
-    "defaultAuthor": "Tucsenberg Team"
+    "defaultAuthor": "[AUTHOR_NAME]"
   },
   "blog": {
     "pageTitle": "Blog",
@@ -431,7 +424,7 @@
       "turnstileRequired": "Please complete the security verification."
     }
   },
-  "title": "Tucsenberg Web Frontier",
+  "title": "[PROJECT_NAME]",
   "trust": {
     "testimonials": {
       "title": "What Our Clients Say",

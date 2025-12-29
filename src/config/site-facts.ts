@@ -7,6 +7,13 @@
  *
  * Translatable content (marketing copy, descriptions) belongs in messages/*.json
  *
+ * Template placeholders - replace with your project values:
+ * - [PROJECT_NAME]: Your company/project name
+ * - [EMAIL]: Contact email address
+ * - [PHONE]: Contact phone number
+ * - [COMPANY_ADDRESS]: Company location details
+ * - [LINKEDIN_URL]: LinkedIn company URL
+ *
  * Usage in components:
  * ```tsx
  * import { siteFacts } from '@/config/site-facts';
@@ -82,16 +89,16 @@ export interface SiteFacts {
  */
 export const siteFacts: SiteFacts = {
   company: {
-    name: 'Tucsenberg',
-    established: 2010,
+    name: '[PROJECT_NAME]',
+    established: 2020,
     location: {
-      country: 'China',
-      city: 'Shenzhen',
+      country: '[COUNTRY]',
+      city: '[CITY]',
     },
   },
   contact: {
-    phone: '+86-xxx-xxxx-xxxx',
-    email: 'sales@example.com',
+    phone: '[PHONE]',
+    email: '[EMAIL]',
   },
   certifications: [
     { name: 'ISO 9001', file: '/certs/iso9001.pdf' },
@@ -103,6 +110,6 @@ export const siteFacts: SiteFacts = {
     onTimeDeliveryRate: 98,
   },
   social: {
-    linkedin: 'https://linkedin.com/company/example',
+    linkedin: '[LINKEDIN_URL]',
   },
 };

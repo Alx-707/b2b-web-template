@@ -67,7 +67,7 @@ describe('footer-config', () => {
 
   describe('COMPANY_INFO', () => {
     it('should have required company information', () => {
-      expect(COMPANY_INFO.name).toBe('Tucsenberg');
+      expect(COMPANY_INFO.name).toBe('[PROJECT_NAME]');
       expect(COMPANY_INFO.description).toContain('Modern B2B enterprise');
       expect(COMPANY_INFO.address).toBeDefined();
       expect(COMPANY_INFO.contact).toBeDefined();
@@ -76,26 +76,25 @@ describe('footer-config', () => {
     it('should have valid address information', () => {
       const { address } = COMPANY_INFO;
       expect(address).toBeDefined();
-      expect(address!.street).toBe('123 Innovation Drive');
-      expect(address!.city).toBe('Tech Valley');
-      expect(address!.country).toBe('Global');
-      expect(address!.postalCode).toBe('12345');
+      expect(address!.street).toBe('[STREET_ADDRESS]');
+      expect(address!.city).toBe('[CITY]');
+      expect(address!.country).toBe('[COUNTRY]');
+      expect(address!.postalCode).toBe('[POSTAL_CODE]');
     });
 
     it('should have valid contact information', () => {
       const { contact } = COMPANY_INFO;
       expect(contact).toBeDefined();
-      expect(contact!.email).toBe('hello@tucsenberg.com');
-      expect(contact!.phone).toBe('+1 (555) 123-4567');
+      expect(contact!.email).toBe('[EMAIL]');
+      expect(contact!.phone).toBe('[PHONE]');
     });
   });
 
   describe('FOOTER_SECTIONS', () => {
     it('should have all required sections', () => {
       const sectionKeys = FOOTER_SECTIONS.map((section) => section.key);
-      expect(sectionKeys).toContain('product');
-      expect(sectionKeys).toContain('company');
-      expect(sectionKeys).toContain('resources');
+      expect(sectionKeys).toContain('navigation');
+      expect(sectionKeys).toContain('support');
     });
 
     it('should have valid section structure', () => {
@@ -125,36 +124,28 @@ describe('footer-config', () => {
       });
     });
 
-    it('should have product section with correct links', () => {
-      const productSection = FOOTER_SECTIONS.find((s) => s.key === 'product');
-      expect(productSection).toBeDefined();
-
-      const linkKeys = productSection!.links.map((link) => link.key);
-      expect(linkKeys).toContain('home');
-      expect(linkKeys).toContain('enterprise');
-      expect(linkKeys).toContain('pricing');
-    });
-
-    it('should have company section with correct links', () => {
-      const companySection = FOOTER_SECTIONS.find((s) => s.key === 'company');
-      expect(companySection).toBeDefined();
-
-      const linkKeys = companySection!.links.map((link) => link.key);
-      expect(linkKeys).toContain('terms');
-      expect(linkKeys).toContain('ai-policy');
-      expect(linkKeys).toContain('privacy');
-    });
-
-    it('should have resources section with correct links', () => {
-      const resourcesSection = FOOTER_SECTIONS.find(
-        (s) => s.key === 'resources',
+    it('should have navigation section with correct links', () => {
+      const navigationSection = FOOTER_SECTIONS.find(
+        (s) => s.key === 'navigation',
       );
-      expect(resourcesSection).toBeDefined();
+      expect(navigationSection).toBeDefined();
 
-      const linkKeys = resourcesSection!.links.map((link) => link.key);
-      expect(linkKeys).toContain('faqs');
-      expect(linkKeys).toContain('docs');
-      expect(linkKeys).toContain('community');
+      const linkKeys = navigationSection!.links.map((link) => link.key);
+      expect(linkKeys).toContain('home');
+      expect(linkKeys).toContain('about');
+      expect(linkKeys).toContain('products');
+      expect(linkKeys).toContain('blog');
+      expect(linkKeys).toContain('contact');
+    });
+
+    it('should have support section with correct links', () => {
+      const supportSection = FOOTER_SECTIONS.find((s) => s.key === 'support');
+      expect(supportSection).toBeDefined();
+
+      const linkKeys = supportSection!.links.map((link) => link.key);
+      expect(linkKeys).toContain('faq');
+      expect(linkKeys).toContain('privacy');
+      expect(linkKeys).toContain('terms');
     });
   });
 
@@ -163,14 +154,16 @@ describe('footer-config', () => {
       expect(SOCIAL_LINKS.length).toBeGreaterThan(0);
 
       const socialKeys = SOCIAL_LINKS.map((link) => link.key);
-      expect(socialKeys).toContain('x');
+      expect(socialKeys).toContain('github');
+      expect(socialKeys).toContain('twitter');
       expect(socialKeys).toContain('linkedin');
     });
 
     it('should have valid social link structure', () => {
       SOCIAL_LINKS.forEach((link) => {
         expect(link.key).toBeTruthy();
-        expect(link.href).toMatch(/^https?:\/\//);
+        // href can be placeholder or URL
+        expect(link.href).toBeTruthy();
         expect(link.icon).toBeTruthy();
         expect(link.label).toBeTruthy();
         expect(link.ariaLabel).toBeTruthy();
@@ -253,23 +246,23 @@ describe('footer-config', () => {
 
       it('should generate English copyright text by default', () => {
         const text = getCopyrightText();
-        expect(text).toBe('© 2024 Tucsenberg. All rights reserved.');
+        expect(text).toBe('© 2024 [PROJECT_NAME]. All rights reserved.');
       });
 
       it('should generate English copyright text explicitly', () => {
         const text = getCopyrightText('en');
-        expect(text).toBe('© 2024 Tucsenberg. All rights reserved.');
+        expect(text).toBe('© 2024 [PROJECT_NAME]. All rights reserved.');
       });
 
       it('should generate Chinese copyright text', () => {
         const text = getCopyrightText('zh');
-        expect(text).toBe('© 2024 Tucsenberg。保留所有权利。');
+        expect(text).toBe('© 2024 [PROJECT_NAME]。保留所有权利。');
       });
 
       it('should include current year in copyright text', () => {
         const text = getCopyrightText();
         expect(text).toContain('2024');
-        expect(text).toContain('Tucsenberg');
+        expect(text).toContain('[PROJECT_NAME]');
       });
 
       it('should handle different years correctly', () => {

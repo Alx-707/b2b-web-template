@@ -251,24 +251,21 @@ describe('SocialLinks', () => {
       render(<SocialLinks showSocialLinks />);
 
       const link = screen.getByRole('link', { name: 'Twitter' });
-      expect(link).toHaveAttribute('href', 'https://twitter.com/tucsenberg');
+      expect(link).toHaveAttribute('href', 'https://[TWITTER_URL]');
     });
 
     it('renders GitHub link with correct href', () => {
       render(<SocialLinks showSocialLinks />);
 
       const link = screen.getByRole('link', { name: 'GitHub' });
-      expect(link).toHaveAttribute('href', 'https://github.com/tucsenberg');
+      expect(link).toHaveAttribute('href', 'https://[GITHUB_URL]');
     });
 
     it('renders LinkedIn link with correct href', () => {
       render(<SocialLinks showSocialLinks />);
 
       const link = screen.getByRole('link', { name: 'LinkedIn' });
-      expect(link).toHaveAttribute(
-        'href',
-        'https://www.linkedin.com/company/tucsenberg',
-      );
+      expect(link).toHaveAttribute('href', 'https://www.[LINKEDIN_URL]');
     });
 
     it('opens links in new tab', () => {

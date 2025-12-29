@@ -185,10 +185,7 @@ describe('CallToAction Component - Basic Tests', () => {
       render(<CallToAction />);
 
       const githubLink = screen.getByRole('link', { name: /primary\.github/i });
-      expect(githubLink).toHaveAttribute(
-        'href',
-        'https://github.com/tucsenberg/web-frontier',
-      );
+      expect(githubLink).toHaveAttribute('href', 'https://[GITHUB_URL]');
       expect(githubLink).toHaveAttribute('target', '_blank');
       expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
@@ -199,10 +196,7 @@ describe('CallToAction Component - Basic Tests', () => {
       const starLink = screen.getByRole('link', {
         name: /buttons\.getStarted/i,
       });
-      expect(starLink).toHaveAttribute(
-        'href',
-        'https://github.com/tucsenberg/web-frontier',
-      );
+      expect(starLink).toHaveAttribute('href', 'https://[GITHUB_URL]');
       expect(starLink).toHaveAttribute('target', '_blank');
       expect(starLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
@@ -224,7 +218,7 @@ describe('CallToAction Component - Basic Tests', () => {
       });
       expect(communityLink).toHaveAttribute(
         'href',
-        'https://github.com/tucsenberg/web-frontier/discussions',
+        'https://[GITHUB_URL]/discussions',
       );
     });
 
@@ -236,7 +230,7 @@ describe('CallToAction Component - Basic Tests', () => {
       });
       expect(discussionsLink).toHaveAttribute(
         'href',
-        'https://github.com/tucsenberg/web-frontier/discussions',
+        'https://[GITHUB_URL]/discussions',
       );
       expect(discussionsLink).toHaveAttribute('target', '_blank');
     });
@@ -245,10 +239,7 @@ describe('CallToAction Component - Basic Tests', () => {
       render(<CallToAction />);
 
       const issuesLink = screen.getByRole('link', { name: /issues/i });
-      expect(issuesLink).toHaveAttribute(
-        'href',
-        'https://github.com/tucsenberg/web-frontier/issues',
-      );
+      expect(issuesLink).toHaveAttribute('href', 'https://[GITHUB_URL]/issues');
       expect(issuesLink).toHaveAttribute('target', '_blank');
     });
   });

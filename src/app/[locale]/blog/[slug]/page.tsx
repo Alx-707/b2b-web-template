@@ -178,7 +178,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <span className='text-sm text-muted-foreground'>
                 {t('author')}{' '}
                 <span className='font-medium text-foreground'>
-                  Tucsenberg Team
+                  [AUTHOR_NAME]
                 </span>
               </span>
             </div>

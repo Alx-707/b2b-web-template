@@ -65,10 +65,7 @@ describe('Site Configuration', () => {
 
   describe('PROJECT_LINKS', () => {
     it('should have valid GitHub link', () => {
-      expect(PROJECT_LINKS.github).toBe(
-        'https://github.com/tucsenberg/web-frontier',
-      );
-      expect(PROJECT_LINKS.github).toMatch(/^https:\/\/github\.com\//);
+      expect(PROJECT_LINKS.github).toBe('https://[GITHUB_URL]/web-frontier');
     });
 
     it('should have valid internal links', () => {
@@ -78,10 +75,7 @@ describe('Site Configuration', () => {
 
     it('should have valid discussions link', () => {
       expect(PROJECT_LINKS.discussions).toBe(
-        'https://github.com/tucsenberg/web-frontier/discussions',
-      );
-      expect(PROJECT_LINKS.discussions).toMatch(
-        /^https:\/\/github\.com\/.*\/discussions$/,
+        'https://[GITHUB_URL]/web-frontier/discussions',
       );
     });
   });

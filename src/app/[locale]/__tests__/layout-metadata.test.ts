@@ -85,7 +85,7 @@ describe('Layout Metadata Generation', () => {
       const metadata = await generateLocaleMetadata({ params });
 
       expect(metadata).toEqual({
-        title: 'Tucsenberg Web Frontier',
+        title: '[PROJECT_NAME]',
         description: 'Modern B2B Enterprise Web Platform with Next.js 15',
       });
 
@@ -99,7 +99,7 @@ describe('Layout Metadata Generation', () => {
       const metadata = await generateLocaleMetadata({ params });
 
       expect(metadata).toEqual({
-        title: 'Tucsenberg Web Frontier',
+        title: '[PROJECT_NAME]',
         description: 'Modern B2B Enterprise Web Platform with Next.js 15',
       });
     });
@@ -110,7 +110,7 @@ describe('Layout Metadata Generation', () => {
       const metadata = await generateLocaleMetadata({ params });
 
       expect(metadata).toEqual({
-        title: 'Tucsenberg Web Frontier',
+        title: '[PROJECT_NAME]',
         description: 'Modern B2B Enterprise Web Platform with Next.js 15',
       });
     });
@@ -194,7 +194,7 @@ describe('Layout Metadata Generation', () => {
 
       const metadata = await generateLocaleMetadata({ params });
 
-      expect(metadata.title).toBe('Tucsenberg Web Frontier');
+      expect(metadata.title).toBe('[PROJECT_NAME]');
       expect(metadata.description).toBe(
         'Modern B2B Enterprise Web Platform with Next.js 15',
       );
@@ -226,7 +226,7 @@ describe('Layout Metadata Generation', () => {
         const metadata = await generateLocaleMetadata({ params });
 
         expect(metadata).toEqual({
-          title: 'Tucsenberg Web Frontier',
+          title: '[PROJECT_NAME]',
           description: 'Modern B2B Enterprise Web Platform with Next.js 15',
         });
       }

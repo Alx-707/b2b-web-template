@@ -21,7 +21,7 @@ export async function generateLocaleMetadata({
   // 确保locale有效
   if (!routing.locales.includes(locale as Locale)) {
     return {
-      title: 'Tucsenberg Web Frontier',
+      title: '[PROJECT_NAME]',
       description: 'Modern B2B Enterprise Web Platform with Next.js 15',
     };
   }

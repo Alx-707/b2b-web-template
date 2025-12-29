@@ -386,12 +386,12 @@
         "issues": "报告问题"
       }
     },
-    "title": "Tucsenberg Web Frontier",
+    "title": "[PROJECT_NAME]",
     "subtitle": "现代化B2B企业级Web平台",
     "description": "基于Next.js 15、React 19和TypeScript构建的现代化B2B企业级Web平台。",
     "getStarted": "开始使用",
     "learnMore": "了解更多",
-    "welcome": "欢迎来到 Tucsenberg",
+    "welcome": "欢迎来到 [PROJECT_NAME]",
     "modernApp": "基于 Next.js 15 和 React 19 构建的现代化Web应用",
     "features": {
       "title": "特性",
@@ -417,93 +417,27 @@
   },
   "footer": {
     "sections": {
-      "product": {
-        "title": "产品",
+      "navigation": {
+        "title": "导航",
         "home": "首页",
-        "enterprise": "企业版",
-        "pricing": "定价"
-      },
-      "company": {
-        "title": "公司",
-        "terms": "条款",
-        "aiPolicy": "AI政策",
-        "privacy": "隐私"
-      },
-      "resources": {
-        "title": "资源",
-        "faqs": "常见问题",
-        "docs": "文档",
-        "ambassadors": "大使",
-        "community": "Vercel社区",
-        "vercel": "Vercel"
-      },
-      "social": {
-        "title": "社交"
+        "about": "关于我们",
+        "products": "产品",
+        "blog": "博客",
+        "contact": "联系我们"
       },
       "support": {
         "title": "支持",
         "faq": "常见问题",
         "privacy": "隐私政策",
         "terms": "服务条款"
-      }
-    },
-    "vercel": {
-      "products": {
-        "title": "产品",
-        "ai": "AI",
-        "enterprise": "企业版",
-        "fluidCompute": "弹性算力",
-        "nextjs": "Next.js",
-        "observability": "可观测性",
-        "previews": "预览",
-        "rendering": "渲染",
-        "security": "安全",
-        "turbo": "Turbo",
-        "domains": "域名",
-        "v0": "v0"
-      },
-      "resources": {
-        "title": "资源",
-        "community": "社区",
-        "docs": "文档",
-        "guides": "指南",
-        "academy": "学院",
-        "help": "帮助",
-        "integrations": "集成",
-        "pricing": "定价",
-        "resources": "资源",
-        "solutionPartners": "解决方案合作伙伴",
-        "startups": "初创企业",
-        "templates": "模板",
-        "sdks": "Vercel SDK"
-      },
-      "company": {
-        "title": "公司",
-        "about": "关于",
-        "blog": "博客",
-        "careers": "招聘",
-        "changelog": "更新日志",
-        "contact": "联系我们",
-        "customers": "客户",
-        "events": "活动",
-        "partners": "合作伙伴",
-        "shipped": "已发布",
-        "privacy": "隐私政策",
-        "legal": "法律"
       },
       "social": {
-        "title": "社交",
+        "title": "社交媒体",
         "github": "GitHub",
-        "linkedin": "LinkedIn",
         "twitter": "Twitter",
-        "youtube": "YouTube"
+        "linkedin": "LinkedIn"
       }
-    },
-    "learn": "学习",
-    "examples": "示例",
-    "goToNextjs": "访问nextjs.org",
-    "copyright": "© {year} Tucsenberg。保留所有权利。",
-    "description": "现代B2B企业级网络解决方案，采用前沿技术。"
+    }
   },
   "accessibility": {
     "skipToContent": "跳转到主要内容",
@@ -660,9 +594,9 @@
       "description": "现代化B2B企业级网络平台",
       "phone": "+86-400-123-4567",
       "social": {
-        "twitter": "https://twitter.com/tucsenberg",
-        "linkedin": "https://linkedin.com/company/tucsenberg",
-        "github": "https://github.com/tucsenberg"
+        "twitter": "https://[TWITTER_URL]",
+        "linkedin": "https://[LINKEDIN_URL]",
+        "github": "https://[GITHUB_URL]"
       }
     },
     "website": {
@@ -911,9 +845,9 @@
     "description": "现代化B2B企业级网络平台",
     "phone": "+86-400-123-4567",
     "social": {
-      "twitter": "https://twitter.com/tucsenberg",
-      "linkedin": "https://linkedin.com/company/tucsenberg",
-      "github": "https://github.com/tucsenberg"
+      "twitter": "https://[TWITTER_URL]",
+      "linkedin": "https://[LINKEDIN_URL]",
+      "github": "https://[GITHUB_URL]"
     }
   },
   "website": {

@@ -149,7 +149,7 @@ describe('paths configuration', () => {
     });
 
     it('should have basic site information', () => {
-      expect(SITE_CONFIG.name).toBe('Tucsenberg Web Frontier');
+      expect(SITE_CONFIG.name).toBe('[PROJECT_NAME]');
       expect(SITE_CONFIG.description).toContain('Modern B2B Enterprise');
     });
 
@@ -168,14 +168,22 @@ describe('paths configuration', () => {
     });
 
     it('should have social media links', () => {
-      expect(SITE_CONFIG.social.twitter).toMatch(/^https:\/\/twitter\.com/);
-      expect(SITE_CONFIG.social.linkedin).toMatch(/^https:\/\/linkedin\.com/);
-      expect(SITE_CONFIG.social.github).toMatch(/^https:\/\/github\.com/);
+      // Template uses placeholders [TWITTER_URL] etc., real deployment validates URLs
+      expect(SITE_CONFIG.social.twitter).toMatch(
+        /^\[TWITTER_URL\]$|^https:\/\/twitter\.com/,
+      );
+      expect(SITE_CONFIG.social.linkedin).toMatch(
+        /^\[LINKEDIN_URL\]$|^https:\/\/linkedin\.com/,
+      );
+      expect(SITE_CONFIG.social.github).toMatch(
+        /^\[GITHUB_URL\]$|^https:\/\/github\.com/,
+      );
     });
 
     it('should have contact information', () => {
-      expect(SITE_CONFIG.contact.phone).toMatch(/^\+\d/);
-      expect(SITE_CONFIG.contact.email).toMatch(/^.+@.+\..+$/);
+      // Template uses placeholders, real deployment validates formats
+      expect(SITE_CONFIG.contact.phone).toMatch(/^\[PHONE\]$|^\+\d/);
+      expect(SITE_CONFIG.contact.email).toMatch(/^\[EMAIL\]$|^.+@.+\..+$/);
     });
   });
 
@@ -417,8 +425,9 @@ describe('paths configuration', () => {
     it('should have valid URL formats in social links', () => {
       const socialLinks = Object.values(SITE_CONFIG.social);
 
+      // Template uses placeholders [*_URL], real deployment validates HTTPS URLs
       socialLinks.forEach((link) => {
-        expect(link).toMatch(/^https:\/\/.+/);
+        expect(link).toMatch(/^\[[A-Z_]+\]$|^https:\/\/.+/);
       });
     });
 
@@ -434,12 +443,16 @@ describe('paths configuration', () => {
     });
 
     it('should have valid email format in contact', () => {
-      expect(SITE_CONFIG.contact.email).toMatch(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+      // Template uses placeholder [EMAIL], real deployment validates email format
+      expect(SITE_CONFIG.contact.email).toMatch(
+        /^\[EMAIL\]$|^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      );
     });
 
     it('should have valid phone format in contact', () => {
+      // Template uses placeholder [PHONE], real deployment validates phone format
       expect(SITE_CONFIG.contact.phone).toMatch(
-        /^\+\d{1,3}[-\s]?\d{1,4}[-\s]?\d{1,4}[-\s]?\d{1,9}$/,
+        /^\[PHONE\]$|^\+\d{1,3}[-\s]?\d{1,4}[-\s]?\d{1,4}[-\s]?\d{1,9}$/,
       );
     });
   });

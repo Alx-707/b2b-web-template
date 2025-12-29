@@ -7,7 +7,6 @@
 
 import type { Locale } from '@/types/i18n';
 
-// Footer link interface
 export interface FooterLink {
   key: string;
   href: string;
@@ -15,14 +14,12 @@ export interface FooterLink {
   translationKey: string;
 }
 
-// Footer section interface
 export interface FooterSection {
   key: string;
   titleKey: string;
   links: FooterLink[];
 }
 
-// Social media link interface
 export interface SocialLink {
   key: string;
   href: string;
@@ -31,7 +28,6 @@ export interface SocialLink {
   ariaLabel: string;
 }
 
-// Company information interface
 export interface CompanyInfo {
   name: string;
   description: string;
@@ -47,149 +43,113 @@ export interface CompanyInfo {
   };
 }
 
-// Footer configuration interface
 export interface FooterConfig {
   company: CompanyInfo;
   sections: FooterSection[];
   socialLinks: SocialLink[];
 }
 
-// Company information
 export const COMPANY_INFO: CompanyInfo = {
-  name: 'Tucsenberg',
+  name: '[PROJECT_NAME]',
   description:
     'Modern B2B enterprise web solutions with cutting-edge technology.',
   address: {
-    street: '123 Innovation Drive',
-    city: 'Tech Valley',
-    country: 'Global',
-    postalCode: '12345',
+    street: '[STREET_ADDRESS]',
+    city: '[CITY]',
+    country: '[COUNTRY]',
+    postalCode: '[POSTAL_CODE]',
   },
   contact: {
-    email: 'hello@tucsenberg.com',
-    phone: '+1 (555) 123-4567',
+    email: '[EMAIL]',
+    phone: '[PHONE]',
   },
 };
 
-// Main footer sections - based on the reference design
 export const FOOTER_SECTIONS: FooterSection[] = [
   {
-    key: 'product',
-    titleKey: 'footer.sections.product.title',
+    key: 'navigation',
+    titleKey: 'footer.sections.navigation.title',
     links: [
       {
         key: 'home',
         href: '/',
-        translationKey: 'footer.sections.product.home',
+        translationKey: 'footer.sections.navigation.home',
       },
       {
-        key: 'enterprise',
-        href: '/enterprise',
-        translationKey: 'footer.sections.product.enterprise',
+        key: 'about',
+        href: '/about',
+        translationKey: 'footer.sections.navigation.about',
       },
       {
-        key: 'pricing',
-        href: '/pricing',
-        translationKey: 'footer.sections.product.pricing',
+        key: 'products',
+        href: '/products',
+        translationKey: 'footer.sections.navigation.products',
+      },
+      {
+        key: 'blog',
+        href: '/blog',
+        translationKey: 'footer.sections.navigation.blog',
+      },
+      {
+        key: 'contact',
+        href: '/contact',
+        translationKey: 'footer.sections.navigation.contact',
       },
     ],
   },
   {
-    key: 'company',
-    titleKey: 'footer.sections.company.title',
+    key: 'support',
+    titleKey: 'footer.sections.support.title',
     links: [
       {
-        key: 'terms',
-        href: '/terms',
-        translationKey: 'footer.sections.company.terms',
-      },
-      {
-        key: 'ai-policy',
-        href: '/ai-policy',
-        translationKey: 'footer.sections.company.aiPolicy',
+        key: 'faq',
+        href: '/faq',
+        translationKey: 'footer.sections.support.faq',
       },
       {
         key: 'privacy',
         href: '/privacy',
-        translationKey: 'footer.sections.company.privacy',
-      },
-    ],
-  },
-  {
-    key: 'resources',
-    titleKey: 'footer.sections.resources.title',
-    links: [
-      {
-        key: 'faqs',
-        href: '/faqs',
-        translationKey: 'footer.sections.resources.faqs',
+        translationKey: 'footer.sections.support.privacy',
       },
       {
-        key: 'docs',
-        href: '/docs',
-        translationKey: 'footer.sections.resources.docs',
-      },
-      {
-        key: 'ambassadors',
-        href: '/ambassadors',
-        translationKey: 'footer.sections.resources.ambassadors',
-      },
-      {
-        key: 'community',
-        href: 'https://community.tucsenberg.com',
-        external: true,
-        translationKey: 'footer.sections.resources.community',
-      },
-      {
-        key: 'vercel',
-        href: 'https://vercel.com',
-        external: true,
-        translationKey: 'footer.sections.resources.vercel',
+        key: 'terms',
+        href: '/terms',
+        translationKey: 'footer.sections.support.terms',
       },
     ],
   },
 ];
 
-// Social media links - based on the reference design
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    key: 'facebook',
-    href: 'https://www.facebook.com',
-    icon: 'facebook',
-    label: 'Facebook',
-    ariaLabel: 'Visit Facebook',
+    key: 'github',
+    href: '[GITHUB_URL]',
+    icon: 'github',
+    label: 'GitHub',
+    ariaLabel: 'Visit GitHub',
   },
   {
-    key: 'youtube',
-    href: 'https://www.youtube.com',
-    icon: 'youtube',
-    label: 'YouTube',
-    ariaLabel: 'Visit YouTube',
-  },
-  {
-    key: 'x',
-    href: 'https://x.com',
-    icon: 'x',
-    label: 'X',
-    ariaLabel: 'Visit X',
+    key: 'twitter',
+    href: '[TWITTER_URL]',
+    icon: 'twitter',
+    label: 'Twitter',
+    ariaLabel: 'Visit Twitter',
   },
   {
     key: 'linkedin',
-    href: 'https://www.linkedin.com',
+    href: '[LINKEDIN_URL]',
     icon: 'linkedin',
     label: 'LinkedIn',
     ariaLabel: 'Visit LinkedIn',
   },
 ];
 
-// Main footer configuration
 export const FOOTER_CONFIG: FooterConfig = {
   company: COMPANY_INFO,
   sections: FOOTER_SECTIONS,
   socialLinks: SOCIAL_LINKS,
 };
 
-// Utility functions
 export function getFooterConfig(): FooterConfig {
   return FOOTER_CONFIG;
 }
@@ -202,12 +162,10 @@ export function getSocialLinks(): SocialLink[] {
   return SOCIAL_LINKS;
 }
 
-// Get current year for copyright
 export function getCurrentYear(): number {
   return new Date().getFullYear();
 }
 
-// Generate copyright text
 export function getCopyrightText(locale: Locale = 'en'): string {
   const year = getCurrentYear();
   const companyName = COMPANY_INFO.name;

@@ -44,12 +44,12 @@
     "tryAgain": "重试"
   },
   "home": {
-    "title": "Tucsenberg Web Frontier",
+    "title": "[PROJECT_NAME]",
     "subtitle": "现代化B2B企业级Web平台",
     "description": "基于Next.js 15、React 19和TypeScript构建的现代化B2B企业级Web平台。",
     "getStarted": "开始使用",
     "learnMore": "了解更多",
-    "welcome": "欢迎来到 Tucsenberg",
+    "welcome": "欢迎来到 [PROJECT_NAME]",
     "modernApp": "基于 Next.js 15 和 React 19 构建的现代化Web应用",
     "features": {
       "title": "特性",
@@ -203,13 +203,6 @@
       }
     }
   },
-  "footer": {
-    "learn": "学习",
-    "examples": "示例",
-    "goToNextjs": "访问nextjs.org",
-    "copyright": "© {year} Tucsenberg。保留所有权利。",
-    "description": "现代B2B企业级网络解决方案，采用前沿技术。"
-  },
   "formatting": {
     "date": {
       "today": "今天",
@@ -307,9 +300,9 @@
     "description": "现代化B2B企业级网络平台",
     "phone": "+86-400-123-4567",
     "social": {
-      "twitter": "https://twitter.com/tucsenberg",
-      "linkedin": "https://linkedin.com/company/tucsenberg",
-      "github": "https://github.com/tucsenberg"
+      "twitter": "https://[TWITTER_URL]",
+      "linkedin": "https://[LINKEDIN_URL]",
+      "github": "https://[GITHUB_URL]"
     }
   },
   "website": {
