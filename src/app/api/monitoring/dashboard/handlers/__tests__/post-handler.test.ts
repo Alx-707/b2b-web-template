@@ -12,6 +12,11 @@ vi.mock('@/lib/logger', () => ({
   },
 }));
 
+// Mock validateAdminAccess to return true by default
+vi.mock('@/app/api/contact/contact-api-validation', () => ({
+  validateAdminAccess: vi.fn(() => true),
+}));
+
 describe('handlePostRequest', () => {
   beforeEach(() => {
     vi.clearAllMocks();

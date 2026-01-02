@@ -169,7 +169,7 @@ describe('UTM Parameter Tracking', () => {
 
       expect(mockSessionStorage.setItem).toHaveBeenCalled();
       const storedData = JSON.parse(
-        mockSessionStorage.store['marketing_attribution'],
+        mockSessionStorage.store['marketing_attribution'] as string,
       );
       expect(storedData.utmSource).toBe('google');
       expect(storedData.gclid).toBe('abc123');
