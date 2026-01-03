@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { env } from '@/lib/env';
 import { logger } from '@/lib/logger';
 import {
@@ -7,8 +8,25 @@ import {
 } from '@/lib/security/distributed-rate-limit';
 import type { CSPReport } from '@/config/security';
 
-/** Force dynamic rendering - rate limiting requires runtime request data */
-export const dynamic = 'force-dynamic';
+/** Zod schema for CSP report validation (all fields optional per browser behavior) */
+const cspReportInnerSchema = z.object({
+  'document-uri': z.string().optional(),
+  'referrer': z.string().optional(),
+  'violated-directive': z.string().optional(),
+  'effective-directive': z.string().optional(),
+  'original-policy': z.string().optional(),
+  'disposition': z.string().optional(),
+  'blocked-uri': z.string().optional(),
+  'line-number': z.number().optional(),
+  'column-number': z.number().optional(),
+  'source-file': z.string().optional(),
+  'status-code': z.number().optional(),
+  'script-sample': z.string().optional(),
+});
+
+const cspReportSchema = z.object({
+  'csp-report': cspReportInnerSchema,
+});
 
 /**
  * CSP Report endpoint
@@ -58,41 +76,41 @@ const isSuspiciousReport = (csp: CSPReport['csp-report']) => {
   return patterns.some((p) => blocked.includes(p) || sample.includes(p));
 };
 
-async function parseCSPReport(
+async function parseAndValidateCSPReport(
   request: NextRequest,
 ): Promise<CSPReport | NextResponse> {
   const body = await request.text();
   if (!body.trim()) {
     return NextResponse.json(
       { error: 'Invalid CSP report format' },
-      { status: 500 },
+      { status: 400 },
     );
   }
 
+  let parsed: unknown;
   try {
-    return JSON.parse(body);
+    parsed = JSON.parse(body);
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON format' }, { status: 500 });
+    return NextResponse.json({ error: 'Invalid JSON format' }, { status: 400 });
   }
-}
 
-function validateCSPReport(report: CSPReport): NextResponse | null {
-  const cspReport = report['csp-report'];
-  if (!cspReport) {
+  const result = cspReportSchema.safeParse(parsed);
+  if (!result.success) {
     return NextResponse.json(
       { error: 'Invalid CSP report format' },
       { status: 400 },
     );
   }
 
-  if (Object.keys(cspReport).length === 0) {
+  // Check for empty csp-report (browser quirk)
+  if (Object.keys(result.data['csp-report']).length === 0) {
     return NextResponse.json(
       { error: 'Invalid CSP report format' },
       { status: 200 },
     );
   }
 
-  return null;
+  return result.data as CSPReport;
 }
 
 function logCSPViolation(
@@ -135,14 +153,9 @@ async function processReport(request: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const report = await parseCSPReport(request);
+  const report = await parseAndValidateCSPReport(request);
   if (report instanceof NextResponse) {
     return report;
-  }
-
-  const validationError = validateCSPReport(report);
-  if (validationError) {
-    return validationError;
   }
 
   const cspReport = report['csp-report'];

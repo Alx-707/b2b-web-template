@@ -7,7 +7,7 @@ import {
   generateMetadataForPath,
   type Locale as SeoLocale,
 } from '@/lib/seo-metadata';
-import { PostGrid } from '@/components/blog';
+import { PostGrid } from '@/components/blog/post-grid';
 import { generateLocaleStaticParams } from '@/app/[locale]/generate-static-params';
 
 export function generateStaticParams() {

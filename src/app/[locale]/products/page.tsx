@@ -10,7 +10,7 @@ import {
   generateMetadataForPath,
   type Locale as SeoLocale,
 } from '@/lib/seo-metadata';
-import { ProductGrid } from '@/components/products';
+import { ProductGrid } from '@/components/products/product-grid';
 import { generateLocaleStaticParams } from '@/app/[locale]/generate-static-params';
 import { ProductCategoryFilter } from '@/app/[locale]/products/product-category-filter';
 
@@ -108,6 +108,7 @@ async function ProductsContent({ locale }: { locale: string }) {
         <ProductCategoryFilter
           categories={categories}
           allCategoriesLabel={t('allCategories')}
+          pathname={linkPrefix}
           className='mb-8'
         />
       )}

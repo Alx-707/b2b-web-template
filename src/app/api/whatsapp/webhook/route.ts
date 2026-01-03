@@ -10,9 +10,6 @@ import {
   verifyWebhookSignature,
 } from '@/lib/whatsapp-service';
 
-/** Force dynamic rendering - webhook requires runtime request data */
-export const dynamic = 'force-dynamic';
-
 /**
  * WhatsApp Webhook Endpoint
  *

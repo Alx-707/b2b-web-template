@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CookieConsentProvider } from '@/lib/cookie-consent';
-import { loadCriticalMessages } from '@/lib/load-messages';
+import { loadCompleteMessages } from '@/lib/load-messages';
 import { generateJSONLD } from '@/lib/structured-data';
 import { LazyCookieBanner } from '@/components/cookie/lazy-cookie-banner';
 import { Footer } from '@/components/footer';
@@ -61,8 +61,8 @@ async function AsyncLocaleLayoutContent({
   // JSON-LD scripts are data-only and don't require nonce for CSP compliance.
   // For client-side scripts that need nonce, consider using a dynamic island component.
 
-  // Load critical messages for root provider (keeps client i18n stable across routes)
-  const messages = await loadCriticalMessages(locale);
+  // Load complete messages for root provider (eliminates need for nested providers)
+  const messages = await loadCompleteMessages(locale);
 
   // 生成结构化数据
   const { organizationData, websiteData } =
@@ -70,8 +70,8 @@ async function AsyncLocaleLayoutContent({
 
   return (
     <>
-      {/* Client-side html[lang] correction for PPR mode */}
-      <LangUpdater locale={locale} />
+      {/* Client-side html[lang] correction for non-default locales */}
+      {locale !== 'en' && <LangUpdater locale={locale} />}
 
       {/*
         JSON-LD Structured Data for SEO
