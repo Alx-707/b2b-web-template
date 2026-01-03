@@ -70,8 +70,8 @@ async function AsyncLocaleLayoutContent({
 
   return (
     <>
-      {/* Client-side html[lang] correction for non-default locales */}
-      {locale !== 'en' && <LangUpdater locale={locale} />}
+      {/* Client-side html[lang] correction (PPR root layout is static) */}
+      <LangUpdater locale={locale} />
 
       {/*
         JSON-LD Structured Data for SEO
