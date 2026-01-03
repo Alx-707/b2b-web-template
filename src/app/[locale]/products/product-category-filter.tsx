@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 
 export interface ProductCategoryFilterProps {
   categories: string[];
-  currentCategory: string | undefined;
+  currentCategory?: string;
   allCategoriesLabel: string;
   className?: string;
 }
