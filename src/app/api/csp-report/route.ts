@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { env } from '@/lib/env';
 import { logger } from '@/lib/logger';
+import {
+  checkDistributedRateLimit,
+  createRateLimitHeaders,
+} from '@/lib/security/distributed-rate-limit';
 import type { CSPReport } from '@/config/security';
 
 /**
@@ -104,38 +108,62 @@ function logCSPViolation(
   }
 }
 
-async function handleCspRequest(request: NextRequest) {
+async function checkRateLimit(
+  request: NextRequest,
+): Promise<NextResponse | null> {
+  const clientIP = getClientIp(request);
+  const rateLimitResult = await checkDistributedRateLimit(clientIP, 'csp');
+  if (!rateLimitResult.allowed) {
+    const headers = createRateLimitHeaders(rateLimitResult);
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      { status: 429, headers },
+    );
+  }
+  return null;
+}
+
+async function processReport(request: NextRequest): Promise<NextResponse> {
+  const contentType = request.headers.get('content-type');
+  if (!isContentTypeValid(contentType)) {
+    return NextResponse.json(
+      { error: 'Unsupported Media Type' },
+      { status: 400 },
+    );
+  }
+
+  const report = await parseCSPReport(request);
+  if (report instanceof NextResponse) {
+    return report;
+  }
+
+  const validationError = validateCSPReport(report);
+  if (validationError) {
+    return validationError;
+  }
+
+  const cspReport = report['csp-report'];
+  logCSPViolation(request, cspReport);
+
+  const violationData = buildViolationData(request, cspReport);
+  return NextResponse.json(
+    { status: 'received', timestamp: violationData.timestamp },
+    { status: 200 },
+  );
+}
+
+export async function POST(request: NextRequest) {
   try {
     if (isDevIgnored()) {
       return NextResponse.json({ status: 'ignored' }, { status: 200 });
     }
 
-    const contentType = request.headers.get('content-type');
-    if (!isContentTypeValid(contentType)) {
-      return NextResponse.json(
-        { error: 'Unsupported Media Type' },
-        { status: 400 },
-      );
+    const rateLimitResponse = await checkRateLimit(request);
+    if (rateLimitResponse) {
+      return rateLimitResponse;
     }
 
-    const report = await parseCSPReport(request);
-    if (report instanceof NextResponse) {
-      return report;
-    }
-
-    const validationError = validateCSPReport(report);
-    if (validationError) {
-      return validationError;
-    }
-
-    const cspReport = report['csp-report'];
-    logCSPViolation(request, cspReport);
-
-    const violationData = buildViolationData(request, cspReport);
-    return NextResponse.json(
-      { status: 'received', timestamp: violationData.timestamp },
-      { status: 200 },
-    );
+    return await processReport(request);
   } catch (error) {
     logger.error('Error processing CSP report:', error as unknown);
     return NextResponse.json(
@@ -143,10 +171,6 @@ async function handleCspRequest(request: NextRequest) {
       { status: 500 },
     );
   }
-}
-
-export function POST(request: NextRequest) {
-  return handleCspRequest(request);
 }
 
 /**
