@@ -32,6 +32,7 @@ interface ProductDetailPageProps {
 }
 
 // Generate static params for all products
+// Returns empty array when no products exist - Next.js will skip static generation
 export function generateStaticParams() {
   return getStaticParamsForType('products');
 }

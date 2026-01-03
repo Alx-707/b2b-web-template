@@ -11,7 +11,7 @@
 ### 1.2 Cookie Security Attributes
 - [ ] 1.2.1 Update `middleware.ts:30-34` to set `httpOnly: true` for NEXT_LOCALE cookie
 - [ ] 1.2.2 Add `secure: true` for production environment (conditional on `process.env.NODE_ENV`)
-- [ ] 1.2.3 Change `sameSite: 'lax'` to `sameSite: 'strict'` for enhanced CSRF protection
+- [ ] 1.2.3 Keep `sameSite: 'lax'` (required for cross-site navigation to preserve locale cookie; 'strict' would break external links)
 - [ ] 1.2.4 Add tests for cookie security attributes
 
 ### 1.3 CSP Nonce Architecture Decision
@@ -54,7 +54,7 @@
 ### 2.3 Webhook Endpoint Rate Limiting
 - [ ] 2.3.1 Add `withRateLimit('whatsapp', handler)` wrapper to `/api/whatsapp/webhook/route.ts`
 - [ ] 2.3.2 Add `export const dynamic = 'force-dynamic'` to route file
-- [ ] 2.3.3 Ensure signature verification happens before rate limit check (to avoid DoS via invalid signatures)
+- [ ] 2.3.3 Ensure invalid signatures do not consume rate limit quota (verify signature first, only count valid requests against limit)
 
 ### 2.4 Distributed Rate Limit Documentation
 - [ ] 2.4.1 Add warning log when falling back to memory store in production

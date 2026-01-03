@@ -104,6 +104,22 @@ export const CONTENT_MANIFEST: ContentManifest = {
     "extension": ".mdx",
     "filePath": "/content/pages/zh/terms.mdx",
     "relativePath": "content/pages/zh/terms.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "en",
+    "slug": "sample-product",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/sample-product.mdx",
+    "relativePath": "content/products/en/sample-product.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "zh",
+    "slug": "sample-product",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/sample-product.mdx",
+    "relativePath": "content/products/zh/sample-product.mdx"
   }
 ],
   byKey: {
@@ -186,6 +202,22 @@ export const CONTENT_MANIFEST: ContentManifest = {
     "extension": ".mdx",
     "filePath": "/content/pages/zh/terms.mdx",
     "relativePath": "content/pages/zh/terms.mdx"
+  },
+  "products/en/sample-product": {
+    "type": "products",
+    "locale": "en",
+    "slug": "sample-product",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/sample-product.mdx",
+    "relativePath": "content/products/en/sample-product.mdx"
+  },
+  "products/zh/sample-product": {
+    "type": "products",
+    "locale": "zh",
+    "slug": "sample-product",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/sample-product.mdx",
+    "relativePath": "content/products/zh/sample-product.mdx"
   }
 },
 } as const;

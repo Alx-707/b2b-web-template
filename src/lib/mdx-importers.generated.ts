@@ -42,7 +42,9 @@ export const pageImporters: Record<string, Record<string, ContentImporter>> = {
 
 export const productImporters: Record<string, Record<string, ContentImporter>> = {
   en: {
+    'sample-product': () => import('@content/products/en/sample-product.mdx'),
   },
   zh: {
+    'sample-product': () => import('@content/products/zh/sample-product.mdx'),
   },
 };
