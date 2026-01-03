@@ -7,6 +7,9 @@ import {
 } from '@/lib/security/distributed-rate-limit';
 import type { CSPReport } from '@/config/security';
 
+/** Force dynamic rendering - rate limiting requires runtime request data */
+export const dynamic = 'force-dynamic';
+
 /**
  * CSP Report endpoint
  *

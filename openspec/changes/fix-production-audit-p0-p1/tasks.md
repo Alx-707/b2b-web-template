@@ -49,20 +49,20 @@
 - [ ] 2.1.3 Verify icon appears in `<head>` via metadata API
 
 ### 2.2 CSP Report Endpoint Rate Limiting
-- [ ] 2.2.1 Add `withRateLimit('analytics', handler)` wrapper to `src/app/api/csp-report/route.ts`
-- [ ] 2.2.2 Add `export const dynamic = 'force-dynamic'` to route file
-- [ ] 2.2.3 Add tests for rate limiting behavior
+- [x] 2.2.1 Add `withRateLimit('analytics', handler)` wrapper to `src/app/api/csp-report/route.ts` (DONE: already uses `checkDistributedRateLimit`)
+- [x] 2.2.2 Add `export const dynamic = 'force-dynamic'` to route file (DONE)
+- [x] 2.2.3 Add tests for rate limiting behavior (DONE: `route-rate-limit.test.ts`)
 
 ### 2.3 Webhook Endpoint Rate Limiting
-- [ ] 2.3.1 Refactor `src/app/api/whatsapp/webhook/route.ts` to verify signature BEFORE rate limit check (signature-first pattern)
-- [ ] 2.3.2 Add rate limiting only for requests with valid signatures (invalid signatures rejected early, don't consume quota)
-- [ ] 2.3.3 Add `export const dynamic = 'force-dynamic'` to route file
-- [ ] 2.3.4 Add tests for signature-first rate limiting behavior
+- [x] 2.3.1 Refactor `src/app/api/whatsapp/webhook/route.ts` to verify signature BEFORE rate limit check (signature-first pattern) (DONE: already implemented)
+- [x] 2.3.2 Add rate limiting only for requests with valid signatures (invalid signatures rejected early, don't consume quota) (DONE: already implemented)
+- [x] 2.3.3 Add `export const dynamic = 'force-dynamic'` to route file (DONE)
+- [x] 2.3.4 Add tests for signature-first rate limiting behavior (DONE: 5 tests added)
 
 ### 2.4 Distributed Rate Limit Documentation
-- [ ] 2.4.1 Add warning log when falling back to memory store in production
-- [ ] 2.4.2 Update `README.md` deployment section to require Upstash/KV configuration
-- [ ] 2.4.3 Add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to `.env.example`
+- [x] 2.4.1 Add warning log when falling back to memory store in production (DONE: already exists in `distributed-rate-limit.ts:71-79`)
+- [x] 2.4.2 Update `README.md` deployment section to require Upstash/KV configuration (DONE: already documented at line 395-407)
+- [x] 2.4.3 Add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to `.env.example` (DONE: already exists at line 156-168)
 
 ### 2.5 API Documentation
 - [ ] 2.5.1 Create `docs/api/README.md` with endpoint overview
@@ -95,7 +95,7 @@
 - [ ] 2.9.1 Add Zod schema validation to `src/app/api/csp-report/route.ts`
 - [ ] 2.9.2 Add Zod schema validation to `src/app/api/cache/invalidate/route.ts`
 - [x] 2.9.3 ~~Add Zod schema validation to `src/app/api/analytics/web-vitals/route.ts`~~ (REMOVED: endpoint deleted in `remove-monitoring-dashboard-api`)
-- [ ] 2.9.4 Create shared validation error response format
+- [x] 2.9.4 Create shared validation error response format (DONE: `src/lib/api/validation-error-response.ts`)
 
 ### 2.10 Test Coverage Improvements
 - [x] 2.10.1 ~~Add unit tests for `src/lib/web-vitals/monitoring-manager-core.ts`~~ (REMOVED: file deleted in `remove-monitoring-dashboard-api`)
