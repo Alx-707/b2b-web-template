@@ -3,23 +3,28 @@
 ## 1. P0 - Security & Compliance Blockers
 
 ### 1.1 i18n Hardcoded Strings
-- [ ] 1.1.1 Add translation keys to `messages/en/critical.json` and `messages/zh/critical.json` for monitoring fallback messages
-- [ ] 1.1.2 Update `src/app/[locale]/layout.tsx:110` to use `t('monitoring.loadError')` instead of hardcoded "监控组件加载失败"
-- [ ] 1.1.3 Update `src/app/[locale]/layout.tsx:133` to use `t('footer.systemStatus')` instead of hardcoded "All systems normal."
+- [x] 1.1.1 Add translation keys to `messages/en/critical.json` and `messages/zh/critical.json` for monitoring fallback messages (DONE: keys already present)
+- [x] 1.1.2 Remove hardcoded monitoring fallback strings from `src/app/[locale]/layout.tsx` (DONE: monitoring components removed)
+- [x] 1.1.3 Remove hardcoded footer system status from `src/app/[locale]/layout.tsx` (DONE: uses translation key)
 - [ ] 1.1.4 Run `pnpm validate:translations` to verify sync
 
 ### 1.2 Cookie Security Attributes
-- [ ] 1.2.1 Update `middleware.ts:30-34` to set `httpOnly: true` for NEXT_LOCALE cookie
-- [ ] 1.2.2 Add `secure: true` for production environment (conditional on `process.env.NODE_ENV`)
-- [ ] 1.2.3 Keep `sameSite: 'lax'` (required for cross-site navigation to preserve locale cookie; 'strict' would break external links)
-- [ ] 1.2.4 Also update `middleware.ts:35-38` manual `set-cookie` header to include secure/httpOnly attributes
-- [ ] 1.2.5 Add tests for cookie security attributes
+- [x] 1.2.1 Set `httpOnly: true` for NEXT_LOCALE cookie in `middleware.ts` (DONE)
+- [x] 1.2.2 Add `secure: true` for production environment (DONE)
+- [x] 1.2.3 Keep `sameSite: 'lax'` (DONE)
+- [x] 1.2.4 Ensure manual `set-cookie` header includes secure/httpOnly attributes (DONE)
+- [x] 1.2.5 Add tests for cookie security attributes (DONE: `tests/unit/middleware.test.ts`)
 
 ### 1.3 CSP Nonce Architecture Decision
-- [ ] 1.3.1 Document architectural decision: JSON-LD scripts are data-only and don't execute, so nonce is not required per CSP spec
-- [ ] 1.3.2 Add code comment in `layout.tsx` explaining why JSON-LD doesn't need nonce
+- [x] 1.3.1 Document architectural decision: JSON-LD scripts are data-only and don't execute, so nonce is not required per CSP spec (DONE: comment in layout.tsx)
+- [x] 1.3.2 Add code comment in `layout.tsx` explaining why JSON-LD doesn't need nonce (DONE)
 - [ ] 1.3.3 Verify CSP report endpoint doesn't show JSON-LD violations in production
-- [ ] 1.3.4 Update `src/config/security.ts:39-46` to add `'unsafe-inline'` for `style-src` in production (currently only enabled in development, but required for Tailwind CSS)
+- [x] 1.3.4 Ensure `style-src` allows Tailwind (`'unsafe-inline'`) in production (DONE: `src/config/security.ts`)
+- [ ] 1.3.5 **Fix GA4 inline script nonce**: `src/components/monitoring/enterprise-analytics-island.tsx:61-75` uses `dangerouslySetInnerHTML` without nonce, will be blocked by strict CSP in production
+  - Recommended: Remove inline init script and perform GA4 initialization in bundled client code (`useEffect`) so no nonce is required
+  - Alternative A: Propagate middleware nonce to React tree (higher complexity)
+  - Alternative B: Migrate to GTM container (functional change)
+  - Not recommended: Add `'unsafe-inline'` to `script-src`
 
 ### 1.4 Server Action Security
 - [ ] 1.4.1 Fix `src/app/actions.ts:93-96`: Extract real client IP from headers instead of passing `'server-action'`
@@ -70,7 +75,7 @@
 - [ ] 2.5.4 Document `/api/subscribe` request/response schema
 - [ ] 2.5.5 Document `/api/verify-turnstile` request/response schema
 - [ ] 2.5.6 Document `/api/whatsapp/*` endpoints
-- [ ] 2.5.7 Document `/api/analytics/*` endpoints
+- [x] 2.5.7 ~~Document `/api/analytics/*` endpoints~~ (REMOVED: endpoints deleted in `remove-monitoring-dashboard-api`)
 - [ ] 2.5.8 Document `/api/csp-report` endpoint
 - [ ] 2.5.9 Document `/api/cache/invalidate` endpoint
 
@@ -93,14 +98,14 @@
 ### 2.9 API Input Validation Consistency
 - [ ] 2.9.1 Add Zod schema validation to `src/app/api/csp-report/route.ts`
 - [ ] 2.9.2 Add Zod schema validation to `src/app/api/cache/invalidate/route.ts`
-- [ ] 2.9.3 Add Zod schema validation to `src/app/api/analytics/web-vitals/route.ts`
+- [x] 2.9.3 ~~Add Zod schema validation to `src/app/api/analytics/web-vitals/route.ts`~~ (REMOVED: endpoint deleted in `remove-monitoring-dashboard-api`)
 - [ ] 2.9.4 Create shared validation error response format
 
-### 2.10 Web Vitals Test Coverage
-- [ ] 2.10.1 Add unit tests for `src/lib/web-vitals/monitoring-manager-core.ts` (target: 80%)
-- [ ] 2.10.2 Add unit tests for `src/lib/web-vitals/monitoring-report-generator.ts` (target: 80%)
+### 2.10 Test Coverage Improvements
+- [x] 2.10.1 ~~Add unit tests for `src/lib/web-vitals/monitoring-manager-core.ts`~~ (REMOVED: file deleted in `remove-monitoring-dashboard-api`)
+- [x] 2.10.2 ~~Add unit tests for `src/lib/web-vitals/monitoring-report-generator.ts`~~ (REMOVED: file deleted in `remove-monitoring-dashboard-api`)
 - [ ] 2.10.3 Add unit tests for `src/hooks/locale-storage-hooks.ts` (target: 80%)
-- [ ] 2.10.4 Add integration tests for Web Vitals reporting flow
+- [x] 2.10.4 ~~Add integration tests for Web Vitals reporting flow~~ (REMOVED: web-vitals system deleted in `remove-monitoring-dashboard-api`)
 
 ### 2.11 B2B Page Gaps (Deferred)
 - [ ] 2.11.1 Create issue/proposal for case studies page
