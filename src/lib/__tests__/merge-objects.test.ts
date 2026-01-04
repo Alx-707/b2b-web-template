@@ -3,8 +3,13 @@ import { mergeObjects } from '@/lib/merge-objects';
 
 describe('mergeObjects', () => {
   it('merges defined source values and preserves target when source is undefined', () => {
-    const target = { a: 1, b: 'x' } satisfies Record<string, unknown>;
-    const source = { a: 2, b: undefined } satisfies Record<string, unknown>;
+    interface Model extends Record<string, unknown> {
+      a: number;
+      b: string | undefined;
+    }
+
+    const target: Model = { a: 1, b: 'x' };
+    const source: Partial<Model> = { a: 2, b: undefined };
 
     const merged = mergeObjects(target, source);
 
@@ -13,12 +18,12 @@ describe('mergeObjects', () => {
   });
 
   it('deep merges nested plain objects and keeps target-only keys', () => {
-    const target = {
-      nested: { keep: 1, change: 1 },
-    } satisfies Record<string, unknown>;
-    const source = {
-      nested: { change: 2 },
-    } satisfies Record<string, unknown>;
+    interface Model extends Record<string, unknown> {
+      nested: Record<string, number>;
+    }
+
+    const target: Model = { nested: { keep: 1, change: 1 } };
+    const source: Partial<Model> = { nested: { change: 2 } };
 
     const merged = mergeObjects(target, source);
 
@@ -26,8 +31,12 @@ describe('mergeObjects', () => {
   });
 
   it('replaces arrays instead of deep merging them', () => {
-    const target = { items: [1, 2] } satisfies Record<string, unknown>;
-    const source = { items: [3] } satisfies Record<string, unknown>;
+    interface Model extends Record<string, unknown> {
+      items: number[];
+    }
+
+    const target: Model = { items: [1, 2] };
+    const source: Partial<Model> = { items: [3] };
 
     const merged = mergeObjects(target, source);
 
@@ -35,13 +44,12 @@ describe('mergeObjects', () => {
   });
 
   it('ignores inherited enumerable properties on source', () => {
-    const source = Object.create({ inherited: 'nope' }) as Record<
-      string,
-      unknown
+    const source = Object.create({ inherited: 'nope' }) as Partial<
+      Record<string, unknown>
     >;
     source.own = 'ok';
 
-    const merged = mergeObjects({}, source);
+    const merged = mergeObjects<Record<string, unknown>>({}, source);
 
     expect(merged).toEqual({ own: 'ok' });
   });
