@@ -33,6 +33,7 @@ All operations must strictly adhere to the following system constraints:
 - When parallelizable tasks are detected, execute them concurrently whenever possible. Use `run_in_background` to suspend long-running commands and proceed with the next, achieving parallelism.
 - **Mandatory**: Follow all Phases in Section 1. Workflow—no phase may be skipped.
 - **Git Workflow**: Before any file write, verify current branch is NOT `main`. If on `main`, create and switch to a feature branch first (`git checkout -b <type>/<description>`). Branch naming: `feat/`, `fix/`, `docs/`, `chore/`, `refactor/`.
+- **Next.js Session Init**: When starting work on this Next.js project, **ALWAYS** call `mcp__web-dev__next-devtools-init` first to establish proper context and documentation requirements. Do this automatically without being asked.
 
 ---
 
