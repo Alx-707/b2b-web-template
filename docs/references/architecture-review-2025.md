@@ -10,7 +10,7 @@
 - **P1**：缓存失效策略缺乏 tag/path 级别精确控制，Data Cache 跨部署持久化可能导致内容延迟一致。
 
 ## 偏差任务执行清单（供 Claude code）
-- 已将“复验后仍存在的 5 条偏差任务”拆解为可执行 checklist（含验收命令/回滚点/OpenSpec 门槛），详见：`docs/deviation-tasks-checklist-2025.md`。后续所有改进以该清单逐条落地并回填 DONE。
+- 已将"复验后仍存在的 5 条偏差任务"拆解为可执行 checklist（含验收命令/回滚点），详见：`docs/deviation-tasks-checklist-2025.md`。后续所有改进以该清单逐条落地并回填 DONE。
 
 ## 执行与验收基线（供自动化模型执行）
 - 所有改动必须保持以下基线门禁通过：`pnpm type-check`、`pnpm lint:check`、`pnpm test`、`pnpm quality:gate`。  
@@ -21,7 +21,7 @@
 ## 执行前自检与提案门槛（供自动化模型）
 
 ### 执行前必读/自检
-- 必读：`docs/architecture-review-2025.md`、`openspec/AGENTS.md`（当任务触及架构/破坏性变更时）、以及对应模块 `### 实施简报（Implementation Brief）` 中列出的关键文件。  
+- 必读：`docs/architecture-review-2025.md`、以及对应模块 `### 实施简报（Implementation Brief）` 中列出的关键文件。  
 - 任一任务开始前先跑一次基线门禁（见上节）；若存在失败但与本次任务无关，只记录到 `docs/known-issue/`，不在本轮“顺手修复”扩 scope。  
 - 复核当前覆盖率与门禁口径：`reports/coverage/coverage-summary.json`、`scripts/quality-gate.js`；确保 required checks 的唯一来源仍为 `quality:gate`。  
 - 对 i18n/内容/性能/安全相关任务，先确认对应报告产物为最新：  
@@ -29,15 +29,7 @@
   - content manifest/缺失：`reports/content-manifest.json`（由 `scripts/generate-content-manifest.ts` 生成）。  
   - bundle analyzer/stats：`.next/analyze/**`、`.next/stats/**`（由 `pnpm build:analyze`/`pnpm analyze:*` 生成）。  
   - Lighthouse：`reports/lighthouse/**`（由 CI 或 `pnpm perf:lighthouse` 生成）。  
-- 严格按“统一优先级清单 → 分阶段落地建议（Phase 0→3）”执行，避免跨 Phase 跳跃导致依赖反转。
-
-### 需要先走 OpenSpec 的任务
-- 以下事项属于架构/破坏性变更或可能影响对外语义，必须先在 `openspec/` 创建 proposal 并获批后再落地：  
-  - MDX RSC 渲染与内容路由/manifest 体系（模块2 P0/P1）。  
-  - CI workflow/required checks 收敛与门禁语义重组（模块7/10 P0/P1）。  
-  - 分布式限流与 CSP/安全头策略体系化重构（模块6 P1/P2）。  
-  - WhatsApp Integration Layer 单源化与 webhook/send 行为收敛（模块9 P1）。  
-  - outbox/队列最终一致性与跨服务补偿（模块9 P3）。  
+- 严格按"统一优先级清单 → 分阶段落地建议（Phase 0→3）"执行，避免跨 Phase 跳跃导致依赖反转。
 
 ### 执行中记录要求
 - 每完成一个 P0/P1 任务：  
@@ -53,9 +45,9 @@
 - **CI/门禁单源**：覆盖率/性能/安全阈值只在 `scripts/quality-gate.js` 维护，任何新增门禁必须以该脚本为入口子门禁接入。  
 
 ### 非目标（Non-goals）通用约束
-- 不引入新的 CMS/数据库/运行时平台；仅在现有 Next.js 16/React 19 + Vercel 体系内优化。  
-- 不改变既有公开 URL、slug、locale 路由语义与 SEO metadata 对外口径；如需变更必须先走 OpenSpec。  
-- 不在本轮同时“上调阈值/换工具链/大规模重构 UI API”；优先收敛真相源与消除高危入口。  
+- 不引入新的 CMS/数据库/运行时平台；仅在现有 Next.js 16/React 19 + Vercel 体系内优化。
+- 不改变既有公开 URL、slug、locale 路由语义与 SEO metadata 对外口径。
+- 不在本轮同时"上调阈值/换工具链/大规模重构 UI API"；优先收敛真相源与消除高危入口。  
 
 ### 灰度/回滚策略（仅 P0/P1）
 - **MDX RSC 渲染**：按 blog → products → pages 逐域迁移；每域迁移完成后保留一周旧路径的 feature flag（如 `CONTENT_RENDERER=legacy|mdx`）用于快速回退。  
