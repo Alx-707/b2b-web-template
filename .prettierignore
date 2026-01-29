@@ -67,6 +67,9 @@ temp/
 *.html
 *.pdf
 
+# Next.js docs (external, auto-generated)
+.next-docs/
+
 # Backup files
 *.backup
 *.bak
