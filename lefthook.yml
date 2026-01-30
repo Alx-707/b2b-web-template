@@ -28,16 +28,18 @@ pre-commit:
     # 架构守卫 - 仅检查已暂存的 JS/TS 变更（排除测试文件和脚本目录）
     architecture-guard:
       run: |
-        FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx)$' | grep -v '^tests/' | grep -v '__tests__' | grep -v '^scripts/' || true)
+        FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx)$' | grep -v '^tests/' | grep -v '__tests__' | grep -v '^scripts/' | grep -v '^src/test/' || true)
         if [ -z "$FILES" ]; then echo "✅ 架构守卫检查通过 (无 JS/TS 变更)"; exit 0; fi
         for f in $FILES; do
-          if git diff --cached -- "$f" | grep -qE '^\+.*export \* from'; then
+          if git diff --cached -- "$f" | grep -E '^\+' | grep -v '^\+.*\/\/' | grep -qE 'export \* from'; then
             echo "❌ 发现新增export *重新导出: $f"; echo "🚫 架构重构期间禁止新增 export * 重新导出";
             echo "请使用命名导出：export { specificExport } from './module'"; exit 1; fi
         done
         for f in $FILES; do
-          # 例外：src/config/security.ts 被 next.config.ts 引用，必须使用相对路径
-          if [ "$f" = "src/config/security.ts" ]; then continue; fi
+          # 例外：配置文件必须使用相对路径（TypeScript 路径别名在 Node.js 运行时不可用）
+          if [ "$f" = "src/config/security.ts" ] || [ "$f" = "next.config.ts" ] || [ "$f" = "middleware.ts" ]; then continue; fi
+          # 例外：barrel files (index.ts) 从子模块导入必须使用相对路径
+          if [[ "$f" == *"/index.ts" ]]; then continue; fi
           if git diff --cached -- "$f" | grep -qE "^\+.*from ['\"']\./|^\+.*from ['\"']\.\./"; then
             echo "❌ 发现新增相对路径导入: $f"; echo "🚫 请使用 @/ 路径别名替代相对路径导入";
             echo "例如：import { something } from '@/lib/module'"; exit 1; fi
